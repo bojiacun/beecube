@@ -12,11 +12,11 @@ spring:
 db:
   num: 1
   password:
-    '0': ${MYSQL-PWD:1}
+    '0': ${MYSQL-PWD:2De77bALZa4kx843}
   url:
     '0': jdbc:mysql://${MYSQL-HOST:jeecg-boot-mysql}:${MYSQL-PORT:3306}/${MYSQL-DB:nacos}?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   user:
-    '0': ${MYSQL-USER:root}
+    '0': ${MYSQL-USER:nacos}
 management:
   metrics:
     export:
