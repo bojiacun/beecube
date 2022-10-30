@@ -1,7 +1,7 @@
-import React, {ReactPortal} from "react";
+import React from "react";
 
 
-const LayoutFull: React.FC<ReactPortal> = (props) => {
+const LayoutFull: React.FC = (props:any) => {
     const {children} = props;
     return (
         <div>
