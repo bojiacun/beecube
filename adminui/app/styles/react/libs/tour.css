@@ -1,0 +1,39 @@
+.v-tour .v-step {
+  z-index: 55000;
+  background-color: #fff;
+  border-radius: 0.428rem;
+  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.2));
+  min-width: 350px;
+  text-align: left;
+}
+.v-tour .v-step .v-step__arrow {
+  border-color: #3366CC;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.v-tour .v-step .v-step__header {
+  background-color: #3366CC;
+  border-top-left-radius: 0.428rem;
+  border-top-right-radius: 0.428rem;
+  font-weight: 500;
+  padding: 0.38rem 1.2rem;
+  margin-bottom: 0;
+  line-height: 2rem;
+}
+.v-tour .v-step .v-step__content {
+  color: #6b727b;
+  border-bottom-left-radius: 0.428rem;
+  border-bottom-right-radius: 0.428rem;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+.dark-layout .v-step {
+  background-color: #283046;
+}
+
+html[dir=rtl] .v-tour .v-step .btn svg {
+  transform: rotate(180deg);
+}
+
+/*# sourceMappingURL=tour.css.map */
