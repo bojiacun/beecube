@@ -7,7 +7,7 @@ const LayoutFull: React.FC<any> = (props:any) => {
     const {theme} = useContext(ThemeContext);
     console.log(theme);
     return (
-        <div>
+        <div className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''}>
             {children}
         </div>
     );
