@@ -1,7 +1,7 @@
 // 核心变量和混入
-@import '~@core/scss/base/bootstrap-extended/include';
+@import '../../base/bootstrap-extended/include';
 // 重写用户变量
-@import '~@core/scss/base/components/include';
+@import '../../base/components/include';
 
 $vt-toast-min-height: unset;
 $vt-toast-max-height: unset;
@@ -21,13 +21,13 @@ $vt-text-color-error: $danger;
 $vt-font-family: inherit;
 
 // 导入常规的 Vue Toastification 通知样式（或创建自己的样式）
-@import 'vue-toastification/src/scss/_variables';
-@import 'vue-toastification/src/scss/_toastContainer';
-@import 'vue-toastification/src/scss/_toast';
-@import 'vue-toastification/src/scss/_closeButton';
-@import 'vue-toastification/src/scss/_progressBar';
-@import 'vue-toastification/src/scss/_icon';
-@import 'vue-toastification/src/scss/animations/fade';
+//@import 'vue-toastification/src/scss/_variables';
+//@import 'vue-toastification/src/scss/_toastContainer';
+//@import 'vue-toastification/src/scss/_toast';
+//@import 'vue-toastification/src/scss/_closeButton';
+//@import 'vue-toastification/src/scss/_progressBar';
+//@import 'vue-toastification/src/scss/_icon';
+//@import 'vue-toastification/src/scss/animations/fade';
 
 .#{$vt-namespace}__toast {
   padding: 1rem;

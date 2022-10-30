@@ -1,7 +1,7 @@
-@import '~@core/scss/base/bootstrap-extended/include';
+@import '../../base/bootstrap-extended/include';
 // 重写用户变量
-@import '~@core/scss/base/components/include';
-@import '~vue-tour/dist/vue-tour.css';
+@import '../../base/components/include';
+//@import '~vue-tour/dist/vue-tour.css';
 
 .v-tour {
   .v-step {

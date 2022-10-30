@@ -1,8 +1,8 @@
-@import '~@core/scss/base/bootstrap-extended/include';
+@import '../../base/bootstrap-extended/include';
 
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
-@import '~@core/scss/base/components/include';
+@import '../../base/core/colors/palette-variables.scss';
+@import '../../base/components/include';
 
 // 设置组件的主题颜色
 $themeColor: $primary;
@@ -10,7 +10,7 @@ $bgColor: rgba($primary, 0.12);
 $dotShadow: none;
 
 // 导入主题默认样式
-@import '~vue-slider-component/lib/theme/default.scss';
+//@import '~vue-slider-component/lib/theme/default.scss';
 
 .vue-slider-dot-handle {
   border: 2px solid $primary;

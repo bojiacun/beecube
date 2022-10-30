@@ -1,7 +1,7 @@
 // 核心变量和混入
-@import '~@core/scss/base/bootstrap-extended/include';
+@import '../../base/bootstrap-extended/include';
 // 重写用户变量
-@import '~@core/scss/base/components/include';
+@import '../../base/components/include';
 // good table variable override to change the color of table
 $text-color: $body-color;
 $thead-bg-color-1: transparent;
