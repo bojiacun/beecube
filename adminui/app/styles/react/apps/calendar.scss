@@ -1,10 +1,10 @@
-@import '~@core/scss/base/bootstrap-extended/include';
-@import '~@core/scss/base/components/include';
+@import '../../base/bootstrap-extended/include';
+@import '../../base/components/include';
 
-@import '~@core/scss/base/pages/app-calendar.scss';
+@import '../../base/pages/app-calendar.scss';
 
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../../base/core/colors/palette-variables.scss';
 
 .fc-sidebarToggle-button {
   // content: '';

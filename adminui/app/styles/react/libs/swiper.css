@@ -1,9 +1,11 @@
 /* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @import '~@core/scss/base/plugins/extensions/ext-component-swiper.scss';
- *   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   app/styles/react/libs/swiper.scss 1:9  root stylesheet */
+ *    ,
+ * 11 | @import 'bootstrap/scss/functions'; // Bootstrap 核心函数
+ *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *    '
+ *   app/styles/base/bootstrap-extended/_include.scss 11:9              @import
+ *   app/styles/base/plugins/extensions/ext-component-swiper.scss 10:9  @import
+ *   app/styles/react/libs/swiper.scss 1:9                              root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +15,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import '~@core/scss/base/plugins/extensions/ext-component-swiper.scss';\a   \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   app/styles/react/libs/swiper.scss 1:9  root stylesheet";
+  content: "Error: Can't find stylesheet to import.\a    \2577 \a 11 \2502  @import 'bootstrap/scss/functions'; // Bootstrap \6838 \5fc3 \51fd \6570 \a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   app/styles/base/bootstrap-extended/_include.scss 11:9              @import\a   app/styles/base/plugins/extensions/ext-component-swiper.scss 10:9  @import\a   app/styles/react/libs/swiper.scss 1:9                              root stylesheet";
 }
