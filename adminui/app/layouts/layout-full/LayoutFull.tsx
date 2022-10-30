@@ -4,8 +4,8 @@ import ThemeContext from 'themeConfig';
 
 const LayoutFull: React.FC<any> = (props:any) => {
     const {children} = props;
-    const themeContext = useContext(ThemeContext);
-    console.log(themeContext);
+    const {theme} = useContext(ThemeContext);
+    console.log(theme);
     return (
         <div>
             {children}
