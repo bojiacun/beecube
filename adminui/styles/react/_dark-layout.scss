@@ -1,6 +1,6 @@
 // 核心变量和混入
-@import '~@core/scss/base/bootstrap-extended/include';
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../base/bootstrap-extended/include';
+@import '../base/core/colors/palette-variables.scss';
 
 body {
   &.dark-layout {

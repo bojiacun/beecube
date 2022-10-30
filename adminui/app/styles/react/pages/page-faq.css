@@ -1,0 +1,20 @@
+@charset "UTF-8";
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 11 | @import 'bootstrap/scss/functions'; // Bootstrap 核心函数
+ *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *    '
+ *   app/styles/base/bootstrap-extended/_include.scss 11:9  @import
+ *   app/styles/base/pages/page-faq.scss 10:9               @import
+ *   app/styles/react/pages/page-faq.scss 1:9               root stylesheet */
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono", "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    ╷\a 11 │ @import 'bootstrap/scss/functions'; // Bootstrap 核心函数\a    │         ^^^^^^^^^^^^^^^^^^^^^^^^^^\a    ╵\a   app/styles/base/bootstrap-extended/_include.scss 11:9  @import\a   app/styles/base/pages/page-faq.scss 10:9               @import\a   app/styles/react/pages/page-faq.scss 1:9               root stylesheet";
+}
+
+/*# sourceMappingURL=page-faq.css.map */
