@@ -8,11 +8,15 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
+import stylesUrl from '~/styles/styles.css';
 
 export const links: LinksFunction = () => {
   return [
-    {rel: 'stylesheet', href: coreStyleUrl}
+    {rel: 'stylesheet', href: featherStyleUrl},
+    {rel: 'stylesheet', href: coreStyleUrl},
+    {rel: 'stylesheet', href: stylesUrl},
   ];
 }
 
