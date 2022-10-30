@@ -1,0 +1,103 @@
+.tree-container .tag-box-container .tag {
+  background-color: transparent;
+}
+.tree-container .tag-box-container .tag .rmNode {
+  color: #ea5455;
+  background-color: rgba(234, 84, 85, 0.15);
+  line-height: 1.1;
+}
+.tree-container .tree-box {
+  position: relative;
+  z-index: 5;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+}
+.tree-container .tree-box input {
+  margin-bottom: 1rem;
+  height: 2.5rem;
+}
+
+.halo-tree,
+.halo-tree .first-node {
+  padding-left: 0;
+}
+.halo-tree li::before {
+  left: -11px;
+}
+.halo-tree .tree-node-el {
+  display: contents;
+}
+.halo-tree .tree-expand {
+  background: content-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.halo-tree .halo-tree li {
+  padding-left: 26px;
+}
+.halo-tree ul {
+  padding-left: 17px !important;
+}
+.halo-tree > li.first-node.only-node::after {
+  z-index: -10;
+}
+.halo-tree .box-halfchecked:after {
+  top: -1px;
+}
+.halo-tree .inputCheck {
+  top: 2px;
+}
+.halo-tree .inputCheck.box-checked:after {
+  top: -1px;
+}
+.halo-tree .node-selected {
+  background-color: #f8f8f8;
+}
+.halo-tree .node-title {
+  padding: 3px 6px;
+  margin: 0 4px;
+}
+.halo-tree .node-title:hover {
+  background-color: #f8f8f8;
+}
+.halo-tree button.btn-async,
+.halo-tree button.btn-delete {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.halo-tree button.btn-async {
+  background: rgba(255, 159, 67, 0.15);
+}
+.halo-tree button.btn-delete {
+  background: rgba(234, 84, 85, 0.15);
+}
+
+.dark-layout .tree-container,
+.dark-layout .tree-container .tree-box,
+.dark-layout .tag-box .tag {
+  border-color: #3b4253;
+}
+.dark-layout .tree-container .tree-box {
+  background-color: #161d31;
+}
+.dark-layout .tree-container .tree-box input {
+  background-color: #283046;
+  border-color: #444b60;
+}
+.dark-layout .tree-container .tag-box .tag {
+  background-color: #161d31 !important;
+}
+.dark-layout .halo-tree .node-title:hover {
+  background-color: transparent;
+}
+.dark-layout .halo-tree .node-title.node-selected {
+  background-color: #161d31;
+  border-color: #3b4253;
+}
+
+/*# sourceMappingURL=tree.css.map */
