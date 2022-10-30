@@ -1,5 +1,6 @@
 import {Button} from "react-bootstrap";
 import {useState} from "react";
+import LayoutFull from "~/layouts/layout-full/LayoutFull";
 
 export default function Index() {
     const [count, setCount] = useState<number>(0);
@@ -8,9 +9,9 @@ export default function Index() {
         setCount(v => v+1);
     }
     return (
-        <div>
+        <LayoutFull>
             <h1>Welcome to Remix {count}</h1>
             <Button variant={'danger'} onClick={handleOnClick}>测试按钮</Button>
-        </div>
+        </LayoutFull>
     );
 }

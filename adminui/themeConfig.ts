@@ -10,7 +10,7 @@ export const theme = {
   app: {
     appName: 'Rexo-UI',
     // eslint-disable-next-line global-require
-    appLogoImage: require('@/assets/images/logo/logo.svg'),
+    appLogoImage: require('assets/images/logo/logo.svg'),
   },
   // 初始布局
   layout: {
