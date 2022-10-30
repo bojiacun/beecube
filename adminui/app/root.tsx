@@ -9,7 +9,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import themeConfig from 'themeConfig';
+import ThemeContext, {theme} from 'themeConfig';
 
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
@@ -29,11 +29,10 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-const ThemeContext = React.createContext<any>(themeConfig);
-
 
 export default function App() {
-  const [themeContext, setThemeContext] = useState(themeConfig);
+  const [themeContext, setThemeContext] = useState(theme);
+
   return (
     <html lang="zh">
       <head>
