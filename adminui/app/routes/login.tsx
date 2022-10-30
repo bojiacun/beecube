@@ -1,17 +1,19 @@
 import {LinksFunction} from "@remix-run/node";
 import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
-import {Row, NavLink, Col, Image} from "react-bootstrap";
+import {Row, NavLink, Col, Image, Card, Alert, OverlayTrigger, Tooltip, Form, Button} from "react-bootstrap";
 import SystemLogo from "~/components/logo";
-import {useContext} from "react";
+import {useContext, useRef} from "react";
 import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
+import {HelpCircle} from "react-feather";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
 }
 
-const LoginPage = (props: any) => {
+const LoginPage = () => {
+    const ref = useRef();
     const {theme} = useContext(ThemeContext);
     let sideImageUrl = lightSideImageUrl;
     if(theme.layout.skin == 'dark') {
@@ -30,6 +32,39 @@ const LoginPage = (props: any) => {
                     <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
                         <Image fluid={true} src={sideImageUrl} alt={'用户登录'} />
                     </div>
+                </Col>
+                <Col lg={4} className="d-flex align-items-center auth-bg px-2 p-lg-5">
+                    <Col lg={12} sm={8} md={6} className="px-xl-2 mx-auto">
+                        <Card.Title className="mb-1 font-weight-bold" style={{fontSize: '1.714rem'}}>
+                            欢迎使用 Rexo Admin Dashboard 管理模板 Vue.js 版 👋
+                        </Card.Title>
+                        <Card.Text>
+                            请登录您的帐户开始体验
+                        </Card.Text>
+                        <Alert variant='primary' show>
+                            <div className="alert-body font-small-2">
+                                <p>
+                                    <small className="mr-50"><span
+                                        className="font-weight-bold">管理员:</span> admin@demo.com 密码: admin</small>
+                                </p>
+                                <p>
+                                    <small className="mr-50"><span
+                                        className="font-weight-bold">客户:</span> client@demo.com 密码: client</small>
+                                </p>
+                            </div>
+                            <OverlayTrigger placement={'top'} overlay={<Tooltip id={'help'}>管理员和客户账号登录后体验不一样哦</Tooltip>}>
+                                <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
+                            </OverlayTrigger>
+                        </Alert>
+                        <Form className="auth-login-form mt-2">
+                            <Form.Group controlId={'login-email'}>
+                                <Form.Label htmlFor={'login-email'}>用户名 / 邮箱</Form.Label>
+                                <Form.Control placeholder={'abc@example.com'} />
+                            </Form.Group>
+
+                            <Button block variant={'primary'} type={'submit'}>登 录</Button>
+                        </Form>
+                    </Col>
                 </Col>
             </Row>
         </div>
