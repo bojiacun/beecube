@@ -2,7 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "sass": "sass --watch --load-path=./node_modules styles/:app/styles/",
+    "sass": "sass --watch --load-path=./node_modules --load-path=./assets styles/:app/styles/",
     "build": "remix build",
     "dev": "concurrently \"npm run sass\" \"remix dev\"",
     "start": "remix-serve build"
