@@ -1,0 +1,18 @@
+@charset "UTF-8";
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 11 | @import 'bootstrap/scss/mixins/gradients';
+ *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *    '
+ *   app/styles/base/colors.scss 11:9  root stylesheet */
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono", "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    ╷\a 11 │ @import 'bootstrap/scss/mixins/gradients';\a    │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    ╵\a   app/styles/base/colors.scss 11:9  root stylesheet";
+}
+
+/*# sourceMappingURL=colors.css.map */

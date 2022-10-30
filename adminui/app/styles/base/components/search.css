@@ -1,0 +1,18 @@
+@charset "UTF-8";
+/* Error: Undefined variable.
+ *    ,
+ * 36 |       background: $white;
+ *    |                   ^^^^^^
+ *    '
+ *   app/styles/base/components/search.scss 36:19  root stylesheet */
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono", "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Undefined variable.\a    ╷\a 36 │       background: $white;\a    │                   ^^^^^^\a    ╵\a   app/styles/base/components/search.scss 36:19  root stylesheet";
+}
+
+/*# sourceMappingURL=search.css.map */

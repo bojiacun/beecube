@@ -1,0 +1,18 @@
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 11 | @import 'scss/variables/_variables-components'; // 组件自定义变量重写 (用户变量)
+ *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *    '
+ *   styles/base/components/_include.scss 11:9  @import
+ *   styles/react/libs/vue-good-table.scss 4:9  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    \2577 \a 11 \2502  @import 'scss/variables/_variables-components'; // \7ec4 \4ef6 \81ea \5b9a \4e49 \53d8 \91cf \91cd \5199  (\7528 \6237 \53d8 \91cf )\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles/base/components/_include.scss 11:9  @import\a   styles/react/libs/vue-good-table.scss 4:9  root stylesheet";
+}
