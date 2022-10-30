@@ -1,4 +1,5 @@
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
+import React, {useState} from 'react';
 import {
   Links,
   LiveReload,
@@ -7,6 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
+import themeConfig from 'themeConfig';
 
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
@@ -26,7 +29,11 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+const ThemeContext = React.createContext<any>(themeConfig);
+
+
 export default function App() {
+  const [themeContext, setThemeContext] = useState(themeConfig);
   return (
     <html lang="zh">
       <head>
@@ -34,7 +41,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
+          <Outlet />
+        </ThemeContext.Provider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

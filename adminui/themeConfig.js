@@ -1,11 +1,11 @@
 // 主题颜色（最初为空白，当应用初始化时将从 CSS 变量分配 bootstrap 颜色）
-export const $themeColors = {}
+export const themeColors = {}
 
 // 主题断点（最初为空白，当应用初始化时将从 CSS 变量分配 bootstrap 断点）
-export const $themeBreakpoints = {}
+export const themeBreakpoints = {}
 
 // 主题配置
-export const $themeConfig = {
+export default {
   app: {
     appName: 'Rexo-UI',
     // eslint-disable-next-line global-require
