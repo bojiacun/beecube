@@ -14,12 +14,12 @@ import {
     InputGroup
 } from "react-bootstrap";
 import SystemLogo from "~/components/logo";
-import {useContext, useRef} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {API_LOGIN, postFormInit} from "~/utils/reqeust";
+import {API_LOGIN, BASE_URL, postFormInit} from "~/utils/reqeust";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
@@ -62,10 +62,15 @@ type ActionData = {
 
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
+    const [captchaData, setCaptchaData] = useState<string>();
     let sideImageUrl = lightSideImageUrl;
     if (theme.layout.skin == 'dark') {
         sideImageUrl = darkSideImageUrl;
     }
+    useEffect(()=>{
+        let randomStr = Math.random().toString(10);
+
+    }, []);
     return (
         <div className={'auth-wrapper auth-v2'}>
             <Row className={'auth-inner m-0'}>
@@ -107,7 +112,7 @@ const LoginPage = () => {
                         <Form className="auth-login-form mt-2" method='post'>
                             <Form.Group>
                                 <Form.Label htmlFor={'login-username'}>用户名</Form.Label>
-                                <Form.Control name='login-username' required placeholder={'邮箱或者手机号'}/>
+                                <Form.Control name='login-username' placeholder={'邮箱或者手机号'}/>
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
@@ -117,12 +122,21 @@ const LoginPage = () => {
                                     </NavLink>
                                 </div>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='login-password' type='password' required className='form-control-merge'
+                                    <Form.Control name='login-password' type='password' className='form-control-merge'
                                                   placeholder={'abc123'}/>
                                     <InputGroup.Append>
                                         <InputGroup.Text>
                                             <Eye className='cursor-pointer' size={14}/>
                                         </InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
+                                <InputGroup className="input-group-merge">
+                                    <Form.Control name='captcha' placeholder={'验证码'}/>
+                                    <InputGroup.Append>
+                                        <Image src={captchaData} />
                                     </InputGroup.Append>
                                 </InputGroup>
                             </Form.Group>
