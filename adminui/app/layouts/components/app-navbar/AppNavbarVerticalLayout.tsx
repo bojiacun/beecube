@@ -1,5 +1,6 @@
 import {Nav} from "react-bootstrap";
 import Locale from "./components/Locale";
+import DarkToggler from "~/layouts/components/app-navbar/components/DarkToggler";
 
 
 const AppNavbarVerticalLayout = () => {
@@ -12,6 +13,7 @@ const AppNavbarVerticalLayout = () => {
             </div>
             <Nav className='nav align-items-center ml-auto'>
                 <Locale />
+                <DarkToggler className={'d-none d-lg-block'} />
             </Nav>
         </div>
     );
