@@ -11,5 +11,6 @@ export default function useAppConfig(theme:any) {
         routerTransition: theme.layout.routerTransition,
         isVerticalMenuCollapsed: theme.layout.menu.isCollapsed,
         layoutType: theme.layout.type,
+        navbarBackgroundColor: theme.layout.navbar.backgroundColor,
     };
 }
