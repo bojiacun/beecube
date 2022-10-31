@@ -2,7 +2,7 @@ import ThemeContext from 'themeConfig';
 import {useContext} from "react";
 import useAppConfig from "~/config";
 import useLayoutHorizontal from "~/layouts/layout-horizontal/useLayoutHorizontal";
-import classNames from "classnames/dedupe";
+import classNames from "classnames";
 import {LinksFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from '~/styles/base/themes/bordered-layout.css';
 

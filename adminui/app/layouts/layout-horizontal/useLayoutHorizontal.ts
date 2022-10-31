@@ -28,7 +28,7 @@ export default function useLayoutHorizontal(navbarMenuType: any, footerType: any
     if (footerType === 'hidden') footerTypeClass = 'd-none';
 
     return {
-        layoutClasses: classNames(classes),
+        layoutClasses: classes,
         navbarMenuTypeClass,
         footerTypeClass
     }

@@ -9,5 +9,7 @@ export default function useAppConfig(theme:any) {
         isVerticalMenuActive: false,
         skin: theme.layout.skin,
         routerTransition: theme.layout.routerTransition,
+        isVerticalMenuCollapsed: theme.layout.menu.isCollapsed,
+        layoutType: theme.layout.type,
     };
 }
