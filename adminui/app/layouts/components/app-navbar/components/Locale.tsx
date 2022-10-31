@@ -22,14 +22,14 @@ const Locale = () => {
         },
     );
     const dropdownTitle = (
-        <div style={{display: 'inline-flex', alignItems: 'center'}}>
+        <>
             <Image src={currentLocale.img} width={22} height={14} alt={currentLocale.locale} />
             <span className={'ml-50 text-body'}>{currentLocale.name}</span>
-        </div>
+        </>
     );
     return (
         //@ts-ignore
-        <NavDropdown id={'dropdown-grouped'} title={dropdownTitle} className={'dropdown-language'} variant={'link'}>
+        <NavDropdown as={'li'} id={'dropdown-grouped'} title={dropdownTitle} className={'dropdown-language'} variant={'link'}>
             {locales.map((item)=>{
                 return (
                     <NavDropdown.Item>
