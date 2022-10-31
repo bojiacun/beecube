@@ -1,4 +1,4 @@
-import {LinksFunction} from "@remix-run/node";
+import {ActionFunction, LinksFunction} from "@remix-run/node";
 import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
 import {
     Row,
@@ -23,6 +23,38 @@ import {Eye, HelpCircle} from "react-feather";
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
 }
+
+export const action: ActionFunction = async ({request}) => {
+    const form = await request.formData();
+    const username = form.get('login-username');
+    const password = form.get('login-password');
+    console.log('form data is', username);
+    return null;
+}
+
+function validateUsername(username: unknown) {
+    if (typeof username !== "string" || username.length < 3) {
+        return `Usernames must be at least 3 characters long`;
+    }
+}
+
+function validatePassword(password: unknown) {
+    if (typeof password !== "string" || password.length < 6) {
+        return `Passwords must be at least 6 characters long`;
+    }
+}
+type ActionData = {
+    formError?: string;
+    fieldErrors?: {
+        username: string | undefined;
+        password: string | undefined;
+    };
+    fields?: {
+        username: string;
+        password: string;
+    };
+};
+
 
 const LoginPage = () => {
     const ref = useRef();
@@ -69,10 +101,10 @@ const LoginPage = () => {
                                 <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}}/>
                             </OverlayTrigger>
                         </Alert>
-                        <Form className="auth-login-form mt-2">
+                        <Form className="auth-login-form mt-2" method='post'>
                             <Form.Group>
-                                <Form.Label htmlFor={'login-email'}>用户名 / 邮箱</Form.Label>
-                                <Form.Control name='login-email' placeholder={'abc@example.com'}/>
+                                <Form.Label htmlFor={'login-username'}>用户名</Form.Label>
+                                <Form.Control name='login-username' required placeholder={'邮箱或者手机号'}/>
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
@@ -82,7 +114,7 @@ const LoginPage = () => {
                                     </NavLink>
                                 </div>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='login-password' type='password' className='form-control-merge'
+                                    <Form.Control name='login-password' type='password' required className='form-control-merge'
                                                   placeholder={'abc123'}/>
                                     <InputGroup.Append>
                                         <InputGroup.Text>
