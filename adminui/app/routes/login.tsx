@@ -32,6 +32,10 @@ export const action: ActionFunction = async ({request}) => {
     return res;
 }
 
+export function ErrorBoundary({error}: {error: Error}) {
+    return (<p>There is a error happened.</p>);
+}
+
 function validateUsername(username: unknown) {
     if (typeof username !== "string" || username.length < 3) {
         return `Usernames must be at least 3 characters long`;
