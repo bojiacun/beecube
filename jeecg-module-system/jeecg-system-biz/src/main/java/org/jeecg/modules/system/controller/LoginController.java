@@ -96,7 +96,7 @@ public class LoginController {
 		Object checkCode = redisUtil.get(realKey);
 		//当进入登录页时，有一定几率出现验证码错误 #1714
 		if(checkCode==null || !checkCode.toString().equals(lowerCaseCaptcha)) {
-            log.warn("验证码错误，key= {} , Ui checkCode= {}, Redis checkCode = {}", sysLoginModel.getCheckKey(), lowerCaseCaptcha, checkCode);
+            log.warn("验证码错误，key= {}, Ui checkCode= {}, Redis checkCode = {}", sysLoginModel.getCheckKey(), lowerCaseCaptcha, checkCode);
 			result.error500("验证码错误");
 			// 改成特殊的code 便于前端判断
 			result.setCode(HttpStatus.PRECONDITION_FAILED.value());
@@ -513,7 +513,7 @@ public class LoginController {
 			//update-end-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
             
 			redisUtil.set(realKey, lowerCaseCode, 60);
-			log.info("获取验证码，Redis key = {}，checkCode = {}", realKey, code);
+			log.info("获取验证码，Redis key = {}，realKey = {}，checkCode = {}", key, realKey, code);
 			//返回前端
 			String base64 = RandImageUtil.generate(code);
 			res.setSuccess(true);

@@ -47,7 +47,6 @@ export const action: ActionFunction = async ({request}) => {
     const form = await request.formData();
     let checkKey = form.get("checkKey");
     const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
-    console.log('post data is', data);
     const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
     const result = await res.json();
     if(result.status !== 200) {
@@ -58,7 +57,7 @@ export const action: ActionFunction = async ({request}) => {
 
 export const loader: LoaderFunction = async () => {
     let randomString = randomstring.generate(12);
-    const res = await fetch(API_CAPTCHA+'/'+randomString+'_t='+randomString);
+    const res = await fetch(API_CAPTCHA+'/'+randomString+'?_t='+randomString);
     let result = await res.json();
     return {captchaImageData: result.result, checkKey: randomString};
 }
