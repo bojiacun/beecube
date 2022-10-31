@@ -19,6 +19,7 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
+import {API_LOGIN, postFormInit} from "~/utils/reqeust";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
@@ -26,10 +27,9 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({request}) => {
     const form = await request.formData();
-    const username = form.get('login-username');
-    const password = form.get('login-password');
-    console.log('form data is', username);
-    return null;
+    const res = await fetch(API_LOGIN, postFormInit(form));
+    console.log('login result is', res);
+    return res;
 }
 
 function validateUsername(username: unknown) {
@@ -57,7 +57,6 @@ type ActionData = {
 
 
 const LoginPage = () => {
-    const ref = useRef();
     const {theme} = useContext(ThemeContext);
     let sideImageUrl = lightSideImageUrl;
     if (theme.layout.skin == 'dark') {
