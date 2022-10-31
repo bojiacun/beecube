@@ -1,4 +1,4 @@
-import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {ActionFunction, json, LinksFunction, LoaderFunction, redirect} from "@remix-run/node";
 import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
 import {
     Row,
@@ -19,7 +19,7 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {API_CAPTCHA, API_LOGIN, BASE_URL, postFormInit} from "~/utils/reqeust";
+import {API_CAPTCHA, API_LOGIN, BASE_URL, LOGIN_SUCCESS_URL, postFormInit} from "~/utils/reqeust";
 import axios from "axios";
 import {useActionData, useLoaderData} from "@remix-run/react";
 
@@ -49,10 +49,11 @@ export const action: ActionFunction = async ({request}) => {
     const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
     const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
     const result = await res.json();
-    if(result.status !== 200) {
+    console.log('login result is', result);
+    if(result.code !== 200) {
         return badRequest({formError: result.message, checkKey: checkKey});
     }
-    return result;
+    return redirect(LOGIN_SUCCESS_URL);
 }
 
 export const loader: LoaderFunction = async () => {
