@@ -1,4 +1,4 @@
-import {ActionFunction, LinksFunction} from "@remix-run/node";
+import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
 import {
     Row,
@@ -19,7 +19,25 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {API_LOGIN, BASE_URL, postFormInit} from "~/utils/reqeust";
+import {API_CAPTCHA, API_LOGIN, BASE_URL, postFormInit} from "~/utils/reqeust";
+import axios from "axios";
+import {useActionData, useLoaderData} from "@remix-run/react";
+
+const randomstring = require('randomstring');
+
+
+type ActionData = {
+    formError?: string;
+    checkKey: any;
+};
+
+type LoaderData = {
+    checkKey: any;
+    captchaImageData: string;
+};
+const badRequest = (data: ActionData) => json(data, { status: 400 });
+
+
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
@@ -27,12 +45,25 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({request}) => {
     const form = await request.formData();
-    const res = await fetch(API_LOGIN, postFormInit(form));
-    console.log('login result is', res);
-    return res;
+    let checkKey = form.get("checkKey");
+    const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
+    console.log('post data is', data);
+    const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
+    const result = await res.json();
+    if(result.status !== 200) {
+        return badRequest({formError: result.message, checkKey: checkKey});
+    }
+    return result;
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export const loader: LoaderFunction = async () => {
+    let randomString = randomstring.generate(12);
+    const res = await fetch(API_CAPTCHA+'/'+randomString+'_t='+randomString);
+    let result = await res.json();
+    return {captchaImageData: result.result, checkKey: randomString};
+}
+
+export function ErrorBoundary({error}: { error: Error }) {
     return (<p>There is a error happened.</p>);
 }
 
@@ -47,30 +78,36 @@ function validatePassword(password: unknown) {
         return `Passwords must be at least 6 characters long`;
     }
 }
-type ActionData = {
-    formError?: string;
-    fieldErrors?: {
-        username: string | undefined;
-        password: string | undefined;
-    };
-    fields?: {
-        username: string;
-        password: string;
-    };
-};
+
 
 
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
-    const [captchaData, setCaptchaData] = useState<string>();
+    const loaderData = useLoaderData<LoaderData>();
+    const actionData = useActionData<ActionData>();
+    const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
+    const [validated, setValidated] = useState<boolean>(false);
+
+
     let sideImageUrl = lightSideImageUrl;
     if (theme.layout.skin == 'dark') {
         sideImageUrl = darkSideImageUrl;
     }
-    useEffect(()=>{
-        let randomStr = Math.random().toString(10);
 
-    }, []);
+    const handleCaptchaClick = () => {
+        let randomStr = randomstring.generate(8);
+        axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
+            setCaptchaData(res.data.result);
+        });
+    }
+    const handleOnSubmit = (e:any) => {
+        let form = e.currentTarget;
+        if(form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        setValidated(true);
+    }
     return (
         <div className={'auth-wrapper auth-v2'}>
             <Row className={'auth-inner m-0'}>
@@ -109,21 +146,28 @@ const LoginPage = () => {
                                 <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}}/>
                             </OverlayTrigger>
                         </Alert>
-                        <Form className="auth-login-form mt-2" method='post'>
+                        {actionData?.formError && <Alert variant='danger'>
+                            <div className="alert-body font-small-2">
+                                <p>
+                                    <small className="mr-50">{actionData.formError}</small>
+                                </p>
+                            </div>
+                        </Alert>}
+                        <Form noValidate className="auth-login-form mt-2" method='post' validated={validated} onSubmit={handleOnSubmit}>
                             <Form.Group>
-                                <Form.Label htmlFor={'login-username'}>用户名</Form.Label>
-                                <Form.Control name='login-username' placeholder={'邮箱或者手机号'}/>
+                                <Form.Label htmlFor={'username'}>用户名</Form.Label>
+                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required />
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
-                                    <Form.Label htmlFor="login-password">密码</Form.Label>
+                                    <Form.Label htmlFor="password">密码</Form.Label>
                                     <NavLink href="forgot-password">
                                         <small>忘记密码?</small>
                                     </NavLink>
                                 </div>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='login-password' type='password' className='form-control-merge'
-                                                  placeholder={'abc123'}/>
+                                    <Form.Control name='password' type='password' className='form-control-merge'
+                                                  placeholder={'abc123'} required />
                                     <InputGroup.Append>
                                         <InputGroup.Text>
                                             <Eye className='cursor-pointer' size={14}/>
@@ -131,16 +175,18 @@ const LoginPage = () => {
                                     </InputGroup.Append>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
-                                <InputGroup className="input-group-merge">
-                                    <Form.Control name='captcha' placeholder={'验证码'}/>
-                                    <InputGroup.Append>
-                                        <Image src={captchaData} />
-                                    </InputGroup.Append>
-                                </InputGroup>
-                            </Form.Group>
-                            <Button block className='mt-4' variant={'primary'} type={'submit'}>登 录</Button>
+                            <Form.Row>
+                                <Form.Group as={Col}>
+                                    <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
+                                    <Form.Control name='captcha' placeholder={'验证码'} required />
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label>&nbsp;</Form.Label>
+                                    <Image onClick={handleCaptchaClick} src={captchaData} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
+                                </Form.Group>
+                            </Form.Row>
+                            <Form.Control type='hidden' name='checkKey' value={loaderData.checkKey} />
+                            <Button block className='mt-1' variant={'primary'} type={'submit'}>登 录</Button>
                         </Form>
                     </Col>
                 </Col>
