@@ -41,7 +41,9 @@ export default function App() {
       </head>
       <body>
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
-          <Outlet />
+          <div id='app' className='h-100'>
+            <Outlet />
+          </div>
         </ThemeContext.Provider>
         <ScrollRestoration />
         <Scripts />
