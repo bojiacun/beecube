@@ -7,14 +7,8 @@ import useAppConfig from "~/config";
 import LayoutVertical, {links as LayoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 
 export const links: LinksFunction = () => {
-    const {theme} = useContext(ThemeContext);
-    const {layoutType} = useAppConfig(theme);
-    if(layoutType == 'vertical') {
-        return [
-            ...LayoutVerticalLinks(),
-        ];
-    }
     return [
+        ...LayoutVerticalLinks(),
         ...LayoutHorizontalLinks(),
     ];
 }

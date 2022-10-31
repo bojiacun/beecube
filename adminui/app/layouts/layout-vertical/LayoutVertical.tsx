@@ -17,7 +17,7 @@ const LayoutVertical = (props:any) => {
     const {layoutClasses} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
-
+            {children}
         </div>
     );
 }
