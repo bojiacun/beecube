@@ -8,7 +8,7 @@ export const themeBreakpoints = {}
 
 export const theme = {
   app: {
-    appName: 'Rexo-UI',
+    appName: '蜜蜂魔方',
     // eslint-disable-next-line global-require
     appLogoImage: require('assets/images/logo/logo.svg'),
   },

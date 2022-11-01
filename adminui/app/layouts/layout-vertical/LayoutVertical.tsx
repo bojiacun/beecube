@@ -20,7 +20,7 @@ const LayoutVertical = (props:any) => {
     const {layoutClasses, navbarTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
-            <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow align-items-center', navbarTypeClass)}>
+            <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow navbar-light align-items-center', navbarTypeClass)}>
                 <AppNavbarVerticalLayout />
             </Navbar>
             {!isNavMenuHidden && <VerticalNavMenu />}

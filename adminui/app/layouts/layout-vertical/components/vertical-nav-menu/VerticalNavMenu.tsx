@@ -9,7 +9,7 @@ import {X, Disc} from 'react-feather'
 
 const VerticalNavMenu = (props:any) => {
     const {theme} = useContext(ThemeContext);
-    const {appName, appLogoImage} = theme;
+    const {appName, appLogoImage} = theme.app;
     const {isVerticalMenuCollapsed, skin} = useAppConfig(theme);
     const {} = useVerticalNavMenu(props);
     const [isMouseHovered, setIsMouseHovered] = useState<boolean>(false);
