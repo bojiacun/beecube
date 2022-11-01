@@ -12,5 +12,7 @@ export default function useAppConfig(theme:any) {
         isVerticalMenuCollapsed: theme.layout.menu.isCollapsed,
         layoutType: theme.layout.type,
         navbarBackgroundColor: theme.layout.navbar.backgroundColor,
+        shallShowOverlay: theme.app.shallShowOverlay,
+        contentWidth: theme.layout.contentWidth,
     };
 }

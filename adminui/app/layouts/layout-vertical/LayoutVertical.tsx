@@ -11,6 +11,7 @@ import Fade from 'react-reveal/Fade';
 import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVerticalLayout";
 import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 import AppFooter from "~/layouts/components/AppFooter";
+import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 
 
 export const links: LinksFunction = () => {
@@ -29,9 +30,9 @@ const LayoutVertical = (props:any) => {
             {!isNavMenuHidden && <VerticalNavMenu />}
             {/*垂直导航菜单遮罩层*/}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
-            <Fade right>
-                {children}
-            </Fade>
+                <LayoutContentRendererDefault>
+                    {children}
+                </LayoutContentRendererDefault>
             {/*页脚 */}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />

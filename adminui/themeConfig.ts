@@ -11,6 +11,7 @@ export const theme = {
     appName: '蜜蜂魔方',
     // eslint-disable-next-line global-require
     appLogoImage: require('assets/images/logo/logo.svg'),
+    shallShowOverlay: false,
   },
   // 初始布局
   layout: {
