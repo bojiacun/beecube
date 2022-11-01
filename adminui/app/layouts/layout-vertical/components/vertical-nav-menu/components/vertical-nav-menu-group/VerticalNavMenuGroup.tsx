@@ -22,7 +22,7 @@ const VerticalNavMenuGroup = (props:any) => {
                 <Navbar.Collapse className={'menu-content'} as={'ul'}>
                     {item.children.map((child:any)=>{
                         const Component = resolveVerticalNavMenuItemComponent(child);
-                        return <Component key={child.header || child.title} />;
+                        return <Component key={child.header || child.title} item={child} />;
                     })}
                 </Navbar.Collapse>
             </li>

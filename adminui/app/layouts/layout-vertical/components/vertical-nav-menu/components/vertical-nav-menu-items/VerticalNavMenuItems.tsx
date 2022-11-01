@@ -7,15 +7,14 @@ type VerticalNavMenuItemsProps = {
 }
 
 const VerticalNavMenuItems: FC<VerticalNavMenuItemsProps> = (props) => {
-    const {items} = props;
+    const {items, className} = props;
     return (
-        <li>
+        <ul className={className}>
             {items&&items.map((item:any)=>{
                 let Component = resolveVerticalNavMenuItemComponent(item);
-                console.log('item is ', Component, item);
                 return <Component key={item.title || item.header} item={item} />
             })}
-        </li>
+        </ul>
     );
 }
 
