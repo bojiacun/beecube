@@ -12,7 +12,7 @@ const VerticalNavMenuItems: FC<VerticalNavMenuItemsProps> = (props) => {
         <li>
             {items&&items.map((item:any)=>{
                 const Component = resolveVerticalNavMenuItemComponent(item);
-                return <Component key={item.title || item.header} />
+                return <Component key={item.title || item.header} item={item} />
             })}
         </li>
     );

@@ -10,7 +10,7 @@ const VerticalNavMenuGroup = (props:any) => {
     const {item} = props;
     const {isOpen, isActive} = useVerticalNavMenuGroup(props.item);
 
-    if(canViewVerticalNavMenuGroup(props.item)) {
+    if(canViewVerticalNavMenuGroup(item)) {
         return (
             <li className={classNames('nav-item has-sub', isOpen ? 'open':'', item.disabled ? 'disabled':'', isActive ? 'sidebar-group-active':'')}>
                 <Nav.Link className={'d-flex align-items-center'}>
