@@ -3,6 +3,7 @@ import {MoreHorizontal} from "react-feather";
 
 
 const VerticalNavMenuHeader = (props:any) => {
+    console.log('header props is', props);
     if(canViewVerticalNavMenuHeader(props.item)) {
         return (
             <li className={'navigation-header text-truncate'}>
