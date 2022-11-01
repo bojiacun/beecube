@@ -6,6 +6,7 @@ import classNames from "classnames";
 import {Image, NavLink} from "react-bootstrap";
 import {X, Disc} from 'react-feather'
 import {LinksFunction} from "@remix-run/node";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import verticalMenuStyleUrl from "~/styles/base/core/menu/menu-types/vertical-menu.css";
 
 export const links: LinksFunction = () => {
@@ -19,7 +20,11 @@ const VerticalNavMenu = (props:any) => {
     const {} = useVerticalNavMenu(props);
     const [isMouseHovered, setIsMouseHovered] = useState<boolean>(false);
     const updateMouseHovered = (val:boolean) => setIsMouseHovered(val);
-    const shallShadowBottom = false;
+    const [shallShadowBottom, setShallShadowBottom] = useState<boolean>(false);
+    const perfectScrollbarSettings = {
+        maxScrollbarLength: 60,
+        wheelPropagation: false,
+    }
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
@@ -47,6 +52,10 @@ const VerticalNavMenu = (props:any) => {
             </div>
 
             <div className={classNames("shadow-bottom", shallShadowBottom ? 'd-block':'')} />
+
+            <PerfectScrollbar onScrollY={evt => setShallShadowBottom(evt.scrollTop > 0)} className={'main-menu-content scroll-area'} component={'ul'} options={perfectScrollbarSettings}>
+
+            </PerfectScrollbar>
         </div>
     );
 }
