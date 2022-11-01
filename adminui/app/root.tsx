@@ -8,12 +8,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
 import ThemeContext, {theme} from 'themeConfig';
-
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
+//@ts-ignore
+import config from 'react-reveal/globals';
+
+config({ssrFadeout: true});
 
 export const links: LinksFunction = () => {
   return [
