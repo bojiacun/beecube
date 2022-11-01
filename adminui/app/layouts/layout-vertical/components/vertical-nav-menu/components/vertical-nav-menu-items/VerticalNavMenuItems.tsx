@@ -11,7 +11,8 @@ const VerticalNavMenuItems: FC<VerticalNavMenuItemsProps> = (props) => {
     return (
         <li>
             {items&&items.map((item:any)=>{
-                const Component = resolveVerticalNavMenuItemComponent(item);
+                let Component = resolveVerticalNavMenuItemComponent(item);
+                console.log('item is ', Component, item);
                 return <Component key={item.title || item.header} item={item} />
             })}
         </li>

@@ -5,6 +5,7 @@ import {Circle} from 'react-feather';
 
 
 const VerticalNavMenuLink = (props:any) => {
+    console.log('link props is', props);
     const {item} = props;
     if(canViewVerticalNavMenuLink(item)) {
         return (

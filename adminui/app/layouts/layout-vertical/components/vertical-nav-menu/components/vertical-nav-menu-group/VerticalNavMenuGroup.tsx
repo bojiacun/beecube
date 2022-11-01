@@ -7,6 +7,7 @@ import {resolveVerticalNavMenuItemComponent} from "~/layouts/utils";
 
 
 const VerticalNavMenuGroup = (props:any) => {
+    console.log('group props is', props);
     const {item} = props;
     const {isOpen, isActive} = useVerticalNavMenuGroup(props.item);
 
