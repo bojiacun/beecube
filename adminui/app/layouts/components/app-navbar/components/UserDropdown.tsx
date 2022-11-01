@@ -29,15 +29,15 @@ const UserDropdown = (props:any) => {
     return (
         //@ts-ignore
         <NavDropdown as={'li'} id={'dropdown-grouped'} title={dropdownTitle} onToggle={handleOnToggle} className={classNames('dropdown-user', toggleClass)} variant={'link'}>
-            <NavDropdown.Item className={'d-flex align-items-center'}>
+            <NavDropdown.Item key={'user-profile'} className={'d-flex align-items-center'}>
                 <User className={'mr-50'} size={16} />
                 <span>个人资料</span>
             </NavDropdown.Item>
-            <NavDropdown.Item className={'d-flex align-items-center'}>
+            <NavDropdown.Item key={'user-settings'} className={'d-flex align-items-center'}>
                 <Settings className={'mr-50'} size={16} />
                 <span>用户设置</span>
             </NavDropdown.Item>
-            <NavDropdown.Item className={'d-flex align-items-center'}>
+            <NavDropdown.Item key={'logout'} className={'d-flex align-items-center'}>
                 <LogOut className={'mr-50'} size={16} />
                 <span>退出登录</span>
             </NavDropdown.Item>

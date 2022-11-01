@@ -7,6 +7,7 @@ import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
 import {Navbar} from "react-bootstrap";
 import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVerticalLayout";
+import VerticalNavMenu from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 
 
 export const links: LinksFunction = () => {
@@ -22,6 +23,7 @@ const LayoutVertical = (props:any) => {
             <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow align-items-center', navbarTypeClass)}>
                 <AppNavbarVerticalLayout />
             </Navbar>
+            {!isNavMenuHidden && <VerticalNavMenu />}
             {children}
         </div>
     );

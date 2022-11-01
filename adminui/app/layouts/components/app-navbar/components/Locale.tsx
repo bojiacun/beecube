@@ -32,7 +32,7 @@ const Locale = () => {
         <NavDropdown as={'li'} id={'dropdown-grouped'} title={dropdownTitle} className={'dropdown-language'} variant={'link'}>
             {locales.map((item)=>{
                 return (
-                    <NavDropdown.Item>
+                    <NavDropdown.Item key={item.locale}>
                         <div style={{display: 'inline-flex', alignItems: 'center'}}>
                             <Image src={item.img} width={22} height={14} alt={item.locale} />
                             <span className={'ml-50 text-body'}>{item.name}</span>
