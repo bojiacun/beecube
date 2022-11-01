@@ -27,7 +27,7 @@ const VerticalNavMenu = (props:any) => {
                     <li className={'nav-item mr-auto'}>
                         <NavLink href={'/'} className={'navbar-brand'}>
                             <span className={'brand-logo'}>
-                                <Image src={appLogoImage} alt={'logo'} />
+                                <Image src={appLogoImage} alt={'logo'} width={36} height={36} />
                             </span>
                             <h2 className={'brand-text'}>{appName}</h2>
                         </NavLink>
