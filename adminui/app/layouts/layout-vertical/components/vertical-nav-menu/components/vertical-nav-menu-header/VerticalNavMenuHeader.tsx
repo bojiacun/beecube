@@ -1,8 +1,8 @@
 import {canViewVerticalNavMenuHeader} from "~/libs/acl/utils";
-import {MoreHorizontal} from 'react-feather';
+import {MoreHorizontal} from "react-feather";
 
 
-const VerticalNavMenuItems = (props:any) => {
+const VerticalNavMenuHeader = (props:any) => {
     if(canViewVerticalNavMenuHeader(props.item)) {
         return (
             <li className={'navigation-header text-truncate'}>
@@ -19,4 +19,4 @@ const VerticalNavMenuItems = (props:any) => {
     );
 }
 
-export default VerticalNavMenuItems;
+export default VerticalNavMenuHeader;
