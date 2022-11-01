@@ -1,21 +1,20 @@
-import {canViewVerticalNavMenuHeader} from "~/libs/acl/utils";
-import {MoreHorizontal} from 'react-feather';
+import {resolveVerticalNavMenuItemComponent} from "~/layouts/utils";
+import {FC} from "react";
 
+type VerticalNavMenuItemsProps = {
+    items?: any[];
+    className?: string;
+}
 
-const VerticalNavMenuItems = (props:any) => {
-    if(canViewVerticalNavMenuHeader(props.item)) {
-        return (
-            <li className={'navigation-header text-truncate'}>
-                <span>{props.item.header}</span>
-                <MoreHorizontal size={18} />
-            </li>
-        );
-    }
+const VerticalNavMenuItems: FC<VerticalNavMenuItemsProps> = (props) => {
+    const {items} = props;
     return (
-        <>
-            <span>{props.item.header}</span>
-            <MoreHorizontal size={18} />
-        </>
+        <li>
+            {items&&items.map((item:any)=>{
+                const Component = resolveVerticalNavMenuItemComponent(item);
+                return <Component key={item.title || item.header} />
+            })}
+        </li>
     );
 }
 
