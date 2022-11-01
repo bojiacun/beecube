@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-reveal": "^1.2.2",
     "sweetalert2": "^11.6.4"
   },
   "devDependencies": {

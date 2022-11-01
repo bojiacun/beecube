@@ -6,6 +6,8 @@ import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
 import {Navbar} from "react-bootstrap";
+//@ts-ignore
+import Fade from 'react-reveal/Fade';
 import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVerticalLayout";
 import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 import AppFooter from "~/layouts/components/AppFooter";
@@ -25,8 +27,12 @@ const LayoutVertical = (props:any) => {
                 <AppNavbarVerticalLayout />
             </Navbar>
             {!isNavMenuHidden && <VerticalNavMenu />}
+            {/*垂直导航菜单遮罩层*/}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
-            {children}
+            <Fade right>
+                {children}
+            </Fade>
+            {/*页脚 */}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />
             </footer>
