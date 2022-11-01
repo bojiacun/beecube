@@ -5,7 +5,12 @@ import useVerticalNavMenu from "~/layouts/layout-vertical/components/vertical-na
 import classNames from "classnames";
 import {Image, NavLink} from "react-bootstrap";
 import {X, Disc} from 'react-feather'
+import {LinksFunction} from "@remix-run/node";
+import verticalMenuStyleUrl from "~/styles/base/core/menu/menu-types/vertical-menu.css";
 
+export const links: LinksFunction = () => {
+    return [{rel: 'stylesheet', href: verticalMenuStyleUrl}];
+}
 
 const VerticalNavMenu = (props:any) => {
     const {theme} = useContext(ThemeContext);

@@ -13,21 +13,27 @@ export default function useVerticalLayout(navbarType: any, footerType:any, curre
         classes.push('vertical-overlay-menu')
         classes.push(isVerticalMenuActive? 'menu-open' : 'menu-hide')
     }
+    // 页脚
+    if (footerType === 'sticky') classes.push('footer-fixed')
+    if (footerType === 'static') classes.push('footer-static')
+    if (footerType === 'hidden') classes.push('footer-hidden')
     // 副导航栏
-    classes.push(`navbar-${navbarType}`)
+    classes.push(`navbar-${navbarType}`);
+
+
     const overlayClasses = () => {
         if (currentBreakpoint !== 'xl' && isVerticalMenuActive ) return 'show'
         return null
     };
     const navbarTypeClass = () => {
-        if (navbarType.value === 'sticky') return 'fixed-top'
-        if (navbarType.value === 'static') return 'navbar-static-top'
-        if (navbarType.value === 'hidden') return 'd-none'
+        if (navbarType === 'sticky') return 'fixed-top'
+        if (navbarType === 'static') return 'navbar-static-top'
+        if (navbarType === 'hidden') return 'd-none'
         return 'floating-nav'
     };
     const footerTypeClass = () => {
-        if (footerType.value === 'static') return 'footer-static'
-        if (footerType.value === 'hidden') return 'd-none'
+        if (footerType === 'static') return 'footer-static'
+        if (footerType === 'hidden') return 'd-none'
         return ''
     };
     const resizeHandler = () => {

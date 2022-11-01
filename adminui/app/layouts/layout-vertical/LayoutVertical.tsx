@@ -7,12 +7,12 @@ import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
 import {Navbar} from "react-bootstrap";
 import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVerticalLayout";
-import VerticalNavMenu from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
+import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 import AppFooter from "~/layouts/components/AppFooter";
 
 
 export const links: LinksFunction = () => {
-    return [{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
+    return [...verticalNavMenuLinks(),{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
 }
 const LayoutVertical = (props:any) => {
     const {children} = props;
@@ -26,10 +26,10 @@ const LayoutVertical = (props:any) => {
             </Navbar>
             {!isNavMenuHidden && <VerticalNavMenu />}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
+            {children}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />
             </footer>
-            {children}
         </div>
     );
 }
