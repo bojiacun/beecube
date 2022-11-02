@@ -14,6 +14,7 @@ import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 //@ts-ignore
 import config from 'react-reveal/globals';
+import '~/libs/i18n/index';
 
 config({ssrFadeout: true});
 

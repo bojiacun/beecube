@@ -5,12 +5,14 @@ import {Nav, Badge} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import {resolveVerticalNavMenuItemComponent} from "~/layouts/utils";
 import React from "react";
+import {useTranslation} from "react-i18next";
 const feather = require('feather-icons');
 
 
 const VerticalNavMenuGroup = (props:any) => {
     const {item} = props;
     const {isOpen, isActive} = useVerticalNavMenuGroup(props.item);
+    const {t} = useTranslation();
     const renderItemIcon = (item:any) => {
         if(item.icon) {
             let icon = item.icon.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
@@ -23,7 +25,7 @@ const VerticalNavMenuGroup = (props:any) => {
             <li className={classNames('nav-item has-sub', isOpen ? 'open':'', item.disabled ? 'disabled':'', isActive ? 'sidebar-group-active':'')}>
                 <Nav.Link className={'d-flex align-items-center'}>
                     {renderItemIcon(item)}
-                    <span className={'menu-title text-truncate'}>{item.title}</span>
+                    <span className={'menu-title text-truncate'}>{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
                 </Nav.Link>
                 <ul className={'menu-content collapse'}>
