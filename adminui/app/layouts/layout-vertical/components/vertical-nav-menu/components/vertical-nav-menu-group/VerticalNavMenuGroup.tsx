@@ -1,7 +1,7 @@
 import useVerticalNavMenuGroup from "./useVerticalNavMenuGroup";
 import {canViewVerticalNavMenuGroup} from "~/libs/acl/utils";
 import classNames from "classnames";
-import {Nav, Badge, Navbar} from "react-bootstrap";
+import {Nav, Badge} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import {resolveVerticalNavMenuItemComponent} from "~/layouts/utils";
 import React from "react";
@@ -26,12 +26,12 @@ const VerticalNavMenuGroup = (props:any) => {
                     <span className={'menu-title text-truncate'}>{item.title}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
                 </Nav.Link>
-                <Navbar.Collapse className={'menu-content'} as={'ul'}>
+                <ul className={'menu-content collapse'}>
                     {item.children.map((child:any)=>{
                         const Component = resolveVerticalNavMenuItemComponent(child);
                         return <Component key={child.header || child.title} item={child} />;
                     })}
-                </Navbar.Collapse>
+                </ul>
             </li>
         );
     }
