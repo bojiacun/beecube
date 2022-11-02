@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Dashboards',
-    icon: 'HomeIcon',
+    icon: 'Home',
     tag: '2',
     tagVariant: 'light-warning',
     children: [

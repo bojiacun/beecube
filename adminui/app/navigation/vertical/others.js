@@ -5,7 +5,7 @@ export default [
   {
     title: 'Access Control',
     route: 'access-control',
-    icon: 'ShieldIcon',
+    icon: 'Shield',
     // acl: {
     action: 'read',
     resource: 'ACL',
@@ -13,7 +13,7 @@ export default [
   },
   {
     title: 'Menu Levels',
-    icon: 'MenuIcon',
+    icon: 'Menu',
     children: [
       {
         title: 'Menu Level 2.1',
@@ -37,17 +37,17 @@ export default [
   {
     title: 'Disabled Menu',
     route: null,
-    icon: 'EyeOffIcon',
+    icon: 'EyeOff',
     disabled: true,
   },
   {
     title: 'Raise Support',
     href: 'https://update.rexoui.com/',
-    icon: 'LifeBuoyIcon',
+    icon: 'LifeBuoy',
   },
   {
     title: 'Documentation',
     href: 'https://rexoui.com/demo/Rexo-vuejs-admin-dashboard-template/documentation',
-    icon: 'FileTextIcon',
+    icon: 'FileText',
   },
 ]

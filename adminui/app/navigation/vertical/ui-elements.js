@@ -5,21 +5,21 @@ export default [
   {
     title: 'Typography',
     route: 'ui-typography',
-    icon: 'TypeIcon',
+    icon: 'Type',
   },
   {
     title: 'Colors',
     route: 'ui-colors',
-    icon: 'DropletIcon',
+    icon: 'Droplet',
   },
   {
     title: 'Feather',
     route: 'ui-feather',
-    icon: 'EyeIcon',
+    icon: 'Eye',
   },
   {
     title: 'Cards',
-    icon: 'CreditCardIcon',
+    icon: 'CreditCard',
     tag: 'new',
     tagVariant: 'light-success',
     children: [
@@ -47,7 +47,7 @@ export default [
   },
   {
     title: 'Components',
-    icon: 'ArchiveIcon',
+    icon: 'Archive',
     children: [
       {
         title: 'Alert',
@@ -181,7 +181,7 @@ export default [
   },
   {
     title: 'Extensions',
-    icon: 'PlusCircleIcon',
+    icon: 'PlusCircle',
     children: [
       {
         title: 'Sweet Alert',
@@ -232,7 +232,7 @@ export default [
   },
   {
     title: 'Page Layouts',
-    icon: 'LayoutIcon',
+    icon: 'Layout',
     children: [
       {
         title: 'Collapsed Menu',

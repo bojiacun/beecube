@@ -4,7 +4,7 @@ export default [
   },
   {
     title: 'Forms Elements',
-    icon: 'CopyIcon',
+    icon: 'Copy',
     children: [
       {
         title: 'Input',
@@ -83,31 +83,31 @@ export default [
   {
     title: 'Form Layout',
     route: 'form-layout',
-    icon: 'CopyIcon',
+    icon: 'Copy',
   },
   {
     title: 'Form Wizard',
     route: 'form-wizard',
-    icon: 'PackageIcon',
+    icon: 'Package',
   },
   {
     title: 'Form Validation',
     route: 'form-validation',
-    icon: 'CheckCircleIcon',
+    icon: 'CheckCircle',
   },
   {
     title: 'Form Repeater',
     route: 'form-repeater',
-    icon: 'CopyIcon',
+    icon: 'Copy',
   },
   {
     title: 'BS Table',
     route: 'table-bs-table',
-    icon: 'ServerIcon',
+    icon: 'Server',
   },
   {
     title: 'Good Table',
     route: 'table-good-table',
-    icon: 'GridIcon',
+    icon: 'Grid',
   },
 ]

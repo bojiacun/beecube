@@ -4,7 +4,7 @@ export default [
   },
   {
     title: 'Charts',
-    icon: 'PieChartIcon',
+    icon: 'PieChart',
     tag: '3',
     tagVariant: 'light-danger',
     children: [
@@ -25,6 +25,6 @@ export default [
   {
     title: 'Leaflet',
     route: 'maps-leaflet',
-    icon: 'MapIcon',
+    icon: 'Map',
   },
 ]

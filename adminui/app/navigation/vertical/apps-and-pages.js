@@ -5,26 +5,26 @@ export default [
   {
     title: 'Email',
     route: 'apps-email',
-    icon: 'MailIcon',
+    icon: 'Mail',
   },
   {
     title: 'Chat',
     route: 'apps-chat',
-    icon: 'MessageSquareIcon',
+    icon: 'MessageSquare',
   },
   {
     title: 'Todo',
     route: 'apps-todo',
-    icon: 'CheckSquareIcon',
+    icon: 'CheckSquare',
   },
   {
     title: 'Calendar',
     route: 'apps-calendar',
-    icon: 'CalendarIcon',
+    icon: 'Calendar',
   },
   {
     title: 'Invoice',
-    icon: 'FileTextIcon',
+    icon: 'FileText',
     children: [
       {
         title: 'List',
@@ -46,7 +46,7 @@ export default [
   },
   {
     title: 'eCommerce',
-    icon: 'ShoppingCartIcon',
+    icon: 'ShoppingCart',
     children: [
       {
         title: 'Shop',
@@ -68,7 +68,7 @@ export default [
   },
   {
     title: 'User',
-    icon: 'UserIcon',
+    icon: 'User',
     children: [
       {
         title: 'List',
@@ -86,11 +86,11 @@ export default [
   },
   {
     title: 'Pages',
-    icon: 'FileIcon',
+    icon: 'File',
     children: [
       {
         title: 'Authentication',
-        icon: 'CircleIcon',
+        icon: 'Circle',
         children: [
           {
             title: 'Login v1',
@@ -202,7 +202,7 @@ export default [
       },
       {
         title: 'Miscellaneous',
-        icon: 'CircleIcon',
+        icon: 'Circle',
         children: [
           {
             title: 'Coming Soon',
