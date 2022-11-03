@@ -1,19 +1,23 @@
 import {canViewVerticalNavMenuHeader} from "~/libs/acl/utils";
 import {MoreHorizontal} from "react-feather";
+import {useTranslation} from "react-i18next";
 
 
 const VerticalNavMenuHeader = (props:any) => {
-    if(canViewVerticalNavMenuHeader(props.item)) {
+    const {item} = props;
+    const {t} = useTranslation();
+
+    if(canViewVerticalNavMenuHeader(item)) {
         return (
             <li className={'navigation-header text-truncate'}>
-                <span>{props.item.header}</span>
+                <span>{t(item.header)}</span>
                 <MoreHorizontal size={18} />
             </li>
         );
     }
     return (
         <>
-            <span>{props.item.header}</span>
+            <span>{t(item.header)}</span>
             <MoreHorizontal size={18} />
         </>
     );

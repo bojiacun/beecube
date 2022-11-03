@@ -5,6 +5,7 @@ import {LinksFunction} from "@remix-run/node";
 import ThemeContext from 'themeConfig';
 import useAppConfig from "~/config";
 import LayoutVertical, {links as LayoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
+import {useTranslation} from "react-i18next";
 
 export const links: LinksFunction = () => {
     return [
@@ -19,6 +20,7 @@ export default function Index() {
     const {theme} = useContext(ThemeContext);
     const {layoutType} = useAppConfig(theme);
     const Layout = layoutType == 'vertical' ? LayoutVertical : LayoutHorizontal;
+    const {t} = useTranslation();
 
     const handleOnClick = () => {
         setCount(v => v+1);
@@ -26,7 +28,7 @@ export default function Index() {
     return (
         <Layout>
             <h1>Welcome to Remix {count}</h1>
-            <Button variant={'danger'} onClick={handleOnClick}>测试按钮</Button>
+            <Button variant={'danger'} onClick={handleOnClick}>{t('test_button')}</Button>
         </Layout>
     );
 }

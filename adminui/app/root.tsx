@@ -14,9 +14,12 @@ import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 //@ts-ignore
 import config from 'react-reveal/globals';
-import '~/libs/i18n/index';
+import i18n from '~/libs/i18n/index';
+
+i18n.changeLanguage('cn').then();
 
 config({ssrFadeout: true});
+
 
 export const links: LinksFunction = () => {
   return [
