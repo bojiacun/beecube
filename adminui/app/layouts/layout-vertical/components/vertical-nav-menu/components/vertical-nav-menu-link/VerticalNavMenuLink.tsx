@@ -4,6 +4,8 @@ import {Nav, Badge} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import React from "react";
 import {useTranslation} from "react-i18next";
+import {navLinkProps} from "~/layouts/utils";
+
 const feather = require('feather-icons');
 
 
@@ -19,9 +21,10 @@ const VerticalNavMenuLink = (props:any) => {
         return <Circle />;
     }
     if(canViewVerticalNavMenuLink(item)) {
+        const linkProps = navLinkProps(item);
         return (
             <li className={classNames('nav-item', item.disabled ? 'disabled' : '',)}>
-                <Nav.Link className={'d-flex align-items-center'}>
+                <Nav.Link className={'d-flex align-items-center'} {...linkProps()}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}

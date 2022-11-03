@@ -7,13 +7,17 @@ import {Image, NavLink} from "react-bootstrap";
 import {X, Disc} from 'react-feather'
 import {LinksFunction} from "@remix-run/node";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import perfectScrollbarStyleUrl from 'react-perfect-scrollbar/dist/css/styles.css';
 import verticalMenuStyleUrl from "~/styles/base/core/menu/menu-types/vertical-menu.css";
 import VerticalNavMenuItems
     from "~/layouts/layout-vertical/components/vertical-nav-menu/components/vertical-nav-menu-items/VerticalNavMenuItems";
 import navMenuItems from '~/navigation/vertical'
 
 export const links: LinksFunction = () => {
-    return [{rel: 'stylesheet', href: verticalMenuStyleUrl}];
+    return [
+        {rel: 'stylesheet', href: verticalMenuStyleUrl},
+        {rel: 'stylesheet', href: perfectScrollbarStyleUrl},
+    ];
 }
 
 const VerticalNavMenu = (props:any) => {

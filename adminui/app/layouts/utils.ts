@@ -70,11 +70,17 @@ export const navLinkProps = (item:any) => () => {
     const props = {}
 
     // 如果路由为字符串,则判定用路由名称创建路由对象；如果路由不为字符串，则直接返回路由对象
-// @ts-ignore
-    if (item.route) props.to = typeof item.route === 'string' ? { name: item.route } : item.route
+    if (item.route) {
+        // @ts-ignore
+        props.to = typeof item.route === 'string' ? item.route : item.route.name;
+        // @ts-ignore
+        props.href = typeof item.route === 'string' ? item.route : item.route.name;
+    }
     else {
         // @ts-ignore
         props.href = item.href
+        // @ts-ignore
+        props.to = item.href
         // @ts-ignore
         props.target = '_blank'
         // @ts-ignore

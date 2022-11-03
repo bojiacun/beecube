@@ -3,6 +3,16 @@ export default [
     header: 'Apps & Pages',
   },
   {
+    title: 'index page',
+    route: '/',
+    icon: 'Book',
+  },
+  {
+    title: 'test page',
+    route: '/test',
+    icon: 'Book',
+  },
+  {
     title: 'Email',
     route: 'apps-email',
     icon: 'Mail',
