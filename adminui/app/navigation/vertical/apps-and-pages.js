@@ -7,11 +7,7 @@ export default [
     route: '/',
     icon: 'Book',
   },
-  {
-    title: 'test page',
-    route: '/test',
-    icon: 'Book',
-  },
+
   {
     title: 'Email',
     route: 'apps-email',
@@ -36,6 +32,11 @@ export default [
     title: 'Invoice',
     icon: 'FileText',
     children: [
+      {
+        title: 'test page',
+        route: '/test',
+        icon: 'Book',
+      },
       {
         title: 'List',
         route: 'apps-invoice-list',

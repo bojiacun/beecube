@@ -2,8 +2,6 @@ import ThemeContext from 'themeConfig';
 import {useContext} from "react";
 import useAppConfig from "~/config";
 import classNames from "classnames";
-//@ts-ignore
-import Fade from 'react-reveal/Fade';
 
 const LayoutContentRendererDefault = (props:any) => {
     const {children} = props;
@@ -15,9 +13,7 @@ const LayoutContentRendererDefault = (props:any) => {
             <div className="header-navbar-shadow"/>
             <div className={classNames('content-wrapper', contentWidth === 'boxed' ? 'container p-0':'')}>
                 <div className={'content-body'}>
-                    <Fade bottom>
-                        {children}
-                    </Fade>
+                    {children}
                 </div>
             </div>
         </div>

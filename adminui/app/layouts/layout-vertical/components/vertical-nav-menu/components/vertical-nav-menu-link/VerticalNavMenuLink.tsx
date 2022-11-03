@@ -5,6 +5,7 @@ import {Circle} from 'react-feather';
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {navLinkProps} from "~/layouts/utils";
+import {useLocation} from "react-router";
 
 const feather = require('feather-icons');
 
@@ -12,6 +13,10 @@ const feather = require('feather-icons');
 const VerticalNavMenuLink = (props:any) => {
     const {item} = props;
     const {t} = useTranslation();
+    const location = useLocation();
+
+    const linkProps:any = navLinkProps(item)();
+    const isActive = location.pathname === linkProps.href;
 
     const renderItemIcon = (item:any) => {
         if(item.icon) {
@@ -21,10 +26,9 @@ const VerticalNavMenuLink = (props:any) => {
         return <Circle />;
     }
     if(canViewVerticalNavMenuLink(item)) {
-        const linkProps = navLinkProps(item);
         return (
-            <li className={classNames('nav-item', item.disabled ? 'disabled' : '',)}>
-                <Nav.Link className={'d-flex align-items-center'} {...linkProps()}>
+            <li className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
+                <Nav.Link className={'d-flex align-items-center'} {...linkProps}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}

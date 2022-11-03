@@ -12,13 +12,9 @@ import ThemeContext, {theme} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
-//@ts-ignore
-import config from 'react-reveal/globals';
 import i18n from '~/libs/i18n/index';
 
 i18n.changeLanguage('cn').then();
-
-config({ssrFadeout: true});
 
 
 export const links: LinksFunction = () => {
