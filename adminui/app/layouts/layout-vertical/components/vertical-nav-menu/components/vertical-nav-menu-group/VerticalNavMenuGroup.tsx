@@ -4,16 +4,17 @@ import classNames from "classnames";
 import {Nav, Badge, Collapse} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import {navLinkProps, resolveVerticalNavMenuItemComponent} from "~/layouts/utils";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 const feather = require('feather-icons');
 
 
-const groupIsActive = (item:any, linkProps:any, location: any) => {
+const groupIsActive = (item:any, location: any) => {
     let isActive = false;
     item.children.forEach((i:any) => {
-        if(i.href === location.pathname) {
+        const linkProps:any = navLinkProps(i)();
+        if(linkProps.href === location.pathname) {
             isActive = true;
         }
     })
@@ -26,8 +27,7 @@ const VerticalNavMenuGroup = (props:any) => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const {t} = useTranslation();
     const location = useLocation();
-    const linkProps:any = navLinkProps(item)();
-    const isActive = groupIsActive(item, linkProps, location);
+    const isActive = groupIsActive(item, location);
 
     const renderItemIcon = (item:any) => {
         if(item.icon) {
@@ -42,6 +42,12 @@ const VerticalNavMenuGroup = (props:any) => {
             setMenuOpen(open);
         }
     }
+
+    useEffect(()=>{
+        if(isActive) {
+            updateGroupOpen(true);
+        }
+    }, []);
     if(canViewVerticalNavMenuGroup(item)) {
         return (
             <li className={classNames('nav-item has-sub', menuOpen? 'open':'', item.disabled ? 'disabled':'', isActive ? 'sidebar-group-active':'')}>
