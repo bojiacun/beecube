@@ -12,3 +12,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
 }
+
+
+
+export const LOCAL_USER_KEY = 'USER_INFO';

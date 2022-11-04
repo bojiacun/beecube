@@ -19,9 +19,9 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {API_CAPTCHA, API_LOGIN, BASE_URL, LOGIN_SUCCESS_URL, postFormInit} from "~/utils/reqeust";
+import {API_CAPTCHA, API_LOGIN, BASE_URL, LOCAL_USER_KEY, LOGIN_SUCCESS_URL, postFormInit} from "~/utils/reqeust";
 import axios from "axios";
-import {useActionData, useLoaderData} from "@remix-run/react";
+import {useLoaderData, useNavigate} from "@remix-run/react";
 
 const randomstring = require('randomstring');
 
@@ -69,10 +69,12 @@ export function ErrorBoundary({error}: { error: Error }) {
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
-    const actionData = useActionData<ActionData>();
     const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
     const [validated, setValidated] = useState<boolean>(false);
-    const [formData, setFormData] = useState<any>({checkKey: loaderData.checkKey});
+    const [formData, setFormData] = useState<any>({checkKey: loaderData.checkKey, username: '', password: '', captcha: ''});
+    const [posting, setPosting] = useState<boolean>(false);
+    const [errorData, setErrorData] = useState<string>();
+    const navigate = useNavigate();
 
 
     let sideImageUrl = lightSideImageUrl;
@@ -89,16 +91,26 @@ const LoginPage = () => {
     const handleOnSubmit = async (e:any) => {
         e.preventDefault();
         e.stopPropagation();
-        const form = e.currentTarget;
+        setValidated(true);
+        let form = e.currentTarget;
         if(form.checkValidity() === false) {
             return false;
         }
+        setPosting(true);
         try{
             const res = await axios.post(API_LOGIN, formData);
-            console.log(res);
+            setPosting(false);
+            if(res.data.success) {
+                localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(res.data.result));
+                navigate('/');
+            }
+            else {
+                setErrorData(res.data.message);
+            }
         }
-        catch(e) {
-            console.log(e);
+        catch(e:any) {
+            setErrorData('登录出错');
+            setPosting(false);
         }
     }
     return (
@@ -139,17 +151,17 @@ const LoginPage = () => {
                                 <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
                             </OverlayTrigger>
                         </Alert>
-                        {actionData?.formError && <Alert variant='danger'>
+                        {errorData && <Alert variant='danger'>
                             <div className="alert-body font-small-2">
                                 <p>
-                                    <small className="mr-50">{actionData.formError}</small>
+                                    <small className="mr-50">{errorData}</small>
                                 </p>
                             </div>
                         </Alert>}
                         <Form noValidate className="auth-login-form mt-2" method='post' validated={validated} onSubmit={handleOnSubmit}>
                             <Form.Group>
                                 <Form.Label htmlFor={'username'}>用户名</Form.Label>
-                                <Form.Control name='username' placeholder={'邮箱或者手机号'} value={formData.username} required onChange={event => setFormData({...formData, username: event.target.value})} />
+                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required value={formData.username} onChange={event => setFormData({...formData, username: event.target.value})}  />
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
@@ -159,8 +171,8 @@ const LoginPage = () => {
                                     </NavLink>
                                 </div>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='password' type='password' className='form-control-merge' value={formData.password} onChange={event => setFormData({...formData, password: event.target.value})}
-                                                  placeholder={'abc123'} required  />
+                                    <Form.Control name='password' type='password' className='form-control-merge'
+                                                  placeholder={'abc123'} required value={formData.password} onChange={event => setFormData({...formData, password: event.target.value})}  />
                                     <InputGroup.Append>
                                         <InputGroup.Text>
                                             <Eye className='cursor-pointer' size={14}/>
@@ -178,7 +190,7 @@ const LoginPage = () => {
                                     <Image onClick={handleCaptchaClick} src={captchaData} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
                                 </Form.Group>
                             </Form.Row>
-                            <Button block className='mt-1' variant={'primary'} type={'submit'}>登 录</Button>
+                            <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={posting}>{posting? '登录中...':'登 录'}</Button>
                         </Form>
                     </Col>
                 </Col>
