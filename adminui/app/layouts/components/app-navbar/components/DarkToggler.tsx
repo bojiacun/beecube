@@ -7,12 +7,18 @@ import useAppConfig from "~/config";
 
 const DarkToggler = (props:any) => {
     const {className} = props;
-    const {theme} = useContext(ThemeContext);
+    const {theme, setThemeContext} = useContext(ThemeContext);
     const {skin} = useAppConfig(theme);
     const isDark = skin === 'dark';
+
+    const updateThemeSkin = (newSkin:string) => {
+        theme.layout.skin = newSkin;
+        setThemeContext({...theme});
+    }
+
     return (
         <Nav.Item className={className} as={'li'}>
-            {isDark ? <Sun size={21} />: <Moon size={21} />}
+            {isDark ? <Sun size={21} onClick={()=>updateThemeSkin('light')} />: <Moon size={21} onClick={()=>updateThemeSkin('dark')} />}
         </Nav.Item>
     );
 }

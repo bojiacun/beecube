@@ -14,7 +14,7 @@ const AppNavbarVerticalLayout = () => {
             </div>
             <Nav as={'ul'} className='nav align-items-center ml-auto'>
                 <Locale />
-                <DarkToggler className={'d-none d-lg-block'} />
+                <DarkToggler className={'d-none d-lg-block cursor-pointer'} />
                 <UserDropdown />
             </Nav>
         </div>

@@ -16,7 +16,7 @@ export const theme = {
   // 初始布局
   layout: {
     isRTL: false,
-    skin: 'light', // 全局皮肤（light, dark, bordered, semi-dark）
+    skin: 'dark', // 全局皮肤（light, dark, bordered, semi-dark）
     routerTransition: 'zoom-fade', // 路由转场效果（zoom-fade, slide-fade, fade-bottom, fade, zoom-out, none）
     type: 'vertical', // 导航布局（vertical, horizontal）
     contentWidth: 'full', // 内容宽度（full, boxed）
