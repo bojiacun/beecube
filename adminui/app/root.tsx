@@ -36,12 +36,12 @@ export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
 
   return (
-    <html lang="zh">
+    <html lang="cn">
       <head>
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''}>
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
           <div id='app' className='h-100'>
             <Outlet />
