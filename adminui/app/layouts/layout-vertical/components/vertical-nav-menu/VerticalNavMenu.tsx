@@ -35,7 +35,7 @@ const VerticalNavMenu = (props:any) => {
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
-            !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) ? 'expanded':'', skin === 'semi-dark' ? 'menu-dark':'menu-light')}
+            !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) ? 'expanded':'', skin === 'dark' ? 'menu-dark':'menu-light')}
              onMouseEnter={()=>updateMouseHovered(true)}
              onMouseLeave={()=>updateMouseHovered(false)}
         >
@@ -60,7 +60,7 @@ const VerticalNavMenu = (props:any) => {
 
             <div className={classNames("shadow-bottom", shallShadowBottom ? 'd-block':'')} />
 
-            <PerfectScrollbar onScrollY={evt => setShallShadowBottom(evt.scrollTop > 0)} className={'main-menu-content scroll-area'} component={'ul'} options={perfectScrollbarSettings}>
+            <PerfectScrollbar onScrollY={evt => setShallShadowBottom(evt.scrollTop > 0)} className={'main-menu-content scroll-area'} component={'div'} options={perfectScrollbarSettings}>
                 <VerticalNavMenuItems className={'navigation navigation-main'} items={navMenuItems} />
             </PerfectScrollbar>
         </div>

@@ -758,10 +758,10 @@ footer.footer-border {
 }
 .main-menu.menu-dark {
   color: #dcdcdc;
-  background: #10163a;
+  background: #283046;
 }
 .main-menu.menu-dark .navigation {
-  background: #10163a;
+  background: #283046;
 }
 .main-menu.menu-dark .navigation .navigation-header {
   color: white;
@@ -820,7 +820,7 @@ footer.footer-border {
 }
 .main-menu.menu-dark .navigation > li.open:not(.menu-item-closing) > a, .main-menu.menu-dark .navigation > li.sidebar-group-active > a {
   color: #c3c3c3;
-  background: #0c102a;
+  background: #212739;
   border-radius: 6px;
 }
 .main-menu.menu-dark .navigation > li:not(.open) > ul {
@@ -841,7 +841,7 @@ footer.footer-border {
   border-radius: 4px;
 }
 .main-menu.menu-dark .navigation > li .active {
-  background: #090d22;
+  background: #1d2333;
 }
 .main-menu.menu-dark .navigation > li .active > a {
   color: #3366CC;
@@ -849,7 +849,7 @@ footer.footer-border {
 }
 .main-menu.menu-dark .navigation > li .active .hover > a,
 .main-menu.menu-dark .navigation > li .active :hover > a {
-  background: #0c102a;
+  background: #212739;
 }
 .main-menu.menu-dark .navigation > li ul {
   padding: 0;
@@ -875,7 +875,7 @@ footer.footer-border {
 .main-menu.menu-dark .navigation > li ul .open > a,
 .main-menu.menu-dark .navigation > li ul .sidebar-group-active > a {
   color: #dcdcdc;
-  background: #0c102a;
+  background: #212739;
   border-radius: 6px;
 }
 .main-menu.menu-dark .navigation > li ul .open > ul,
