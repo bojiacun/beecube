@@ -8,7 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import ThemeContext, {theme} from 'themeConfig';
+import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
@@ -34,6 +34,20 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
+  // 设置主题颜色
+  const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0, len = colors.length; i < len; i++) {
+    themeColors[colors[i]] = `--${colors[i]}`.trim();
+  }
+  // 设置主题断点
+  const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl']
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0, len = breakpoints.length; i < len; i++) {
+    themeBreakpoints[breakpoints[i]] = `--breakpoint-${breakpoints[i]}`;
+  }
 
   return (
     <html lang="cn">

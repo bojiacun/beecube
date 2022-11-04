@@ -1,10 +1,10 @@
 // 主题颜色（最初为空白，当应用初始化时将从 CSS 变量分配 bootstrap 颜色）
 import React from "react";
 
-export const themeColors = {}
+export const themeColors:any = {}
 
 // 主题断点（最初为空白，当应用初始化时将从 CSS 变量分配 bootstrap 断点）
-export const themeBreakpoints = {}
+export const themeBreakpoints:any = {}
 
 export const theme = {
   app: {
