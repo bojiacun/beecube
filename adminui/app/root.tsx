@@ -13,6 +13,7 @@ import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 import i18n from '~/libs/i18n/index';
+import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
 
 i18n.changeLanguage('cn').then();
 
@@ -59,6 +60,7 @@ export default function App() {
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
           <div id='app' className='h-100'>
             <Outlet />
+            {themeContext.layout.enableScrollToTop && <ScrollToTop />}
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />
