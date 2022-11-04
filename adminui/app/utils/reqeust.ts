@@ -1,4 +1,5 @@
 import axios from "axios";
+import {userInfo} from "os";
 
 export const BASE_URL = 'http://localhost:9999';
 export const API_LOGIN = `${BASE_URL}/jeecg-system/sys/login`;
@@ -16,3 +17,10 @@ export const postFormInit = (data: any): RequestInit=> {
 
 
 export const LOCAL_USER_KEY = 'USER_INFO';
+
+export const saveCurrentUser = (userInfo: any) => {
+    localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(userInfo));
+}
+export function getCurrentUser() {
+    return JSON.parse(localStorage.getItem(LOCAL_USER_KEY)!);
+}

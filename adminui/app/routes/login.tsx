@@ -19,7 +19,15 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {API_CAPTCHA, API_LOGIN, BASE_URL, LOCAL_USER_KEY, LOGIN_SUCCESS_URL, postFormInit} from "~/utils/reqeust";
+import {
+    API_CAPTCHA,
+    API_LOGIN,
+    BASE_URL,
+    LOCAL_USER_KEY,
+    LOGIN_SUCCESS_URL,
+    postFormInit,
+    saveCurrentUser
+} from "~/utils/reqeust";
 import axios from "axios";
 import {useLoaderData, useNavigate} from "@remix-run/react";
 
@@ -101,7 +109,7 @@ const LoginPage = () => {
             const res = await axios.post(API_LOGIN, formData);
             setPosting(false);
             if(res.data.success) {
-                localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(res.data.result));
+                saveCurrentUser(res.data.result);
                 navigate('/');
             }
             else {
