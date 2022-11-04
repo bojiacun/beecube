@@ -1,7 +1,6 @@
 import {Button} from "react-bootstrap";
 import {ArrowUp} from 'react-feather';
 import {useWindowScroll} from "react-use";
-import {useState} from "react";
 import classNames from "classnames";
 
 
