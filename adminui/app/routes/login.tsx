@@ -72,6 +72,7 @@ const LoginPage = () => {
     const actionData = useActionData<ActionData>();
     const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
     const [validated, setValidated] = useState<boolean>(false);
+    const [formData, setFormData] = useState<any>({checkKey: loaderData.checkKey});
 
 
     let sideImageUrl = lightSideImageUrl;
@@ -85,13 +86,20 @@ const LoginPage = () => {
             setCaptchaData(res.data.result);
         });
     }
-    const handleOnSubmit = (e:any) => {
-        let form = e.currentTarget;
+    const handleOnSubmit = async (e:any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const form = e.currentTarget;
         if(form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
+            return false;
         }
-        setValidated(true);
+        try{
+            const res = await axios.post(API_LOGIN, formData);
+            console.log(res);
+        }
+        catch(e) {
+            console.log(e);
+        }
     }
     return (
         <div className={'auth-wrapper auth-v2'}>
@@ -128,7 +136,7 @@ const LoginPage = () => {
                             </div>
                             <OverlayTrigger placement={'top'}
                                             overlay={<Tooltip id={'help'}>管理员和客户账号登录后体验不一样哦</Tooltip>}>
-                                <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}}/>
+                                <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
                             </OverlayTrigger>
                         </Alert>
                         {actionData?.formError && <Alert variant='danger'>
@@ -141,7 +149,7 @@ const LoginPage = () => {
                         <Form noValidate className="auth-login-form mt-2" method='post' validated={validated} onSubmit={handleOnSubmit}>
                             <Form.Group>
                                 <Form.Label htmlFor={'username'}>用户名</Form.Label>
-                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required />
+                                <Form.Control name='username' placeholder={'邮箱或者手机号'} value={formData.username} required onChange={event => setFormData({...formData, username: event.target.value})} />
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
@@ -151,8 +159,8 @@ const LoginPage = () => {
                                     </NavLink>
                                 </div>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='password' type='password' className='form-control-merge'
-                                                  placeholder={'abc123'} required />
+                                    <Form.Control name='password' type='password' className='form-control-merge' value={formData.password} onChange={event => setFormData({...formData, password: event.target.value})}
+                                                  placeholder={'abc123'} required  />
                                     <InputGroup.Append>
                                         <InputGroup.Text>
                                             <Eye className='cursor-pointer' size={14}/>
@@ -163,14 +171,13 @@ const LoginPage = () => {
                             <Form.Row>
                                 <Form.Group as={Col}>
                                     <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
-                                    <Form.Control name='captcha' placeholder={'验证码'} required />
+                                    <Form.Control name='captcha' placeholder={'验证码'} required value={formData.captcha} onChange={event => setFormData({...formData, captcha: event.target.value})} />
                                 </Form.Group>
                                 <Form.Group as={Col}>
                                     <Form.Label>&nbsp;</Form.Label>
                                     <Image onClick={handleCaptchaClick} src={captchaData} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
                                 </Form.Group>
                             </Form.Row>
-                            <Form.Control type='hidden' name='checkKey' value={loaderData.checkKey} />
                             <Button block className='mt-1' variant={'primary'} type={'submit'}>登 录</Button>
                         </Form>
                     </Col>
