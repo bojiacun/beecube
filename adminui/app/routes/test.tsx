@@ -26,7 +26,7 @@ export default function Test() {
         setCount(v => v+1);
     }
     return (
-        <Layout>
+        <Layout requireLogin={true}>
             <h1>Test page.Welcome to Remix {count}</h1>
             <Button variant={'danger'} onClick={handleOnClick}>{t('test_button')}</Button>
         </Layout>

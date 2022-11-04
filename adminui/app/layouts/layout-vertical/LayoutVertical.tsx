@@ -1,7 +1,7 @@
-import {LinksFunction} from "@remix-run/node";
+import {LinksFunction, redirect} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
-import {useContext} from "react";
+import {FC, useContext} from "react";
 import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
@@ -12,16 +12,32 @@ import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVe
 import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
+import {getCurrentUser} from "~/utils/reqeust";
 
 
 export const links: LinksFunction = () => {
     return [...verticalNavMenuLinks(),{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
 }
-const LayoutVertical = (props:any) => {
-    const {children} = props;
+
+export interface LayoutVerticalProps {
+    requireLogin?: boolean;
+    children?: any;
+}
+
+
+const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
+    const {children, requireLogin = true} = props;
     const {theme} = useContext(ThemeContext);
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
+    //检验用户是否登录
+    if(requireLogin) {
+        const userInfo = getCurrentUser();
+        if(userInfo == null) {
+            redirect('/login');
+        }
+    }
+
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
             <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow navbar-light align-items-center', navbarTypeClass)}>
