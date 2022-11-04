@@ -1,7 +1,7 @@
 import {LinksFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
-import {FC, useContext, useEffect} from "react";
+import {FC, useContext, useEffect, useState} from "react";
 import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
@@ -29,6 +29,7 @@ export interface LayoutVerticalProps {
 const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {children, requireLogin = true} = props;
     const {theme} = useContext(ThemeContext);
+    const [appLoading, setAppLoading] = useState<boolean>(true);
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     const navigate = useNavigate();
@@ -39,8 +40,17 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
             if(userInfo == null) {
                 navigate('/login');
             }
+            else {
+                const appLoading = document.getElementById('loading-bg')
+                if (appLoading) {
+                    appLoading.style.display = 'none'
+                    setAppLoading(false);
+                }
+            }
         }
     }, []);
+
+    if(appLoading) return <></>
 
 
     return (

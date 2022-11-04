@@ -12,8 +12,11 @@ import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
+import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
 import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
+import logoSvg from 'assets/images/logo/logo.svg';
+import {Image} from "react-bootstrap";
 
 i18n.changeLanguage('cn').then();
 
@@ -23,6 +26,7 @@ export const links: LinksFunction = () => {
     {rel: 'stylesheet', href: featherStyleUrl},
     {rel: 'stylesheet', href: coreStyleUrl},
     {rel: 'stylesheet', href: stylesUrl},
+    {rel: 'stylesheet', href: loaderStyleUrl},
   ];
 }
 
@@ -60,7 +64,7 @@ export default function App() {
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
           <div id="loading-bg">
             <div className="loading-logo">
-              <img src="<%= BASE_URL %>logo.png" alt="Logo"/>
+              <Image src={logoSvg} width={70} height={70} />
             </div>
             <div className="loading">
               <div className="effect-1 effects"></div>
