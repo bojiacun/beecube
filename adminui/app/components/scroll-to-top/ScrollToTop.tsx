@@ -1,16 +1,12 @@
 import {Button} from "react-bootstrap";
 import {ArrowUp} from 'react-feather';
-import {useWindowScroll} from "beautiful-react-hooks";
+import {useWindowScroll} from "react-use";
 import {useState} from "react";
 import classNames from "classnames";
 
 
 const ScrollToTop = () => {
-    const [scrollY, setScrollY] = useState(window.scrollY);
-    const onWindowScroll = useWindowScroll();
-    onWindowScroll((event)=>{
-        setScrollY(window.scrollY);
-    });
+    const {y} = useWindowScroll();
     const handleScrollToTop = () => {
         const rootEle = document.documentElement
         rootEle.scrollTo({
@@ -19,7 +15,7 @@ const ScrollToTop = () => {
         })
     }
     return (
-        <div onClick={handleScrollToTop} className={classNames('btn-scroll-to-top', scrollY > 50 ? 'show':'')}>
+        <div onClick={handleScrollToTop} className={classNames('btn-scroll-to-top', y > 50 ? 'show':'')}>
             <Button variant={'primary'} className={'btn-icon'}>
                 <ArrowUp size={16} />
             </Button>

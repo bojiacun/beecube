@@ -58,6 +58,16 @@ export default function App() {
       </head>
       <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''}>
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
+          <div id="loading-bg">
+            <div className="loading-logo">
+              <img src="<%= BASE_URL %>logo.png" alt="Logo"/>
+            </div>
+            <div className="loading">
+              <div className="effect-1 effects"></div>
+              <div className="effect-2 effects"></div>
+              <div className="effect-3 effects"></div>
+            </div>
+          </div>
           <div id='app' className='h-100'>
             <Outlet />
             {themeContext.layout.enableScrollToTop && <ScrollToTop />}
