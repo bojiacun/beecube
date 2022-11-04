@@ -6,6 +6,7 @@ import ThemeContext from 'themeConfig';
 import useAppConfig from "~/config";
 import LayoutVertical, {links as LayoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 import {useTranslation} from "react-i18next";
+import {Outlet} from "@remix-run/react";
 
 export const links: LinksFunction = () => {
     return [
@@ -29,6 +30,7 @@ export default function Test() {
         <Layout requireLogin={true}>
             <h1>Test page.Welcome to Remix {count}</h1>
             <Button variant={'danger'} onClick={handleOnClick}>{t('test_button')}</Button>
+            <Outlet />
         </Layout>
     );
 }
