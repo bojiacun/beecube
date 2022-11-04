@@ -1,7 +1,7 @@
-import {LinksFunction, redirect} from "@remix-run/node";
+import {LinksFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
-import {FC, useContext} from "react";
+import {FC, useContext, useEffect} from "react";
 import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
@@ -13,6 +13,7 @@ import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-ve
 import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import {getCurrentUser} from "~/utils/reqeust";
+import {useNavigate} from "@remix-run/react";
 
 
 export const links: LinksFunction = () => {
@@ -30,13 +31,17 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {theme} = useContext(ThemeContext);
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
+    const navigate = useNavigate();
     //检验用户是否登录
-    if(requireLogin) {
-        const userInfo = getCurrentUser();
-        if(userInfo == null) {
-            redirect('/login');
+    useEffect(()=>{
+        if(requireLogin) {
+            const userInfo = getCurrentUser();
+            if(userInfo == null) {
+                navigate('/login');
+            }
         }
-    }
+    }, []);
+
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>

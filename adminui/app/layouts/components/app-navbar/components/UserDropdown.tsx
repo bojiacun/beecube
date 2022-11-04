@@ -1,47 +1,49 @@
-import {NavDropdown, Image} from "react-bootstrap";
-import {useState} from "react";
+import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
+import {LOCAL_USER_KEY} from "~/utils/reqeust";
+import {useNavigate} from "@remix-run/react";
 
 const UserDropdown = (props:any) => {
     const {userData} = props;
-    const [toggleClass, setToggleClass] = useState<string>('d-flex align-items-center dropdown-user-link');
-
-    const handleOnToggle = (isOpen: boolean) => {
-        if(isOpen) {
-           setToggleClass('d-flex align-items-center dropdown-user-link');
-        }
-        else {
-            setToggleClass('');
-        }
-    }
+    const navigate = useNavigate();
     const dropdownTitle = (
         <>
             <div className="d-sm-flex d-none user-nav">
                 <p className="user-name font-weight-bolder mb-0">
-                    {userData?.fullName || userData?.username}
+                    {userData?.realName || userData?.username}
                 </p>
-                <span className="user-status">{userData?.role}</span>
+                <span className="user-status">{userData?.post}</span>
             </div>
-            {!userData?.fullName ? <User size={22} /> : <Image roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+            {!userData?.username ? <User size={22} /> : <Image src={userData.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
         </>
     );
+    const logout = () => {
+        localStorage.removeItem(LOCAL_USER_KEY);
+        navigate('/login');
+    }
     return (
         //@ts-ignore
-        <NavDropdown as={'li'} id={'dropdown-grouped'} title={dropdownTitle} onToggle={handleOnToggle} className={classNames('dropdown-user', toggleClass)} variant={'link'}>
-            <NavDropdown.Item key={'user-profile'} className={'d-flex align-items-center'}>
+        <Dropdown as={'li'} style={{minWidth: 160}} className={classNames('dropdown-user d-flex justify-content-end')} variant={'link'}>
+            <Dropdown.Toggle id={'dropdown-grouped'} as={NavLink} className={'d-flex align-items-center dropdown-user-link'}>
+                {dropdownTitle}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+            <Dropdown.Item key={'user-profile'} className={'d-flex align-items-center'}>
                 <User className={'mr-50'} size={16} />
                 <span>个人资料</span>
-            </NavDropdown.Item>
-            <NavDropdown.Item key={'user-settings'} className={'d-flex align-items-center'}>
+            </Dropdown.Item>
+            <Dropdown.Item key={'user-settings'} className={'d-flex align-items-center'}>
                 <Settings className={'mr-50'} size={16} />
                 <span>用户设置</span>
-            </NavDropdown.Item>
-            <NavDropdown.Item key={'logout'} className={'d-flex align-items-center'}>
+            </Dropdown.Item>
+            <Dropdown.Item key={'logout'} onSelect={logout} className={'d-flex align-items-center'}>
                 <LogOut className={'mr-50'} size={16} />
                 <span>退出登录</span>
-            </NavDropdown.Item>
-        </NavDropdown>
+            </Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
     );
 }
 
