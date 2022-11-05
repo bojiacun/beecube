@@ -89,7 +89,12 @@ const LoginPage = () => {
     if (theme.layout.skin == 'dark') {
         sideImageUrl = darkSideImageUrl;
     }
-
+    useEffect(()=>{
+        const appLoading = document.getElementById('loading-bg')
+        if (appLoading) {
+            appLoading.style.display = 'none'
+        }
+    }, []);
     const handleCaptchaClick = () => {
         let randomStr = randomstring.generate(8);
         axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
