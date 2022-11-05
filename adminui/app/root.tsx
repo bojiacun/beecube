@@ -83,7 +83,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''} style={{overflowY: themeContext.layout.iframeContent ? 'hidden': 'auto'}}>
+      <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout':''} style={{overflowY: themeContext?.layout?.iframeContent ? 'hidden': 'auto'}}>
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
           <div id="loading-bg">
             <div className="loading-logo">
@@ -97,7 +97,7 @@ export default function App() {
           </div>
           <div id='app' className='h-100'>
             <Outlet />
-            {themeContext.layout.enableScrollToTop && !themeContext.layout.iframeContent && <ScrollToTop />}
+            {themeContext?.layout?.enableScrollToTop && !themeContext?.layout?.iframeContent && <ScrollToTop />}
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />

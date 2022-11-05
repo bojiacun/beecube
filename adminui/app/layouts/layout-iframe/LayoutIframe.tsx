@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useRef} from "react";
 import ThemeContext from 'themeConfig';
 import {useLocation} from "react-router";
-import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
 import IframeScrollToTop from "~/components/iframe-scroll-to-top/IframeScrollToTop";
 import {getCurrentUser} from "~/utils/reqeust";
 
@@ -22,7 +21,7 @@ const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
         if (appLoading) {
             appLoading.style.display = 'none';
             //@ts-ignore
-            parent?.setCurrentLink(location.pathname);
+            typeof parent?.setCurrentLink === 'function' && parent?.setCurrentLink(location.pathname);
         }
         window.addEventListener("message", function(event){
             updateThemeContext({...event.data});
@@ -31,15 +30,15 @@ const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
             const userInfo = getCurrentUser();
             if(userInfo == null) {
                 //@ts-ignore
-                parent?.navigate("/login");
+                typeof parent?.navigate === 'function' && parent?.navigate("/login");
             }
         }
     }, []);
 
     return (
-        <div ref={scrollContainerRef} className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
+        <div ref={scrollContainerRef} className={theme?.layout?.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
             {children}
-            {theme.layout.enableScrollToTop && <IframeScrollToTop scrollRef={scrollContainerRef} />}
+            {theme?.layout?.enableScrollToTop && <IframeScrollToTop scrollRef={scrollContainerRef} />}
         </div>
     );
 }
