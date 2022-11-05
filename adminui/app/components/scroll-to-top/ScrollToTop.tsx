@@ -2,7 +2,12 @@ import {Button} from "react-bootstrap";
 import {ArrowUp} from 'react-feather';
 import {useWindowScroll} from "react-use";
 import classNames from "classnames";
+import stylesUrl from '~/styles/base/components/scroll-to-top.css';
+import {LinksFunction} from "@remix-run/node";
 
+export const links: LinksFunction = () => {
+    return [{rel: 'stylesheet', href: stylesUrl}];
+}
 
 const ScrollToTop = () => {
     const {y} = useWindowScroll();

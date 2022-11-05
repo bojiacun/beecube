@@ -1,0 +1,15 @@
+.btn-scroll-to-top {
+  position: fixed;
+  bottom: 5%;
+  right: 30px;
+  z-index: 99;
+
+  opacity: 0;
+  // transform: translateY(100px);
+  transition: all .5s ease;
+
+  &.show {
+    opacity: 1;
+    // transform: translateY(0)
+  }
+}

@@ -14,7 +14,7 @@ import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
-import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
+import ScrollToTop, {links as scrollToTopLinks} from "~/components/scroll-to-top/ScrollToTop";
 import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
 
@@ -23,6 +23,7 @@ i18n.changeLanguage('cn').then();
 
 export const links: LinksFunction = () => {
   return [
+      ...scrollToTopLinks(),
     {rel: 'stylesheet', href: featherStyleUrl},
     {rel: 'stylesheet', href: coreStyleUrl},
     {rel: 'stylesheet', href: stylesUrl},
