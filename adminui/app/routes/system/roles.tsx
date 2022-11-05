@@ -15,8 +15,7 @@ import {ChevronLeft, ChevronRight} from "react-feather";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {LinksFunction} from "@remix-run/node";
 import {useEffect} from "react";
-import axios from "axios";
-import {API_ROLE_LIST} from "~/utils/reqeust";
+import {API_ROLE_LIST, getAxios} from "~/utils/reqeust";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -24,8 +23,7 @@ export const links: LinksFunction = () => {
 
 const RolesPage = () => {
     useEffect(()=>{
-        console.log(axios.defaults.headers);
-        axios.get(API_ROLE_LIST).then(res=>{
+        getAxios().get(API_ROLE_LIST).then(res=>{
             console.log(res);
         });
         stopLoading();

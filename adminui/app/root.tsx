@@ -18,7 +18,7 @@ import ScrollToTop, {links as scrollToTopLinks} from "~/components/scroll-to-top
 import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
 import axios from "axios";
-import {getCurrentUser} from "~/utils/reqeust";
+import {configAxios, getCurrentUser} from "~/utils/reqeust";
 
 i18n.changeLanguage('cn').then();
 
@@ -46,14 +46,7 @@ export default function App() {
   useEffect(()=>{
     //@ts-ignore
     window.theme = theme;
-    const user = getCurrentUser();
-    console.log('root current user is', user);
-    if(user != null) {
-      axios.defaults.headers.common['X-Access-Token'] = user.token;
-      axios.defaults.headers.common['Authorization'] = user.token;
-    }
-    //@ts-ignore
-    window.user = user;
+    configAxios();
     //@ts-ignore
     window.navigate = navigate;
   }, []);

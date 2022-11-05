@@ -12,7 +12,22 @@ export const API_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/role/list`;
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
+let axiosInstance:any = null;
+export function getAxios() {
+    if(axiosInstance == null) {
+        axiosInstance = axios.create();
+    }
+    return axiosInstance;
+}
 
+export function configAxios() {
+    const user = getCurrentUser();
+    if(user != null) {
+        axios.defaults.headers.common['X-Access-Token'] = user.token;
+        axios.defaults.headers.common['Authorization'] = user.token;
+    }
+    axiosInstance = axios.create();
+}
 
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
