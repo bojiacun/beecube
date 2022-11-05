@@ -14,7 +14,7 @@ import {
 import {ChevronLeft, ChevronRight} from "react-feather";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {LinksFunction} from "@remix-run/node";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {API_ROLE_LIST, getAxios} from "~/utils/reqeust";
 
 export const links: LinksFunction = () => {
@@ -22,9 +22,11 @@ export const links: LinksFunction = () => {
 }
 
 const RolesPage = () => {
+    const [records, setRecords] = useState<any[]>([]);
+
     useEffect(()=>{
-        getAxios().get(API_ROLE_LIST).then(res=>{
-            console.log(res);
+        getAxios().get(API_ROLE_LIST).then((res:any)=>{
+            setRecords(res.data.result.records);
         });
         stopLoading();
     }, []);
@@ -70,6 +72,18 @@ const RolesPage = () => {
                         <th>操作</th>
                     </tr>
                     </thead>
+                    <tbody>
+                    {records.map((item:any)=>{
+                        return (
+                            <tr>
+                                <td>{item.roleName}</td>
+                                <td>{item.roleCode}</td>
+                                <td>{item.createTime}</td>
+                                <td></td>
+                            </tr>
+                        );
+                    })}
+                    </tbody>
                 </Table>
 
                 <Card.Body className={'d-flex justify-content-between flex-wrap pt-0'}>
