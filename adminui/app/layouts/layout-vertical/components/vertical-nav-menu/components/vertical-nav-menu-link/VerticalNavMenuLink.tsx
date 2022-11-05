@@ -2,10 +2,13 @@ import classNames from "classnames";
 import {canViewVerticalNavMenuLink} from "~/libs/acl/utils";
 import {Nav, Badge} from "react-bootstrap";
 import {Circle} from 'react-feather';
-import React from "react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {navLinkProps} from "~/layouts/utils";
 import {useLocation} from "react-router";
+import ThemeContext from 'themeConfig';
+import useAppConfig from "~/config";
+
 
 const feather = require('feather-icons');
 
@@ -14,8 +17,9 @@ const VerticalNavMenuLink = (props:any) => {
     const {item} = props;
     const {t} = useTranslation();
     const location = useLocation();
-
-    const linkProps:any = navLinkProps(item)();
+    const {theme} = useContext(ThemeContext);
+    const {iframeContent} = useAppConfig(theme);
+    const linkProps:any = navLinkProps(item, iframeContent)();
     const isActive = location.pathname === linkProps.href;
 
     const renderItemIcon = (item:any) => {

@@ -66,7 +66,7 @@ export const isNavGroupActive = (children:any) => {
  * @param {Object, String} item 数据中提供的导航路由名称或路由对象
  */
 // prettier-ignore
-export const navLinkProps = (item:any) => () => {
+export const navLinkProps = (item:any, isIframeContent:boolean = true) => () => {
     const props = {}
 
     // 如果路由为字符串,则判定用路由名称创建路由对象；如果路由不为字符串，则直接返回路由对象
@@ -89,6 +89,9 @@ export const navLinkProps = (item:any) => () => {
 
     // @ts-ignore
     if (!props.target) props.target = item.target || null
+
+    // @ts-ignore
+    if(isIframeContent) props.target = 'content-body';
 
     return props
 }

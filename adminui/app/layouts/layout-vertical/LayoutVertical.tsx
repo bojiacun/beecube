@@ -14,6 +14,8 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import {getCurrentUser} from "~/utils/reqeust";
 import {useNavigate} from "@remix-run/react";
+import LayoutContentRendererIframe
+    from "~/layouts/components/layout-content-iframe-renderer/LayoutContentRendererIframe";
 
 
 export const links: LinksFunction = () => {
@@ -30,7 +32,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {children, requireLogin = true} = props;
     const {theme} = useContext(ThemeContext);
     const [appLoading, setAppLoading] = useState<boolean>(true);
-    const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor} = useAppConfig(theme);
+    const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, iframeContent} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     const navigate = useNavigate();
     //检验用户是否登录
@@ -52,6 +54,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
 
     if(appLoading) return <></>
 
+    const LayoutContentRenderer = iframeContent ? LayoutContentRendererDefault: LayoutContentRendererIframe;
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
@@ -61,9 +64,9 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
             {!isNavMenuHidden && <VerticalNavMenu />}
             {/*垂直导航菜单遮罩层*/}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
-                <LayoutContentRendererDefault>
+                <LayoutContentRenderer>
                     {children}
-                </LayoutContentRendererDefault>
+                </LayoutContentRenderer>
             {/*页脚 */}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />
