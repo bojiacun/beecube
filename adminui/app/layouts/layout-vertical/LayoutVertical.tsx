@@ -49,6 +49,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
                     setAppLoading(false);
                     //@ts-ignore
                     window.setCurrentLink = (pathname: string) => {
+                        // @ts-ignore
                         document.getElementById('link-'+pathname).classList.add('active');
                     }
                 }
