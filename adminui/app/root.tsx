@@ -47,9 +47,10 @@ export default function App() {
     //@ts-ignore
     window.theme = theme;
     const user = getCurrentUser();
+    console.log('root current user is', user);
     if(user != null) {
-      axios.defaults.headers['X-Access-Token'] = user.token;
-      axios.defaults.headers['Authorization'] = user.token;
+      axios.defaults.headers.common['X-Access-Token'] = user.token;
+      axios.defaults.headers.common['Authorization'] = user.token;
     }
     //@ts-ignore
     window.user = user;

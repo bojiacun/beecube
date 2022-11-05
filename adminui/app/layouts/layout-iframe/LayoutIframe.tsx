@@ -19,7 +19,7 @@ const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
     useEffect(()=>{
         const appLoading = document.getElementById('loading-bg')
         if (appLoading) {
-            appLoading.style.display = 'none';
+            // appLoading.style.display = 'none';
             //@ts-ignore
             typeof parent?.setCurrentLink === 'function' && parent?.setCurrentLink(location.pathname);
         }
@@ -35,12 +35,22 @@ const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
         }
     }, []);
 
+
+
     return (
         <div ref={scrollContainerRef} className={theme?.layout?.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
             {children}
             {theme?.layout?.enableScrollToTop && <IframeScrollToTop scrollRef={scrollContainerRef} />}
         </div>
     );
+}
+export const stopLoading = () => {
+    const appLoading = document.getElementById('loading-bg')
+    if(appLoading) appLoading.style.display = 'none';
+}
+export const startLoading = () => {
+    const appLoading = document.getElementById('loading-bg')
+    if(appLoading) appLoading.style.display = 'none';
 }
 
 export default LayoutIframe;

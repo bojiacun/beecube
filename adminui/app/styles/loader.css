@@ -8,6 +8,7 @@ body {
   background: transparent;
   display: block;
   position: absolute;
+  z-index: 99;
 }
 
 .loading-logo {
