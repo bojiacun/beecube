@@ -14,7 +14,6 @@ const LayoutContentRendererIframe = (props:any) => {
             <div className={classNames('content-wrapper', contentWidth === 'boxed' ? 'container p-0':'')}>
                 <div className={'content-body'}>
                     <iframe name={'content-body'} id={'content-body'} style={{height: '100%', width: '100%', border: 'none'}}>
-                        {children}
                     </iframe>
                 </div>
             </div>

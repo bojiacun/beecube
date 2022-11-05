@@ -54,7 +54,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
 
     if(appLoading) return <></>
 
-    const LayoutContentRenderer = iframeContent ? LayoutContentRendererDefault: LayoutContentRendererIframe;
+    const LayoutContentRenderer = !iframeContent ? LayoutContentRendererDefault: LayoutContentRendererIframe;
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>

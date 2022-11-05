@@ -4,7 +4,7 @@ export default [
   },
   {
     title: 'index page',
-    route: '/test/child',
+    route: '/',
     icon: 'Book',
   },
 
@@ -32,11 +32,6 @@ export default [
     title: 'Invoice',
     icon: 'FileText',
     children: [
-      {
-        title: 'test page',
-        route: '/test',
-        icon: 'Book',
-      },
       {
         title: 'List',
         route: 'apps-invoice-list',

@@ -27,8 +27,8 @@ export default function Index() {
         setCount(v => v+1);
     }
     return (
-        <Layout requireLogin={true}>
-            <Outlet />
+        <Layout>
+            <h1>Welcome to Remix!</h1>
         </Layout>
     );
 }
