@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import ThemeContext from 'themeConfig';
 import {useLocation} from "react-router";
+import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
 
 
 const LayoutIframe : React.FC<any> = (props:any) => {
@@ -19,6 +20,7 @@ const LayoutIframe : React.FC<any> = (props:any) => {
     return (
         <div className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
             {children}
+            {theme.layout.enableScrollToTop && <ScrollToTop />}
         </div>
     );
 }

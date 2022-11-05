@@ -75,7 +75,7 @@ export default function App() {
           </div>
           <div id='app' className='h-100'>
             <Outlet />
-            {themeContext.layout.enableScrollToTop && <ScrollToTop />}
+            {themeContext.layout.enableScrollToTop && !themeContext.layout.iframeContent && <ScrollToTop />}
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />
