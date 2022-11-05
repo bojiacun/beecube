@@ -1,16 +1,21 @@
 import {Button} from "react-bootstrap";
 import {ArrowUp} from 'react-feather';
-import {useWindowScroll} from "react-use";
+import {useScroll, useWindowScroll} from "react-use";
 import classNames from "classnames";
 import stylesUrl from '~/styles/base/components/scroll-to-top.css';
 import {LinksFunction} from "@remix-run/node";
+import {FC} from "react";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: stylesUrl}];
 }
 
-const ScrollToTop = (props:any) => {
-    const {y} = useWindowScroll();
+export interface IFrameScrollToTopProps {
+    scrollRef: any;
+}
+
+const IFrameScrollToTop: FC<IFrameScrollToTopProps> = (props) => {
+    const {y} = useScroll(props.scrollRef);
 
     const handleScrollToTop = () => {
         const rootEle = document.documentElement
@@ -28,4 +33,4 @@ const ScrollToTop = (props:any) => {
     );
 }
 
-export default ScrollToTop;
+export default IFrameScrollToTop;
