@@ -1,5 +1,5 @@
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../../base/core/colors/palette-variables.scss';
 
 .b-avatar {
   font-size: 0.857rem;
@@ -49,7 +49,7 @@
 }
 
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../../base/core/colors/palette-variables.scss';
 
 // 徽章变量颜色
 @each $color_name, $color in $colors {

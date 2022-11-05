@@ -1,5 +1,5 @@
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../../base/core/colors/palette-variables.scss';
 
 @each $color_name, $color in $colors {
   @each $color_type, $color_value in $color {

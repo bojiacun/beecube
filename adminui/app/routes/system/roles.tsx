@@ -55,10 +55,12 @@ const RolesPage = () => {
 
                 <Table striped hover responsive className={'position-relative'}>
                     <thead>
-                    <th>角色名称</th>
-                    <th>角色编码</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
+                    <tr>
+                        <th>角色名称</th>
+                        <th>角色编码</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
                     </thead>
                 </Table>
 
@@ -75,8 +77,12 @@ const RolesPage = () => {
                     </FormGroup>
                     <div>
                         <Pagination className={'mb-0'}>
-                            <Pagination.Item className={'prev-item'} as={'span'}><ChevronLeft size={18} /></Pagination.Item>
-                            <Pagination.Item className={'next-item'} as={'span'}><ChevronRight size={18} /></Pagination.Item>
+                            <Pagination.Item className={'prev-item'} as={'span'}><ChevronLeft
+                                size={18}/></Pagination.Item>
+                            <Pagination.Item className={'active'} as={'button'} type={'button'}>1</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
+                            <Pagination.Item className={'next-item'} as={'span'}><ChevronRight
+                                size={18}/></Pagination.Item>
                         </Pagination>
                     </div>
                 </Card.Body>

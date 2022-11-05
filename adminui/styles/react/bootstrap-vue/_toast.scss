@@ -1,5 +1,5 @@
 // 调色板
-@import '~@core/scss/base/core/colors/palette-variables.scss';
+@import '../../base/core/colors/palette-variables.scss';
 
 // 上传根据事件类别的边框颜色
 @each $color_name, $color in $colors {
