@@ -60,7 +60,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''}>
+      <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''} style={{overflowY: themeContext.layout.iframeContent ? 'hidden': 'auto'}}>
         <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
           <div id="loading-bg">
             <div className="loading-logo">
