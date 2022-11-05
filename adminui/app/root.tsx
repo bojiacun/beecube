@@ -51,6 +51,7 @@ export default function App() {
     window.navigate = navigate;
     console.log('app loaded');
   }, []);
+  console.log('app init');
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
 
