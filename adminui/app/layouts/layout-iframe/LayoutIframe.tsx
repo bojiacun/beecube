@@ -7,7 +7,7 @@ import IframeScrollToTop from "~/components/iframe-scroll-to-top/IframeScrollToT
 
 const LayoutIframe : React.FC<any> = (props:any) => {
     const {children} = props;
-    const {theme} = useContext(ThemeContext);
+    const {theme, updateThemeContext} = useContext(ThemeContext);
     const location = useLocation();
     const scrollContainerRef = useRef<any>();
 
@@ -16,8 +16,11 @@ const LayoutIframe : React.FC<any> = (props:any) => {
         if (appLoading) {
             appLoading.style.display = 'none';
             //@ts-ignore
-            parent.setCurrentLink(location.pathname);
+            parent?.setCurrentLink(location.pathname);
         }
+        window.addEventListener("message", function(event){
+            updateThemeContext({...event.data});
+        }, false);
     }, []);
 
     return (
