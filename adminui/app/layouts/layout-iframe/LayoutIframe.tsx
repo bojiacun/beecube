@@ -3,10 +3,16 @@ import ThemeContext from 'themeConfig';
 import {useLocation} from "react-router";
 import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
 import IframeScrollToTop from "~/components/iframe-scroll-to-top/IframeScrollToTop";
+import {getCurrentUser} from "~/utils/reqeust";
 
 
-const LayoutIframe : React.FC<any> = (props:any) => {
-    const {children} = props;
+export interface LayoutIframeProps {
+    requireLogin?: boolean;
+    children?: any;
+}
+
+const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
+    const {children, requireLogin = true} = props;
     const {theme, updateThemeContext} = useContext(ThemeContext);
     const location = useLocation();
     const scrollContainerRef = useRef<any>();
@@ -21,6 +27,13 @@ const LayoutIframe : React.FC<any> = (props:any) => {
         window.addEventListener("message", function(event){
             updateThemeContext({...event.data});
         }, false);
+        if(requireLogin) {
+            const userInfo = getCurrentUser();
+            if(userInfo == null) {
+                //@ts-ignore
+                parent?.navigate("/login");
+            }
+        }
     }, []);
 
     return (

@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration, useNavigate,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -17,6 +17,8 @@ import i18n from '~/libs/i18n/index';
 import ScrollToTop, {links as scrollToTopLinks} from "~/components/scroll-to-top/ScrollToTop";
 import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
+import axios from "axios";
+import {getCurrentUser} from "~/utils/reqeust";
 
 i18n.changeLanguage('cn').then();
 
@@ -40,9 +42,19 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
+  const navigate = useNavigate();
   useEffect(()=>{
     //@ts-ignore
     window.theme = theme;
+    const user = getCurrentUser();
+    if(user != null) {
+      axios.defaults.headers['X-Access-Token'] = user.token;
+      axios.defaults.headers['Authorization'] = user.token;
+    }
+    //@ts-ignore
+    window.user = user;
+    //@ts-ignore
+    window.navigate = navigate;
   }, []);
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
