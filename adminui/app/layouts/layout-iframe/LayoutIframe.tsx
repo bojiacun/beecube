@@ -1,13 +1,15 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import ThemeContext from 'themeConfig';
 import {useLocation} from "react-router";
 import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
+import IframeScrollToTop from "~/components/iframe-scroll-to-top/IframeScrollToTop";
 
 
 const LayoutIframe : React.FC<any> = (props:any) => {
     const {children} = props;
     const {theme} = useContext(ThemeContext);
     const location = useLocation();
+    const scrollContainerRef = useRef<any>();
 
     useEffect(()=>{
         const appLoading = document.getElementById('loading-bg')
@@ -18,9 +20,9 @@ const LayoutIframe : React.FC<any> = (props:any) => {
         }
     }, []);
     return (
-        <div className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
+        <div ref={scrollContainerRef} className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
             {children}
-            {theme.layout.enableScrollToTop && <ScrollToTop />}
+            {theme.layout.enableScrollToTop && <IframeScrollToTop scrollRef={scrollContainerRef} />}
         </div>
     );
 }
