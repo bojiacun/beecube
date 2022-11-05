@@ -23,9 +23,7 @@ export const links: LinksFunction = () => {
 
 const RolesPage = () => {
     useEffect(()=>{
-        getAxios().get(API_ROLE_LIST).then(res=>{
-            console.log(res);
-        });
+        console.log('roles page loaded');
         stopLoading();
     }, []);
     return (
