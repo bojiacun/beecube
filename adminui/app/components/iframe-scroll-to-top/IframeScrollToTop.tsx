@@ -18,7 +18,7 @@ const IFrameScrollToTop: FC<IFrameScrollToTopProps> = (props) => {
     const {y} = useScroll(props.scrollRef);
 
     const handleScrollToTop = () => {
-        const rootEle = document.documentElement
+        const rootEle = props.scrollRef.current;
         rootEle.scrollTo({
             top: 0,
             behavior: 'smooth',
