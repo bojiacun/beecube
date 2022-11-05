@@ -15,7 +15,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 let axiosInstance:any = null;
 export function getAxios() {
     if(axiosInstance == null) {
-        axiosInstance = axios.create();
+        configAxios();
     }
     return axiosInstance;
 }
