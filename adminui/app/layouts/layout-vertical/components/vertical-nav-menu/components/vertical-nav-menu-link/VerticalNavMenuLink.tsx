@@ -31,7 +31,7 @@ const VerticalNavMenuLink = (props:any) => {
     }
     if(canViewVerticalNavMenuLink(item)) {
         return (
-            <li className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
+            <li id={'link-'+linkProps.href} className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
                 <Nav.Link className={'d-flex align-items-center'} {...linkProps}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>

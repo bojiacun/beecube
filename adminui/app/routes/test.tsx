@@ -1,9 +1,9 @@
-import LayoutFull from "~/layouts/layout-full/LayoutFull";
+import LayoutIframe from "~/layouts/layout-iframe/LayoutIframe";
 
 
 const Test = () => {
     return (
-        <LayoutFull>
+        <LayoutIframe>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
@@ -75,7 +75,7 @@ const Test = () => {
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
-        </LayoutFull>
+        </LayoutIframe>
     );
 }
 
