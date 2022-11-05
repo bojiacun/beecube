@@ -49,6 +49,7 @@ export default function App() {
     configAxios();
     //@ts-ignore
     window.navigate = navigate;
+    console.log('app loaded');
   }, []);
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
