@@ -7,13 +7,13 @@ import useAppConfig from "~/config";
 
 const DarkToggler = (props:any) => {
     const {className} = props;
-    const {theme, setThemeContext} = useContext(ThemeContext);
+    const {theme, updateThemeContext} = useContext(ThemeContext);
     const {skin} = useAppConfig(theme);
     const isDark = skin === 'dark';
 
     const updateThemeSkin = (newSkin:string) => {
         theme.layout.skin = newSkin;
-        setThemeContext({...theme});
+        updateThemeContext({...theme});
     }
 
     return (

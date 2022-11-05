@@ -19,6 +19,7 @@ const LayoutIframe : React.FC<any> = (props:any) => {
             parent.setCurrentLink(location.pathname);
         }
     }, []);
+
     return (
         <div ref={scrollContainerRef} className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
             {children}

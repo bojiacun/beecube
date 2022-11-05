@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Links,
   LiveReload,
@@ -40,6 +40,10 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
+  useEffect(()=>{
+    //@ts-ignore
+    window.theme = theme;
+  }, []);
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
 
@@ -55,6 +59,12 @@ export default function App() {
     themeBreakpoints[breakpoints[i]] = `--breakpoint-${breakpoints[i]}`;
   }
 
+  const updateThemeContext = (theme:any) => {
+    setThemeContext(theme);
+    //@ts-ignore
+    window.theme = theme;
+  }
+
   return (
     <html lang="cn">
       <head>
@@ -62,7 +72,7 @@ export default function App() {
         <Links />
       </head>
       <body className={themeContext.layout.skin == 'dark' ? 'dark-layout':''} style={{overflowY: themeContext.layout.iframeContent ? 'hidden': 'auto'}}>
-        <ThemeContext.Provider value={{theme: themeContext, setThemeContext}}>
+        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
           <div id="loading-bg">
             <div className="loading-logo">
               <Image src={logoSvg} width={70} height={70} />
