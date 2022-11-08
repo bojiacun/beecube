@@ -1,10 +1,9 @@
 import classNames from "classnames";
 import {canViewVerticalNavMenuLink} from "~/libs/acl/utils";
-import {Badge} from "react-bootstrap";
+import {Badge, NavLink} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {navLinkProps} from "~/layouts/utils";
 import {useLocation} from "react-router";
 import {Link} from "@remix-run/react";
 
@@ -16,10 +15,8 @@ const VerticalNavMenuLink = (props:any) => {
     const {item} = props;
     const {t} = useTranslation();
     const location = useLocation();
-    const linkProps:any = navLinkProps(item)();
-    const isActive = location.pathname === linkProps.to;
+    const isActive = location.pathname === '/'+item.route;
 
-    console.log(linkProps);
 
     const renderItemIcon = (item:any) => {
         if(item.icon) {
@@ -28,14 +25,30 @@ const VerticalNavMenuLink = (props:any) => {
         }
         return <Circle />;
     }
-    if(canViewVerticalNavMenuLink(item)) {
-        return (
-            <li id={'link-'+linkProps.href} className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
-                <Link className={'d-flex align-items-center'} to={linkProps.to}>
+    const renderLink = (item:any) => {
+        if(item.route && !item.target) {
+            return (
+                <Link className={'d-flex align-items-center'} to={item.route}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
                 </Link>
+            );
+        }
+        else {
+            return (
+                <NavLink className={'d-flex align-items-center'} href={item.route||item.href} target={item.target??''}>
+                    {renderItemIcon(item)}
+                    <span className="menu-title text-truncate">{t(item.title)}</span>
+                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                </NavLink>
+            );
+        }
+    }
+    if(canViewVerticalNavMenuLink(item)) {
+        return (
+            <li id={'link-'+item.route} className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
+                {renderLink(item)}
             </li>
         );
     }

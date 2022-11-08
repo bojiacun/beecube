@@ -5,7 +5,7 @@ export default [
     },
     {
         title: 'RolesManager',
-        route: '/system/roles',
+        route: 'system/roles',
         icon: 'Settings'
     }
 ]
