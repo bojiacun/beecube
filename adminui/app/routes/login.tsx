@@ -14,7 +14,7 @@ import {
     InputGroup
 } from "react-bootstrap";
 import SystemLogo from "~/components/logo";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
@@ -22,14 +22,12 @@ import {Eye, HelpCircle} from "react-feather";
 import {
     API_CAPTCHA,
     API_LOGIN,
-    BASE_URL,
-    LOCAL_USER_KEY,
     LOGIN_SUCCESS_URL,
     postFormInit,
-    saveCurrentUser
 } from "~/utils/reqeust";
 import axios from "axios";
-import {useLoaderData, useNavigate} from "@remix-run/react";
+import {useActionData, useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
+import classNames from "classnames";
 
 const randomstring = require('randomstring');
 
@@ -55,6 +53,7 @@ export const action: ActionFunction = async ({request}) => {
     const form = await request.formData();
     let checkKey = form.get("checkKey");
     const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
+    console.log(data);
     const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
     const result = await res.json();
     if(result.code !== 200) {
@@ -77,12 +76,10 @@ export function ErrorBoundary({error}: { error: Error }) {
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
+    const actionData = useActionData<ActionData>();
+    const transition = useTransition();
     const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
     const [validated, setValidated] = useState<boolean>(false);
-    const [formData, setFormData] = useState<any>({checkKey: loaderData.checkKey, username: '', password: '', captcha: ''});
-    const [posting, setPosting] = useState<boolean>(false);
-    const [errorData, setErrorData] = useState<string>();
-    const navigate = useNavigate();
 
 
     let sideImageUrl = lightSideImageUrl;
@@ -102,30 +99,14 @@ const LoginPage = () => {
         });
     }
     const handleOnSubmit = async (e:any) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setValidated(true);
         let form = e.currentTarget;
         if(form.checkValidity() === false) {
-            return false;
+            e.preventDefault();
+            e.stopPropagation();
         }
-        setPosting(true);
-        try{
-            const res = await axios.post(API_LOGIN, formData);
-            setPosting(false);
-            if(res.data.success) {
-                saveCurrentUser(res.data.result);
-                navigate('/');
-            }
-            else {
-                setErrorData(res.data.message);
-            }
-        }
-        catch(e:any) {
-            setErrorData('登录出错');
-            setPosting(false);
-        }
+        setValidated(true);
     }
+    // @ts-ignore
     return (
         <div className={'auth-wrapper auth-v2'}>
             <Row className={'auth-inner m-0'}>
@@ -164,17 +145,17 @@ const LoginPage = () => {
                                 <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
                             </OverlayTrigger>
                         </Alert>
-                        {errorData && <Alert variant='danger'>
+                        {actionData?.formError && <Alert variant='danger'>
                             <div className="alert-body font-small-2">
                                 <p>
-                                    <small className="mr-50">{errorData}</small>
+                                    <small className="mr-50">{actionData.formError}</small>
                                 </p>
                             </div>
                         </Alert>}
-                        <Form noValidate className="auth-login-form mt-2" method='post' validated={validated} onSubmit={handleOnSubmit}>
+                        <RemixForm noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated':'')} method='post' onSubmit={handleOnSubmit}>
                             <Form.Group>
                                 <Form.Label htmlFor={'username'}>用户名</Form.Label>
-                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required value={formData.username} onChange={event => setFormData({...formData, username: event.target.value})}  />
+                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required  />
                             </Form.Group>
                             <Form.Group>
                                 <div className="d-flex justify-content-between">
@@ -185,7 +166,7 @@ const LoginPage = () => {
                                 </div>
                                 <InputGroup className="input-group-merge">
                                     <Form.Control name='password' type='password' className='form-control-merge'
-                                                  placeholder={'abc123'} required value={formData.password} onChange={event => setFormData({...formData, password: event.target.value})}  />
+                                                  placeholder={'abc123'} required  />
                                     <InputGroup.Append>
                                         <InputGroup.Text>
                                             <Eye className='cursor-pointer' size={14}/>
@@ -196,15 +177,16 @@ const LoginPage = () => {
                             <Form.Row>
                                 <Form.Group as={Col}>
                                     <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
-                                    <Form.Control name='captcha' placeholder={'验证码'} required value={formData.captcha} onChange={event => setFormData({...formData, captcha: event.target.value})} />
+                                    <Form.Control name='captcha' placeholder={'验证码'} required  />
                                 </Form.Group>
                                 <Form.Group as={Col}>
                                     <Form.Label>&nbsp;</Form.Label>
                                     <Image onClick={handleCaptchaClick} src={captchaData} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
                                 </Form.Group>
                             </Form.Row>
-                            <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={posting}>{posting? '登录中...':'登 录'}</Button>
-                        </Form>
+                            <Form.Control type={'hidden'} name={'checkKey'} value={loaderData.checkKey} />
+                            <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
+                        </RemixForm>
                     </Col>
                 </Col>
             </Row>
