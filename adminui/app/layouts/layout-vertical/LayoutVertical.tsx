@@ -14,11 +14,11 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import {getCurrentUser} from "~/utils/reqeust";
 import {useNavigate} from "@remix-run/react";
-import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
+import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
 
 
 export const links: LinksFunction = () => {
-    return [...verticalNavMenuLinks(),{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
+    return [...verticalNavMenuLinks(),...scrollToTopStyle(),{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
 }
 
 export interface LayoutVerticalProps {
