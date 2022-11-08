@@ -1,9 +1,6 @@
-import LayoutIframe from "~/layouts/layout-iframe/LayoutIframe";
-
-
 const Test = () => {
     return (
-        <LayoutIframe>
+        <>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
@@ -75,7 +72,7 @@ const Test = () => {
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
             <h1>Welcome to Remix!</h1>
-        </LayoutIframe>
+        </>
     );
 }
 

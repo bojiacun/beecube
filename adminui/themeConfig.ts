@@ -34,7 +34,6 @@ export const theme = {
     },
     customizer: true,
     enableScrollToTop: true,
-    iframeContent: true,
   },
 };
 
