@@ -17,8 +17,6 @@ import i18n from '~/libs/i18n/index';
 import ScrollToTop, {links as scrollToTopLinks} from "~/components/scroll-to-top/ScrollToTop";
 import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
-import axios from "axios";
-import {configAxios, getCurrentUser} from "~/utils/reqeust";
 
 i18n.changeLanguage('cn').then();
 
@@ -77,7 +75,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout':''} style={{overflowY: themeContext?.layout?.iframeContent ? 'hidden': 'auto'}}>
+      <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout':''} style={{overflowY: 'auto'}}>
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
           <div id="loading-bg">
             <div className="loading-logo">
@@ -91,7 +89,7 @@ export default function App() {
           </div>
           <div id='app' className='h-100'>
             <Outlet />
-            {themeContext?.layout?.enableScrollToTop && !themeContext?.layout?.iframeContent && <ScrollToTop />}
+            {themeContext?.layout?.enableScrollToTop && <ScrollToTop />}
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />

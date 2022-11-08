@@ -14,6 +14,5 @@ export default function useAppConfig(theme:any) {
         navbarBackgroundColor: theme.layout.navbar.backgroundColor,
         shallShowOverlay: theme.app.shallShowOverlay,
         contentWidth: theme.layout.contentWidth,
-        iframeContent: theme.layout.iframeContent,
     };
 }

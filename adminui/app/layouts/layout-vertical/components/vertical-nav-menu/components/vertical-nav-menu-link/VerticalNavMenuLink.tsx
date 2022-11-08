@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 import {navLinkProps} from "~/layouts/utils";
 import {useLocation} from "react-router";
 import ThemeContext from 'themeConfig';
-import useAppConfig from "~/config";
 
 
 const feather = require('feather-icons');
@@ -18,8 +17,7 @@ const VerticalNavMenuLink = (props:any) => {
     const {t} = useTranslation();
     const location = useLocation();
     const {theme} = useContext(ThemeContext);
-    const {iframeContent} = useAppConfig(theme);
-    const linkProps:any = navLinkProps(item, iframeContent)();
+    const linkProps:any = navLinkProps(item)();
     const isActive = location.pathname === linkProps.href;
 
     const renderItemIcon = (item:any) => {
