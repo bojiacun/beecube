@@ -14,8 +14,7 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import {getCurrentUser} from "~/utils/reqeust";
 import {useNavigate} from "@remix-run/react";
-import LayoutContentRendererIframe
-    from "~/layouts/components/layout-content-iframe-renderer/LayoutContentRendererIframe";
+import ScrollToTop from "~/components/scroll-to-top/ScrollToTop";
 
 
 export const links: LinksFunction = () => {
@@ -32,7 +31,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {children, requireLogin = true} = props;
     const {theme} = useContext(ThemeContext);
     const [appLoading, setAppLoading] = useState<boolean>(true);
-    const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, iframeContent} = useAppConfig(theme);
+    const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     const navigate = useNavigate();
     //检验用户是否登录
@@ -57,8 +56,6 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
         }
     }, []);
 
-    if(appLoading) return <></>
-
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
@@ -75,6 +72,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />
             </footer>
+            {enableScrollToTop && <ScrollToTop />}
         </div>
     );
 }

@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration, useNavigate,
+  ScrollRestoration, useMatches, useNavigate,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -14,16 +14,17 @@ import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
-import ScrollToTop, {links as scrollToTopLinks} from "~/components/scroll-to-top/ScrollToTop";
 import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
+import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
+import LayoutFull from "~/layouts/layout-full/LayoutFull";
 
 i18n.changeLanguage('cn').then();
 
 
 export const links: LinksFunction = () => {
   return [
-      ...scrollToTopLinks(),
+      ...layoutVerticalLinks(),
     {rel: 'stylesheet', href: featherStyleUrl},
     {rel: 'stylesheet', href: coreStyleUrl},
     {rel: 'stylesheet', href: stylesUrl},
@@ -41,6 +42,17 @@ export const meta: MetaFunction = () => ({
 export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
   const navigate = useNavigate();
+  const matches = useMatches();
+
+  console.log(matches);
+  let Layout : any;
+  if(matches[1].pathname == '/login') {
+    Layout = LayoutFull;
+  }
+  else {
+    Layout = LayoutVertical;
+  }
+
   useEffect(()=>{
     //@ts-ignore
     window.theme = theme;
@@ -88,8 +100,9 @@ export default function App() {
             </div>
           </div>
           <div id='app' className='h-100'>
-            <Outlet />
-            {themeContext?.layout?.enableScrollToTop && <ScrollToTop />}
+            <Layout>
+              <Outlet />
+            </Layout>
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />
