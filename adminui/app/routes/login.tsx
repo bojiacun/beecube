@@ -53,12 +53,12 @@ export const action: ActionFunction = async ({request}) => {
     const form = await request.formData();
     let checkKey = form.get("checkKey");
     const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
-    console.log(data);
     const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
     const result = await res.json();
     if(result.code !== 200) {
         return badRequest({formError: result.message, checkKey: checkKey});
     }
+    console.log('登录成功，准备跳转登录成功页面', result);
     return redirect(LOGIN_SUCCESS_URL);
 }
 

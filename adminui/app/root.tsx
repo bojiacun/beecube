@@ -18,6 +18,8 @@ import logoSvg from 'assets/images/logo/logo.svg';
 import {Image} from "react-bootstrap";
 import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
+//@ts-ignore
+import _ from 'lodash';
 
 i18n.changeLanguage('cn').then();
 
@@ -44,8 +46,11 @@ export default function App() {
   const navigate = useNavigate();
   const matches = useMatches();
 
+
+  const excludeAdminPaths = ['/login'];
+
   let Layout : any;
-  if(matches[1].pathname == '/login') {
+  if(_.indexOf(excludeAdminPaths,matches[1].pathname) > -1) {
     Layout = LayoutFull;
   }
   else {
