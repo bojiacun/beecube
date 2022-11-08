@@ -4,7 +4,7 @@ export default [
   },
   {
     title: 'index page',
-    route: '/test',
+    route: 'test',
     icon: 'Book',
   },
 

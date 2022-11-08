@@ -1,12 +1,12 @@
 import classNames from "classnames";
 import {canViewVerticalNavMenuLink} from "~/libs/acl/utils";
-import {Nav, Badge} from "react-bootstrap";
+import {Badge} from "react-bootstrap";
 import {Circle} from 'react-feather';
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {navLinkProps} from "~/layouts/utils";
 import {useLocation} from "react-router";
-import ThemeContext from 'themeConfig';
+import {Link} from "@remix-run/react";
 
 
 const feather = require('feather-icons');
@@ -16,9 +16,10 @@ const VerticalNavMenuLink = (props:any) => {
     const {item} = props;
     const {t} = useTranslation();
     const location = useLocation();
-    const {theme} = useContext(ThemeContext);
     const linkProps:any = navLinkProps(item)();
-    const isActive = location.pathname === linkProps.href;
+    const isActive = location.pathname === linkProps.to;
+
+    console.log(linkProps);
 
     const renderItemIcon = (item:any) => {
         if(item.icon) {
@@ -30,11 +31,11 @@ const VerticalNavMenuLink = (props:any) => {
     if(canViewVerticalNavMenuLink(item)) {
         return (
             <li id={'link-'+linkProps.href} className={classNames('nav-item', item.disabled ? 'disabled' : '',isActive ? 'active': '')}>
-                <Nav.Link className={'d-flex align-items-center'} {...linkProps}>
+                <Link className={'d-flex align-items-center'} to={linkProps.to}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
-                </Nav.Link>
+                </Link>
             </li>
         );
     }

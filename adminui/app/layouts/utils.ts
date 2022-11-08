@@ -73,22 +73,12 @@ export const navLinkProps = (item:any) => () => {
     if (item.route) {
         // @ts-ignore
         props.to = typeof item.route === 'string' ? item.route : item.route.name;
-        // @ts-ignore
-        props.href = typeof item.route === 'string' ? item.route : item.route.name;
     }
     else {
         // @ts-ignore
-        props.href = item.href
-        // @ts-ignore
         props.to = item.href
-        // @ts-ignore
-        props.target = '_blank'
-        // @ts-ignore
-        props.rel = 'nofollow'
     }
 
-    // @ts-ignore
-    if (!props.target) props.target = item.target || null
 
 
     return props

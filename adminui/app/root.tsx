@@ -44,7 +44,6 @@ export default function App() {
   const navigate = useNavigate();
   const matches = useMatches();
 
-  console.log(matches);
   let Layout : any;
   if(matches[1].pathname == '/login') {
     Layout = LayoutFull;
