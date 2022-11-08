@@ -25,8 +25,6 @@ const VerticalNavMenu = (props:any) => {
     const {appName, appLogoImage} = theme.app;
     const {isVerticalMenuCollapsed, skin} = useAppConfig(theme);
     const {} = useVerticalNavMenu(props);
-    const [isMouseHovered, setIsMouseHovered] = useState<boolean>(false);
-    const updateMouseHovered = (val:boolean) => setIsMouseHovered(val);
     const [shallShadowBottom, setShallShadowBottom] = useState<boolean>(false);
     const perfectScrollbarSettings = {
         maxScrollbarLength: 60,
@@ -35,9 +33,7 @@ const VerticalNavMenu = (props:any) => {
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
-            !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) ? 'expanded':'', skin === 'dark' ? 'menu-dark':'menu-light')}
-             onMouseEnter={()=>updateMouseHovered(true)}
-             onMouseLeave={()=>updateMouseHovered(false)}
+            !isVerticalMenuCollapsed || (isVerticalMenuCollapsed) ? 'expanded':'', skin === 'dark' ? 'menu-dark':'menu-light')}
         >
             <div className={'navbar-header expanded'}>
                 <ul className={'nav navbar-nav flex-row'}>
