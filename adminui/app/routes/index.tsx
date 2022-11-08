@@ -21,8 +21,6 @@ export default function Index() {
 
 
     return (
-        <Layout requireLogin={true}>
-            <Outlet />
-        </Layout>
+        <Outlet />
     );
 }
