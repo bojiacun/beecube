@@ -20,9 +20,22 @@ import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-ver
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
 import _ from 'lodash';
+import {json} from "@remix-run/node";
 
 i18n.changeLanguage('cn').then();
 
+
+export async function loader() {
+  return json({
+    ENV: {
+      BASE_URL: process.env.BASE_URL,
+      LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,
+      LOCAL_USER_KEY: process.env.LOCAL_USER_KEY,
+      SESSION_SECRET: process.env.SESSION_SECRET,
+      COOKIE_NAME: process.env.COOKIE_NAME,
+    },
+  });
+}
 
 export const links: LinksFunction = () => {
   return [
@@ -62,7 +75,7 @@ export default function App() {
     window.theme = theme;
     //@ts-ignore
     window.navigate = navigate;
-    console.log('app loaded');
+    console.log('app loaded', window);
   }, []);
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']

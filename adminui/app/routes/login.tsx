@@ -19,21 +19,13 @@ import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
-import {
-    API_CAPTCHA, LOGIN_SUCCESS_URL,
-} from "~/utils/reqeust";
-import axios from "axios";
-import {useActionData, useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
+
+import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
-
+import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/reqeust";
 const randomstring = require('randomstring');
 
-
-type ActionData = {
-    formError?: string;
-    checkKey: any;
-};
 
 type LoaderData = {
     checkKey: any;
@@ -68,7 +60,6 @@ export function ErrorBoundary({error}: { error: Error }) {
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
-    const actionData = useActionData<ActionData>();
     const transition = useTransition();
     const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
     const [validated, setValidated] = useState<boolean>(false);
@@ -86,9 +77,9 @@ const LoginPage = () => {
     }, []);
     const handleCaptchaClick = () => {
         let randomStr = randomstring.generate(8);
-        axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
-            setCaptchaData(res.data.result);
-        });
+        // axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
+        //     setCaptchaData(res.data.result);
+        // });
     }
     const handleOnSubmit = async (e:any) => {
         let form = e.currentTarget;
