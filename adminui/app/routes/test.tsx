@@ -1,3 +1,9 @@
+import {json, LoaderFunction} from "@remix-run/node";
+import {auth} from "~/utils/auth.server";
+
+export const loader: LoaderFunction = async ({request}) => {
+        return json(await auth.isAuthenticated(request, {failureRedirect: '/login'}));
+}
 const Test = () => {
     return (
         <>
