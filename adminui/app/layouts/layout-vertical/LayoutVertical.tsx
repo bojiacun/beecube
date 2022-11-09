@@ -1,4 +1,4 @@
-import {LinksFunction} from "@remix-run/node";
+import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
 import {FC, useContext, useEffect, useState} from "react";
@@ -14,43 +14,38 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import {useNavigate} from "@remix-run/react";
 import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
+import {auth} from "~/utils/auth.server";
 
 
 export const links: LinksFunction = () => {
     return [...verticalNavMenuLinks(),...scrollToTopStyle(),{rel: 'stylesheet', href: borderedLayoutStyleUrl}];
 }
 
+export const loader: LoaderFunction = async ({request}) => {
+    return json(await auth.isAuthenticated(request, {failureRedirect: '/login'}));
+}
+
 export interface LayoutVerticalProps {
-    requireLogin?: boolean;
     children?: any;
 }
 
 
 const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
-    const {children, requireLogin = true} = props;
+    const {children} = props;
     const {theme} = useContext(ThemeContext);
     const [appLoading, setAppLoading] = useState<boolean>(true);
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
-    const navigate = useNavigate();
     //检验用户是否登录
-    useEffect(()=>{
-        if(requireLogin) {
-            const userInfo = '';
-            if(userInfo == null) {
-                navigate('/login');
-            }
-            else {
-                const appLoading = document.getElementById('loading-bg')
-                if (appLoading) {
-                    appLoading.style.display = 'none'
-                    setAppLoading(false);
-                    //@ts-ignore
-                    window.setCurrentLink = (pathname: string) => {
-                        // @ts-ignore
-                        document.getElementById('link-'+pathname).classList.add('active');
-                    }
-                }
+    useEffect(()=> {
+        const appLoading = document.getElementById('loading-bg')
+        if (appLoading) {
+            appLoading.style.display = 'none'
+            setAppLoading(false);
+            //@ts-ignore
+            window.setCurrentLink = (pathname: string) => {
+                // @ts-ignore
+                document.getElementById('link-' + pathname).classList.add('active');
             }
         }
     }, []);
