@@ -3,18 +3,11 @@ import Locale from "./components/Locale";
 import DarkToggler from "~/layouts/components/app-navbar/components/DarkToggler";
 import UserDropdown from "~/layouts/components/app-navbar/components/UserDropdown";
 import {useEffect, useState} from "react";
-import {getCurrentUser} from "~/utils/reqeust";
 
 
 const AppNavbarVerticalLayout = () => {
     const [userData, setUserData] = useState<any>();
 
-    useEffect(()=>{
-        const user = getCurrentUser();
-        if(user != null) {
-            setUserData(user.userInfo);
-        }
-    }, []);
 
     return (
         <div className='navbar-container d-flex content align-items-center'>

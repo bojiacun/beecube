@@ -1,7 +1,6 @@
 import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
-import {LOCAL_USER_KEY} from "~/utils/reqeust";
 import {useNavigate} from "@remix-run/react";
 
 const UserDropdown = (props:any) => {
@@ -19,7 +18,6 @@ const UserDropdown = (props:any) => {
         </>
     );
     const logout = () => {
-        localStorage.removeItem(LOCAL_USER_KEY);
         navigate('/login');
     }
     return (

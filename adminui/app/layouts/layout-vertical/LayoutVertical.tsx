@@ -12,7 +12,6 @@ import AppNavbarVerticalLayout from "~/layouts/components/app-navbar/AppNavbarVe
 import VerticalNavMenu,{links as verticalNavMenuLinks} from "~/layouts/layout-vertical/components/vertical-nav-menu/VerticalNavMenu";
 import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
-import {getCurrentUser} from "~/utils/reqeust";
 import {useNavigate} from "@remix-run/react";
 import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
 
@@ -37,7 +36,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     //检验用户是否登录
     useEffect(()=>{
         if(requireLogin) {
-            const userInfo = getCurrentUser();
+            const userInfo = '';
             if(userInfo == null) {
                 navigate('/login');
             }

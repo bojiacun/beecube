@@ -25,6 +25,7 @@ import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
 import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/request.server";
 import axios from "axios";
+import {API_CAPTCHA_URL} from "~/utils/request.client";
 const randomstring = require('randomstring');
 
 
@@ -78,7 +79,7 @@ const LoginPage = () => {
     }, []);
     const handleCaptchaClick = () => {
         let randomStr = randomstring.generate(8);
-        axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
+        axios.get(API_CAPTCHA_URL + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
             setCaptchaData(res.data.result);
         });
     }

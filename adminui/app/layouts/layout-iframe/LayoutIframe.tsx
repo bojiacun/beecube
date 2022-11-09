@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useRef} from "react";
 import ThemeContext from 'themeConfig';
 import {useLocation} from "react-router";
 import IframeScrollToTop from "~/components/iframe-scroll-to-top/IframeScrollToTop";
-import {getCurrentUser} from "~/utils/reqeust";
 
 
 export interface LayoutIframeProps {
@@ -27,7 +26,7 @@ const LayoutIframe : React.FC<LayoutIframeProps> = (props) => {
             updateThemeContext({...event.data});
         }, false);
         if(requireLogin) {
-            const userInfo = getCurrentUser();
+            const userInfo = '';
             if(userInfo == null) {
                 //@ts-ignore
                 typeof parent?.navigate === 'function' && parent?.navigate("/login");
