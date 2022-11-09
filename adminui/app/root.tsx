@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration, useMatches, useNavigate,
+  ScrollRestoration, useLoaderData, useMatches, useNavigate,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -58,8 +58,7 @@ export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
   const navigate = useNavigate();
   const matches = useMatches();
-
-
+  const data = useLoaderData();
   const excludeAdminPaths = ['/login'];
 
   let Layout : any;
@@ -75,7 +74,7 @@ export default function App() {
     window.theme = theme;
     //@ts-ignore
     window.navigate = navigate;
-    console.log('app loaded', window);
+    console.log('app loaded');
   }, []);
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
@@ -125,6 +124,13 @@ export default function App() {
           </div>
         </ThemeContext.Provider>
         <ScrollRestoration />
+        <script
+            dangerouslySetInnerHTML={{
+              __html: `window.ENV = ${JSON.stringify(
+                  data.ENV
+              )}`,
+            }}
+        />
         <Scripts />
         <LiveReload />
       </body>

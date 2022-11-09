@@ -3,7 +3,7 @@ import {Authenticator, AuthorizationError} from "remix-auth";
 import {FormStrategy} from "remix-auth-form";
 //@ts-ignore
 import _ from 'lodash';
-import {API_LOGIN, postFormInit} from "~/utils/reqeust";
+import {API_LOGIN, postFormInit} from "~/utils/request.server";
 
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
 

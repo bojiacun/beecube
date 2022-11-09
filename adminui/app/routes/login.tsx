@@ -23,7 +23,8 @@ import {Eye, HelpCircle} from "react-feather";
 import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
-import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/reqeust";
+import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/request.client";
+import axios from "axios";
 const randomstring = require('randomstring');
 
 
@@ -77,9 +78,9 @@ const LoginPage = () => {
     }, []);
     const handleCaptchaClick = () => {
         let randomStr = randomstring.generate(8);
-        // axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
-        //     setCaptchaData(res.data.result);
-        // });
+        axios.get(API_CAPTCHA + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
+            setCaptchaData(res.data.result);
+        });
     }
     const handleOnSubmit = async (e:any) => {
         let form = e.currentTarget;

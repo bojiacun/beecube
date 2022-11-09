@@ -1,8 +1,11 @@
 import axios from "axios";
 
-export const BASE_URL = process.env["BASE_URL"] || 'http://localhost:9999';
-export const LOGIN_SUCCESS_URL = process.env["LOGIN_SUCCESS_URL"] || '/';
-export const LOCAL_USER_KEY = process.env["LOCAL_USER_KEY"] || 'USER_INFO';
+//@ts-ignore
+export const BASE_URL =  window.ENV.BASE_URL || 'http://localhost:9999';
+//@ts-ignore
+export const LOGIN_SUCCESS_URL =  window.ENV.LOGIN_SUCCESS_URL || '/';
+//@ts-ignore
+export const LOCAL_USER_KEY = 'USER_INFO';
 
 export const API_LOGIN = `${BASE_URL}/jeecg-system/sys/login`;
 export const API_CAPTCHA = `${BASE_URL}/jeecg-system/sys/randomImage`;
@@ -30,9 +33,7 @@ export function configAxios() {
     axiosInstance = axios.create();
 }
 
-export const postFormInit = (data: any): RequestInit=> {
-    return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
-}
+
 export const saveCurrentUser = (userInfo: any) => {
     localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(userInfo));
 }
