@@ -23,7 +23,7 @@ import {Eye, HelpCircle} from "react-feather";
 import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
-import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/request.client";
+import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/request.server";
 import axios from "axios";
 const randomstring = require('randomstring');
 

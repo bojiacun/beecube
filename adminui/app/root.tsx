@@ -30,7 +30,6 @@ export async function loader() {
     ENV: {
       BASE_URL: process.env.BASE_URL,
       LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,
-      LOCAL_USER_KEY: process.env.LOCAL_USER_KEY,
       SESSION_SECRET: process.env.SESSION_SECRET,
       COOKIE_NAME: process.env.COOKIE_NAME,
     },
