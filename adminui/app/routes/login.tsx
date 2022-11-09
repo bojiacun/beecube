@@ -50,12 +50,14 @@ export const loader: LoaderFunction = async ({request}) => {
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     const error = session.get(auth.sessionErrorKey) as LoaderData['error'];
     let randomString = randomstring.generate(12);
-    const res = await fetch(API_CAPTCHA+'/'+randomString+'?_t='+randomString);
+    let imageUrl = API_CAPTCHA+'/'+randomString+'?_t='+randomString;
+    const res = await fetch(imageUrl);
     let result = await res.json();
     return {captchaImageData: result.result, checkKey: randomString, error: error};
 }
 
 export function ErrorBoundary({error}: { error: Error }) {
+    console.log(error);
     return (<p>There is a error happened.</p>);
 }
 
