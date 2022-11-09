@@ -20,13 +20,11 @@ import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
 import {
-    API_CAPTCHA,
-    API_LOGIN,
-    LOGIN_SUCCESS_URL,
-    postFormInit,
+    API_CAPTCHA, LOGIN_SUCCESS_URL,
 } from "~/utils/reqeust";
 import axios from "axios";
 import {useActionData, useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
+import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
 
 const randomstring = require('randomstring');
@@ -40,8 +38,8 @@ type ActionData = {
 type LoaderData = {
     checkKey: any;
     captchaImageData: string;
+    error: { message: string } | null;
 };
-const badRequest = (data: ActionData) => json(data, { status: 400 });
 
 
 
@@ -50,23 +48,17 @@ export const links: LinksFunction = () => {
 }
 
 export const action: ActionFunction = async ({request}) => {
-    const form = await request.formData();
-    let checkKey = form.get("checkKey");
-    const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: checkKey};
-    const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
-    const result = await res.json();
-    if(result.code !== 200) {
-        return badRequest({formError: result.message, checkKey: checkKey});
-    }
-    console.log('登录成功，准备跳转登录成功页面', result);
-    return redirect(LOGIN_SUCCESS_URL);
+    await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: '/login'});
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({request}) => {
+    await auth.isAuthenticated(request, {successRedirect: LOGIN_SUCCESS_URL});
+    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+    const error = session.get(auth.sessionErrorKey) as LoaderData['error'];
     let randomString = randomstring.generate(12);
     const res = await fetch(API_CAPTCHA+'/'+randomString+'?_t='+randomString);
     let result = await res.json();
-    return {captchaImageData: result.result, checkKey: randomString};
+    return {captchaImageData: result.result, checkKey: randomString, error: error};
 }
 
 export function ErrorBoundary({error}: { error: Error }) {
@@ -145,10 +137,10 @@ const LoginPage = () => {
                                 <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
                             </OverlayTrigger>
                         </Alert>
-                        {actionData?.formError && <Alert variant='danger'>
+                        {loaderData.error && <Alert variant='danger'>
                             <div className="alert-body font-small-2">
                                 <p>
-                                    <small className="mr-50">{actionData.formError}</small>
+                                    <small className="mr-50">{loaderData.error.message}</small>
                                 </p>
                             </div>
                         </Alert>}
