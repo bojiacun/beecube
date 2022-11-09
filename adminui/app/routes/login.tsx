@@ -49,11 +49,16 @@ export const loader: LoaderFunction = async ({request}) => {
     await auth.isAuthenticated(request, {successRedirect: LOGIN_SUCCESS_URL});
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     const error = session.get(auth.sessionErrorKey) as LoaderData['error'];
+    session.unset(auth.sessionErrorKey);
     let randomString = randomstring.generate(12);
     let imageUrl = API_CAPTCHA+'/'+randomString+'?_t='+randomString;
     const res = await fetch(imageUrl);
     let result = await res.json();
-    return {captchaImageData: result.result, checkKey: randomString, error: error};
+    return json({captchaImageData: result.result, checkKey: randomString, error: error}, {
+        headers: {
+            "Set-Cookie": await sessionStorage.commitSession(session),
+        },
+    });
 }
 
 export function ErrorBoundary({error}: { error: Error }) {
