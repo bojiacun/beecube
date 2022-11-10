@@ -137,9 +137,9 @@ export default function App() {
               <AnimatePresence mode={'wait'} initial={false}>
                 <motion.div
                     key={location.pathname}
-                    initial={{  opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    initial={{scale: 0, opacity: 0}}
+                    animate={{scale: 1, opacity: 1}}
+                    exit={{scale: 0, opacity: 0}}
                 >
                   {outlet}
                 </motion.div>
