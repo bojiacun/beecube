@@ -1,4 +1,4 @@
-import {ActionFunction, json, LinksFunction, LoaderFunction, redirect} from "@remix-run/node";
+import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
 import {
     Row,
