@@ -1,12 +1,14 @@
 import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
+import {useLoaderData} from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({request}) => {
     const user = await requireAuthenticated(request);
-    console.log('require authenticated user is', user);
     return json(user);
 }
 const Test = () => {
+    const loaderData = useLoaderData();
+    console.log('test loader data is', loaderData);
     return (
         <>
             <h1>Welcome to Remix!</h1>

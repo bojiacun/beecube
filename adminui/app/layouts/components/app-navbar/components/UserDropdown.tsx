@@ -1,11 +1,12 @@
 import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
-import {useFetcher} from "@remix-run/react";
+import {useFetcher, useLoaderData} from "@remix-run/react";
 
 const UserDropdown = (props:any) => {
     const {userData} = props;
     const fetcher = useFetcher();
+
 
     const dropdownTitle = (
         <>
