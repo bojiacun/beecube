@@ -21,16 +21,16 @@ const SinglePagination: FC<SinglePaginationProps> = (props) => {
     return (
         //@ts-ignore
         <Pagination {...rest}>
-            <Pagination.Item className={classNames('prev-item', current === 1 ? 'disabled':'')} as={'span'}><ChevronLeft
+            <Pagination.Item key={'pages-prev'} className={classNames('prev-item', current === 1 ? 'disabled':'')} as={'span'}><ChevronLeft
                 size={18}/></Pagination.Item>
             {pageNumbers.map((pn:number)=>{
                 return (
-                    <Pagination.Item className={pn === current ? 'active':''} as={'button'} type={'button'}>
+                    <Pagination.Item key={'pages-'+pn} className={pn === current ? 'active':''} as={'button'} type={'button'}>
                         {pn}
                     </Pagination.Item>
                 );
             })}
-            <Pagination.Item className={classNames('next-item', current === pages ? 'disabled': '')} as={'span'}><ChevronRight
+            <Pagination.Item key={'pages-next'} className={classNames('next-item', current === pages ? 'disabled': '')} as={'span'}><ChevronRight
                 size={18}/></Pagination.Item>
         </Pagination>
     );

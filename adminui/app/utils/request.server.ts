@@ -1,5 +1,5 @@
 import {LoginedUser, requireAuthenticated} from "~/utils/auth.server";
-import {RequestInfo} from "@remix-run/node";
+import {json, RequestInfo} from "@remix-run/node";
 
 export const BASE_URL =  process.env.BASE_URL || 'http://localhost:9999';
 export const LOGIN_SUCCESS_URL =  process.env.LOGIN_SUCCESS_URL || '/';
@@ -18,5 +18,10 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     const user: LoginedUser = await requireAuthenticated(request);
     options.headers['X-Access-Token'] = user.token;
     options.headers['Authorization'] = user.token;
-    return fetch(url, options);
+    const res = await fetch(url, options);
+    const result = await res.json();
+    if(result.code === 401) {
+        throw new Response(result.message, {status: 401});
+    }
+    return result;
 }

@@ -21,8 +21,7 @@ export const links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({request}) => {
-    const res = await requestWithToken(request)(API_ROLE_LIST);
-    const result = await res.json();
+    const result = await requestWithToken(request)(API_ROLE_LIST);
     return json(result.result);
 }
 
@@ -55,14 +54,14 @@ const RolesPage = () => {
                             </InputGroup>
                         </FormGroup>
                     </Form>
-                    <Form inline>
-                        <FormGroup as={Form.Row} controlId={'filterInput'} className={'mb-0'}>
-                            <FormLabel column={'sm'} sm={2}>筛选</FormLabel>
+                    <Form inline method={'get'} action={'/system/roles'}>
+                        <FormGroup as={Form.Row} className={'mb-0'}>
+                            <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
                             <Col sm={10}>
                                 <InputGroup size={'sm'}>
-                                    <FormControl placeholder={'请输入要搜索的内容'}/>
+                                    <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
                                     <InputGroup.Append>
-                                        <Button>搜索</Button>
+                                        <Button type={'submit'}>搜索</Button>
                                     </InputGroup.Append>
                                 </InputGroup>
                             </Col>
@@ -82,7 +81,7 @@ const RolesPage = () => {
                     <tbody>
                     {records.map((item: any) => {
                         return (
-                            <tr>
+                            <tr key={item.id}>
                                 <td>{item.roleName}</td>
                                 <td>{item.roleCode}</td>
                                 <td>{item.createTime}</td>
