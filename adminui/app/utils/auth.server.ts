@@ -31,7 +31,6 @@ auth.use(
         if(result.code !== 200) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
-        console.log(result);
         return result.result.token;
     })
 )

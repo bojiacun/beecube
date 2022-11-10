@@ -2,7 +2,9 @@ import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async ({request}) => {
-        return json(await requireAuthenticated(request));
+    const user = await requireAuthenticated(request);
+    console.log('require authenticated user is', user);
+    return json(user);
 }
 const Test = () => {
     return (
