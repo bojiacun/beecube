@@ -23,7 +23,7 @@ import {Eye, HelpCircle} from "react-feather";
 import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
-import {LOGIN_SUCCESS_URL} from "~/utils/request.server";
+import {LOGIN_SUCCESS_URL, LOGIN_URL} from "~/utils/request.server";
 
 
 const randomstring = require('randomstring');
@@ -40,7 +40,7 @@ export const links: LinksFunction = () => {
 }
 
 export const action: ActionFunction = async ({request}) => {
-    await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: '/login'});
+    await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: LOGIN_URL});
 }
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -63,10 +63,9 @@ export function ErrorBoundary({error}: { error: Error }) {
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
-    const [captchaKey, setCaptchaKey] = useState<string>(randomstring.generate(18));
+    const [captchaKey, setCaptchaKey] = useState<string>();
     const transition = useTransition();
     const [validated, setValidated] = useState<boolean>(false);
-
 
     let sideImageUrl = lightSideImageUrl;
     if (theme.layout.skin == 'dark') {
@@ -77,6 +76,8 @@ const LoginPage = () => {
         if (appLoading) {
             appLoading.style.display = 'none'
         }
+        let randomStr = randomstring.generate(18);
+        setCaptchaKey(randomStr);
     }, []);
     const handleCaptchaClick = () => {
         let randomStr = randomstring.generate(18);
@@ -165,10 +166,10 @@ const LoginPage = () => {
                                 </Form.Group>
                                 <Form.Group as={Col}>
                                     <Form.Label>&nbsp;</Form.Label>
-                                    <Image onClick={handleCaptchaClick} src={`/captcha.png?_t=${captchaKey}`} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
+                                    {captchaKey && <Image onClick={handleCaptchaClick} src={`/captcha.png?_t=${captchaKey}`} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />}
                                 </Form.Group>
                             </Form.Row>
-                            <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey} />
+                            {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey} />}
                             <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
                         </RemixForm>
                     </Col>
