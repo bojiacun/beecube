@@ -56,7 +56,6 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 export function ErrorBoundary({error}: { error: Error }) {
-    console.log(error);
     return (<p>There is a error happened.</p>);
 }
 
