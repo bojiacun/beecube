@@ -83,3 +83,13 @@ export const navLinkProps = (item:any) => () => {
 
     return props
 }
+
+
+export function startPageLoading() {
+    const appLoading = document.getElementById('loading-bg');
+    if(appLoading) appLoading.style.display = 'block';
+}
+export function stopPageLoading() {
+    const appLoading = document.getElementById('loading-bg');
+    if(appLoading) appLoading.style.display = 'none';
+}

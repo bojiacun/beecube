@@ -21,6 +21,9 @@ import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
 import _ from 'lodash';
 import {json} from "@remix-run/node";
+import {AnimatePresence, motion} from "framer-motion";
+import {useLocation} from "react-router";
+import {startPageLoading} from "~/layouts/utils";
 
 i18n.changeLanguage('cn').then();
 
@@ -59,12 +62,12 @@ export const meta: MetaFunction = () => ({
 export default function App() {
   const [themeContext, setThemeContext] = useState(theme);
   const navigate = useNavigate();
-  const matches = useMatches();
+  const location = useLocation();
   const data = useLoaderData();
   const excludeAdminPaths = ['/login'];
 
   let Layout : any;
-  if(_.indexOf(excludeAdminPaths,matches[1].pathname) > -1) {
+  if(_.indexOf(excludeAdminPaths,location.pathname) > -1) {
     Layout = LayoutFull;
   }
   else {
@@ -76,8 +79,14 @@ export default function App() {
     window.theme = theme;
     //@ts-ignore
     window.navigate = navigate;
-    console.log('app loaded');
   }, []);
+
+  useEffect(()=> {
+    startPageLoading();
+  }, [location]);
+
+
+
   // 设置主题颜色
   const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
 
@@ -121,7 +130,16 @@ export default function App() {
           </div>
           <div id='app' className='h-100'>
             <Layout>
-              <Outlet />
+              <AnimatePresence mode={'wait'} initial={false}>
+                <motion.main
+                    key={location.pathname}
+                    initial={{ x: "10%", opacity: 0 }}
+                    animate={{ x: "0", opacity: 1 }}
+                    exit={{ x: "-40%", opacity: 0 }}
+                >
+                  <Outlet />
+                </motion.main>
+              </AnimatePresence>
             </Layout>
           </div>
         </ThemeContext.Provider>

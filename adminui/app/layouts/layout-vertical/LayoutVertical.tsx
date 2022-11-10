@@ -14,6 +14,7 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
 import {auth} from "~/utils/auth.server";
+import {stopPageLoading} from "~/layouts/utils";
 
 
 export const links: LinksFunction = () => {
@@ -37,15 +38,12 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     //检验用户是否登录
     useEffect(()=> {
-        const appLoading = document.getElementById('loading-bg')
-        if (appLoading) {
-            appLoading.style.display = 'none'
-            setAppLoading(false);
-            //@ts-ignore
-            window.setCurrentLink = (pathname: string) => {
-                // @ts-ignore
-                document.getElementById('link-' + pathname).classList.add('active');
-            }
+        stopPageLoading();
+        setAppLoading(false);
+        //@ts-ignore
+        window.setCurrentLink = (pathname: string) => {
+            // @ts-ignore
+            document.getElementById('link-' + pathname).classList.add('active');
         }
     }, []);
 

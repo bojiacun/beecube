@@ -28,7 +28,6 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const RolesPage = () => {
     const loaderData = useLoaderData();
-    console.log(loaderData);
     const records = loaderData.records;
 
     return (

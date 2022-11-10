@@ -15,6 +15,7 @@
     "bootstrap": "^4.6.2",
     "crypto-js": "^4.1.1",
     "feather-icons": "^4.29.0",
+    "framer-motion": "^7.6.5",
     "i18next": "^22.0.4",
     "i18next-browser-languagedetector": "^7.0.0",
     "i18next-http-backend": "^2.0.1",
