@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration, useLoaderData, useMatches, useNavigate,
+  ScrollRestoration, useLoaderData, useNavigate, useTransition,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -64,6 +64,10 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = useLoaderData();
+  const transition = useTransition();
+
+
+
   const excludeAdminPaths = ['/login'];
 
   let Layout : any;
@@ -82,6 +86,7 @@ export default function App() {
   }, []);
 
   useEffect(()=> {
+    console.log(location, transition);
     startPageLoading();
   }, [location]);
 

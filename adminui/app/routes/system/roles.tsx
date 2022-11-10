@@ -15,6 +15,7 @@ import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
+import {withAutoLoading} from "~/utils/components";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -113,4 +114,4 @@ const RolesPage = () => {
     );
 }
 
-export default RolesPage;
+export default withAutoLoading(RolesPage);
