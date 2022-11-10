@@ -15,6 +15,7 @@ import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
+import {useEffect, useState} from "react";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -22,14 +23,20 @@ export const links: LinksFunction = () => {
 
 export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
-    const result = await requestWithToken(request)(API_ROLE_LIST, {body: url.searchParams});
+    const result = await requestWithToken(request)(API_ROLE_LIST+url.search);
     return json(result.result);
 }
 
 const RolesPage = () => {
     const loaderData = useLoaderData();
-    const records = loaderData?.records || [];
+    const [records, setRecords] = useState(loaderData?.records || []);
     const searchFetcher = useFetcher();
+
+    useEffect(()=>{
+        if(searchFetcher.data) {
+            setRecords(searchFetcher.data.records);
+        }
+    }, [searchFetcher.state]);
 
     return (
         <>
