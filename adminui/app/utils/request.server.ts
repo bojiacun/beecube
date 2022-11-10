@@ -14,7 +14,7 @@ export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
 }
 
-export const request = async (request: Request) => async (url:RequestInfo, options:any) => {
+export const requestWithToken = (request: Request) => async (url:RequestInfo, options:any = {headers: {'Content-Type': 'application/json'}}) => {
     const user: LoginedUser = await requireAuthenticated(request);
     options.headers['X-Access-Token'] = user.token;
     options.headers['Authorization'] = user.token;

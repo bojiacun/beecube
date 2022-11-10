@@ -1,4 +1,3 @@
-import LayoutIframe, {stopLoading} from "~/layouts/layout-iframe/LayoutIframe";
 import {
     Col,
     FormGroup,
@@ -13,28 +12,27 @@ import {
 } from "react-bootstrap";
 import {ChevronLeft, ChevronRight} from "react-feather";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
-import {LinksFunction, LoaderFunction} from "@remix-run/node";
-import {useEffect, useState} from "react";
-import {API_ROLE_LIST} from "~/utils/request.server";
+import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {useLoaderData} from "@remix-run/react";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 
 export const loader: LoaderFunction = async ({request}) => {
-    const res = await request(request)(API_ROLE_LIST);
-    console.log(res);
-
+    const res = await requestWithToken(request)(API_ROLE_LIST);
+    const result = await res.json();
+    return json(result.result);
 }
 
 const RolesPage = () => {
-    const [records, setRecords] = useState<any[]>([]);
+    const loaderData = useLoaderData();
+    console.log(loaderData);
+    const records = loaderData.records;
 
-    useEffect(()=>{
-        stopLoading();
-    }, []);
     return (
-        <LayoutIframe>
+        <>
             <Card>
                 <Card.Header>
                     <Card.Title>
@@ -112,7 +110,7 @@ const RolesPage = () => {
                     </div>
                 </Card.Body>
             </Card>
-        </LayoutIframe>
+        </>
     );
 }
 
