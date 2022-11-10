@@ -3,7 +3,7 @@ import {Authenticator, AuthorizationError} from "remix-auth";
 import {FormStrategy} from "remix-auth-form";
 //@ts-ignore
 import _ from 'lodash';
-import {API_LOGIN, postFormInit} from "~/utils/request.server";
+import {API_LOGIN, LOGIN_URL, postFormInit} from "~/utils/request.server";
 
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
 
@@ -34,3 +34,7 @@ auth.use(
         return result.data;
     })
 )
+
+export const requireAuthenticated = async (request: Request) => {
+    return await auth.isAuthenticated(request, {failureRedirect: LOGIN_URL});
+}
