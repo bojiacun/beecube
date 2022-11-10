@@ -2,8 +2,6 @@ import {Nav} from "react-bootstrap";
 import Locale from "./components/Locale";
 import DarkToggler from "~/layouts/components/app-navbar/components/DarkToggler";
 import UserDropdown from "~/layouts/components/app-navbar/components/UserDropdown";
-import {useEffect, useState} from "react";
-import {useLoaderData} from "@remix-run/react";
 
 
 const AppNavbarVerticalLayout = () => {

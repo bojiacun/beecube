@@ -1,11 +1,25 @@
 import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import {useFetcher} from "@remix-run/react";
+import {LoginedUser, UserInfo} from "~/utils/auth.server";
+import {useEffect, useState} from "react";
 
-const UserDropdown = (props:any) => {
-    const {userData} = props;
-    const fetcher = useFetcher();
+const UserDropdown = () => {
+    const [userData, setUserData] = useState<UserInfo>();
+    const logoutFetcher = useFetcher();
+    const userFetcher = useFetcher<LoginedUser>();
+
+    useEffect(()=>{
+        // @ts-ignore
+        userFetcher.load(window.ENV.USER_INFO_URL);
+    }, []);
+
+    useEffect(()=>{
+        if(userFetcher.type === 'done') {
+            setUserData(userFetcher.data.userInfo);
+        }
+    }, [userFetcher.type]);
 
 
     const dropdownTitle = (
@@ -20,7 +34,8 @@ const UserDropdown = (props:any) => {
         </>
     );
     const logout = () => {
-        fetcher.load('/logout');
+        // @ts-ignore
+        logoutFetcher.load(window.ENV.LOGOUT_URL);
     }
     return (
         //@ts-ignore

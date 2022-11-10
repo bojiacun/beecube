@@ -8,7 +8,6 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 const Test = () => {
     const loaderData = useLoaderData();
-    console.log('test loader data is', loaderData);
     return (
         <>
             <h1>Welcome to Remix!</h1>

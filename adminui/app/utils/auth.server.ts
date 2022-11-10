@@ -6,9 +6,17 @@ import _ from 'lodash';
 import {API_LOGIN, LOGIN_URL, postFormInit} from "~/utils/request.server";
 
 
-type LoginedUser = {
+export type LoginedUser = {
     token: string;
-    userInfo: any;
+    userInfo: UserInfo;
+}
+
+export type UserInfo = {
+    realName: string;
+    avatar: string;
+    post: string;
+    phone: string;
+    username: string;
 }
 
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
