@@ -7,7 +7,7 @@ import {
     Meta,
     Outlet,
     Scripts,
-    ScrollRestoration, useCatch, useLoaderData, useNavigate, useOutlet, useTransition,
+    ScrollRestoration, useCatch, useFetcher, useLoaderData, useNavigate, useOutlet, useTransition,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -16,7 +16,7 @@ import stylesUrl from '~/styles/styles.css';
 import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
 import logoSvg from 'assets/images/logo/logo.svg';
-import {Card, Image, NavLink} from "react-bootstrap";
+import {Button, Card, Image, NavLink} from "react-bootstrap";
 import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
@@ -24,7 +24,7 @@ import _ from 'lodash';
 import {json} from "@remix-run/node";
 import {AnimatePresence, motion} from "framer-motion";
 import {useLocation} from "react-router";
-import {LOGIN_URL} from "~/utils/request.server";
+import {LOGIN_URL, LOGOUT_URL} from "~/utils/request.server";
 
 i18n.changeLanguage('cn').then();
 
@@ -86,6 +86,13 @@ export function ErrorBoundary({error}: { error: Error }) {
 export function CatchBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
     const caught = useCatch();
+    const logoutFetcher = useFetcher();
+    const data = useLoaderData();
+    const handleRelogin = () => {
+        //@ts-ignore
+        logoutFetcher.load(window.ENV.LOGOUT_URL);
+    }
+
     if (caught.status === 401) {
         //登录态失效
         return (
@@ -99,11 +106,18 @@ export function CatchBoundary() {
                 <Card>
                     <Card.Body>
                         <h4> 由于长时间未操作，系统自动退出登录，请重新登陆 </h4>
-                        <div><NavLink href={LOGIN_URL}>重新登陆</NavLink></div>
+                        <div className={'text-center'}><Button onClick={handleRelogin}>重新登陆</Button></div>
                     </Card.Body>
                 </Card>
             </div>
             <ScrollRestoration/>
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `window.ENV = ${JSON.stringify(
+                        data.ENV
+                    )}`,
+                }}
+            />
             <Scripts/>
             <LiveReload/>
             </body>
