@@ -61,6 +61,7 @@ export const meta: MetaFunction = () => ({
 
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
+    console.log(error);
     return (
         <html lang="cn">
         <head>
@@ -93,6 +94,7 @@ export function CatchBoundary() {
         logoutFetcher.load(window.ENV.LOGOUT_URL);
     }
 
+    console.log(caught);
     if (caught.status === 401) {
         //登录态失效
         return (

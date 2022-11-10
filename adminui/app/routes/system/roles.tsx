@@ -28,7 +28,6 @@ export const loader: LoaderFunction = async ({request}) => {
 const RolesPage = () => {
     const loaderData = useLoaderData();
     const records = loaderData?.records || [];
-    console.log(loaderData);
     return (
         <>
             <Card>
@@ -54,7 +53,7 @@ const RolesPage = () => {
                             </InputGroup>
                         </FormGroup>
                     </Form>
-                    <Form inline method={'get'} action={'/system/roles'}>
+                    <Form inline method={'post'} action={'/system/roles'}>
                         <FormGroup as={Form.Row} className={'mb-0'}>
                             <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
                             <Col sm={10}>
@@ -92,7 +91,7 @@ const RolesPage = () => {
                     </tbody>
                 </Table>
 
-                <Card.Body className={'d-flex justify-content-between flex-wrap pt-0'}>
+                <Card.Body className={'d-flex justify-content-between flex-wrap pt-0 mt-1'}>
                     <div className={'align-items-center mr-1 mb-md-0'}>
                         <Form inline>
                             <FormGroup as={Form.Row}>
