@@ -12,7 +12,7 @@ import {
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
-import {useLoaderData} from "@remix-run/react";
+import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 
@@ -21,13 +21,16 @@ export const links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({request}) => {
-    const result = await requestWithToken(request)(API_ROLE_LIST);
+    const url = new URL(request.url);
+    const result = await requestWithToken(request)(API_ROLE_LIST, {body: url.searchParams});
     return json(result.result);
 }
 
 const RolesPage = () => {
     const loaderData = useLoaderData();
     const records = loaderData?.records || [];
+    const searchFetcher = useFetcher();
+
     return (
         <>
             <Card>
@@ -53,7 +56,7 @@ const RolesPage = () => {
                             </InputGroup>
                         </FormGroup>
                     </Form>
-                    <Form inline method={'post'} action={'/system/roles'}>
+                    <searchFetcher.Form className={'form-inline'}>
                         <FormGroup as={Form.Row} className={'mb-0'}>
                             <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
                             <Col sm={10}>
@@ -65,7 +68,7 @@ const RolesPage = () => {
                                 </InputGroup>
                             </Col>
                         </FormGroup>
-                    </Form>
+                    </searchFetcher.Form>
                 </Card.Body>
 
                 <Table striped hover responsive className={'position-relative'}>
