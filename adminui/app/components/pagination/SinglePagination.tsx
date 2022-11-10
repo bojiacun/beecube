@@ -1,6 +1,7 @@
 import {Pagination} from "react-bootstrap";
 import {FC} from "react";
 import {ChevronLeft, ChevronRight} from "react-feather";
+import classNames from "classnames";
 
 export interface SinglePaginationProps {
     className?: string;
@@ -20,16 +21,16 @@ const SinglePagination: FC<SinglePaginationProps> = (props) => {
     return (
         //@ts-ignore
         <Pagination {...rest}>
-            <Pagination.Item className={'prev-item disabled'} as={'span'}><ChevronLeft
+            <Pagination.Item className={classNames('prev-item', current === 1 ? 'disabled':'')} as={'span'}><ChevronLeft
                 size={18}/></Pagination.Item>
             {pageNumbers.map((pn:number)=>{
                 return (
-                    <Pagination.Item as={'button'} type={'button'}>
+                    <Pagination.Item className={pn === current ? 'active':''} as={'button'} type={'button'}>
                         {pn}
                     </Pagination.Item>
                 );
             })}
-            <Pagination.Item className={'next-item'} as={'span'}><ChevronRight
+            <Pagination.Item className={classNames('next-item', current === pages ? 'disabled': '')} as={'span'}><ChevronRight
                 size={18}/></Pagination.Item>
         </Pagination>
     );

@@ -99,7 +99,7 @@ const RolesPage = () => {
                     <div className={'align-items-center mr-1 mb-md-0'}>
                         <Form inline>
                             <FormGroup as={Form.Row}>
-                                <FormLabel column={'sm'}>共计{loaderData?.total},每页显示</FormLabel>
+                                <FormLabel column={'sm'}>共计{loaderData?.total}条数据,每页显示</FormLabel>
                                 <InputGroup size={'sm'} as={'span'}>
                                     <FormControl as={'select'} size={'sm'}>
                                         <option>20</option>
@@ -110,9 +110,7 @@ const RolesPage = () => {
                             </FormGroup>
                         </Form>
                     </div>
-                    <div>
-                        <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages} total={loaderData?.total} size={loaderData?.size} />
-                    </div>
+                    <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages} total={loaderData?.total} size={loaderData?.size} />
                 </Card.Body>
             </Card>
         </>
