@@ -40,8 +40,7 @@ export const links: LinksFunction = () => {
 }
 
 export const action: ActionFunction = async ({request}) => {
-    const user = await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: LOGIN_URL});
-    console.log('authenticated user is', user);
+    await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: LOGIN_URL});
 }
 
 export const loader: LoaderFunction = async ({request}) => {
