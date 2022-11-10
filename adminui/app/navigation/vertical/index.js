@@ -36,4 +36,4 @@ import formAndTable from './forms-and-table'
 import systemPages from './system-pages';
 
 // 部件名数组
-export default [...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others, ...systemPages]
+export default [...dashboard,  ...systemPages]

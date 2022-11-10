@@ -8,7 +8,7 @@ import {
     FormControl,
     FormLabel,
     Button,
-    Pagination
+    Pagination, Row
 } from "react-bootstrap";
 import {ChevronLeft, ChevronRight} from "react-feather";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({request}) => {
 const RolesPage = () => {
     const loaderData = useLoaderData();
     const records = loaderData?.records || [];
-
+    console.log(loaderData);
     return (
         <>
             <Card>
@@ -88,9 +88,9 @@ const RolesPage = () => {
                 </Table>
 
                 <Card.Body className={'d-flex justify-content-between flex-wrap pt-0'}>
-                    <FormGroup as={Form.Row} className={'align-items-center mr-1 mb-md-0'}>
-                        <FormLabel column={'sm'} xs={6}>每页显示</FormLabel>
-                        <InputGroup as={Col} size={'sm'} sm={6}>
+                    <FormGroup as={Row} className={'align-items-center mr-1 mb-md-0'}>
+                        <FormLabel column={'sm'} xs={'auto'}>共计{loaderData?.total},每页显示</FormLabel>
+                        <InputGroup as={Col} size={'sm'} xs={'auto'}>
                             <FormControl as={'select'} size={'sm'}>
                                 <option>20</option>
                                 <option>50</option>
@@ -100,9 +100,14 @@ const RolesPage = () => {
                     </FormGroup>
                     <div>
                         <Pagination className={'mb-0'}>
-                            <Pagination.Item className={'prev-item'} as={'span'}><ChevronLeft
-                                size={18}/></Pagination.Item>
+                            <Pagination.Item className={'prev-item disabled'} as={'span'}><ChevronLeft
+                                size={18} /></Pagination.Item>
                             <Pagination.Item className={'active'} as={'button'} type={'button'}>1</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
+                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
                             <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
                             <Pagination.Item className={'next-item'} as={'span'}><ChevronRight
                                 size={18}/></Pagination.Item>
