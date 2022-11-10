@@ -68,8 +68,12 @@ export function ErrorBoundary({error}: { error: Error }) {
             <Links/>
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        <div id='app' className='h-100'>
-
+        <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
+            <Card>
+                <Card.Body>
+                    <h4>系统发生致命错误，请联系管理员修复</h4>
+                </Card.Body>
+            </Card>
         </div>
         <ScrollRestoration/>
         <Scripts/>
