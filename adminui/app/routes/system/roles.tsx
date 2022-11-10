@@ -13,12 +13,18 @@ import {
 } from "react-bootstrap";
 import {ChevronLeft, ChevronRight} from "react-feather";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
-import {LinksFunction} from "@remix-run/node";
+import {LinksFunction, LoaderFunction} from "@remix-run/node";
 import {useEffect, useState} from "react";
 import {API_ROLE_LIST} from "~/utils/request.server";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
+}
+
+export const loader: LoaderFunction = async ({request}) => {
+    const res = await request(request)(API_ROLE_LIST);
+    console.log(res);
+
 }
 
 const RolesPage = () => {
