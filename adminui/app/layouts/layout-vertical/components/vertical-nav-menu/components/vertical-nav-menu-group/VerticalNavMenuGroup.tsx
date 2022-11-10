@@ -13,8 +13,7 @@ const feather = require('feather-icons');
 const groupIsActive = (item:any, location: any) => {
     let isActive = false;
     item.children.forEach((i:any) => {
-        const linkProps:any = navLinkProps(i)();
-        if(linkProps.href === location.pathname) {
+        if('/'+i.route === location.pathname) {
             isActive = true;
         }
     })
