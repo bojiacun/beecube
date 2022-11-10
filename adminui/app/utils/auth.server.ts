@@ -53,6 +53,10 @@ export const requireAuthenticated = async (request: Request) => {
     return await auth.isAuthenticated(request, {failureRedirect: LOGIN_URL});
 }
 
+export const requireAuthenticatedLoader = async ({request}:{request: Request}) => {
+    return await requireAuthenticated(request);
+}
+
 export const logout = async (request: Request) => {
     return await auth.logout(request, {redirectTo: LOGIN_URL});
 }
