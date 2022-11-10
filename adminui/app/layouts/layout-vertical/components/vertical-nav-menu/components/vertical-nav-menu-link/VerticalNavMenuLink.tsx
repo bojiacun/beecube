@@ -6,6 +6,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 import {Link} from "@remix-run/react";
+import {startPageLoading} from "~/layouts/utils";
 
 
 const feather = require('feather-icons');
@@ -28,7 +29,11 @@ const VerticalNavMenuLink = (props:any) => {
     const renderLink = (item:any) => {
         if(item.route && !item.target) {
             return (
-                <Link className={'d-flex align-items-center'} to={item.route}>
+                <Link className={'d-flex align-items-center'} to={item.route} onClick={()=> {
+                    if(!isActive) {
+                        startPageLoading();
+                    }
+                }}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}

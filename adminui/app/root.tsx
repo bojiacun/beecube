@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration, useLoaderData, useNavigate, useTransition,
+  ScrollRestoration, useLoaderData, useNavigate, useOutlet, useTransition,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -64,7 +64,7 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = useLoaderData();
-  const transition = useTransition();
+  const outlet = useOutlet();
 
 
 
@@ -86,9 +86,8 @@ export default function App() {
   }, []);
 
   useEffect(()=> {
-    console.log(location, transition);
-    startPageLoading();
-  }, [location]);
+    // startPageLoading();
+  }, [location.pathname]);
 
 
 
@@ -136,14 +135,14 @@ export default function App() {
           <div id='app' className='h-100'>
             <Layout>
               <AnimatePresence mode={'wait'} initial={false}>
-                <motion.main
+                <motion.div
                     key={location.pathname}
-                    initial={{ x: "10%", opacity: 0 }}
-                    animate={{ x: "0", opacity: 1 }}
-                    exit={{ x: "-40%", opacity: 0 }}
+                    initial={{  opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                 >
-                  <Outlet />
-                </motion.main>
+                  {outlet}
+                </motion.div>
               </AnimatePresence>
             </Layout>
           </div>
