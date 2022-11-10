@@ -16,13 +16,21 @@ import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
+import {DefaultListSearchParams} from "~/utils/utils";
+//@ts-ignore
+import _ from 'lodash';
+import querystring from 'querystring';
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 
+
 export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
+    if(_.isEmpty(url.search)) {
+        url.search = '?'+querystring.stringify(DefaultListSearchParams);
+    }
     const result = await requestWithToken(request)(API_ROLE_LIST+url.search);
     return json(result.result);
 }
@@ -64,6 +72,10 @@ const RolesPage = () => {
                         </FormGroup>
                     </Form>
                     <searchFetcher.Form className={'form-inline'}>
+                        <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'} />
+                        <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'} />
+                        <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'} />
+
                         <FormGroup as={Form.Row} className={'mb-0'}>
                             <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
                             <Col sm={10}>

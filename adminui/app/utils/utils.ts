@@ -41,3 +41,10 @@ export const base64Decode = (value:any) => {
     }
     return value;
 }
+
+export const DefaultListSearchParams = {
+    pageNo: 1,
+    pageSize: 20,
+    column: 'id',
+    order: 'desc',
+}
