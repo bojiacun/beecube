@@ -1,11 +1,12 @@
 import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
-import {useNavigate} from "@remix-run/react";
+import {useFetcher} from "@remix-run/react";
 
 const UserDropdown = (props:any) => {
     const {userData} = props;
-    const navigate = useNavigate();
+    const fetcher = useFetcher();
+
     const dropdownTitle = (
         <>
             <div className="d-sm-flex d-none user-nav">
@@ -18,7 +19,7 @@ const UserDropdown = (props:any) => {
         </>
     );
     const logout = () => {
-        navigate('/login');
+        fetcher.load('/logout');
     }
     return (
         //@ts-ignore

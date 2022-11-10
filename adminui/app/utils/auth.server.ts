@@ -5,6 +5,12 @@ import {FormStrategy} from "remix-auth-form";
 import _ from 'lodash';
 import {API_LOGIN, LOGIN_URL, postFormInit} from "~/utils/request.server";
 
+
+type LoginedUser = {
+    token: string;
+    userInfo: any;
+}
+
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
 
 export const sessionStorage = createCookieSessionStorage({
@@ -18,10 +24,10 @@ export const sessionStorage = createCookieSessionStorage({
     }
 })
 
-export const auth = new Authenticator(sessionStorage);
+export const auth = new Authenticator<LoginedUser>(sessionStorage);
 
 auth.use(
-    new FormStrategy(async ({form}) => {
+    new FormStrategy<LoginedUser>(async ({form}) => {
         const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: form.get("checkKey")};
         if(_.isEmpty(data.username) || _.isEmpty(data.password)) {
             throw new AuthorizationError('username or password is required');
@@ -31,7 +37,7 @@ auth.use(
         if(result.code !== 200) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
-        return result.result.token;
+        return {token: result.result.token, userInfo: result.result.userInfo};
     })
 )
 
