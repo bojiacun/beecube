@@ -23,15 +23,13 @@ import {Eye, HelpCircle} from "react-feather";
 import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
-import {API_CAPTCHA, LOGIN_SUCCESS_URL} from "~/utils/request.server";
-import axios from "axios";
-import {API_CAPTCHA_URL} from "~/utils/request.client";
+import {LOGIN_SUCCESS_URL} from "~/utils/request.server";
+
+
 const randomstring = require('randomstring');
 
 
 type LoaderData = {
-    checkKey: any;
-    captchaImageData: string;
     error: { message: string } | null;
 };
 
@@ -50,11 +48,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     const error = session.get(auth.sessionErrorKey) as LoaderData['error'];
     session.unset(auth.sessionErrorKey);
-    let randomString = randomstring.generate(12);
-    let imageUrl = API_CAPTCHA+'/'+randomString+'?_t='+randomString;
-    const res = await fetch(imageUrl);
-    let result = await res.json();
-    return json({captchaImageData: result.result, checkKey: randomString, error: error}, {
+    return json({error: error}, {
         headers: {
             "Set-Cookie": await sessionStorage.commitSession(session),
         },
@@ -69,8 +63,8 @@ export function ErrorBoundary({error}: { error: Error }) {
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
+    const [captchaKey, setCaptchaKey] = useState<string>(randomstring.generate(18));
     const transition = useTransition();
-    const [captchaData, setCaptchaData] = useState<string>(loaderData.captchaImageData);
     const [validated, setValidated] = useState<boolean>(false);
 
 
@@ -85,10 +79,8 @@ const LoginPage = () => {
         }
     }, []);
     const handleCaptchaClick = () => {
-        let randomStr = randomstring.generate(8);
-        axios.get(API_CAPTCHA_URL + '/' + loaderData.checkKey + '?_t=' + randomStr).then(res => {
-            setCaptchaData(res.data.result);
-        });
+        let randomStr = randomstring.generate(18);
+        setCaptchaKey(randomStr);
     }
     const handleOnSubmit = async (e:any) => {
         let form = e.currentTarget;
@@ -173,10 +165,10 @@ const LoginPage = () => {
                                 </Form.Group>
                                 <Form.Group as={Col}>
                                     <Form.Label>&nbsp;</Form.Label>
-                                    <Image onClick={handleCaptchaClick} src={captchaData} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
+                                    <Image onClick={handleCaptchaClick} src={`/captcha.png?_t=${captchaKey}`} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />
                                 </Form.Group>
                             </Form.Row>
-                            <Form.Control type={'hidden'} name={'checkKey'} value={loaderData.checkKey} />
+                            <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey} />
                             <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
                         </RemixForm>
                     </Col>
