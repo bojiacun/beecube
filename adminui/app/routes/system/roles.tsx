@@ -16,6 +16,7 @@ import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
+import SinglePagination from "~/components/pagination/SinglePagination";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -40,28 +41,35 @@ const RolesPage = () => {
                     </Card.Title>
                 </Card.Header>
                 <Card.Body className={'d-flex justify-content-between  flex-wrap'}>
-                    <FormGroup as={Form.Row} className={'align-items-center mr-1 mb-md-0'}>
-                        <FormLabel column={'sm'} xs={3}>排序</FormLabel>
-                        <InputGroup as={Col} size={'sm'} sm={9}>
-                            <FormControl as={'select'} size={'sm'}>
-                                <option>无</option>
-                            </FormControl>
-                            <FormControl as={'select'} size={'sm'}>
-                                <option>升序</option>
-                                <option>降序</option>
-                            </FormControl>
-                        </InputGroup>
-                    </FormGroup>
-                    <FormGroup as={Form.Row} controlId={'filterInput'} className={'mb-0'}>
-                        <FormLabel column={'sm'} xs={2}>筛选</FormLabel>
-                        <InputGroup as={Col} size={'sm'} sm={10}>
-                            <FormControl placeholder={'请输入要搜索的内容'}/>
-                            <InputGroup.Append>
-                                <Button>搜索</Button>
-                            </InputGroup.Append>
-                        </InputGroup>
-
-                    </FormGroup>
+                    <Form inline>
+                        <FormGroup as={Form.Row} className={'align-items-center mr-1 mb-md-0'}>
+                            <FormLabel column={'sm'}>排序</FormLabel>
+                            <InputGroup as={'span'} size={'sm'}>
+                                <FormControl as={'select'} size={'sm'}>
+                                    <option>无</option>
+                                </FormControl>
+                            </InputGroup>
+                            <InputGroup as={'span'} size={'sm'}>
+                                <FormControl as={'select'} size={'sm'}>
+                                    <option>升序</option>
+                                    <option>降序</option>
+                                </FormControl>
+                            </InputGroup>
+                        </FormGroup>
+                    </Form>
+                    <Form inline>
+                        <FormGroup as={Form.Row} controlId={'filterInput'} className={'mb-0'}>
+                            <FormLabel column={'sm'} sm={2}>筛选</FormLabel>
+                            <Col sm={10}>
+                                <InputGroup size={'sm'}>
+                                    <FormControl placeholder={'请输入要搜索的内容'}/>
+                                    <InputGroup.Append>
+                                        <Button>搜索</Button>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </Col>
+                        </FormGroup>
+                    </Form>
                 </Card.Body>
 
                 <Table striped hover responsive className={'position-relative'}>
@@ -74,7 +82,7 @@ const RolesPage = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {records.map((item:any)=>{
+                    {records.map((item: any) => {
                         return (
                             <tr>
                                 <td>{item.roleName}</td>
@@ -88,30 +96,22 @@ const RolesPage = () => {
                 </Table>
 
                 <Card.Body className={'d-flex justify-content-between flex-wrap pt-0'}>
-                    <FormGroup as={Row} className={'align-items-center mr-1 mb-md-0'}>
-                        <FormLabel column={'sm'} xs={'auto'}>共计{loaderData?.total},每页显示</FormLabel>
-                        <InputGroup as={Col} size={'sm'} xs={'auto'}>
-                            <FormControl as={'select'} size={'sm'}>
-                                <option>20</option>
-                                <option>50</option>
-                                <option>100</option>
-                            </FormControl>
-                        </InputGroup>
-                    </FormGroup>
+                    <div className={'align-items-center mr-1 mb-md-0'}>
+                        <Form inline>
+                            <FormGroup as={Form.Row}>
+                                <FormLabel column={'sm'}>共计{loaderData?.total},每页显示</FormLabel>
+                                <InputGroup size={'sm'} as={'span'}>
+                                    <FormControl as={'select'} size={'sm'}>
+                                        <option>20</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </FormControl>
+                                </InputGroup>
+                            </FormGroup>
+                        </Form>
+                    </div>
                     <div>
-                        <Pagination className={'mb-0'}>
-                            <Pagination.Item className={'prev-item disabled'} as={'span'}><ChevronLeft
-                                size={18} /></Pagination.Item>
-                            <Pagination.Item className={'active'} as={'button'} type={'button'}>1</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item as={'button'} type={'button'}>2</Pagination.Item>
-                            <Pagination.Item className={'next-item'} as={'span'}><ChevronRight
-                                size={18}/></Pagination.Item>
-                        </Pagination>
+                        <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages} total={loaderData?.total} size={loaderData?.size} />
                     </div>
                 </Card.Body>
             </Card>
