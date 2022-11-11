@@ -16,10 +16,11 @@ import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams} from "~/utils/utils";
+import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
+import Select from "react-select";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -36,13 +37,12 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 const DataLogPages = () => {
-    const loaderData = useLoaderData();
-    const [records, setRecords] = useState(loaderData?.records || []);
+    const [list, setList] = useState<any>(useLoaderData());
     const searchFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
-            setRecords(searchFetcher.data.records);
+            setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
 
@@ -52,56 +52,31 @@ const DataLogPages = () => {
                <Row>
                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <h4 className="mb-0">数据日志</h4>
-                       <FormControl as={'select'} size={'sm'} className={'v-select per-page-selector d-inline-block ml-50 mr-1'}>
-                           <option>10</option>
-                           <option>20</option>
-                           <option>50</option>
-                           <option>100</option>
-                       </FormControl>
+                       <Select placeholder={'分页大小'} isSearchable={false} defaultValue={PageSizeOptions[0]}  options={PageSizeOptions} className={'per-page-selector d-inline-block ml-50 mr-1'} />
                        <Button>添加记录</Button>
+                   </Col>
+                   <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                       <searchFetcher.Form className={'form-inline'}>
+                           <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'}/>
+                           <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'}/>
+                           <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'}/>
+
+                           <FormGroup as={Form.Row} className={'mb-0'}>
+                               <FormLabel column={true} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
+                               <Col sm={10}>
+                                   <InputGroup>
+                                       <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
+                                       <InputGroup.Append>
+                                           <Button type={'submit'}>搜索</Button>
+                                       </InputGroup.Append>
+                                   </InputGroup>
+                               </Col>
+                           </FormGroup>
+                       </searchFetcher.Form>
                    </Col>
                </Row>
             </div>
-            <Card.Header>
-                <Card.Title>
-                    数据日志
-                </Card.Title>
-            </Card.Header>
-            <Card.Body className={'d-flex justify-content-between  flex-wrap'}>
-                <Form inline>
-                    <FormGroup as={Form.Row} className={'align-items-center mr-1 mb-md-0'}>
-                        <FormLabel column={'sm'}>排序</FormLabel>
-                        <InputGroup as={'span'} size={'sm'}>
-                            <FormControl as={'select'} size={'sm'}>
-                                <option>无</option>
-                            </FormControl>
-                        </InputGroup>
-                        <InputGroup as={'span'} size={'sm'}>
-                            <FormControl as={'select'} size={'sm'}>
-                                <option>升序</option>
-                                <option>降序</option>
-                            </FormControl>
-                        </InputGroup>
-                    </FormGroup>
-                </Form>
-                <searchFetcher.Form className={'form-inline'}>
-                    <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'}/>
-                    <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'}/>
-                    <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'}/>
 
-                    <FormGroup as={Form.Row} className={'mb-0'}>
-                        <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
-                        <Col sm={10}>
-                            <InputGroup size={'sm'}>
-                                <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
-                                <InputGroup.Append>
-                                    <Button type={'submit'}>搜索</Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </Col>
-                    </FormGroup>
-                </searchFetcher.Form>
-            </Card.Body>
 
             <Table striped hover responsive className={'position-relative table-layout-fixed'}>
                 <thead>
@@ -114,7 +89,7 @@ const DataLogPages = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {records.map((item: any) => {
+                {list?.records.map((item: any) => {
                     return (
                         <tr key={item.id}>
                             <td>{item.dataTable}</td>
@@ -130,24 +105,17 @@ const DataLogPages = () => {
                 </tbody>
             </Table>
 
-            <Card.Body className={'d-flex justify-content-between flex-wrap pt-0 mt-1'}>
-                <div className={'align-items-center mr-1 mb-md-0'}>
-                    <Form inline>
-                        <FormGroup as={Form.Row}>
-                            <FormLabel column={'sm'}>共计{loaderData?.total}条数据,每页显示</FormLabel>
-                            <InputGroup size={'sm'} as={'span'}>
-                                <FormControl as={'select'} size={'sm'}>
-                                    <option>20</option>
-                                    <option>50</option>
-                                    <option>100</option>
-                                </FormControl>
-                            </InputGroup>
-                        </FormGroup>
-                    </Form>
-                </div>
-                <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages}
-                                  total={loaderData?.total} size={loaderData?.size}/>
-            </Card.Body>
+            <div className={'mx-2 mb-2 mt-1'}>
+                <Row>
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {(list?.current - 1)*list.size + list.size} 条</span>
+                    </Col>
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                        <SinglePagination className={'mb-0'} current={list?.current} pages={list?.pages} total={list?.total} size={list?.size} />
+                    </Col>
+                </Row>
+            </div>
+
         </Card>
     );
 }
