@@ -1,7 +1,6 @@
 import {
     Col,
     FormGroup,
-    Table,
     Card,
     InputGroup,
     Form,
@@ -17,12 +16,11 @@ import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
+import BootstrapTable, {ColumnDescription} from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import Select from "react-select";
-import ReactPaginate from "react-paginate";
-import {ChevronLeft, ChevronRight} from "react-feather";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -37,6 +35,38 @@ export const loader: LoaderFunction = async ({request}) => {
     const result = await requestWithToken(request)(API_DATALOG_LIST + url.search);
     return json(result.result);
 }
+const headerSortingClasses = (column:any, sortOrder:any) => (
+    sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
+);
+const columns: ColumnDescription[] = [
+    {
+        text: '表名',
+        dataField: 'dataTable',
+        headerStyle: {width: 170}
+    },
+    {
+        text: '数据ID',
+        dataField: 'dataId',
+        headerStyle: {width: 350}
+    },
+    {
+        text: '版本号',
+        dataField: 'dataVersion',
+        headerStyle: {width: 100}
+    },
+    {
+        text: '数据内容',
+        dataField: 'dataContent',
+        classes: 'text-cut'
+    },
+    {
+        text: '创建人',
+        dataField: 'createBy',
+        headerStyle: {width: 130},
+        sort: true,
+        headerSortingClasses,
+    },
+]
 
 const DataLogPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
@@ -60,7 +90,6 @@ const DataLogPages = () => {
                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <h4 className="mb-0">数据日志</h4>
                        <Select placeholder={'分页大小'} isSearchable={false} defaultValue={PageSizeOptions[0]}  options={PageSizeOptions} className={'per-page-selector d-inline-block ml-50 mr-1'} />
-                       <Button>添加记录</Button>
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                        <searchFetcher.Form className={'form-inline'}>
@@ -84,33 +113,8 @@ const DataLogPages = () => {
                </Row>
             </div>
 
+            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}  keyField={'id'} />
 
-            <Table striped hover responsive className={'position-relative table-layout-fixed'}>
-                <thead>
-                <tr>
-                    <th style={{width: 170}}>表名</th>
-                    <th style={{width: 350}}>数据ID</th>
-                    <th style={{width: 100}}>版本号</th>
-                    <th>数据内容</th>
-                    <th style={{width: 150}}>创建人</th>
-                </tr>
-                </thead>
-                <tbody>
-                {list?.records.map((item: any) => {
-                    return (
-                        <tr key={item.id}>
-                            <td>{item.dataTable}</td>
-                            <td>{item.dataId}</td>
-                            <td>{item.dataVersion}</td>
-                            <td className={'text-cut'}>
-                                {item.dataContent}
-                            </td>
-                            <td>{item.createBy}</td>
-                        </tr>
-                    );
-                })}
-                </tbody>
-            </Table>
 
             <div className={'mx-2 mb-2 mt-1'}>
                 <Row>
