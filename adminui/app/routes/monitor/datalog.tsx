@@ -14,9 +14,9 @@ import {API_DATALOG_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
-import BootstrapTable, {ColumnDescription} from 'react-bootstrap-table-next';
+import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
@@ -43,6 +43,7 @@ const headerSortingClasses = (column:any, sortOrder:any) => (
 
 const DataLogPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
+    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
     const {theme:systemTheme} = useContext(themeContext);
 
@@ -54,10 +55,20 @@ const DataLogPages = () => {
 
 
     const handlePageChanged = (e:any) => {
-        console.log(e);
+        searchState.pageNo = e.selected + 1;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
+    }
+    const handlePageSizeChanged = (newValue:any) => {
+        searchState.pageSize = parseInt(newValue.value);
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
     }
     const handleSort = (field:any, order:any):void => {
-        console.log(field, order);
+        searchState.column = field;
+        searchState.order = order;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
     }
     const columns: any[] = [
         {
@@ -103,6 +114,7 @@ const DataLogPages = () => {
                            defaultValue={PageSizeOptions[0]}
                            options={PageSizeOptions}
                            className={'per-page-selector d-inline-block ml-50 mr-1'}
+                           onChange={handlePageSizeChanged}
                            theme={(theme)=>{
                                if(systemTheme.layout.skin === 'dark') {
                                    theme.colors.neutral0 = '#161d31';
@@ -120,9 +132,10 @@ const DataLogPages = () => {
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                        <searchFetcher.Form className={'form-inline justify-content-end'}>
-                           <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'}/>
-                           <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'}/>
-                           <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'}/>
+                           <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                           <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
+                           <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
+                           <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                            <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
                                <FormLabel htmlFor={'dataTable'}>表名</FormLabel>
@@ -152,7 +165,7 @@ const DataLogPages = () => {
             <div className={'mx-2 mb-2 mt-1'}>
                 <Row>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {(list?.current - 1)*list.size + list.size} 条</span>
+                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {list?.current*list.size > list.total ? list.total:list?.current*list.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination
