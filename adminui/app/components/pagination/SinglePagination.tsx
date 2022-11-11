@@ -27,7 +27,7 @@ const SinglePagination: FC<SinglePaginationProps> = (props) => {
             {pageNumbers.map((pn:number)=>{
                 return (
                     <Pagination.Item key={'pages-'+pn} className={pn === current ? 'active':''} as={'span'}>
-                        <Link to={'/system/roles/'+pn} className={'text-white'}>{pn}</Link>
+                        <Link to={'/system/roles/'+pn} className={pn === current ? 'text-white':'text-dark'}>{pn}</Link>
                     </Pagination.Item>
                 );
             })}

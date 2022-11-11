@@ -90,14 +90,14 @@ const DataLogPages = () => {
                     </searchFetcher.Form>
                 </Card.Body>
 
-                <Table striped hover responsive className={'position-relative'}>
+                <Table striped hover responsive className={'position-relative table-layout-fixed'}>
                     <thead>
                     <tr>
-                        <th>表名</th>
-                        <th>数据ID</th>
-                        <th>版本号</th>
+                        <th style={{width:170}}>表名</th>
+                        <th style={{width: 350}}>数据ID</th>
+                        <th style={{width: 100}}>版本号</th>
                         <th>数据内容</th>
-                        <th>创建人</th>
+                        <th style={{width: 150}}>创建人</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -107,10 +107,8 @@ const DataLogPages = () => {
                                 <td>{item.dataTable}</td>
                                 <td>{item.dataId}</td>
                                 <td>{item.dataVersion}</td>
-                                <td>
-                                    <div className={'text-cut'} style={{width: 600}}>
-                                        {item.dataContent}
-                                    </div>
+                                <td className={'text-cut'}>
+                                    {item.dataContent}
                                 </td>
                                 <td>{item.createBy}</td>
                             </tr>
