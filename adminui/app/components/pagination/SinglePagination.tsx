@@ -1,39 +1,31 @@
-import {Pagination} from "react-bootstrap";
 import {FC} from "react";
 import {ChevronLeft, ChevronRight} from "react-feather";
 import classNames from "classnames";
-import {Link} from "@remix-run/react";
+import ReactPaginate, {ReactPaginateProps} from "react-paginate";
 
-export interface SinglePaginationProps {
-    className?: string;
-    current: number;
-    pages: number;
-    total: number;
-    size: number;
+export interface SinglePaginationProps extends ReactPaginateProps{
+
 }
 
 const SinglePagination: FC<SinglePaginationProps> = (props) => {
-    const {current, pages, ...rest} = props;
-    const pageNumbers = [];
-    for(let i = 1; i <= pages; i++) {
-        pageNumbers.push(i);
-    }
+    const {pageCount, className, ...rest} = props;
 
     return (
         //@ts-ignore
-        <Pagination {...rest}>
-            <Pagination.Item key={'pages-prev'} className={classNames('prev-item', current === 1 ? 'disabled':'')} as={'span'}><ChevronLeft
-                size={18}/></Pagination.Item>
-            {pageNumbers.map((pn:number)=>{
-                return (
-                    <Pagination.Item key={'pages-'+pn} className={pn === current ? 'active':''} as={'span'}>
-                        <Link to={'/system/roles/'+pn} className={pn === current ? 'text-white':'text-dark'}>{pn}</Link>
-                    </Pagination.Item>
-                );
-            })}
-            <Pagination.Item key={'pages-next'} className={classNames('next-item', current === pages ? 'disabled': '')} as={'span'}><ChevronRight
-                size={18}/></Pagination.Item>
-        </Pagination>
+        <ReactPaginate
+            pageCount={pageCount}
+            className={classNames('pagination mb-0 mt-1 mt-sm-0 b-pagination', className)}
+            pageClassName={'page-item'}
+            pageLinkClassName={'page-link'}
+            previousClassName={'page-item prev-item'}
+            previousLinkClassName={'page-link'}
+            previousLabel={<ChevronLeft size={18}/>}
+            nextClassName={'page-item next-item'}
+            nextLinkClassName={'page-link'}
+            nextLabel={<ChevronRight size={18}/>}
+            activeClassName={'active'}
+            {...rest}
+        />
     );
 }
 

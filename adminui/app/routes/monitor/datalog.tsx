@@ -48,6 +48,11 @@ const DataLogPages = () => {
         }
     }, [searchFetcher.state]);
 
+
+    const handlePageChanged = (e:any) => {
+        console.log(e);
+    }
+
     return (
         <Card>
             <div className={'m-2'}>
@@ -113,19 +118,11 @@ const DataLogPages = () => {
                         <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {(list?.current - 1)*list.size + list.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                        <ReactPaginate
+                        <SinglePagination
+                            className={'mb-0'}
                             pageCount={list?.pages}
-                            className={'pagination mb-0 mt-1 mt-sm-0 b-pagination'}
-                            pageClassName={'page-item'}
-                            pageLinkClassName={'page-link'}
-                            previousClassName={'page-item prev-item'}
-                            previousLinkClassName={'page-link'}
-                            previousLabel={<ChevronLeft size={18}/>}
-                            nextClassName={'page-item next-item'}
-                            nextLinkClassName={'page-link'}
-                            nextLabel={<ChevronRight size={18}/>}
+                            onPageChange={handlePageChanged}
                         />
-                        {/*<SinglePagination className={'mb-0'} current={list?.current} pages={list?.pages} total={list?.total} size={list?.size} />*/}
                     </Col>
                 </Row>
             </div>
