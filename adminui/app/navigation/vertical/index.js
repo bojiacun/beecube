@@ -34,6 +34,7 @@ import chartsAndMaps from './charts-and-maps'
 import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 import systemPages from './system-pages';
+import monitorPages from './monitor';
 
 // 部件名数组
-export default [...dashboard,  ...systemPages]
+export default [...dashboard,  ...systemPages, ...monitorPages]
