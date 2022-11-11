@@ -42,7 +42,7 @@ export const base64Decode = (value:any) => {
     return value;
 }
 
-export const DefaultListSearchParams = {
+export const DefaultListSearchParams:any = {
     pageNo: 1,
     pageSize: 10,
     column: 'id',
@@ -55,3 +55,7 @@ export const PageSizeOptions = [
     { value: '50', label: '50' },
     { value: '100', label: '100' }
 ]
+export const headerSortingClasses = (column: any, sortOrder: any) => (
+    sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
+);
+export const emptySortFunc = () => 0;

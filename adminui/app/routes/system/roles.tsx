@@ -15,7 +15,7 @@ import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useContext, useEffect, useRef, useState} from "react";
-import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
+import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
@@ -35,10 +35,6 @@ export const loader: LoaderFunction = async ({request}) => {
     const result = await requestWithToken(request)(API_ROLE_LIST + url.search);
     return json(result.result);
 }
-const headerSortingClasses = (column:any, sortOrder:any) => (
-    sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
-);
-
 
 const SytemRolesPage = () => {
     const [list, setList] = useState<any>(useLoaderData());
@@ -85,7 +81,8 @@ const SytemRolesPage = () => {
             headerStyle: {width: 200},
             sort: true,
             onSort: handleSort,
-            headerSortingClasses
+            headerSortingClasses,
+            sortFunc: emptySortFunc
         },
 
         {
