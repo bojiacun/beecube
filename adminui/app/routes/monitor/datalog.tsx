@@ -119,16 +119,22 @@ const DataLogPages = () => {
                        />
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                       <searchFetcher.Form className={'form-inline'}>
+                       <searchFetcher.Form className={'form-inline justify-content-end'}>
                            <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'}/>
                            <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'}/>
                            <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'}/>
 
+                           <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
+                               <FormLabel htmlFor={'dataTable'}>表名</FormLabel>
+                               <Col>
+                                   <FormControl name={'dataTable'} placeholder={'请输入要搜索的内容'}/>
+                               </Col>
+                           </FormGroup>
                            <FormGroup as={Form.Row} className={'mb-0'}>
-                               <FormLabel column={true} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
-                               <Col sm={10}>
+                               <FormLabel htmlFor={'dataId'}>数据ID</FormLabel>
+                               <Col>
                                    <InputGroup>
-                                       <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
+                                       <FormControl name={'dataId'} placeholder={'请输入要搜索的内容'}/>
                                        <InputGroup.Append>
                                            <Button type={'submit'}>搜索</Button>
                                        </InputGroup.Append>
