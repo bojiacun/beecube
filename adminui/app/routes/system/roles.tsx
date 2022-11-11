@@ -90,7 +90,11 @@ const SytemRolesPage = () => {
 
         {
             text: '操作',
+            dataField: 'operation',
             headerStyle: {width: 130},
+            formatter: (cell:any, row:any) => {
+                return <Button size={'sm'}>编辑</Button>
+            }
         },
     ]
 
