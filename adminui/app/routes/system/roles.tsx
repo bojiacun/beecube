@@ -1,25 +1,26 @@
 import {
     Col,
     FormGroup,
-    Table,
     Card,
     InputGroup,
     Form,
     FormControl,
     FormLabel,
-    Button,
+    Button, Row,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {API_DATALOG_LIST, API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {useEffect, useState} from "react";
-import {DefaultListSearchParams} from "~/utils/utils";
+import {useContext, useEffect, useRef, useState} from "react";
+import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
+import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
+import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -28,111 +29,130 @@ export const links: LinksFunction = () => {
 
 export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
-    if(_.isEmpty(url.search)) {
-        url.search = '?'+querystring.stringify(DefaultListSearchParams);
+    if (_.isEmpty(url.search)) {
+        url.search = '?' + querystring.stringify(DefaultListSearchParams);
     }
-    const result = await requestWithToken(request)(API_ROLE_LIST+url.search);
+    const result = await requestWithToken(request)(API_ROLE_LIST + url.search);
     return json(result.result);
 }
+const headerSortingClasses = (column:any, sortOrder:any) => (
+    sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
+);
 
-const RolesPage = () => {
-    const loaderData = useLoaderData();
-    const [records, setRecords] = useState(loaderData?.records || []);
+
+const SytemRolesPage = () => {
+    const [list, setList] = useState<any>(useLoaderData());
+    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
 
-    useEffect(()=>{
-        if(searchFetcher.data) {
-            setRecords(searchFetcher.data.records);
+    useEffect(() => {
+        if (searchFetcher.data) {
+            setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
 
+
+    const handlePageChanged = (e:any) => {
+        searchState.pageNo = e.selected + 1;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
+    }
+    const handlePageSizeChanged = (newValue:any) => {
+        searchState.pageSize = parseInt(newValue.value);
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
+    }
+    const handleSort = (field:any, order:any):void => {
+        searchState.column = field;
+        searchState.order = order;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get'});
+    }
+    const columns: any[] = [
+        {
+            text: '角色名称',
+            dataField: 'roleName',
+            headerStyle: {width: 170}
+        },
+        {
+            text: '角色编码',
+            dataField: 'roleCode',
+            headerStyle: {width: 170}
+        },
+        {
+            text: '创建时间',
+            dataField: 'createTime',
+            headerStyle: {width: 200},
+            sort: true,
+            onSort: handleSort,
+            headerSortingClasses
+        },
+
+        {
+            text: '操作',
+            headerStyle: {width: 130},
+        },
+    ]
+
+
     return (
-        <>
-            <Card>
-                <Card.Header>
-                    <Card.Title>
-                        角色管理
-                    </Card.Title>
-                </Card.Header>
-                <Card.Body className={'d-flex justify-content-between  flex-wrap'}>
-                    <Form inline>
-                        <FormGroup as={Form.Row} className={'align-items-center mr-1 mb-md-0'}>
-                            <FormLabel column={'sm'}>排序</FormLabel>
-                            <InputGroup as={'span'} size={'sm'}>
-                                <FormControl as={'select'} size={'sm'}>
-                                    <option>无</option>
-                                </FormControl>
-                            </InputGroup>
-                            <InputGroup as={'span'} size={'sm'}>
-                                <FormControl as={'select'} size={'sm'}>
-                                    <option>升序</option>
-                                    <option>降序</option>
-                                </FormControl>
-                            </InputGroup>
-                        </FormGroup>
-                    </Form>
-                    <searchFetcher.Form className={'form-inline'}>
-                        <FormControl name={'pageNo'} value={DefaultListSearchParams.pageNo} type={'hidden'} />
-                        <FormControl name={'column'} value={DefaultListSearchParams.column} type={'hidden'} />
-                        <FormControl name={'order'} value={DefaultListSearchParams.order} type={'hidden'} />
+        <Card>
+            <div className={'m-2'}>
+                <Row>
+                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                        <h4 className="mb-0">角色管理</h4>
+                        <ReactSelectThemed
+                            placeholder={'分页大小'}
+                            isSearchable={false}
+                            defaultValue={PageSizeOptions[0]}
+                            options={PageSizeOptions}
+                            className={'per-page-selector d-inline-block ml-50 mr-1'}
+                            onChange={handlePageSizeChanged}
+                        />
+                    </Col>
+                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                        <searchFetcher.Form className={'form-inline justify-content-end'}>
+                            <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                            <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
+                            <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
+                            <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                        <FormGroup as={Form.Row} className={'mb-0'}>
-                            <FormLabel column={'sm'} sm={2} htmlFor={'roleName'}>筛选</FormLabel>
-                            <Col sm={10}>
-                                <InputGroup size={'sm'}>
-                                    <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
-                                    <InputGroup.Append>
-                                        <Button type={'submit'}>搜索</Button>
-                                    </InputGroup.Append>
-                                </InputGroup>
-                            </Col>
-                        </FormGroup>
-                    </searchFetcher.Form>
-                </Card.Body>
-
-                <Table striped hover responsive className={'position-relative'}>
-                    <thead>
-                    <tr>
-                        <th>角色名称</th>
-                        <th>角色编码</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {records.map((item: any) => {
-                        return (
-                            <tr key={item.id}>
-                                <td>{item.roleName}</td>
-                                <td>{item.roleCode}</td>
-                                <td>{item.createTime}</td>
-                                <td></td>
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </Table>
-
-                <Card.Body className={'d-flex justify-content-between flex-wrap pt-0 mt-1'}>
-                    <div className={'align-items-center mr-1 mb-md-0'}>
-                        <Form inline>
-                            <FormGroup as={Form.Row}>
-                                <FormLabel column={'sm'}>共计{loaderData?.total}条数据,每页显示</FormLabel>
-                                <InputGroup size={'sm'} as={'span'}>
-                                    <FormControl as={'select'} size={'sm'}>
-                                        <option>20</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </FormControl>
-                                </InputGroup>
+                            <FormGroup as={Form.Row} className={'mb-0'}>
+                                <FormLabel htmlFor={'roleName'}>角色名称</FormLabel>
+                                <Col>
+                                    <InputGroup>
+                                        <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
+                                        <InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                </Col>
                             </FormGroup>
-                        </Form>
-                    </div>
-                    <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages} total={loaderData?.total} size={loaderData?.size} />
-                </Card.Body>
-            </Card>
-        </>
+                        </searchFetcher.Form>
+                    </Col>
+                </Row>
+            </div>
+
+            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}  keyField={'id'} />
+
+
+            <div className={'mx-2 mb-2 mt-1'}>
+                <Row>
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {list?.current*list.size > list.total ? list.total:list?.current*list.size} 条</span>
+                    </Col>
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                        <SinglePagination
+                            className={'mb-0'}
+                            pageCount={list?.pages}
+                            onPageChange={handlePageChanged}
+                        />
+                    </Col>
+                </Row>
+            </div>
+
+        </Card>
     );
 }
 
-export default withAutoLoading(RolesPage);
+export default withAutoLoading(SytemRolesPage);
