@@ -10,17 +10,18 @@ import {
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_DATALOG_LIST, API_GATEWAY_LIST, API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {API_DATALOG_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable, {ColumnDescription} from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import Select from "react-select";
+import themeContext from 'themeConfig';
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -71,6 +72,7 @@ const columns: ColumnDescription[] = [
 const DataLogPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const searchFetcher = useFetcher();
+    const {theme:systemTheme} = useContext(themeContext);
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -89,7 +91,26 @@ const DataLogPages = () => {
                <Row>
                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <h4 className="mb-0">数据日志</h4>
-                       <Select placeholder={'分页大小'} isSearchable={false} defaultValue={PageSizeOptions[0]}  options={PageSizeOptions} className={'per-page-selector d-inline-block ml-50 mr-1'} />
+                       <Select
+                           placeholder={'分页大小'}
+                           isSearchable={false}
+                           defaultValue={PageSizeOptions[0]}
+                           options={PageSizeOptions}
+                           className={'per-page-selector d-inline-block ml-50 mr-1'}
+                           theme={(theme)=>{
+                               if(systemTheme.layout.skin === 'dark') {
+                                   theme.colors.neutral0 = '#161d31';
+                                   theme.colors.neutral20 = '#3b4253';
+                                   theme.colors.neutral80 = '#b4b7bd';
+                               }
+                               else {
+                                   theme.colors.neutral0 = 'hsl(0, 0%, 100%)';
+                                   theme.colors.neutral20 = 'hsl(0, 0%, 80%)';
+                                   theme.colors.neutral80 = 'hsl(0, 0%, 20%)';
+                               }
+                               return theme;
+                           }}
+                       />
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                        <searchFetcher.Form className={'form-inline'}>
