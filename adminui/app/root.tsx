@@ -61,6 +61,8 @@ export const meta: MetaFunction = () => ({
 
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
+    const data = useLoaderData();
+
     console.log(error);
     return (
         <html lang="cn">
@@ -77,6 +79,13 @@ export function ErrorBoundary({error}: { error: Error }) {
             </Card>
         </div>
         <ScrollRestoration/>
+        <script
+            dangerouslySetInnerHTML={{
+                __html: `window.ENV = ${JSON.stringify(
+                    data.ENV
+                )}`,
+            }}
+        />
         <Scripts/>
         <LiveReload/>
         </body>
@@ -109,6 +118,35 @@ export function CatchBoundary() {
                     <Card.Body>
                         <h4> 由于长时间未操作，系统自动退出登录，请重新登陆 </h4>
                         <div className={'text-center'}><Button onClick={handleRelogin}>重新登陆</Button></div>
+                    </Card.Body>
+                </Card>
+            </div>
+            <ScrollRestoration/>
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `window.ENV = ${JSON.stringify(
+                        data.ENV
+                    )}`,
+                }}
+            />
+            <Scripts/>
+            <LiveReload/>
+            </body>
+            </html>
+        );
+    }
+    else if(caught.status === 404) {
+        return (
+            <html lang="cn">
+            <head>
+                <Meta/>
+                <Links/>
+            </head>
+            <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
+            <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
+                <Card>
+                    <Card.Body>
+                        <h4> 页面找不到了 404 </h4>
                     </Card.Body>
                 </Card>
             </div>

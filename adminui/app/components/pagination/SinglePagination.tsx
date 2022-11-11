@@ -2,6 +2,7 @@ import {Pagination} from "react-bootstrap";
 import {FC} from "react";
 import {ChevronLeft, ChevronRight} from "react-feather";
 import classNames from "classnames";
+import {Link} from "@remix-run/react";
 
 export interface SinglePaginationProps {
     className?: string;
@@ -25,8 +26,8 @@ const SinglePagination: FC<SinglePaginationProps> = (props) => {
                 size={18}/></Pagination.Item>
             {pageNumbers.map((pn:number)=>{
                 return (
-                    <Pagination.Item key={'pages-'+pn} className={pn === current ? 'active':''} as={'button'} type={'button'}>
-                        {pn}
+                    <Pagination.Item key={'pages-'+pn} className={pn === current ? 'active':''} as={'span'}>
+                        <Link to={'/system/roles/'+pn} className={'text-white'}>{pn}</Link>
                     </Pagination.Item>
                 );
             })}
