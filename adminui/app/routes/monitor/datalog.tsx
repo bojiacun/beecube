@@ -20,8 +20,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
-import Select from "react-select";
-import themeContext from 'themeConfig';
+import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -45,7 +44,6 @@ const DataLogPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
-    const {theme:systemTheme} = useContext(themeContext);
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -108,26 +106,13 @@ const DataLogPages = () => {
                <Row>
                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <h4 className="mb-0">数据日志</h4>
-                       <Select
+                       <ReactSelectThemed
                            placeholder={'分页大小'}
                            isSearchable={false}
                            defaultValue={PageSizeOptions[0]}
                            options={PageSizeOptions}
                            className={'per-page-selector d-inline-block ml-50 mr-1'}
                            onChange={handlePageSizeChanged}
-                           theme={(theme)=>{
-                               if(systemTheme.layout.skin === 'dark') {
-                                   theme.colors.neutral0 = '#161d31';
-                                   theme.colors.neutral20 = '#3b4253';
-                                   theme.colors.neutral80 = '#b4b7bd';
-                               }
-                               else {
-                                   theme.colors.neutral0 = 'hsl(0, 0%, 100%)';
-                                   theme.colors.neutral20 = 'hsl(0, 0%, 80%)';
-                                   theme.colors.neutral80 = 'hsl(0, 0%, 20%)';
-                               }
-                               return theme;
-                           }}
                        />
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
