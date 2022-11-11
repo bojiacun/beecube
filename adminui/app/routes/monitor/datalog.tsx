@@ -52,6 +52,13 @@ const DataLogPages = () => {
                <Row>
                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <h4 className="mb-0">数据日志</h4>
+                       <FormControl as={'select'} size={'sm'} className={'v-select per-page-selector d-inline-block ml-50 mr-1'}>
+                           <option>10</option>
+                           <option>20</option>
+                           <option>50</option>
+                           <option>100</option>
+                       </FormControl>
+                       <Button>添加记录</Button>
                    </Col>
                </Row>
             </div>
