@@ -11,6 +11,7 @@ export const API_CAPTCHA = `${BASE_URL}/jeecg-system/sys/randomImage`;
 export const API_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/role/list`;
 export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`;
 export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;
+export const API_LOG_LIST = `${BASE_URL}/jeecg-system/sys/log/list`;
 
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
