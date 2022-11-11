@@ -39,35 +39,7 @@ export const loader: LoaderFunction = async ({request}) => {
 const headerSortingClasses = (column:any, sortOrder:any) => (
     sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
 );
-const columns: ColumnDescription[] = [
-    {
-        text: '表名',
-        dataField: 'dataTable',
-        headerStyle: {width: 170}
-    },
-    {
-        text: '数据ID',
-        dataField: 'dataId',
-        headerStyle: {width: 350}
-    },
-    {
-        text: '版本号',
-        dataField: 'dataVersion',
-        headerStyle: {width: 100}
-    },
-    {
-        text: '数据内容',
-        dataField: 'dataContent',
-        classes: 'text-cut'
-    },
-    {
-        text: '创建人',
-        dataField: 'createBy',
-        headerStyle: {width: 130},
-        sort: true,
-        headerSortingClasses,
-    },
-]
+
 
 const DataLogPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
@@ -84,6 +56,40 @@ const DataLogPages = () => {
     const handlePageChanged = (e:any) => {
         console.log(e);
     }
+    const handleSort = (field:any, order:any):void => {
+        console.log(field, order);
+    }
+    const columns: any[] = [
+        {
+            text: '表名',
+            dataField: 'dataTable',
+            headerStyle: {width: 170}
+        },
+        {
+            text: '数据ID',
+            dataField: 'dataId',
+            headerStyle: {width: 350}
+        },
+        {
+            text: '版本号',
+            dataField: 'dataVersion',
+            headerStyle: {width: 100}
+        },
+        {
+            text: '数据内容',
+            dataField: 'dataContent',
+            classes: 'text-cut'
+        },
+        {
+            text: '创建人',
+            dataField: 'createBy',
+            headerStyle: {width: 130},
+            sort: true,
+            headerSortingClasses,
+            onSort: handleSort
+        },
+    ]
+
 
     return (
         <Card>
