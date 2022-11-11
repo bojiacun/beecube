@@ -9,6 +9,7 @@ export const USER_INFO_URL = process.env.USER_INFO_URL || '/auth/user';
 export const API_LOGIN = `${BASE_URL}/jeecg-system/sys/login`;
 export const API_CAPTCHA = `${BASE_URL}/jeecg-system/sys/randomImage`;
 export const API_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/role/list`;
+export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`;
 
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
