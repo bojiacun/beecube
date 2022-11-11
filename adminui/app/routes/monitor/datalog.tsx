@@ -107,7 +107,11 @@ const DataLogPages = () => {
                                 <td>{item.dataTable}</td>
                                 <td>{item.dataId}</td>
                                 <td>{item.dataVersion}</td>
-                                <td>{item.dataContent}</td>
+                                <td>
+                                    <div className={'text-cut'} style={{width: 600}}>
+                                        {item.dataContent}
+                                    </div>
+                                </td>
                                 <td>{item.createBy}</td>
                             </tr>
                         );
