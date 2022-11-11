@@ -21,6 +21,8 @@ import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
 import _ from 'lodash';
 import querystring from 'querystring';
 import Select from "react-select";
+import ReactPaginate from "react-paginate";
+import {ChevronLeft, ChevronRight} from "react-feather";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -111,7 +113,19 @@ const DataLogPages = () => {
                         <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {(list?.current - 1)*list.size + list.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                        <SinglePagination className={'mb-0'} current={list?.current} pages={list?.pages} total={list?.total} size={list?.size} />
+                        <ReactPaginate
+                            pageCount={list?.pages}
+                            className={'pagination mb-0 mt-1 mt-sm-0 b-pagination'}
+                            pageClassName={'page-item'}
+                            pageLinkClassName={'page-link'}
+                            previousClassName={'page-item prev-item'}
+                            previousLinkClassName={'page-link'}
+                            previousLabel={<ChevronLeft size={18}/>}
+                            nextClassName={'page-item next-item'}
+                            nextLinkClassName={'page-link'}
+                            nextLabel={<ChevronRight size={18}/>}
+                        />
+                        {/*<SinglePagination className={'mb-0'} current={list?.current} pages={list?.pages} total={list?.total} size={list?.size} />*/}
                     </Col>
                 </Row>
             </div>
