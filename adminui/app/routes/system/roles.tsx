@@ -52,7 +52,6 @@ const SystemRolesPage = () => {
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModalShow, setEditModalShow] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<any>();
-    const [validated, setValidated] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
@@ -147,13 +146,7 @@ const SystemRolesPage = () => {
     const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
-    const handleOnEditSubmit = (e: any) => {
-        let form = e.currentTarget;
-        if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        setValidated(true);
+    const handleOnEditSubmit = async ({values}) => {
     }
     return (
         <Card>
@@ -225,7 +218,7 @@ const SystemRolesPage = () => {
                     <Modal.Title id={'edit-modal'}>编辑角色</Modal.Title>
                 </Modal.Header>
                 {editModal &&
-                    <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={console.log}>
+                    <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
                         {({errors, touched})=>{
                             return (
                                 <FormikForm

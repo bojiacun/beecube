@@ -70,7 +70,7 @@ export const meta: MetaFunction = () => ({
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
 
-    console.log(error);
+    console.log('error is',error);
     return (
         <html lang="cn">
         <head>
@@ -97,13 +97,12 @@ export function CatchBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
     const caught = useCatch();
     const logoutFetcher = useFetcher();
-    const data = useLoaderData();
     const handleRelogin = () => {
         //@ts-ignore
         logoutFetcher.load(window.ENV.LOGOUT_URL);
     }
 
-    console.log(caught);
+    console.log('There is exception ocurred',caught);
     if (caught.status === 401) {
         //登录态失效
         return (
@@ -122,13 +121,6 @@ export function CatchBoundary() {
                 </Card>
             </div>
             <ScrollRestoration/>
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `window.ENV = ${JSON.stringify(
-                        data.ENV
-                    )}`,
-                }}
-            />
             <Scripts/>
             <LiveReload/>
             </body>
@@ -151,13 +143,6 @@ export function CatchBoundary() {
                 </Card>
             </div>
             <ScrollRestoration/>
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `window.ENV = ${JSON.stringify(
-                        data.ENV
-                    )}`,
-                }}
-            />
             <Scripts/>
             <LiveReload/>
             </body>
