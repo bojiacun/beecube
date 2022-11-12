@@ -6,7 +6,7 @@ import {
     Form,
     FormControl,
     FormLabel,
-    Button, Row, Dropdown, Nav, NavDropdown,
+    Button, Row, Dropdown, Nav, NavDropdown, Modal,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
@@ -21,7 +21,8 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import {MoreVertical} from "react-feather";
+import {Delete, Edit, MoreVertical, Shield} from "react-feather";
+import {AwesomeButton} from "react-awesome-button";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -37,9 +38,11 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(result.result);
 }
 
-const SytemRolesPage = () => {
+const SystemRolesPage = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [editModalShow, setEditModalShow] = useState<boolean>(false);
+    const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
 
     useEffect(() => {
@@ -48,7 +51,15 @@ const SytemRolesPage = () => {
         }
     }, [searchFetcher.state]);
 
-
+    const handleOnAction = (row: any, e: any) => {
+        switch (e) {
+            case 'edit':
+                //编辑
+                setEditModal(row);
+                setEditModalShow(true);
+                break;
+        }
+    }
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
@@ -93,23 +104,23 @@ const SytemRolesPage = () => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <Link to={'/'}>用户</Link>
-                        <span className={'divider'} />
+                        <a href={'#'}>用户</a>
+                        <span className={'divider'}/>
                         <Link to={'/'}>工单授权</Link>
-                        <span className={'divider'} />
-                        <Dropdown as={'span'}>
+                        <span className={'divider'}/>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'}>
-                                <MoreVertical size={16} style={{marginTop: -2}} />
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item eventKey={'authorization'}>
-                                    授权
+                                    <div className={'d-flex align-items-center'}><Shield size={16} className={'mr-1'}/>授权</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'edit'}>
-                                    编辑
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'delete'}>
-                                    删除
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -184,8 +195,26 @@ const SytemRolesPage = () => {
                 </Row>
             </div>
 
+            <Modal
+                show={editModalShow}
+                onHide={() => setEditModalShow(false)}
+                centered
+                backdrop={'static'}
+                aria-labelledby={'edit-modal'}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id={'edit-modal'}>编辑角色</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <AwesomeButton type={'primary'}>保存</AwesomeButton>
+                </Modal.Footer>
+            </Modal>
+
         </Card>
     );
 }
 
-export default withAutoLoading(SytemRolesPage);
+export default withAutoLoading(SystemRolesPage);
