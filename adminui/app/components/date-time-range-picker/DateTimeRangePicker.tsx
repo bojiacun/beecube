@@ -39,7 +39,7 @@ const DateTimeRangePicker: FC<DateTimePickerProps> = (props) => {
             minDate={minDate}
             maxDate={maxDate}
             onChange={handleOnDateChange}
-            dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+            dateFormat={showTime ? 'yyyy/MM/dd HH:mm' : 'yyyy/MM/dd'}
             customInput={<BootstrapFormControlInput inputName={inputName} />}
             showTimeSelect={showTime}
             selectsRange={true}

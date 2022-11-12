@@ -32,10 +32,24 @@ DefaultListSearchParams.logType = 1;
 
 export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
+    let queryString = '';
     if (_.isEmpty(url.search)) {
-        url.search = '?' + querystring.stringify(DefaultListSearchParams);
+        queryString = '?' + querystring.stringify(DefaultListSearchParams);
     }
-    const result = await requestWithToken(request)(API_LOG_LIST + url.search);
+    else {
+        //转化时间段搜索
+        const dates = url.searchParams.get('dates');
+        if(dates) {
+            url.searchParams.set('createTime_begin', dates.split('-')[0]);
+            url.searchParams.set('createTime_end', dates.split('-')[1]);
+            url.searchParams.delete('dates');
+        }
+        queryString = '?' + url.searchParams.toString();
+        console.log('query string is', queryString);
+    }
+
+
+    const result = await requestWithToken(request)(API_LOG_LIST + queryString);
     return json(result.result);
 }
 
@@ -133,11 +147,6 @@ const OperationLogPage = () => {
         showExpandColumn: true,
         expandByColumnOnly: true,
     }
-
-    const handleOnDateChange = (e:any) => {
-        console.log(e);
-    }
-
 
 
     if(!list) return <></>;

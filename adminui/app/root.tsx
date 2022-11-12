@@ -69,7 +69,6 @@ export const meta: MetaFunction = () => ({
 
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
-    const data = useLoaderData();
 
     console.log(error);
     return (
@@ -87,13 +86,6 @@ export function ErrorBoundary({error}: { error: Error }) {
             </Card>
         </div>
         <ScrollRestoration/>
-        <script
-            dangerouslySetInnerHTML={{
-                __html: `window.ENV = ${JSON.stringify(
-                    data.ENV
-                )}`,
-            }}
-        />
         <Scripts/>
         <LiveReload/>
         </body>
