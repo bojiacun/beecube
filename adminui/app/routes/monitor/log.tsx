@@ -140,6 +140,9 @@ const OperationLogPage = () => {
     const handleKeywordChanged = (e:any) => {
         setSearchState({...searchState, keyWord: e.target.value});
     }
+    const handleOnDateChanged = (date:any) => {
+        setSearchState({...searchState, dates: date});
+    }
 
 
     if(!list) return <></>;
@@ -170,7 +173,7 @@ const OperationLogPage = () => {
                             <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
                                 <FormLabel htmlFor={'dataTable'}>时间段搜索</FormLabel>
                                 <Col>
-                                    <DateTimeRangePicker inputName={'dates'} minDate={new Date()} />
+                                    <DateTimeRangePicker inputName={'dates'} onChange={handleOnDateChanged} />
                                 </Col>
                             </FormGroup>
 
