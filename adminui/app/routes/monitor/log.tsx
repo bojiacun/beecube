@@ -143,7 +143,10 @@ const OperationLogPage = () => {
     const handleOnDateChanged = (date:any) => {
         setSearchState({...searchState, dates: date});
     }
-
+    const handleOnSearchSubmit = () => {
+        //设置分页为1
+        setSearchState({...searchState, pageNo: 1});
+    }
 
     if(!list) return <></>;
 
@@ -163,7 +166,7 @@ const OperationLogPage = () => {
                         />
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form className={'form-inline justify-content-end'}>
+                        <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                             <FormControl name={'logType'} value={searchState.logType} type={'hidden'}/>
                             <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
@@ -209,6 +212,7 @@ const OperationLogPage = () => {
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination
+                            forcePage={searchState.pageNo - 1}
                             className={'mb-0'}
                             pageCount={list?.pages}
                             onPageChange={handlePageChanged}
@@ -296,6 +300,10 @@ const LoginLogPage = () => {
     const handleKeywordChanged = (e:any) => {
         setSearchState({...searchState, keyWord: e.target.value});
     }
+    const handleOnSearchSubmit = () => {
+        //设置分页为1
+        setSearchState({...searchState, pageNo: 1});
+    }
     return (
         <>
             <div className={'m-2'}>
@@ -312,7 +320,7 @@ const LoginLogPage = () => {
                         />
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form className={'form-inline justify-content-end'}>
+                        <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                             <FormControl name={'logType'} value={searchState.logType} type={'hidden'}/>
                             <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
@@ -351,6 +359,7 @@ const LoginLogPage = () => {
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination
+                            forcePage={searchState.pageNo - 1}
                             className={'mb-0'}
                             pageCount={list?.pages}
                             onPageChange={handlePageChanged}
