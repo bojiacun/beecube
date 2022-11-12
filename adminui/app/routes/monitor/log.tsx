@@ -168,7 +168,7 @@ const OperationLogPage = () => {
                             <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
                                 <FormLabel htmlFor={'dataTable'}>时间段搜索</FormLabel>
                                 <Col>
-                                    <DateTimeRangePicker minDate={new Date()} />
+                                    <DateTimeRangePicker inputName={'dates'} minDate={new Date()} />
                                 </Col>
                             </FormGroup>
 

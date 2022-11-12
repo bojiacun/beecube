@@ -7,13 +7,14 @@ export interface DateTimePickerProps {
     showTime?: boolean;
     minDate?: any;
     maxDate?: any;
+    inputName: string;
 }
 
-const BootstrapFormControlInput = React.forwardRef(({value, onClick}:any, ref:any)=>{
+const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName}:any, ref:any)=>{
     const handleOnChange = (e:any) => {
     }
     return <FormControl
-        name={'datepicker'}
+        name={inputName}
         autoComplete={'off'}
         onClick={onClick}
         value={value}
@@ -23,7 +24,7 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick}:any, ref:an
 });
 
 const DateTimeRangePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false, minDate = null, maxDate = null} = props;
+    const {showTime = false, minDate = null, maxDate = null, inputName} = props;
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
 
@@ -39,7 +40,7 @@ const DateTimeRangePicker: FC<DateTimePickerProps> = (props) => {
             maxDate={maxDate}
             onChange={handleOnDateChange}
             dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
-            customInput={<BootstrapFormControlInput />}
+            customInput={<BootstrapFormControlInput inputName={inputName} />}
             showTimeSelect={showTime}
             selectsRange={true}
         />
