@@ -25,6 +25,7 @@ import {json} from "@remix-run/node";
 import {AnimatePresence, motion} from "framer-motion";
 import {useLocation} from "react-router";
 import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import datepickerStyle from 'react-datepicker/dist/react-datepicker.min.css';
 
 i18n.changeLanguage('cn').then();
 
@@ -51,6 +52,7 @@ export const links: LinksFunction = () => {
         {rel: 'stylesheet', href: stylesUrl},
         {rel: 'stylesheet', href: loaderStyleUrl},
         {rel: 'stylesheet', href: reactBootstrapTable2Style},
+        {rel: 'stylesheet', href: datepickerStyle},
     ];
 }
 

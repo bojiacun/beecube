@@ -22,6 +22,7 @@ import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {MinusSquare, PlusSquare} from "react-feather";
+import DatePicker from 'react-datepicker';
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -132,6 +133,13 @@ const OperationLogPage = () => {
         showExpandColumn: true,
         expandByColumnOnly: true,
     }
+
+    const handleOnDateChange = (e:any) => {
+        console.log(e);
+    }
+
+
+
     if(!list) return <></>;
 
     return (
@@ -157,8 +165,15 @@ const OperationLogPage = () => {
                             <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                             <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
+                            <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
+                                <FormLabel htmlFor={'dataTable'}>时间段搜索</FormLabel>
+                                <Col>
+                                    <DatePicker onChange={handleOnDateChange} />
+                                </Col>
+                            </FormGroup>
+
                             <FormGroup as={Form.Row} className={'mb-0'}>
-                                <FormLabel htmlFor={'keyWord'}>搜索</FormLabel>
+                                <FormLabel htmlFor={'keyWord'}>搜索日志</FormLabel>
                                 <Col>
                                     <InputGroup>
                                         <FormControl name={'keyWord'} placeholder={'请输入要搜索的内容'}/>
