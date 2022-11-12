@@ -6,21 +6,22 @@ import {
     Form,
     FormControl,
     FormLabel,
-    Button, Row,
+    Button, Row, Dropdown, Nav, NavDropdown,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_DATALOG_LIST, API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {Link, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+import {MoreVertical} from "react-feather";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -48,17 +49,17 @@ const SytemRolesPage = () => {
     }, [searchFetcher.state]);
 
 
-    const handlePageChanged = (e:any) => {
+    const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get'});
     }
-    const handlePageSizeChanged = (newValue:any) => {
+    const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get'});
     }
-    const handleSort = (field:any, order:any):void => {
+    const handleSort = (field: any, order: any): void => {
         searchState.column = field;
         searchState.order = order;
         setSearchState({...searchState});
@@ -89,8 +90,31 @@ const SytemRolesPage = () => {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 130},
-            formatter: (cell:any, row:any) => {
-                return <Button size={'sm'}>编辑</Button>
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        <Link to={'/'}>用户</Link>
+                        <span className={'divider'} />
+                        <Link to={'/'}>工单授权</Link>
+                        <span className={'divider'} />
+                        <Dropdown as={'span'}>
+                            <Dropdown.Toggle as={'span'}>
+                                <MoreVertical size={16} style={{marginTop: -2}} />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'authorization'}>
+                                    授权
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    编辑
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    删除
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
+                );
             }
         },
     ]
@@ -98,7 +122,7 @@ const SytemRolesPage = () => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
-    const handleOnRoleNameChanged = (e:any) => {
+    const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
     return (
@@ -139,13 +163,15 @@ const SytemRolesPage = () => {
                 </Row>
             </div>
 
-            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}  keyField={'id'} />
+            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}
+                            keyField={'id'}/>
 
 
             <div className={'mx-2 mb-2 mt-1'}>
                 <Row>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {list?.current*list.size > list.total ? list.total:list?.current*list.size} 条</span>
+                        <span
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination

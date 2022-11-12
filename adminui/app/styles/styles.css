@@ -40,6 +40,13 @@ body.dark-layout .react-datepicker__day--disabled, body.dark-layout .react-datep
   text-align: center;
 }
 
+span.divider {
+  border-right: 1px solid #ebe9f1;
+  width: 1px;
+  height: 12px;
+  margin: 0 5px !important;
+}
+
 .text-cut {
   overflow: hidden;
   white-space: nowrap;
