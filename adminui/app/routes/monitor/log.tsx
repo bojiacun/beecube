@@ -40,8 +40,8 @@ export const loader: LoaderFunction = async ({request}) => {
         //转化时间段搜索
         const dates = url.searchParams.get('dates');
         if(dates) {
-            url.searchParams.set('createTime_begin', dates.split('-')[0]);
-            url.searchParams.set('createTime_end', dates.split('-')[1]);
+            url.searchParams.set('createTime_begin', _.replace(dates.split('-')[0],/\//g,'-'));
+            url.searchParams.set('createTime_end', _.replace(dates.split('-')[1], /\//g,'-'));
             url.searchParams.delete('dates');
         }
         queryString = '?' + url.searchParams.toString();
