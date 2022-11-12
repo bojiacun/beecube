@@ -23,6 +23,7 @@ import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {MinusSquare, PlusSquare} from "react-feather";
 import DateTimeRangePicker from "~/components/date-time-range-picker/DateTimeRangePicker";
+import {requireAuthenticated} from "~/utils/auth.server";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -31,6 +32,7 @@ export const links: LinksFunction = () => {
 DefaultListSearchParams.logType = 1;
 
 export const loader: LoaderFunction = async ({request}) => {
+    await requireAuthenticated(request);
     const url = new URL(request.url);
     let queryString = '';
     if (_.isEmpty(url.search)) {

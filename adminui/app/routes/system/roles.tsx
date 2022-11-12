@@ -26,6 +26,7 @@ import {Delete, Edit, MoreVertical, Shield} from "react-feather";
 import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
+import {requireAuthenticated} from "~/utils/auth.server";
 
 
 export const links: LinksFunction = () => {
@@ -34,6 +35,7 @@ export const links: LinksFunction = () => {
 
 
 export const loader: LoaderFunction = async ({request}) => {
+    await requireAuthenticated(request);
     const url = new URL(request.url);
     if (_.isEmpty(url.search)) {
         url.search = '?' + querystring.stringify(DefaultListSearchParams);

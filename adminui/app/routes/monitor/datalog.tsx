@@ -21,6 +21,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+import {requireAuthenticated} from "~/utils/auth.server";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -28,6 +29,7 @@ export const links: LinksFunction = () => {
 
 
 export const loader: LoaderFunction = async ({request}) => {
+    await requireAuthenticated(request);
     const url = new URL(request.url);
     if (_.isEmpty(url.search)) {
         url.search = '?' + querystring.stringify(DefaultListSearchParams);
