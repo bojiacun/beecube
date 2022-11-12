@@ -21,6 +21,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+import {MinusSquare, PlusSquare} from "react-feather";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -110,7 +111,27 @@ const OperationLogPage = () => {
             headerStyle: {width: 170}
         },
     ]
-
+    const expandRow = {
+        renderer: (row:any) => {
+            return (
+                <>
+                <div>请求方法：{row.method}</div>
+                <div>请求参数：{row.requestParam}</div>
+                </>
+            );
+        },
+        expandHeaderColumnRenderer: () => {
+            return <></>
+        },
+        expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
+            if(expanded) {
+                return <MinusSquare size={16} />
+            }
+            return <PlusSquare size={16} />
+        },
+        showExpandColumn: true,
+        expandByColumnOnly: true,
+    }
     if(!list) return <></>;
 
     return (
@@ -152,8 +173,12 @@ const OperationLogPage = () => {
                 </Row>
             </div>
 
-            {list?.records && <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
-                                              data={list?.records} keyField={'id'}/>}
+            {list?.records && <BootstrapTable
+                classes={'table-layout-fixed position-relative b-table'}
+                striped hover columns={columns} bootstrap4
+                expandRow={expandRow}
+                data={list?.records} keyField={'id'}
+            />}
 
 
             <div className={'mx-2 mb-2 mt-1'}>
@@ -240,6 +265,24 @@ const LoginLogPage = () => {
         },
     ]
 
+    const expandRow = {
+        renderer: (row:any) => {
+            return (
+                <div></div>
+            );
+        },
+        expandHeaderColumnRenderer: () => {
+            return <></>
+        },
+        expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
+            if(expanded) {
+                return <MinusSquare size={16} />
+            }
+            return <PlusSquare size={16} />
+        },
+        showExpandColumn: true,
+        expandByColumnOnly: true,
+    }
 
     return (
         <>
@@ -280,8 +323,12 @@ const LoginLogPage = () => {
                 </Row>
             </div>
 
-            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}
-                            keyField={'id'}/>
+            <BootstrapTable
+                classes={'table-layout-fixed position-relative b-table'}
+                striped hover columns={columns} bootstrap4 data={list?.records}
+                expandRow={expandRow}
+                keyField={'id'}
+            />
 
 
             <div className={'mx-2 mb-2 mt-1'}>

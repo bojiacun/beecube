@@ -24,7 +24,7 @@ import _ from 'lodash';
 import {json} from "@remix-run/node";
 import {AnimatePresence, motion} from "framer-motion";
 import {useLocation} from "react-router";
-import {LOGIN_URL, LOGOUT_URL} from "~/utils/request.server";
+import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 i18n.changeLanguage('cn').then();
 
@@ -50,6 +50,7 @@ export const links: LinksFunction = () => {
         {rel: 'stylesheet', href: coreStyleUrl},
         {rel: 'stylesheet', href: stylesUrl},
         {rel: 'stylesheet', href: loaderStyleUrl},
+        {rel: 'stylesheet', href: reactBootstrapTable2Style},
     ];
 }
 

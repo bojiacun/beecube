@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {ChevronLeft, ChevronRight} from "react-feather";
+import {ChevronLeft, ChevronRight, MoreHorizontal} from "react-feather";
 import classNames from "classnames";
 import ReactPaginate, {ReactPaginateProps} from "react-paginate";
 
@@ -23,6 +23,9 @@ const SinglePagination: FC<SinglePaginationProps> = (props) => {
             nextClassName={'page-item next-item'}
             nextLinkClassName={'page-link'}
             nextLabel={<ChevronRight size={18}/>}
+            breakClassName={'page-item'}
+            breakLinkClassName={'page-link'}
+            breakLabel={<MoreHorizontal size={18} />}
             activeClassName={'active'}
             {...rest}
         />
