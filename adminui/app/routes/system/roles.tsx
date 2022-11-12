@@ -9,8 +9,8 @@ import {
     Button, Row, Dropdown, Modal,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
-import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {API_ROLE_EDIT, API_ROLE_LIST, putFormInit, requestWithToken} from "~/utils/request.server";
 import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -36,8 +36,17 @@ export const links: LinksFunction = () => {
 }
 export function ErrorBoundary() {
     stopPageLoading();
-    return <>roles errors</>;
+    return <SystemRolesPage />
 }
+export function CatchBoundary() {
+    stopPageLoading();
+    return <SystemRolesPage />
+}
+
+const EditRoleSchema = Yup.object().shape({
+    roleCode: Yup.string().required(),
+    roleName: Yup.string().required()
+});
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
@@ -53,10 +62,6 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(result.result);
 }
 
-const EditRoleSchema = Yup.object().shape({
-    roleCode: Yup.string().required(),
-    roleName: Yup.string().required()
-});
 
 const SystemRolesPage = () => {
     const [list, setList] = useState<any>(useLoaderData());
