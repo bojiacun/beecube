@@ -43,7 +43,9 @@ const SystemRolesPage = () => {
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModalShow, setEditModalShow] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<any>();
+    const [validated, setValidated] = useState<boolean>(false);
     const searchFetcher = useFetcher();
+    const editFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -136,6 +138,14 @@ const SystemRolesPage = () => {
     const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
+    const handleOnEditSubmit = (e:any) => {
+        let form = e.currentTarget;
+        if(form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        setValidated(true);
+    }
     return (
         <Card>
             <div className={'m-2'}>
@@ -205,12 +215,29 @@ const SystemRolesPage = () => {
                 <Modal.Header closeButton>
                     <Modal.Title id={'edit-modal'}>编辑角色</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-
-                </Modal.Body>
-                <Modal.Footer>
-                    <AwesomeButton type={'primary'}>保存</AwesomeButton>
-                </Modal.Footer>
+                {editModal &&
+                    <editFetcher.Form noValidate className={validated ? 'was-validated':''} method={'post'} action={`/system/roles/${editModal.id}`} onSubmit={handleOnEditSubmit}>
+                        <Modal.Body>
+                            <FormGroup controlId={'roleCode'}>
+                                <Form.Label>角色编码</Form.Label>
+                                <FormControl name={'roleCode'} placeholder={'角色编码'} readOnly value={editModal.roleCode}/>
+                            </FormGroup>
+                            <FormGroup controlId={'roleName'}>
+                                <Form.Label>角色名称</Form.Label>
+                                <FormControl
+                                    name={'roleName'}
+                                    placeholder={'角色名称'}
+                                    value={editModal.roleName}
+                                    onChange={e => setEditModal({...editModal, roleName: e.target.value})}
+                                    required
+                                />
+                            </FormGroup>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <AwesomeButton type={'primary'}>保存</AwesomeButton>
+                        </Modal.Footer>
+                    </editFetcher.Form>
+                }
             </Modal>
 
         </Card>
