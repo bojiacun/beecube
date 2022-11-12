@@ -15,7 +15,7 @@ import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import * as Yup from 'yup';
 //@ts-ignore
@@ -80,7 +80,7 @@ const SystemRolesPage = () => {
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
             if(editFetcher.data.success) {
-                showToastError('修改成功');
+                showToastSuccess('修改成功');
                 searchFetcher.submit(searchState, {method: 'get'});
                 setEditModal(null);
             }
@@ -255,10 +255,6 @@ const SystemRolesPage = () => {
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
                                             <Field className={'form-control'} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly />
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Form.Label htmlFor={'id'}>id</Form.Label>
-                                            <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'id'} name={'id'} placeholder={'id'} />
                                         </FormGroup>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
