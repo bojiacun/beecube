@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap");
 .react-datepicker {
   font-family: inherit !important;
+}
+
+.react-datepicker:has(> .react-datepicker__time-container) {
   min-width: 298px;
 }
 
@@ -27,6 +30,9 @@ body.dark-layout .react-datepicker__current-month, body.dark-layout .react-datep
 }
 body.dark-layout .react-datepicker__day-name, body.dark-layout .react-datepicker__day, body.dark-layout .react-datepicker__time-name {
   color: #b4b7bd !important;
+}
+body.dark-layout .react-datepicker__day--disabled, body.dark-layout .react-datepicker__month-text--disabled, body.dark-layout .react-datepicker__quarter-text--disabled, body.dark-layout .react-datepicker__year-text--disabled {
+  color: #444b60 !important;
 }
 
 .th.expand-cell-header, td.expand-cell {

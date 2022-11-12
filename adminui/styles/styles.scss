@@ -26,6 +26,8 @@
 
 .react-datepicker {
   font-family: inherit !important;
+}
+.react-datepicker:has(> .react-datepicker__time-container ) {
   min-width: 298px;
 }
 .react-datepicker__header {
@@ -58,6 +60,9 @@ body {
     }
     .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
       color: $theme-dark-body-color !important;
+    }
+    .react-datepicker__day--disabled, .react-datepicker__month-text--disabled, .react-datepicker__quarter-text--disabled, .react-datepicker__year-text--disabled {
+      color: $theme-dark-input-disabled-border-color !important;
     }
   }
 }

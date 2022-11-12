@@ -5,6 +5,8 @@ import {FormControl} from "react-bootstrap";
 
 export interface DateTimePickerProps {
     showTime?: boolean;
+    minDate?: any;
+    maxDate?: any;
 }
 
 const BootstrapFormControlInput = React.forwardRef(({value, onClick}:any, ref:any)=>{
@@ -21,7 +23,7 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick}:any, ref:an
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false} = props;
+    const {showTime = false, minDate = null, maxDate = null} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
 
     const handleOnDateChange = (date:any) => {
@@ -31,6 +33,8 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
         <DatePicker
             isClearable={true}
             selected={selectedDate}
+            minDate={minDate}
+            maxDate={maxDate}
             onChange={handleOnDateChange}
             dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
             customInput={<BootstrapFormControlInput />}
