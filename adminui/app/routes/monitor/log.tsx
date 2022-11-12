@@ -45,7 +45,6 @@ export const loader: LoaderFunction = async ({request}) => {
             url.searchParams.delete('dates');
         }
         queryString = '?' + url.searchParams.toString();
-        console.log('query string is', queryString);
     }
 
 
