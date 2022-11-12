@@ -1,9 +1,9 @@
 @import "scss/style";
+@import "react-awesome-button/src/styles/styles.scss";
 @import "base/bootstrap-extended/variables";
 @import "base/components/variables-dark";
-@import "react-awesome-button/src/styles/styles.scss";
 
-
+$button-primary-color: #3366CC;
 
 
 .react-datepicker {
