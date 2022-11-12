@@ -178,7 +178,7 @@ const SystemRolesPage = () => {
         setSearchState({...searchState, roleName: e.target.value});
     }
     const handleOnEditSubmit = (values:any) => {
-        editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`});
+        editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`, replace: true});
     }
     return (
         <Card>
