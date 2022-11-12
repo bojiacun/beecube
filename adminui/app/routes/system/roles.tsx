@@ -49,9 +49,6 @@ export const loader: LoaderFunction = async ({request}) => {
     else {
         queryString = '?' + url.searchParams.toString();
     }
-    console.log(url.search, queryString);
-
-
     const result = await requestWithToken(request)(API_ROLE_LIST + queryString);
     return json(result.result);
 }
