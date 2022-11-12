@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FormControl} from "react-bootstrap";
 
 
@@ -12,9 +12,12 @@ export interface DateTimePickerProps {
     onChange?: Function;
 }
 
-const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, placeholder}:any, ref:any)=>{
+const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, inputPlaceHolder, onInputChange}:any, ref:any)=>{
     const handleOnChange = (e:any) => {
     }
+    useEffect(()=> {
+        typeof onInputChange === 'function' && onInputChange(value);
+    }, [value])
     return <FormControl
         name={inputName}
         autoComplete={'off'}
@@ -22,7 +25,7 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, 
         value={value}
         ref={ref}
         onChange={handleOnChange}
-        placeholder={placeholder}
+        placeholder={inputPlaceHolder}
     />
 });
 
@@ -42,7 +45,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
             maxDate={maxDate}
             onChange={handleOnDateChange}
             dateFormat={showTime ? 'yyyy/MM/dd HH:mm' : 'yyyy/MM/dd'}
-            customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} />}
+            customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} inputPlaceHolder={placeholder} onInputChange={onChange} />}
             showTimeSelect={showTime}
         />
     );

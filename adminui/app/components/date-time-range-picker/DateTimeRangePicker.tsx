@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {FormControl} from "react-bootstrap";
 
 
@@ -17,7 +17,10 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, 
         console.log('date changed', e);
     }
 
-    // typeof onInputChange === 'function' && onInputChange(value);
+    useEffect(()=> {
+        typeof onInputChange === 'function' && onInputChange(value);
+    }, [value])
+
 
     return <FormControl
         name={inputName}
