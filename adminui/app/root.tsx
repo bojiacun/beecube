@@ -30,6 +30,9 @@ import toastStyle from 'react-toastify/dist/ReactToastify.min.css';
 import zhCN from 'date-fns/locale/zh-CN';
 import {registerLocale, setDefaultLocale} from "react-datepicker";
 import {ToastContainer} from "react-toastify";
+import Error500Page from "~/components/error-page/500";
+import Error404Page from "~/components/error-page/404";
+import Error401Page from "~/components/error-page/401";
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -82,11 +85,7 @@ export function ErrorBoundary({error}: { error: Error }) {
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
         <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-            <Card>
-                <Card.Body>
-                    <h4>系统发生致命错误，请联系管理员修复</h4>
-                </Card.Body>
-            </Card>
+            <Error500Page />
         </div>
         <ScrollRestoration/>
         <Scripts/>
@@ -99,12 +98,7 @@ export function ErrorBoundary({error}: { error: Error }) {
 export function CatchBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
     const caught = useCatch();
-    const logoutFetcher = useFetcher();
-    const handleRelogin = () => {
-        //@ts-ignore
-        logoutFetcher.load(window.ENV.LOGOUT_URL);
-    }
-
+    const data = useLoaderData();
     console.log('There is exception ocurred',caught);
     if (caught.status === 401) {
         //登录态失效
@@ -116,14 +110,16 @@ export function CatchBoundary() {
             </head>
             <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
             <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                <Card>
-                    <Card.Body>
-                        <h4> 由于长时间未操作，系统自动退出登录，请重新登陆 </h4>
-                        <div className={'text-center'}><Button onClick={handleRelogin}>重新登陆</Button></div>
-                    </Card.Body>
-                </Card>
+                <Error401Page />
             </div>
             <ScrollRestoration/>
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `window.ENV = ${JSON.stringify(
+                        data.ENV
+                    )}`,
+                }}
+            />
             <Scripts/>
             <LiveReload/>
             </body>
@@ -139,11 +135,7 @@ export function CatchBoundary() {
             </head>
             <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
             <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                <Card>
-                    <Card.Body>
-                        <h4> 页面找不到了 404 </h4>
-                    </Card.Body>
-                </Card>
+                <Error404Page />
             </div>
             <ScrollRestoration/>
             <Scripts/>
