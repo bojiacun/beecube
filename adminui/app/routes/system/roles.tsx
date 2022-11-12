@@ -227,7 +227,6 @@ const SystemRolesPage = () => {
                 {editModal &&
                     <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={console.log}>
                         {({errors, touched})=>{
-                            console.log(errors);
                             return (
                                 <FormikForm
                                     method={'post'}
