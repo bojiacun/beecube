@@ -8,9 +8,10 @@ export interface DateTimePickerProps {
     minDate?: any;
     maxDate?: any;
     inputName: string;
+    placeholder?: string;
 }
 
-const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName}:any, ref:any)=>{
+const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, placeholder}:any, ref:any)=>{
     const handleOnChange = (e:any) => {
     }
     return <FormControl
@@ -20,11 +21,12 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName}:
         value={value}
         ref={ref}
         onChange={handleOnChange}
+        placeholder={placeholder}
     />
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false, minDate = null, maxDate = null, inputName} = props;
+    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间'} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
 
     const handleOnDateChange = (date:any) => {
@@ -38,7 +40,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
             maxDate={maxDate}
             onChange={handleOnDateChange}
             dateFormat={showTime ? 'yyyy/MM/dd HH:mm' : 'yyyy/MM/dd'}
-            customInput={<BootstrapFormControlInput inputName={inputName} />}
+            customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} />}
             showTimeSelect={showTime}
         />
     );

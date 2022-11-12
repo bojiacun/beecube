@@ -15,7 +15,7 @@ import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
+import {DefaultListSearchParams, defaultTableExpandRow, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 //@ts-ignore
 import _ from 'lodash';
@@ -126,6 +126,7 @@ const OperationLogPage = () => {
         },
     ]
     const expandRow = {
+        ...defaultTableExpandRow,
         renderer: (row:any) => {
             return (
                 <>
@@ -134,17 +135,10 @@ const OperationLogPage = () => {
                 </>
             );
         },
-        expandHeaderColumnRenderer: () => {
-            return <></>
-        },
-        expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
-            if(expanded) {
-                return <MinusSquare size={16} />
-            }
-            return <PlusSquare size={16} />
-        },
-        showExpandColumn: true,
-        expandByColumnOnly: true,
+    }
+
+    const handleKeywordChanged = (e:any) => {
+        setSearchState({...searchState, keyWord: e.target.value});
     }
 
 
@@ -184,7 +178,7 @@ const OperationLogPage = () => {
                                 <FormLabel htmlFor={'keyWord'}>搜索日志</FormLabel>
                                 <Col>
                                     <InputGroup>
-                                        <FormControl name={'keyWord'} placeholder={'请输入要搜索的内容'}/>
+                                        <FormControl onChange={handleKeywordChanged} name={'keyWord'} placeholder={'请输入要搜索的内容'}/>
                                         <InputGroup.Append>
                                             <Button type={'submit'}>搜索</Button>
                                         </InputGroup.Append>

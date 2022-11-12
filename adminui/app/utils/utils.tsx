@@ -1,5 +1,7 @@
 
 // uint8array转base64
+import {MinusSquare, PlusSquare} from "react-feather";
+
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
     return Buffer.from(value, 'binary').toString('base64');
@@ -59,3 +61,17 @@ export const headerSortingClasses = (column: any, sortOrder: any) => (
     sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
 );
 export const emptySortFunc = () => 0;
+
+export const defaultTableExpandRow = {
+    expandHeaderColumnRenderer: () => {
+        return <></>
+    },
+    expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
+        if(expanded) {
+            return <MinusSquare size={16} />
+        }
+        return <PlusSquare size={16} />
+    },
+    showExpandColumn: true,
+    expandByColumnOnly: true,
+}
