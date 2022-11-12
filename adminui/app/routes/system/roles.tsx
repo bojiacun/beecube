@@ -48,8 +48,10 @@ export const loader: LoaderFunction = async ({request}) => {
     }
     else {
         queryString = '?' + url.searchParams.toString();
-        throw new Error('search error');
     }
+    console.log(url.search, queryString);
+
+
     const result = await requestWithToken(request)(API_ROLE_LIST + queryString);
     return json(result.result);
 }
@@ -280,9 +282,6 @@ const SystemRolesPage = () => {
 
                     </Formik>
                 }
-                <Modal.Body>
-                    <Outlet />
-                </Modal.Body>
             </Modal>
 
         </Card>

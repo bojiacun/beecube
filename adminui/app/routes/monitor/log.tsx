@@ -29,14 +29,14 @@ export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 
-DefaultListSearchParams.logType = 1;
+const defaultSearchParams = {...DefaultListSearchParams, logType : 1};
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
     let queryString = '';
     if (_.isEmpty(url.search)) {
-        queryString = '?' + querystring.stringify(DefaultListSearchParams);
+        queryString = '?' + querystring.stringify(defaultSearchParams);
     }
     else {
         //转化时间段搜索
@@ -57,7 +57,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const OperationLogPage = () => {
     const [list, setList] = useState<any>();
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 2});
+    const [searchState, setSearchState] = useState<any>({...defaultSearchParams, logType: 2});
     const searchFetcher = useFetcher();
 
     useEffect(() => {

@@ -14,7 +14,6 @@ import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_GATEWAY_LIST, API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
-import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams} from "~/utils/utils";
 //@ts-ignore
@@ -128,7 +127,6 @@ const GatewayPages = () => {
                             </FormGroup>
                         </Form>
                     </div>
-                    <SinglePagination className={'mb-0'} current={loaderData?.current} pages={loaderData?.pages} total={loaderData?.total} size={loaderData?.size} />
                 </Card.Body>
             </Card>
         </>
