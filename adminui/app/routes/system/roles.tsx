@@ -36,11 +36,11 @@ export const links: LinksFunction = () => {
 }
 export function ErrorBoundary() {
     stopPageLoading();
-    return <SystemRolesPage />
+    return <></>
 }
 export function CatchBoundary() {
     stopPageLoading();
-    return <SystemRolesPage />
+    return <></>
 }
 
 const EditRoleSchema = Yup.object().shape({
