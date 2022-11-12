@@ -6,7 +6,7 @@ import {
     Form,
     FormControl,
     FormLabel,
-    Button, Row, Dropdown, Nav, NavDropdown, Modal,
+    Button, Row, Dropdown, Modal,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
@@ -17,12 +17,16 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
+import * as Yup from 'yup';
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {Delete, Edit, MoreVertical, Shield} from "react-feather";
 import {AwesomeButton} from "react-awesome-button";
+import {Formik, Form as FormikForm, Field} from "formik";
+import classNames from "classnames";
+
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -37,6 +41,11 @@ export const loader: LoaderFunction = async ({request}) => {
     const result = await requestWithToken(request)(API_ROLE_LIST + url.search);
     return json(result.result);
 }
+
+const EditRoleSchema = Yup.object().shape({
+    roleCode: Yup.string().required(),
+    roleName: Yup.string().required()
+});
 
 const SystemRolesPage = () => {
     const [list, setList] = useState<any>(useLoaderData());
@@ -138,9 +147,9 @@ const SystemRolesPage = () => {
     const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
-    const handleOnEditSubmit = (e:any) => {
+    const handleOnEditSubmit = (e: any) => {
         let form = e.currentTarget;
-        if(form.checkValidity() === false) {
+        if (form.checkValidity() === false) {
             e.preventDefault();
             e.stopPropagation();
         }
@@ -216,27 +225,32 @@ const SystemRolesPage = () => {
                     <Modal.Title id={'edit-modal'}>编辑角色</Modal.Title>
                 </Modal.Header>
                 {editModal &&
-                    <editFetcher.Form noValidate className={validated ? 'was-validated':''} method={'post'} action={`/system/roles/${editModal.id}`} onSubmit={handleOnEditSubmit}>
-                        <Modal.Body>
-                            <FormGroup controlId={'roleCode'}>
-                                <Form.Label>角色编码</Form.Label>
-                                <FormControl name={'roleCode'} placeholder={'角色编码'} readOnly value={editModal.roleCode}/>
-                            </FormGroup>
-                            <FormGroup controlId={'roleName'}>
-                                <Form.Label>角色名称</Form.Label>
-                                <FormControl
-                                    name={'roleName'}
-                                    placeholder={'角色名称'}
-                                    value={editModal.roleName}
-                                    onChange={e => setEditModal({...editModal, roleName: e.target.value})}
-                                    required
-                                />
-                            </FormGroup>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <AwesomeButton type={'primary'}>保存</AwesomeButton>
-                        </Modal.Footer>
-                    </editFetcher.Form>
+                    <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={console.log}>
+                        {({errors, touched})=>{
+                            console.log(errors);
+                            return (
+                                <FormikForm
+                                    method={'post'}
+                                    action={`/system/roles/${editModal.id}`}
+                                >
+                                    <Modal.Body>
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
+                                            <Field className={'form-control'} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
+                                            <Field className={classNames('form-control', !!errors.roleName? 'is-invalid':'')} id={'roleName'} name={'roleName'} placeholder={'角色名称'} />
+                                        </FormGroup>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <AwesomeButton key={'submit'} type={'primary'} containerProps={{type: 'submit'}}>保存</AwesomeButton>
+                                    </Modal.Footer>
+                                </FormikForm>
+                            );
+                        }}
+
+                    </Formik>
                 }
             </Modal>
 
