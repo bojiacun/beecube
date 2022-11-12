@@ -3,14 +3,13 @@
 @import "base/components/variables-dark";
 
 @import "react-awesome-button/src/styles/base/variables";
-
 $button-primary-color: $primary;
 $button-default-height: 38px;
-
 @import "react-awesome-button/src/styles/base/custom-properties";
 @import "react-awesome-button/src/styles/base/lists";
 @import "react-awesome-button/src/styles/base/main";
 @import "react-awesome-button/src/styles/base/progress";
+
 
 .react-datepicker {
   font-family: inherit !important;

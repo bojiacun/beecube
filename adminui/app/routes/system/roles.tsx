@@ -27,6 +27,7 @@ import {AwesomeButton, AwesomeButtonProgress} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export const links: LinksFunction = () => {
@@ -63,7 +64,16 @@ const SystemRolesPage = () => {
     }, [searchFetcher.state]);
 
     useEffect(()=>{
-        if(editFetcher.data) {
+        if(editFetcher.data && editFetcher.type === 'done') {
+            toast.success('修改成功', {
+                position: "top-center",
+                autoClose: 800,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+            });
             searchFetcher.submit(searchState, {method: 'get'});
             setEditModal(null);
         }

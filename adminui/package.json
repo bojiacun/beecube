@@ -38,10 +38,11 @@
     "react-paginate": "^8.1.4",
     "react-perfect-scrollbar": "^1.5.8",
     "react-select": "^5.6.0",
+    "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
     "remix-auth": "^3.3.0",
     "remix-auth-form": "^1.2.0",
-    "sweetalert2": "^11.6.4",
+    "sweetalert2": "^11.6.8",
     "yup": "^0.32.11"
   },
   "devDependencies": {

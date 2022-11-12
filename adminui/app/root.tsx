@@ -26,8 +26,10 @@ import {AnimatePresence, motion} from "framer-motion";
 import {useLocation} from "react-router";
 import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import datepickerStyle from 'react-datepicker/dist/react-datepicker.min.css';
+import toastStyle from 'react-toastify/dist/ReactToastify.min.css';
 import zhCN from 'date-fns/locale/zh-CN';
 import {registerLocale, setDefaultLocale} from "react-datepicker";
+import {ToastContainer} from "react-toastify";
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -58,6 +60,7 @@ export const links: LinksFunction = () => {
         {rel: 'stylesheet', href: loaderStyleUrl},
         {rel: 'stylesheet', href: reactBootstrapTable2Style},
         {rel: 'stylesheet', href: datepickerStyle},
+        {rel: 'stylesheet', href: toastStyle},
     ];
 }
 
@@ -234,6 +237,7 @@ export default function App() {
                         </motion.div>
                     </AnimatePresence>
                 </Layout>
+                <ToastContainer />
             </div>
         </ThemeContext.Provider>
         <ScrollRestoration/>
