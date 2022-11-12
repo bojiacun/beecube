@@ -286,24 +286,16 @@ const LoginLogPage = () => {
     ]
 
     const expandRow = {
+        ...defaultTableExpandRow,
         renderer: (row:any) => {
             return (
                 <div></div>
             );
         },
-        expandHeaderColumnRenderer: () => {
-            return <></>
-        },
-        expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
-            if(expanded) {
-                return <MinusSquare size={16} />
-            }
-            return <PlusSquare size={16} />
-        },
-        showExpandColumn: true,
-        expandByColumnOnly: true,
     }
-
+    const handleKeywordChanged = (e:any) => {
+        setSearchState({...searchState, keyWord: e.target.value});
+    }
     return (
         <>
             <div className={'m-2'}>
@@ -331,7 +323,7 @@ const LoginLogPage = () => {
                                 <FormLabel htmlFor={'keyWord'}>搜索</FormLabel>
                                 <Col>
                                     <InputGroup>
-                                        <FormControl name={'keyWord'} placeholder={'请输入要搜索的内容'}/>
+                                        <FormControl name={'keyWord'} onChange={handleKeywordChanged} placeholder={'请输入要搜索的内容'}/>
                                         <InputGroup.Append>
                                             <Button type={'submit'}>搜索</Button>
                                         </InputGroup.Append>
