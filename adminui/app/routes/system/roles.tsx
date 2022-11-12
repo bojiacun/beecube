@@ -146,7 +146,8 @@ const SystemRolesPage = () => {
     const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
-    const handleOnEditSubmit = async ({values}) => {
+    const handleOnEditSubmit = (values:any) => {
+        editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`});
     }
     return (
         <Card>
@@ -221,10 +222,7 @@ const SystemRolesPage = () => {
                     <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
                         {({errors, touched})=>{
                             return (
-                                <FormikForm
-                                    method={'post'}
-                                    action={`/system/roles/${editModal.id}`}
-                                >
+                                <FormikForm >
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
@@ -234,9 +232,13 @@ const SystemRolesPage = () => {
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
                                             <Field className={classNames('form-control', !!errors.roleName? 'is-invalid':'')} id={'roleName'} name={'roleName'} placeholder={'角色名称'} />
                                         </FormGroup>
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'description'}>描述</Form.Label>
+                                            <Field className={'form-control'} placeholder={'角色描述'} id={'description'} name={'description'} as={'textarea'} rows={3} />
+                                        </FormGroup>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <AwesomeButton key={'submit'} type={'primary'} containerProps={{type: 'submit'}}>保存</AwesomeButton>
+                                        <AwesomeButton key={'submit'} type={'primary'} ripple={editFetcher.state === 'submitting'} containerProps={{type: 'submit'}}>保存</AwesomeButton>
                                     </Modal.Footer>
                                 </FormikForm>
                             );
