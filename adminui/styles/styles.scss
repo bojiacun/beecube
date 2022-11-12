@@ -1,10 +1,16 @@
 @import "scss/style";
-@import "react-awesome-button/src/styles/styles.scss";
 @import "base/bootstrap-extended/variables";
 @import "base/components/variables-dark";
 
-$button-primary-color: #3366CC;
+@import "react-awesome-button/src/styles/base/variables";
 
+$button-primary-color: $primary;
+$button-default-height: 38px;
+
+@import "react-awesome-button/src/styles/base/custom-properties";
+@import "react-awesome-button/src/styles/base/lists";
+@import "react-awesome-button/src/styles/base/main";
+@import "react-awesome-button/src/styles/base/progress";
 
 .react-datepicker {
   font-family: inherit !important;
@@ -70,4 +76,8 @@ span.divider {
 }
 .table-layout-fixed {
   table-layout: fixed;
+}
+
+.dropdown-toggle.noafter:after {
+  display: none;
 }

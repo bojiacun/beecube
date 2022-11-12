@@ -109,7 +109,7 @@ const SystemRolesPage = () => {
                         <Link to={'/'}>工单授权</Link>
                         <span className={'divider'}/>
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
-                            <Dropdown.Toggle as={'span'}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
                                 <MoreVertical size={16} style={{marginTop: -2}}/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>

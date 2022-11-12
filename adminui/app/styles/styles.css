@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap");
 .aws-btn {
-  --button-default-height: 44px;
+  --button-default-height: 38px;
   --button-default-font-size: 14px;
   --button-default-line-height: 24px;
   --button-default-border-radius: 4px;
@@ -29,7 +29,7 @@
   --loading-transition-speed: 6s;
   --loading-transition-end-speed: 0.3s;
   --transform-speed: 0.15s;
-  --button-primary-color: #1E88E5;
+  --button-primary-color: #3366CC;
   --button-primary-color-dark: #1360a4;
   --button-primary-color-light: white;
   --button-primary-color-hover: #187bd1;
@@ -952,6 +952,10 @@ span.divider {
 
 .table-layout-fixed {
   table-layout: fixed;
+}
+
+.dropdown-toggle.noafter:after {
+  display: none;
 }
 
 /*# sourceMappingURL=styles.css.map */
