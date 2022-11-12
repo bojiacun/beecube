@@ -1,0 +1,50 @@
+import DatePicker from "react-datepicker";
+import React, {FC, useState} from "react";
+import {FormControl} from "react-bootstrap";
+
+
+export interface DateTimePickerProps {
+    showTime?: boolean;
+    minDate?: any;
+    maxDate?: any;
+}
+
+const BootstrapFormControlInput = React.forwardRef(({value, onClick}:any, ref:any)=>{
+    const handleOnChange = (e:any) => {
+    }
+    return <FormControl
+        name={'datepicker'}
+        autoComplete={'off'}
+        onClick={onClick}
+        value={value}
+        ref={ref}
+        onChange={handleOnChange}
+    />
+});
+
+const DateTimeRangePicker: FC<DateTimePickerProps> = (props) => {
+    const {showTime = false, minDate = null, maxDate = null} = props;
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
+
+    const handleOnDateChange = (date:any) => {
+        setDateRange(date);
+    }
+    return (
+        <DatePicker
+            isClearable={true}
+            startDate={startDate}
+            endDate={endDate}
+            minDate={minDate}
+            maxDate={maxDate}
+            onChange={handleOnDateChange}
+            dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+            customInput={<BootstrapFormControlInput />}
+            showTimeSelect={showTime}
+            selectsRange={true}
+        />
+    );
+}
+
+
+export default DateTimeRangePicker;

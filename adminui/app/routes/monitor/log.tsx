@@ -22,7 +22,7 @@ import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {MinusSquare, PlusSquare} from "react-feather";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
+import DateTimeRangePicker from "~/components/date-time-range-picker/DateTimeRangePicker";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -168,7 +168,7 @@ const OperationLogPage = () => {
                             <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
                                 <FormLabel htmlFor={'dataTable'}>时间段搜索</FormLabel>
                                 <Col>
-                                    <DateTimePicker minDate={new Date()} />
+                                    <DateTimeRangePicker minDate={new Date()} />
                                 </Col>
                             </FormGroup>
 
