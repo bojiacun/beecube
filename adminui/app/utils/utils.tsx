@@ -1,6 +1,7 @@
 
 // uint8array转base64
 import {MinusSquare, PlusSquare} from "react-feather";
+import {toast} from "react-toastify";
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -74,4 +75,28 @@ export const defaultTableExpandRow = {
     },
     showExpandColumn: true,
     expandByColumnOnly: true,
+}
+
+export function showToastSuccess(message: string) {
+    toast.success(message, {
+        position: "top-center",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+    });
+}
+
+export function showToastError(message: string) {
+    toast.error(message, {
+        position: "top-center",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+    });
 }

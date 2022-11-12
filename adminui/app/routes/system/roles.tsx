@@ -15,7 +15,7 @@ import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
+import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions, showToastError} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import * as Yup from 'yup';
 //@ts-ignore
@@ -27,10 +27,8 @@ import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
-import {toast} from "react-toastify";
 import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
-import {error} from "react-toastify/dist/core/toast";
 
 
 export const links: LinksFunction = () => {
@@ -82,28 +80,12 @@ const SystemRolesPage = () => {
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
             if(editFetcher.data.success) {
-                toast.success('修改成功', {
-                    position: "top-center",
-                    autoClose: 800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "colored",
-                });
+                showToastError('修改成功');
                 searchFetcher.submit(searchState, {method: 'get'});
                 setEditModal(null);
             }
             else {
-                toast.error(editFetcher.data.message, {
-                    position: "top-center",
-                    autoClose: 800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "colored",
-                });
+                showToastError(editFetcher.data.message);
             }
         }
     }, [editFetcher.state]);
