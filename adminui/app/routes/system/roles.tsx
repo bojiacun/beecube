@@ -29,6 +29,7 @@ import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {toast} from "react-toastify";
 import {stopPageLoading} from "~/layouts/utils";
+import Error500Page from "~/components/error-page/500";
 
 
 export const links: LinksFunction = () => {
@@ -36,11 +37,11 @@ export const links: LinksFunction = () => {
 }
 export function ErrorBoundary() {
     stopPageLoading();
-    return <></>
+    return <Error500Page />
 }
 export function CatchBoundary() {
     stopPageLoading();
-    return <></>
+    return <Error500Page />
 }
 
 const EditRoleSchema = Yup.object().shape({

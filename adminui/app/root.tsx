@@ -33,6 +33,7 @@ import {ToastContainer} from "react-toastify";
 import Error500Page from "~/components/error-page/500";
 import Error404Page from "~/components/error-page/404";
 import Error401Page from "~/components/error-page/401";
+import pageMiscStyle from '~/styles/react/pages/page-misc.css';
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -64,6 +65,7 @@ export const links: LinksFunction = () => {
         {rel: 'stylesheet', href: reactBootstrapTable2Style},
         {rel: 'stylesheet', href: datepickerStyle},
         {rel: 'stylesheet', href: toastStyle},
+        {rel: 'stylesheet', href: pageMiscStyle},
     ];
 }
 
