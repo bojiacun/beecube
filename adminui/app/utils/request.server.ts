@@ -17,6 +17,9 @@ export const API_LOG_LIST = `${BASE_URL}/jeecg-system/sys/log/list`;
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
 }
+export const putFormInit = (data: any): RequestInit=> {
+    return {method: 'put', body: data, headers: {'Content-Type': 'application/json'}};
+}
 
 export const requestWithToken = (request: Request) => async (url:RequestInfo, options:any = {}) => {
     const user: LoginedUser = await requireAuthenticated(request);
