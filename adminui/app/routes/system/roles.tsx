@@ -30,6 +30,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import {toast} from "react-toastify";
 import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
+import {error} from "react-toastify/dist/core/toast";
 
 
 export const links: LinksFunction = () => {
@@ -80,17 +81,30 @@ const SystemRolesPage = () => {
 
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
-            toast.success('修改成功', {
-                position: "top-center",
-                autoClose: 800,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "colored",
-            });
-            searchFetcher.submit(searchState, {method: 'get'});
-            setEditModal(null);
+            if(editFetcher.data.success) {
+                toast.success('修改成功', {
+                    position: "top-center",
+                    autoClose: 800,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "colored",
+                });
+                searchFetcher.submit(searchState, {method: 'get'});
+                setEditModal(null);
+            }
+            else {
+                toast.error(editFetcher.data.message, {
+                    position: "top-center",
+                    autoClose: 800,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "colored",
+                });
+            }
         }
     }, [editFetcher.state]);
 
@@ -259,6 +273,10 @@ const SystemRolesPage = () => {
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
                                             <Field className={'form-control'} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'id'}>id</Form.Label>
+                                            <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'id'} name={'id'} placeholder={'id'} />
                                         </FormGroup>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
