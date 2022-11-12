@@ -8,8 +8,5 @@ export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     let jsonData:any = {};
     formData.forEach((value, key)=>jsonData[key] = value);
-    const res = await requestWithToken(request)(API_ROLE_EDIT, putFormInit(jsonData))
-    const result:any = await res.json();
-    console.log(result);
-    return json(result.result);
+    return await requestWithToken(request)(API_ROLE_EDIT, putFormInit(JSON.stringify(jsonData)))
 }

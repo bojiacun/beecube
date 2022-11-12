@@ -23,7 +23,7 @@ import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {Delete, Edit, MoreVertical, Shield} from "react-feather";
-import {AwesomeButton} from "react-awesome-button";
+import {AwesomeButton, AwesomeButtonProgress} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
@@ -52,7 +52,6 @@ const EditRoleSchema = Yup.object().shape({
 const SystemRolesPage = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
-    const [editModalShow, setEditModalShow] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
@@ -63,12 +62,18 @@ const SystemRolesPage = () => {
         }
     }, [searchFetcher.state]);
 
+    useEffect(()=>{
+        if(editFetcher.data) {
+            searchFetcher.submit(searchState, {method: 'get'});
+            setEditModal(null);
+        }
+    }, [editFetcher.state]);
+
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'edit':
                 //编辑
                 setEditModal(row);
-                setEditModalShow(true);
                 break;
         }
     }
@@ -211,8 +216,8 @@ const SystemRolesPage = () => {
             </div>
 
             <Modal
-                show={editModalShow}
-                onHide={() => setEditModalShow(false)}
+                show={!!editModal}
+                onHide={() => setEditModal(null)}
                 centered
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
@@ -240,7 +245,14 @@ const SystemRolesPage = () => {
                                         </FormGroup>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <AwesomeButton key={'submit'} type={'primary'} ripple={editFetcher.state === 'submitting'} containerProps={{type: 'submit'}}>保存</AwesomeButton>
+                                        <AwesomeButton
+                                            key={'submit'}
+                                            type={'primary'}
+                                            containerProps={{type: 'submit'}}
+                                            disabled={editFetcher.state === 'submitting'}
+                                        >
+                                            保存
+                                        </AwesomeButton>
                                     </Modal.Footer>
                                 </FormikForm>
                             );
