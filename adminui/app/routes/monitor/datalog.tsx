@@ -99,6 +99,16 @@ const DataLogPages = () => {
         },
     ]
 
+    const handleOnDataIdChanged = (e:any) => {
+        setSearchState({...searchState, dataId: e.target.value});
+    }
+    const handleOnDataTableChanged = (e:any) => {
+        setSearchState({...searchState, dataTable: e.target.value});
+    }
+    const handleOnSearchSubmit = () => {
+        //设置分页为1
+        setSearchState({...searchState, pageNo: 1});
+    }
 
     return (
         <Card>
@@ -116,7 +126,7 @@ const DataLogPages = () => {
                        />
                    </Col>
                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                       <searchFetcher.Form className={'form-inline justify-content-end'}>
+                       <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                            <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                            <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                            <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
@@ -125,14 +135,14 @@ const DataLogPages = () => {
                            <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
                                <FormLabel htmlFor={'dataTable'}>表名</FormLabel>
                                <Col>
-                                   <FormControl name={'dataTable'} placeholder={'请输入要搜索的内容'}/>
+                                   <FormControl name={'dataTable'} placeholder={'请输入要搜索的内容'} onChange={handleOnDataTableChanged} />
                                </Col>
                            </FormGroup>
                            <FormGroup as={Form.Row} className={'mb-0'}>
                                <FormLabel htmlFor={'dataId'}>数据ID</FormLabel>
                                <Col>
                                    <InputGroup>
-                                       <FormControl name={'dataId'} placeholder={'请输入要搜索的内容'}/>
+                                       <FormControl name={'dataId'} onChange={handleOnDataIdChanged} placeholder={'请输入要搜索的内容'}/>
                                        <InputGroup.Append>
                                            <Button type={'submit'}>搜索</Button>
                                        </InputGroup.Append>
@@ -154,6 +164,7 @@ const DataLogPages = () => {
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination
+                            forcePage={searchState.pageNo - 1}
                             className={'mb-0'}
                             pageCount={list?.pages}
                             onPageChange={handlePageChanged}
