@@ -1,23 +1,32 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap");
-.table.b-table thead > tr > .sortable, .table.b-table tfoot > tr > .sortable {
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-size: 0.65em 1em;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='26'%3E%3Cg stroke='%23C6C4D0' stroke-width='2' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 19l6 6 6-6M13 7L7 1 1 7'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: right 1.36rem center;
-}
-.table.b-table thead > tr > .sortable.sorting-asc, .table.b-table tfoot > tr > .sortable.sorting-asc {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='26'%3E%3Cg stroke-width='2' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 19l6 6 6-6' stroke='%23C6C4D0'/%3E%3Cpath d='M13 7L7 1 1 7' stroke='%235E5873'/%3E%3C/g%3E%3C/svg%3E");
-}
-.table.b-table thead > tr > .sortable.sorting-desc, .table.b-table tfoot > tr > .sortable.sorting-desc {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='26'%3E%3Cg stroke-width='2' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 19l6 6 6-6' stroke='%235E5873'/%3E%3Cpath d='M13 7L7 1 1 7' stroke='%23C6C4D0'/%3E%3C/g%3E%3C/svg%3E");
+.react-datepicker {
+  font-family: inherit !important;
+  min-width: 298px;
 }
 
-body.dark-layout .table.b-table thead > tr > .sortable.sorting-asc, body.dark-layout .table.b-table tfoot > tr > .sortable.sorting-asc {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='14px' height='26px' viewBox='0 0 14 26' version='1.1'%3E%3Ctitle%3Eactive-up-dark%3C/title%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Artboard' transform='translate(-199.000000, -621.000000)' stroke-width='2'%3E%3Cg id='active-up-dark' transform='translate(200.000000, 622.000000)'%3E%3Cg id='chevron-down' transform='translate(0.000000, 18.000000)' stroke='%23747A88'%3E%3Cpolyline id='Path' points='0 0 6 6 12 0'/%3E%3C/g%3E%3Cg id='chevron-up' stroke='%23B4B7BC'%3E%3Cpolyline id='Path' points='12 6 6 0 0 6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+.react-datepicker__header {
+  background-color: #f2f4f7 !important;
+  border-bottom: 1px solid #ebe9f1 !important;
 }
-body.dark-layout .table.b-table thead > tr > .sortable.sorting-desc, body.dark-layout .table.b-table tfoot > tr > .sortable.sorting-desc {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='14px' height='26px' viewBox='0 0 14 26' version='1.1'%3E%3Ctitle%3Eactive-dow-dark%3C/title%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Artboard' transform='translate(-229.000000, -621.000000)' stroke-width='2'%3E%3Cg id='active-dow-dark' transform='translate(230.000000, 622.000000)'%3E%3Cg id='chevron-down' transform='translate(0.000000, 18.000000)' stroke='%23B4B7BC'%3E%3Cpolyline id='Path' points='0 0 6 6 12 0'/%3E%3C/g%3E%3Cg id='chevron-up' stroke='%23747A88'%3E%3Cpolyline id='Path' points='12 6 6 0 0 6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+
+body.dark-layout .react-datepicker {
+  background-color: #283046 !important;
+  color: #b4b7bd !important;
+}
+body.dark-layout .react-datepicker__header {
+  background-color: #343d55 !important;
+  border-bottom: 1px solid #3b4253 !important;
+  color: #b4b7bd !important;
+}
+body.dark-layout .react-datepicker__time-container .react-datepicker__time {
+  background-color: #343d55 !important;
+  color: #b4b7bd !important;
+}
+body.dark-layout .react-datepicker__current-month, body.dark-layout .react-datepicker-time__header, body.dark-layout .react-datepicker-year-header {
+  color: #b4b7bd !important;
+}
+body.dark-layout .react-datepicker__day-name, body.dark-layout .react-datepicker__day, body.dark-layout .react-datepicker__time-name {
+  color: #b4b7bd !important;
 }
 
 .th.expand-cell-header, td.expand-cell {

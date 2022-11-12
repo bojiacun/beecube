@@ -26,6 +26,11 @@ import {AnimatePresence, motion} from "framer-motion";
 import {useLocation} from "react-router";
 import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import datepickerStyle from 'react-datepicker/dist/react-datepicker.min.css';
+import zhCN from 'date-fns/locale/zh-CN';
+import {registerLocale, setDefaultLocale} from "react-datepicker";
+
+registerLocale('zh-cn', zhCN);
+setDefaultLocale('zh-cn');
 
 i18n.changeLanguage('cn').then();
 
