@@ -31,10 +31,14 @@ export const links: LinksFunction = () => {
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
+    let queryString = '';
     if (_.isEmpty(url.search)) {
-        url.search = '?' + querystring.stringify(DefaultListSearchParams);
+        queryString = '?' + querystring.stringify(DefaultListSearchParams);
     }
-    const result = await requestWithToken(request)(API_DATALOG_LIST + url.search);
+    else {
+        queryString = '?' + url.searchParams.toString();
+    }
+    const result = await requestWithToken(request)(API_DATALOG_LIST + queryString);
     return json(result.result);
 }
 const headerSortingClasses = (column:any, sortOrder:any) => (

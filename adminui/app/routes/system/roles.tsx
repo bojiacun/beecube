@@ -11,7 +11,7 @@ import {
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
-import {Link, useFetcher, useLoaderData} from "@remix-run/react";
+import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
@@ -23,27 +23,34 @@ import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {Delete, Edit, MoreVertical, Shield} from "react-feather";
-import {AwesomeButton, AwesomeButtonProgress} from "react-awesome-button";
+import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {toast} from "react-toastify";
+import {stopPageLoading} from "~/layouts/utils";
 
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 export function ErrorBoundary() {
-    return <></>
+    stopPageLoading();
+    return <>roles errors</>;
 }
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
+    let queryString = '';
     if (_.isEmpty(url.search)) {
-        url.search = '?' + querystring.stringify(DefaultListSearchParams);
+        queryString = '?' + querystring.stringify(DefaultListSearchParams);
     }
-    const result = await requestWithToken(request)(API_ROLE_LIST + url.search);
+    else {
+        queryString = '?' + url.searchParams.toString();
+        throw new Error('search error');
+    }
+    const result = await requestWithToken(request)(API_ROLE_LIST + queryString);
     return json(result.result);
 }
 
@@ -58,6 +65,7 @@ const SystemRolesPage = () => {
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
+
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -272,6 +280,9 @@ const SystemRolesPage = () => {
 
                     </Formik>
                 }
+                <Modal.Body>
+                    <Outlet />
+                </Modal.Body>
             </Modal>
 
         </Card>
