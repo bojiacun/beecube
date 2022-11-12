@@ -55,10 +55,6 @@ export const loader: LoaderFunction = async ({request}) => {
     });
 }
 
-export function ErrorBoundary({error}: { error: Error }) {
-    return (<p>There is a error happened.</p>);
-}
-
 const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
