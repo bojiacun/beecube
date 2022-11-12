@@ -254,7 +254,7 @@ const SystemRolesPage = () => {
                     <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
                         {({errors, touched})=>{
                             return (
-                                <FormikForm >
+                                <FormikForm>
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
