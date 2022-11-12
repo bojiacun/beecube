@@ -9,6 +9,7 @@ export interface DateTimePickerProps {
     maxDate?: any;
     inputName: string;
     placeholder?: string;
+    onChange?: Function;
 }
 
 const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, placeholder}:any, ref:any)=>{
@@ -26,11 +27,12 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, 
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间'} = props;
+    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间', onChange} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
 
     const handleOnDateChange = (date:any) => {
         setSelectedDate(date);
+        typeof onChange === 'function' && onChange(date);
     }
     return (
         <DatePicker
