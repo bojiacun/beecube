@@ -27,13 +27,15 @@ import {AwesomeButton, AwesomeButtonProgress} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
-
+export function ErrorBoundary() {
+    return <></>
+}
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
