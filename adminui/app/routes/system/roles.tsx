@@ -94,8 +94,13 @@ const SytemRolesPage = () => {
             }
         },
     ]
-
-
+    const handleOnSearchSubmit = () => {
+        //设置分页为1
+        setSearchState({...searchState, pageNo: 1});
+    }
+    const handleOnRoleNameChanged = (e:any) => {
+        setSearchState({...searchState, roleName: e.target.value});
+    }
     return (
         <Card>
             <div className={'m-2'}>
@@ -112,7 +117,7 @@ const SytemRolesPage = () => {
                         />
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form className={'form-inline justify-content-end'}>
+                        <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                             <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                             <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
@@ -122,7 +127,7 @@ const SytemRolesPage = () => {
                                 <FormLabel htmlFor={'roleName'}>角色名称</FormLabel>
                                 <Col>
                                     <InputGroup>
-                                        <FormControl name={'roleName'} placeholder={'请输入要搜索的内容'}/>
+                                        <FormControl name={'roleName'} onChange={handleOnRoleNameChanged} placeholder={'请输入要搜索的内容'}/>
                                         <InputGroup.Append>
                                             <Button type={'submit'}>搜索</Button>
                                         </InputGroup.Append>
@@ -144,6 +149,7 @@ const SytemRolesPage = () => {
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination
+                            forcePage={searchState.pageNo - 1}
                             className={'mb-0'}
                             pageCount={list?.pages}
                             onPageChange={handlePageChanged}
