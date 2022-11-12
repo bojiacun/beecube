@@ -47,7 +47,7 @@ export const base64Decode = (value:any) => {
 export const DefaultListSearchParams:any = {
     pageNo: 1,
     pageSize: 10,
-    column: 'id',
+    column: 'createTime',
     order: 'desc',
 }
 
