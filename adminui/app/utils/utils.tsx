@@ -2,6 +2,7 @@
 // uint8array转base64
 import {MinusSquare, PlusSquare} from "react-feather";
 import {toast} from "react-toastify";
+import Swal from 'sweetalert2';
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -99,4 +100,20 @@ export function showToastError(message: string) {
         draggable: true,
         theme: "colored",
     });
+}
+
+export function showDeleteAlert(deleteCallback: Function, message: string = '您确定要删除本条数据吗') {
+    Swal.fire({
+        title: '删除确认',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#ccc',
+        confirmButtonText: '确认删除!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteCallback();
+        }
+    })
 }

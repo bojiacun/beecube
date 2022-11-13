@@ -15,7 +15,15 @@ import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
 import {withAutoLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, emptySortFunc, headerSortingClasses, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
+import {
+    DefaultListSearchParams,
+    emptySortFunc,
+    headerSortingClasses,
+    PageSizeOptions,
+    showDeleteAlert,
+    showToastError,
+    showToastSuccess
+} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import * as Yup from 'yup';
 //@ts-ignore
@@ -29,6 +37,7 @@ import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
+
 
 
 export const links: LinksFunction = () => {
@@ -69,6 +78,7 @@ const SystemRolesPage = () => {
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
 
     useEffect(() => {
@@ -80,7 +90,7 @@ const SystemRolesPage = () => {
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
             if(editFetcher.data.success) {
-                showToastSuccess('修改成功');
+                showToastSuccess(editModal.id ? '修改成功': '新建成功');
                 searchFetcher.submit(searchState, {method: 'get'});
                 setEditModal(null);
             }
@@ -89,12 +99,29 @@ const SystemRolesPage = () => {
             }
         }
     }, [editFetcher.state]);
+    useEffect(()=>{
+        if(deleteFetcher.data && deleteFetcher.type === 'done') {
+            if(deleteFetcher.data.success) {
+                showToastSuccess('删除成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+            }
+            else {
+                showToastError(editFetcher.data.message);
+            }
+        }
+    }, [deleteFetcher.state]);
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'edit':
                 //编辑
                 setEditModal(row);
+                break;
+            case 'delete':
+                //删除按钮
+                showDeleteAlert(function(){
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/roles/delete/${row.id}`, replace: true});
+                });
                 break;
         }
     }
