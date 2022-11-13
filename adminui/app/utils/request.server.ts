@@ -1,5 +1,6 @@
 import {LoginedUser, requireAuthenticated} from "~/utils/auth.server";
 import {json, RequestInfo} from "@remix-run/node";
+import {showToastError} from "~/utils/utils";
 
 export const BASE_URL =  process.env.BASE_URL || 'http://localhost:9999';
 export const LOGIN_SUCCESS_URL =  process.env.LOGIN_SUCCESS_URL || '/';
@@ -30,6 +31,10 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     const result = await res.json();
     if(result.code === 401) {
         throw new Response(result.message, {status: 401});
+    }
+    else if(result.code !== 200) {
+        showToastError(result.message || '发生错误');
+        return null;
     }
     return result;
 }

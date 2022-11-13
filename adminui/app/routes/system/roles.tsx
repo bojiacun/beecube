@@ -79,14 +79,9 @@ const SystemRolesPage = () => {
 
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
-            if(editFetcher.data.success) {
-                showToastSuccess('修改成功');
-                searchFetcher.submit(searchState, {method: 'get'});
-                setEditModal(null);
-            }
-            else {
-                showToastError(editFetcher.data.message);
-            }
+            showToastSuccess('修改成功');
+            searchFetcher.submit(searchState, {method: 'get'});
+            setEditModal(null);
         }
     }, [editFetcher.state]);
 
@@ -255,6 +250,10 @@ const SystemRolesPage = () => {
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
                                             <Field className={'form-control'} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'roleId'}>id</Form.Label>
+                                            <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'roleId'} name={'id'} placeholder={'角色ID'} />
                                         </FormGroup>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>

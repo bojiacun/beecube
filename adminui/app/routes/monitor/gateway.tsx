@@ -19,11 +19,20 @@ import {DefaultListSearchParams} from "~/utils/utils";
 //@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
+import {stopPageLoading} from "~/layouts/utils";
+import Error500Page from "~/components/error-page/500";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
-
+export function ErrorBoundary() {
+    stopPageLoading();
+    return <Error500Page />
+}
+export function CatchBoundary() {
+    stopPageLoading();
+    return <Error500Page />
+}
 
 export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);

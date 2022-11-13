@@ -24,13 +24,22 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import {MinusSquare, PlusSquare} from "react-feather";
 import DateTimeRangePicker from "~/components/date-time-range-picker/DateTimeRangePicker";
 import {requireAuthenticated} from "~/utils/auth.server";
+import {stopPageLoading} from "~/layouts/utils";
+import Error500Page from "~/components/error-page/500";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 
 const defaultSearchParams = {...DefaultListSearchParams, logType : 1};
-
+export function ErrorBoundary() {
+    stopPageLoading();
+    return <Error500Page />
+}
+export function CatchBoundary() {
+    stopPageLoading();
+    return <Error500Page />
+}
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
