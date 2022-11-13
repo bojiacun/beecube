@@ -423,6 +423,7 @@ const UserListPage = (props: any) => {
     const handleOnAddRole = () => {
         if(selectedRows.length > 0) {
             //添加
+            console.log(selectedRows);
             let data:any = {roleId: selectedRole.id, userIdList: selectedRows};
             editFetcher.submit(data, {method: 'post', action: '/system/roles/users/add'})
         }

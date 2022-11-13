@@ -7,5 +7,6 @@ export const action: ActionFunction = async ({request, params}) => {
     const formData = await request.formData();
     let jsonData:any = {};
     formData.forEach((value, key)=>jsonData[key] = value);
+    jsonData.userIdList = jsonData.userIdList.split(',');
     return await requestWithToken(request)(API_USER_ADDSYSUSERROLE, postFormInit(JSON.stringify(jsonData)))
 }
