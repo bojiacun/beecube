@@ -28,24 +28,12 @@ export const loader: LoaderFunction = async ({request}) => {
 export interface LayoutVerticalProps {
     children?: any;
 }
-const loaderCss: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-};
+
 
 const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
-    const {children} = props;
+    const {children, startPageLoading, stopPageLoading} = props;
     const {theme} = useContext(ThemeContext);
-    let [loading, setLoading] = useState(true);
-    let [color, setColor] = useState("#ffffff");
 
-    const startPageLoading = () => {
-        setLoading(true);
-    }
-    const stopPageLoading = () => {
-        setLoading(false);
-    }
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     //检验用户是否登录
@@ -58,7 +46,6 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     }, []);
 
     const ChildrenComponent = React.cloneElement(children, {startPageLoading: startPageLoading, stopPageLoading: stopPageLoading});
-
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
             <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow navbar-light align-items-center', navbarTypeClass)}>
@@ -75,12 +62,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
                 <AppFooter />
             </footer>
             {enableScrollToTop && <ScrollToTop />}
-            <ClipLoader
-                color={color}
-                loading={loading}
-                cssOverride={loaderCss}
-                size={150}
-            />
+
         </div>
     );
 }

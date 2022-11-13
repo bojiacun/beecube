@@ -1,5 +1,5 @@
 import type {MetaFunction, LinksFunction} from "@remix-run/node";
-import React, {useEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
 import {
     Link,
     Links,
@@ -34,6 +34,7 @@ import Error500Page from "~/components/error-page/500";
 import Error404Page from "~/components/error-page/404";
 import Error401Page from "~/components/error-page/401";
 import pageMiscStyle from '~/styles/react/pages/page-misc.css';
+import ClipLoader from "react-spinners/ClipLoader";
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -77,8 +78,6 @@ export const meta: MetaFunction = () => ({
 
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
-
-    console.log('error is',error);
     return (
         <html lang="cn">
         <head>
@@ -101,7 +100,6 @@ export function CatchBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
     const caught = useCatch();
     const data = useLoaderData();
-    console.log('There is exception ocurred',caught);
     if (caught.status === 401) {
         //登录态失效
         return (
@@ -148,14 +146,30 @@ export function CatchBoundary() {
     }
     throw new Error('未捕获的异常信息');
 }
-
+const loaderCss: CSSProperties = {
+    position: "absolute",
+    left: 'calc(50% - 17.5px)',
+    top: 'calc(50% - 17.5px)',
+    zIndex: '999999'
+};
 export default function App() {
     const [themeContext, setThemeContext] = useState(theme);
     const navigate = useNavigate();
     const location = useLocation();
     const data = useLoaderData();
     const outlet = useOutlet();
+    const [loading, setLoading] = useState(false);
 
+    const startPageLoading = () => {
+        setLoading(true);
+    }
+    const stopPageLoading = () => {
+        setLoading(false);
+    }
+
+    if(outlet != null) {
+        outlet.props.context = [startPageLoading, stopPageLoading];
+    }
 
     const excludeAdminPaths = ['/login'];
 
@@ -209,7 +223,7 @@ export default function App() {
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
             <div id='app' className='h-100'>
-                <Layout>
+                <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
                     <AnimatePresence mode={'wait'} initial={false}>
                         <motion.div
                             key={location.pathname}
@@ -222,6 +236,11 @@ export default function App() {
                     </AnimatePresence>
                 </Layout>
                 <ToastContainer />
+                <ClipLoader
+                    color={'#3366CC'}
+                    loading={loading}
+                    cssOverride={loaderCss}
+                />
             </div>
         </ThemeContext.Provider>
         <ScrollRestoration/>

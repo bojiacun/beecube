@@ -8,6 +8,7 @@ const ReactSelectThemed = (props:any) => {
 
     return (
         <Select
+            id={'react-select2'}
             theme={(theme)=>{
                 if(systemTheme.layout.skin === 'dark') {
                     theme.colors.neutral0 = '#161d31';

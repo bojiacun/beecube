@@ -11,7 +11,7 @@ import {
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_EDIT, API_ROLE_LIST, putFormInit, requestWithToken} from "~/utils/request.server";
-import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
+import {Link, Outlet, useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
@@ -35,6 +35,8 @@ import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
 import Error500Page from "~/components/error-page/500";
+import Error401Page from "~/components/error-page/401";
+import Error404Page from "~/components/error-page/404";
 
 
 
@@ -45,6 +47,13 @@ export function ErrorBoundary() {
     return <Error500Page />
 }
 export function CatchBoundary() {
+    const caught = useCatch();
+    if(caught.status === 401) {
+        return <Error401Page />
+    }
+    else if(caught.status === 404) {
+        return <Error404Page />
+    }
     return <Error500Page />
 }
 
@@ -68,7 +77,7 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 
-const SystemRolesPage = () => {
+const SystemRolesPage = (props:any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();

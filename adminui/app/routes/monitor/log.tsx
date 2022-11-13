@@ -11,7 +11,7 @@ import {
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_DATALOG_LIST, API_LOG_LIST, requestWithToken} from "~/utils/request.server";
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
@@ -23,6 +23,8 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import DateTimeRangePicker from "~/components/date-time-range-picker/DateTimeRangePicker";
 import {requireAuthenticated} from "~/utils/auth.server";
 import Error500Page from "~/components/error-page/500";
+import Error401Page from "~/components/error-page/401";
+import Error404Page from "~/components/error-page/404";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -33,6 +35,13 @@ export function ErrorBoundary() {
     return <Error500Page />
 }
 export function CatchBoundary() {
+    const caught = useCatch();
+    if(caught.status === 401) {
+        return <Error401Page />
+    }
+    else if(caught.status === 404) {
+        return <Error404Page />
+    }
     return <Error500Page />
 }
 export const loader: LoaderFunction = async ({request}) => {
