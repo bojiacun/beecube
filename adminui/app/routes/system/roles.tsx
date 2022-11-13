@@ -9,9 +9,9 @@ import {
     Button, Row, Dropdown, Modal,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
-import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_ROLE_EDIT, API_ROLE_LIST, putFormInit, requestWithToken} from "~/utils/request.server";
-import {Link, Outlet, useCatch, useFetcher, useLoaderData} from "@remix-run/react";
+import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
+import {Link, useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
