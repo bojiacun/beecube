@@ -6,13 +6,14 @@ import {useOutletContext} from "react-router";
 //自动关闭loading
 export const withPageLoading = (Component:any) => {
     return function(props:any) {
-        console.log('with page loading props is', useOutletContext(), props);
+        const [startPageLoading, stopPageLoading] = useOutletContext<any>();
+
         useEffect(() => {
-            // stopPageLoading();
+            stopPageLoading();
         }, []);
         return (
             <>
-                <Component {...props} />
+                <Component startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} {...props} />
             </>
         );
     }

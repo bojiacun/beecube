@@ -157,9 +157,7 @@ export default function App() {
     const navigate = useNavigate();
     const location = useLocation();
     const data = useLoaderData();
-    const outlet = useOutlet();
     const [loading, setLoading] = useState(false);
-    let children = null;
 
     const startPageLoading = () => {
         setLoading(true);
@@ -167,11 +165,6 @@ export default function App() {
     const stopPageLoading = () => {
         setLoading(false);
     }
-
-    if(outlet != null) {
-        children = React.cloneElement(outlet, {context: [startPageLoading, stopPageLoading]});
-    }
-
     const excludeAdminPaths = ['/login'];
 
     let Layout: any;
@@ -232,7 +225,7 @@ export default function App() {
                             animate={{scale: 1, opacity: 1}}
                             exit={{scale: 0, opacity: 0}}
                         >
-                            {children}
+                            <Outlet context={[startPageLoading, stopPageLoading]} />
                         </motion.div>
                     </AnimatePresence>
                 </Layout>
