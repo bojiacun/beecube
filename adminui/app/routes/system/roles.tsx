@@ -6,7 +6,7 @@ import {
     Form,
     FormControl,
     FormLabel,
-    Button, Row, Dropdown, Modal,
+    Button, Row, Dropdown, Modal, Badge,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
@@ -29,7 +29,7 @@ import * as Yup from 'yup';
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
+import {Delete, Edit, MoreVertical, Plus, Shield, XCircle} from "react-feather";
 import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
@@ -336,7 +336,7 @@ const SystemRolesPage = (props:any) => {
 }
 
 const NestedUsersPage = (props:any) => {
-    const {selectedRole, startPageLoading, stopPageLoading} = props;
+    const {selectedRole, startPageLoading, stopPageLoading, setSelectedRole} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, roleId: selectedRole.id});
     const [editModal, setEditModal] = useState<any>();
@@ -411,8 +411,8 @@ const NestedUsersPage = (props:any) => {
         {
             text: '状态',
             dataField: 'status',
-            fomatter: (cell:any, row:any) => {
-
+            formatter: (cell:any, row:any) => {
+                return row.status == 1 ? <Badge variant={'success'}>正常</Badge> : <Badge variant={'danger'}>异常</Badge>
             }
         },
 
@@ -423,9 +423,9 @@ const NestedUsersPage = (props:any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a  onClick={()=>handleOnAction(row, 'edit')}>编辑</a>
+                        <a href={'#'} onClick={()=>handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
-                        <a  onClick={()=>handleOnAction(row, 'delete')}>取消关联</a>
+                        <a href={'#'} onClick={()=>handleOnAction(row, 'delete')}>取消关联</a>
                         <span className={'divider'}/>
                     </div>
                 );
@@ -436,6 +436,7 @@ const NestedUsersPage = (props:any) => {
 
     return (
         <Card>
+            <XCircle size={28} className={'cursor-pointer'} style={{position: 'absolute', right: -14, top: -14, zIndex: 99}} onClick={()=>setSelectedRole(null)} />
             <div className={'m-2'}>
                 <Row>
                     <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
