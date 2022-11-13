@@ -361,18 +361,18 @@ const NestedUsersPage = (props:any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
     }
     const handleSort = (field: any, order: any): void => {
         searchState.column = field;
         searchState.order = order;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
     }
     const handleOnSearchNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
@@ -452,8 +452,9 @@ const NestedUsersPage = (props:any) => {
                         <Button onClick={handleOnAdd}><Plus size={16} />新建用户</Button>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
+                        <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                            <FormControl name={'roleId'} value={selectedRole.id} type={'hidden'}/>
                             <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                             <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                             <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
