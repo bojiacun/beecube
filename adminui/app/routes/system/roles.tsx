@@ -120,7 +120,7 @@ const SystemRolesPage = () => {
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function(){
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/roles/delete/${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/roles/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
