@@ -7,5 +7,7 @@ export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     let jsonData:any = {};
     formData.forEach((value, key)=>jsonData[key] = value);
+    delete jsonData.updateTime;
+    delete jsonData.updateBy;
     return await requestWithToken(request)(API_ROLE_EDIT, putFormInit(JSON.stringify(jsonData)))
 }

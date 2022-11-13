@@ -110,7 +110,9 @@ export function showDeleteAlert(deleteCallback: Function, message: string = '您
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#ccc',
-        confirmButtonText: '确认删除!'
+        confirmButtonText: '确认删除!',
+        cancelButtonText: '取消',
+        backdrop: false,
     }).then((result) => {
         if (result.isConfirmed) {
             deleteCallback();
