@@ -1,7 +1,7 @@
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
-import React, {CSSProperties, FC, useContext, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect} from "react";
 import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
@@ -45,7 +45,6 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
         }
     }, []);
 
-    const ChildrenComponent = React.cloneElement(children, {startPageLoading: startPageLoading, stopPageLoading: stopPageLoading});
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
             <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow navbar-light align-items-center', navbarTypeClass)}>
@@ -55,7 +54,7 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
             {/*垂直导航菜单遮罩层*/}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
                 <LayoutContentRendererDefault>
-                    {ChildrenComponent}
+                    {children}
                 </LayoutContentRendererDefault>
             {/*页脚 */}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
