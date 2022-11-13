@@ -12,8 +12,7 @@ const feather = require('feather-icons');
 
 
 const VerticalNavMenuLink = (props:any) => {
-    const {item} = props;
-    const [pageLoading, setPageLoading] = useState<boolean>(false);
+    const {item, startPageLoading} = props;
     const {t} = useTranslation();
     const location = useLocation();
     const isActive = location.pathname === '/'+item.route;
@@ -31,7 +30,7 @@ const VerticalNavMenuLink = (props:any) => {
             return (
                 <Link className={'d-flex align-items-center'} to={item.route} onClick={()=> {
                     if(!isActive) {
-                        setPageLoading(true);
+                        startPageLoading();
                     }
                 }}>
                     {renderItemIcon(item)}

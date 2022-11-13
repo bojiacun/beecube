@@ -1,7 +1,7 @@
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
 import classNames from "classnames";
-import {FC, useContext, useEffect, useState} from "react";
+import React, {CSSProperties, FC, useContext, useEffect, useState} from "react";
 import ThemeContext from "../../../themeConfig";
 import useAppConfig from "~/config";
 import useVerticalLayout from "~/layouts/layout-vertical/useLayoutVertical";
@@ -14,6 +14,7 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
 import {auth} from "~/utils/auth.server";
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 export const links: LinksFunction = () => {
@@ -27,11 +28,24 @@ export const loader: LoaderFunction = async ({request}) => {
 export interface LayoutVerticalProps {
     children?: any;
 }
-
+const loaderCss: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+};
 
 const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {children} = props;
     const {theme} = useContext(ThemeContext);
+    let [loading, setLoading] = useState(true);
+    let [color, setColor] = useState("#ffffff");
+
+    const startPageLoading = () => {
+        setLoading(true);
+    }
+    const stopPageLoading = () => {
+        setLoading(false);
+    }
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     //检验用户是否登录
@@ -43,23 +57,30 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
         }
     }, []);
 
+    const ChildrenComponent = React.cloneElement(children, {startPageLoading: startPageLoading, stopPageLoading: stopPageLoading});
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
             <Navbar variant={navbarBackgroundColor} className={classNames('header-navbar navbar navbar-shadow navbar-light align-items-center', navbarTypeClass)}>
                 <AppNavbarVerticalLayout />
             </Navbar>
-            {!isNavMenuHidden && <VerticalNavMenu />}
+            {!isNavMenuHidden && <VerticalNavMenu startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} />}
             {/*垂直导航菜单遮罩层*/}
             <div className={classNames('sidenav-overlay', overlayClasses)} />
                 <LayoutContentRendererDefault>
-                    {children}
+                    {ChildrenComponent}
                 </LayoutContentRendererDefault>
             {/*页脚 */}
             <footer className={classNames('footer footer-light', footerTypeClass)}>
                 <AppFooter />
             </footer>
             {enableScrollToTop && <ScrollToTop />}
+            <ClipLoader
+                color={color}
+                loading={loading}
+                cssOverride={loaderCss}
+                size={150}
+            />
         </div>
     );
 }
