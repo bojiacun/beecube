@@ -22,7 +22,7 @@ import * as Yup from 'yup';
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import {Delete, Edit, MoreVertical, Shield} from "react-feather";
+import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
 import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
@@ -79,9 +79,14 @@ const SystemRolesPage = () => {
 
     useEffect(()=>{
         if(editFetcher.data && editFetcher.type === 'done') {
-            showToastSuccess('修改成功');
-            searchFetcher.submit(searchState, {method: 'get'});
-            setEditModal(null);
+            if(editFetcher.data.success) {
+                showToastSuccess('修改成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+                setEditModal(null);
+            }
+            else {
+                showToastError(editFetcher.data.message);
+            }
         }
     }, [editFetcher.state]);
 
@@ -170,7 +175,15 @@ const SystemRolesPage = () => {
         setSearchState({...searchState, roleName: e.target.value});
     }
     const handleOnEditSubmit = (values:any) => {
-        editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`, replace: true});
+        if(values.id) {
+            editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`, replace: true});
+        }
+        else {
+            editFetcher.submit(values, {method: 'put', action: `/system/roles/add`, replace: true});
+        }
+    }
+    const handleOnAdd = () => {
+        setEditModal({});
     }
     return (
         <Card>
@@ -186,6 +199,7 @@ const SystemRolesPage = () => {
                             className={'per-page-selector d-inline-block ml-50 mr-1'}
                             onChange={handlePageSizeChanged}
                         />
+                        <Button onClick={handleOnAdd}><Plus size={16} />新建角色</Button>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                         <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -249,12 +263,12 @@ const SystemRolesPage = () => {
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
-                                            <Field className={'form-control'} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly />
+                                            <Field className={classNames('form-control', !!errors.roleCode ? 'is-invalid':'')} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly={editModal.id} />
                                         </FormGroup>
-                                        <FormGroup>
-                                            <Form.Label htmlFor={'roleId'}>id</Form.Label>
-                                            <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'roleId'} name={'id'} placeholder={'角色ID'} />
-                                        </FormGroup>
+                                        {/*<FormGroup>*/}
+                                        {/*    <Form.Label htmlFor={'roleId'}>id</Form.Label>*/}
+                                        {/*    <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'roleId'} name={'id'} placeholder={'角色ID'} />*/}
+                                        {/*</FormGroup>*/}
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
                                             <Field className={classNames('form-control', !!errors.roleName? 'is-invalid':'')} id={'roleName'} name={'roleName'} placeholder={'角色名称'} />
