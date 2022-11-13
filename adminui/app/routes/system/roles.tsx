@@ -16,7 +16,7 @@ import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
 import {
-    DefaultListSearchParams,
+    DefaultListSearchParams, defaultSelectRowConfig,
     emptySortFunc,
     headerSortingClasses,
     PageSizeOptions,
@@ -39,22 +39,22 @@ import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 
 
-
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
+
 export function ErrorBoundary() {
-    return <Error500Page />
+    return <Error500Page/>
 }
+
 export function CatchBoundary() {
     const caught = useCatch();
-    if(caught.status === 401) {
-        return <Error401Page />
+    if (caught.status === 401) {
+        return <Error401Page/>
+    } else if (caught.status === 404) {
+        return <Error404Page/>
     }
-    else if(caught.status === 404) {
-        return <Error404Page />
-    }
-    return <Error500Page />
+    return <Error500Page/>
 }
 
 const EditRoleSchema = Yup.object().shape({
@@ -68,8 +68,7 @@ export const loader: LoaderFunction = async ({request}) => {
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
-    }
-    else {
+    } else {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_ROLE_LIST + queryString);
@@ -77,7 +76,7 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 
-const SystemRolesPage = (props:any) => {
+const SystemRolesPage = (props: any) => {
     const {startPageLoading, stopPageLoading, setSelectedRole} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
@@ -93,27 +92,25 @@ const SystemRolesPage = (props:any) => {
         }
     }, [searchFetcher.state]);
 
-    useEffect(()=>{
-        if(editFetcher.data && editFetcher.type === 'done') {
-            if(editFetcher.data.success) {
-                showToastSuccess(editModal.id ? '修改成功': '新建成功');
+    useEffect(() => {
+        if (editFetcher.data && editFetcher.type === 'done') {
+            if (editFetcher.data.success) {
+                showToastSuccess(editModal.id ? '修改成功' : '新建成功');
                 searchFetcher.submit(searchState, {method: 'get'});
                 setEditModal(null);
-            }
-            else {
+            } else {
                 showToastError(editFetcher.data.message);
             }
         }
     }, [editFetcher.state]);
-    useEffect(()=>{
-        if(deleteFetcher.data && deleteFetcher.type === 'done') {
-            if(deleteFetcher.data.success) {
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            if (deleteFetcher.data.success) {
                 stopPageLoading();
                 showToastSuccess('删除成功');
                 searchFetcher.submit(searchState, {method: 'get'});
-            }
-            else {
-                showToastError(editFetcher.data.message);
+            } else {
+                showToastError(deleteFetcher.data.message);
             }
         }
     }, [deleteFetcher.state]);
@@ -126,7 +123,7 @@ const SystemRolesPage = (props:any) => {
                 break;
             case 'delete':
                 //删除按钮
-                showDeleteAlert(function(){
+                showDeleteAlert(function () {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/roles/delete?id=${row.id}`, replace: true});
                 });
@@ -178,9 +175,9 @@ const SystemRolesPage = (props:any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'list-user')}>用户</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'list-user')}>用户</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'grant')}>工单授权</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'grant')}>工单授权</a>
                         <span className={'divider'}/>
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>
@@ -210,11 +207,10 @@ const SystemRolesPage = (props:any) => {
     const handleOnRoleNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
-    const handleOnEditSubmit = (values:any) => {
-        if(values.id) {
+    const handleOnEditSubmit = (values: any) => {
+        if (values.id) {
             editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`, replace: true});
-        }
-        else {
+        } else {
             editFetcher.submit(values, {method: 'put', action: `/system/roles/add`, replace: true});
         }
     }
@@ -235,7 +231,7 @@ const SystemRolesPage = (props:any) => {
                             className={'per-page-selector d-inline-block ml-50 mr-1'}
                             onChange={handlePageSizeChanged}
                         />
-                        <Button onClick={handleOnAdd}><Plus size={16} />新建角色</Button>
+                        <Button onClick={handleOnAdd}><Plus size={16}/>新建角色</Button>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                         <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -293,13 +289,14 @@ const SystemRolesPage = (props:any) => {
                 </Modal.Header>
                 {editModal &&
                     <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
-                        {({errors, touched})=>{
+                        {({errors, touched}) => {
                             return (
                                 <FormikForm>
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleCode'}>角色编码</Form.Label>
-                                            <Field className={classNames('form-control', !!errors.roleCode ? 'is-invalid':'')} id={'roleCode'} name={'roleCode'} placeholder={'角色编码'} readOnly={editModal.id} />
+                                            <Field className={classNames('form-control', !!errors.roleCode ? 'is-invalid' : '')} id={'roleCode'}
+                                                   name={'roleCode'} placeholder={'角色编码'} readOnly={editModal.id}/>
                                         </FormGroup>
                                         {/*<FormGroup>*/}
                                         {/*    <Form.Label htmlFor={'roleId'}>id</Form.Label>*/}
@@ -307,11 +304,13 @@ const SystemRolesPage = (props:any) => {
                                         {/*</FormGroup>*/}
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
-                                            <Field className={classNames('form-control', !!errors.roleName? 'is-invalid':'')} id={'roleName'} name={'roleName'} placeholder={'角色名称'} />
+                                            <Field className={classNames('form-control', !!errors.roleName ? 'is-invalid' : '')} id={'roleName'}
+                                                   name={'roleName'} placeholder={'角色名称'}/>
                                         </FormGroup>
                                         <FormGroup>
                                             <Form.Label htmlFor={'description'}>描述</Form.Label>
-                                            <Field className={'form-control'} placeholder={'角色描述'} id={'description'} name={'description'} as={'textarea'} rows={3} />
+                                            <Field className={'form-control'} placeholder={'角色描述'} id={'description'} name={'description'}
+                                                   as={'textarea'} rows={3}/>
                                         </FormGroup>
                                     </Modal.Body>
                                     <Modal.Footer>
@@ -334,26 +333,213 @@ const SystemRolesPage = (props:any) => {
         </Card>
     );
 }
+const UserListPage = (props: any) => {
+    const {show, setUserListShow} = props;
+    const [list, setList] = useState<any>({records: []});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const searchFetcher = useFetcher();
 
-const NestedUsersPage = (props:any) => {
+    useEffect(()=>{
+        if(show) {
+            searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+        }
+    }, [show]);
+    useEffect(() => {
+        if (searchFetcher.data) {
+            setList(searchFetcher.data);
+        }
+    }, [searchFetcher.state]);
+
+    const handlePageChanged = (e: any) => {
+        searchState.pageNo = e.selected + 1;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+    }
+    const handlePageSizeChanged = (newValue: any) => {
+        searchState.pageSize = parseInt(newValue.value);
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+    }
+    const handleSort = (field: any, order: any): void => {
+        searchState.column = field;
+        searchState.order = order;
+        setSearchState({...searchState});
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+    }
+    const handleOnSearchNameChanged = (e: any) => {
+        setSearchState({...searchState, roleName: e.target.value});
+    }
+    const handleOnSearchSubmit = () => {
+        //设置分页为1
+        setSearchState({...searchState, pageNo: 1});
+    }
+    const columns: any[] = [
+        {
+            text: '用户账号',
+            dataField: 'username',
+        },
+        {
+            text: '用户名称',
+            dataField: 'realname',
+        },
+        {
+            text: '性别',
+            dataField: 'sex_dictText',
+        },
+        {
+            text: '电话',
+            dataField: 'phone',
+        },
+        {
+            text: '部门',
+            dataField: 'orgCodeText',
+        },
+    ]
+
+    const handleOnRowSelect = (row:any, isSelect:boolean) => {
+        if(isSelect) {
+            setSelectedRows([...selectedRows, row.id])
+        }
+        else {
+            let selected = selectedRows.filter(x=> x !== row.id);
+            setSelectedRows([...selected]);
+        }
+    }
+    const hanldeOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
+        if(isSelect) {
+            setSelectedRows([...rows.map(x=>x.id)]);
+        }
+        else {
+            setSelectedRows([]);
+        }
+    }
+
+    const selectRowConfig = {
+        ...defaultSelectRowConfig,
+        onSelect: handleOnRowSelect,
+        onSelectAll: hanldeOnRowSelectAll,
+    }
+
+    return (
+        <Modal
+            show={show}
+            size={'xl'}
+            onHide={()=>setUserListShow(false)}
+            centered
+            backdrop={'static'}
+            aria-labelledby={'edit-modal'}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id={'edit-modal'}>添加已有用户</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div className={'m-2'}>
+                    <Row>
+                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                            <ReactSelectThemed
+                                placeholder={'分页大小'}
+                                isSearchable={false}
+                                defaultValue={PageSizeOptions[0]}
+                                options={PageSizeOptions}
+                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                onChange={handlePageSizeChanged}
+                            />
+                        </Col>
+                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                            <searchFetcher.Form action={'/system/users'} className={'form-inline justify-content-end'}
+                                                onSubmit={handleOnSearchSubmit}>
+                                <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
+                                <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
+                                <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
+
+                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                    <FormLabel htmlFor={'username'}>用户账号</FormLabel>
+                                    <Col>
+                                        <InputGroup>
+                                            <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
+                                                         placeholder={'请输入要搜索的内容'}/>
+                                            <InputGroup.Append>
+                                                <Button type={'submit'}>搜索</Button>
+                                            </InputGroup.Append>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                            </searchFetcher.Form>
+                        </Col>
+                    </Row>
+                </div>
+
+                <BootstrapTable
+                    classes={'table-layout-fixed position-relative b-table'}
+                    striped
+                    hover
+                    columns={columns}
+                    bootstrap4
+                    data={list?.records}
+                    selectRow={selectRowConfig}
+                    keyField={'id'}
+                />
+
+                <div className={'mx-2 mb-2 mt-1'}>
+                    <Row>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                        <span
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                        </Col>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                            <SinglePagination
+                                forcePage={searchState.pageNo - 1}
+                                className={'mb-0'}
+                                pageCount={list?.pages}
+                                onPageChange={handlePageChanged}
+                            />
+                        </Col>
+                    </Row>
+                </div>
+
+
+            </Modal.Body>
+
+            <Modal.Footer>
+                <AwesomeButton type={'primary'}>确认选择</AwesomeButton>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+const NestedUsersPage = (props: any) => {
     const {selectedRole, startPageLoading, stopPageLoading, setSelectedRole} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, roleId: selectedRole.id});
     const [editModal, setEditModal] = useState<any>();
+    const [userListShow, setUserListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
-    useEffect(()=>{
-        if(selectedRole) {
+    useEffect(() => {
+        if (selectedRole) {
             searchState.roleId = selectedRole.id;
             setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
         }
     }, [selectedRole]);
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            if (deleteFetcher.data.success) {
+                stopPageLoading();
+                showToastSuccess('取消成功');
+                searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
+            } else {
+                showToastError(deleteFetcher.data.message);
+            }
+        }
+    }, [deleteFetcher.state]);
 
     const handleOnAdd = () => {
         setEditModal({});
@@ -389,14 +575,15 @@ const NestedUsersPage = (props:any) => {
                 break;
             case 'delete':
                 //删除按钮
-                showDeleteAlert(function(){
+                showDeleteAlert(function () {
                     startPageLoading();
-                });
+                    deleteFetcher.submit({userId: row.id, roleId: selectedRole.id},
+                        {method: 'delete', action: `/system/roles/users/delete?userId=${row.id}&roleId=${selectedRole.id}`, replace: true}
+                    );
+                }, '确认取消关联吗?', '取消提醒', '确认取消');
                 break;
         }
     }
-
-
 
 
     const columns: any[] = [
@@ -411,7 +598,7 @@ const NestedUsersPage = (props:any) => {
         {
             text: '状态',
             dataField: 'status',
-            formatter: (cell:any, row:any) => {
+            formatter: (cell: any, row: any) => {
                 return row.status == 1 ? <Badge variant={'success'}>正常</Badge> : <Badge variant={'danger'}>异常</Badge>
             }
         },
@@ -423,9 +610,9 @@ const NestedUsersPage = (props:any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'edit')}>编辑</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'delete')}>取消关联</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>取消关联</a>
                         <span className={'divider'}/>
                     </div>
                 );
@@ -433,83 +620,97 @@ const NestedUsersPage = (props:any) => {
         },
     ]
 
-
     return (
-        <Card>
-            <XCircle size={28} className={'cursor-pointer'} style={{position: 'absolute', right: -14, top: -14, zIndex: 99}} onClick={()=>setSelectedRole(null)} />
-            <div className={'m-2'}>
-                <Row>
-                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                        <h4 className="mb-0">用户管理</h4>
-                        <ReactSelectThemed
-                            placeholder={'分页大小'}
-                            isSearchable={false}
-                            defaultValue={PageSizeOptions[0]}
-                            options={PageSizeOptions}
-                            className={'per-page-selector d-inline-block ml-50 mr-1'}
-                            onChange={handlePageSizeChanged}
-                        />
-                        <Button onClick={handleOnAdd}><Plus size={16} />新建用户</Button>
-                    </Col>
-                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
-                            <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                            <FormControl name={'roleId'} value={selectedRole.id} type={'hidden'}/>
-                            <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
-                            <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
-                            <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
+        <>
+            <Card>
+                <XCircle size={28} className={'cursor-pointer'} style={{position: 'absolute', right: -14, top: -14, zIndex: 99}}
+                         onClick={() => setSelectedRole(null)}/>
+                <div className={'m-2'}>
+                    <Row>
+                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                            <ReactSelectThemed
+                                placeholder={'分页大小'}
+                                isSearchable={false}
+                                defaultValue={PageSizeOptions[0]}
+                                options={PageSizeOptions}
+                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                onChange={handlePageSizeChanged}
+                            />
+                            <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
+                            <Button variant={'secondary'} onClick={()=>setUserListShow(true)}><Plus size={16}/>已有用户</Button>
+                        </Col>
+                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                            <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'}
+                                                onSubmit={handleOnSearchSubmit}>
+                                <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                <FormControl name={'roleId'} value={selectedRole.id} type={'hidden'}/>
+                                <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
+                                <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
+                                <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                            <FormGroup as={Form.Row} className={'mb-0'}>
-                                <FormLabel htmlFor={'username'}>用户账号</FormLabel>
-                                <Col>
-                                    <InputGroup>
-                                        <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                        <InputGroup.Append>
-                                            <Button type={'submit'}>搜索</Button>
-                                        </InputGroup.Append>
-                                    </InputGroup>
-                                </Col>
-                            </FormGroup>
-                        </searchFetcher.Form>
-                    </Col>
-                </Row>
-            </div>
+                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                    <FormLabel htmlFor={'username'}>用户账号</FormLabel>
+                                    <Col>
+                                        <InputGroup>
+                                            <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
+                                                         placeholder={'请输入要搜索的内容'}/>
+                                            <InputGroup.Append>
+                                                <Button type={'submit'}>搜索</Button>
+                                            </InputGroup.Append>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                            </searchFetcher.Form>
+                        </Col>
+                    </Row>
+                </div>
 
 
-            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}
-                            keyField={'id'}/>
+                <BootstrapTable
+                    classes={'table-layout-fixed position-relative b-table'}
+                    striped
+                    hover
+                    columns={columns}
+                    bootstrap4
+                    data={list?.records}
+                    keyField={'id'}
+                />
 
-            <div className={'mx-2 mb-2 mt-1'}>
-                <Row>
-                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                <div className={'mx-2 mb-2 mt-1'}>
+                    <Row>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
                             className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
-                    </Col>
-                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                        <SinglePagination
-                            forcePage={searchState.pageNo - 1}
-                            className={'mb-0'}
-                            pageCount={list?.pages}
-                            onPageChange={handlePageChanged}
-                        />
-                    </Col>
-                </Row>
-            </div>
-        </Card>
+                        </Col>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                            <SinglePagination
+                                forcePage={searchState.pageNo - 1}
+                                className={'mb-0'}
+                                pageCount={list?.pages}
+                                onPageChange={handlePageChanged}
+                            />
+                        </Col>
+                    </Row>
+                </div>
+            </Card>
+            <UserListPage show={userListShow} setUserListShow={setUserListShow} />
+        </>
     );
 }
 
 
-const MainSystemRolesPage = (props:any) => {
+
+
+const MainSystemRolesPage = (props: any) => {
     const [selectedRole, setSelectedRole] = useState<any>();
 
     return (
         <Row>
             <Col>
-                <SystemRolesPage {...props} setSelectedRole={setSelectedRole} />
+                <SystemRolesPage {...props} setSelectedRole={setSelectedRole}/>
             </Col>
             {selectedRole && <Col>
-                <NestedUsersPage {...props} setSelectedRole={setSelectedRole} selectedRole={selectedRole} />
+                <NestedUsersPage {...props} setSelectedRole={setSelectedRole} selectedRole={selectedRole}/>
             </Col>}
         </Row>
     );

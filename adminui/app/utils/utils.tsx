@@ -64,6 +64,11 @@ export const headerSortingClasses = (column: any, sortOrder: any) => (
 );
 export const emptySortFunc = () => 0;
 
+export const defaultSelectRowConfig:any = {
+    mode: 'checkbox',
+    clickToSelect: true
+}
+
 export const defaultTableExpandRow = {
     expandHeaderColumnRenderer: () => {
         return <></>
@@ -102,15 +107,15 @@ export function showToastError(message: string) {
     });
 }
 
-export function showDeleteAlert(deleteCallback: Function, message: string = '您确定要删除本条数据吗') {
+export function showDeleteAlert(deleteCallback: Function, message: string = '您确定要删除本条数据吗', title='确认删除吗?', confirmText='确认删除！') {
     Swal.fire({
-        title: '删除确认',
+        title: title,
         text: message,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#ccc',
-        confirmButtonText: '确认删除!',
+        confirmButtonText: confirmText,
         cancelButtonText: '取消',
         backdrop: false,
     }).then((result) => {
