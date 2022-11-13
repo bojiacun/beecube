@@ -14,6 +14,7 @@ export const API_ROLE_EDIT = `${BASE_URL}/jeecg-system/sys/role/edit`;
 export const API_ROLE_ADD = `${BASE_URL}/jeecg-system/sys/role/add`;
 export const API_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/role/delete`;
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
+export const API_USER_ADDSYSUSERROLE = `${BASE_URL}/jeecg-system/sys/user/addSysUserRole`;
 export const API_USER_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/user/userRoleList`;
 export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserRole`;
 export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`;

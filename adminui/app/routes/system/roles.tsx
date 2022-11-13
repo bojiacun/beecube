@@ -334,11 +334,12 @@ const SystemRolesPage = (props: any) => {
     );
 }
 const UserListPage = (props: any) => {
-    const {show, setUserListShow} = props;
+    const {show, setUserListShow, selectedRole, refreshRoleUsers} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
+    const editFetcher = useFetcher();
 
     useEffect(()=>{
         if(show) {
@@ -351,6 +352,17 @@ const UserListPage = (props: any) => {
         }
     }, [searchFetcher.state]);
 
+    useEffect(() => {
+        if (editFetcher.data && editFetcher.type === 'done') {
+            if (editFetcher.data.success) {
+                setUserListShow(false);
+                refreshRoleUsers();
+            } else {
+                showToastError(editFetcher.data.message);
+            }
+        }
+    }, [editFetcher.state]);
+
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
@@ -358,12 +370,6 @@ const UserListPage = (props: any) => {
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
-    }
-    const handleSort = (field: any, order: any): void => {
-        searchState.column = field;
-        searchState.order = order;
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
     }
@@ -412,6 +418,16 @@ const UserListPage = (props: any) => {
         }
         else {
             setSelectedRows([]);
+        }
+    }
+    const handleOnAddRole = () => {
+        if(selectedRows.length > 0) {
+            //添加
+            let data:any = {roleId: selectedRole.id, userIdList: selectedRows};
+            editFetcher.submit(data, {method: 'post', action: '/system/roles/users/add'})
+        }
+        else{
+            setUserListShow(false);
         }
     }
 
@@ -503,7 +519,7 @@ const UserListPage = (props: any) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <AwesomeButton type={'primary'}>确认选择</AwesomeButton>
+                <AwesomeButton type={'primary'} onPress={handleOnAddRole} disabled={editFetcher.state === 'submitting'}>确认选择</AwesomeButton>
             </Modal.Footer>
         </Modal>
     );
@@ -541,6 +557,9 @@ const NestedUsersPage = (props: any) => {
         }
     }, [deleteFetcher.state]);
 
+    const refreshRoleUsers = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
+    }
     const handleOnAdd = () => {
         setEditModal({});
     }
@@ -693,7 +712,7 @@ const NestedUsersPage = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <UserListPage show={userListShow} setUserListShow={setUserListShow} />
+            <UserListPage show={userListShow} setUserListShow={setUserListShow} selectedRole={selectedRole} refreshRoleUsers={refreshRoleUsers} />
         </>
     );
 }
