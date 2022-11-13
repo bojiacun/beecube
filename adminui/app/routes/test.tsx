@@ -1,7 +1,7 @@
 import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticatedLoader} from "~/utils/auth.server";
 import {useLoaderData} from "@remix-run/react";
-import {withAutoLoading} from "~/utils/components";
+import {withPageLoading} from "~/utils/components";
 
 export const loader: LoaderFunction = requireAuthenticatedLoader;
 const Test = () => {
@@ -18,4 +18,4 @@ const Test = () => {
     );
 }
 
-export default withAutoLoading(Test);
+export default withPageLoading(Test);

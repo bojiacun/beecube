@@ -2,11 +2,10 @@ import classNames from "classnames";
 import {canViewVerticalNavMenuLink} from "~/libs/acl/utils";
 import {Badge, NavLink} from "react-bootstrap";
 import {Circle} from 'react-feather';
-import React from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 import {Link} from "@remix-run/react";
-import {startPageLoading} from "~/layouts/utils";
 
 
 const feather = require('feather-icons');
@@ -14,6 +13,7 @@ const feather = require('feather-icons');
 
 const VerticalNavMenuLink = (props:any) => {
     const {item} = props;
+    const [pageLoading, setPageLoading] = useState<boolean>(false);
     const {t} = useTranslation();
     const location = useLocation();
     const isActive = location.pathname === '/'+item.route;
@@ -31,7 +31,7 @@ const VerticalNavMenuLink = (props:any) => {
             return (
                 <Link className={'d-flex align-items-center'} to={item.route} onClick={()=> {
                     if(!isActive) {
-                        startPageLoading();
+                        setPageLoading(true);
                     }
                 }}>
                     {renderItemIcon(item)}

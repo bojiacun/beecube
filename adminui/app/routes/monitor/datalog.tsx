@@ -12,17 +12,15 @@ import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_DATALOG_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {withAutoLoading} from "~/utils/components";
+import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useContext, useEffect, useRef, useState} from "react";
 import {DefaultListSearchParams, PageSizeOptions} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
-//@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {requireAuthenticated} from "~/utils/auth.server";
-import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
 
 export const links: LinksFunction = () => {
@@ -30,11 +28,9 @@ export const links: LinksFunction = () => {
 }
 
 export function ErrorBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 export function CatchBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 export const loader: LoaderFunction = async ({request}) => {
@@ -192,4 +188,4 @@ const DataLogPages = () => {
     );
 }
 
-export default withAutoLoading(DataLogPages);
+export default withPageLoading(DataLogPages);

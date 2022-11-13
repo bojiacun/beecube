@@ -208,16 +208,6 @@ export default function App() {
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
-            <div id="loading-bg">
-                <div className="loading-logo">
-                    <Image src={logoSvg} width={70} height={70}/>
-                </div>
-                <div className="loading">
-                    <div className="effect-1 effects"></div>
-                    <div className="effect-2 effects"></div>
-                    <div className="effect-3 effects"></div>
-                </div>
-            </div>
             <div id='app' className='h-100'>
                 <Layout>
                     <AnimatePresence mode={'wait'} initial={false}>

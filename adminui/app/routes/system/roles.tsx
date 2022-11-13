@@ -12,7 +12,7 @@ import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_EDIT, API_ROLE_LIST, putFormInit, requestWithToken} from "~/utils/request.server";
 import {Link, Outlet, useFetcher, useLoaderData} from "@remix-run/react";
-import {withAutoLoading} from "~/utils/components";
+import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
 import {
@@ -26,7 +26,6 @@ import {
 } from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import * as Yup from 'yup';
-//@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -35,7 +34,6 @@ import {AwesomeButton} from "react-awesome-button";
 import {Formik, Form as FormikForm, Field} from "formik";
 import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
-import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
 
 
@@ -44,11 +42,9 @@ export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 export function ErrorBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 export function CatchBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 
@@ -327,4 +323,4 @@ const SystemRolesPage = () => {
     );
 }
 
-export default withAutoLoading(SystemRolesPage);
+export default withPageLoading(SystemRolesPage);

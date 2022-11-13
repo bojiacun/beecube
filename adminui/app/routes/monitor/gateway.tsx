@@ -13,24 +13,20 @@ import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_GATEWAY_LIST, API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {withAutoLoading} from "~/utils/components";
+import {withPageLoading} from "~/utils/components";
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams} from "~/utils/utils";
-//@ts-ignore
 import _ from 'lodash';
 import querystring from 'querystring';
-import {stopPageLoading} from "~/layouts/utils";
 import Error500Page from "~/components/error-page/500";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 export function ErrorBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 export function CatchBoundary() {
-    stopPageLoading();
     return <Error500Page />
 }
 
@@ -142,4 +138,4 @@ const GatewayPages = () => {
     );
 }
 
-export default withAutoLoading(GatewayPages);
+export default withPageLoading(GatewayPages);

@@ -67,10 +67,6 @@ const LoginPage = () => {
         sideImageUrl = darkSideImageUrl;
     }
     useEffect(()=>{
-        const appLoading = document.getElementById('loading-bg')
-        if (appLoading) {
-            appLoading.style.display = 'none'
-        }
         let randomStr = randomstring.generate(18);
         setCaptchaKey(randomStr);
     }, []);

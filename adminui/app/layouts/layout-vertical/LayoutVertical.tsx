@@ -14,7 +14,6 @@ import AppFooter from "~/layouts/components/AppFooter";
 import LayoutContentRendererDefault from "~/layouts/components/layout-content-renderer/LayoutContentRendererDefault";
 import ScrollToTop, {links as scrollToTopStyle} from "~/components/scroll-to-top/ScrollToTop";
 import {auth} from "~/utils/auth.server";
-import {stopPageLoading} from "~/layouts/utils";
 
 
 export const links: LinksFunction = () => {
@@ -33,13 +32,10 @@ export interface LayoutVerticalProps {
 const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
     const {children} = props;
     const {theme} = useContext(ThemeContext);
-    const [appLoading, setAppLoading] = useState<boolean>(true);
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
     //检验用户是否登录
     useEffect(()=> {
-        stopPageLoading();
-        setAppLoading(false);
         //@ts-ignore
         window.setCurrentLink = (pathname: string) => {
             // @ts-ignore
@@ -47,7 +43,6 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
         }
     }, []);
 
-    if(appLoading) return <></>;
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
