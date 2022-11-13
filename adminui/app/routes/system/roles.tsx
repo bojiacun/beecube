@@ -78,6 +78,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 
 const SystemRolesPage = (props:any) => {
+    const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
@@ -107,6 +108,7 @@ const SystemRolesPage = (props:any) => {
     useEffect(()=>{
         if(deleteFetcher.data && deleteFetcher.type === 'done') {
             if(deleteFetcher.data.success) {
+                stopPageLoading();
                 showToastSuccess('删除成功');
                 searchFetcher.submit(searchState, {method: 'get'});
             }
@@ -125,6 +127,7 @@ const SystemRolesPage = (props:any) => {
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function(){
+                    startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/roles/delete?id=${row.id}`, replace: true});
                 });
                 break;
