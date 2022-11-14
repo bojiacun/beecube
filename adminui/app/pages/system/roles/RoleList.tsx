@@ -14,11 +14,18 @@ import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {Field, Formik} from "formik";
-import {Form as FormikForm} from "formik/dist/Form";
+import {Field, Formik, Form as FormikForm} from "formik";
 import classNames from "classnames";
 import {AwesomeButton} from "react-awesome-button";
+import * as Yup from "yup";
 
+
+
+
+const EditRoleSchema = Yup.object().shape({
+    roleCode: Yup.string().required(),
+    roleName: Yup.string().required()
+});
 const RoleList = (props: any) => {
     const {startPageLoading, stopPageLoading, setSelectedRole} = props;
     const [list, setList] = useState<any>(useLoaderData());

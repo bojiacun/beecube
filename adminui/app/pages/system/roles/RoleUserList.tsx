@@ -6,6 +6,7 @@ import {Plus, XCircle} from "react-feather";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
+import UserListSelector from "~/pages/system/roles/UserListSelector";
 
 
 const RoleUserList = (props: any) => {

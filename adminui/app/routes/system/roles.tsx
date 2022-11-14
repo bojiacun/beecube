@@ -1,43 +1,22 @@
-import {
-    Col,
-    FormGroup,
-    Card,
-    InputGroup,
-    Form,
-    FormControl,
-    FormLabel,
-    Button, Row, Dropdown, Modal, Badge,
-} from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
-import {Link, useCatch, useFetcher, useLoaderData} from "@remix-run/react";
+import {useCatch} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
-import SinglePagination from "~/components/pagination/SinglePagination";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {
-    DefaultListSearchParams, defaultSelectRowConfig,
-    emptySortFunc,
-    headerSortingClasses,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
+    DefaultListSearchParams,
 } from "~/utils/utils";
-import BootstrapTable from 'react-bootstrap-table-next';
 import * as Yup from 'yup';
 import _ from 'lodash';
 import querystring from 'querystring';
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import {Delete, Edit, MoreVertical, Plus, Shield, XCircle} from "react-feather";
-import {AwesomeButton} from "react-awesome-button";
-import {Formik, Form as FormikForm, Field} from "formik";
-import classNames from "classnames";
 import {requireAuthenticated} from "~/utils/auth.server";
 import Error500Page from "~/components/error-page/500";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
-import UserListSelector from "~/pages/system/roles/RoleUserList";
+import RoleList from "~/pages/system/roles/RoleList";
+import RoleUserList from "~/pages/system/roles/RoleUserList";
 
 
 export const links: LinksFunction = () => {
@@ -58,10 +37,7 @@ export function CatchBoundary() {
     return <Error500Page/>
 }
 
-const EditRoleSchema = Yup.object().shape({
-    roleCode: Yup.string().required(),
-    roleName: Yup.string().required()
-});
+
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
@@ -86,10 +62,10 @@ const MainSystemRolesPage = (props: any) => {
     return (
         <Row>
             <Col>
-                <SystemRolesPage {...props} setSelectedRole={setSelectedRole}/>
+                <RoleList {...props} setSelectedRole={setSelectedRole}/>
             </Col>
             {selectedRole && <Col>
-                <NestedUsersPage {...props} setSelectedRole={setSelectedRole} selectedRole={selectedRole}/>
+                <RoleUserList {...props} setSelectedRole={setSelectedRole} selectedRole={selectedRole}/>
             </Col>}
         </Row>
     );
