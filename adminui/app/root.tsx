@@ -158,6 +158,7 @@ export default function App() {
     const location = useLocation();
     const data = useLoaderData();
     const [loading, setLoading] = useState(false);
+    const outlet = useOutlet();
 
     const startPageLoading = () => {
         setLoading(true);
@@ -215,7 +216,7 @@ export default function App() {
             <Links/>
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext}}>
+        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading}}>
             <div id='app' className='h-100'>
                 <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
                     <AnimatePresence mode={'wait'} initial={false}>
@@ -225,7 +226,7 @@ export default function App() {
                             animate={{scale: 1, opacity: 1}}
                             exit={{scale: 0, opacity: 0}}
                         >
-                            <Outlet context={[startPageLoading, stopPageLoading]} />
+                            {outlet}
                         </motion.div>
                     </AnimatePresence>
                 </Layout>
