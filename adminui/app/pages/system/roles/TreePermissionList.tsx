@@ -1,9 +1,17 @@
 import {Modal} from "react-bootstrap";
-import Tree from "rc-tree";
 import {useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
+import {ChevronDown, ChevronRight} from "react-feather";
+import CheckboxTree from 'react-checkbox-tree';
 
-
+const nodes = [{
+    value: 'mars',
+    label: 'Mars',
+    children: [
+        { value: 'phobos', label: 'Phobos' },
+        { value: 'deimos', label: 'Deimos' },
+    ],
+}];
 const TreePermissionList = (props:any) => {
     const {model, setAuthModel} = props;
     const [treeData, setTreeData] = useState<any>();
@@ -21,6 +29,7 @@ const TreePermissionList = (props:any) => {
         }
     }, [searchFetcher.state]);
 
+
     return (
         <Modal
             show={!!model}
@@ -29,8 +38,11 @@ const TreePermissionList = (props:any) => {
             backdrop={'static'}
             aria-labelledby={'edit-modal'}
         >
-            <Tree
-                treeData={treeData}
+            <Modal.Header closeButton>
+                <Modal.Title id={'role-tree-permission'}>{model?.roleName}授权</Modal.Title>
+            </Modal.Header>
+            <CheckboxTree
+                nodes={nodes}
             />
         </Modal>
     );
