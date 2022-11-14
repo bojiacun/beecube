@@ -35,6 +35,7 @@ import Error404Page from "~/components/error-page/404";
 import Error401Page from "~/components/error-page/401";
 import pageMiscStyle from '~/styles/react/pages/page-misc.css';
 import ClipLoader from "react-spinners/ClipLoader";
+import treeViewStyle from 'rc-tree/assets/index.css';
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -59,6 +60,7 @@ export async function loader() {
 export const links: LinksFunction = () => {
     return [
         ...layoutVerticalLinks(),
+        {rel: 'stylesheet', href: treeViewStyle},
         {rel: 'stylesheet', href: featherStyleUrl},
         {rel: 'stylesheet', href: coreStyleUrl},
         {rel: 'stylesheet', href: stylesUrl},
