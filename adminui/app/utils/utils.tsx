@@ -3,6 +3,12 @@
 import {MinusSquare, PlusSquare} from "react-feather";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
+import {useCatch} from "@remix-run/react";
+import {useOutletContext} from "react-router";
+import {useEffect} from "react";
+import Error401Page from "~/components/error-page/401";
+import Error404Page from "~/components/error-page/404";
+import Error500Page from "~/components/error-page/500";
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -123,4 +129,28 @@ export function showDeleteAlert(deleteCallback: Function, message: string = '您
             deleteCallback();
         }
     })
+}
+
+
+export function defaultRouteCatchBoundary() {
+    const caught = useCatch();
+    const [startPageLoading, stopPageLoading] = useOutletContext<any>();
+    useEffect(()=>{
+        stopPageLoading();
+    }, []);
+
+    if (caught.status === 401) {
+        return <Error401Page/>
+    } else if (caught.status === 404) {
+        return <Error404Page/>
+    }
+    return <Error500Page/>
+}
+
+export function defaultRouteErrorBoundary() {
+    const [startPageLoading, stopPageLoading] = useOutletContext<any>();
+    useEffect(()=>{
+        stopPageLoading();
+    }, []);
+    return <Error500Page/>;
 }

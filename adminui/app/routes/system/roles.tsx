@@ -4,9 +4,9 @@ import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, requestWithToken} from "~/utils/request.server";
 import {useCatch} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
-    DefaultListSearchParams,
+    DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary,
 } from "~/utils/utils";
 import * as Yup from 'yup';
 import _ from 'lodash';
@@ -17,25 +17,16 @@ import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import RoleList from "~/pages/system/roles/RoleList";
 import RoleUserList from "~/pages/system/roles/RoleUserList";
+import {useOutletContext} from "react-router";
 
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
 }
 
-export function ErrorBoundary() {
-    return <Error500Page/>
-}
+export const ErrorBoundary = defaultRouteErrorBoundary;
 
-export function CatchBoundary() {
-    const caught = useCatch();
-    if (caught.status === 401) {
-        return <Error401Page/>
-    } else if (caught.status === 404) {
-        return <Error404Page/>
-    }
-    return <Error500Page/>
-}
+export const CatchBoundary = defaultRouteCatchBoundary;
 
 
 

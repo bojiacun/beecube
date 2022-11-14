@@ -15,7 +15,14 @@ import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultTableExpandRow, emptySortFunc, headerSortingClasses, PageSizeOptions} from "~/utils/utils";
+import {
+    DefaultListSearchParams, defaultRouteCatchBoundary,
+    defaultRouteErrorBoundary,
+    defaultTableExpandRow,
+    emptySortFunc,
+    headerSortingClasses,
+    PageSizeOptions
+} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
@@ -31,19 +38,10 @@ export const links: LinksFunction = () => {
 }
 
 const defaultSearchParams = {...DefaultListSearchParams, logType : 1};
-export function ErrorBoundary() {
-    return <Error500Page />
-}
-export function CatchBoundary() {
-    const caught = useCatch();
-    if(caught.status === 401) {
-        return <Error401Page />
-    }
-    else if(caught.status === 404) {
-        return <Error404Page />
-    }
-    return <Error500Page />
-}
+export const ErrorBoundary = defaultRouteErrorBoundary;
+export const CatchBoundary = defaultRouteCatchBoundary;
+
+
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
