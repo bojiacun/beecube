@@ -126,9 +126,9 @@ const RoleList = (props: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'list-user')}>用户</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'grant')}>工单授权</a>
-                        <span className={'divider'}/>
+                        {/*<span className={'divider'}/>*/}
+                        {/*<a href={'#'} onClick={() => handleOnAction(row, 'grant')}>工单授权</a>*/}
+                        {/*<span className={'divider'}/>*/}
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>
                                 <MoreVertical size={16} style={{marginTop: -2}}/>
