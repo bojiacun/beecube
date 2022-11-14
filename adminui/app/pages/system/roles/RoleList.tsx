@@ -248,10 +248,6 @@ const RoleList = (props: any) => {
                                             <Field className={classNames('form-control', !!errors.roleCode ? 'is-invalid' : '')} id={'roleCode'}
                                                    name={'roleCode'} placeholder={'角色编码'} readOnly={editModal.id}/>
                                         </FormGroup>
-                                        {/*<FormGroup>*/}
-                                        {/*    <Form.Label htmlFor={'roleId'}>id</Form.Label>*/}
-                                        {/*    <Field className={classNames('form-control', !!errors.id? 'is-invalid':'')} id={'roleId'} name={'id'} placeholder={'角色ID'} />*/}
-                                        {/*</FormGroup>*/}
                                         <FormGroup>
                                             <Form.Label htmlFor={'roleName'}>角色名称</Form.Label>
                                             <Field className={classNames('form-control', !!errors.roleName ? 'is-invalid' : '')} id={'roleName'}

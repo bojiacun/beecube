@@ -9,6 +9,9 @@ import {useEffect} from "react";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import Error500Page from "~/components/error-page/500";
+import {FormGroup, FormLabel} from "react-bootstrap";
+import {Field} from "formik";
+import classNames from "classnames";
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -153,4 +156,25 @@ export function defaultRouteErrorBoundary() {
         stopPageLoading();
     }, []);
     return <Error500Page/>;
+}
+
+export interface EditFormHelperInputProps {
+    label: string;
+    fieldName: string;
+    placeholder?: string;
+    readOnly?: boolean;
+    className?: string;
+}
+
+export const EditFormHelper = {
+    normalInput: (options: EditFormHelperInputProps)=>{
+        const {label, fieldName, placeholder = '', readOnly = false, className = ''} = options;
+        return (
+            <FormGroup>
+                <FormLabel htmlFor={fieldName}>{label}</FormLabel>
+                <Field className={classNames('form-control', className)} id={fieldName}
+                       name={fieldName} placeholder={placeholder} readOnly={readOnly}/>
+            </FormGroup>
+        );
+    }
 }

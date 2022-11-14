@@ -204,7 +204,7 @@ const RoleUserList = (props: any) => {
                 selectedRole={selectedRole}
                 refreshRoleUsers={refreshRoleUsers}
             />
-            <UserEdit model={editModal} />
+            <UserEdit model={editModal} setEditModel={setEditModal} />
         </>
     );
 }
