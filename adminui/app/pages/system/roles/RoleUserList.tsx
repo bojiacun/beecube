@@ -7,6 +7,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import UserListSelector from "~/pages/system/roles/UserListSelector";
+import UserEdit from "~/pages/system/roles/UserEdit";
 
 
 const RoleUserList = (props: any) => {
@@ -197,7 +198,13 @@ const RoleUserList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <UserListSelector show={userListShow} setUserListShow={setUserListShow} selectedRole={selectedRole} refreshRoleUsers={refreshRoleUsers} />
+            <UserListSelector
+                show={userListShow}
+                setUserListShow={setUserListShow}
+                selectedRole={selectedRole}
+                refreshRoleUsers={refreshRoleUsers}
+            />
+            <UserEdit model={editModal} />
         </>
     );
 }
