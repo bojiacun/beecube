@@ -1,17 +1,17 @@
-
-// uint8array转base64
 import {MinusSquare, PlusSquare} from "react-feather";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
 import {useCatch} from "@remix-run/react";
 import {useOutletContext} from "react-router";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import Error500Page from "~/components/error-page/500";
 import {FormGroup, FormLabel} from "react-bootstrap";
 import {Field} from "formik";
 import classNames from "classnames";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import themeContext from 'themeConfig';
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -137,7 +137,8 @@ export function showDeleteAlert(deleteCallback: Function, message: string = '您
 
 export function defaultRouteCatchBoundary() {
     const caught = useCatch();
-    const [startPageLoading, stopPageLoading] = useOutletContext<any>();
+    const {stopPageLoading} = useContext(themeContext);
+
     useEffect(()=>{
         stopPageLoading();
     }, []);
@@ -151,7 +152,7 @@ export function defaultRouteCatchBoundary() {
 }
 
 export function defaultRouteErrorBoundary() {
-    const [startPageLoading, stopPageLoading] = useOutletContext<any>();
+    const {stopPageLoading} = useContext(themeContext);
     useEffect(()=>{
         stopPageLoading();
     }, []);
@@ -178,3 +179,16 @@ export const EditFormHelper = {
         );
     }
 }
+
+export const defaultTreeIcons = {
+    check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon={'check-square'}/>,
+    uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['far', 'square']}/>,
+    halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon="check-square"/>,
+    expandClose: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon={'caret-right'}/>,
+    expandOpen: <FontAwesomeIcon className="rct-icon rct-icon-expand-open" icon="caret-down"/>,
+    expandAll: <FontAwesomeIcon className="rct-icon rct-icon-expand-all" icon="plus-square"/>,
+    collapseAll: <FontAwesomeIcon className="rct-icon rct-icon-collapse-all" icon="minus-square"/>,
+    parentClose: <FontAwesomeIcon className="rct-icon rct-icon-parent-close" icon="folder"/>,
+    parentOpen: <FontAwesomeIcon className="rct-icon rct-icon-parent-open" icon="folder-open"/>,
+    leaf: <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon="file"/>
+};

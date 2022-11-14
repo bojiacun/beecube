@@ -1,37 +1,52 @@
 import {Modal} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {AwesomeButton} from "react-awesome-button";
+import {defaultTreeIcons} from "~/utils/utils";
+import themeConfig from "../../../../themeConfig";
 
-const nodes = [{
-    value: 'mars',
-    label: 'Mars',
-    children: [
-        {value: 'phobos', label: 'Phobos'},
-        {value: 'deimos', label: 'Deimos'},
-    ],
-}];
+
+const translateTreeToNode = (treeNode:any) => {
+    return {
+        value: treeNode.value,
+        label: treeNode.slotTitle,
+        children: treeNode.children?.map(translateTreeToNode) || null,
+    };
+}
+
 const TreePermissionList = (props: any) => {
     const {model, setAuthModel} = props;
-    const [treeData, setTreeData] = useState<any>();
+    const {startPageLoading, stopPageLoading} = useContext(themeConfig);
+    const [treeData, setTreeData] = useState<any>([]);
     const [checked, setChecked] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
     const searchFetcher = useFetcher();
+    const rolePermissionFetcher = useFetcher();
 
     useEffect(() => {
         if (model) {
+            setChecked([]);
+            startPageLoading();
             searchFetcher.load('/system/roles/tree');
+            rolePermissionFetcher.load('/system/roles/permissions?roleId='+model.id);
         }
     }, [model]);
 
     useEffect(() => {
         if (searchFetcher.type === 'done' && searchFetcher.data) {
-            setTreeData(searchFetcher.data.treeList);
+            let nodes = searchFetcher.data.treeList.map(translateTreeToNode);
+            setTreeData(nodes);
+            rolePermissionFetcher.load('/system/roles/permissions?roleId='+model.id);
         }
     }, [searchFetcher.state]);
 
+    useEffect(() => {
+        if (rolePermissionFetcher.type === 'done' && rolePermissionFetcher.data) {
+            stopPageLoading();
+            setChecked(rolePermissionFetcher.data);
+        }
+    }, [rolePermissionFetcher.state]);
 
     return (
         <Modal
@@ -44,27 +59,16 @@ const TreePermissionList = (props: any) => {
             <Modal.Header closeButton>
                 <Modal.Title id={'role-tree-permission'}>{model?.roleName}授权</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body style={{overflowY: 'auto', maxHeight: 400}}>
                 <div className={'mb-1'}>所拥有权限：</div>
                 <CheckboxTree
-                    nodes={nodes}
+                    nodes={treeData}
                     checked={checked}
                     expanded={expanded}
                     onCheck={checked1 => setChecked(checked1)}
                     onExpand={expanded1 => setExpanded(expanded1)}
                     iconsClass={'fa6'}
-                    icons={{
-                        check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon={'check-square'}/>,
-                        uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['far', 'square']}/>,
-                        halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon="check-square"/>,
-                        expandClose: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon={'caret-right'}/>,
-                        expandOpen: <FontAwesomeIcon className="rct-icon rct-icon-expand-open" icon="caret-down"/>,
-                        expandAll: <FontAwesomeIcon className="rct-icon rct-icon-expand-all" icon="plus-square"/>,
-                        collapseAll: <FontAwesomeIcon className="rct-icon rct-icon-collapse-all" icon="minus-square"/>,
-                        parentClose: <FontAwesomeIcon className="rct-icon rct-icon-parent-close" icon="folder"/>,
-                        parentOpen: <FontAwesomeIcon className="rct-icon rct-icon-parent-open" icon="folder-open"/>,
-                        leaf: <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon="file"/>
-                    }}
+                    icons={defaultTreeIcons}
                 />
             </Modal.Body>
             <Modal.Footer>
