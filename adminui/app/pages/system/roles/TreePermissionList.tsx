@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import {ChevronDown, ChevronRight} from "react-feather";
 import CheckboxTree from 'react-checkbox-tree';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const nodes = [{
     value: 'mars',
@@ -43,6 +44,18 @@ const TreePermissionList = (props:any) => {
             </Modal.Header>
             <CheckboxTree
                 nodes={nodes}
+                icons={{
+                    check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon="check-square" />,
+                    uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['fas', 'square']} />,
+                    halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon="check-square" />,
+                    expandClose: <ChevronRight size={16} />,
+                    expandOpen: <FontAwesomeIcon className="rct-icon rct-icon-expand-open" icon="chevron-down" />,
+                    expandAll: <FontAwesomeIcon className="rct-icon rct-icon-expand-all" icon="plus-square" />,
+                    collapseAll: <FontAwesomeIcon className="rct-icon rct-icon-collapse-all" icon="minus-square" />,
+                    parentClose: <FontAwesomeIcon className="rct-icon rct-icon-parent-close" icon="folder" />,
+                    parentOpen: <FontAwesomeIcon className="rct-icon rct-icon-parent-open" icon="folder-open" />,
+                    leaf: <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon="file" />
+                }}
             />
         </Modal>
     );
