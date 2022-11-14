@@ -20,6 +20,7 @@ const TreePermissionList = (props: any) => {
     const {startPageLoading, stopPageLoading} = useContext(themeConfig);
     const [treeData, setTreeData] = useState<any>([]);
     const [checked, setChecked] = useState<any[]>([]);
+    const [lastPermissionIds, setLastPermissionIds] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const rolePermissionFetcher = useFetcher();
@@ -44,9 +45,15 @@ const TreePermissionList = (props: any) => {
     useEffect(() => {
         if (rolePermissionFetcher.type === 'done' && rolePermissionFetcher.data) {
             stopPageLoading();
+            setLastPermissionIds(rolePermissionFetcher.data);
             setChecked(rolePermissionFetcher.data);
         }
     }, [rolePermissionFetcher.state]);
+
+
+    const handleOnSave = () => {
+
+    }
 
     return (
         <Modal
@@ -76,6 +83,7 @@ const TreePermissionList = (props: any) => {
                     key={'submit'}
                     type={'primary'}
                     containerProps={{type: 'submit'}}
+                    onClick={handleOnSave}
                 >
                     保存
                 </AwesomeButton>
