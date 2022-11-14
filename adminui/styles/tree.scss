@@ -1,1 +1,12 @@
 @import "react-checkbox-tree/src/scss/react-checkbox-tree";
+
+
+.rct-node-icon {
+  display: none;
+}
+.rct-icon-uncheck {
+  color: #d9d9d9;
+}
+.rct-icon-check {
+  color: $primary;
+}
