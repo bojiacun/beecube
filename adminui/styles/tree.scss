@@ -1,12 +1,36 @@
 @import "react-checkbox-tree/src/scss/react-checkbox-tree";
 
 
+.rct-icon {
+}
 .rct-node-icon {
   display: none;
 }
 .rct-icon-uncheck {
   color: #d9d9d9;
+  font-size: 20px;
 }
 .rct-icon-check {
   color: $primary;
+  font-size: 20px;
+}
+.rct-checkbox {
+  padding: 0;
+  width: 20px;
+  height: 20px;
+}
+.rct-checkbox > * {
+  width: 20px;
+  height: 20px;
+}
+.react-checkbox-tree label {
+  display: flex;
+  align-items: center;
+}
+.rct-title {
+  font-size: 16px;
+  line-height: 1;
+}
+.rct-text {
+  padding: 5px 0;
 }
