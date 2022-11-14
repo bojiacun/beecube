@@ -36,6 +36,13 @@ import Error401Page from "~/components/error-page/401";
 import pageMiscStyle from '~/styles/react/pages/page-misc.css';
 import ClipLoader from "react-spinners/ClipLoader";
 
+//字体设置
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import {far} from '@fortawesome/free-regular-svg-icons';
+library.add(fas, far);
+
+
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
 
