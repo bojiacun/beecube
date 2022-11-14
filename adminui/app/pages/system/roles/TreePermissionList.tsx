@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
 import {AwesomeButton} from "react-awesome-button";
-import {defaultTreeIcons} from "~/utils/utils";
+import {defaultTreeIcons, showToastSuccess} from "~/utils/utils";
 import themeConfig from "../../../../themeConfig";
 
 
@@ -24,6 +24,7 @@ const TreePermissionList = (props: any) => {
     const [expanded, setExpanded] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const rolePermissionFetcher = useFetcher();
+    const savePermissionFetcher = useFetcher();
 
     useEffect(() => {
         if (model) {
@@ -49,10 +50,22 @@ const TreePermissionList = (props: any) => {
             setChecked(rolePermissionFetcher.data);
         }
     }, [rolePermissionFetcher.state]);
-
+    useEffect(() => {
+        if (savePermissionFetcher.type === 'done' && savePermissionFetcher.data) {
+            stopPageLoading();
+            showToastSuccess('保存成功');
+            setAuthModel(null);
+        }
+    }, [savePermissionFetcher.state]);
 
     const handleOnSave = () => {
-
+        startPageLoading();
+        let postData = {
+            roleId: model.id,
+            lastpermissionIds: lastPermissionIds.join(','),
+            permissionIds: checked.join(',')
+        };
+        savePermissionFetcher.submit(postData, {method: 'post', action: '/system/roles/permissions'})
     }
 
     return (
@@ -83,7 +96,8 @@ const TreePermissionList = (props: any) => {
                     key={'submit'}
                     type={'primary'}
                     containerProps={{type: 'submit'}}
-                    onClick={handleOnSave}
+                    onPress={handleOnSave}
+                    disabled={savePermissionFetcher.state === 'submitting'}
                 >
                     保存
                 </AwesomeButton>

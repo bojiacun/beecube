@@ -16,5 +16,6 @@ export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     let jsonData:any = {};
     formData.forEach((value, key)=>jsonData[key] = value);
+    console.log(jsonData);
     return await requestWithToken(request)(API_ROLE_PERMISSIONS_SAVE, postFormInit(JSON.stringify(jsonData)))
 }
