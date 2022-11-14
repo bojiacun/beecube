@@ -4,6 +4,7 @@ import {useFetcher} from "@remix-run/react";
 import {ChevronDown, ChevronRight} from "react-feather";
 import CheckboxTree from 'react-checkbox-tree';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheckSquare} from '@fortawesome/free-regular-svg-icons';
 
 const nodes = [{
     value: 'mars',
@@ -45,10 +46,10 @@ const TreePermissionList = (props:any) => {
             <CheckboxTree
                 nodes={nodes}
                 icons={{
-                    check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon="check-square" />,
+                    check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon={faCheckSquare} />,
                     uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['fas', 'square']} />,
                     halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon="check-square" />,
-                    expandClose: <ChevronRight size={16} />,
+                    expandClose: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon={faCheckSquare} />,
                     expandOpen: <FontAwesomeIcon className="rct-icon rct-icon-expand-open" icon="chevron-down" />,
                     expandAll: <FontAwesomeIcon className="rct-icon rct-icon-expand-all" icon="plus-square" />,
                     collapseAll: <FontAwesomeIcon className="rct-icon rct-icon-collapse-all" icon="minus-square" />,
