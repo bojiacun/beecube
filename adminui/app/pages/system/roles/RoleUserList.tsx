@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {defaultEmptyTable, DefaultListSearchParams, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import {Plus, XCircle} from "react-feather";
@@ -134,6 +134,7 @@ const RoleUserList = (props: any) => {
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <ReactSelectThemed
+                                id={'role-user-page-size'}
                                 placeholder={'分页大小'}
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
@@ -179,8 +180,10 @@ const RoleUserList = (props: any) => {
                     bootstrap4
                     data={list?.records}
                     keyField={'id'}
+                    noDataIndication={defaultEmptyTable()}
                 />
 
+                {list.records.length > 0 &&
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
@@ -197,6 +200,7 @@ const RoleUserList = (props: any) => {
                         </Col>
                     </Row>
                 </div>
+                }
             </Card>
             <UserListSelector
                 show={userListShow}

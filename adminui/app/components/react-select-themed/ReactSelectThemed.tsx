@@ -3,11 +3,15 @@ import {useContext} from "react";
 import themeContext from 'themeConfig';
 
 
+
+
 const ReactSelectThemed = (props:any) => {
     const {theme:systemTheme} = useContext(themeContext);
+    const {id, ...rest} = props;
 
     return (
         <Select
+            instanceId={id}
             theme={(theme)=>{
                 if(systemTheme.layout.skin === 'dark') {
                     theme.colors.neutral0 = '#161d31';
@@ -21,8 +25,13 @@ const ReactSelectThemed = (props:any) => {
                 }
                 return theme;
             }}
-            {...props}
+            {...rest}
         />
+        // <Select className={className} mode={'combobox'} showSearch={isSearchable} {...rest}>
+        //     {options.map((item:any)=>{
+        //         return <Option key={item.value} value={item.value}>{item.label}</Option>
+        //     })}
+        // </Select>
     );
 }
 

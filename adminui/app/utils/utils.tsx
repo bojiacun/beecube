@@ -192,3 +192,7 @@ export const defaultTreeIcons = {
     parentOpen: <FontAwesomeIcon className="rct-icon rct-icon-parent-open" icon="folder-open"/>,
     leaf: <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon="file"/>
 };
+
+export const defaultEmptyTable = () => {
+    return <div className={'text-muted'}>暂无数据</div>
+}
