@@ -7,7 +7,7 @@ import {useContext, useEffect} from "react";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import Error500Page from "~/components/error-page/500";
-import {FormGroup, FormLabel} from "react-bootstrap";
+import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import {Field} from "formik";
 import classNames from "classnames";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -159,22 +159,15 @@ export function defaultRouteErrorBoundary() {
     return <Error500Page/>;
 }
 
-export interface EditFormHelperInputProps {
-    label: string;
-    fieldName: string;
-    placeholder?: string;
-    readOnly?: boolean;
-    className?: string;
-}
+
 
 export const EditFormHelper = {
-    normalInput: (options: EditFormHelperInputProps)=>{
-        const {label, fieldName, placeholder = '', readOnly = false, className = ''} = options;
+    normalInput: (props:any)=>{
+        const {label, name, ...rest} = props;
         return (
             <FormGroup>
-                <FormLabel htmlFor={fieldName}>{label}</FormLabel>
-                <Field className={classNames('form-control', className)} id={fieldName}
-                       name={fieldName} placeholder={placeholder} readOnly={readOnly}/>
+                <FormLabel htmlFor={name}>{label}</FormLabel>
+                <FormControl id={name} name={name} {...rest} />
             </FormGroup>
         );
     }
