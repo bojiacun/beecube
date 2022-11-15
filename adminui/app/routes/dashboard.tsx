@@ -6,7 +6,10 @@ import {withPageLoading} from "~/utils/components";
 export const loader: LoaderFunction = requireAuthenticatedLoader;
 
 export const DashboardPage = () => {
-    return (<>默认仪表盘页面</>);
+    return (
+        <>
+        </>
+    );
 }
 
 export default withPageLoading(DashboardPage);

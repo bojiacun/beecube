@@ -1,3 +1,4 @@
+@import "react-selectize/dist/index.css";
 .aws-btn {
   --button-default-height: 38px;
   --button-default-font-size: 14px;
