@@ -1,9 +1,10 @@
-import {Form, Modal} from "react-bootstrap";
-import {useFormik} from "formik";
+import {Modal, Form, FormControl} from "react-bootstrap";
+import {Field,  useFormik} from "formik";
 import {EditFormHelper} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
+import {useEffect} from "react";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -17,12 +18,19 @@ const UserEdit = (props: any) => {
     const {model, setEditModel} = props;
     const editFetcher = useFetcher();
     const formik = useFormik({
-        initialValues: model,
+        initialValues: model||{},
         validationSchema: userSchema,
         onSubmit: values => {
             console.log(values);
         }
     });
+
+
+    useEffect(()=>{
+        if(model?.id) {
+            formik.setValues(model);
+        }
+    }, [model]);
 
 
     return (
@@ -37,8 +45,9 @@ const UserEdit = (props: any) => {
                 <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}用户</Modal.Title>
             </Modal.Header>
             {model &&
-                <Form method={'post'}>
+                <Form method={'post'} onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
                     <Modal.Body>
+
                         {EditFormHelper.normalInput({
                                 label: '用户账号',
                                 placeholder: '用户账号',
