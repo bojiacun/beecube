@@ -1,10 +1,11 @@
-import {Modal, Form, FormControl} from "react-bootstrap";
+import {Modal, Form, FormControl, FormGroup, FormLabel, InputGroup, Button, Col, Row} from "react-bootstrap";
 import {Field,  useFormik} from "formik";
 import {EditFormHelper} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect} from "react";
+import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -83,7 +84,25 @@ const UserEdit = (props: any) => {
                                 placeholder: '座机号',
                             }
                         )}
+                        <FormGroup>
+                            <FormLabel htmlFor={'post'}>职务</FormLabel>
+                            <Row>
+                                <Col sm={10}>
+                                    <ReactSelectThemed
+                                        id={'post'}
+                                        placeholder={'选择职务'}
+                                        isClearable={true}
+                                        isSearchable={false}
+                                        IsMulti={true}
+                                        {...formik.getFieldProps('post')}
+                                    />
+                                </Col>
+                                <Col sm={2}>
+                                    <Button>选择</Button>
+                                </Col>
+                            </Row>
 
+                        </FormGroup>
                     </Modal.Body>
                     <Modal.Footer>
                         <AwesomeButton
