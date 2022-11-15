@@ -5,6 +5,7 @@ import {EditFormHelper} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
+import FormikSelect from "~/components/form/FormikSelect";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -73,6 +74,10 @@ const UserEdit = (props:any) => {
                                            placeholder: '座机号',
                                        }
                                    )}
+                                   <FormGroup>
+                                       <FormLabel htmlFor={'post'}>职务</FormLabel>
+                                       <FormikSelect id={'post'} name={'post'} placeholder={'选择职务'} />
+                                   </FormGroup>
                                </Modal.Body>
                                <Modal.Footer>
                                    <AwesomeButton
