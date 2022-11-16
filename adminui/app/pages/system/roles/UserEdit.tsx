@@ -10,6 +10,7 @@ import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 import classNames from "classnames";
 //@ts-ignore
 import _ from 'lodash';
+import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -18,21 +19,28 @@ const userSchema = Yup.object().shape({
     phone: Yup.string().required(),
     email: Yup.string().required(),
     post: Yup.string().required(),
+    selecteddeparts: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
     const {model, setEditModel} = props;
     const [positionListShow, setPositionListShow] = useState<boolean>(false);
+    const [departmentSelectorShow, setDepartmentSelectorShow] = useState<boolean>(false);
     const [positionOptions, setPositionOptions] = useState<any[]>([]);
+    const [departmentOptions, setDepartmentOptions] = useState<any[]>([]);
     const [postValue, setPostValue] = useState<any[]>([]);
+    const [departmentValue, setDepartmentValue] = useState<any[]>([]);
     const [allRoles, setAllRoles] = useState<any[]>([]);
+    const [allTenants, setAllTenants] = useState<any[]>([]);
     const editFetcher = useFetcher();
     const postSelectRef = useRef<any>();
     const roleFetcher = useFetcher();
+    const tenantFetcher = useFetcher();
 
 
     useEffect(()=>{
         roleFetcher.load('/system/roles/all');
+        tenantFetcher.load('/system/tenants');
     }, []);
 
     useEffect(()=>{
@@ -40,6 +48,12 @@ const UserEdit = (props: any) => {
             setAllRoles(roleFetcher.data);
         }
     }, [roleFetcher.state]);
+
+    useEffect(()=>{
+        if(tenantFetcher.type === 'done' && tenantFetcher.data) {
+            setAllTenants(tenantFetcher.data);
+        }
+    }, [tenantFetcher.state]);
 
     useEffect(() => {
         if (model?.id) {
@@ -58,7 +72,8 @@ const UserEdit = (props: any) => {
             workNo: '',
             phone: '',
             telephone: '',
-            post: ''
+            post: '',
+            selecteddeparts: '',
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -80,7 +95,21 @@ const UserEdit = (props: any) => {
         formik.handleChange(e);
         setPostValue(currentValue);
     }
+    const handleOnDepartmentSelect = (rows:any) => {
+        let newOptions = rows.map((x:any)=>({label: x.label, value:x.value, key: x.value}));
+        setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
+        let data = {name: 'post', value: newOptions.map((item:any)=>item.value).join(',')};
+        let e = {currentTarget: data};
+        formik.handleChange(e);
+        setDepartmentValue(newOptions);
+    }
+    const handleOnDepartmentSelectChanged = (currentValue:any) => {
+        let data = {name: 'post', value: currentValue.map((item:any)=>item.value).join(',')};
+        let e = {currentTarget: data};
+        formik.handleChange(e);
+        setDepartmentValue(currentValue);
+    }
     if(!model) return <></>
 
 
@@ -177,6 +206,48 @@ const UserEdit = (props: any) => {
                                     options={allRoles.map((item:any)=>({label: item.roleName, value: item.id}))}
                                 />
                             </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'post'}>所属部门</FormLabel>
+                                <Row>
+                                    <Col sm={10}>
+                                        <ReactSelectThemed
+                                            id={'selecteddeparts'}
+                                            ref={postSelectRef}
+                                            name={'selecteddeparts'}
+                                            styles={{control: (provided:any)=>{
+                                                    if(formik.touched.selecteddeparts && formik.errors.selecteddeparts) {
+                                                        provided.borderColor = '#ea5455';
+                                                    }
+                                                    return provided;
+                                                }}}
+                                            components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
+                                            placeholder={'选择所属部门'}
+                                            isClearable={true}
+                                            isSearchable={false}
+                                            isMulti={true}
+                                            openMenuOnClick={false}
+                                            options={departmentOptions}
+                                            onChange={handleOnDepartmentSelectChanged}
+                                            value={departmentValue}
+                                        />
+                                    </Col>
+                                    <Col sm={2}>
+                                        <Button onClick={()=>setDepartmentSelectorShow(true)}>选择</Button>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'relTenantIds'}>租户</FormLabel>
+                                <ReactSelectThemed
+                                    id={'relTenantIds'}
+                                    name={'relTenantIds'}
+                                    placeholder={'选择租户'}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    isMulti={true}
+                                    options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
+                                />
+                            </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
                             <AwesomeButton
@@ -192,6 +263,7 @@ const UserEdit = (props: any) => {
                 }
             </Modal>
             <PositionListSelector show={positionListShow} setPositionListShow={setPositionListShow} onSelect={handleOnPositionSelect} />
+            <DepartmentTreeSelector show={departmentSelectorShow} setShow={setDepartmentSelectorShow} onSelect={handleOnDepartmentSelect} />
         </>
     );
 }
