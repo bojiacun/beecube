@@ -68,6 +68,7 @@ const UserEdit = (props: any) => {
             telephone: '',
             post: '',
             departIds: '',
+            userIdentity: 1
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -90,7 +91,7 @@ const UserEdit = (props: any) => {
         setPostValue(currentValue);
     }
     const handleOnDepartmentSelect = (rows:any) => {
-        let newOptions = rows.map((x:any)=>({label: x.name, value:x.value, key: x.value}));
+        let newOptions = rows.map((x:any)=>({label: x.label, value:x.value, key: x.value}));
         setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
         let data = {name: 'departIds', value: newOptions.map((item:any)=>item.value).join(',')};
@@ -240,6 +241,15 @@ const UserEdit = (props: any) => {
                                     isMulti={true}
                                     options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
                                 />
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'userIdentity'}>身份</FormLabel>
+                                <Row>
+                                    <Col>
+                                        <Form.Check inline value={1} checked={formik.values.userIdentity == 1} name={'userIdentity'} label={'普通用户'} id={'userIdentity-1'} type={'radio'} />
+                                        <Form.Check inline value={2} checked={formik.values.userIdentity == 2} name={'userIdentity'} label={'上级'} id={'userIdentity-2'} type={'radio'} />
+                                    </Col>
+                                </Row>
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
