@@ -1,4 +1,4 @@
-import {Modal, Form, FormControl, FormGroup, FormLabel, InputGroup, Button, Col, Row} from "react-bootstrap";
+import {Modal, Form, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Field, useFormik} from "formik";
 import {EditFormHelper, emptyDropdownIndicator, emptyIndicatorSeparator} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
@@ -8,6 +8,8 @@ import {useEffect, useRef, useState} from "react";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 import classNames from "classnames";
+//@ts-ignore
+import _ from 'lodash';
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -22,8 +24,9 @@ const UserEdit = (props: any) => {
     const {model, setEditModel} = props;
     const [positionListShow, setPositionListShow] = useState<boolean>(false);
     const [positionOptions, setPositionOptions] = useState<any[]>([]);
-    const positionRef = useRef<any>();
+    const [postValue, setPostValue] = useState<any[]>([]);
     const editFetcher = useFetcher();
+    const postSelectRef = useRef<any>();
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -43,16 +46,26 @@ const UserEdit = (props: any) => {
     useEffect(() => {
         if (model?.id) {
             formik.setValues(model);
+            if(_.isEmpty(model.post)) {
+                setPostValue([]);
+            }
         }
     }, [model]);
 
     const handleOnPositionSelect = (rows:any) => {
         let newOptions = rows.map((x:any)=>({label: x.name, value:x.id, key: x.id}));
-        setPositionOptions(newOptions);
-        positionRef.current!.setValue(newOptions);
+        setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));
+
+        let data = {name: 'post', value: newOptions.map((item:any)=>item.value).join(',')};
+        let e = {currentTarget: data};
+        formik.handleChange(e);
+        setPostValue(newOptions);
     }
     const handleOnPositionSelectChanged = (currentValue:any) => {
-        console.log(currentValue);
+        let data = {name: 'post', value: currentValue.map((item:any)=>item.value).join(',')};
+        let e = {currentTarget: data};
+        formik.handleChange(e);
+        setPostValue(currentValue);
     }
 
     if(!model) return <></>
@@ -114,8 +127,15 @@ const UserEdit = (props: any) => {
                                 <Row>
                                     <Col sm={10}>
                                         <ReactSelectThemed
-                                            ref={positionRef}
                                             id={'post'}
+                                            ref={postSelectRef}
+                                            name={'post'}
+                                            styles={{control: (provided:any)=>{
+                                                if(formik.touched.post && formik.errors.post) {
+                                                    provided.borderColor = '#ea5455';
+                                                }
+                                                return provided;
+                                            }}}
                                             components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
                                             placeholder={'选择职务'}
                                             isClearable={true}
@@ -123,7 +143,8 @@ const UserEdit = (props: any) => {
                                             isMulti={true}
                                             openMenuOnClick={false}
                                             options={positionOptions}
-                                            form={{...formik.getFieldProps('post')}}
+                                            onChange={handleOnPositionSelectChanged}
+                                            value={postValue}
                                         />
                                     </Col>
                                     <Col sm={2}>

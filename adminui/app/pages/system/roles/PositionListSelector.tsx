@@ -89,6 +89,7 @@ const PositionListSelector = (props: any) => {
     const handleOnSelected = () => {
         setPositionListShow(false);
         onSelect(selectedRows);
+        setSelectedRows([]);
     }
 
     const selectRowConfig = {
@@ -101,7 +102,10 @@ const PositionListSelector = (props: any) => {
         <Modal
             show={show}
             size={'lg'}
-            onHide={()=>setPositionListShow(false)}
+            onHide={()=>{
+                setSelectedRows([]);
+                setPositionListShow(false)
+            }}
             centered
             backdrop={'static'}
             aria-labelledby={'edit-modal'}
