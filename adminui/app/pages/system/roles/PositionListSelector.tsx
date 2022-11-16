@@ -71,16 +71,16 @@ const PositionListSelector = (props: any) => {
 
     const handleOnRowSelect = (row:any, isSelect:boolean) => {
         if(isSelect) {
-            setSelectedRows([...selectedRows, row.id])
+            setSelectedRows([...selectedRows, row])
         }
         else {
-            let selected = selectedRows.filter(x=> x !== row.id);
+            let selected = selectedRows.filter(x=> x.id !== row.id);
             setSelectedRows([...selected]);
         }
     }
     const hanldeOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
         if(isSelect) {
-            setSelectedRows([...rows.map(x=>x.id)]);
+            setSelectedRows([...rows]);
         }
         else {
             setSelectedRows([]);

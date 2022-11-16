@@ -1,16 +1,17 @@
 import Select from "react-select";
-import {useContext} from "react";
+import React, {useContext} from "react";
 import themeContext from 'themeConfig';
 
 
 
 
-const ReactSelectThemed = (props:any) => {
+const ReactSelectThemed = React.forwardRef((props:any, ref) => {
     const {theme:systemTheme} = useContext(themeContext);
     const {id, ...rest} = props;
 
     return (
         <Select
+            ref={ref}
             instanceId={id}
             theme={(theme)=>{
                 if(systemTheme.layout.skin === 'dark') {
@@ -33,6 +34,6 @@ const ReactSelectThemed = (props:any) => {
         //     })}
         // </Select>
     );
-}
+});
 
 export default ReactSelectThemed;
