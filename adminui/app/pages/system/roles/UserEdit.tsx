@@ -19,7 +19,7 @@ const userSchema = Yup.object().shape({
     phone: Yup.string().required(),
     email: Yup.string().required(),
     post: Yup.string().required(),
-    selecteddeparts: Yup.string().required(),
+    departIds: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
@@ -72,7 +72,7 @@ const UserEdit = (props: any) => {
             phone: '',
             telephone: '',
             post: '',
-            selecteddeparts: '',
+            departIds: '',
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -98,14 +98,14 @@ const UserEdit = (props: any) => {
         let newOptions = rows.map((x:any)=>({label: x.name, value:x.value, key: x.value}));
         setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
-        let data = {name: 'selecteddeparts', value: newOptions.map((item:any)=>item.value).join(',')};
+        let data = {name: 'departIds', value: newOptions.map((item:any)=>item.value).join(',')};
         let e = {currentTarget: data};
         formik.handleChange(e);
         setDepartmentValue(newOptions);
         setDepartmentSelectorShow(false);
     }
     const handleOnDepartmentSelectChanged = (currentValue:any) => {
-        let data = {name: 'selecteddeparts', value: currentValue.map((item:any)=>item.value).join(',')};
+        let data = {name: 'departIds', value: currentValue.map((item:any)=>item.value).join(',')};
         let e = {currentTarget: data};
         formik.handleChange(e);
         setDepartmentValue(currentValue);
@@ -206,14 +206,14 @@ const UserEdit = (props: any) => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
+                                <FormLabel htmlFor={'departIds'}>所属部门</FormLabel>
                                 <Row>
                                     <Col sm={10}>
                                         <ReactSelectThemed
-                                            id={'selecteddeparts'}
-                                            name={'selecteddeparts'}
+                                            id={'departIds'}
+                                            name={'departIds'}
                                             styles={{control: (provided:any)=>{
-                                                    if(formik.errors.selecteddeparts) {
+                                                    if(formik.touched.departIds && formik.errors.departIds) {
                                                         provided.borderColor = '#ea5455';
                                                     }
                                                     return provided;
