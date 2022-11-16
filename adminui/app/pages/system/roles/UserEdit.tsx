@@ -123,7 +123,7 @@ const UserEdit = (props: any) => {
                 </Modal.Header>
                 {model &&
                     <Form method={'post'} onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-                        <Modal.Body>
+                        <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
 
                             {EditFormHelper.normalInput({
                                     label: '用户账号',
@@ -202,18 +202,12 @@ const UserEdit = (props: any) => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <FormLabel htmlFor={'departIds'}>所属部门</FormLabel>
+                                <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
                                 <Row>
                                     <Col sm={10}>
                                         <ReactSelectThemed
-                                            id={'departIds'}
-                                            name={'departIds'}
-                                            styles={{control: (provided:any)=>{
-                                                    if(formik.touched.departIds && formik.errors.departIds) {
-                                                        provided.borderColor = '#ea5455';
-                                                    }
-                                                    return provided;
-                                                }}}
+                                            id={'selecteddeparts'}
+                                            name={'selecteddeparts'}
                                             components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
                                             placeholder={'选择所属部门'}
                                             isClearable={true}
@@ -250,6 +244,18 @@ const UserEdit = (props: any) => {
                                         <Form.Check inline value={2} checked={formik.values.userIdentity == 2} name={'userIdentity'} label={'上级'} id={'userIdentity-2'} type={'radio'} />
                                     </Col>
                                 </Row>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'departIds'}>负责部门</FormLabel>
+                                <ReactSelectThemed
+                                    id={'departIds'}
+                                    name={'departIds'}
+                                    placeholder={'选择所属部门'}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    isMulti={true}
+                                    options={departmentValue}
+                                />
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
