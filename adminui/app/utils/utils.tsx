@@ -189,3 +189,10 @@ export const defaultTreeIcons = {
 export const defaultEmptyTable = () => {
     return <div className={'text-muted'}>暂无数据</div>
 }
+
+export const emptyDropdownIndicator = () => {
+    return <></>
+}
+export const emptyIndicatorSeparator= () => {
+    return <></>
+}

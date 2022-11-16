@@ -1,12 +1,13 @@
 import {Modal, Form, FormControl, FormGroup, FormLabel, InputGroup, Button, Col, Row} from "react-bootstrap";
 import {Field, useFormik} from "formik";
-import {EditFormHelper} from "~/utils/utils";
+import {EditFormHelper, emptyDropdownIndicator, emptyIndicatorSeparator} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import PositionListSelector from "~/pages/system/roles/PositionListSelector";
+import classNames from "classnames";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -14,6 +15,7 @@ const userSchema = Yup.object().shape({
     workNo: Yup.string().required(),
     phone: Yup.string().required(),
     email: Yup.string().required(),
+    post: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
@@ -45,7 +47,7 @@ const UserEdit = (props: any) => {
     }, [model]);
 
     const handleOnPositionSelect = (rows:any) => {
-        let newOptions = rows.map((x:any)=>({label: x.name, value:x.id}));
+        let newOptions = rows.map((x:any)=>({label: x.name, value:x.id, key: x.id}));
         setPositionOptions(newOptions);
         positionRef.current!.setValue(newOptions);
     }
@@ -114,13 +116,14 @@ const UserEdit = (props: any) => {
                                         <ReactSelectThemed
                                             ref={positionRef}
                                             id={'post'}
+                                            components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
                                             placeholder={'选择职务'}
                                             isClearable={true}
                                             isSearchable={false}
                                             isMulti={true}
-                                            openMenuOnClick={true}
+                                            openMenuOnClick={false}
                                             options={positionOptions}
-                                            onChange={formik.handleChange}
+                                            form={{...formik.getFieldProps('post')}}
                                         />
                                     </Col>
                                     <Col sm={2}>
