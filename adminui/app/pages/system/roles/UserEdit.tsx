@@ -33,7 +33,6 @@ const UserEdit = (props: any) => {
     const [allRoles, setAllRoles] = useState<any[]>([]);
     const [allTenants, setAllTenants] = useState<any[]>([]);
     const editFetcher = useFetcher();
-    const postSelectRef = useRef<any>();
     const roleFetcher = useFetcher();
     const tenantFetcher = useFetcher();
 
@@ -96,16 +95,18 @@ const UserEdit = (props: any) => {
         setPostValue(currentValue);
     }
     const handleOnDepartmentSelect = (rows:any) => {
-        let newOptions = rows.map((x:any)=>({label: x.label, value:x.value, key: x.value}));
+        console.log(rows);
+        let newOptions = rows.map((x:any)=>({label: x.name, value:x.value, key: x.value}));
         setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
-        let data = {name: 'post', value: newOptions.map((item:any)=>item.value).join(',')};
+        let data = {name: 'selecteddeparts', value: newOptions.map((item:any)=>item.value).join(',')};
         let e = {currentTarget: data};
         formik.handleChange(e);
         setDepartmentValue(newOptions);
+        setDepartmentSelectorShow(false);
     }
     const handleOnDepartmentSelectChanged = (currentValue:any) => {
-        let data = {name: 'post', value: currentValue.map((item:any)=>item.value).join(',')};
+        let data = {name: 'selecteddeparts', value: currentValue.map((item:any)=>item.value).join(',')};
         let e = {currentTarget: data};
         formik.handleChange(e);
         setDepartmentValue(currentValue);
@@ -170,7 +171,6 @@ const UserEdit = (props: any) => {
                                     <Col sm={10}>
                                         <ReactSelectThemed
                                             id={'post'}
-                                            ref={postSelectRef}
                                             name={'post'}
                                             styles={{control: (provided:any)=>{
                                                 if(formik.touched.post && formik.errors.post) {
@@ -207,15 +207,14 @@ const UserEdit = (props: any) => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <FormLabel htmlFor={'post'}>所属部门</FormLabel>
+                                <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
                                 <Row>
                                     <Col sm={10}>
                                         <ReactSelectThemed
                                             id={'selecteddeparts'}
-                                            ref={postSelectRef}
                                             name={'selecteddeparts'}
                                             styles={{control: (provided:any)=>{
-                                                    if(formik.touched.selecteddeparts && formik.errors.selecteddeparts) {
+                                                    if(formik.errors.selecteddeparts) {
                                                         provided.borderColor = '#ea5455';
                                                     }
                                                     return provided;
