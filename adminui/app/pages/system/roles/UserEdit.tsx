@@ -25,8 +25,32 @@ const UserEdit = (props: any) => {
     const [positionListShow, setPositionListShow] = useState<boolean>(false);
     const [positionOptions, setPositionOptions] = useState<any[]>([]);
     const [postValue, setPostValue] = useState<any[]>([]);
+    const [allRoles, setAllRoles] = useState<any[]>([]);
     const editFetcher = useFetcher();
     const postSelectRef = useRef<any>();
+    const roleFetcher = useFetcher();
+
+
+    useEffect(()=>{
+        roleFetcher.load('/system/roles/all');
+    }, []);
+
+    useEffect(()=>{
+        if(roleFetcher.type === 'done' && roleFetcher.data) {
+            setAllRoles(roleFetcher.data);
+        }
+    }, [roleFetcher.state]);
+
+    useEffect(() => {
+        if (model?.id) {
+            formik.setValues(model);
+            if(_.isEmpty(model.post)) {
+                setPostValue([]);
+            }
+        }
+    }, [model]);
+
+
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -41,17 +65,6 @@ const UserEdit = (props: any) => {
             console.log(values);
         }
     });
-
-
-    useEffect(() => {
-        if (model?.id) {
-            formik.setValues(model);
-            if(_.isEmpty(model.post)) {
-                setPostValue([]);
-            }
-        }
-    }, [model]);
-
     const handleOnPositionSelect = (rows:any) => {
         let newOptions = rows.map((x:any)=>({label: x.name, value:x.id, key: x.id}));
         setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));
@@ -151,6 +164,18 @@ const UserEdit = (props: any) => {
                                         <Button onClick={()=>setPositionListShow(true)}>选择</Button>
                                     </Col>
                                 </Row>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'selectedroles'}>角色</FormLabel>
+                                <ReactSelectThemed
+                                    id={'selectedroles'}
+                                    name={'selectedroles'}
+                                    placeholder={'选择角色'}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    isMulti={true}
+                                    options={allRoles.map((item:any)=>({label: item.roleName, value: item.id}))}
+                                />
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>

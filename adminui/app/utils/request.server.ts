@@ -10,6 +10,7 @@ export const USER_INFO_URL = process.env.USER_INFO_URL || '/auth/user';
 export const API_LOGIN = `${BASE_URL}/jeecg-system/sys/login`;
 export const API_CAPTCHA = `${BASE_URL}/jeecg-system/sys/randomImage`;
 export const API_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/role/list`;
+export const API_ROLE_ALL_LIST = `${BASE_URL}/jeecg-system/sys/role/queryall`;
 export const API_ROLE_EDIT = `${BASE_URL}/jeecg-system/sys/role/edit`;
 export const API_ROLE_ADD = `${BASE_URL}/jeecg-system/sys/role/add`;
 export const API_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/role/delete`;
