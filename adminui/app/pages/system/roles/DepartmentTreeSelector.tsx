@@ -61,6 +61,7 @@ const DepartmentTreeSelector = (props: any) => {
                     onCheck={checked1 => setChecked(checked1)}
                     onExpand={expanded1 => setExpanded(expanded1)}
                     iconsClass={'fa6'}
+                    noCascade={true}
                     icons={defaultTreeIcons}
                 />
             </Modal.Body>

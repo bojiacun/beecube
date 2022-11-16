@@ -95,7 +95,6 @@ const UserEdit = (props: any) => {
         setPostValue(currentValue);
     }
     const handleOnDepartmentSelect = (rows:any) => {
-        console.log(rows);
         let newOptions = rows.map((x:any)=>({label: x.name, value:x.value, key: x.value}));
         setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
