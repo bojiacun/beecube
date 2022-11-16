@@ -15,11 +15,6 @@ import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector"
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
     realname: Yup.string().required(),
-    workNo: Yup.string().required(),
-    phone: Yup.string().required(),
-    email: Yup.string().required(),
-    post: Yup.string().required(),
-    departIds: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {

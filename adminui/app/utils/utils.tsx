@@ -196,3 +196,16 @@ export const emptyDropdownIndicator = () => {
 export const emptyIndicatorSeparator= () => {
     return <></>
 }
+
+export function tree2List(tree:any[]):any[] {
+    let list: any[] = [];
+
+    tree.forEach((t:any)=>{
+        list.push(t);
+        if(t.children && t.children.length > 0) {
+            tree2List(t.children).forEach(c => list.push(c));
+        }
+    });
+
+    return list;
+}

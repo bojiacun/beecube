@@ -3,8 +3,10 @@ import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
 import {AwesomeButton} from "react-awesome-button";
-import {defaultTreeIcons, showToastSuccess} from "~/utils/utils";
+import {defaultTreeIcons, showToastSuccess, tree2List} from "~/utils/utils";
 import themeConfig from "../../../../themeConfig";
+//@ts-ignore
+import _ from 'lodash';
 
 
 const translateTreeToNode = (treeNode: any) => {
@@ -40,7 +42,10 @@ const DepartmentTreeSelector = (props: any) => {
     }, [searchFetcher.state]);
 
     const handleOnSave = () => {
-        onSelect(checked);
+        let treeList = tree2List(treeData);
+        onSelect(treeList.filter((t:any)=>{
+            return _.indexOf(checked, t.value) >= 0;
+        }));
     }
 
     return (
