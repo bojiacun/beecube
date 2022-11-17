@@ -1,0 +1,107 @@
+$filebrowser-prefix: 'filebrowser';
+
+.#{$filebrowser-prefix} {
+    .container {
+        padding: 0px;
+    }
+
+    .item {
+        position: relative;
+        flex: none;
+        display: block;
+        background-size: contain;
+        vertical-align: middle;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .item:hover {
+        outline: 2px solid $primary;
+    }
+
+    .item:before {
+        content: "";
+        display: inline-block;
+        padding-bottom: calc(100% - 16px);
+        width: .1px;
+    }
+
+    .header {
+    }
+
+    .footer {
+    }
+
+    .audio, .video, .excel {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -24px;
+        margin-top: -24px;
+        font-size: 48px;
+    }
+
+    .name {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        line-height: 34px;
+        background: rgba(0, 0, 0, .5);
+        color: #fff;
+        padding: 0 20px;
+        text-align: left;
+        z-index: 2;
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis; /* Opera */
+    }
+
+    .mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 5;
+        background-color: rgba(0, 0, 0, .5);
+        text-align: center;
+        color: white;
+        font-size: 48px;
+    }
+
+    .mask .icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -24px;
+        margin-top: -24px;
+    }
+
+    .previewItem {
+        position: relative;
+        padding: 0 50px;
+    }
+
+    .preview {
+        outline: 1px solid #ddd;
+        padding: 4px;
+    }
+
+    .close {
+        color: #ddd;
+        position: absolute;
+        right: -10px;
+        top: 0px;
+        font-size: 16px;
+        z-index: 999;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .disabled {
+        background-color: gray;
+    }
+}
