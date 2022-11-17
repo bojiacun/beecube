@@ -11,6 +11,7 @@ import classNames from "classnames";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
+import FileBrowserInput from "~/components/filebrowser/form";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -256,6 +257,10 @@ const UserEdit = (props: any) => {
                                     isMulti={true}
                                     options={departmentValue}
                                 />
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'avatar'}>头像</FormLabel>
+                                <FileBrowserInput type={1} />
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
