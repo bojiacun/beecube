@@ -6,6 +6,8 @@ import {useHydrated} from "remix-utils";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
+import querystring from "querystring";
+import Upload from "rc-upload";
 
 export const FILE_TYPE_IMAGE = 1
 export const FILE_TYPE_AUDIO = 2
@@ -18,7 +20,6 @@ function resolveUrl(path: string) {
 
 
 interface FileBrowserProps {
-    request: (page: number, type: number) => void;
     onChange: (values: any[]) => void;
     type: number;
     uploadUrl: string;
@@ -28,12 +29,14 @@ interface FileBrowserProps {
 
 
 const FileBrowser: FC<FileBrowserProps> = (props) => {
+    const {onChange, type = FILE_TYPE_IMAGE, onDelete, uploadUrl, multi} = props;
     const [list, setList] = useState<any>();
     const [deleting, setDeleting] = useState<boolean>(false);
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
     const [canDelete, setCanDelete] = useState(false);
     const [progress, setProgress] = useState({percent: 0});
-    const {request, onChange, type = FILE_TYPE_IMAGE, onDelete, uploadUrl, multi} = props;
+
+    const searchFetcher = useFetcher();
 
     let filters: any;
     switch (type) {
@@ -108,19 +111,14 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         setList({...list});
         typeof onChange === 'function' && onChange(list.records.filter((itm:any) => itm.checked === true));
     }
-    const loadData = (page = 1) => {
+    const loadData = () => {
         setCanDelete(false);
-        // typeof request === 'function' && request(page, type).then(res => {
-        //     setLoading(false);
-        //     res.data.number++;
-        //     setPage(res.data);
-        //     setItems(res.data.content);
-        // }).catch(e => setLoading(false));
+        searchFetcher.load('/system/oss/file/list?'+querystring.stringify(searchState));
     }
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        loadData(searchState.pageNo);
+        loadData();
     }
     const doDelete = () => {
         if (typeof onDelete === 'function') {
@@ -131,16 +129,13 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             for (let item of itemsToDelete) {
                 requests.push(onDelete(item));
             }
-
             Promise.all(requests).then(() => {
-                loadData(searchState.pageNo);
+                loadData();
                 setDeleting(false);
             });
         }
     }
-    const pageSizeChanged = (newPage: number, pageSize: number) => {
-        loadData(newPage);
-    }
+
 
     useEffect(() => {
         // const uploader = new plupload.Uploader({
@@ -183,6 +178,11 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         // uploader.init();
         loadData();
     }, []);
+    useEffect(()=>{
+        if(searchFetcher.type === 'done' && searchFetcher.data) {
+            setList(searchFetcher.data);
+        }
+    }, [searchFetcher.state]);
     let renderChildren:any;
     switch (type) {
         case FILE_TYPE_IMAGE:
@@ -225,6 +225,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             renderChildren = <></>
             break;
     }
+    if(!list) return <></>
     return (
         <div className={'filebrowser'}>
             <div className={'container'}>
@@ -234,7 +235,9 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                     </Col>
                     <Col style={{textAlign: 'right'}}>
                         <Button disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
-                        <Button type="primary" id="browseBtn">上传{filters.name}</Button>
+                        <Upload action={'/system/oss/file/upload'} data={{type: type}}>
+                            <Button type="primary" id="browseBtn">上传{filters.name}</Button>
+                        </Upload>
                     </Col>
                 </Row>
                 <ListGroup>
@@ -245,7 +248,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                 <Row className={'footer'}>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list?.size + 1} 至 {list?.current * list?.size > list?.total ? list?.total : list?.current * list?.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination

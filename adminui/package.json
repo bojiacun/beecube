@@ -33,6 +33,7 @@
     "randomstring": "^1.2.3",
     "rc-table": "^7.28.1",
     "rc-tree": "^5.7.0",
+    "rc-upload": "^4.3.4",
     "react": "^18.2.0",
     "react-awesome-button": "^7.0.4",
     "react-bootstrap": "^1.6.6",

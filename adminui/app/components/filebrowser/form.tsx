@@ -162,7 +162,6 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     </Modal.Title>
                 </Modal.Header>
                 <FileBrowser
-                    request={(page, type) => []}
                     onChange={handleFileChanged}
                     type={type}
                     uploadUrl={'/'}

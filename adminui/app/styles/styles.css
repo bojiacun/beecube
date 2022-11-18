@@ -2387,6 +2387,9 @@ span.divider {
   padding-bottom: calc(100% - 16px);
   width: 0.1px;
 }
+.filebrowser .footer {
+  margin-top: 1.65rem;
+}
 .filebrowser .audio, .filebrowser .video, .filebrowser .excel {
   position: absolute;
   top: 50%;
