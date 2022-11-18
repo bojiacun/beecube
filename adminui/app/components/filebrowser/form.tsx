@@ -51,8 +51,8 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const renderFooter = () => {
         return (
             <>
-                <Button onClick={() => setModalVisible(false)}>取消</Button>
-                <Button type="primary" onClick={() => doSelect()}>
+                <Button variant={'secondary'} onClick={() => setModalVisible(false)}>取消</Button>
+                <Button variant="primary" onClick={() => doSelect()}>
                     确定选择
                 </Button>
             </>
@@ -151,15 +151,17 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                 </Row>
             }
             <Modal
-                bodyStyle={{ padding: '0 20px' }}
-                destroyOnClose
+                centered={true}
+                size={'xl'}
                 width={browserWidth}
                 show={modalVisible}
                 onHide={() => setModalVisible(false)}
             >
-                <Modal.Title>
-                    {buttonText}
-                </Modal.Title>
+                <Modal.Header closeButton={true}>
+                    <Modal.Title>
+                        {buttonText}
+                    </Modal.Title>
+                </Modal.Header>
                 <FileBrowser
                     request={(page, type) => []}
                     onChange={handleFileChanged}

@@ -56,6 +56,7 @@
   "devDependencies": {
     "@remix-run/dev": "^1.7.4",
     "@remix-run/eslint-config": "^1.7.4",
+    "@types/plupload": "^2.0.9",
     "@types/react": "^18.0.15",
     "@types/react-bootstrap-table-next": "^4.0.18",
     "@types/react-datepicker": "^4.8.0",

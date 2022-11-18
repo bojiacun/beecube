@@ -1,10 +1,6 @@
 import {FC, useEffect, useState} from "react";
-// @ts-ignore
 import plupload from "plupload";
-// @ts-ignore
-import moxieSwf from 'assets/Moxie.swf';
-// @ts-ignore
-import moxieXap from 'assets/Moxie.xap';
+
 import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
 import {CheckCircle, FileText, Speaker, Video} from "react-feather";
 
@@ -141,44 +137,44 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         loadData(newPage);
     }
     useEffect(() => {
-        const uploader = new plupload.Uploader({
-            runtimes: "html5,flash,silverlight,html4",
-            browse_button: document.getElementById('browseBtn'),
-            url: uploadUrl,
-            flash_swf_url: moxieSwf,
-            silverlight_xap_url: moxieXap,
-            chunk_size: '1m',
-            multi_selection: true,
-            multipart_params: {
-                type: type
-            },
-            headers: {},
-            filters,
-            init: {
-                PostInit: function () {
-                },
-
-                FilesAdded: function (up: any, files: any) {
-                    up.start();
-                },
-
-                UploadComplete: function (up: any, files: any) {
-                },
-
-                FileUploaded: function (up: any, files: any) {
-                    loadData(page.number);
-                },
-
-                UploadProgress: function (up: any, file: any) {
-                    setProgress(() => ({...file}));
-                },
-
-                Error: function (up: any, err: any) {
-                    setProgress(() => ({...err.file}));
-                }
-            }
-        })
-        uploader.init();
+        // const uploader = new plupload.Uploader({
+        //     runtimes: "html5,flash,silverlight,html4",
+        //     browse_button: document.getElementById('browseBtn'),
+        //     url: uploadUrl,
+        //     flash_swf_url: '/static/Moxie.swf',
+        //     silverlight_xap_url: '/static/Moxie.xap',
+        //     chunk_size: '1m',
+        //     multi_selection: true,
+        //     multipart_params: {
+        //         type: type
+        //     },
+        //     headers: {},
+        //     filters,
+        //     init: {
+        //         PostInit: function () {
+        //         },
+        //
+        //         FilesAdded: function (up: any, files: any) {
+        //             up.start();
+        //         },
+        //
+        //         UploadComplete: function (up: any, files: any) {
+        //         },
+        //
+        //         FileUploaded: function (up: any, files: any) {
+        //             loadData(page.number);
+        //         },
+        //
+        //         UploadProgress: function (up: any, file: any) {
+        //             setProgress(() => ({...file}));
+        //         },
+        //
+        //         Error: function (up: any, err: any) {
+        //             setProgress(() => ({...err.file}));
+        //         }
+        //     }
+        // })
+        // uploader.init();
         loadData();
     }, []);
     let renderChildren:any;
