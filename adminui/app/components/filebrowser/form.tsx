@@ -162,18 +162,14 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         {buttonText}
                     </Modal.Title>
                 </Modal.Header>
-                <ClientOnly fallback={<div>loading...</div>}>
-                    {()=>{
-                        return <FileBrowser
-                            request={(page, type) => []}
-                            onChange={handleFileChanged}
-                            type={type}
-                            uploadUrl={'/'}
-                            onDelete={handleFileDelete}
-                            multi={multi}
-                        />
-                    }}
-                </ClientOnly>
+                <FileBrowser
+                    request={(page, type) => []}
+                    onChange={handleFileChanged}
+                    type={type}
+                    uploadUrl={'/'}
+                    onDelete={handleFileDelete}
+                    multi={multi}
+                />
                 <Modal.Footer>
                     {renderFooter()}
                 </Modal.Footer>

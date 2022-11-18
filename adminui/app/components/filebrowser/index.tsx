@@ -1,8 +1,8 @@
 import {FC, useEffect, useState} from "react";
 import plupload from "plupload";
-
 import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
 import {CheckCircle, FileText, Speaker, Video} from "react-feather";
+import {useHydrated} from "remix-utils";
 
 export const FILE_TYPE_IMAGE = 1
 export const FILE_TYPE_AUDIO = 2
@@ -22,6 +22,7 @@ interface FileBrowserProps {
     onDelete: (value: any) => void;
     multi: boolean;
 }
+
 
 const FileBrowser: FC<FileBrowserProps> = (props) => {
     const [items, setItems] = useState<any[]>([]);
@@ -136,7 +137,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     const pageSizeChanged = (newPage: number, pageSize: number) => {
         loadData(newPage);
     }
-    
+
     useEffect(() => {
         // const uploader = new plupload.Uploader({
         //     runtimes: "html5,flash,silverlight,html4",
@@ -174,7 +175,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         //             setProgress(() => ({...err.file}));
         //         }
         //     }
-        // })
+        // });
         // uploader.init();
         loadData();
     }, []);
