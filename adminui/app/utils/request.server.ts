@@ -24,6 +24,7 @@ export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
 
+export const API_OSS_FILE_LIST = `${BASE_URL}/jeecg-system/sys/oss/file/list`;
 
 
 export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;

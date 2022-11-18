@@ -3,6 +3,9 @@ import plupload from "plupload";
 import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
 import {CheckCircle, FileText, Speaker, Video} from "react-feather";
 import {useHydrated} from "remix-utils";
+import SinglePagination from "~/components/pagination/SinglePagination";
+import {DefaultListSearchParams} from "~/utils/utils";
+import {useFetcher} from "@remix-run/react";
 
 export const FILE_TYPE_IMAGE = 1
 export const FILE_TYPE_AUDIO = 2
@@ -25,13 +28,13 @@ interface FileBrowserProps {
 
 
 const FileBrowser: FC<FileBrowserProps> = (props) => {
-    const [items, setItems] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [list, setList] = useState<any>();
     const [deleting, setDeleting] = useState<boolean>(false);
-    const [page, setPage] = useState({totalElements: 0, size: 20, number: 1});
+    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [canDelete, setCanDelete] = useState(false);
     const [progress, setProgress] = useState({percent: 0});
     const {request, onChange, type = FILE_TYPE_IMAGE, onDelete, uploadUrl, multi} = props;
+
     let filters: any;
     switch (type) {
         case FILE_TYPE_IMAGE:
@@ -90,26 +93,22 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     }
 
     const checkItem = (item: any) => {
-        console.log('multi', multi);
         if (!multi) {
             //取消所有所选
-            items.map((itm: any) => itm.checked = false);
+            list.records.forEach((itm: any) => itm.checked = false);
         }
         item.checked = !item.checked;
-        setItems([...items]);
-        setCanDelete(items.filter((itm: any) => itm.checked === true).length > 0);
-        typeof onChange === 'function' && onChange(items.filter((itm: any) => itm.checked === true));
+        setList({...list});
+        setCanDelete(list.records.filter((itm: any) => itm.checked === true).length > 0);
+        typeof onChange === 'function' && onChange(list.records.filter((itm: any) => itm.checked === true));
     }
     const checkAll = (e:any) => {
         setCanDelete(e.target.checked);
-        setItems(items.map(item => {
-            item.checked = e.target.checked;
-            return item
-        }))
-        typeof onChange === 'function' && onChange(items.filter(itm => itm.checked === true));
+        list.records.forEach((item:any)=>item.checked = e.target.checked);
+        setList({...list});
+        typeof onChange === 'function' && onChange(list.records.filter((itm:any) => itm.checked === true));
     }
     const loadData = (page = 1) => {
-        setLoading(true);
         setCanDelete(false);
         // typeof request === 'function' && request(page, type).then(res => {
         //     setLoading(false);
@@ -118,9 +117,14 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         //     setItems(res.data.content);
         // }).catch(e => setLoading(false));
     }
+    const handlePageChanged = (e: any) => {
+        searchState.pageNo = e.selected + 1;
+        setSearchState({...searchState});
+        loadData(searchState.pageNo);
+    }
     const doDelete = () => {
         if (typeof onDelete === 'function') {
-            const itemsToDelete = items.filter(item => item.checked === true);
+            const itemsToDelete = list.records.filter((item:any) => item.checked === true);
             const requests = [];
             setDeleting(true);
 
@@ -129,7 +133,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             }
 
             Promise.all(requests).then(() => {
-                loadData(page.number);
+                loadData(searchState.pageNo);
                 setDeleting(false);
             });
         }
@@ -228,21 +232,28 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                     <Col>
                         {progress.percent > 0 && <ProgressBar />}
                     </Col>
-                    <Col>
+                    <Col style={{textAlign: 'right'}}>
                         <Button disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
                         <Button type="primary" id="browseBtn">上传{filters.name}</Button>
                     </Col>
                 </Row>
                 <ListGroup>
-                    {items.map((item:any)=>{
+                    {list?.records.map((item:any)=>{
                         return renderChildren(item);
                     })}
                 </ListGroup>
                 <Row className={'footer'}>
-                    <Col>
-                        {multi && <Form.Check onChange={checkAll}>全选</Form.Check>}
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                        <span
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
                     </Col>
-                    <Col style={{textAlign: 'right'}}>
+                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                        <SinglePagination
+                            forcePage={searchState.pageNo - 1}
+                            className={'mb-0'}
+                            pageCount={list?.pages}
+                            onPageChange={handlePageChanged}
+                        />
                     </Col>
                 </Row>
             </div>
