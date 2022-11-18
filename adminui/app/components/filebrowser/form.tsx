@@ -9,7 +9,6 @@ import FallbackImage from "~/components/fallback-image";
 interface FileBrowserInputProps {
     type: number;
     multi?: boolean;
-    browserWidth?: number;
     onChange?: (value: any) => void;
     value?: string;
     imagePreview?: boolean;
@@ -24,7 +23,7 @@ function resolveUrl(path: string) {
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, browserWidth, onChange, value, imagePreview=false, previewHeight=80, previewWidth=80, ...rest } = props;
+    const { type, multi=false, onChange, value, imagePreview=false, previewHeight=80, previewWidth=80, ...rest } = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
     let buttonText: string = '';
@@ -153,7 +152,6 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
             <Modal
                 centered={true}
                 size={'xl'}
-                width={browserWidth}
                 show={modalVisible}
                 onHide={() => setModalVisible(false)}
             >
