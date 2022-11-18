@@ -47,10 +47,10 @@ public class OssFileController {
 	@ResponseBody
 	@PostMapping("/upload")
 	//@RequiresRoles("admin")
-	public Result upload(@RequestParam("file") MultipartFile multipartFile) {
+	public Result upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam(value = "type", defaultValue = "1") Integer type) {
 		Result result = new Result();
 		try {
-			ossFileService.upload(multipartFile);
+			ossFileService.upload(multipartFile, type);
 			result.success("上传成功！");
 		}
 		catch (Exception ex) {

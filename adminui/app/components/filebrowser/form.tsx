@@ -4,6 +4,7 @@ import FileBrowser, { FILE_TYPE_AUDIO, FILE_TYPE_IMAGE, FILE_TYPE_OTHER, FILE_TY
 import {Button, FormControl, Image, Row, Col, InputGroup, Modal} from "react-bootstrap";
 import {DownloadCloud, XCircle} from "react-feather";
 import FallbackImage from "~/components/fallback-image";
+import {ClientOnly} from "remix-utils";
 
 
 interface FileBrowserInputProps {
@@ -161,14 +162,18 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         {buttonText}
                     </Modal.Title>
                 </Modal.Header>
-                <FileBrowser
-                    request={(page, type) => []}
-                    onChange={handleFileChanged}
-                    type={type}
-                    uploadUrl={'/'}
-                    onDelete={handleFileDelete}
-                    multi={multi}
-                />
+                <ClientOnly fallback={<div>loading...</div>}>
+                    {()=>{
+                        return <FileBrowser
+                            request={(page, type) => []}
+                            onChange={handleFileChanged}
+                            type={type}
+                            uploadUrl={'/'}
+                            onDelete={handleFileDelete}
+                            multi={multi}
+                        />
+                    }}
+                </ClientOnly>
                 <Modal.Footer>
                     {renderFooter()}
                 </Modal.Footer>

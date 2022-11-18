@@ -136,6 +136,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     const pageSizeChanged = (newPage: number, pageSize: number) => {
         loadData(newPage);
     }
+    
     useEffect(() => {
         // const uploader = new plupload.Uploader({
         //     runtimes: "html5,flash,silverlight,html4",

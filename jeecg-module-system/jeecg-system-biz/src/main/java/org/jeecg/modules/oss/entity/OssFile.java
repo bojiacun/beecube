@@ -25,4 +25,5 @@ public class OssFile extends JeecgEntity {
 	@Excel(name = "文件地址")
 	private String url;
 
+	private Integer type;
 }
