@@ -152,6 +152,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
             <Modal
                 centered={true}
                 size={'xl'}
+                style={{maxWidth: 1000}}
                 show={modalVisible}
                 onHide={() => setModalVisible(false)}
             >
@@ -179,7 +180,6 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
 
 FileBrowserInput.defaultProps = {
     multi: false,
-    browserWidth: 1000,
 }
 
 export default FileBrowserInput
