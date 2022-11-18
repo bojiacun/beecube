@@ -4,7 +4,7 @@ import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
 import {CheckCircle, FileText, Speaker, Video} from "react-feather";
 import {useHydrated} from "remix-utils";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {DefaultListSearchParams} from "~/utils/utils";
+import {DefaultListSearchParams, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import querystring from "querystring";
 import Upload from "rc-upload";
@@ -135,6 +135,9 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             });
         }
     }
+    const handleOnUploadError = () => {
+        showToastError('上传失败');
+    }
 
 
     useEffect(() => {
@@ -183,6 +186,10 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
+
+
+
+
     let renderChildren:any;
     switch (type) {
         case FILE_TYPE_IMAGE:
@@ -235,7 +242,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                     </Col>
                     <Col style={{textAlign: 'right'}}>
                         <Button disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
-                        <Upload action={'/system/oss/file/upload'} data={{type: type}}>
+                        <Upload action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} >
                             <Button type="primary" id="browseBtn">上传{filters.name}</Button>
                         </Upload>
                     </Col>
