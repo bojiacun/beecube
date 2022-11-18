@@ -138,47 +138,15 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     const handleOnUploadError = () => {
         showToastError('上传失败');
     }
+    const handleOnUploadSuccess = (e:any) => {
+        console.log(e);
+        if(!e.success) {
+            showToastError('上传失败');
+        }
+    }
 
 
     useEffect(() => {
-        // const uploader = new plupload.Uploader({
-        //     runtimes: "html5,flash,silverlight,html4",
-        //     browse_button: document.getElementById('browseBtn'),
-        //     url: uploadUrl,
-        //     flash_swf_url: '/static/Moxie.swf',
-        //     silverlight_xap_url: '/static/Moxie.xap',
-        //     chunk_size: '1m',
-        //     multi_selection: true,
-        //     multipart_params: {
-        //         type: type
-        //     },
-        //     headers: {},
-        //     filters,
-        //     init: {
-        //         PostInit: function () {
-        //         },
-        //
-        //         FilesAdded: function (up: any, files: any) {
-        //             up.start();
-        //         },
-        //
-        //         UploadComplete: function (up: any, files: any) {
-        //         },
-        //
-        //         FileUploaded: function (up: any, files: any) {
-        //             loadData(page.number);
-        //         },
-        //
-        //         UploadProgress: function (up: any, file: any) {
-        //             setProgress(() => ({...file}));
-        //         },
-        //
-        //         Error: function (up: any, err: any) {
-        //             setProgress(() => ({...err.file}));
-        //         }
-        //     }
-        // });
-        // uploader.init();
         loadData();
     }, []);
     useEffect(()=>{
@@ -232,6 +200,11 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             renderChildren = <></>
             break;
     }
+
+
+
+
+
     if(!list) return <></>
     return (
         <div className={'filebrowser'}>
@@ -241,8 +214,8 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                         {progress.percent > 0 && <ProgressBar />}
                     </Col>
                     <Col style={{textAlign: 'right'}}>
-                        <Button disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
-                        <Upload action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} >
+                        <Button className={'mr-1'} disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
+                        <Upload action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} onSuccess={handleOnUploadSuccess}>
                             <Button type="primary" id="browseBtn">上传{filters.name}</Button>
                         </Upload>
                     </Col>
