@@ -2,7 +2,7 @@ import type { FC} from "react";
 import React, { useState } from "react";
 import FileBrowser, { FILE_TYPE_AUDIO, FILE_TYPE_IMAGE, FILE_TYPE_OTHER, FILE_TYPE_VIDEO } from "./index";
 import {Button, FormControl, Image, Row, Col, InputGroup, Modal} from "react-bootstrap";
-import {DownloadCloud, XCircle} from "react-feather";
+import {DownloadCloud, X, XCircle} from "react-feather";
 import FallbackImage from "~/components/fallback-image";
 import {ClientOnly} from "remix-utils";
 import {resolveUrl} from "~/utils/utils";
@@ -80,7 +80,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
             }
             {imagePreview && 
                 <Row style={{marginTop: 0, minWidth: 60}}>
-                    <Col className={'previewItem'}>
+                    <Col sm={2} className={'previewItem'}>
                         <XCircle size={16} className={'close'} onClick={()=>removeFile(value!)} />
                         <FallbackImage src={resolveUrl(value!)} style={{width:previewWidth, height: previewHeight, cursor: 'pointer'}} onClick={()=>setModalVisible(true)} />
                     </Col>
@@ -92,7 +92,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         value.split(',').map(v => {
                             return (
                                 <Col className={'previewItem'} key={v}>
-                                    <XCircle className={'close'} onClick={()=>removeFile(v)} />
+                                    <X className={'close'} onClick={()=>removeFile(v)} />
                                     <Image width={160} src={resolveUrl(v)} className={'preview'} />
                                 </Col>
                             );
@@ -106,7 +106,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         value.split(',').map(v => {
                             return (
                                 <Col className={'previewItem'} key={v}>
-                                    <XCircle className={'close'} onClick={()=>removeFile(v)} />
+                                    <X className={'close'} onClick={()=>removeFile(v)} />
                                     <video src={resolveUrl(v)} controls={true} style={{width: 320}} className={'previeew'}> 您的浏览器不支持 video 标签。 </video>
                                 </Col>
                             );
@@ -120,7 +120,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         value.split(',').map(v => {
                             return (
                                 <Col className={'previewItem'} key={v}>
-                                    <XCircle className={'close'} onClick={()=>removeFile(v)} />
+                                    <X className={'close'} onClick={()=>removeFile(v)} />
                                     <audio src={resolveUrl(v)} controls={true} style={{width: 320}} className={'preview'}> 您的浏览器不支持 audio 标签。 </audio>
                                 </Col>
                             );
@@ -134,7 +134,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         value.split(',').map(v => {
                             return (
                                 <Col className={'previewItem'} key={v}>
-                                    <XCircle className={'close'} onClick={()=>removeFile(v)} />
+                                    <X className={'close'} onClick={()=>removeFile(v)} />
                                     <div className={'preview'} style={{width: 160, height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <a href={resolveUrl(v)} target="_blank"><DownloadCloud style={{fontSize: 80}} /></a>
                                     </div>

@@ -260,7 +260,7 @@ const UserEdit = (props: any) => {
                             </FormGroup>
                             <FormGroup>
                                 <FormLabel htmlFor={'avatar'}>头像</FormLabel>
-                                <FileBrowserInput type={1} />
+                                <FileBrowserInput type={1} multi={true} />
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
