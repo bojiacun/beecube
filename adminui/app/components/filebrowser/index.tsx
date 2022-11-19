@@ -4,7 +4,7 @@ import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
 import {Check, CheckCircle, FileText, Speaker, Video} from "react-feather";
 import {useHydrated} from "remix-utils";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {DefaultListSearchParams, showToastError, showToastSuccess} from "~/utils/utils";
+import {DefaultListSearchParams, resolveUrl, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import querystring from "querystring";
 import Upload from "rc-upload";
@@ -13,11 +13,6 @@ export const FILE_TYPE_IMAGE = 1
 export const FILE_TYPE_AUDIO = 2
 export const FILE_TYPE_VIDEO = 3
 export const FILE_TYPE_OTHER = 4
-
-function resolveUrl(path: string) {
-    return path;
-}
-
 
 interface FileBrowserProps {
     onChange: (values: any[]) => void;
@@ -29,7 +24,7 @@ interface FileBrowserProps {
 
 
 const FileBrowser: FC<FileBrowserProps> = (props) => {
-    const {onChange, type = FILE_TYPE_IMAGE, onDelete, uploadUrl, multi} = props;
+    const {onChange, type = FILE_TYPE_IMAGE, onDelete, multi} = props;
     const [list, setList] = useState<any>();
     const [deleting, setDeleting] = useState<boolean>(false);
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
@@ -148,6 +143,9 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             loadData();
         }
     }
+    const handleOnProgress = (step:any, file:any) => {
+        setProgress(step.percent);
+    }
 
 
     useEffect(() => {
@@ -219,7 +217,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                     </Col>
                     <Col style={{textAlign: 'right'}}>
                         <Button className={'mr-1'} disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
-                        <Upload action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} onSuccess={handleOnUploadSuccess}>
+                        <Upload multiple={multi} onProgress={handleOnProgress} action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} onSuccess={handleOnUploadSuccess}>
                             <Button type="primary" id="browseBtn">上传{filters.name}</Button>
                         </Upload>
                     </Col>

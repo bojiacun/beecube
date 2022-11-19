@@ -5,28 +5,25 @@ import {Button, FormControl, Image, Row, Col, InputGroup, Modal} from "react-boo
 import {DownloadCloud, XCircle} from "react-feather";
 import FallbackImage from "~/components/fallback-image";
 import {ClientOnly} from "remix-utils";
+import {resolveUrl} from "~/utils/utils";
 
 
 interface FileBrowserInputProps {
     type: number;
     multi?: boolean;
-    onChange?: (value: any) => void;
-    value?: string;
     imagePreview?: boolean;
     previewWidth?: number;
     previewHeight?: number;
 }
 
 
-function resolveUrl(path: string) {
-    return '/' + path;
-}
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, onChange, value, imagePreview=false, previewHeight=80, previewWidth=80, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, ...rest } = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
+    const [value, setValue] = useState<string>();
     let buttonText: string = '';
     switch (type) {
         case FILE_TYPE_IMAGE:
@@ -44,7 +41,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     }
     const doSelect = () => {
         if (selectedFiles && selectedFiles.length > 0) {
-            typeof onChange === 'function' && onChange(selectedFiles.map(item => item.attachment).join(','));
+            setValue(selectedFiles.map(item => item.url).join(','));
         }
         setModalVisible(false);
     }
@@ -65,14 +62,11 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
         console.log(val);
     }
     const handleInputValueChanged = (val:any) => {
-        typeof onChange === 'function' && onChange(val);
     }
     const removeFile = (v:string) => {
         let values = value?.split(',');
         values = values?.filter(val => val != v);
-        if(onChange) {
-            onChange(values?.join(','));
-        }
+        setValue(values?.join(','));
     }
     return (
         <div className={'filebrowser'}>

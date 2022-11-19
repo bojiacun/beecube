@@ -209,3 +209,6 @@ export function tree2List(tree:any[]):any[] {
 
     return list;
 }
+export function resolveUrl(path: string) {
+    return path.startsWith('http')? path : '/'+path;
+}
