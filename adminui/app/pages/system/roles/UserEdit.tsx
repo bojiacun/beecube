@@ -14,6 +14,7 @@ import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector"
 import FileBrowserInput from "~/components/filebrowser/form";
 import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
+import BootstrapSelect from "~/components/form/BootstrapSelect";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -129,8 +130,6 @@ const UserEdit = (props: any) => {
                             <BootstrapInput label={'用户账号'} formik={formik} readOnly={model?.id} name={'username'} />
                             <BootstrapInput label={'用户姓名'} formik={formik} name={'realname'} />
                             <BootstrapInput label={'工号'} formik={formik} name={'workNo'} />
-
-
                             <FormGroup>
                                 <FormLabel htmlFor={'post'}>职务</FormLabel>
                                 <Row>
@@ -160,18 +159,15 @@ const UserEdit = (props: any) => {
                                     </Col>
                                 </Row>
                             </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'selectedroles'}>角色</FormLabel>
-                                <ReactSelectThemed
-                                    id={'selectedroles'}
-                                    name={'selectedroles'}
-                                    placeholder={'选择角色'}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    isMulti={true}
-                                    options={allRoles.map((item:any)=>({label: item.roleName, value: item.id}))}
-                                />
-                            </FormGroup>
+                            <BootstrapSelect
+                                name={'selectedroles'}
+                                label={'角色'}
+                                options={allRoles.map((item:any)=>({label: item.roleName, value: item.id}))}
+                                placeholder={'选择角色'}
+                                isClearable={true}
+                                isSearchable={false}
+                                isMulti={true}
+                            />
                             <FormGroup>
                                 <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
                                 <Row>
@@ -195,18 +191,15 @@ const UserEdit = (props: any) => {
                                     </Col>
                                 </Row>
                             </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'relTenantIds'}>租户</FormLabel>
-                                <ReactSelectThemed
-                                    id={'relTenantIds'}
-                                    name={'relTenantIds'}
-                                    placeholder={'选择租户'}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    isMulti={true}
-                                    options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
-                                />
-                            </FormGroup>
+                            <BootstrapSelect
+                                name={'relTenantIds'}
+                                label={'租户'}
+                                options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
+                                placeholder={'选择租户'}
+                                isClearable={true}
+                                isSearchable={false}
+                                isMulti={true}
+                            />
                             <FormGroup>
                                 <FormLabel htmlFor={'userIdentity'}>身份</FormLabel>
                                 <Row>
@@ -216,37 +209,32 @@ const UserEdit = (props: any) => {
                                     </Col>
                                 </Row>
                             </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'departIds'}>负责部门</FormLabel>
-                                <ReactSelectThemed
-                                    id={'departIds'}
-                                    name={'departIds'}
-                                    placeholder={'选择所属部门'}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    isMulti={true}
-                                    options={departmentValue}
-                                />
-                            </FormGroup>
+                            <BootstrapSelect
+                                name={'departIds'}
+                                label={'负责部门'}
+                                options={departmentValue}
+                                placeholder={'选择负责部门'}
+                                isClearable={true}
+                                isSearchable={false}
+                                isMulti={true}
+                            />
                             <FormGroup>
                                 <FormLabel htmlFor={'avatar'}>头像</FormLabel>
                                 <FileBrowserInput type={1} multi={false} />
                             </FormGroup>
                             <FormGroup>
                                 <FormLabel htmlFor={'birthday'}>生日</FormLabel>
-                                <DateTimePicker  inputName={'birthday'}/>
+                                <DateTimePicker  inputName={'birthday'} />
                             </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'sex'}>性别</FormLabel>
-                                <ReactSelectThemed
-                                    id={'sex'}
-                                    name={'sex'}
-                                    placeholder={'选择性别'}
-                                    isSearchable={false}
-                                    isMulti={false}
-                                    options={[{label: '男', value: 1},{label: '女', value: 2}].map((item:any)=>({label: item.label, value: item.value}))}
-                                />
-                            </FormGroup>
+                            <BootstrapSelect
+                                name={'sex'}
+                                label={'性别'}
+                                options={[{label: '男', value: 1},{label: '女', value: 2}].map((item:any)=>({label: item.label, value: item.value}))}
+                                placeholder={'选择性别'}
+                                isClearable={false}
+                                isSearchable={false}
+                                isMulti={false}
+                            />
                             <BootstrapInput label={'邮箱'} formik={formik} name={'email'} />
                             <BootstrapInput label={'手机号'} formik={formik} name={'phone'} />
                             <BootstrapInput label={'座机号'} formik={formik} name={'telephone'} />
