@@ -109,7 +109,6 @@ const UserEdit = (props: any) => {
     }
     if(!model) return <></>
 
-
     return (
         <>
             <Modal
@@ -241,8 +240,8 @@ const UserEdit = (props: any) => {
                                 <FormLabel htmlFor={'userIdentity'}>身份</FormLabel>
                                 <Row>
                                     <Col>
-                                        <Form.Check inline value={1} checked={formik.values.userIdentity == 1} name={'userIdentity'} label={'普通用户'} id={'userIdentity-1'} type={'radio'} />
-                                        <Form.Check inline value={2} checked={formik.values.userIdentity == 2} name={'userIdentity'} label={'上级'} id={'userIdentity-2'} type={'radio'} />
+                                        <Form.Check inline value={1} onChange={formik.handleChange} checked={formik.values.userIdentity == 1} name={'userIdentity'} label={'普通用户'} id={'userIdentity-1'} type={'radio'} />
+                                        <Form.Check inline value={2} onChange={formik.handleChange} checked={formik.values.userIdentity == 2} name={'userIdentity'} label={'上级'} id={'userIdentity-2'} type={'radio'} />
                                     </Col>
                                 </Row>
                             </FormGroup>
