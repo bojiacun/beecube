@@ -1,6 +1,9 @@
 import DatePicker from "react-datepicker";
 import React, {FC, useEffect, useState} from "react";
 import {FormControl} from "react-bootstrap";
+import {FormikProps} from "formik";
+import moment from "moment";
+import classNames from "classnames";
 
 
 export interface DateTimePickerProps {
@@ -9,18 +12,21 @@ export interface DateTimePickerProps {
     maxDate?: any;
     inputName: string;
     placeholder?: string;
-    onChange?: Function;
+    formik: FormikProps<any>;
 }
 
-const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, inputPlaceHolder, onInputChange}:any, ref:any)=>{
+const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, inputPlaceHolder, formik}:any, ref:any)=>{
     const handleOnChange = (e:any) => {
+        formik.handleChange(e);
     }
     useEffect(()=> {
-        typeof onInputChange === 'function' && onInputChange(value);
+        formik.handleChange({currentTarget: {name: inputName, value: value}});
     }, [value])
+
     return <FormControl
         name={inputName}
         autoComplete={'off'}
+        className={classNames((!!formik.touched[inputName] && !!formik.errors[inputName]) ? 'is-invalid':'')}
         onClick={onClick}
         value={value}
         ref={ref}
@@ -30,12 +36,17 @@ const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, 
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间', onChange} = props;
+    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间', formik} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
+
+    useEffect(()=>{
+        if(formik.values[inputName]) {
+            setSelectedDate(moment(formik.values[inputName], showTime ? ['yyyy-MM-dd HH:mm', 'yyyy/MM/dd HH:mm'] : ['yyyy-MM-dd', 'yyyy/MM/dd'], 'en', false).toDate());
+        }
+    }, [formik.values[inputName]]);
 
     const handleOnDateChange = (date:any) => {
         setSelectedDate(date);
-        typeof onChange === 'function' && onChange(date);
     }
     return (
         <DatePicker
@@ -44,8 +55,8 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
             minDate={minDate}
             maxDate={maxDate}
             onChange={handleOnDateChange}
-            dateFormat={showTime ? 'yyyy/MM/dd HH:mm' : 'yyyy/MM/dd'}
-            customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} inputPlaceHolder={placeholder} onInputChange={onChange} />}
+            dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+            customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} inputPlaceHolder={placeholder} formik={formik} />}
             showTimeSelect={showTime}
         />
     );

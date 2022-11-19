@@ -19,7 +19,7 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
     realname: Yup.string().required(),
-    selectedroles: Yup.string().required(),
+    birthday: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
@@ -56,7 +56,7 @@ const UserEdit = (props: any) => {
 
     useEffect(() => {
         if (model?.id) {
-            formik.setValues(model);
+            formik.setValues({...model, selectedroles: ''});
             if(_.isEmpty(model.post)) {
                 setPostValue([]);
             }
@@ -224,11 +224,11 @@ const UserEdit = (props: any) => {
                             </FormGroup>
                             <FormGroup>
                                 <FormLabel htmlFor={'avatar'}>头像</FormLabel>
-                                <FileBrowserInput type={1} multi={false} />
+                                <FileBrowserInput name={'avatar'} type={1} multi={false} formik={formik} />
                             </FormGroup>
                             <FormGroup>
                                 <FormLabel htmlFor={'birthday'}>生日</FormLabel>
-                                <DateTimePicker  inputName={'birthday'} />
+                                <DateTimePicker inputName={'birthday'} formik={formik} />
                             </FormGroup>
                             <BootstrapSelect
                                 name={'sex'}

@@ -36,7 +36,6 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 name={name}
                 styles={{
                     control: (provided: any) => {
-                        console.log(formik);
                         if (formik.touched[name] && formik.errors[name]) {
                             provided.borderColor = '#ea5455';
                         }

@@ -2104,6 +2104,11 @@ span.divider {
   display: none;
 }
 
+.form-group .react-datepicker-wrapper {
+  display: block;
+  max-width: 200px;
+}
+
 .react-checkbox-tree {
   display: flex;
   flex-direction: row-reverse;

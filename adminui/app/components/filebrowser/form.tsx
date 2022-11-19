@@ -1,11 +1,12 @@
 import type { FC} from "react";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import FileBrowser, { FILE_TYPE_AUDIO, FILE_TYPE_IMAGE, FILE_TYPE_OTHER, FILE_TYPE_VIDEO } from "./index";
 import {Button, FormControl, Image, Row, Col, InputGroup, Modal} from "react-bootstrap";
 import {DownloadCloud, X, XCircle} from "react-feather";
 import FallbackImage from "~/components/fallback-image";
 import {ClientOnly} from "remix-utils";
 import {resolveUrl} from "~/utils/utils";
+import {FormikProps} from "formik";
 
 
 interface FileBrowserInputProps {
@@ -14,16 +15,24 @@ interface FileBrowserInputProps {
     imagePreview?: boolean;
     previewWidth?: number;
     previewHeight?: number;
+    name: string;
+    formik: FormikProps<any>;
 }
 
 
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, formik, ...rest } = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
-    const [value, setValue] = useState<string>();
+    const [value, setValue] = useState<string>(formik.values[name]);
+
+    useEffect(()=>{
+        setValue(formik.values[name]);
+    }, [formik.values[name]]);
+
+
     let buttonText: string = '';
     switch (type) {
         case FILE_TYPE_IMAGE:
@@ -41,7 +50,9 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     }
     const doSelect = () => {
         if (selectedFiles && selectedFiles.length > 0) {
-            setValue(selectedFiles.map(item => item.url).join(','));
+            let newValue = selectedFiles.map(item => item.url).join(',');
+            formik.handleChange({currentTarget: {name: name, value: newValue}});
+            setValue(newValue);
         }
         setModalVisible(false);
     }
@@ -58,21 +69,30 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const handleFileChanged = (values: any[]) => {
         setSelectedFiles(values);
     }
-    const handleFileDelete = (val:any) => {
-        console.log(val);
-    }
-    const handleInputValueChanged = (val:any) => {
+    const handleInputValueChanged = (e:any) => {
+        formik.handleChange(e);
+        setValue(e.currentTarget.value);
     }
     const removeFile = (v:string) => {
         let values = value?.split(',');
         values = values?.filter(val => val != v);
-        setValue(values?.join(','));
+        let newValue = values?.join(',');
+        formik.handleChange({currentTarget: {name: name, value: newValue}});
+        setValue(newValue);
     }
     return (
         <div className={'filebrowser'}>
             {!imagePreview &&
                 <InputGroup>
-                    <FormControl ref={ref} readOnly={multi} onChange={handleInputValueChanged} value={multi?'':value} {...rest}  />
+                    <FormControl
+                        ref={ref}
+                        name={name}
+                        className={(!!formik.touched[name]&&!!formik.errors[name]) ? 'is-invalid':''}
+                        readOnly={multi}
+                        onChange={handleInputValueChanged}
+                        value={multi?'':value}
+                        {...rest}
+                    />
                     <InputGroup.Append>
                         <Button onClick={() => setModalVisible(true)}>浏览</Button>
                     </InputGroup.Append>
@@ -159,8 +179,6 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                 <FileBrowser
                     onChange={handleFileChanged}
                     type={type}
-                    uploadUrl={'/'}
-                    onDelete={handleFileDelete}
                     multi={multi}
                 />
                 <Modal.Footer>

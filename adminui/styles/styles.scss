@@ -83,7 +83,12 @@ span.divider {
 .dropdown-toggle.noafter:after {
   display: none;
 }
-
+.form-group {
+  .react-datepicker-wrapper {
+    display: block;
+    max-width: 200px;
+  }
+}
 
 @import "tree";
 @import "./filebrowser";
