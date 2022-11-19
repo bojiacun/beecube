@@ -148,6 +148,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
+                setDeleting(false);
                 loadData();
             } else {
                 showToastError(deleteFetcher.data.message);
