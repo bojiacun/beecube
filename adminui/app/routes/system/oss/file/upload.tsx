@@ -5,5 +5,5 @@ import {API_OSS_FILE_UPLOAD, requestWithToken} from "~/utils/request.server";
 export const action: ActionFunction = async ({request}) => {
     await requireAuthenticated(request);
     const formData = await request.formData();
-    return await requestWithToken(request)(API_OSS_FILE_UPLOAD, {method: 'post', body: formData, headers: request.headers});
+    return await requestWithToken(request)(API_OSS_FILE_UPLOAD, {method: 'post', body: formData, headers: {'Content-Type': request.headers.get('content-type')}});
 }
