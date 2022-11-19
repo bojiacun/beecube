@@ -19,10 +19,13 @@ export const API_ROLE_PERMISSIONS = `${BASE_URL}/jeecg-system/sys/permission/que
 export const API_ROLE_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/permission/saveRolePermission`;
 
 
+export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
+
+export const API_DUPLICATE_CEHCK = `${BASE_URL}/jeecg-system/sys/duplicate/check`;
 
 export const API_OSS_FILE_LIST = `${BASE_URL}/jeecg-system/sys/oss/file/list`;
 export const API_OSS_FILE_UPLOAD = `${BASE_URL}/jeecg-system/sys/oss/file/upload`;

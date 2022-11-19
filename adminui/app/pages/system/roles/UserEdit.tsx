@@ -15,11 +15,11 @@ import FileBrowserInput from "~/components/filebrowser/form";
 import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
+import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
     realname: Yup.string().required(),
-    birthday: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
@@ -33,6 +33,7 @@ const UserEdit = (props: any) => {
     const [allRoles, setAllRoles] = useState<any[]>([]);
     const [allTenants, setAllTenants] = useState<any[]>([]);
     const editFetcher = useFetcher();
+    const postFetcher = useFetcher();
     const roleFetcher = useFetcher();
     const tenantFetcher = useFetcher();
 
@@ -41,6 +42,14 @@ const UserEdit = (props: any) => {
         roleFetcher.load('/system/roles/all');
         tenantFetcher.load('/system/tenants');
     }, []);
+
+
+    useEffect(()=>{
+        if(editFetcher.type === 'done' && editFetcher.data) {
+            //@ts-ignore
+            postFetcher.submit(formik.values, {method: 'post', action: '/system/user/edit'});
+        }
+    }, [editFetcher.state]);
 
     useEffect(()=>{
         if(roleFetcher.type === 'done' && roleFetcher.data) {
@@ -66,6 +75,7 @@ const UserEdit = (props: any) => {
 
     const formik = useFormik({
         initialValues: {
+            id: '',
             username: '',
             realname: '',
             workNo: '',
@@ -74,10 +84,12 @@ const UserEdit = (props: any) => {
             post: '',
             departIds: '',
             userIdentity: 1,
+            activitiSync: 1
         },
         validationSchema: userSchema,
-        onSubmit: values => {
+        onSubmit: (values) => {
             console.log(values);
+            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldValue=${values.username}&dataId=${values.id}`);
         }
     });
     const handleOnPositionSelect = (rows:any) => {
@@ -97,7 +109,7 @@ const UserEdit = (props: any) => {
     }
     const handleOnDepartmentSelect = (rows:any) => {
         let newOptions = rows.map((x:any)=>({label: x.label, value:x.value, key: x.value}));
-        setPositionOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
+        setDepartmentOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
 
         let data = {name: 'departIds', value: newOptions.map((item:any)=>item.value).join(',')};
         let e = {currentTarget: data};
@@ -243,14 +255,22 @@ const UserEdit = (props: any) => {
                             <BootstrapInput label={'邮箱'} formik={formik} name={'email'} />
                             <BootstrapInput label={'手机号'} formik={formik} name={'phone'} />
                             <BootstrapInput label={'座机号'} formik={formik} name={'telephone'} />
-
+                            <FormGroup>
+                                <FormLabel htmlFor={'activitiSync'}>工作流引擎</FormLabel>
+                                <Row>
+                                    <Col>
+                                        <Form.Check inline value={1} onChange={formik.handleChange} checked={formik.values.activitiSync == 1} name={'activitiSync'} label={'同步'} id={'activitiSync-1'} type={'radio'} />
+                                        <Form.Check inline value={2} onChange={formik.handleChange} checked={formik.values.activitiSync == 2} name={'activitiSync'} label={'不同步'} id={'activitiSync-2'} type={'radio'} />
+                                    </Col>
+                                </Row>
+                            </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
                             <AwesomeButton
                                 key={'submit'}
                                 type={'primary'}
                                 containerProps={{type: 'submit'}}
-                                disabled={editFetcher.state === 'submitting'}
+                                disabled={editFetcher.state === 'submitting'||postFetcher.state === 'submitting'}
                             >
                                 保存
                             </AwesomeButton>
