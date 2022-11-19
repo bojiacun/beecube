@@ -2,7 +2,7 @@ import {FormGroup, FormLabel} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {FC, useState} from "react";
 import {FormikProps} from "formik";
-import classNames from "classnames";
+import _ from "lodash";
 
 export interface BootstrapSelectProps extends Partial<any> {
     name: string;
@@ -22,7 +22,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
         placeholder = label;
     }
     const handleOnChanged = (currentValue: any) => {
-        let data = {name: name, value: currentValue.map((item: any) => item.value).join(',')};
+        let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue};
         let e = {currentTarget: data};
         formik.handleChange(e);
         setSelectValue(currentValue);

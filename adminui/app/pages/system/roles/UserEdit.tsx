@@ -254,7 +254,7 @@ const UserEdit = (props: any) => {
                             <BootstrapSelect
                                 name={'sex'}
                                 label={'性别'}
-                                options={[{label: '男', value: 1},{label: '女', value: 2}].map((item:any)=>({label: item.label, value: item.value}))}
+                                options={[{label: '男', value: '1'},{label: '女', value: '2'}]}
                                 placeholder={'选择性别'}
                                 isClearable={false}
                                 isSearchable={false}
