@@ -9,12 +9,12 @@ $filebrowser-prefix: 'filebrowser';
 
     .item {
         position: relative;
-        flex: none;
         display: block;
         background-size: contain;
         vertical-align: middle;
         background-repeat: no-repeat;
         background-position: center center;
+        margin-bottom: 10px;
     }
 
     .item:hover {

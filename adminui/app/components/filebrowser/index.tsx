@@ -1,10 +1,10 @@
 import {FC, useEffect, useState} from "react";
 import plupload from "plupload";
 import {ListGroup, Row, Col, Button, Form, ProgressBar} from "react-bootstrap";
-import {CheckCircle, FileText, Speaker, Video} from "react-feather";
+import {Check, CheckCircle, FileText, Speaker, Video} from "react-feather";
 import {useHydrated} from "remix-utils";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {DefaultListSearchParams, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import querystring from "querystring";
 import Upload from "rc-upload";
@@ -15,7 +15,7 @@ export const FILE_TYPE_VIDEO = 3
 export const FILE_TYPE_OTHER = 4
 
 function resolveUrl(path: string) {
-    return '/' + path;
+    return path;
 }
 
 
@@ -143,6 +143,10 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         if(!e.success) {
             showToastError('上传失败');
         }
+        else {
+            showToastSuccess('上传成功');
+            loadData();
+        }
     }
 
 
@@ -162,38 +166,38 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     switch (type) {
         case FILE_TYPE_IMAGE:
             renderChildren = (item: any) => (
-                <ListGroup.Item className={'item'} style={{backgroundImage: 'url(' + resolveUrl(item.attachment) + ')'}}
+                <Col sm={4} key={item.id} className={'item'} style={{backgroundImage: 'url(' + resolveUrl(item.url) + ')'}}
                            onClick={() => checkItem(item)}>
-                    {item.checked && <div className={'mask'}><CheckCircle size={16} className={'icon'}/></div>}
+                    {item.checked && <div className={'mask'}><Check size={48} className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
-                </ListGroup.Item>
+                </Col>
             )
             break;
         case FILE_TYPE_AUDIO:
             renderChildren = (item: any) => (
-                <ListGroup.Item className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <Speaker className={'audio'}/>
-                    {item.checked && <div className={'mask'}><CheckCircle className={'icon'}/></div>}
+                    {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
-                </ListGroup.Item>
+                </Col>
             )
             break;
         case FILE_TYPE_VIDEO:
             renderChildren = (item: any) => (
-                <ListGroup.Item className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <Video className={'video'}/>
-                    {item.checked && <div className={'mask'}><CheckCircle className={'icon'}/></div>}
+                    {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
-                </ListGroup.Item>
+                </Col>
             )
             break;
         case FILE_TYPE_OTHER:
             renderChildren = (item: any) => (
-                <ListGroup.Item className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <FileText className={'excel'}/>
-                    {item.checked && <div className={'mask'}><CheckCircle className={'icon'}/></div>}
+                    {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
-                </ListGroup.Item>
+                </Col>
             )
             break;
         default:
@@ -220,11 +224,11 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                         </Upload>
                     </Col>
                 </Row>
-                <ListGroup>
+                <Row className={'mt-1 mb-1'}>
                     {list?.records.map((item:any)=>{
                         return renderChildren(item);
                     })}
-                </ListGroup>
+                </Row>
                 <Row className={'footer'}>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span

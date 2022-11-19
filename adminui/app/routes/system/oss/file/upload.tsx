@@ -1,4 +1,4 @@
-import {ActionFunction, unstable_createMemoryUploadHandler, unstable_parseMultipartFormData} from "@remix-run/node";
+import {ActionFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {API_OSS_FILE_UPLOAD, requestWithToken} from "~/utils/request.server";
 
@@ -14,9 +14,4 @@ export const action: ActionFunction = async ({request}) => {
     return await requestWithToken(request)(
         API_OSS_FILE_UPLOAD, {method: 'post', body: data}
     );
-}
-
-async function uploadToServer(data:any, request:any, contentType:string, type: number) {
-    console.log(data);
-
 }
