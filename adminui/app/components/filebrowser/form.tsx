@@ -148,6 +148,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                 centered={true}
                 size={'lg'}
                 show={modalVisible}
+                dialogClassName={'filebrowser-modal'}
                 onHide={() => setModalVisible(false)}
             >
                 <Modal.Header closeButton={true}>

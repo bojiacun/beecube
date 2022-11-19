@@ -2366,6 +2366,11 @@ span.divider {
   padding: 5px 0;
 }
 
+.filebrowser-modal {
+  width: 1000px;
+  max-width: 1000px;
+}
+
 .filebrowser .container {
   padding: 0.8rem 1.65rem;
 }

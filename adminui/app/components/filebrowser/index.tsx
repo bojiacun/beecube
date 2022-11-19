@@ -17,21 +17,20 @@ export const FILE_TYPE_OTHER = 4
 interface FileBrowserProps {
     onChange: (values: any[]) => void;
     type: number;
-    uploadUrl: string;
-    onDelete: (value: any) => void;
     multi: boolean;
 }
 
 
 const FileBrowser: FC<FileBrowserProps> = (props) => {
-    const {onChange, type = FILE_TYPE_IMAGE, onDelete, multi} = props;
+    const {onChange, type = FILE_TYPE_IMAGE, multi} = props;
     const [list, setList] = useState<any>();
     const [deleting, setDeleting] = useState<boolean>(false);
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type, pageSize: 12});
     const [canDelete, setCanDelete] = useState(false);
-    const [progress, setProgress] = useState({percent: 0});
+    const [progress, setProgress] = useState<number>( 0);
 
     const searchFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     let filters: any;
     switch (type) {
@@ -100,12 +99,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         setCanDelete(list.records.filter((itm: any) => itm.checked === true).length > 0);
         typeof onChange === 'function' && onChange(list.records.filter((itm: any) => itm.checked === true));
     }
-    const checkAll = (e:any) => {
-        setCanDelete(e.target.checked);
-        list.records.forEach((item:any)=>item.checked = e.target.checked);
-        setList({...list});
-        typeof onChange === 'function' && onChange(list.records.filter((itm:any) => itm.checked === true));
-    }
+
     const loadData = () => {
         setCanDelete(false);
         searchFetcher.load('/system/oss/file/list?'+querystring.stringify(searchState));
@@ -116,20 +110,15 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         loadData();
     }
     const doDelete = () => {
-        if (typeof onDelete === 'function') {
-            const itemsToDelete = list.records.filter((item:any) => item.checked === true);
-            const requests = [];
-            setDeleting(true);
-
-            for (let item of itemsToDelete) {
-                requests.push(onDelete(item));
-            }
-            Promise.all(requests).then(() => {
-                loadData();
-                setDeleting(false);
-            });
-        }
+        const itemsToDelete = list.records.filter((item:any) => item.checked === true);
+        const requests = [];
+        setDeleting(true);
+        itemsToDelete.forEach((item:any) => {
+            deleteFetcher.submit({id: item.id}, {method: 'delete', action: `/system/oss/file/delete?id=${item.id}`, replace: true});
+        });
     }
+
+
     const handleOnUploadError = () => {
         showToastError('上传失败');
     }
@@ -156,7 +145,15 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
-
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            if (deleteFetcher.data.success) {
+                loadData();
+            } else {
+                showToastError(deleteFetcher.data.message);
+            }
+        }
+    }, [deleteFetcher.state]);
 
 
 
@@ -164,7 +161,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
     switch (type) {
         case FILE_TYPE_IMAGE:
             renderChildren = (item: any) => (
-                <Col sm={4} key={item.id} className={'item'} style={{backgroundImage: 'url(' + resolveUrl(item.url) + ')'}}
+                <Col sm={3} key={item.id} className={'item'} style={{backgroundImage: 'url(' + resolveUrl(item.url) + ')'}}
                            onClick={() => checkItem(item)}>
                     {item.checked && <div className={'mask'}><Check size={48} className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
@@ -173,7 +170,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             break;
         case FILE_TYPE_AUDIO:
             renderChildren = (item: any) => (
-                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <Speaker className={'audio'}/>
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
@@ -182,7 +179,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             break;
         case FILE_TYPE_VIDEO:
             renderChildren = (item: any) => (
-                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <Video className={'video'}/>
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
@@ -191,7 +188,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             break;
         case FILE_TYPE_OTHER:
             renderChildren = (item: any) => (
-                <Col sm={4} key={item.id} className={'item'} onClick={() => checkItem(item)}>
+                <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <FileText className={'excel'}/>
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
                     <div className={'name'}>{item.filename}</div>
@@ -212,11 +209,11 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         <div className={'filebrowser'}>
             <div className={'container'}>
                 <Row className={'header'}>
-                    <Col>
-                        {progress.percent > 0 && <ProgressBar now={progress} label={`${progress}%}`} />}
+                    <Col className={'d-flex align-items-center'}>
+                        {progress > 0 && <ProgressBar style={{width: '100%'}} now={progress} label={`${progress}%`} />}
                     </Col>
-                    <Col style={{textAlign: 'right'}}>
-                        <Button className={'mr-1'} disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
+                    <Col sm={3} style={{textAlign: 'right'}}>
+                        <Button variant={'secondary'} className={'mr-1'} disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
                         <Upload multiple={multi} onProgress={handleOnProgress} action={'/system/oss/file/upload'} data={{type: type}} onError={handleOnUploadError} onSuccess={handleOnUploadSuccess}>
                             <Button type="primary" id="browseBtn">上传{filters.name}</Button>
                         </Upload>

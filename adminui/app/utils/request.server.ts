@@ -26,6 +26,7 @@ export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepa
 
 export const API_OSS_FILE_LIST = `${BASE_URL}/jeecg-system/sys/oss/file/list`;
 export const API_OSS_FILE_UPLOAD = `${BASE_URL}/jeecg-system/sys/oss/file/upload`;
+export const API_OSS_FILE_DELETE = `${BASE_URL}/jeecg-system/sys/oss/file/delete`;
 
 
 export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;

@@ -21,6 +21,7 @@ const RoleUserList = (props: any) => {
 
     useEffect(() => {
         if (searchFetcher.data) {
+            stopPageLoading();
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
