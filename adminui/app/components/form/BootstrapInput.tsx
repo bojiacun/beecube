@@ -1,12 +1,13 @@
 import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import {FC} from "react";
 import classNames from "classnames";
+import {FormikProps} from "formik";
 
 export interface BootstrapInputProps extends Partial<any>{
     label: string;
     name: string;
     placeholder?: string;
-    formik: any;
+    formik: FormikProps<any>;
 }
 
 const BootstrapInput: FC<BootstrapInputProps> = (props) => {
@@ -21,8 +22,7 @@ const BootstrapInput: FC<BootstrapInputProps> = (props) => {
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <FormControl
                 id={name}
-                name={name}
-                className={classNames(!!formik.errors[name] ? 'is-invalid':'')}
+                className={classNames(className,!!formik.errors[name] ? 'is-invalid':'')}
                 placeholder={placeholder}
                 {...formik.getFieldProps(name)}
                 {...rest}

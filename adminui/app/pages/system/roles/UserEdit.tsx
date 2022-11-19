@@ -73,7 +73,7 @@ const UserEdit = (props: any) => {
             telephone: '',
             post: '',
             departIds: '',
-            userIdentity: 1
+            userIdentity: 1,
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -168,6 +168,7 @@ const UserEdit = (props: any) => {
                                 isClearable={true}
                                 isSearchable={false}
                                 isMulti={true}
+                                formik={formik}
                             />
                             <FormGroup>
                                 <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
@@ -200,6 +201,7 @@ const UserEdit = (props: any) => {
                                 isClearable={true}
                                 isSearchable={false}
                                 isMulti={true}
+                                formik={formik}
                             />
                             <BootstrapSelect
                                 name={'relTenantIds'}
@@ -209,6 +211,7 @@ const UserEdit = (props: any) => {
                                 isClearable={true}
                                 isSearchable={false}
                                 isMulti={true}
+                                formik={formik}
                             />
                             <FormGroup>
                                 <FormLabel htmlFor={'userIdentity'}>身份</FormLabel>
@@ -235,6 +238,7 @@ const UserEdit = (props: any) => {
                                 isClearable={false}
                                 isSearchable={false}
                                 isMulti={false}
+                                formik={formik}
                             />
                             <BootstrapInput label={'邮箱'} formik={formik} name={'email'} />
                             <BootstrapInput label={'手机号'} formik={formik} name={'phone'} />
