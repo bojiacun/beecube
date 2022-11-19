@@ -19,6 +19,7 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
     realname: Yup.string().required(),
+    selectedroles: Yup.string().required(),
 });
 
 const UserEdit = (props: any) => {
@@ -192,6 +193,15 @@ const UserEdit = (props: any) => {
                                 </Row>
                             </FormGroup>
                             <BootstrapSelect
+                                name={'departIds'}
+                                label={'负责部门'}
+                                options={departmentValue}
+                                placeholder={'选择负责部门'}
+                                isClearable={true}
+                                isSearchable={false}
+                                isMulti={true}
+                            />
+                            <BootstrapSelect
                                 name={'relTenantIds'}
                                 label={'租户'}
                                 options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
@@ -209,15 +219,6 @@ const UserEdit = (props: any) => {
                                     </Col>
                                 </Row>
                             </FormGroup>
-                            <BootstrapSelect
-                                name={'departIds'}
-                                label={'负责部门'}
-                                options={departmentValue}
-                                placeholder={'选择负责部门'}
-                                isClearable={true}
-                                isSearchable={false}
-                                isMulti={true}
-                            />
                             <FormGroup>
                                 <FormLabel htmlFor={'avatar'}>头像</FormLabel>
                                 <FileBrowserInput type={1} multi={false} />
