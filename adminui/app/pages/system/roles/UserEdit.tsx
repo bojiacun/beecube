@@ -1,6 +1,6 @@
 import {Modal, Form, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Field, useFormik} from "formik";
-import {emptyDropdownIndicator, emptyIndicatorSeparator} from "~/utils/utils";
+import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
@@ -46,11 +46,20 @@ const UserEdit = (props: any) => {
 
     useEffect(()=>{
         if(editFetcher.type === 'done' && editFetcher.data) {
-            //@ts-ignore
-            postFetcher.submit(formik.values, {method: 'post', action: '/system/user/edit'});
+            if(!editFetcher.data.success) {
+               showToastError(editFetcher.data.message);
+            }
+            else {
+                //@ts-ignore
+                postFetcher.submit(formik.values, {method: 'post', action: '/system/user/edit'});
+            }
         }
     }, [editFetcher.state]);
-
+    useEffect(()=>{
+        if(postFetcher.type === 'done' && postFetcher.data) {
+            handleSaveResult(postFetcher.data);
+        }
+    }, [postFetcher.state]);
     useEffect(()=>{
         if(roleFetcher.type === 'done' && roleFetcher.data) {
             setAllRoles(roleFetcher.data);
@@ -89,7 +98,7 @@ const UserEdit = (props: any) => {
         validationSchema: userSchema,
         onSubmit: (values) => {
             console.log(values);
-            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldValue=${values.username}&dataId=${values.id}`);
+            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
         }
     });
     const handleOnPositionSelect = (rows:any) => {

@@ -16,5 +16,5 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_DUPLICATE_CEHCK + queryString);
-    return json(result.result);
+    return json(result);
 }
