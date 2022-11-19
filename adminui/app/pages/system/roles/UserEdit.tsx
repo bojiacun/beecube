@@ -1,6 +1,6 @@
 import {Modal, Form, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Field, useFormik} from "formik";
-import {EditFormHelper, emptyDropdownIndicator, emptyIndicatorSeparator} from "~/utils/utils";
+import {emptyDropdownIndicator, emptyIndicatorSeparator} from "~/utils/utils";
 import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
@@ -12,6 +12,8 @@ import classNames from "classnames";
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
 import FileBrowserInput from "~/components/filebrowser/form";
+import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
+import BootstrapInput from "~/components/form/BootstrapInput";
 
 const userSchema = Yup.object().shape({
     username: Yup.string().required(),
@@ -124,42 +126,11 @@ const UserEdit = (props: any) => {
                 {model &&
                     <Form method={'post'} onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
                         <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                            <BootstrapInput label={'用户账号'} formik={formik} readOnly={model?.id} name={'username'} />
+                            <BootstrapInput label={'用户姓名'} formik={formik} name={'realname'} />
+                            <BootstrapInput label={'工号'} formik={formik} name={'workNo'} />
 
-                            {EditFormHelper.normalInput({
-                                    label: '用户账号',
-                                    placeholder: '用户账号',
-                                    className: !!formik.errors.username ? 'is-invalid' : '',
-                                    readOnly: model?.id,
-                                    ...formik.getFieldProps('username')
-                                }
-                            )}
-                            {EditFormHelper.normalInput({
-                                    label: '用户姓名',
-                                    ...formik.getFieldProps('realname'),
-                                    placeholder: '用户姓名',
-                                    className: !!formik.errors.realname ? 'is-invalid' : '',
-                                }
-                            )}
-                            {EditFormHelper.normalInput({
-                                    label: '工号',
-                                    ...formik.getFieldProps('workNo'),
-                                    placeholder: '工号',
-                                    className: !!formik.errors.workNo ? 'is-invalid' : ''
-                                }
-                            )}
-                            {EditFormHelper.normalInput({
-                                    label: '手机号',
-                                    ...formik.getFieldProps('phone'),
-                                    placeholder: '手机号',
-                                    className: !!formik.errors.phone ? 'is-invalid' : ''
-                                }
-                            )}
-                            {EditFormHelper.normalInput({
-                                    label: '座机号',
-                                    ...formik.getFieldProps('telephone'),
-                                    placeholder: '座机号',
-                                }
-                            )}
+
                             <FormGroup>
                                 <FormLabel htmlFor={'post'}>职务</FormLabel>
                                 <Row>
@@ -261,6 +232,25 @@ const UserEdit = (props: any) => {
                                 <FormLabel htmlFor={'avatar'}>头像</FormLabel>
                                 <FileBrowserInput type={1} multi={false} />
                             </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'birthday'}>生日</FormLabel>
+                                <DateTimePicker  inputName={'birthday'}/>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormLabel htmlFor={'sex'}>性别</FormLabel>
+                                <ReactSelectThemed
+                                    id={'sex'}
+                                    name={'sex'}
+                                    placeholder={'选择性别'}
+                                    isSearchable={false}
+                                    isMulti={false}
+                                    options={[{label: '男', value: 1},{label: '女', value: 2}].map((item:any)=>({label: item.label, value: item.value}))}
+                                />
+                            </FormGroup>
+                            <BootstrapInput label={'邮箱'} formik={formik} name={'email'} />
+                            <BootstrapInput label={'手机号'} formik={formik} name={'phone'} />
+                            <BootstrapInput label={'座机号'} formik={formik} name={'telephone'} />
+
                         </Modal.Body>
                         <Modal.Footer>
                             <AwesomeButton

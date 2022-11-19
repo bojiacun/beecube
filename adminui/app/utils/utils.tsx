@@ -161,18 +161,6 @@ export function defaultRouteErrorBoundary() {
 
 
 
-export const EditFormHelper = {
-    normalInput: (props:any)=>{
-        const {label, name, ...rest} = props;
-        return (
-            <FormGroup>
-                <FormLabel htmlFor={name}>{label}</FormLabel>
-                <FormControl id={name} name={name} {...rest} />
-            </FormGroup>
-        );
-    }
-}
-
 export const defaultTreeIcons = {
     check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon={'check-square'}/>,
     uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['far', 'square']}/>,

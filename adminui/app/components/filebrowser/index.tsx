@@ -211,7 +211,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
             <div className={'container'}>
                 <Row className={'header'}>
                     <Col className={'d-flex align-items-center'}>
-                        {progress > 0 && <ProgressBar style={{width: '100%'}} now={progress} label={`${progress}%`} />}
+                        {progress > 0 && progress < 100 && <ProgressBar style={{width: '100%'}} now={progress} label={`${progress}%`} />}
                     </Col>
                     <Col sm={3} style={{textAlign: 'right'}}>
                         <Button variant={'secondary'} className={'mr-1'} disabled={!canDelete || deleting} onClick={doDelete}>删除</Button>
