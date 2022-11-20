@@ -116,7 +116,7 @@ const UserListSelector = (props: any) => {
     return (
         <Modal
             show={show}
-            size={'xl'}
+            size={'lg'}
             onHide={()=>setUserListShow(false)}
             centered
             backdrop={'static'}

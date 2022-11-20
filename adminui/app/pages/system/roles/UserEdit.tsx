@@ -40,10 +40,14 @@ const UserEdit = (props: any) => {
 
 
     useEffect(()=>{
-        roleFetcher.load('/system/roles/all');
-        tenantFetcher.load('/system/tenants');
-        userRoleFetcher.load('/system/users/roles');
-    }, []);
+        if(model) {
+            roleFetcher.load('/system/roles/all');
+            tenantFetcher.load('/system/tenants');
+            if(model.id) {
+                userRoleFetcher.load(`/system/users/${model.id}/roles`);
+            }
+        }
+    }, [model]);
 
 
     if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {

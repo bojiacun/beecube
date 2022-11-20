@@ -57,8 +57,6 @@ export async function loader() {
             LOGIN_URL: process.env.LOGIN_URL,
             LOGOUT_URL: process.env.LOGOUT_URL,
             USER_INFO_URL: process.env.USER_INFO_URL,
-            SESSION_SECRET: process.env.SESSION_SECRET,
-            COOKIE_NAME: process.env.COOKIE_NAME,
         },
     });
 }

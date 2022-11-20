@@ -5,10 +5,11 @@ import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_USER_ROLE_LIST_ALL, requestWithToken} from "~/utils/request.server";
 
-export const loader: LoaderFunction = async ({request}) => {
-    const user:LoginedUser = await requireAuthenticated(request);
+export const loader: LoaderFunction = async ({request,params}) => {
+    await requireAuthenticated(request);
     const url = new URL(request.url);
-    url.searchParams.append("userid", user.userInfo.id);
+    //@ts-ignore
+    url.searchParams.append("userid", params.id);
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
