@@ -22,27 +22,27 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
         placeholder = label;
     }
 
-    useEffect(()=>{
-        if(formik.values[name]) {
-            if(isMulti) {
-                const values = formik.values[name].split(',');
-                let valueOptions:any = [];
-                values.forEach((v:any)=>{
-                    let option = _.find(options, {value: v});
-                    valueOptions.push(option);
-                })
-                setSelectValue(valueOptions);
-            }
-            else {
-                const val = formik.values[name];
-                let valueOption = _.find(options, {value: val});
-                setSelectValue(valueOption);
-            }
-        }
-        else {
-            setSelectValue('');
-        }
-    }, [formik.values[name]]);
+    // useEffect(()=>{
+    //     if(formik.values[name]) {
+    //         if(isMulti) {
+    //             const values = formik.values[name].split(',');
+    //             let valueOptions:any = [];
+    //             values.forEach((v:any)=>{
+    //                 let option = _.find(options, {value: v});
+    //                 valueOptions.push(option);
+    //             })
+    //             setSelectValue(valueOptions);
+    //         }
+    //         else {
+    //             const val = formik.values[name];
+    //             let valueOption = _.find(options, {value: val});
+    //             setSelectValue(valueOption);
+    //         }
+    //     }
+    //     else {
+    //         setSelectValue('');
+    //     }
+    // }, [formik.values[name]]);
 
 
 
@@ -50,7 +50,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
         let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue.value};
         let e = {currentTarget: data};
         console.log(e);
-        formik.handleChange(e);
+        // formik.handleChange(e);
     }
 
     return (

@@ -17,11 +17,8 @@ export interface DateTimePickerProps {
 
 const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, inputPlaceHolder, formik}:any, ref:any)=>{
     const handleOnChange = (e:any) => {
-        formik.handleChange(e);
     }
-    useEffect(()=> {
-        formik.handleChange({currentTarget: {name: inputName, value: value}});
-    }, [value])
+
 
     return <FormControl
         name={inputName}
@@ -43,10 +40,13 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
         if(formik.values[inputName]) {
             setSelectedDate(moment(formik.values[inputName], showTime ? ['yyyy-MM-dd HH:mm', 'yyyy/MM/dd HH:mm'] : ['yyyy-MM-dd', 'yyyy/MM/dd'], 'en', false).toDate());
         }
+        else {
+            formik.setFieldValue(inputName,'');
+        }
     }, [formik.values[inputName]]);
 
     const handleOnDateChange = (date:any) => {
-        setSelectedDate(date);
+        formik.setFieldValue(inputName,date);
     }
     return (
         <DatePicker
