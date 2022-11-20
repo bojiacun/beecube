@@ -75,6 +75,7 @@ const UserEdit = (props: any) => {
         if(postFetcher.type === 'done' && postFetcher.data) {
             handleSaveResult(postFetcher.data);
         }
+        setPosting(false);
     }, [postFetcher.state]);
     useEffect(()=>{
         if(roleFetcher.type === 'done' && roleFetcher.data) {
@@ -112,6 +113,7 @@ const UserEdit = (props: any) => {
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
+            setPosting(true);
             console.log(values);
             editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
         }
@@ -294,7 +296,7 @@ const UserEdit = (props: any) => {
                                 key={'submit'}
                                 type={'primary'}
                                 containerProps={{type: 'submit'}}
-                                disabled={editFetcher.state === 'submitting'||postFetcher.state === 'submitting'}
+                                disabled={posting}
                             >
                                 保存
                             </AwesomeButton>
