@@ -32,6 +32,7 @@ const UserEdit = (props: any) => {
     const [departmentValue, setDepartmentValue] = useState<any[]>([]);
     const [allRoles, setAllRoles] = useState<any[]>([]);
     const [allTenants, setAllTenants] = useState<any[]>([]);
+    const [posting, setPosting] = useState<boolean>(false);
     const editFetcher = useFetcher();
     const postFetcher = useFetcher();
     const roleFetcher = useFetcher();
@@ -53,7 +54,7 @@ const UserEdit = (props: any) => {
     useEffect(()=>{
         if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {
             //获取用户角色列表
-            formik.setFieldValue('selectedroles', userRoleFetcher.data);
+            formik.setFieldValue('selectedroles', userRoleFetcher.data.join(','));
         }
     }, [userRoleFetcher.state]);
 

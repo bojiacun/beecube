@@ -17,29 +17,39 @@ export interface BootstrapSelectProps extends Partial<any> {
 
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false, formik} = props;
-    const [selectValue, setSelectValue] = useState<any>(formik.values[name]);
+    const [selectValue, setSelectValue] = useState<any>();
     if (placeholder === '') {
         placeholder = label;
     }
 
     useEffect(()=>{
         if(formik.values[name]) {
-            const values = formik.values[name];
-            let valueOptions = options.filter((o: any) => {
-                return _.indexOf(values, o.value) > -1;
-            });
-            console.log(values, valueOptions);
-            setSelectValue(valueOptions);
+            if(isMulti) {
+                const values = formik.values[name].split(',');
+                let valueOptions:any = [];
+                values.forEach((v:any)=>{
+                    let option = _.find(options, {value: v});
+                    valueOptions.push(option);
+                })
+                setSelectValue(valueOptions);
+            }
+            else {
+                const val = formik.values[name];
+                let valueOption = _.find(options, {value: val});
+                setSelectValue(valueOption);
+            }
+        }
+        else {
+            setSelectValue('');
         }
     }, [formik.values[name]]);
 
 
 
     const handleOnChanged = (currentValue: any) => {
-        let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue};
+        let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue.value};
         let e = {currentTarget: data};
         formik.handleChange(e);
-        setSelectValue(currentValue);
     }
 
     return (
