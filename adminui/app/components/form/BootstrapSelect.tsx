@@ -35,7 +35,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
             }
             else {
                 const val = formik.values[name];
-                let valueOption = _.find(options, {value: val.toString()});
+                let valueOption = _.find(options, {value: val});
                 setSelectValue(valueOption);
             }
         }
@@ -49,6 +49,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     const handleOnChanged = (currentValue: any) => {
         let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue.value};
         let e = {currentTarget: data};
+        console.log(e);
         formik.handleChange(e);
     }
 

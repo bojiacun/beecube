@@ -37,6 +37,7 @@ const UserEdit = (props: any) => {
     const postFetcher = useFetcher();
     const roleFetcher = useFetcher();
     const userRoleFetcher = useFetcher();
+    const userDepartmentFetcher = useFetcher();
     const tenantFetcher = useFetcher();
 
 
@@ -46,6 +47,7 @@ const UserEdit = (props: any) => {
             tenantFetcher.load('/system/tenants');
             if(model.id) {
                 userRoleFetcher.load(`/system/users/${model.id}/roles`);
+                userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
             }
         }
     }, [model]);
@@ -57,6 +59,13 @@ const UserEdit = (props: any) => {
             formik.setFieldValue('selectedroles', userRoleFetcher.data.join(','));
         }
     }, [userRoleFetcher.state]);
+
+    useEffect(()=>{
+        if(userDepartmentFetcher.type === 'done' && userDepartmentFetcher.data) {
+            //获取用户角色列表
+            formik.setFieldValue('selecteddeparts', userDepartmentFetcher.data.map((item:any)=>item.value).join(','));
+        }
+    }, [userDepartmentFetcher.state]);
 
     useEffect(()=>{
         if(editFetcher.type === 'done' && editFetcher.data) {
@@ -90,7 +99,7 @@ const UserEdit = (props: any) => {
 
     useEffect(() => {
         if (model?.id) {
-            formik.setValues({...model, selectedroles: ''});
+            formik.setValues({...model, selectedroles: '', selecteddeparts: ''});
             if(_.isEmpty(model.post)) {
                 setPostValue([]);
             }
@@ -109,7 +118,8 @@ const UserEdit = (props: any) => {
             post: '',
             departIds: '',
             userIdentity: 1,
-            activitiSync: 1
+            activitiSync: 1,
+            relTenantIds: ''
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
