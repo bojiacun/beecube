@@ -79,7 +79,6 @@ const RoleList = (props: any) => {
                 });
                 break;
             case 'list-user':
-                startPageLoading();
                 setSelectedRole(row);
                 break;
             case 'authorization':

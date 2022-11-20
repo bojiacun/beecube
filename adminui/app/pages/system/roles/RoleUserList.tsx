@@ -25,13 +25,17 @@ const RoleUserList = (props: any) => {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
+
     useEffect(() => {
         if (selectedRole) {
+            startPageLoading();
             searchState.roleId = selectedRole.id;
             setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
         }
     }, [selectedRole]);
+
+
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {

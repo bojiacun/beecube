@@ -50,9 +50,12 @@ const UserEdit = (props: any) => {
     }, [model]);
 
 
-    if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {
-        console.log(userRoleFetcher.data);
-    }
+    useEffect(()=>{
+        if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {
+            //获取用户角色列表
+            formik.setFieldValue('selectedroles', userRoleFetcher.data);
+        }
+    }, [userRoleFetcher.state]);
 
     useEffect(()=>{
         if(editFetcher.type === 'done' && editFetcher.data) {
@@ -65,6 +68,8 @@ const UserEdit = (props: any) => {
             }
         }
     }, [editFetcher.state]);
+
+
     useEffect(()=>{
         if(postFetcher.type === 'done' && postFetcher.data) {
             handleSaveResult(postFetcher.data);
