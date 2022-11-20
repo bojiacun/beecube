@@ -99,6 +99,7 @@ const UserEdit = (props: any) => {
 
     useEffect(() => {
         if (model?.id) {
+            setPosting(false);
             formik.setValues({...model, selectedroles: '', selecteddeparts: ''});
             if(_.isEmpty(model.post)) {
                 setPostValue([]);
@@ -125,7 +126,7 @@ const UserEdit = (props: any) => {
         onSubmit: (values) => {
             setPosting(true);
             console.log(values);
-            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
+            // editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
         }
     });
     const handleOnPositionSelect = (rows:any) => {
@@ -302,14 +303,13 @@ const UserEdit = (props: any) => {
                             </FormGroup>
                         </Modal.Body>
                         <Modal.Footer>
-                            <AwesomeButton
-                                key={'submit'}
-                                type={'primary'}
-                                containerProps={{type: 'submit'}}
+                            <Button
+                                variant={'primary'}
                                 disabled={posting}
+                                type={'submit'}
                             >
                                 保存
-                            </AwesomeButton>
+                            </Button>
                         </Modal.Footer>
                     </Form>
                 }

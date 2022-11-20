@@ -15,38 +15,40 @@ export interface DateTimePickerProps {
     formik: FormikProps<any>;
 }
 
-const BootstrapFormControlInput = React.forwardRef(({value, onClick, inputName, inputPlaceHolder, formik}:any, ref:any)=>{
-    const handleOnChange = (e:any) => {
-    }
-
-
+const BootstrapFormControlInput = React.forwardRef(({value, inputName, onClick, inputPlaceHolder, formik}:any, ref:any)=>{
     return <FormControl
         name={inputName}
         autoComplete={'off'}
         className={classNames((!!formik.touched[inputName] && !!formik.errors[inputName]) ? 'is-invalid':'')}
-        onClick={onClick}
         value={value}
         ref={ref}
-        onChange={handleOnChange}
         placeholder={inputPlaceHolder}
+        onClick={onClick}
     />
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
     const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间', formik} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
+    const formatter = showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
 
     useEffect(()=>{
         if(formik.values[inputName]) {
-            setSelectedDate(moment(formik.values[inputName], showTime ? ['yyyy-MM-dd HH:mm', 'yyyy/MM/dd HH:mm'] : ['yyyy-MM-dd', 'yyyy/MM/dd'], 'en', false).toDate());
+            setSelectedDate(moment(formik.values[inputName]).toDate());
         }
         else {
-            formik.setFieldValue(inputName,'');
+            setSelectedDate(null);
         }
     }, [formik.values[inputName]]);
 
     const handleOnDateChange = (date:any) => {
-        formik.setFieldValue(inputName,date);
+        if(date) {
+            const dateValue =  moment(date).format('YYYY-MM-DD');
+            formik.setFieldValue(inputName, dateValue);
+        }
+        else {
+            formik.setFieldValue(inputName, null);
+        }
     }
     return (
         <DatePicker
@@ -55,7 +57,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
             minDate={minDate}
             maxDate={maxDate}
             onChange={handleOnDateChange}
-            dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+            dateFormat={formatter}
             customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} inputPlaceHolder={placeholder} formik={formik} />}
             showTimeSelect={showTime}
         />

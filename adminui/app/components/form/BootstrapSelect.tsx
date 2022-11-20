@@ -17,40 +17,35 @@ export interface BootstrapSelectProps extends Partial<any> {
 
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false, formik} = props;
-    const [selectValue, setSelectValue] = useState<any>();
+    const [value, setValue] = useState<any>();
     if (placeholder === '') {
         placeholder = label;
     }
 
-    // useEffect(()=>{
-    //     if(formik.values[name]) {
-    //         if(isMulti) {
-    //             const values = formik.values[name].split(',');
-    //             let valueOptions:any = [];
-    //             values.forEach((v:any)=>{
-    //                 let option = _.find(options, {value: v});
-    //                 valueOptions.push(option);
-    //             })
-    //             setSelectValue(valueOptions);
-    //         }
-    //         else {
-    //             const val = formik.values[name];
-    //             let valueOption = _.find(options, {value: val});
-    //             setSelectValue(valueOption);
-    //         }
-    //     }
-    //     else {
-    //         setSelectValue('');
-    //     }
-    // }, [formik.values[name]]);
+    useEffect(()=>{
+        if(formik.values[name]) {
+            if(isMulti) {
+                const values = formik.values[name].split(',');
+                let valueOptions:any = [];
+                values.forEach((v:any)=>{
+                    let option = _.find(options, {value: v});
+                    valueOptions.push(option);
+                });
+                setValue(valueOptions);
+            }
+            else {
+                const val = formik.values[name];
+                let valueOption = _.find(options, {value: val});
+                setValue(valueOption);
+            }
+        }
+    }, [formik.values[name]]);
 
 
 
     const handleOnChanged = (currentValue: any) => {
-        let data = {name: name, value: _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue.value};
-        let e = {currentTarget: data};
-        console.log(e);
-        // formik.handleChange(e);
+        const newValue = _.isArray(currentValue) ? currentValue.map((item: any) => item.value).join(','): currentValue.value;
+        formik.setFieldValue(name, newValue);
     }
 
     return (
@@ -72,7 +67,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 isSearchable={isSearchable}
                 isMulti={isMulti}
                 options={options}
-                value={selectValue}
+                value={value}
                 onChange={handleOnChanged}
             />
         </FormGroup>
