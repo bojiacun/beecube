@@ -64,6 +64,7 @@ const UserEdit = (props: any) => {
         if(userDepartmentFetcher.type === 'done' && userDepartmentFetcher.data) {
             //获取用户角色列表
             formik.setFieldValue('selecteddeparts', userDepartmentFetcher.data.map((item:any)=>item.value).join(','));
+            setDepartmentValue(userDepartmentFetcher.data.map((item:any)=>({label: item.title, value: item.value})));
         }
     }, [userDepartmentFetcher.state]);
 
@@ -147,17 +148,14 @@ const UserEdit = (props: any) => {
     const handleOnDepartmentSelect = (rows:any) => {
         let newOptions = rows.map((x:any)=>({label: x.label, value:x.value, key: x.value}));
         setDepartmentOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
-
-        let data = {name: 'departIds', value: newOptions.map((item:any)=>item.value).join(',')};
-        let e = {currentTarget: data};
-        formik.handleChange(e);
+        const newValue = newOptions.map((item:any)=>item.value).join(',');
+        formik.setFieldValue('selecteddeparts', newValue);
         setDepartmentValue(newOptions);
         setDepartmentSelectorShow(false);
     }
     const handleOnDepartmentSelectChanged = (currentValue:any) => {
-        let data = {name: 'departIds', value: currentValue.map((item:any)=>item.value).join(',')};
-        let e = {currentTarget: data};
-        formik.handleChange(e);
+        const newValue = currentValue.map((item:any)=>item.value).join(',');
+        formik.setFieldValue('selecteddeparts', newValue);
         setDepartmentValue(currentValue);
     }
     if(!model) return <></>

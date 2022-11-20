@@ -28,14 +28,14 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 const values = formik.values[name].split(',');
                 let valueOptions:any = [];
                 values.forEach((v:any)=>{
-                    let option = _.find(options, {value: v});
+                    let option = _.find(options, {value: v.toString()});
                     valueOptions.push(option);
                 });
                 setValue(valueOptions);
             }
             else {
                 const val = formik.values[name];
-                let valueOption = _.find(options, {value: val});
+                let valueOption = _.find(options, {value: val.toString()});
                 setValue(valueOption);
             }
         }
