@@ -35,14 +35,20 @@ const UserEdit = (props: any) => {
     const editFetcher = useFetcher();
     const postFetcher = useFetcher();
     const roleFetcher = useFetcher();
+    const userRoleFetcher = useFetcher();
     const tenantFetcher = useFetcher();
 
 
     useEffect(()=>{
         roleFetcher.load('/system/roles/all');
         tenantFetcher.load('/system/tenants');
+        userRoleFetcher.load('/system/users/roles');
     }, []);
 
+
+    if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {
+        console.log(userRoleFetcher.data);
+    }
 
     useEffect(()=>{
         if(editFetcher.type === 'done' && editFetcher.data) {
@@ -65,7 +71,6 @@ const UserEdit = (props: any) => {
             setAllRoles(roleFetcher.data);
         }
     }, [roleFetcher.state]);
-
     useEffect(()=>{
         if(tenantFetcher.type === 'done' && tenantFetcher.data) {
             setAllTenants(tenantFetcher.data);

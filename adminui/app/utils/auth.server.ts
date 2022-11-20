@@ -17,6 +17,7 @@ export type UserInfo = {
     post: string;
     phone: string;
     username: string;
+    id: string;
 }
 
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
