@@ -36,7 +36,6 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
             else {
                 const val = formik.values[name];
                 let valueOption = _.find(options, {value: val.toString()});
-                console.log(val, valueOption);
                 setSelectValue(valueOption);
             }
         }
