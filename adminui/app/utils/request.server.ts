@@ -62,9 +62,6 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers = options.headers || {};
     options.headers['X-Access-Token'] = user.token;
     options.headers['Authorization'] = user.token;
-    if(!options.headers['Content-Type']) {
-        options.headers['Content-Type'] = 'application/json';
-    }
     const res = await fetch(url, options);
     const result = await res.json();
     if(result.code === 401) {

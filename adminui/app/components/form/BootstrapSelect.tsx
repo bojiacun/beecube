@@ -39,6 +39,9 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 setValue(valueOption);
             }
         }
+        else {
+            setValue(null);
+        }
     }, [formik.values[name]]);
 
 

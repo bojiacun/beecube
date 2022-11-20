@@ -23,7 +23,7 @@ const userSchema = Yup.object().shape({
 });
 
 const UserEdit = (props: any) => {
-    const {model, setEditModel} = props;
+    const {model, onHide} = props;
     const [positionListShow, setPositionListShow] = useState<boolean>(false);
     const [departmentSelectorShow, setDepartmentSelectorShow] = useState<boolean>(false);
     const [positionOptions, setPositionOptions] = useState<any[]>([]);
@@ -83,9 +83,10 @@ const UserEdit = (props: any) => {
 
     useEffect(()=>{
         if(postFetcher.type === 'done' && postFetcher.data) {
+            onHide();
+            setPosting(false);
             handleSaveResult(postFetcher.data);
         }
-        setPosting(false);
     }, [postFetcher.state]);
     useEffect(()=>{
         if(roleFetcher.type === 'done' && roleFetcher.data) {
@@ -127,7 +128,7 @@ const UserEdit = (props: any) => {
         onSubmit: (values) => {
             setPosting(true);
             console.log(values);
-            // editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
+            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
         }
     });
     const handleOnPositionSelect = (rows:any) => {
@@ -164,7 +165,7 @@ const UserEdit = (props: any) => {
         <>
             <Modal
                 show={!!model}
-                onHide={() => setEditModel(null)}
+                onHide={onHide}
                 size={'lg'}
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
@@ -253,7 +254,7 @@ const UserEdit = (props: any) => {
                             <BootstrapSelect
                                 name={'relTenantIds'}
                                 label={'租户'}
-                                options={allTenants.map((item:any)=>({label: item.name, value: item.id}))}
+                                options={allTenants.map((item:any)=>({label: item.name, value: item.id.toString()}))}
                                 placeholder={'选择租户'}
                                 isClearable={true}
                                 isSearchable={false}
