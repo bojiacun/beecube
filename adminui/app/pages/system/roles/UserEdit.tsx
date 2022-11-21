@@ -16,11 +16,10 @@ import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
+import {usePromise} from "react-use";
 
-const userSchema = Yup.object().shape({
-    username: Yup.string().required(),
-    realname: Yup.string().required(),
-});
+
+const checkHandlers:any = {};
 
 const UserEdit = (props: any) => {
     const {model, onHide} = props;
@@ -33,7 +32,9 @@ const UserEdit = (props: any) => {
     const [allRoles, setAllRoles] = useState<any[]>([]);
     const [allTenants, setAllTenants] = useState<any[]>([]);
     const [posting, setPosting] = useState<boolean>(false);
-    const editFetcher = useFetcher();
+    const userNameCheckFetcher = useFetcher();
+    const emailNameCheckFetcher = useFetcher();
+    const phoneNameCheckFetcher = useFetcher();
     const postFetcher = useFetcher();
     const roleFetcher = useFetcher();
     const userRoleFetcher = useFetcher();
@@ -41,6 +42,53 @@ const UserEdit = (props: any) => {
     const tenantFetcher = useFetcher();
 
 
+    const userSchema = Yup.object().shape({
+        username: Yup.string().required().test('username-check', 'not avialiable', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.username = resolve;
+                userNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${value}&dataId=${model.id}`);
+            });
+        }),
+        realname: Yup.string().required(),
+        phone: Yup.string().test('phone-check', 'not avialiable', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.phone = resolve;
+                phoneNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=phone&fieldVal=${value}&dataId=${model.id}`);
+            });
+        }),
+        email: Yup.string().test('email-check', 'not avialiable', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.email = resolve;
+                emailNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=email&fieldVal=${value}&dataId=${model.id}`);
+            });
+        }),
+    });
+    const formik = useFormik({
+        initialValues: {
+            id: '',
+            username: '',
+            realname: '',
+            workNo: '',
+            phone: '',
+            telephone: '',
+            post: '',
+            departIds: '',
+            userIdentity: 1,
+            activitiSync: 1,
+            relTenantIds: ''
+        },
+        validationSchema: userSchema,
+        onSubmit: (values:any) => {
+            setPosting(true);
+            console.log(values);
+            if(values.id) {
+                postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
+            }
+            else {
+                postFetcher.submit(values, {method: 'post', action: '/system/users/add'});
+            }
+        }
+    });
     useEffect(()=>{
         if(model) {
             roleFetcher.load('/system/roles/all');
@@ -62,6 +110,22 @@ const UserEdit = (props: any) => {
         }
     }, [model]);
 
+    useEffect(()=>{
+        if(userNameCheckFetcher.type === 'done' && userNameCheckFetcher.data) {
+            checkHandlers.username(userNameCheckFetcher.data.success);
+        }
+    }, [userNameCheckFetcher.state]);
+    useEffect(()=>{
+        if(emailNameCheckFetcher.type === 'done' && emailNameCheckFetcher.data) {
+            checkHandlers.email(emailNameCheckFetcher.data.success);
+        }
+    }, [emailNameCheckFetcher.state]);
+    useEffect(()=>{
+        if(phoneNameCheckFetcher.type === 'done' && phoneNameCheckFetcher.data) {
+            checkHandlers.phone(phoneNameCheckFetcher.data.success);
+        }
+    }, [phoneNameCheckFetcher.state]);
+
 
     useEffect(()=>{
         if(userRoleFetcher.type === 'done' && userRoleFetcher.data) {
@@ -78,26 +142,18 @@ const UserEdit = (props: any) => {
         }
     }, [userDepartmentFetcher.state]);
 
-    useEffect(()=>{
-        if(editFetcher.type === 'done' && editFetcher.data) {
-            if(!editFetcher.data.success) {
-               showToastError(editFetcher.data.message);
-            }
-            else {
-                //@ts-ignore
-                postFetcher.submit(formik.values, {method: 'post', action: '/system/user/edit'});
-            }
-        }
-    }, [editFetcher.state]);
-
 
     useEffect(()=>{
         if(postFetcher.type === 'done' && postFetcher.data) {
-            onHide();
             setPosting(false);
             handleSaveResult(postFetcher.data);
+            if(postFetcher.data.success) {
+                onHide();
+            }
         }
     }, [postFetcher.state]);
+
+
     useEffect(()=>{
         if(roleFetcher.type === 'done' && roleFetcher.data) {
             setAllRoles(roleFetcher.data);
@@ -109,32 +165,9 @@ const UserEdit = (props: any) => {
         }
     }, [tenantFetcher.state]);
 
-    useEffect(() => {
-
-    }, [model]);
 
 
-    const formik = useFormik({
-        initialValues: {
-            id: '',
-            username: '',
-            realname: '',
-            workNo: '',
-            phone: '',
-            telephone: '',
-            post: '',
-            departIds: '',
-            userIdentity: 1,
-            activitiSync: 1,
-            relTenantIds: ''
-        },
-        validationSchema: userSchema,
-        onSubmit: (values) => {
-            setPosting(true);
-            console.log(values);
-            editFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${values.username}&dataId=${values.id}`);
-        }
-    });
+
     const handleOnPositionSelect = (rows:any) => {
         let newOptions = rows.map((x:any)=>({label: x.name, value:x.code, key: x.id}));
         setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));

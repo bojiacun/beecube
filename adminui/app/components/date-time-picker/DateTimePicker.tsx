@@ -24,6 +24,7 @@ const BootstrapFormControlInput = React.forwardRef(({value, inputName, onClick, 
         ref={ref}
         placeholder={inputPlaceHolder}
         onClick={onClick}
+        onChange={()=>{}}
     />
 });
 

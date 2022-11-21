@@ -20,6 +20,7 @@ export const API_ROLE_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/permissio
 
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
+export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
 
