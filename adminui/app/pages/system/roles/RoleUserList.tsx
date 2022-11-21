@@ -213,10 +213,10 @@ const RoleUserList = (props: any) => {
                 selectedRole={selectedRole}
                 refreshRoleUsers={refreshRoleUsers}
             />
-            <UserEdit model={editModal} setEditModel={setEditModal} onHide={()=>{
+            {editModal && <UserEdit model={editModal} onHide={()=>{
                 refreshRoleUsers();
                 setEditModal(null);
-            }} />
+            }} />}
         </>
     );
 }

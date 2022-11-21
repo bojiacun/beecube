@@ -48,6 +48,16 @@ const UserEdit = (props: any) => {
             if(model.id) {
                 userRoleFetcher.load(`/system/users/${model.id}/roles`);
                 userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
+                setPosting(false);
+                const newModel:any = {...model, selectedroles: '', selecteddeparts: ''};
+                formik.setValues(newModel);
+                const posts = newModel.post.split(',');
+                const postTexts = newModel.post_dictText.split(',');
+                const postValueOptions:any[] = [];
+                posts.forEach((v:any,i:number)=>{
+                    postValueOptions.push({value: v, label: postTexts[i]});
+                });
+                setPostValue(postValueOptions);
             }
         }
     }, [model]);
@@ -100,18 +110,7 @@ const UserEdit = (props: any) => {
     }, [tenantFetcher.state]);
 
     useEffect(() => {
-        if (model?.id) {
-            setPosting(false);
-            const newModel:any = {...model, selectedroles: '', selecteddeparts: ''};
-            formik.setValues(newModel);
-            const posts = newModel.post.split(',');
-            const postTexts = newModel.post_dictText.split(',');
-            const postValueOptions:any[] = [];
-            posts.forEach((v:any,i:number)=>{
-                postValueOptions.push({value: v, label: postTexts[i]});
-            });
-            setPostValue(postValueOptions);
-        }
+
     }, [model]);
 
 
