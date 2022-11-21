@@ -13,4 +13,9 @@ export default [
         route: 'system/positions',
         icon: 'Layers'
     },
+    {
+        title: '数据字典',
+        route: 'system/databases',
+        icon: 'Database'
+    },
 ]

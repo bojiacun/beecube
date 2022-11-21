@@ -34,7 +34,7 @@ const EditRoleSchema = Yup.object().shape({
     code: Yup.string().required(),
     name: Yup.string().required()
 });
-const PositionList = (props: any) => {
+const DatabaseDictList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
@@ -82,7 +82,7 @@ const PositionList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/positions/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/databases/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
@@ -100,16 +100,16 @@ const PositionList = (props: any) => {
 
     const columns: any[] = [
         {
-            text: '职务编码',
-            dataField: 'code',
+            text: '字典编号',
+            dataField: 'dictCode',
         },
         {
-            text: '职务名称',
-            dataField: 'name',
+            text: '字典名称',
+            dataField: 'dictName',
         },
         {
-            text: '职务等级',
-            dataField: 'postRank_dictText',
+            text: '描述',
+            dataField: 'description',
         },
 
         {
@@ -136,9 +136,9 @@ const PositionList = (props: any) => {
     }
     const handleOnEditSubmit = (values: any) => {
         if (values.id) {
-            editFetcher.submit(values, {method: 'put', action: `/system/positions/edit`, replace: true});
+            editFetcher.submit(values, {method: 'put', action: `/system/databases/edit`, replace: true});
         } else {
-            editFetcher.submit(values, {method: 'post', action: `/system/positions/add`, replace: true});
+            editFetcher.submit(values, {method: 'post', action: `/system/databases/add`, replace: true});
         }
     }
     const handleOnAdd = () => {
@@ -150,7 +150,7 @@ const PositionList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">职务管理</h4>
+                            <h4 className="mb-0">数据字典</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -160,7 +160,7 @@ const PositionList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建职务</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新增</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -170,10 +170,10 @@ const PositionList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>职务名称</FormLabel>
+                                    <FormLabel htmlFor={'dictName'}>字典名称</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'dictName'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
@@ -217,7 +217,7 @@ const PositionList = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-modal'}>编辑职务</Modal.Title>
+                    <Modal.Title id={'edit-modal'}>编辑字典</Modal.Title>
                 </Modal.Header>
                 {editModal &&
                     <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
@@ -226,16 +226,20 @@ const PositionList = (props: any) => {
                                 <FormikForm>
                                     <Modal.Body>
                                         <FormGroup>
-                                            <Form.Label htmlFor={'code'}>职务编码</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.code ? 'is-invalid' : '')} id={'roleCode'}
-                                                   name={'code'} placeholder={'职务编码'} readOnly={editModal.id}/>
+                                            <Form.Label htmlFor={'dictCode'}>字典编号</Form.Label>
+                                            <Field className={classNames('form-control', !!formik.errors.code ? 'is-invalid' : '')} id={'dictCode'}
+                                                   name={'dictCode'} placeholder={'字典编号'} readOnly={editModal.id}/>
                                         </FormGroup>
                                         <FormGroup>
-                                            <Form.Label htmlFor={'name'}>职务名称</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.name ? 'is-invalid' : '')} id={'roleName'}
-                                                   name={'name'} placeholder={'职务名称'}/>
+                                            <Form.Label htmlFor={'dictName'}>字典名称</Form.Label>
+                                            <Field className={classNames('form-control', !!formik.errors.name ? 'is-invalid' : '')} id={'dictName'}
+                                                   name={'dictName'} placeholder={'字典名称'}/>
                                         </FormGroup>
-                                        <BootstrapSelect name={'postRank'} label={'职务等级'} options={POST_RANKS} formik={formik} />
+                                        <FormGroup>
+                                            <Form.Label htmlFor={'description'}>描述</Form.Label>
+                                            <Field className={'form-control'} placeholder={'描述'} id={'description'} name={'description'}
+                                                   as={'textarea'} rows={3}/>
+                                        </FormGroup>
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button
@@ -258,4 +262,4 @@ const PositionList = (props: any) => {
     );
 }
 
-export default PositionList;
+export default DatabaseDictList;
