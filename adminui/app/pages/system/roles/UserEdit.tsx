@@ -103,9 +103,6 @@ const UserEdit = (props: any) => {
         if (model?.id) {
             setPosting(false);
             formik.setValues({...model, selectedroles: '', selecteddeparts: ''});
-            if(_.isEmpty(model.post)) {
-                setPostValue([]);
-            }
         }
     }, [model]);
 

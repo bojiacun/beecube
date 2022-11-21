@@ -23,7 +23,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     }
 
     useEffect(()=>{
-        if(formik.values[name]) {
+        if(formik.values[name] && options) {
             if(isMulti) {
                 const values = formik.values[name].split(',');
                 let valueOptions:any = [];
@@ -42,7 +42,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
         else {
             setValue(null);
         }
-    }, [formik.values[name]]);
+    }, [formik.values[name], options]);
 
 
 
