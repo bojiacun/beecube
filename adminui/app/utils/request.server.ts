@@ -23,6 +23,9 @@ export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
+export const API_POSITION_EDIT = `${BASE_URL}/jeecg-system/sys/position/edit`;
+export const API_POSITION_ADD = `${BASE_URL}/jeecg-system/sys/position/add`;
+export const API_POSITION_DELETE = `${BASE_URL}/jeecg-system/sys/position/delete`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
 
