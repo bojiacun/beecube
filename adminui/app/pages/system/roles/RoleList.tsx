@@ -161,7 +161,7 @@ const RoleList = (props: any) => {
         if (values.id) {
             editFetcher.submit(values, {method: 'put', action: `/system/roles/${values.id}`, replace: true});
         } else {
-            editFetcher.submit(values, {method: 'put', action: `/system/roles/add`, replace: true});
+            editFetcher.submit(values, {method: 'post', action: `/system/roles/add`, replace: true});
         }
     }
     const handleOnAdd = () => {
@@ -265,14 +265,13 @@ const RoleList = (props: any) => {
                                         </FormGroup>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <AwesomeButton
-                                            key={'submit'}
-                                            type={'primary'}
-                                            containerProps={{type: 'submit'}}
+                                        <Button
+                                            type={'submit'}
+                                            variant={'primary'}
                                             disabled={editFetcher.state === 'submitting'}
                                         >
                                             保存
-                                        </AwesomeButton>
+                                        </Button>
                                     </Modal.Footer>
                                 </FormikForm>
                             );

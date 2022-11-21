@@ -35,14 +35,13 @@ const EditRoleSchema = Yup.object().shape({
     name: Yup.string().required()
 });
 const PositionList = (props: any) => {
-    const {startPageLoading, stopPageLoading, setSelectedRole} = props;
+    const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -120,7 +119,7 @@ const PositionList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'list-user')}>用户</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
@@ -139,7 +138,7 @@ const PositionList = (props: any) => {
         if (values.id) {
             editFetcher.submit(values, {method: 'put', action: `/system/positions/${values.id}`, replace: true});
         } else {
-            editFetcher.submit(values, {method: 'put', action: `/system/positions/add`, replace: true});
+            editFetcher.submit(values, {method: 'post', action: `/system/positions/add`, replace: true});
         }
     }
     const handleOnAdd = () => {
@@ -239,13 +238,13 @@ const PositionList = (props: any) => {
                                         <BootstrapSelect name={'postRank'} label={'职务等级'} options={POST_RANKS} formik={formik} />
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <AwesomeButton
-                                            key={'submit'}
-                                            type={'primary'}
+                                        <Button
+                                            type={'submit'}
+                                            variant={'primary'}
                                             disabled={editFetcher.state === 'submitting'}
                                         >
                                             保存
-                                        </AwesomeButton>
+                                        </Button>
                                     </Modal.Footer>
                                 </FormikForm>
                             );

@@ -5,6 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_POSITION_LIST,  requestWithToken} from "~/utils/request.server";
 import PositionList from "~/pages/system/PositionList";
+import {withPageLoading} from "~/utils/components";
 
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -27,4 +28,4 @@ const PositionListPage = (props:any) => {
     );
 }
 
-export default PositionListPage;
+export default withPageLoading(PositionListPage);
