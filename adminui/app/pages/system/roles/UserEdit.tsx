@@ -102,7 +102,15 @@ const UserEdit = (props: any) => {
     useEffect(() => {
         if (model?.id) {
             setPosting(false);
-            formik.setValues({...model, selectedroles: '', selecteddeparts: ''});
+            const newModel:any = {...model, selectedroles: '', selecteddeparts: ''};
+            formik.setValues(newModel);
+            const posts = newModel.post.split(',');
+            const postTexts = newModel.post_dictText.split(',');
+            const postValueOptions:any[] = [];
+            posts.forEach((v:any,i:number)=>{
+                postValueOptions.push({value: v, label: postTexts[i]});
+            });
+            setPostValue(postValueOptions);
         }
     }, [model]);
 
@@ -129,7 +137,7 @@ const UserEdit = (props: any) => {
         }
     });
     const handleOnPositionSelect = (rows:any) => {
-        let newOptions = rows.map((x:any)=>({label: x.name, value:x.id, key: x.id}));
+        let newOptions = rows.map((x:any)=>({label: x.name, value:x.code, key: x.id}));
         setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));
 
         let data = {name: 'post', value: newOptions.map((item:any)=>item.value).join(',')};
