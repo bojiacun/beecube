@@ -4,6 +4,7 @@ import _ from "lodash";
 import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_POSITION_LIST,  requestWithToken} from "~/utils/request.server";
+import PositionList from "~/pages/system/PositionList";
 
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -19,3 +20,11 @@ export const loader: LoaderFunction = async ({request}) => {
     const result = await requestWithToken(request)(API_POSITION_LIST + queryString);
     return json(result.result);
 }
+
+const PositionListPage = (props:any) => {
+    return (
+        <PositionList {...props} />
+    );
+}
+
+export default PositionListPage;
