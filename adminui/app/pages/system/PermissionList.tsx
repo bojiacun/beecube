@@ -57,6 +57,7 @@ const PermissionList = () => {
             text: '菜单名称',
             dataField: 'name',
             formatter: (cell:any, row:any)=>{
+                console.log(expanded);
                 if(expanded.includes(row.id)) {
                     //已经展开的行
                     return (
