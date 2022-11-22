@@ -18,6 +18,7 @@ export const API_ROLE_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/role/queryTr
 export const API_ROLE_PERMISSIONS = `${BASE_URL}/jeecg-system/sys/permission/queryRolePermission`;
 export const API_ROLE_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/permission/saveRolePermission`;
 
+export const API_PERMISSION_LIST = `${BASE_URL}/jeecg-system/sys/permission/list`;
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
