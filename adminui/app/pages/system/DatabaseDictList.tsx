@@ -40,7 +40,6 @@ const DatabaseDictList = (props: any) => {
     const [selectedModel, setSelectedModel] = useState<any>();
     const searchFetcher = useFetcher();
     const refreshFetcher = useFetcher();
-    const dictNameCheckFetcher = useFetcher();
     const dictCodeCheckFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const editFetcher = useFetcher();
@@ -51,35 +50,21 @@ const DatabaseDictList = (props: any) => {
             return new Promise((resolve, reject)=>{
                 checkHandlers.dictCode = resolve;
                 if(editModal) {
-                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictCode&fieldVal=${value}&dataId=${editModal.id}`);
+                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dict_code&fieldVal=${value}&dataId=${editModal.id}`);
                 }
                 else {
-                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictCode&fieldVal=${value}`);
+                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dict_code&fieldVal=${value}`);
                 }
             });
         }),
-        dictName: Yup.string().required().test('dict-name', 'not available', (value)=>{
-            return new Promise((resolve, reject)=>{
-                checkHandlers.dictName = resolve;
-                if(editModal) {
-                    dictNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictName&fieldVal=${value}&dataId=${editModal.id}`);
-                }
-                else {
-                    dictNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictName&fieldVal=${value}`);
-                }
-            });
-        })
+        dictName: Yup.string().required()
     });
-    useEffect(()=>{
-        if(dictNameCheckFetcher.type === 'done' && dictNameCheckFetcher.data) {
-            checkHandlers.dictName(dictNameCheckFetcher.data.success);
-        }
-    }, [dictNameCheckFetcher.state]);
     useEffect(()=>{
         if(dictCodeCheckFetcher.type === 'done' && dictCodeCheckFetcher.data) {
             checkHandlers.dictCode(dictCodeCheckFetcher.data.success);
         }
     }, [dictCodeCheckFetcher.state]);
+
     useEffect(() => {
         if (refreshFetcher.type === 'done' && refreshFetcher.data) {
             handleResult(refreshFetcher.data);
@@ -283,12 +268,12 @@ const DatabaseDictList = (props: any) => {
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'dictCode'}>字典编号</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.code ? 'is-invalid' : '')} id={'dictCode'}
+                                            <Field className={classNames('form-control', !!formik.errors.dictCode ? 'is-invalid' : '')} id={'dictCode'}
                                                    name={'dictCode'} placeholder={'字典编号'} readOnly={editModal.id}/>
                                         </FormGroup>
                                         <FormGroup>
                                             <Form.Label htmlFor={'dictName'}>字典名称</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.name ? 'is-invalid' : '')} id={'dictName'}
+                                            <Field className={classNames('form-control', !!formik.errors.dictName ? 'is-invalid' : '')} id={'dictName'}
                                                    name={'dictName'} placeholder={'字典名称'}/>
                                         </FormGroup>
                                         <FormGroup>
