@@ -133,7 +133,14 @@ export function showDeleteAlert(deleteCallback: Function, message: string = '您
         }
     })
 }
-
+export function handleResult(result: any, successMessage = '执行成功') {
+    if(!result.success) {
+        showToastError(result.message || '服务器内部错误');
+    }
+    else {
+        showToastSuccess(successMessage);
+    }
+}
 export function handleSaveResult(result: any, successMessage = '保存成功') {
     if(!result.success) {
         showToastError(result.message || '服务器内部错误');

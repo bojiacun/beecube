@@ -439,8 +439,8 @@ public class SysDictController {
 	 * @功能：刷新缓存
 	 * @return
 	 */
-	@RequestMapping(value = "/refleshCache")
-	public Result<?> refleshCache() {
+	@RequestMapping(value = "/refreshCache")
+	public Result<?> refreshCache() {
 		Result<?> result = new Result<SysDict>();
 		//清空字典缓存
 		Set keys = redisTemplate.keys(CacheConstant.SYS_DICT_CACHE + "*");

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
-    emptySortFunc,
+    emptySortFunc, handleResult, handleSaveResult,
     headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
@@ -37,6 +37,7 @@ const DatabaseDictList = (props: any) => {
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
+    const refreshFetcher = useFetcher();
     const dictNameCheckFetcher = useFetcher();
     const dictCodeCheckFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -77,10 +78,13 @@ const DatabaseDictList = (props: any) => {
             checkHandlers.dictCode(dictCodeCheckFetcher.data.success);
         }
     }, [dictCodeCheckFetcher.state]);
-
-
     useEffect(() => {
-        if (searchFetcher.data) {
+        if (refreshFetcher.type === 'done' && refreshFetcher.data) {
+            handleResult(refreshFetcher.data);
+        }
+    }, [refreshFetcher.state]);
+    useEffect(() => {
+        if (searchFetcher.type === 'done' && searchFetcher.data) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
@@ -182,6 +186,9 @@ const DatabaseDictList = (props: any) => {
     const handleOnAdd = () => {
         setEditModal({});
     }
+    const handleOnRefresh = () => {
+        refreshFetcher.load('/system/databases/refresh');
+    }
     return (
         <>
             <Card>
@@ -199,6 +206,8 @@ const DatabaseDictList = (props: any) => {
                                 onChange={handlePageSizeChanged}
                             />
                             <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新增</Button>
+                            <Button onClick={handleOnRefresh}><i className={'feather icon-plus'} />刷新缓存</Button>
+
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
