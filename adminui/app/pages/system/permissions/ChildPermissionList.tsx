@@ -100,6 +100,7 @@ const ChildPermissionList = (props: any) => {
             striped hover columns={columns} bootstrap4 data={list?.records}
             expandRow={expandRow}
             keyField={'id'}
+            headerWrapperClasses={'d-none'}
         />
     );
 }

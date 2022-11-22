@@ -205,7 +205,7 @@ const DatabaseDictList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新增</Button>
+                            <Button className={'mr-1'} onClick={handleOnAdd}><i className={'feather icon-plus'} />新增</Button>
                             <Button onClick={handleOnRefresh}><i className={'feather icon-plus'} />刷新缓存</Button>
 
                         </Col>

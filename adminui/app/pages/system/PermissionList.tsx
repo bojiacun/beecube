@@ -19,7 +19,7 @@ const PermissionList = () => {
 
     useEffect(() => {
         if (searchFetcher.data) {
-            setList(searchFetcher.data);
+            // setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
 
@@ -31,12 +31,6 @@ const PermissionList = () => {
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
-    }
-    const handleSort = (field: any, order: any): void => {
-        searchState.column = field;
-        searchState.order = order;
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get'});
     }
@@ -114,7 +108,7 @@ const PermissionList = () => {
         renderer: (row:any) => {
             return (
                 <div>
-                    <ChildPermissionList list={row.children} />
+
                 </div>
             );
         },
@@ -131,7 +125,7 @@ const PermissionList = () => {
             <div className={'m-2'}>
                 <Row>
                     <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                        <h4 className="mb-0">登录日志</h4>
+                        <h4 className="mb-0">菜单管理</h4>
                         <ReactSelectThemed
                             placeholder={'分页大小'}
                             isSearchable={false}
@@ -168,7 +162,6 @@ const PermissionList = () => {
             <BootstrapTable
                 classes={'table-layout-fixed position-relative b-table'}
                 striped hover columns={columns} bootstrap4 data={list?.records}
-                expandRow={expandRow}
                 keyField={'id'}
             />
 
@@ -177,7 +170,7 @@ const PermissionList = () => {
                 <Row>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list?.size + 1} 至 {list?.current * list?.size > list?.total ? list?.total : list?.current * list?.size} 条</span>
                     </Col>
                     <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                         <SinglePagination

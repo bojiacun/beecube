@@ -5,6 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_PERMISSION_LIST, requestWithToken} from "~/utils/request.server";
 import PermissionList from "~/pages/system/PermissionList";
+import {withPageLoading} from "~/utils/components";
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
@@ -27,4 +28,4 @@ const PermissionListPage = () => {
     );
 }
 
-export default PermissionListPage;
+export default withPageLoading(PermissionListPage);
