@@ -28,7 +28,15 @@ export const API_POSITION_ADD = `${BASE_URL}/jeecg-system/sys/position/add`;
 export const API_POSITION_DELETE = `${BASE_URL}/jeecg-system/sys/position/delete`;
 
 export const API_DATABASE_DICT_LIST = `${BASE_URL}/jeecg-system/sys/dict/list`;
+export const API_DATABASE_DICT_EDIT = `${BASE_URL}/jeecg-system/sys/dict/edit`;
+export const API_DATABASE_DICT_ADD = `${BASE_URL}/jeecg-system/sys/dict/add`;
+export const API_DATABASE_DICT_DELETE = `${BASE_URL}/jeecg-system/sys/dict/delete`;
+
+
 export const API_DATABASE_DICT_ITEM_LIST = `${BASE_URL}/jeecg-system/sys/dictItem/list`;
+export const API_DATABASE_DICT_ITEM_EDIT = `${BASE_URL}/jeecg-system/sys/dictItem/edit`;
+export const API_DATABASE_DICT_ITEM_ADD = `${BASE_URL}/jeecg-system/sys/dictItem/add`;
+export const API_DATABASE_DICT_ITEM_DELETE = `${BASE_URL}/jeecg-system/sys/dictItem/delete`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
 

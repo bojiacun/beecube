@@ -11,13 +11,10 @@ import {Form as FormikForm} from "formik/dist/Form";
 import classNames from "classnames";
 import * as Yup from "yup";
 
-const DictItemSchema = Yup.object().shape({
-    itemValue: Yup.string().required(),
-    itemText: Yup.string().required()
-});
 
+const checkHandlers:any = {};
 const DictItemListSelector = (props: any) => {
-    const {show, onHide} = props;
+    const {show, onHide, selectedDict} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -25,6 +22,45 @@ const DictItemListSelector = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+    const itemValueCheckFetcher = useFetcher();
+    const itemTextCheckFetcher = useFetcher();
+
+
+    const DictItemSchema = Yup.object().shape({
+        itemValue: Yup.string().required().test('item-value', 'not available', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.itemValue = resolve;
+                if(editModal) {
+                    itemValueCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
+                }
+                else {
+                    itemValueCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}`);
+                }
+            });
+        }),
+        itemText: Yup.string().required().test('item-text', 'not available', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.itemText = resolve;
+                if(editModal) {
+                    itemTextCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
+                }
+                else {
+                    itemTextCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}`);
+                }
+            });
+        })
+    });
+    useEffect(()=>{
+        if(itemTextCheckFetcher.type === 'done' && itemTextCheckFetcher.data) {
+            checkHandlers.itemText(itemTextCheckFetcher.data.success);
+        }
+    }, [itemTextCheckFetcher.state]);
+    useEffect(()=>{
+        if(itemValueCheckFetcher.type === 'done' && itemValueCheckFetcher.data) {
+            checkHandlers.itemValue(itemValueCheckFetcher.data.success);
+        }
+    }, [itemValueCheckFetcher.state]);
+
 
     useEffect(() => {
         if (show) {
