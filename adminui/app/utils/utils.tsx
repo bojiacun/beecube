@@ -82,7 +82,8 @@ export const defaultTableExpandRow = {
     expandHeaderColumnRenderer: () => {
         return <></>
     },
-    expandColumnRenderer: ({expanded}: {expanded: boolean}) => {
+    expandColumnRenderer: ({expanded, expandable}: {expanded: boolean, expandable: boolean}) => {
+        if(!expandable) return <MinusSquare size={16} />
         if(expanded) {
             return <MinusSquare size={16} />
         }

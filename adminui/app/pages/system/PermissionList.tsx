@@ -15,7 +15,6 @@ export const MenuTypes = [
 
 const PermissionList = () => {
     const [list, setList] = useState<any>(useLoaderData());
-    const [expanded, setExpanded] = useState<any[]>([]);
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 1});
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
@@ -29,14 +28,6 @@ const PermissionList = () => {
     }, [searchFetcher.state]);
 
 
-    const handleOnExpand = (row:any, isExpand:boolean, rowIndex:number) => {
-        if(isExpand) {
-            setExpanded([...expanded, row.id]);
-        }
-        else {
-            setExpanded(expanded.filter(x=>x !== row.id));
-        }
-    }
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
@@ -56,26 +47,6 @@ const PermissionList = () => {
         {
             text: '菜单名称',
             dataField: 'name',
-            formatter: (cell:any, row:any)=>{
-                console.log(expanded);
-                if(expanded.includes(row.id)) {
-                    //已经展开的行
-                    return (
-                        <>
-                            <MinusSquare size={16} style={{marginRight: 5}} />
-                            {row.name}
-                        </>
-                    );
-                }
-                else {
-                    return (
-                        <>
-                            <PlusSquare size={16} style={{marginRight: 5}} />
-                            {row.name}
-                        </>
-                    );
-                }
-            }
         },
         {
             text: '菜单类型',
@@ -137,15 +108,12 @@ const PermissionList = () => {
         ...defaultTableExpandRow,
         renderer: (row:any) => {
             return (
-                <div>
+                <div style={{marginLeft: -1,marginRight: -1, paddingLeft: 57}}>
                     <ChildPermissionList list={row.children} />
                 </div>
             );
         },
-        showExpandColumn: false,
-        expandByColumnOnly: false,
-        onExpand: handleOnExpand,
-        expanded: expanded,
+        nonExpandable: list.filter((x:any)=>!x.children || x.children.length == 0).map((x:any)=>x.id)
     }
     const handleKeywordChanged = (e:any) => {
         setSearchState({...searchState, keyWord: e.target.value});

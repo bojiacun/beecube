@@ -30,7 +30,7 @@ const ChildPermissionList = (props: any) => {
         {
             text: '菜单类型',
             dataField: 'menuType',
-            headerStyle: {width: 120},
+            style: {width: 120},
             formatter: (cell:any, row:any)=>{
                 return MenuTypes[row.menuType];
             }
@@ -38,25 +38,25 @@ const ChildPermissionList = (props: any) => {
         {
             text: '图标',
             dataField: 'icon',
-            headerStyle: {width: 260},
+            style: {width: 260},
             classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
-            headerStyle: {width: 260},
+            style: {width: 260},
             classes: 'text-cut'
         },
         {
             text: '排序',
             dataField: 'sortNo',
-            headerStyle: {width: 120},
+            style: {width: 120},
         },
         {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 180},
+            style: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -87,11 +87,12 @@ const ChildPermissionList = (props: any) => {
         ...defaultTableExpandRow,
         renderer: (row: any) => {
             return (
-                <div></div>
+                <div style={{marginLeft: -1,marginRight: -1, paddingLeft: 60}}>
+                    <ChildPermissionList list={row.children || []} />
+                </div>
             );
         },
-        showExpandColumn: false,
-        expandByColumnOnly: false,
+        nonExpandable: list.filter((x:any)=>!x.children || x.children.length == 0).map((x:any)=>x.id)
     }
 
     return (
@@ -100,6 +101,7 @@ const ChildPermissionList = (props: any) => {
             striped hover columns={columns} bootstrap4 data={list}
             expandRow={expandRow}
             keyField={'id'}
+            headerWrapperClasses={'d-none'}
         />
     );
 }

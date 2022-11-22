@@ -2470,5 +2470,8 @@ span.divider {
 .react-bootstrap-table .row-expansion-style {
   padding: 0 !important;
 }
+.react-bootstrap-table .expand-cell {
+  width: 60px;
+}
 
 /*# sourceMappingURL=styles.css.map */
