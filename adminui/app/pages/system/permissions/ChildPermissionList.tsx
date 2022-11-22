@@ -6,10 +6,12 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {Delete, Edit, MoreVertical} from "react-feather";
+import {MenuTypes} from "~/pages/system/PermissionList";
 
 
 const ChildPermissionList = (props: any) => {
     const {list} = props;
+
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
@@ -28,26 +30,32 @@ const ChildPermissionList = (props: any) => {
         {
             text: '菜单类型',
             dataField: 'menuType',
+            headerStyle: {width: 120},
+            formatter: (cell:any, row:any)=>{
+                return MenuTypes[row.menuType];
+            }
         },
         {
             text: '图标',
             dataField: 'icon',
-        },
-        {
-            text: '组件',
-            dataField: 'component',
+            headerStyle: {width: 260},
+            classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
+            headerStyle: {width: 260},
+            classes: 'text-cut'
         },
         {
             text: '排序',
             dataField: 'sortNo',
+            headerStyle: {width: 120},
         },
         {
             text: '操作',
             dataField: 'operation',
+            isDummyField: true,
             headerStyle: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (
@@ -82,6 +90,8 @@ const ChildPermissionList = (props: any) => {
                 <div></div>
             );
         },
+        showExpandColumn: false,
+        expandByColumnOnly: false,
     }
 
     return (
@@ -90,7 +100,6 @@ const ChildPermissionList = (props: any) => {
             striped hover columns={columns} bootstrap4 data={list}
             expandRow={expandRow}
             keyField={'id'}
-            headerWrapperClasses={'d-none'}
         />
     );
 }

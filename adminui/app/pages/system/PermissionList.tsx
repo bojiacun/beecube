@@ -2,15 +2,20 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {DefaultListSearchParams, defaultTableExpandRow, emptySortFunc, headerSortingClasses, PageSizeOptions, showDeleteAlert} from "~/utils/utils";
 import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
-import SinglePagination from "~/components/pagination/SinglePagination";
-import {Delete, Edit, MoreVertical} from "react-feather";
+import {Delete, Edit, MinusSquare, MoreVertical, PlusSquare} from "react-feather";
 import ChildPermissionList from "~/pages/system/permissions/ChildPermissionList";
 
 
+export const MenuTypes = [
+    '一级菜单',
+    '子菜单',
+    '按钮权限'
+];
+
 const PermissionList = () => {
     const [list, setList] = useState<any>(useLoaderData());
+    const [expanded, setExpanded] = useState<any[]>([]);
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 1});
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
@@ -24,16 +29,15 @@ const PermissionList = () => {
     }, [searchFetcher.state]);
 
 
-    const handlePageChanged = (e: any) => {
-        searchState.pageNo = e.selected + 1;
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
+    const handleOnExpand = (row:any, isExpand:boolean, rowIndex:number) => {
+        if(isExpand) {
+            setExpanded([...expanded, row.id]);
+        }
+        else {
+            setExpanded(expanded.filter(x=>x !== row.id));
+        }
     }
-    const handlePageSizeChanged = (newValue: any) => {
-        searchState.pageSize = parseInt(newValue.value);
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
-    }
+
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'edit':
@@ -52,30 +56,55 @@ const PermissionList = () => {
         {
             text: '菜单名称',
             dataField: 'name',
+            formatter: (cell:any, row:any)=>{
+                if(expanded.includes(row.id)) {
+                    //已经展开的行
+                    return (
+                        <>
+                            <MinusSquare size={16} style={{marginRight: 5}} />
+                            {row.name}
+                        </>
+                    );
+                }
+                else {
+                    return (
+                        <>
+                            <PlusSquare size={16} style={{marginRight: 5}} />
+                            {row.name}
+                        </>
+                    );
+                }
+            }
         },
         {
             text: '菜单类型',
             dataField: 'menuType',
+            headerStyle: {width: 120},
+            formatter: (cell:any, row:any)=>{
+                return MenuTypes[row.menuType];
+            }
         },
         {
             text: '图标',
             dataField: 'icon',
-        },
-        {
-            text: '组件',
-            dataField: 'component',
+            headerStyle: {width: 260},
+            classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
+            headerStyle: {width: 260},
+            classes: 'text-cut'
         },
         {
             text: '排序',
             dataField: 'sortNo',
+            headerStyle: {width: 120},
         },
         {
             text: '操作',
             dataField: 'operation',
+            isDummyField: true,
             headerStyle: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (
@@ -112,6 +141,10 @@ const PermissionList = () => {
                 </div>
             );
         },
+        showExpandColumn: false,
+        expandByColumnOnly: false,
+        onExpand: handleOnExpand,
+        expanded: expanded,
     }
     const handleKeywordChanged = (e:any) => {
         setSearchState({...searchState, keyWord: e.target.value});
