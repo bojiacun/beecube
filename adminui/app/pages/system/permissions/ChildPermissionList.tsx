@@ -10,23 +10,13 @@ import {Delete, Edit, MoreVertical} from "react-feather";
 
 const ChildPermissionList = (props: any) => {
     const {list} = props;
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 1});
-    const [editModal, setEditModal] = useState<any>();
-    const searchFetcher = useFetcher();
-    const editFetcher = useFetcher();
-    const deleteFetcher = useFetcher();
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'edit':
                 //编辑
-                setEditModal(row);
                 break;
             case 'delete':
-                //删除按钮
-                showDeleteAlert(function () {
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/positions/delete?id=${row.id}`, replace: true});
-                });
                 break;
         }
     }
@@ -97,7 +87,7 @@ const ChildPermissionList = (props: any) => {
     return (
         <BootstrapTable
             classes={'table-layout-fixed position-relative b-table'}
-            striped hover columns={columns} bootstrap4 data={list?.records}
+            striped hover columns={columns} bootstrap4 data={list}
             expandRow={expandRow}
             keyField={'id'}
             headerWrapperClasses={'d-none'}
