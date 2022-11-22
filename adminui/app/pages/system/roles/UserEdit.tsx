@@ -46,20 +46,35 @@ const UserEdit = (props: any) => {
         username: Yup.string().required().test('username-check', 'not avialiable', (value)=>{
             return new Promise((resolve, reject)=>{
                 checkHandlers.username = resolve;
-                userNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${value}&dataId=${model.id}`);
+                if(model.id) {
+                    userNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${value}&dataId=${model.id}`);
+                }
+                else {
+                    userNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=username&fieldVal=${value}`);
+                }
             });
         }),
         realname: Yup.string().required(),
         phone: Yup.string().test('phone-check', 'not avialiable', (value)=>{
             return new Promise((resolve, reject)=>{
                 checkHandlers.phone = resolve;
-                phoneNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=phone&fieldVal=${value}&dataId=${model.id}`);
+                if(model.id) {
+                    phoneNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=phone&fieldVal=${value}&dataId=${model.id}`);
+                }
+                else {
+                    phoneNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=phone&fieldVal=${value}`);
+                }
             });
         }),
         email: Yup.string().test('email-check', 'not avialiable', (value)=>{
             return new Promise((resolve, reject)=>{
                 checkHandlers.email = resolve;
-                emailNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=email&fieldVal=${value}&dataId=${model.id}`);
+                if(model.id) {
+                    emailNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=email&fieldVal=${value}&dataId=${model.id}`);
+                }
+                else {
+                    emailNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_user&fieldName=email&fieldVal=${value}`);
+                }
             });
         }),
     });

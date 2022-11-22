@@ -30,18 +30,54 @@ const POST_RANKS = [
     {label: '正高级', value: '5'},
 ];
 
-const EditRoleSchema = Yup.object().shape({
-    code: Yup.string().required(),
-    name: Yup.string().required()
-});
+const checkHandlers:any = {};
 const DatabaseDictList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
-    const editFetcher = useFetcher();
+    const dictNameCheckFetcher = useFetcher();
+    const dictCodeCheckFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+    const editFetcher = useFetcher();
+
+
+    const DictSchema = Yup.object().shape({
+        dictCode: Yup.string().required().test('dict-code', 'not available', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.dictCode = resolve;
+                if(editModal) {
+                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictCode&fieldVal=${value}&dataId=${editModal.id}`);
+                }
+                else {
+                    dictCodeCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictCode&fieldVal=${value}`);
+                }
+            });
+        }),
+        dictName: Yup.string().required().test('dict-name', 'not available', (value)=>{
+            return new Promise((resolve, reject)=>{
+                checkHandlers.dictName = resolve;
+                if(editModal) {
+                    dictNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictName&fieldVal=${value}&dataId=${editModal.id}`);
+                }
+                else {
+                    dictNameCheckFetcher.load(`/system/duplicate/check?tableName=sys_dict&fieldName=dictName&fieldVal=${value}`);
+                }
+            });
+        })
+    });
+    useEffect(()=>{
+        if(dictNameCheckFetcher.type === 'done' && dictNameCheckFetcher.data) {
+            checkHandlers.dictName(dictNameCheckFetcher.data.success);
+        }
+    }, [dictNameCheckFetcher.state]);
+    useEffect(()=>{
+        if(dictCodeCheckFetcher.type === 'done' && dictCodeCheckFetcher.data) {
+            checkHandlers.dictCode(dictCodeCheckFetcher.data.success);
+        }
+    }, [dictCodeCheckFetcher.state]);
+
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -60,6 +96,8 @@ const DatabaseDictList = (props: any) => {
             }
         }
     }, [editFetcher.state]);
+
+
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
@@ -220,7 +258,7 @@ const DatabaseDictList = (props: any) => {
                     <Modal.Title id={'edit-modal'}>编辑字典</Modal.Title>
                 </Modal.Header>
                 {editModal &&
-                    <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
+                    <Formik initialValues={editModal} validationSchema={DictSchema} onSubmit={handleOnEditSubmit}>
                         {(formik:any) => {
                             return (
                                 <FormikForm>

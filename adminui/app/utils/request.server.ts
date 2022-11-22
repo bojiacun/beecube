@@ -28,6 +28,7 @@ export const API_POSITION_ADD = `${BASE_URL}/jeecg-system/sys/position/add`;
 export const API_POSITION_DELETE = `${BASE_URL}/jeecg-system/sys/position/delete`;
 
 export const API_DATABASE_DICT_LIST = `${BASE_URL}/jeecg-system/sys/dict/list`;
+export const API_DATABASE_DICT_ITEM_LIST = `${BASE_URL}/jeecg-system/sys/dictItem/list`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
 
