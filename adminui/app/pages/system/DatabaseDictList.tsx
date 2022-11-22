@@ -20,6 +20,7 @@ import {AwesomeButton} from "react-awesome-button";
 import * as Yup from "yup";
 import TreePermissionList from "~/pages/system/roles/TreePermissionList";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
+import DictItemListSelector from "~/pages/system/databases/DictItemListSelector";
 
 
 const POST_RANKS = [
@@ -36,6 +37,7 @@ const DatabaseDictList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [selectedModel, setSelectedModel] = useState<any>();
     const searchFetcher = useFetcher();
     const refreshFetcher = useFetcher();
     const dictNameCheckFetcher = useFetcher();
@@ -120,6 +122,10 @@ const DatabaseDictList = (props: any) => {
                 //编辑
                 setEditModal(row);
                 break;
+            case 'dict-config':
+                //编辑
+                setSelectedModel(row);
+                break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
@@ -157,11 +163,14 @@ const DatabaseDictList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            isDummyField: true,
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'dict-config')}>字典配置</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
@@ -304,7 +313,7 @@ const DatabaseDictList = (props: any) => {
                     </Formik>
                 }
             </Modal>
-
+            { selectedModel && <DictItemListSelector selectedDict={selectedModel} show={!!selectedModel} onHide={()=>setSelectedModel(null)} /> }
         </>
     );
 }

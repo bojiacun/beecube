@@ -5,9 +5,8 @@ import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal,
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {AwesomeButton} from "react-awesome-button";
 import {Field, Formik} from "formik";
-import {Form as FormikForm} from "formik/dist/Form";
+import {Form as FormikForm} from "formik";
 import classNames from "classnames";
 import * as Yup from "yup";
 
@@ -16,7 +15,7 @@ const checkHandlers:any = {};
 const DictItemListSelector = (props: any) => {
     const {show, onHide, selectedDict} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, dictId: selectedDict?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
@@ -64,9 +63,11 @@ const DictItemListSelector = (props: any) => {
 
     useEffect(() => {
         if (show) {
-            searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+            searchFetcher.submit(searchState, {method: 'get', action: '/system/databases/items'});
         }
     }, [show]);
+
+
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);
@@ -86,15 +87,11 @@ const DictItemListSelector = (props: any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
+        searchFetcher.submit(searchState, {method: 'get', action: `/system/databases/items?dictId=${selectedDict?.id}`});
     }
-    const handlePageSizeChanged = (newValue: any) => {
-        searchState.pageSize = parseInt(newValue.value);
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
-    }
+
     const handleOnSearchNameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
+        setSearchState({...searchState, itemText: e.target.value});
     }
     const handleOnSearchSubmit = () => {
         //设置分页为1
@@ -162,7 +159,7 @@ const DictItemListSelector = (props: any) => {
         }
     }
     const handleOnAdd = () => {
-        setEditModal({});
+        setEditModal({status: 1});
     }
     const selectRowConfig = {
         ...defaultSelectRowConfig,
@@ -187,20 +184,13 @@ const DictItemListSelector = (props: any) => {
                     <div className={'m-2'}>
                         <Row>
                             <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                                <ReactSelectThemed
-                                    placeholder={'分页大小'}
-                                    isSearchable={false}
-                                    defaultValue={PageSizeOptions[0]}
-                                    options={PageSizeOptions}
-                                    className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                    onChange={handlePageSizeChanged}
-                                />
                                 <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建</Button>
                             </Col>
                             <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                                <searchFetcher.Form action={'/system/databases/items'} className={'form-inline justify-content-end'}
+                                <searchFetcher.Form method={'get'} action={'/system/databases/items'} className={'form-inline justify-content-end'}
                                                     onSubmit={handleOnSearchSubmit}>
                                     <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                    <FormControl name={'dictId'} value={searchState.dictId} type={'hidden'}/>
                                     <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                     <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                     <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
@@ -266,6 +256,7 @@ const DictItemListSelector = (props: any) => {
                         {(formik: any) => {
                             return (
                                 <FormikForm>
+                                    <FormControl name={'dictId'} value={selectedDict?.id} type={'hidden'}/>
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'itemText'}>名称</Form.Label>
