@@ -6,6 +6,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {Delete, Edit, MoreVertical} from "react-feather";
+import ChildPermissionList from "~/pages/system/permissions/ChildPermissionList";
 
 
 const PermissionList = () => {
@@ -112,7 +113,9 @@ const PermissionList = () => {
         ...defaultTableExpandRow,
         renderer: (row:any) => {
             return (
-                <div></div>
+                <div>
+                    <ChildPermissionList list={row.children} />
+                </div>
             );
         },
     }
