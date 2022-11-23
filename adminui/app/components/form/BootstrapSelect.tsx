@@ -1,7 +1,7 @@
 import {FormGroup, FormLabel} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {FC, useEffect, useState} from "react";
-import {FormikProps} from "formik";
+import {FormikProps, useFormikContext} from "formik";
 import _ from "lodash";
 
 export interface BootstrapSelectProps extends Partial<any> {
@@ -12,12 +12,12 @@ export interface BootstrapSelectProps extends Partial<any> {
     isClearable?: boolean;
     isSearchable?: boolean;
     isMulti?: boolean;
-    formik: FormikProps<any>;
 }
 
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
-    let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false, formik} = props;
+    let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false} = props;
     const [value, setValue] = useState<any>();
+    const formik = useFormikContext<any>();
     if (placeholder === '') {
         placeholder = label;
     }

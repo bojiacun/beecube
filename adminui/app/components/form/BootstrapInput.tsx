@@ -1,17 +1,17 @@
 import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import {FC} from "react";
 import classNames from "classnames";
-import {FormikProps} from "formik";
+import {useFormikContext} from "formik";
 
 export interface BootstrapInputProps extends Partial<any>{
     label: string;
     name: string;
     placeholder?: string;
-    formik: FormikProps<any>;
 }
 
 const BootstrapInput: FC<BootstrapInputProps> = (props) => {
-    let {label, name, formik, placeholder = '', className, ...rest} = props;
+    let {label, name, placeholder = '', className, ...rest} = props;
+    const formik = useFormikContext<any>();
 
     if(placeholder === '') {
         placeholder = label;

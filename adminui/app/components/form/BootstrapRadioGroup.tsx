@@ -19,7 +19,7 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
                 <Col>
                     {options.map(item=>{
                         return (
-                            <Form.Check inline value={item.value} onChange={formik.handleChange} checked={formik.values[name]==item.value} name={name} label={item.label} id={`${item.label}-${item.value}`} type={'radio'} />
+                            <Form.Check key={item.value} inline value={item.value} onChange={formik.handleChange} checked={formik.values[name]==item.value} name={name} label={item.label} id={`${item.label}-${item.value}`} type={'radio'} />
                         );
                     })}
                 </Col>
