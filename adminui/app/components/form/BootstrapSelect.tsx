@@ -3,6 +3,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import {FC, useEffect, useState} from "react";
 import {useFormikContext} from "formik";
 import _ from "lodash";
+import {useTranslation} from "react-i18next";
 
 export interface BootstrapSelectProps extends Partial<any> {
     name: string;
@@ -17,6 +18,7 @@ export interface BootstrapSelectProps extends Partial<any> {
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false} = props;
     const [value, setValue] = useState<any>();
+    const {t} = useTranslation();
     const formik = useFormikContext<any>();
     if (placeholder === '') {
         placeholder = label;
@@ -73,7 +75,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 value={value}
                 onChange={handleOnChanged}
             />
-            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</Form.Control.Feedback>}
+            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</Form.Control.Feedback>}
         </FormGroup>
     );
 }

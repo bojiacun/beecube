@@ -216,14 +216,7 @@ const UserEdit = (props: any) => {
                                                     <ReactSelectThemed
                                                         id={'post'}
                                                         name={'post'}
-                                                        styles={{
-                                                            control: (provided: any) => {
-                                                                if (formik.touched.post && formik.errors.post) {
-                                                                    provided.borderColor = '#ea5455';
-                                                                }
-                                                                return provided;
-                                                            }
-                                                        }}
+
                                                         components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
                                                         placeholder={'选择职务'}
                                                         isClearable={true}

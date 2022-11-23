@@ -18,6 +18,7 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import MenuTreeSelector from "~/pages/system/permissions/MenuTreeSelector";
 
 
 const checkHandlers: any = {};
@@ -30,14 +31,46 @@ const menuTypeOptions = [
 
 const PermissionEdit = (props: any) => {
     const {model, onHide} = props;
+    const [parentOptions, setParentOptions] = useState<any[]>([]);
+    const [menuSelectorShow, setMenuSelectorShow] = useState<boolean>(false);
+    const [parentValue, setParentValue] = useState<any[]>([]);
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
+    const nameCheckFetcher = useFetcher();
 
 
     const PermissionSchema = Yup.object().shape({
         name: Yup.string().required('必填字段'),
-        url: Yup.string().required('必填字段')
+        parentId: Yup.string().required('必填字段'),
+        url: Yup.string().required('必填字段').test('name-duplicate', 'not avialiable', (value)=>{
+            return new Promise((resolve, reject) => {
+                checkHandlers.url = resolve;
+                if (model.id) {
+                    nameCheckFetcher.load(`/system/permissions/check?id=${model.id}&url=${value}&alwaysShow=${model.alwaysShow}`);
+                } else {
+                    nameCheckFetcher.load(`/system/permissions/check?url=${value}&alwaysShow=${model.alwaysShow}`);
+                }
+            });
+        }),
     });
+    useEffect(() => {
+        if (nameCheckFetcher.type === 'done' && nameCheckFetcher.data) {
+            checkHandlers.url(nameCheckFetcher.data.success);
+        }
+    }, [nameCheckFetcher.state]);
+    const handleOnParentMenuSelected = (rows: any) => {
+        let newOptions = rows.map((x: any) => ({label: x.name, value: x.id, key: x.id}));
+        setParentOptions(_.uniqBy([...parentOptions, ...newOptions], 'key'));
+        const newValue = newOptions.map((item: any) => item.value).join(',');
+        formikRef.current!.setFieldValue('selecteddeparts', newValue);
+        setParentValue(newOptions);
+        setMenuSelectorShow(false);
+    }
+    const handleOnParentSelectChanged = (currentValue: any) => {
+        const newValue = currentValue.map((item: any) => item.value).join(',');
+        formikRef.current!.setFieldValue('selecteddeparts', newValue);
+        setParentValue(currentValue);
+    }
 
     const handleOnSubmit = (values:any)=>{
         console.log(values);
@@ -73,12 +106,45 @@ const PermissionEdit = (props: any) => {
                 </Modal.Header>
                 {model &&
                     <Formik innerRef={formikRef} initialValues={{menuType: 0, status: 1, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
-                        {({isSubmitting})=>{
+                        {({isSubmitting,values,errors})=>{
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
                                         <BootstrapInput label={'菜单名称'} name={'name'} />
+                                        {values.menuType == 1 &&
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'selecteddeparts'}>上级菜单</FormLabel>
+                                            <Row>
+                                                <Col sm={8}>
+                                                    <ReactSelectThemed
+                                                        id={'parentId'}
+                                                        name={'parentId'}
+                                                        styles={{
+                                                            control: (provided: any) => {
+                                                                if (errors.parentId) {
+                                                                    provided.borderColor = '#ea5455';
+                                                                }
+                                                                return provided;
+                                                            }
+                                                        }}
+                                                        components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
+                                                        placeholder={'选择上级菜单'}
+                                                        isClearable={true}
+                                                        isSearchable={false}
+                                                        isMulti={false}
+                                                        openMenuOnClick={false}
+                                                        options={parentOptions}
+                                                        onChange={handleOnParentSelectChanged}
+                                                        value={parentValue}
+                                                    />
+                                                </Col>
+                                                <Col sm={4}>
+                                                    <Button onClick={() => setMenuSelectorShow(true)}>选择</Button>
+                                                </Col>
+                                            </Row>
+                                        </FormGroup>
+                                        }
                                         <BootstrapInput label={'访问路径'} name={'url'} />
                                         <BootstrapInput label={'访问图标'} name={'icon'} />
                                         <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} defaultValue={0} />
@@ -99,6 +165,7 @@ const PermissionEdit = (props: any) => {
                     </Formik>
                 }
             </Modal>
+            <MenuTreeSelector show={menuSelectorShow} setShow={setMenuSelectorShow} onSelect={handleOnParentMenuSelected} />
         </>
     );
 }

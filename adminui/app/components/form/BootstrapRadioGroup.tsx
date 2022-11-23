@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {Col, Form, FormGroup, FormLabel, Row} from "react-bootstrap";
 import {useFormikContext} from "formik";
+import {useTranslation} from "react-i18next";
 
 export interface BootstrapRadioGroupProps extends Partial<any> {
     options: {label: string, value: string}[];
@@ -11,6 +12,7 @@ export interface BootstrapRadioGroupProps extends Partial<any> {
 const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
     const {name, options, label} = props;
     const formik = useFormikContext<any>();
+    const {t} = useTranslation();
 
     return (
         <FormGroup>
@@ -24,7 +26,7 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
                     })}
                 </Col>
             </Row>
-            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</Form.Control.Feedback>}
+            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</Form.Control.Feedback>}
         </FormGroup>
     );
 }

@@ -7,6 +7,7 @@ import FallbackImage from "~/components/fallback-image";
 import {ClientOnly} from "remix-utils";
 import {resolveUrl} from "~/utils/utils";
 import {FormikProps, useFormikContext} from "formik";
+import {useTranslation} from "react-i18next";
 
 
 interface FileBrowserInputProps {
@@ -27,6 +28,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
     const [value, setValue] = useState<string>(formik.values[name]);
+    const {t} = useTranslation();
 
     useEffect(()=>{
         setValue(formik.values[name]);
@@ -98,7 +100,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     </InputGroup.Append>
                 </InputGroup>
             }
-            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</FormControl.Feedback>}
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
             {imagePreview &&
                 <Row style={{marginTop: 0, minWidth: 60}}>
                     <Col sm={2} className={'previewItem'}>

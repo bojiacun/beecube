@@ -2,6 +2,7 @@ import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import {FC} from "react";
 import classNames from "classnames";
 import {useFormikContext} from "formik";
+import {useTranslation} from "react-i18next";
 
 export interface BootstrapInputProps extends Partial<any>{
     label: string;
@@ -12,6 +13,7 @@ export interface BootstrapInputProps extends Partial<any>{
 const BootstrapInput: FC<BootstrapInputProps> = (props) => {
     let {label, name, placeholder = '', className, ...rest} = props;
     const formik = useFormikContext<any>();
+    const {t} = useTranslation();
 
     if(placeholder === '') {
         placeholder = label;
@@ -28,7 +30,7 @@ const BootstrapInput: FC<BootstrapInputProps> = (props) => {
                 {...rest}
             />
 
-            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</FormControl.Feedback>}
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
         </FormGroup>
     );
 }

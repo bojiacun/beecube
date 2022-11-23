@@ -179,5 +179,6 @@
   "system log": "日志管理",
   "System Monitor Pages": "系统监控",
   "SystemPages": "系统设置",
-  "RolesManager": "角色管理"
+  "RolesManager": "角色管理",
+  "not avialiable": "字段重复不可用"
 }
