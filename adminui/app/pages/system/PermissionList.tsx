@@ -139,7 +139,7 @@ const PermissionList = () => {
         setSearchState({...searchState, pageNo: 1});
     }
     const handleOnAdd = () => {
-        setEditModal({});
+        setEditModal({status: 1, sortNo: 1});
     }
 
     return (

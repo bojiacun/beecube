@@ -72,15 +72,16 @@ const PermissionEdit = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{menuType: 0, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{menuType: 0, status: 1, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
                         {({isSubmitting})=>{
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
-                                        <BootstrapInput label={'菜单名称'} name={'name'}/>
-                                        <BootstrapInput label={'访问路径'} name={'url'}/>
-                                        <BootstrapInput label={'访问图标'} name={'icon'}/>
+                                        <BootstrapInput label={'菜单名称'} name={'name'} />
+                                        <BootstrapInput label={'访问路径'} name={'url'} />
+                                        <BootstrapInput label={'访问图标'} name={'icon'} />
+                                        <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} defaultValue={0} />
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button
