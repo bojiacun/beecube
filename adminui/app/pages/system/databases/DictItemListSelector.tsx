@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, handleSaveResult, PageSizeOptions, showDeleteAlert, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -30,10 +30,10 @@ const DictItemListSelector = (props: any) => {
             return new Promise((resolve, reject)=>{
                 checkHandlers.itemValue = resolve;
                 if(editModal) {
-                    itemValueCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
+                    itemValueCheckFetcher.load(`/system/databases/items/check?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
                 }
                 else {
-                    itemValueCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}`);
+                    itemValueCheckFetcher.load(`/system/databases/items/check?itemValue=${value}&dictId=${selectedDict.id}`);
                 }
             });
         }),
@@ -41,10 +41,10 @@ const DictItemListSelector = (props: any) => {
             return new Promise((resolve, reject)=>{
                 checkHandlers.itemText = resolve;
                 if(editModal) {
-                    itemTextCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
+                    itemTextCheckFetcher.load(`/system/databases/items/check?itemValue=${value}&dictId=${selectedDict.id}&id=${editModal.id}`);
                 }
                 else {
-                    itemTextCheckFetcher.load(`/system/dictItem/dictItemCheck?itemValue=${value}&dictId=${selectedDict.id}`);
+                    itemTextCheckFetcher.load(`/system/databases/items/check?itemValue=${value}&dictId=${selectedDict.id}`);
                 }
             });
         })
@@ -76,13 +76,22 @@ const DictItemListSelector = (props: any) => {
 
     useEffect(() => {
         if (editFetcher.data && editFetcher.type === 'done') {
+            handleSaveResult(editFetcher.data);
             if (editFetcher.data.success) {
-                onHide();
-            } else {
-                showToastError(editFetcher.data.message);
+                setEditModal(null);
+                searchFetcher.submit(searchState, {method: 'get', action: '/system/databases/items'});
             }
         }
     }, [editFetcher.state]);
+
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            handleSaveResult(deleteFetcher.data);
+            if (deleteFetcher.data.success) {
+                searchFetcher.submit(searchState, {method: 'get', action: '/system/databases/items'});
+            }
+        }
+    }, [deleteFetcher.state]);
 
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
@@ -151,6 +160,7 @@ const DictItemListSelector = (props: any) => {
             setSelectedRows([]);
         }
     }
+
     const handleOnEditSubmit = (values: any) => {
         if (values.id) {
             editFetcher.submit(values, {method: 'put', action: `/system/databases/items/edit`, replace: true});
@@ -159,7 +169,7 @@ const DictItemListSelector = (props: any) => {
         }
     }
     const handleOnAdd = () => {
-        setEditModal({status: 1});
+        setEditModal({status: 1, dictId: selectedDict.id});
     }
     const selectRowConfig = {
         ...defaultSelectRowConfig,
@@ -256,7 +266,6 @@ const DictItemListSelector = (props: any) => {
                         {(formik: any) => {
                             return (
                                 <FormikForm>
-                                    <FormControl name={'dictId'} value={selectedDict?.id} type={'hidden'}/>
                                     <Modal.Body>
                                         <FormGroup>
                                             <Form.Label htmlFor={'itemText'}>名称</Form.Label>

@@ -36,6 +36,7 @@ export const API_DATABASE_DICT_DELETE = `${BASE_URL}/jeecg-system/sys/dict/delet
 
 
 export const API_DATABASE_DICT_ITEM_LIST = `${BASE_URL}/jeecg-system/sys/dictItem/list`;
+export const API_DATABASE_DICT_ITEM_CHECK = `${BASE_URL}/jeecg-system/sys/dictItem/dictItemCheck`;
 export const API_DATABASE_DICT_ITEM_EDIT = `${BASE_URL}/jeecg-system/sys/dictItem/edit`;
 export const API_DATABASE_DICT_ITEM_ADD = `${BASE_URL}/jeecg-system/sys/dictItem/add`;
 export const API_DATABASE_DICT_ITEM_DELETE = `${BASE_URL}/jeecg-system/sys/dictItem/delete`;
