@@ -17,9 +17,16 @@ import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
+import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
 const checkHandlers:any = {};
+
+const menuTypeOptions = [
+    {label: '一级菜单', value: '0'},
+    {label: '子菜单', value: '1'},
+    {label: '按钮权限', value: '2'},
+];
 
 const PermissionEdit = (props: any) => {
     const {model, onHide} = props;
@@ -229,135 +236,15 @@ const PermissionEdit = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}用户</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
                 </Modal.Header>
                 {model &&
                     <Form method={'post'} onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
                         <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                            <BootstrapInput label={'用户账号'} formik={formik} readOnly={model?.id} name={'username'} />
-                            <BootstrapInput label={'用户姓名'} formik={formik} name={'realname'} />
-                            <BootstrapInput label={'工号'} formik={formik} name={'workNo'} />
-                            <FormGroup>
-                                <FormLabel htmlFor={'post'}>职务</FormLabel>
-                                <Row>
-                                    <Col sm={10}>
-                                        <ReactSelectThemed
-                                            id={'post'}
-                                            name={'post'}
-                                            styles={{control: (provided:any)=>{
-                                                if(formik.touched.post && formik.errors.post) {
-                                                    provided.borderColor = '#ea5455';
-                                                }
-                                                return provided;
-                                            }}}
-                                            components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
-                                            placeholder={'选择职务'}
-                                            isClearable={true}
-                                            isSearchable={false}
-                                            isMulti={true}
-                                            openMenuOnClick={false}
-                                            options={positionOptions}
-                                            onChange={handleOnPositionSelectChanged}
-                                            value={postValue}
-                                        />
-                                    </Col>
-                                    <Col sm={2}>
-                                        <Button onClick={()=>setPositionListShow(true)}>选择</Button>
-                                    </Col>
-                                </Row>
-                            </FormGroup>
-                            <BootstrapSelect
-                                name={'selectedroles'}
-                                label={'角色'}
-                                options={allRoles.map((item:any)=>({label: item.roleName, value: item.id}))}
-                                placeholder={'选择角色'}
-                                isClearable={true}
-                                isSearchable={false}
-                                isMulti={true}
-                                formik={formik}
-                            />
-                            <FormGroup>
-                                <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
-                                <Row>
-                                    <Col sm={10}>
-                                        <ReactSelectThemed
-                                            id={'selecteddeparts'}
-                                            name={'selecteddeparts'}
-                                            components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
-                                            placeholder={'选择所属部门'}
-                                            isClearable={true}
-                                            isSearchable={false}
-                                            isMulti={true}
-                                            openMenuOnClick={false}
-                                            options={departmentOptions}
-                                            onChange={handleOnDepartmentSelectChanged}
-                                            value={departmentValue}
-                                        />
-                                    </Col>
-                                    <Col sm={2}>
-                                        <Button onClick={()=>setDepartmentSelectorShow(true)}>选择</Button>
-                                    </Col>
-                                </Row>
-                            </FormGroup>
-                            <BootstrapSelect
-                                name={'departIds'}
-                                label={'负责部门'}
-                                options={departmentValue}
-                                placeholder={'选择负责部门'}
-                                isClearable={true}
-                                isSearchable={false}
-                                isMulti={true}
-                                formik={formik}
-                            />
-                            <BootstrapSelect
-                                name={'relTenantIds'}
-                                label={'租户'}
-                                options={allTenants.map((item:any)=>({label: item.name, value: item.id.toString()}))}
-                                placeholder={'选择租户'}
-                                isClearable={true}
-                                isSearchable={false}
-                                isMulti={true}
-                                formik={formik}
-                            />
-                            <FormGroup>
-                                <FormLabel htmlFor={'userIdentity'}>身份</FormLabel>
-                                <Row>
-                                    <Col>
-                                        <Form.Check inline value={1} onChange={formik.handleChange} checked={formik.values.userIdentity == 1} name={'userIdentity'} label={'普通用户'} id={'userIdentity-1'} type={'radio'} />
-                                        <Form.Check inline value={2} onChange={formik.handleChange} checked={formik.values.userIdentity == 2} name={'userIdentity'} label={'上级'} id={'userIdentity-2'} type={'radio'} />
-                                    </Col>
-                                </Row>
-                            </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'avatar'}>头像</FormLabel>
-                                <FileBrowserInput name={'avatar'} type={1} multi={false} formik={formik} />
-                            </FormGroup>
-                            <FormGroup>
-                                <FormLabel htmlFor={'birthday'}>生日</FormLabel>
-                                <DateTimePicker inputName={'birthday'} formik={formik} />
-                            </FormGroup>
-                            <BootstrapSelect
-                                name={'sex'}
-                                label={'性别'}
-                                options={[{label: '男', value: '1'},{label: '女', value: '2'}]}
-                                placeholder={'选择性别'}
-                                isClearable={false}
-                                isSearchable={false}
-                                isMulti={false}
-                                formik={formik}
-                            />
-                            <BootstrapInput label={'邮箱'} formik={formik} name={'email'} />
-                            <BootstrapInput label={'手机号'} formik={formik} name={'phone'} />
-                            <BootstrapInput label={'座机号'} formik={formik} name={'telephone'} />
-                            <FormGroup>
-                                <FormLabel htmlFor={'activitiSync'}>工作流引擎</FormLabel>
-                                <Row>
-                                    <Col>
-                                        <Form.Check inline value={1} onChange={formik.handleChange} checked={formik.values.activitiSync == 1} name={'activitiSync'} label={'同步'} id={'activitiSync-1'} type={'radio'} />
-                                        <Form.Check inline value={2} onChange={formik.handleChange} checked={formik.values.activitiSync == 2} name={'activitiSync'} label={'不同步'} id={'activitiSync-2'} type={'radio'} />
-                                    </Col>
-                                </Row>
-                            </FormGroup>
+                            <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'} />
+                            <BootstrapInput label={'菜单名称'} formik={formik} name={'name'} />
+                            <BootstrapInput label={'访问路径'} formik={formik} name={'url'} />
+                            <BootstrapInput label={'访问图标'} formik={formik} name={'icon'} />
                         </Modal.Body>
                         <Modal.Footer>
                             <Button
@@ -371,8 +258,6 @@ const PermissionEdit = (props: any) => {
                     </Form>
                 }
             </Modal>
-            <PositionListSelector show={positionListShow} setPositionListShow={setPositionListShow} onSelect={handleOnPositionSelect} />
-            <DepartmentTreeSelector show={departmentSelectorShow} setShow={setDepartmentSelectorShow} onSelect={handleOnDepartmentSelect} />
         </>
     );
 }
