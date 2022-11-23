@@ -5,9 +5,7 @@ import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, In
 import BootstrapTable from "react-bootstrap-table-next";
 import {Delete, Edit, MinusSquare, MoreVertical, PlusSquare} from "react-feather";
 import ChildPermissionList from "~/pages/system/permissions/ChildPermissionList";
-import {Field, Formik, Form as FormikForm} from "formik";
-import classNames from "classnames";
-import * as Yup from "yup";
+import PermissionEdit from "~/pages/system/permissions/PermissionEdit";
 
 
 export const MenuTypes = [
@@ -21,15 +19,7 @@ const PermissionList = () => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 1});
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
-    const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-
-
-    const PermissionSchema = Yup.object().shape({
-        dictCode: Yup.string().required(),
-        dictName: Yup.string().required()
-    });
-
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -37,6 +27,10 @@ const PermissionList = () => {
         }
     }, [searchFetcher.state]);
 
+
+    const loadData = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: '/system/permissions'});
+    }
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
@@ -47,7 +41,7 @@ const PermissionList = () => {
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/positions/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/permissions/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
@@ -132,15 +126,9 @@ const PermissionList = () => {
         setSearchState({...searchState, pageNo: 1});
     }
     const handleOnAdd = () => {
+        setEditModal({});
+    }
 
-    }
-    const handleOnEditSubmit = (values: any) => {
-        if (values.id) {
-            editFetcher.submit(values, {method: 'put', action: `/system/permissions/edit`, replace: true});
-        } else {
-            editFetcher.submit(values, {method: 'post', action: `/system/permissions/add`, replace: true});
-        }
-    }
     return (
         <>
             <Card>
@@ -153,7 +141,6 @@ const PermissionList = () => {
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                                <FormControl name={'logType'} value={searchState.logType} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
@@ -181,43 +168,10 @@ const PermissionList = () => {
                     keyField={'id'}
                 />
             </Card>
-            {editModal &&
-                <Formik initialValues={editModal} validationSchema={PermissionSchema} onSubmit={handleOnEditSubmit}>
-                    {(formik:any) => {
-                        return (
-                            <FormikForm>
-                                <Modal.Body>
-                                    <FormGroup>
-                                        <Form.Label htmlFor={'dictCode'}>字典编号</Form.Label>
-                                        <Field className={classNames('form-control', !!formik.errors.dictCode ? 'is-invalid' : '')} id={'dictCode'}
-                                               name={'dictCode'} placeholder={'字典编号'} readOnly={editModal.id}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Form.Label htmlFor={'dictName'}>字典名称</Form.Label>
-                                        <Field className={classNames('form-control', !!formik.errors.dictName ? 'is-invalid' : '')} id={'dictName'}
-                                               name={'dictName'} placeholder={'字典名称'}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Form.Label htmlFor={'description'}>描述</Form.Label>
-                                        <Field className={'form-control'} placeholder={'描述'} id={'description'} name={'description'}
-                                               as={'textarea'} rows={3}/>
-                                    </FormGroup>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button
-                                        type={'submit'}
-                                        variant={'primary'}
-                                        disabled={editFetcher.state === 'submitting'}
-                                    >
-                                        保存
-                                    </Button>
-                                </Modal.Footer>
-                            </FormikForm>
-                        );
-                    }}
-
-                </Formik>
-            }
+            {editModal &&  <PermissionEdit model={editModal} onHide={()=>{
+                loadData();
+                setEditModal(null);
+            }} /> }
         </>
     );
 }
