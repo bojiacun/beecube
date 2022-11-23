@@ -13,19 +13,14 @@ const BootstrapSwitch: FC<BootstrapSwitchProps> = (props) => {
     const formik = useFormikContext<any>();
     const {t} = useTranslation();
 
-    const toggleChange = () => {
-        if(formik.values[name]) {
-            formik.setFieldValue(name, false);
-        }
-        else {
-            formik.setFieldValue(name, true);
-        }
+    const handleOnChange = (e:any) => {
+        formik.setFieldValue(name, e.target.checked);
     }
 
     return (
         <FormGroup>
             <FormLabel htmlFor={name}>{label}</FormLabel>
-            <Form.Switch name={name} checked={formik.values[name]} onClick={toggleChange} {...rest} />
+            <Form.Switch id={name} name={name} checked={formik.values[name]} onChange={handleOnChange} {...rest} />
         </FormGroup>
     );
 }

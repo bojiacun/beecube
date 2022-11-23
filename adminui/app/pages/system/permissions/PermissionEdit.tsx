@@ -112,8 +112,8 @@ const PermissionEdit = (props: any) => {
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
-                                        <BootstrapInput label={'菜单名称'} name={'name'} />
-                                        {values.menuType == 1 &&
+                                        <BootstrapInput label={values.menuType < 2 ? '菜单名称': '按钮权限'} name={'name'} />
+                                        {values.menuType > 0 &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'selecteddeparts'}>上级菜单</FormLabel>
                                             <Row>
@@ -146,10 +146,14 @@ const PermissionEdit = (props: any) => {
                                             </Row>
                                         </FormGroup>
                                         }
-                                        <BootstrapInput label={'访问路径'} name={'url'} />
-                                        <BootstrapInput label={'访问图标'} name={'icon'} />
-                                        <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} />
-                                        <BootstrapSwitch label={'是否路由菜单'} name={'route'} />
+                                        {values.menuType == 2 && <BootstrapInput label={'授权标识'} name={'perms'} />}
+                                        {values.menuType == 2 && <BootstrapRadioGroup options={[{label: '可见/可访问', value: '1'},{label: '可编辑', value: '2'}]} name={'permsType'} label={'授权策略'}/>}
+                                        {values.menuType < 2 && <BootstrapInput label={'访问路径'} name={'url'} />}
+                                        {values.menuType < 2 && <BootstrapInput label={'访问图标'} name={'icon'} />}
+                                        {values.menuType < 2 && <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} />}
+                                        {values.menuType < 2 && <BootstrapSwitch label={'是否路由菜单'} name={'route'} />}
+                                        {values.menuType < 2 && <BootstrapSwitch label={'隐藏路由'} name={'hidden'} />}
+                                        <BootstrapRadioGroup options={[{label: '有效', value: '1'},{label: '无效', value: '0'}]} name={'status'} label={'状态'}/>
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button
