@@ -19,6 +19,7 @@ import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import MenuTreeSelector from "~/pages/system/permissions/MenuTreeSelector";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 const checkHandlers: any = {};
@@ -147,7 +148,8 @@ const PermissionEdit = (props: any) => {
                                         }
                                         <BootstrapInput label={'访问路径'} name={'url'} />
                                         <BootstrapInput label={'访问图标'} name={'icon'} />
-                                        <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} defaultValue={0} />
+                                        <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} />
+                                        <BootstrapSwitch label={'是否路由菜单'} name={'route'} />
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button
