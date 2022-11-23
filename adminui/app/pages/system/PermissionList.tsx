@@ -5,8 +5,7 @@ import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, In
 import BootstrapTable from "react-bootstrap-table-next";
 import {Delete, Edit, MinusSquare, MoreVertical, PlusSquare} from "react-feather";
 import ChildPermissionList from "~/pages/system/permissions/ChildPermissionList";
-import {Field, Formik} from "formik";
-import {Form as FormikForm} from "formik/dist/Form";
+import {Field, Formik, Form as FormikForm} from "formik";
 import classNames from "classnames";
 import * as Yup from "yup";
 
@@ -149,7 +148,7 @@ const PermissionList = () => {
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <h4 className="mb-0">菜单管理</h4>
-                            <Button className={'mr-1'} onClick={handleOnAdd}><i className={'feather icon-plus'}/>新增菜单</Button>
+                            <Button className={'ml-1'} onClick={handleOnAdd}><i className={'feather icon-plus'}/>新增菜单</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
