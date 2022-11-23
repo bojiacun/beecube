@@ -6,7 +6,7 @@ import {DownloadCloud, X, XCircle} from "react-feather";
 import FallbackImage from "~/components/fallback-image";
 import {ClientOnly} from "remix-utils";
 import {resolveUrl} from "~/utils/utils";
-import {FormikProps} from "formik";
+import {FormikProps, useFormikContext} from "formik";
 
 
 interface FileBrowserInputProps {
@@ -16,17 +16,17 @@ interface FileBrowserInputProps {
     previewWidth?: number;
     previewHeight?: number;
     name: string;
-    formik: FormikProps<any>;
 }
 
 
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, formik, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, ...rest } = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
     const [value, setValue] = useState<string>(formik.values[name]);
+    const formik = useFormikContext<any>();
 
     useEffect(()=>{
         setValue(formik.values[name]);

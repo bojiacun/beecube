@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker";
 import React, {FC, useEffect, useState} from "react";
 import {FormControl} from "react-bootstrap";
-import {FormikProps} from "formik";
+import {FormikProps, useFormikContext} from "formik";
 import moment from "moment";
 import classNames from "classnames";
 
@@ -12,7 +12,6 @@ export interface DateTimePickerProps {
     maxDate?: any;
     inputName: string;
     placeholder?: string;
-    formik: FormikProps<any>;
 }
 
 const BootstrapFormControlInput = React.forwardRef(({value, inputName, onClick, inputPlaceHolder, formik}:any, ref:any)=>{
@@ -29,9 +28,10 @@ const BootstrapFormControlInput = React.forwardRef(({value, inputName, onClick, 
 });
 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
-    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间', formik} = props;
+    const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间'} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
     const formatter = showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
+    const formik = useFormikContext<any>();
 
     useEffect(()=>{
         if(formik.values[inputName]) {
