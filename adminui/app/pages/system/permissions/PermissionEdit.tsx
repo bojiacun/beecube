@@ -70,7 +70,7 @@ const PermissionEdit = (props: any) => {
             }
         }
     }, [model]);
-    const permissionSchemaShape = {name: Yup.string().required('必填字段')};
+    const permissionSchemaShape:any = {name: Yup.string().required('必填字段')};
 
     if(model.menuType < 2 ) {
         permissionSchemaShape.url = Yup.string().required('必填字段').test('name-duplicate', 'not avialiable', (value)=>{
