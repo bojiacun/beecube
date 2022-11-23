@@ -44,6 +44,9 @@ const PermissionList = () => {
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get', action: '/system/permissions'});
     }
+    const doDelete = (model:any) => {
+        deleteFetcher.submit({id: model.id}, {method: 'delete', action: `/system/permissions/delete?id=${model.id}`, replace: true});
+    }
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
@@ -54,7 +57,7 @@ const PermissionList = () => {
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/permissions/delete?id=${row.id}`, replace: true});
+                    doDelete(row);
                 });
                 break;
         }
@@ -125,7 +128,7 @@ const PermissionList = () => {
         renderer: (row: any) => {
             return (
                 <div style={{marginLeft: -1, marginRight: -1, paddingLeft: 57}}>
-                    <ChildPermissionList list={row.children}/>
+                    <ChildPermissionList list={row.children} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
                 </div>
             );
         },
@@ -139,7 +142,7 @@ const PermissionList = () => {
         setSearchState({...searchState, pageNo: 1});
     }
     const handleOnAdd = () => {
-        setEditModal({status: 1, sortNo: 1});
+        setEditModal({status: 1, sortNo: 1, permsType: 1});
     }
 
     return (
@@ -181,7 +184,7 @@ const PermissionList = () => {
                     keyField={'id'}
                 />
             </Card>
-            {editModal &&  <PermissionEdit model={editModal} onHide={()=>{
+            {editModal &&  <PermissionEdit menus={list} model={editModal} onHide={()=>{
                 loadData();
                 setEditModal(null);
             }} /> }

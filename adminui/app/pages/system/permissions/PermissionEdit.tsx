@@ -30,15 +30,44 @@ const menuTypeOptions = [
     {label: '按钮权限', value: '2'},
 ];
 
+function findRecyle(items:any[], key:string, value:any):any{
+    let result = null;
+    for(let i = 0; i < items.length;i++){
+        let item = items[i];
+        if(item[key] == value) {
+            result = item;
+            break;
+        }
+        else if(item.children) {
+            result = findRecyle(item.children, key, value);
+            break;
+        }
+    }
+    return result;
+}
+
 const PermissionEdit = (props: any) => {
-    const {model, onHide} = props;
+    const {model, onHide, menus} = props;
     const [parentOptions, setParentOptions] = useState<any[]>([]);
     const [menuSelectorShow, setMenuSelectorShow] = useState<boolean>(false);
-    const [parentValue, setParentValue] = useState<any[]>([]);
+    const [parentValue, setParentValue] = useState<any>();
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
     const nameCheckFetcher = useFetcher();
 
+    useEffect(() => {
+        if (model) {
+            if (model.parentId) {
+                const menu:any = findRecyle(menus, 'id', model.parentId);
+                console.log(model, menu);
+                if(menu != null) {
+                    const opt = {label: menu.name, value: menu.id, key: menu.id};
+                    setParentOptions([opt]);
+                    setParentValue(opt);
+                }
+            }
+        }
+    }, [model]);
 
     const PermissionSchema = Yup.object().shape({
         name: Yup.string().required('必填字段'),
@@ -60,17 +89,16 @@ const PermissionEdit = (props: any) => {
         }
     }, [nameCheckFetcher.state]);
     const handleOnParentMenuSelected = (rows: any) => {
-        let newOptions = rows.map((x: any) => ({label: x.name, value: x.id, key: x.id}));
+        let newOptions = rows.map((x: any) => ({label: x.label, value: x.value, key: x.value}));
         setParentOptions(_.uniqBy([...parentOptions, ...newOptions], 'key'));
         const newValue = newOptions.map((item: any) => item.value).join(',');
-        formikRef.current!.setFieldValue('selecteddeparts', newValue);
+        formikRef.current!.setFieldValue('parentId', newValue);
         setParentValue(newOptions);
         setMenuSelectorShow(false);
     }
     const handleOnParentSelectChanged = (currentValue: any) => {
-        const newValue = currentValue.map((item: any) => item.value).join(',');
-        formikRef.current!.setFieldValue('selecteddeparts', newValue);
         setParentValue(currentValue);
+        formikRef.current!.setFieldValue('parentId', currentValue);
     }
 
     const handleOnSubmit = (values:any)=>{

@@ -77,7 +77,7 @@ const DepartmentTreeSelector = (props: any) => {
                     containerProps={{type: 'submit'}}
                     onPress={handleOnSave}
                 >
-                    保存
+                    确认选择
                 </AwesomeButton>
             </Modal.Footer>
         </Modal>

@@ -63,7 +63,9 @@ const MenuTreeSelector = (props: any) => {
                     nodes={treeData}
                     checked={checked}
                     expanded={expanded}
-                    onCheck={checked1 => setChecked(checked1)}
+                    onCheck={(checked, node)=> {
+                        setChecked([node.value]);
+                    }}
                     onExpand={expanded1 => setExpanded(expanded1)}
                     iconsClass={'fa6'}
                     noCascade={true}
@@ -77,7 +79,7 @@ const MenuTreeSelector = (props: any) => {
                     containerProps={{type: 'submit'}}
                     onPress={handleOnSave}
                 >
-                    保存
+                    确认选择
                 </AwesomeButton>
             </Modal.Footer>
         </Modal>
