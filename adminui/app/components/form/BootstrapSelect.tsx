@@ -1,7 +1,7 @@
-import {FormGroup, FormLabel} from "react-bootstrap";
+import {FormGroup, FormLabel, Form} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {FC, useEffect, useState} from "react";
-import {FormikProps, useFormikContext} from "formik";
+import {useFormikContext} from "formik";
 import _ from "lodash";
 
 export interface BootstrapSelectProps extends Partial<any> {
@@ -59,7 +59,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 name={name}
                 styles={{
                     control: (provided: any) => {
-                        if (formik.touched[name] && formik.errors[name]) {
+                        if (formik.errors[name]) {
                             provided.borderColor = '#ea5455';
                         }
                         return provided;
@@ -73,6 +73,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 value={value}
                 onChange={handleOnChanged}
             />
+            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</Form.Control.Feedback>}
         </FormGroup>
     );
 }

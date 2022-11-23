@@ -1,6 +1,14 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {DefaultListSearchParams, defaultTableExpandRow, emptySortFunc, headerSortingClasses, PageSizeOptions, showDeleteAlert} from "~/utils/utils";
+import {
+    DefaultListSearchParams,
+    defaultTableExpandRow,
+    emptySortFunc, handleResult, handleSaveResult,
+    headerSortingClasses,
+    PageSizeOptions,
+    showDeleteAlert, showToastError,
+    showToastSuccess
+} from "~/utils/utils";
 import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import {Delete, Edit, MinusSquare, MoreVertical, PlusSquare} from "react-feather";
@@ -26,7 +34,12 @@ const PermissionList = () => {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
-
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            handleResult(deleteFetcher.data, '删除成功');
+            loadData();
+        }
+    }, [deleteFetcher.state]);
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get', action: '/system/permissions'});

@@ -24,6 +24,7 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
                     })}
                 </Col>
             </Row>
+            {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</Form.Control.Feedback>}
         </FormGroup>
     );
 }

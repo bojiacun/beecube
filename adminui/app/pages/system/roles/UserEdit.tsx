@@ -42,7 +42,7 @@ const UserEdit = (props: any) => {
 
 
     const userSchema = Yup.object().shape({
-        username: Yup.string().required().test('username-check', 'not avialiable', (value) => {
+        username: Yup.string().required('必填字段').test('username-check', 'not avialiable', (value) => {
             return new Promise((resolve, reject) => {
                 checkHandlers.username = resolve;
                 if (model.id) {
@@ -52,7 +52,7 @@ const UserEdit = (props: any) => {
                 }
             });
         }),
-        realname: Yup.string().required(),
+        realname: Yup.string().required('必填字段'),
         phone: Yup.string().test('phone-check', 'not avialiable', (value) => {
             return new Promise((resolve, reject) => {
                 checkHandlers.phone = resolve;

@@ -98,7 +98,8 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     </InputGroup.Append>
                 </InputGroup>
             }
-            {imagePreview && 
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</FormControl.Feedback>}
+            {imagePreview &&
                 <Row style={{marginTop: 0, minWidth: 60}}>
                     <Col sm={2} className={'previewItem'}>
                         <XCircle size={16} className={'close'} onClick={()=>removeFile(value!)} />

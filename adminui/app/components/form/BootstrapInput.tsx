@@ -22,11 +22,13 @@ const BootstrapInput: FC<BootstrapInputProps> = (props) => {
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <FormControl
                 id={name}
-                className={classNames(className,(!!formik.touched[name]&&!!formik.errors[name]) ? 'is-invalid':'')}
+                className={classNames(className,(!!formik.errors[name]) ? 'is-invalid':'')}
                 placeholder={placeholder}
                 {...formik.getFieldProps(name)}
                 {...rest}
             />
+
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{formik.errors[name]!.toString()}</FormControl.Feedback>}
         </FormGroup>
     );
 }

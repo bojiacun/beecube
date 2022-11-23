@@ -31,36 +31,31 @@ const menuTypeOptions = [
 const PermissionEdit = (props: any) => {
     const {model, onHide} = props;
     const postFetcher = useFetcher();
+    const formikRef = useRef<any>();
 
 
     const PermissionSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        url: Yup.string().required()
+        name: Yup.string().required('必填字段'),
+        url: Yup.string().required('必填字段')
     });
 
     const handleOnSubmit = (values:any)=>{
         console.log(values);
-        // if (values.id) {
-        //     postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
-        // } else {
-        //     postFetcher.submit(values, {method: 'post', action: '/system/users/add'});
-        // }
+        if (values.id) {
+            postFetcher.submit(values, {method: 'post', action: '/system/permissions/edit'});
+        } else {
+            postFetcher.submit(values, {method: 'post', action: '/system/permissions/add'});
+        }
     }
-
-
-
-
-
-
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
+            formikRef.current!.setSubmitting(false);
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
                 onHide();
             }
         }
     }, [postFetcher.state]);
-
 
 
     if (!model) return <></>
@@ -77,7 +72,7 @@ const PermissionEdit = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik initialValues={{menuType: 0, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{menuType: 0, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
                         {({isSubmitting})=>{
                             return (
                                 <Form method={'post'}>
