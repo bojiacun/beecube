@@ -216,3 +216,19 @@ export function tree2List(tree:any[]):any[] {
 export function resolveUrl(path: string) {
     return path.startsWith('http')? path : '/'+path;
 }
+
+export function formData2Json(formData: FormData, stringify = true) {
+    let jsonData:any = {};
+    formData.forEach((value, key)=>{
+        if(value === 'null' || value === 'undefined') {
+            jsonData[key] = null;
+        }
+        else {
+            jsonData[key] = value
+        }
+    });
+    if(stringify) {
+        return JSON.stringify(jsonData);
+    }
+    return jsonData;
+}

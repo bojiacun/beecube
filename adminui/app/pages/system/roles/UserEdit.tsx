@@ -1,13 +1,11 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
-import {Field, useFormik, Form, Formik, FormikProps, FormikValues} from "formik";
+import {Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
-import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import PositionListSelector from "~/pages/system/roles/PositionListSelector";
-import classNames from "classnames";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
@@ -41,6 +39,7 @@ const UserEdit = (props: any) => {
     const userRoleFetcher = useFetcher();
     const userDepartmentFetcher = useFetcher();
     const tenantFetcher = useFetcher();
+    const formikRef = useRef<any>();
 
 
     const userSchema = Yup.object().shape({
@@ -95,7 +94,6 @@ const UserEdit = (props: any) => {
                 userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
                 setPosting(false);
                 const newModel: any = {...model, selectedroles: '', selecteddeparts: ''};
-                formik.setValues(newModel);
                 const posts = newModel.post.split(',');
                 const postTexts = newModel.post_dictText.split(',');
                 const postValueOptions: any[] = [];
@@ -127,14 +125,14 @@ const UserEdit = (props: any) => {
     useEffect(() => {
         if (userRoleFetcher.type === 'done' && userRoleFetcher.data) {
             //获取用户角色列表
-            formik.setFieldValue('selectedroles', userRoleFetcher.data.join(','));
+            formikRef.current!.setFieldValue('selectedroles', userRoleFetcher.data.join(','));
         }
     }, [userRoleFetcher.state]);
 
     useEffect(() => {
         if (userDepartmentFetcher.type === 'done' && userDepartmentFetcher.data) {
             //获取用户角色列表
-            formik.setFieldValue('selecteddeparts', userDepartmentFetcher.data.map((item: any) => item.value).join(','));
+            formikRef.current!.setFieldValue('selecteddeparts', userDepartmentFetcher.data.map((item: any) => item.value).join(','));
             setDepartmentValue(userDepartmentFetcher.data.map((item: any) => ({label: item.title, value: item.value})));
         }
     }, [userDepartmentFetcher.state]);
@@ -163,32 +161,32 @@ const UserEdit = (props: any) => {
     }, [tenantFetcher.state]);
 
 
-    const handleOnPositionSelect = (rows: any, formik:FormikProps<FormikValues>) => {
+    const handleOnPositionSelect = (rows: any) => {
         let newOptions = rows.map((x: any) => ({label: x.name, value: x.code, key: x.id}));
         setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));
 
         let data = {name: 'post', value: newOptions.map((item: any) => item.value).join(',')};
         let e = {currentTarget: data};
-        formik.handleChange(e);
+        formikRef.current!.handleChange(e);
         setPostValue(newOptions);
     }
-    const handleOnPositionSelectChanged = (currentValue: any, formik:FormikProps<FormikValues>) => {
+    const handleOnPositionSelectChanged = (currentValue: any) => {
         let data = {name: 'post', value: currentValue.map((item: any) => item.value).join(',')};
         let e = {currentTarget: data};
-        formik.handleChange(e);
+        formikRef.current!.handleChange(e);
         setPostValue(currentValue);
     }
-    const handleOnDepartmentSelect = (rows: any, formik:FormikProps<FormikValues>) => {
+    const handleOnDepartmentSelect = (rows: any) => {
         let newOptions = rows.map((x: any) => ({label: x.label, value: x.value, key: x.value}));
         setDepartmentOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
         const newValue = newOptions.map((item: any) => item.value).join(',');
-        formik.setFieldValue('selecteddeparts', newValue);
+        formikRef.current!.setFieldValue('selecteddeparts', newValue);
         setDepartmentValue(newOptions);
         setDepartmentSelectorShow(false);
     }
-    const handleOnDepartmentSelectChanged = (currentValue: any, formik:FormikProps<FormikValues>) => {
+    const handleOnDepartmentSelectChanged = (currentValue: any) => {
         const newValue = currentValue.map((item: any) => item.value).join(',');
-        formik.setFieldValue('selecteddeparts', newValue);
+        formikRef.current!.setFieldValue('selecteddeparts', newValue);
         setDepartmentValue(currentValue);
     }
     if (!model) return <></>
@@ -206,19 +204,7 @@ const UserEdit = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}用户</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik initialValues={{
-                        id: '',
-                        username: '',
-                        realname: '',
-                        workNo: '',
-                        phone: '',
-                        telephone: '',
-                        post: '',
-                        departIds: '',
-                        userIdentity: 1,
-                        activitiSync: 1,
-                        relTenantIds: ''
-                    }} validationSchema={userSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{...model, selectedroles: '', selecteddeparts: ''}} validationSchema={userSchema} onSubmit={handleOnSubmit}>
                         {(formik)=>{
                             return (
                                 <Form method={'post'}>
@@ -297,7 +283,6 @@ const UserEdit = (props: any) => {
                                             isClearable={true}
                                             isSearchable={false}
                                             isMulti={true}
-                                            formik={formik}
                                         />
                                         <BootstrapSelect
                                             name={'relTenantIds'}
@@ -307,7 +292,6 @@ const UserEdit = (props: any) => {
                                             isClearable={true}
                                             isSearchable={false}
                                             isMulti={true}
-                                            formik={formik}
                                         />
                                         <BootstrapRadioGroup  options={[{label: '普通用户', value: '1'},{label: '上级', value: '2'}]} name={'userIdentity'} label={'身份'} />
 
