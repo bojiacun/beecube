@@ -1,12 +1,12 @@
 import {ActionFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {API_USER_ADDSYSUSERROLE, postFormInit, requestWithToken} from "~/utils/request.server";
+import {formData2Json} from "~/utils/utils";
 
 export const action: ActionFunction = async ({request, params}) => {
     await requireAuthenticated(request);
     const formData = await request.formData();
-    let jsonData:any = {};
-    formData.forEach((value, key)=>jsonData[key] = value);
+    let jsonData = formData2Json(formData, false);
     jsonData.userIdList = jsonData.userIdList.split(',');
     return await requestWithToken(request)(API_USER_ADDSYSUSERROLE, postFormInit(JSON.stringify(jsonData)))
 }
