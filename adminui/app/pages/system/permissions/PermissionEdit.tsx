@@ -70,10 +70,10 @@ const PermissionEdit = (props: any) => {
             }
         }
     }, [model]);
+    const permissionSchemaShape = {name: Yup.string().required('必填字段')};
 
-    const PermissionSchema = Yup.object().shape({
-        name: Yup.string().required('必填字段'),
-        url: Yup.string().required('必填字段').test('name-duplicate', 'not avialiable', (value)=>{
+    if(model.menuType < 2 ) {
+        permissionSchemaShape.url = Yup.string().required('必填字段').test('name-duplicate', 'not avialiable', (value)=>{
             return new Promise((resolve, reject) => {
                 checkHandlers.url = resolve;
                 if (model.id) {
@@ -82,8 +82,11 @@ const PermissionEdit = (props: any) => {
                     nameCheckFetcher.load(`/system/permissions/check?url=${value}&alwaysShow=true`);
                 }
             });
-        }),
-    });
+        });
+    }
+
+    const PermissionSchema = Yup.object().shape(permissionSchemaShape);
+
     useEffect(() => {
         if (nameCheckFetcher.type === 'done' && nameCheckFetcher.data) {
             checkHandlers.url(nameCheckFetcher.data.success);

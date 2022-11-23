@@ -15,6 +15,10 @@ const ChildPermissionList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'add-child':
+                //编辑
+                onEdit({menuType: 2, status: 1, parentId: row.id, permsType: 1});
+                break;
             case 'edit':
                 //编辑
                 onEdit(row);
