@@ -40,7 +40,9 @@ function findRecyle(items:any[], key:string, value:any):any{
         }
         else if(item.children) {
             result = findRecyle(item.children, key, value);
-            break;
+            if(result != null) {
+                break;
+            }
         }
     }
     return result;
@@ -59,7 +61,7 @@ const PermissionEdit = (props: any) => {
         if (model) {
             if (model.parentId) {
                 const menu:any = findRecyle(menus, 'id', model.parentId);
-                console.log(model, menu);
+                console.log(model, menu, menus);
                 if(menu != null) {
                     const opt = {label: menu.name, value: menu.id, key: menu.id};
                     setParentOptions([opt]);
@@ -71,14 +73,13 @@ const PermissionEdit = (props: any) => {
 
     const PermissionSchema = Yup.object().shape({
         name: Yup.string().required('必填字段'),
-        parentId: Yup.string().required('必填字段'),
         url: Yup.string().required('必填字段').test('name-duplicate', 'not avialiable', (value)=>{
             return new Promise((resolve, reject) => {
                 checkHandlers.url = resolve;
                 if (model.id) {
                     nameCheckFetcher.load(`/system/permissions/check?id=${model.id}&url=${value}&alwaysShow=${model.alwaysShow}`);
                 } else {
-                    nameCheckFetcher.load(`/system/permissions/check?url=${value}&alwaysShow=${model.alwaysShow}`);
+                    nameCheckFetcher.load(`/system/permissions/check?url=${value}&alwaysShow=true`);
                 }
             });
         }),
@@ -139,7 +140,7 @@ const PermissionEdit = (props: any) => {
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                        <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
+                                        <BootstrapRadioGroup disabled={model.id} options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
                                         <BootstrapInput label={values.menuType < 2 ? '菜单名称': '按钮权限'} name={'name'} />
                                         {values.menuType > 0 &&
                                         <FormGroup>

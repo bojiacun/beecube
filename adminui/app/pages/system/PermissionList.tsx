@@ -50,6 +50,10 @@ const PermissionList = () => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'add-child':
+                //编辑
+                setEditModal({menuType: 1, status: 1, parentId: row.id});
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -162,10 +166,10 @@ const PermissionList = () => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'keyWord'}>搜索</FormLabel>
+                                    <FormLabel htmlFor={'name'}>菜单名称</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'keyWord'} onChange={handleKeywordChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'name'} onChange={handleKeywordChanged} placeholder={'请输入要搜索的内容'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
