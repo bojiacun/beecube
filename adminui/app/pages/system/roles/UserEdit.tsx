@@ -30,7 +30,6 @@ const UserEdit = (props: any) => {
     const [departmentValue, setDepartmentValue] = useState<any[]>([]);
     const [allRoles, setAllRoles] = useState<any[]>([]);
     const [allTenants, setAllTenants] = useState<any[]>([]);
-    const [posting, setPosting] = useState<boolean>(false);
     const userNameCheckFetcher = useFetcher();
     const emailNameCheckFetcher = useFetcher();
     const phoneNameCheckFetcher = useFetcher();
@@ -77,7 +76,6 @@ const UserEdit = (props: any) => {
     });
 
     const handleOnSubmit = (values: any) => {
-        setPosting(true);
         console.log(values);
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
@@ -92,7 +90,6 @@ const UserEdit = (props: any) => {
             if (model.id) {
                 userRoleFetcher.load(`/system/users/${model.id}/roles`);
                 userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
-                setPosting(false);
                 const newModel: any = {...model, selectedroles: '', selecteddeparts: ''};
                 const posts = newModel.post.split(',');
                 const postTexts = newModel.post_dictText.split(',');
@@ -140,7 +137,7 @@ const UserEdit = (props: any) => {
 
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
-            setPosting(false);
+            formikRef.current!.setSubmitting(false);
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
                 onHide();
@@ -204,7 +201,7 @@ const UserEdit = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}用户</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{...model, selectedroles: '', selecteddeparts: ''}} validationSchema={userSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{selectedroles: '', selecteddeparts: '', ...model}} validationSchema={userSchema} onSubmit={handleOnSubmit}>
                         {(formik)=>{
                             return (
                                 <Form method={'post'}>
@@ -320,7 +317,7 @@ const UserEdit = (props: any) => {
                                     <Modal.Footer>
                                         <Button
                                             variant={'primary'}
-                                            disabled={posting}
+                                            disabled={formik.isSubmitting}
                                             type={'submit'}
                                         >
                                             保存

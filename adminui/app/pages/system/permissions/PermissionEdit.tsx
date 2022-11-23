@@ -30,25 +30,15 @@ const menuTypeOptions = [
 
 const PermissionEdit = (props: any) => {
     const {model, onHide} = props;
-    const [positionListShow, setPositionListShow] = useState<boolean>(false);
-    const [departmentSelectorShow, setDepartmentSelectorShow] = useState<boolean>(false);
-    const [positionOptions, setPositionOptions] = useState<any[]>([]);
-    const [departmentOptions, setDepartmentOptions] = useState<any[]>([]);
-    const [postValue, setPostValue] = useState<any[]>([]);
-    const [departmentValue, setDepartmentValue] = useState<any[]>([]);
-    const [allRoles, setAllRoles] = useState<any[]>([]);
-    const [allTenants, setAllTenants] = useState<any[]>([]);
-    const [posting, setPosting] = useState<boolean>(false);
     const postFetcher = useFetcher();
 
 
     const PermissionSchema = Yup.object().shape({
-        dictCode: Yup.string().required(),
-        dictName: Yup.string().required()
+        name: Yup.string().required(),
+        url: Yup.string().required()
     });
 
     const handleOnSubmit = (values:any)=>{
-        setPosting(true);
         console.log(values);
         // if (values.id) {
         //     postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
@@ -57,28 +47,13 @@ const PermissionEdit = (props: any) => {
         // }
     }
 
-    useEffect(() => {
-        if (model) {
-            if (model.id) {
-                setPosting(false);
-                const newModel: any = {...model, selectedroles: '', selecteddeparts: ''};
-                const posts = newModel.post.split(',');
-                const postTexts = newModel.post_dictText.split(',');
-                const postValueOptions: any[] = [];
-                posts.forEach((v: any, i: number) => {
-                    postValueOptions.push({value: v, label: postTexts[i]});
-                });
-                setPostValue(postValueOptions);
-            }
-        }
-    }, [model]);
+
 
 
 
 
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
-            setPosting(false);
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
                 onHide();
@@ -95,7 +70,6 @@ const PermissionEdit = (props: any) => {
             <Modal
                 show={!!model}
                 onHide={onHide}
-                size={'lg'}
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
             >
@@ -103,24 +77,29 @@ const PermissionEdit = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik initialValues={model} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
-                        <Form method={'post'}>
-                            <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
-                                <BootstrapInput label={'菜单名称'} name={'name'}/>
-                                <BootstrapInput label={'访问路径'} name={'url'}/>
-                                <BootstrapInput label={'访问图标'} name={'icon'}/>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button
-                                    variant={'primary'}
-                                    disabled={posting}
-                                    type={'submit'}
-                                >
-                                    保存
-                                </Button>
-                            </Modal.Footer>
-                        </Form>
+                    <Formik initialValues={{menuType: 0, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
+                        {({isSubmitting})=>{
+                            return (
+                                <Form method={'post'}>
+                                    <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                                        <BootstrapRadioGroup options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
+                                        <BootstrapInput label={'菜单名称'} name={'name'}/>
+                                        <BootstrapInput label={'访问路径'} name={'url'}/>
+                                        <BootstrapInput label={'访问图标'} name={'icon'}/>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button
+                                            variant={'primary'}
+                                            disabled={isSubmitting}
+                                            type={'submit'}
+                                        >
+                                            保存
+                                        </Button>
+                                    </Modal.Footer>
+                                </Form>
+                            );
+                        }}
+
                     </Formik>
                 }
             </Modal>
