@@ -78,7 +78,7 @@ const PositionListSelector = (props: any) => {
             setSelectedRows([...selected]);
         }
     }
-    const hanldeOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
+    const handleOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
         if(isSelect) {
             setSelectedRows([...rows]);
         }
@@ -95,7 +95,7 @@ const PositionListSelector = (props: any) => {
     const selectRowConfig = {
         ...defaultSelectRowConfig,
         onSelect: handleOnRowSelect,
-        onSelectAll: hanldeOnRowSelectAll,
+        onSelectAll: handleOnRowSelectAll,
     }
 
     return (

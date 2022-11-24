@@ -87,7 +87,7 @@ const UserListSelector = (props: any) => {
             setSelectedRows([...selected]);
         }
     }
-    const hanldeOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
+    const handleOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
         if(isSelect) {
             setSelectedRows([...rows.map(x=>x.id)]);
         }
@@ -110,7 +110,7 @@ const UserListSelector = (props: any) => {
     const selectRowConfig = {
         ...defaultSelectRowConfig,
         onSelect: handleOnRowSelect,
-        onSelectAll: hanldeOnRowSelectAll,
+        onSelectAll: handleOnRowSelectAll,
     }
 
     return (
