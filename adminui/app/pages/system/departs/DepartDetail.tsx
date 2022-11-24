@@ -118,7 +118,7 @@ const DepartPermissionTree = (props: any) => {
                 expanded={expanded}
                 showExpandAll={true}
                 onCheck={(checked, node) => {
-                    setChecked([node.value]);
+                    setChecked(checked);
                 }}
                 onExpand={expanded1 => setExpanded(expanded1)}
                 iconsClass={'fa6'}
