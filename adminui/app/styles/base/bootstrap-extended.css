@@ -716,8 +716,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .dropdown-toggle-split {
-  padding-right: 0.7894736842rem;
-  padding-left: 0.7894736842rem;
+  padding-right: 0.5263157895rem;
+  padding-left: 0.5263157895rem;
 }
 
 .btn-lg + .dropdown-toggle-split,
@@ -1918,7 +1918,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin-bottom: 1rem;
 }
 .nav-pills .nav-link {
-  padding: 0.786rem 1.5rem;
+  padding: 0.7rem 1rem;
   font-size: 1rem;
   line-height: 1rem;
   border: 1px solid transparent;

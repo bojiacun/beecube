@@ -2223,7 +2223,7 @@ textarea.form-control {
   user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
-  padding: 0.786rem 1.5rem;
+  padding: 0.7rem 1rem;
   font-size: 1rem;
   line-height: 1;
   border-radius: 0.358rem;
@@ -3052,8 +3052,8 @@ input[type=button].btn-block {
 }
 
 .dropdown-toggle-split {
-  padding-right: 1.125rem;
-  padding-left: 1.125rem;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
 }
 .dropdown-toggle-split::after, .dropup .dropdown-toggle-split::after, .dropright .dropdown-toggle-split::after {
   margin-left: 0;
@@ -10861,8 +10861,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .dropdown-toggle-split {
-  padding-right: 0.7894736842rem;
-  padding-left: 0.7894736842rem;
+  padding-right: 0.5263157895rem;
+  padding-left: 0.5263157895rem;
 }
 
 .btn-lg + .dropdown-toggle-split,
@@ -12063,7 +12063,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin-bottom: 1rem;
 }
 .nav-pills .nav-link {
-  padding: 0.786rem 1.5rem;
+  padding: 0.7rem 1rem;
   font-size: 1rem;
   line-height: 1rem;
   border: 1px solid transparent;
