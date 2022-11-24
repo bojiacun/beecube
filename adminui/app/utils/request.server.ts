@@ -73,6 +73,7 @@ export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`
 export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;
 export const API_LOG_LIST = `${BASE_URL}/jeecg-system/sys/log/list`;
 export const API_HTTPTRACE_LIST = `${BASE_URL}/jeecg-system/actuator/httptrace`;
+export const API_CRONJOB_LIST = `${BASE_URL}/jeecg-system/sys/quartzJob/list`;
 
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
