@@ -10,7 +10,7 @@ import {MenuTypes} from "~/pages/system/PermissionList";
 
 
 const ChildPermissionList = (props: any) => {
-    const {list, onEdit, onDelete} = props;
+    const {list, onEdit, onDelete, onShowRule} = props;
 
 
     const handleOnAction = (row: any, e: any) => {
@@ -22,6 +22,9 @@ const ChildPermissionList = (props: any) => {
             case 'edit':
                 //编辑
                 onEdit(row);
+                break;
+            case 'data-rule':
+                onShowRule(row);
                 break;
             case 'delete':
                 showDeleteAlert(function () {
@@ -96,7 +99,7 @@ const ChildPermissionList = (props: any) => {
         renderer: (row: any) => {
             return (
                 <div style={{marginLeft: -1,marginRight: -1, paddingLeft: 60}}>
-                    <ChildPermissionList list={row.children || []} onEdit={onEdit} onDelete={onDelete} />
+                    <ChildPermissionList list={row.children || []} onShowRule={onShowRule} onEdit={onEdit} onDelete={onDelete} />
                 </div>
             );
         },

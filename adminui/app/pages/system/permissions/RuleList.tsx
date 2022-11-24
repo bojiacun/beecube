@@ -14,8 +14,8 @@ const API_LIST = '/system/permissions/rules';
 
 const RuleList = (props: any) => {
     const {show, onHide, selectedPermission} = props;
-    const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, ruleId: selectedPermission.id});
+    const [list, setList] = useState<any>([]);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, permissionId: selectedPermission.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
@@ -31,7 +31,6 @@ const RuleList = (props: any) => {
             loadData();
         }
     }, [show]);
-
 
 
     useEffect(() => {
@@ -50,11 +49,6 @@ const RuleList = (props: any) => {
         }
     }, [editFetcher.state]);
 
-    const handlePageChanged = (e: any) => {
-        searchState.pageNo = e.selected + 1;
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: API_LIST});
-    }
 
     const handleOnRuleNameChanged = (e: any) => {
         setSearchState({...searchState, ruleName: e.target.value});
@@ -120,13 +114,13 @@ const RuleList = (props: any) => {
                 <Modal.Header closeButton>
                     <Modal.Title id={'edit-modal'}>数据权限规则</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{maxHeight: 'calc(100vh - 200px)'}}>
                     <div className={'m-2'}>
                         <Row>
-                            <Col md={4}>
+                            <Col md={2}>
                                 <Button onClick={handleOnAdd}><Plus size={16}/>新建</Button>
                             </Col>
-                            <Col md={8} className={'d-flex align-items-center justify-content-end'}>
+                            <Col md={10} className={'d-flex align-items-center justify-content-end'}>
                                 <searchFetcher.Form action={'/system/permissions/rules'} className={'form-inline justify-content-end'}
                                                     onSubmit={handleOnSearchSubmit}>
                                     <FormControl name={'pageNo'} value={1} type={'hidden'}/>
@@ -134,17 +128,13 @@ const RuleList = (props: any) => {
                                     <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                     <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                    <FormGroup as={Form.Row} className={'mb-0'}>
-                                        <FormLabel htmlFor={'roleName'}>规则名称</FormLabel>
-                                        <FormControl name={'roleName'} autoComplete={'off'} onChange={handleOnRuleNameChanged}
-                                                     placeholder={'请输入要搜索的内容'}/>
-                                    </FormGroup>
+                                    <FormLabel htmlFor={'roleName'} className={'mr-1'}>规则名称</FormLabel>
+                                    <FormControl name={'roleName'} className={'mr-1'} style={{maxWidth: 120}} autoComplete={'off'} onChange={handleOnRuleNameChanged}
+                                                 placeholder={'请输入要搜索的内容'}/>
 
-                                    <FormGroup as={Form.Row} className={'mb-0'}>
-                                        <FormLabel htmlFor={'roleValue'}>规则值</FormLabel>
-                                        <FormControl name={'roleValue'} autoComplete={'off'} onChange={handleOnRuleValueChanged}
-                                                     placeholder={'请输入要搜索的内容'}/>
-                                    </FormGroup>
+                                    <FormLabel htmlFor={'roleValue'} className={'mr-1'}>规则值</FormLabel>
+                                    <FormControl name={'roleValue'} className={'mr-1'} style={{maxWidth: 120}} autoComplete={'off'} onChange={handleOnRuleValueChanged}
+                                                 placeholder={'请输入要搜索的内容'}/>
 
 
                                     <Button type={'submit'}>搜索</Button>
@@ -159,33 +149,17 @@ const RuleList = (props: any) => {
                         hover
                         columns={columns}
                         bootstrap4
-                        data={list?.records}
+                        data={list || []}
                         selectRow={selectRowConfig}
                         keyField={'id'}
                     />
 
-                    <div className={'mx-2 mb-2 mt-1'}>
-                        <Row>
-                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
-                            </Col>
-                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                                <SinglePagination
-                                    forcePage={searchState.pageNo - 1}
-                                    className={'mb-0'}
-                                    pageCount={list?.pages}
-                                    onPageChange={handlePageChanged}
-                                />
-                            </Col>
-                        </Row>
-                    </div>
                 </Modal.Body>
             </Modal>
-            {editModal && <RuleEdit model={editModal} onHide={()=>{
+            {editModal && <RuleEdit model={editModal} onHide={() => {
                 setEditModal(null);
                 loadData();
-            }} selectedPermission={selectedPermission} />}
+            }} selectedPermission={selectedPermission}/>}
         </>
     );
 }

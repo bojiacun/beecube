@@ -14,6 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import {Delete, Edit, MinusSquare, MoreVertical, PlusSquare} from "react-feather";
 import ChildPermissionList from "~/pages/system/permissions/ChildPermissionList";
 import PermissionEdit from "~/pages/system/permissions/PermissionEdit";
+import RuleList from "~/pages/system/permissions/RuleList";
 
 
 export const MenuTypes = [
@@ -24,8 +25,9 @@ export const MenuTypes = [
 
 const PermissionList = () => {
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, logType: 1});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
+    const [selectedPermission, setSelectedPermission] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
@@ -57,6 +59,9 @@ const PermissionList = () => {
             case 'edit':
                 //编辑
                 setEditModal(row);
+                break;
+            case 'data-rule':
+                setSelectedPermission(row);
                 break;
             case 'delete':
                 //删除按钮
@@ -132,7 +137,7 @@ const PermissionList = () => {
         renderer: (row: any) => {
             return (
                 <div style={{marginLeft: -1, marginRight: -1, paddingLeft: 57}}>
-                    <ChildPermissionList list={row.children} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
+                    <ChildPermissionList list={row.children} onShowRule={(row:any)=>setSelectedPermission(row)} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
                 </div>
             );
         },
@@ -192,6 +197,10 @@ const PermissionList = () => {
                 loadData();
                 setEditModal(null);
             }} /> }
+            {selectedPermission && <RuleList show={!!selectedPermission} onHide={()=>{
+                loadData();
+                setSelectedPermission(null);
+            }} selectedPermission={selectedPermission} />}
         </>
     );
 }
