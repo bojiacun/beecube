@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, handleResult, PageSizeOptions, showDeleteAlert, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {AwesomeButton} from "react-awesome-button";
-import {Plus} from "react-feather";
+import {Delete, Edit, MoreVertical, Plus} from "react-feather";
 import RuleEdit from "~/pages/system/permissions/RuleEdit";
 
 
@@ -20,12 +20,20 @@ const RuleList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
-
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            handleResult(deleteFetcher.data, '删除成功');
+            loadData();
+        }
+    }, [deleteFetcher.state]);
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get', action: API_LIST});
     }
-
+    const doDelete = (model:any) => {
+        deleteFetcher.submit({id: model.id}, {method: 'delete', action: `/system/permissions/rules/delete?id=${model.id}`, replace: true});
+    }
     useEffect(() => {
         if (show) {
             loadData();
@@ -60,6 +68,21 @@ const RuleList = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
+    const handleOnAction = (row: any, e: any) => {
+        switch (e) {
+            case 'edit':
+                //编辑
+                setEditModal(row);
+                break;
+
+            case 'delete':
+                //删除按钮
+                showDeleteAlert(function () {
+                    doDelete(row);
+                });
+                break;
+        }
+    }
     const columns: any[] = [
         {
             text: '规则名称',
@@ -72,6 +95,21 @@ const RuleList = (props: any) => {
         {
             text: '规则值',
             dataField: 'ruleValue',
+        },
+        {
+            text: '操作',
+            dataField: 'operation',
+            isDummyField: true,
+            headerStyle: {width: 180},
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
+                    </div>
+                );
+            }
         },
     ]
 

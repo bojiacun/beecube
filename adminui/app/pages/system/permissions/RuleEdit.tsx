@@ -67,13 +67,13 @@ const RuleEdit = (props: any) => {
                 <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
             </Modal.Header>
             {model &&
-                <Formik innerRef={formikRef} initialValues={{menuType: 0, status: 1, ...model}} validationSchema={RuleSchema}
+                <Formik innerRef={formikRef} initialValues={{status: 1,permissionId: selectedPermission.id,...model}} validationSchema={RuleSchema}
                         onSubmit={handleOnSubmit}>
                     {({isSubmitting, values, errors}) => {
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                    <FormControl type={'hidden'} name={'ruleId'} value={selectedPermission.id} />
+                                    <FormControl type={'hidden'} name={'permissionId'} value={selectedPermission.id} />
                                     <BootstrapInput label={'规则名称'} name={'ruleName'}/>
                                     {values.ruleConditions != 'USE_SQL_RULES' && <BootstrapInput label={'规则字段'} name={'ruleColumn'}/>}
                                     <BootstrapSelect name={'ruleConditions'} label={'条件规则'} options={[
