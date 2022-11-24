@@ -13,4 +13,9 @@ export default [
         route: 'monitor/log',
         icon: 'Terminal'
     },
+    {
+        title: '请求追踪',
+        route: 'monitor/httptrace',
+        icon: 'Eye'
+    },
 ]
