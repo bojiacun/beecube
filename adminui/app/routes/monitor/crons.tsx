@@ -25,6 +25,7 @@ import Error500Page from "~/components/error-page/500";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import {Delete, Edit, MoreVertical} from "react-feather";
+import CronEdit from "~/pages/monitor/crons/CronEdit";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -35,15 +36,13 @@ export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
 
 
-
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
-    }
-    else {
+    } else {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_CRONJOB_LIST + queryString);
@@ -51,11 +50,13 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 
-
 const CronsPages = () => {
     const [list, setList] = useState<any>(useLoaderData());
+    const [editModel, setEditModel] = useState<any>();
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
+    const resumeFetcher = useFetcher();
+    const runJobFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -64,25 +65,31 @@ const CronsPages = () => {
     }, [searchFetcher.state]);
 
 
-    const handlePageChanged = (e:any) => {
+    const loadData = () => {
+        searchFetcher.submit(searchState);
+    }
+
+    const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get'});
     }
-    const handlePageSizeChanged = (newValue:any) => {
+    const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
         searchFetcher.submit(searchState, {method: 'get'});
     }
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'add-child':
-                //编辑
+            case 'start':
+                //启动
+                resumeFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/resume'});
                 break;
             case 'edit':
                 //编辑
                 break;
-            case 'data-rule':
+            case 'start-now':
+                runJobFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/execute'});
                 break;
             case 'delete':
                 //删除按钮
@@ -118,8 +125,9 @@ const CronsPages = () => {
             text: '状态',
             dataField: 'status_dictText',
             headerStyle: {width: 100},
-            formatter: (cell:number, row:any) => {
-                return row.status === -1 ? <Badge variant={'danger'}>{row.status_dictText}</Badge> : <Badge variant={'info'}>{row.status_dictText}</Badge>;
+            formatter: (cell: number, row: any) => {
+                return row.status === -1 ? <Badge variant={'danger'}>{row.status_dictText}</Badge> :
+                    <Badge variant={'info'}>{row.status_dictText}</Badge>;
             }
         },
         {
@@ -153,10 +161,10 @@ const CronsPages = () => {
         },
     ]
 
-    const handleOnDataIdChanged = (e:any) => {
+    const handleOnDataIdChanged = (e: any) => {
         setSearchState({...searchState, dataId: e.target.value});
     }
-    const handleOnDataTableChanged = (e:any) => {
+    const handleOnDataTableChanged = (e: any) => {
         setSearchState({...searchState, dataTable: e.target.value});
     }
     const handleOnSearchSubmit = () => {
@@ -165,62 +173,66 @@ const CronsPages = () => {
     }
 
     return (
-        <Card>
-            <div className={'m-2'}>
-               <Row>
-                   <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                       <h4 className="mb-0">定时任务</h4>
-                       <ReactSelectThemed
-                           placeholder={'分页大小'}
-                           isSearchable={false}
-                           defaultValue={PageSizeOptions[0]}
-                           options={PageSizeOptions}
-                           className={'per-page-selector d-inline-block ml-50 mr-1'}
-                           onChange={handlePageSizeChanged}
-                       />
-                   </Col>
-                   <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                       <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
-                           <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                           <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
-                           <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
-                           <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
-                           <FormGroup as={Form.Row} className={'mb-0'}>
-                               <FormLabel htmlFor={'jobClassName'}>任务类名</FormLabel>
-                               <Col>
-                                   <InputGroup>
-                                       <FormControl name={'jobClassName'} onChange={handleOnDataIdChanged} placeholder={'请输入要搜索的内容'}/>
-                                       <InputGroup.Append>
-                                           <Button type={'submit'}>搜索</Button>
-                                       </InputGroup.Append>
-                                   </InputGroup>
-                               </Col>
-                           </FormGroup>
-                       </searchFetcher.Form>
-                   </Col>
-               </Row>
-            </div>
-
-            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records}  keyField={'id'} />
-
-
-            <div className={'mx-2 mb-2 mt-1'}>
-                <Row>
-                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1)*list.size + 1} 至 {list?.current*list.size > list.total ? list.total:list?.current*list.size} 条</span>
-                    </Col>
-                    <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                        <SinglePagination
-                            forcePage={searchState.pageNo - 1}
-                            className={'mb-0'}
-                            pageCount={list?.pages}
-                            onPageChange={handlePageChanged}
-                        />
-                    </Col>
-                </Row>
-            </div>
-
-        </Card>
+        <>
+            <Card>
+                <div className={'m-2'}>
+                    <Row>
+                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                            <h4 className="mb-0">定时任务</h4>
+                            <ReactSelectThemed
+                                placeholder={'分页大小'}
+                                isSearchable={false}
+                                defaultValue={PageSizeOptions[0]}
+                                options={PageSizeOptions}
+                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                onChange={handlePageSizeChanged}
+                            />
+                        </Col>
+                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                            <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
+                                <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
+                                <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
+                                <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
+                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                    <FormLabel htmlFor={'jobClassName'}>任务类名</FormLabel>
+                                    <Col>
+                                        <InputGroup>
+                                            <FormControl name={'jobClassName'} onChange={handleOnDataIdChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <InputGroup.Append>
+                                                <Button type={'submit'}>搜索</Button>
+                                            </InputGroup.Append>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                            </searchFetcher.Form>
+                        </Col>
+                    </Row>
+                </div>
+                <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
+                                data={list?.records} keyField={'id'}/>
+                <div className={'mx-2 mb-2 mt-1'}>
+                    <Row>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                            <span
+                                className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                        </Col>
+                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                            <SinglePagination
+                                forcePage={searchState.pageNo - 1}
+                                className={'mb-0'}
+                                pageCount={list?.pages}
+                                onPageChange={handlePageChanged}
+                            />
+                        </Col>
+                    </Row>
+                </div>
+            </Card>
+            {editModel && <CronEdit model={editModel} onHide={()=>{
+                setEditModel(null);
+                loadData();
+            }} />}
+        </>
     );
 }
 

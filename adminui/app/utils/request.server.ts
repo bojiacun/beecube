@@ -74,6 +74,8 @@ export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;
 export const API_LOG_LIST = `${BASE_URL}/jeecg-system/sys/log/list`;
 export const API_HTTPTRACE_LIST = `${BASE_URL}/jeecg-system/actuator/httptrace`;
 export const API_CRONJOB_LIST = `${BASE_URL}/jeecg-system/sys/quartzJob/list`;
+export const API_CRONJOB_RESUME = `${BASE_URL}/jeecg-system/sys/quartzJob/resume`;
+export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execute`;
 
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
