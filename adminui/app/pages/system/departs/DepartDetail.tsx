@@ -3,7 +3,7 @@ import {Form, Formik} from "formik";
 import {useContext, useEffect, useRef, useState} from "react";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
-import {defaultTreeIcons, findTree} from "~/utils/utils";
+import {defaultTreeIcons, findTree, handleSaveResult} from "~/utils/utils";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import {Save} from "react-feather";
 import CheckboxTree from "react-checkbox-tree";
@@ -68,13 +68,21 @@ const DepartPermissionTree = (props: any) => {
     const {departments, model} = props;
     const [treeData, setTreeData] = useState<any>([]);
     const [checked, setChecked] = useState<any[]>([]);
+    const [lastChecked, setLastChecked] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
     const searchFetcher = useFetcher();
+    const permissionFetcher = useFetcher();
+    const postFetcher = useFetcher();
 
     useEffect(() => {
         searchFetcher.load('/system/permissions');
     }, []);
 
+    useEffect(()=>{
+        if(model) {
+            permissionFetcher.load(`/system/departs/permissions?departId=${model.id}`)
+        }
+    }, [model]);
 
     useEffect(() => {
         if (searchFetcher.type === 'done' && searchFetcher.data) {
@@ -82,6 +90,25 @@ const DepartPermissionTree = (props: any) => {
             setTreeData(nodes);
         }
     }, [searchFetcher.state]);
+
+    useEffect(() => {
+        if (permissionFetcher.type === 'done' && permissionFetcher.data) {
+            setChecked(permissionFetcher.data);
+            setLastChecked(permissionFetcher.data);
+        }
+    }, [permissionFetcher.state]);
+    useEffect(() => {
+        if (postFetcher.type === 'done' && postFetcher.data) {
+            handleSaveResult(postFetcher.data);
+        }
+    }, [postFetcher.state]);
+
+    const handleOnSave = () => {
+        const permissionIds = checked.join(',');
+        const lastpermissionIds = lastChecked.join(',');
+        const postData = {permissionIds: permissionIds, lastpermissionIds: lastpermissionIds, departId: model.id};
+        postFetcher.submit(postData, {method: 'post', action: '/system/departs/permissions'});
+    }
 
     return (
         <>
@@ -99,7 +126,7 @@ const DepartPermissionTree = (props: any) => {
                 icons={defaultTreeIcons}
             />
             <Card.Footer className={'mt-2 text-right pb-0'}>
-                <Button type={'submit'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
+                <Button type={'button'} onClick={handleOnSave} disabled={postFetcher.state == 'submitting'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
             </Card.Footer>
         </>
     );

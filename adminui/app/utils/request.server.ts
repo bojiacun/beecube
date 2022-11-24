@@ -28,6 +28,10 @@ export const API_PERMISSION_EDIT = `${BASE_URL}/jeecg-system/sys/permission/edit
 export const API_PERMISSION_DELETE = `${BASE_URL}/jeecg-system/sys/permission/delete`;
 export const API_PERMISSION_CHECKDUPLICATION = `${BASE_URL}/jeecg-system/sys/permission/checkPermDuplication`;
 
+
+export const API_DEPARTMENT_PERMISSIONS = `${BASE_URL}/jeecg-system/sys/permission/queryDepartPermission`;
+export const API_DEPARTMENT_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/permission/saveDepartPermission`;
+
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
