@@ -22,57 +22,25 @@ import MenuTreeSelector from "~/pages/system/permissions/MenuTreeSelector";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
-const checkHandlers: any = {};
 
-const menuTypeOptions = [
-    {label: '一级菜单', value: '0'},
-    {label: '子菜单', value: '1'},
-    {label: '按钮权限', value: '2'},
-];
-
-function findRecyle(items: any[], key: string, value: any): any {
-    let result = null;
-    for (let i = 0; i < items.length; i++) {
-        let item = items[i];
-        if (item[key] == value) {
-            result = item;
-            break;
-        } else if (item.children) {
-            result = findRecyle(item.children, key, value);
-            if (result != null) {
-                break;
-            }
-        }
-    }
-    return result;
-}
+const RuleSchema = Yup.object().shape({
+    ruleName: Yup.string().required('必填字段'),
+    ruleValue: Yup.string().required('必填字段'),
+    ruleConditions: Yup.string().required('必填字段'),
+});
 
 const RuleEdit = (props: any) => {
     const {model, onHide, selectedPermission} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
-    const nameCheckFetcher = useFetcher();
 
 
-
-
-    const RuleSchema = Yup.object().shape({
-        ruleName: Yup.string().required('必填字段'),
-        ruleValue: Yup.string().required('必填字段'),
-        ruleConditions: Yup.string().required('必填字段'),
-    });
-
-    useEffect(() => {
-        if (nameCheckFetcher.type === 'done' && nameCheckFetcher.data) {
-            checkHandlers.url(nameCheckFetcher.data.success);
-        }
-    }, [nameCheckFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/system/permissions/edit'});
+            postFetcher.submit(values, {method: 'post', action: '/system/permissions/rules/edit'});
         } else {
-            postFetcher.submit(values, {method: 'post', action: '/system/permissions/add'});
+            postFetcher.submit(values, {method: 'post', action: '/system/permissions/rules/add'});
         }
     }
     useEffect(() => {
@@ -106,7 +74,6 @@ const RuleEdit = (props: any) => {
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <FormControl type={'hidden'} name={'ruleId'} value={selectedPermission.id} />
-                                    <BootstrapRadioGroup disabled={model.id} options={menuTypeOptions} name={'menuType'} label={'菜单类型'}/>
                                     <BootstrapInput label={'规则名称'} name={'ruleName'}/>
                                     {values.ruleConditions != 'USE_SQL_RULES' && <BootstrapInput label={'规则字段'} name={'ruleColumn'}/>}
                                     <BootstrapSelect name={'ruleConditions'} label={'条件规则'} options={[
