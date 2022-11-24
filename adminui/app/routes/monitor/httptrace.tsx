@@ -89,7 +89,7 @@ const HttpTracePage = () => {
         {
             text: '请求时间',
             dataField: 'timestamp',
-            headerStyle: {width: 170},
+            headerStyle: {width: 200},
             formatter: (cell:any, row:any)=>{
                 return moment(row.timestamp).format('YYYY-MM-DD HH:mm');
             }
