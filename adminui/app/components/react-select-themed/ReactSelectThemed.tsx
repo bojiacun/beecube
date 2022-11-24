@@ -28,11 +28,6 @@ const ReactSelectThemed = React.forwardRef((props:any, ref) => {
             }}
             {...rest}
         />
-        // <Select className={className} mode={'combobox'} showSearch={isSearchable} {...rest}>
-        //     {options.map((item:any)=>{
-        //         return <Option key={item.value} value={item.value}>{item.label}</Option>
-        //     })}
-        // </Select>
     );
 });
 

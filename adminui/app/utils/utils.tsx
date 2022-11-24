@@ -232,3 +232,22 @@ export function formData2Json(formData: FormData, stringify = true) {
     }
     return jsonData;
 }
+
+export function findTree(items:any[], key:string, value:any):any{
+    let result = null;
+    if(!items) return result;
+    for(let i = 0; i < items.length;i++){
+        let item = items[i];
+        if(item[key] == value) {
+            result = item;
+            break;
+        }
+        else if(item.children) {
+            result = findTree(item.children, key, value);
+            if(result != null) {
+                break;
+            }
+        }
+    }
+    return result;
+}

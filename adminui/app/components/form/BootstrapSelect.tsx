@@ -16,7 +16,7 @@ export interface BootstrapSelectProps extends Partial<any> {
 }
 
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
-    let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false} = props;
+    let {label, name, placeholder = '', options, isSearchable = false, isClearable = false, isMulti = false, ...rest} = props;
     const [value, setValue] = useState<any>();
     const {t} = useTranslation();
     const formik = useFormikContext<any>();
@@ -74,6 +74,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
                 options={options}
                 value={value}
                 onChange={handleOnChanged}
+                {...rest}
             />
             {formik.errors[name]&&<Form.Control.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</Form.Control.Feedback>}
         </FormGroup>

@@ -9,6 +9,16 @@ export default [
         icon: 'Settings'
     },
     {
+        title: '部门管理',
+        route: 'system/departs',
+        icon: 'Users'
+    },
+    {
+        title: '我的部门',
+        route: 'system/departs-user',
+        icon: 'Home'
+    },
+    {
         title: '菜单管理',
         route: 'system/permissions',
         icon: 'Menu'
