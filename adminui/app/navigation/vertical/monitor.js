@@ -4,6 +4,11 @@ export default [
         header: 'System Monitor Pages',
     },
     {
+        title: '定时任务',
+        route: 'monitor/crons',
+        icon: 'Clock'
+    },
+    {
         title: 'data log',
         route: 'monitor/datalog',
         icon: 'Terminal'

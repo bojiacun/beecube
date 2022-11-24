@@ -19,11 +19,9 @@ import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBou
 import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+//@ts-ignore
+import sha256 from 'crypto-js/sha256';
 import {requireAuthenticated} from "~/utils/auth.server";
-import Error500Page from "~/components/error-page/500";
-import Error401Page from "~/components/error-page/401";
-import Error404Page from "~/components/error-page/404";
 import moment from "moment";
 import {RefreshCw} from "react-feather";
 
@@ -56,11 +54,11 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_HTTPTRACE_LIST+ queryString);
+    result.traces.forEach((item:any, index:number)=>{
+        item.id = sha256(item.request.uri + index).toString();
+    });
     return json(result.traces);
 }
-const headerSortingClasses = (column:any, sortOrder:any) => (
-    sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc'
-);
 
 
 const HttpTracePage = () => {
@@ -143,7 +141,7 @@ const HttpTracePage = () => {
                    </Col>
                </Row>
             </div>
-            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records} keyField={'request.uri'} />
+            <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4 data={list?.records} keyField={'id'} />
         </Card>
     );
 }
