@@ -21,11 +21,17 @@ const RuleList = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
+
+    const loadData = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: API_LIST});
+    }
+
     useEffect(() => {
         if (show) {
-            searchFetcher.submit(searchState, {method: 'get', action: API_LIST});
+            loadData();
         }
     }, [show]);
+
 
 
     useEffect(() => {
@@ -176,7 +182,10 @@ const RuleList = (props: any) => {
                     </div>
                 </Modal.Body>
             </Modal>
-            {editModal && <RuleEdit model={editModal} onHide={()=>setEditModal(null)} selectedPermission={selectedPermission} />}
+            {editModal && <RuleEdit model={editModal} onHide={()=>{
+                setEditModal(null);
+                loadData();
+            }} selectedPermission={selectedPermission} />}
         </>
     );
 }
