@@ -124,7 +124,7 @@ const HttpTracePage = () => {
             dataField: 'timeTaken',
             headerStyle: {width: 130},
             formatter: (cell:any, row:any)=>{
-                return row.timeTaken > 1000 ? <Badge variant={'danger'}>{row.timeTaken}</Badge> : <Badge variant={'success'}>{row.timeTaken}</Badge>
+                return row.timeTaken > 1000 ? <Badge variant={'danger'}>{row.timeTaken}ms</Badge> : <Badge variant={'success'}>{row.timeTaken}ms</Badge>
             }
         },
     ]

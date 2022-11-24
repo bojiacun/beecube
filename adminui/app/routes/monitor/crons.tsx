@@ -6,7 +6,7 @@ import {
     Form,
     FormControl,
     FormLabel,
-    Button, Row, Dropdown,
+    Button, Row, Dropdown, Badge,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
@@ -118,6 +118,9 @@ const CronsPages = () => {
             text: '状态',
             dataField: 'status_dictText',
             headerStyle: {width: 100},
+            formatter: (cell:number, row:any) => {
+                return row.status === -1 ? <Badge variant={'danger'}>{row.status_dictText}</Badge> : <Badge variant={'info'}>{row.status_dictText}</Badge>;
+            }
         },
         {
             text: '操作',
