@@ -66,7 +66,7 @@ const GatewayFilterEditor = (props:any) => {
     let {label, name, className, ...rest} = props;
     const formik = useFormikContext();
     //@ts-ignore
-    const [filters, setFilters] = useState<any[]>(JSON.parse(formik.values[name]||'[]'));
+    const [filters, setFilters] = useState<any[]>(formik.values[name]||[]);
     const [index, setIndex] = useState<number>(0);
 
     const handleRemove = (item: any) => {

@@ -117,12 +117,12 @@ const PredicateHost = (props: any) => {
             <Row>
                 {hosts.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建Host</Button>
                 </Col>
             </Row>
@@ -157,12 +157,12 @@ const PredicateBefore = (props: any) => {
             <Row>
                 {befores.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建Before</Button>
                 </Col>
             </Row>
@@ -197,12 +197,12 @@ const PredicateRemoteAddr = (props: any) => {
             <Row>
                 {remoteAddrs.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建RemoteAddr</Button>
                 </Col>
             </Row>
@@ -237,12 +237,12 @@ const PredicateBetween = (props: any) => {
             <Row>
                 {betweens.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建Between</Button>
                 </Col>
             </Row>
@@ -277,12 +277,12 @@ const PredicateAfter = (props: any) => {
             <Row>
                 {afters.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建After</Button>
                 </Col>
             </Row>
@@ -317,12 +317,12 @@ const PredicateMethod = (props: any) => {
             <Row>
                 {methods.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建Method</Button>
                 </Col>
             </Row>
@@ -332,7 +332,7 @@ const PredicateMethod = (props: any) => {
 
 const PredicatePath = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [paths, setPaths] = useState<string[]>([]);
+    const [paths, setPaths] = useState<string[]>(item.args||[]);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -358,12 +358,12 @@ const PredicatePath = (props: any) => {
             <Row>
                 {paths.map(p => {
                     return (
-                        <Col sm={2} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
+                        <Col sm={12} key={p}><Badge variant={'light'}>{p} <X size={12} className={'cursor-pointer'} onClick={() => handleRemove(p)}/>
                         </Badge></Col>
                     );
                 })}
-                {showInput && <Col sm={3}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
-                <Col sm={4}>
+                {showInput && <Col sm={12}><FormControl onBlur={handleOnBlur} size={'sm'}/></Col>}
+                <Col sm={12}>
                     <Button size={'sm'} variant={'light'} onClick={handleAdd}><Plus size={12}/>新建Path</Button>
                 </Col>
             </Row>
@@ -375,7 +375,7 @@ const GatewayPredicateEditor = (props: any) => {
     let {label, name, className, ...rest} = props;
     const formik = useFormikContext();
     //@ts-ignore
-    const [predicates, setPredicates] = useState<any>(JSON.parse(formik.values[name]||'[]'));
+    const [predicates, setPredicates] = useState<any>(formik.values[name]||[]);
     const [index, setIndex] = useState<number>(0);
 
     const handleOnSelect = (e: any) => {
