@@ -91,6 +91,8 @@ public class TokenUtils {
                 // 设置Toekn缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
+                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + userName, newAuthorization);
+                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + userName, JwtUtil.EXPIRE_TIME *2 / 1000);
             }
             return true;
         }

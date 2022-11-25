@@ -432,6 +432,13 @@ public class LoginController {
 		// 设置token缓存有效时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
+		//用户互顶，顶掉之前已经登录的用户使其token立即失效
+		if(redisUtil.hasKey(CommonConstant.PREFIX_USER_TOKEN + username)) {
+			String oldToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + username));
+			redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + oldToken);
+		}
+		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + username, token);
+		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + username, JwtUtil.EXPIRE_TIME * 2 / 1000);
 		obj.put("token", token);
 
 		// update-begin--Author:sunjianlei Date:20210802 for：获取用户租户信息
