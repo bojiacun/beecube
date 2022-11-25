@@ -2478,4 +2478,15 @@ span.divider {
   padding: 1.2rem 0;
 }
 
+fieldset {
+  border-top: 1px solid #ebe9f1;
+}
+fieldset legend {
+  width: auto !important;
+}
+
+.badge-light {
+  color: #2a2e30 !important;
+}
+
 /*# sourceMappingURL=styles.css.map */

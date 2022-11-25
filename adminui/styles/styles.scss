@@ -104,3 +104,12 @@ span.divider {
 .card-footer {
   padding: 1.2rem 0;
 }
+fieldset {
+  legend {
+    width: auto !important;
+  }
+  border-top: 1px solid $border-color;
+}
+.badge-light {
+  color: #2a2e30 !important;
+}
