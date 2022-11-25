@@ -1,7 +1,7 @@
 import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut} from 'react-feather';
-import {useFetcher} from "@remix-run/react";
+import {useFetcher, useNavigate} from "@remix-run/react";
 import {LoginedUser, UserInfo} from "~/utils/auth.server";
 import {useEffect, useState} from "react";
 
@@ -9,6 +9,7 @@ const UserDropdown = () => {
     const [userData, setUserData] = useState<UserInfo>();
     const logoutFetcher = useFetcher();
     const userFetcher = useFetcher<LoginedUser>();
+    const navigate = useNavigate();
 
     useEffect(()=>{
         // @ts-ignore
@@ -37,6 +38,9 @@ const UserDropdown = () => {
         // @ts-ignore
         logoutFetcher.load(window.ENV.LOGOUT_URL);
     }
+    const navigateToAccountSettings = () => {
+        navigate('/account/settings');
+    }
     return (
         //@ts-ignore
         <Dropdown as={'li'} style={{minWidth: 160}} className={classNames('dropdown-user d-flex justify-content-end')} variant={'link'}>
@@ -45,11 +49,7 @@ const UserDropdown = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-            <Dropdown.Item key={'user-profile'} className={'d-flex align-items-center'}>
-                <User className={'mr-50'} size={16} />
-                <span>个人资料</span>
-            </Dropdown.Item>
-            <Dropdown.Item key={'user-settings'} className={'d-flex align-items-center'}>
+            <Dropdown.Item key={'user-settings'} onSelect={navigateToAccountSettings} className={'d-flex align-items-center'}>
                 <Settings className={'mr-50'} size={16} />
                 <span>用户设置</span>
             </Dropdown.Item>
