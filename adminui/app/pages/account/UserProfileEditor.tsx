@@ -4,13 +4,14 @@ import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
-import {DefaultListSearchParams} from "~/utils/utils";
+import {DefaultListSearchParams, handleSaveResult} from "~/utils/utils";
 import {API_USER_INFO, requestWithToken} from "~/utils/request.server";
-import {useLoaderData} from "@remix-run/react";
+import {useFetcher, useLoaderData} from "@remix-run/react";
 import * as Yup from "yup";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import FileBrowserInput from "~/components/filebrowser/form";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useEffect} from "react";
 
 
 const UserInfoSchema = Yup.object().shape({
@@ -18,8 +19,17 @@ const UserInfoSchema = Yup.object().shape({
 });
 const UserProfileEditor = () => {
     const userInfo = useLoaderData();
+    const postFetcher = useFetcher();
+
+    useEffect(() => {
+        if (postFetcher.type === 'done' && postFetcher.data) {
+            handleSaveResult(postFetcher.data);
+        }
+    }, [postFetcher.state]);
+
     const handleOnSubmit = (values: any) => {
         console.log(values);
+        postFetcher.submit({userInfo, ...values}, {method: 'put', action:'/system/users/edit'});
     }
 
     return (
@@ -36,7 +46,7 @@ const UserProfileEditor = () => {
                         <FileBrowserInput name={'avatar'} type={1} />
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
-                        <Button type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
+                        <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
                     </Card.Footer>
                 </Card>
             </Form>
