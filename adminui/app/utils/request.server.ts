@@ -54,6 +54,7 @@ export const API_DATABASE_DICT_ITEM_ADD = `${BASE_URL}/jeecg-system/sys/dictItem
 export const API_DATABASE_DICT_ITEM_DELETE = `${BASE_URL}/jeecg-system/sys/dictItem/delete`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
+export const API_SYSDEPART_MY_LIST= `${BASE_URL}/jeecg-system/sys/sysDepart/queryMyDeptTreeList`;
 export const API_SYSDEPART_EDIT = `${BASE_URL}/jeecg-system/sys/sysDepart/edit`;
 export const API_SYSDEPART_ADD = `${BASE_URL}/jeecg-system/sys/sysDepart/add`;
 export const API_SYSDEPART_DELETE = `${BASE_URL}/jeecg-system/sys/sysDepart/deleteBatch`;
@@ -70,6 +71,7 @@ export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
 export const API_USER_ROLE_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/queryUserRole`;
 export const API_USER_DEPARTMENT_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/userDepartList`;
+export const API_DEPARTMENT_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/departUserList`;
 export const API_USER_ADDSYSUSERROLE = `${BASE_URL}/jeecg-system/sys/user/addSysUserRole`;
 export const API_USER_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/user/userRoleList`;
 export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserRole`;

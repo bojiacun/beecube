@@ -15,7 +15,7 @@ export default [
     },
     {
         title: '我的部门',
-        route: 'system/departs-user',
+        route: 'system/my-departs',
         icon: 'Home'
     },
     {

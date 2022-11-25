@@ -20,7 +20,7 @@ const translateTreeToNode = (treeNode: any) => {
 }
 
 const DepartTreeList = (props: any) => {
-    const {departments, setSelectedDepart, reloadDepartments} = props;
+    const {departments, setSelectedDepart, reloadDepartments, showControl = true} = props;
     const [treeData, setTreeData] = useState<any>([]);
     const [checked, setChecked] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
@@ -67,6 +67,7 @@ const DepartTreeList = (props: any) => {
                     <Card.Title>所有部门</Card.Title>
                 </Card.Header>
                 <Card.Body>
+                    {showControl &&
                     <Row className={'mb-1'}>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={14} style={{marginRight: 5}}/>新增</Button>
@@ -77,6 +78,7 @@ const DepartTreeList = (props: any) => {
                                                                                                                                        style={{marginRight: 5}}/> 删除</Button>
                         </Col>
                     </Row>
+                    }
                     <CheckboxTree
                         nodes={treeData}
                         checked={checked}
