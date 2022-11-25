@@ -13,7 +13,7 @@ const Error401Page = () => {
         <div className={'misc-wrapper'}>
             <div className="misc-inner p-2 p-sm-5">
                 <div className="w-100 text-center">
-                    <h2 className="mb-1">登录超时，或你的账号在其他地方被登陆，您已经下线，请重新登陆 </h2>
+                    <h2 className="mb-1">登录超时或您的账号在其他地方登录，您已经下线</h2>
                     <p className="mb-2"> 点击以下按钮重新登录 </p>
                     <Button variant="primary" className="mb-2 btn-sm-block" onClick={handleRelogin}> 重新登录 </Button>
                     <Image fluid src={errorImageUrl} alt="页面发生错误" />
