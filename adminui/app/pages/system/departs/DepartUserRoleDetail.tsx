@@ -89,9 +89,6 @@ const DepartUserRoleDetail = (props: any) => {
                     <Tab title={'用户信息'} as={'li'} eventKey={'user-list'}>
                         <DepartUserList model={selectedDepart} departments={departments} />
                     </Tab>
-                    <Tab title={'部门角色'} as={'li'} eventKey={'depart-permission'}>
-
-                    </Tab>
                 </Tabs>
             </Card.Body>
         </Card>

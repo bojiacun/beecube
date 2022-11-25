@@ -24,8 +24,9 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import Error500Page from "~/components/error-page/500";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
-import {Delete, Edit, MoreVertical} from "react-feather";
+import {Delete, Edit, MoreVertical, Plus} from "react-feather";
 import CronEdit from "~/pages/monitor/crons/CronEdit";
+import GatewayEdit from "~/pages/system/gateway/GatewayEdit";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
@@ -55,8 +56,6 @@ const GatewayPages = () => {
     const [editModel, setEditModel] = useState<any>();
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
-    const resumeFetcher = useFetcher();
-    const runJobFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -83,6 +82,7 @@ const GatewayPages = () => {
         switch (e) {
             case 'edit':
                 //编辑
+                setEditModel(row);
                 break;
             case 'delete':
                 //删除按钮
@@ -135,6 +135,10 @@ const GatewayPages = () => {
         },
     ]
 
+    const handleOnAdd = () => {
+        setEditModel({status: 0});
+    }
+
     return (
         <>
             <Card>
@@ -150,6 +154,7 @@ const GatewayPages = () => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
+                            <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={14} /> 新建</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                         </Col>
@@ -158,6 +163,10 @@ const GatewayPages = () => {
                 <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
                                 data={list||[]} keyField={'id'}/>
             </Card>
+            {editModel && <GatewayEdit model={editModel} onHide={()=>{
+                setEditModel(null);
+                loadData();
+            }} />}
         </>
     );
 }
