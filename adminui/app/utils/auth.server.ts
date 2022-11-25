@@ -12,7 +12,7 @@ export type LoginedUser = {
 }
 
 export type UserInfo = {
-    realName: string;
+    realname: string;
     avatar: string;
     post: string;
     phone: string;
@@ -47,7 +47,7 @@ auth.use(
             throw new AuthorizationError(result?.message || 'login fail');
         }
         const userInfo = result.result.userInfo;
-        return {token: result.result.token, userInfo: {realName: userInfo.realName, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone}};
+        return {token: result.result.token, userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone}};
     })
 )
 
