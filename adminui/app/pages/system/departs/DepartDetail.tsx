@@ -17,7 +17,7 @@ const DepartSchema = Yup.object().shape({
 
 
 const DepartBasicInfo = (props: any) => {
-    const {model, departments} = props;
+    const {model, departments, reloadDepartments} = props;
     const [parentDepartOptions, setParentDepartOptions] = useState<any[]>([]);
     const formikRef = useRef<any>();
     const postFetcher = useFetcher();
@@ -39,6 +39,7 @@ const DepartBasicInfo = (props: any) => {
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
             handleSaveResult(postFetcher.data);
+            reloadDepartments();
         }
     }, [postFetcher.state]);
 
@@ -145,16 +146,16 @@ const DepartPermissionTree = (props: any) => {
 }
 
 const DepartDetail = (props: any) => {
-    const {selectedDepart, departments} = props;
+    const {selectedDepart, departments, ...rest} = props;
     return (
         <Card>
             <Card.Body>
                 <Tabs as={'ul'} defaultActiveKey={'basic-info'}>
                     <Tab title={'基本信息'} as={'li'} eventKey={'basic-info'}>
-                        <DepartBasicInfo model={selectedDepart} departments={departments}/>
+                        <DepartBasicInfo model={selectedDepart} departments={departments} {...rest} />
                     </Tab>
                     <Tab title={'部门权限'} as={'li'} eventKey={'depart-permission'}>
-                        <DepartPermissionTree model={selectedDepart} departments={departments}/>
+                        <DepartPermissionTree model={selectedDepart} departments={departments} {...rest} />
                     </Tab>
                 </Tabs>
             </Card.Body>

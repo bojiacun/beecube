@@ -70,7 +70,7 @@ const DepartsPage = (props: any) => {
                 <DepartTreeList departments={departments} {...props} setSelectedDepart={setSelectedDepart} reloadDepartments={reloadDepartments} />
             </Col>
             {selectedDepart && <Col>
-                <DepartDetail selectedDepart={selectedDepart} departments={departments} />
+                <DepartDetail selectedDepart={selectedDepart} departments={departments} reloadDepartments={reloadDepartments} />
             </Col>}
         </Row>
     );

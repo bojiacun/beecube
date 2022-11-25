@@ -28,12 +28,12 @@ const DepartTreeList = (props: any) => {
     const [parentDepart, setParentDepart] = useState<any>();
     const deleteFetcher = useFetcher();
 
-    useEffect(()=>{
+    useEffect(() => {
         let nodes = departments.map(translateTreeToNode);
         setTreeData(nodes);
         setSelectedDepart(departments[0]);
         setChecked([departments[0].id]);
-        setExpanded(departments.map((x:any)=>x.id));
+        setExpanded(departments.map((x: any) => x.id));
     }, []);
 
 
@@ -56,45 +56,44 @@ const DepartTreeList = (props: any) => {
 
     return (
         <>
-        <Card>
-            <Card.Header>
-                <Card.Title>所有部门</Card.Title>
-            </Card.Header>
-            <div className={'m-2'}>
-                <Row>
-                    <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                        <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={14} style={{marginRight: 5}} />新增</Button>
-                        <Button onClick={handleOnAddChild}><Plus size={14} style={{marginRight: 5}} />添加下级</Button>
-                    </Col>
-                    <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <Button variant={'danger'} onClick={handleOnDelete} disabled={checked.length == 0} type={'button'}><Trash2 size={14} style={{marginRight: 5}} /> 删除</Button>
-                    </Col>
-                </Row>
-            </div>
-            <Card.Body>
-                <CheckboxTree
-                    nodes={treeData}
-                    checked={checked}
-                    expanded={expanded}
-                    showExpandAll={true}
-                    onCheck={(checked, node)=> {
-                        setChecked([node.value]);
-                        const department = findTree(departments, 'id', node.value);
-                        if(department) {
-                            setSelectedDepart(department);
-                        }
-                    }}
-                    onExpand={expanded1 => setExpanded(expanded1)}
-                    iconsClass={'fa6'}
-                    noCascade={true}
-                    icons={defaultTreeIcons}
-                />
-            </Card.Body>
-        </Card>
-            {editModel && <DepartEdit model={editModel} onHide={()=>{
+            <Card>
+                <Card.Header>
+                    <Card.Title>所有部门</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <Row className={'mb-1'}>
+                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                            <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={14} style={{marginRight: 5}}/>新增</Button>
+                            <Button onClick={handleOnAddChild}><Plus size={14} style={{marginRight: 5}}/>添加下级</Button>
+                        </Col>
+                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                            <Button variant={'danger'} onClick={handleOnDelete} disabled={checked.length == 0} type={'button'}><Trash2 size={14}
+                                                                                                                                       style={{marginRight: 5}}/> 删除</Button>
+                        </Col>
+                    </Row>
+                    <CheckboxTree
+                        nodes={treeData}
+                        checked={checked}
+                        expanded={expanded}
+                        showExpandAll={true}
+                        onCheck={(checked, node) => {
+                            setChecked([node.value]);
+                            const department = findTree(departments, 'id', node.value);
+                            if (department) {
+                                setSelectedDepart(department);
+                            }
+                        }}
+                        onExpand={expanded1 => setExpanded(expanded1)}
+                        iconsClass={'fa6'}
+                        noCascade={true}
+                        icons={defaultTreeIcons}
+                    />
+                </Card.Body>
+            </Card>
+            {editModel && <DepartEdit model={editModel} onHide={() => {
                 setEditModel(null);
                 reloadDepartments();
-            }} parentDepart={parentDepart} />}
+            }} parentDepart={parentDepart}/>}
         </>
     );
 }
