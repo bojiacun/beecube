@@ -2,6 +2,7 @@ import {Button, DropdownButton, Dropdown, FormLabel, FormGroup, Row, Col, Badge,
 import {Plus, Trash, X} from "react-feather";
 import {useState} from "react";
 import _ from 'lodash';
+import {useFormikContext} from "formik";
 
 
 const PredicatePath = (props:any) => {
@@ -40,6 +41,8 @@ const PredicatePath = (props:any) => {
 
 const GatewayPredicateEditor = (props:any) => {
     let {label, name, className, ...rest} = props;
+    const formik = useFormikContext();
+
     const [predicates, setPredicates] = useState<any[]>([]);
     const [index, setIndex] = useState<number>(0);
 
@@ -50,6 +53,7 @@ const GatewayPredicateEditor = (props:any) => {
                 setIndex(index+1);
                 break;
         }
+        formik.setFieldValue(name, JSON.stringify(predicates));
     }
     const handleRemove = (item:any) => {
         _.remove(predicates, {index:item.index});
