@@ -47,7 +47,6 @@ const UserDropdown = () => {
             <Dropdown.Toggle id={'dropdown-grouped'} as={NavLink} className={'d-flex align-items-center dropdown-user-link'}>
                 {dropdownTitle}
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
             <Dropdown.Item key={'user-settings'} onSelect={navigateToAccountSettings} className={'d-flex align-items-center'}>
                 <Settings className={'mr-50'} size={16} />
