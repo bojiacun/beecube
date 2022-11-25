@@ -46,7 +46,8 @@ auth.use(
         if(result.code !== 200) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
-        return {token: result.result.token, userInfo: result.result.userInfo};
+        const userInfo = result.result.userInfo;
+        return {token: result.result.token, userInfo: {realName: userInfo.realName, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone}};
     })
 )
 

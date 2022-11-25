@@ -15,7 +15,7 @@ import {useEffect} from "react";
 
 
 const UserInfoSchema = Yup.object().shape({
-    realname: Yup.string().required('必填字段'),
+    realName: Yup.string().required('必填字段'),
 });
 const UserProfileEditor = () => {
     const userInfo = useLoaderData();
@@ -40,9 +40,9 @@ const UserProfileEditor = () => {
                         <Card.Title>用户资料</Card.Title>
                     </Card.Header>
                     <Card.Body>
-                        <BootstrapInput  label={'用户姓名'} name={'realname'} />
+                        <BootstrapInput  label={'用户姓名'} name={'realName'} />
                         <BootstrapInput  label={'Email'} name={'email'} disabled={true} />
-                        <BootstrapInput  label={'手机号'} name={'mobile'} disabled={true} />
+                        <BootstrapInput  label={'手机号'} name={'phone'} disabled={true} />
                         <FileBrowserInput name={'avatar'} type={1} />
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
