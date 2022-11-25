@@ -54,6 +54,9 @@ export const API_DATABASE_DICT_ITEM_ADD = `${BASE_URL}/jeecg-system/sys/dictItem
 export const API_DATABASE_DICT_ITEM_DELETE = `${BASE_URL}/jeecg-system/sys/dictItem/delete`;
 
 export const API_SYSDEPART_QUERYTREELIST = `${BASE_URL}/jeecg-system/sys/sysDepart/queryTreeList`;
+export const API_SYSDEPART_EDIT = `${BASE_URL}/jeecg-system/sys/sysDepart/edit`;
+export const API_SYSDEPART_ADD = `${BASE_URL}/jeecg-system/sys/sysDepart/add`;
+export const API_SYSDEPART_DELETE = `${BASE_URL}/jeecg-system/sys/sysDepart/deleteBatch`;
 
 export const API_DUPLICATE_CEHCK = `${BASE_URL}/jeecg-system/sys/duplicate/check`;
 

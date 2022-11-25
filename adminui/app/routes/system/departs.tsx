@@ -2,11 +2,11 @@ import { Col, Row } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_ROLE_LIST, API_SYSDEPART_QUERYTREELIST, API_USER_DEPARTMENT_LIST_ALL, requestWithToken} from "~/utils/request.server";
-import {useCatch, useLoaderData} from "@remix-run/react";
+import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import {useEffect, useState} from "react";
 import {
-    DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary,
+    DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, handleSaveResult,
 } from "~/utils/utils";
 import * as Yup from 'yup';
 import _ from 'lodash';
@@ -51,12 +51,23 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const DepartsPage = (props: any) => {
     const [selectedDepart, setSelectedDepart] = useState<any>();
-    const departments = useLoaderData();
+    const [departments, setDepartments] = useState<any[]>(useLoaderData());
+    const reloadFetcher = useFetcher();
+
+    const reloadDepartments = () => {
+        reloadFetcher.submit({}, {method: 'get'});
+    }
+
+    useEffect(()=>{
+        if (reloadFetcher.type === 'done' && reloadFetcher.data) {
+            setDepartments(reloadFetcher.data);
+        }
+    }, [reloadFetcher.state]);
 
     return (
         <Row>
             <Col>
-                <DepartTreeList departments={departments} {...props} setSelectedDepart={setSelectedDepart} />
+                <DepartTreeList departments={departments} {...props} setSelectedDepart={setSelectedDepart} reloadDepartments={reloadDepartments} />
             </Col>
             {selectedDepart && <Col>
                 <DepartDetail selectedDepart={selectedDepart} departments={departments} />

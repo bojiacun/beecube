@@ -7,13 +7,20 @@ import {defaultTreeIcons, findTree, handleSaveResult} from "~/utils/utils";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import {Save} from "react-feather";
 import CheckboxTree from "react-checkbox-tree";
-import themeConfig from "../../../../themeConfig";
 import {useFetcher} from "@remix-run/react";
+import * as Yup from "yup";
+
+
+const DepartSchema = Yup.object().shape({
+    departName: Yup.string().required('必填字段'),
+});
+
 
 const DepartBasicInfo = (props: any) => {
     const {model, departments} = props;
     const [parentDepartOptions, setParentDepartOptions] = useState<any[]>([]);
     const formikRef = useRef<any>();
+    const postFetcher = useFetcher();
 
     useEffect(() => {
         formikRef.current!.setValues(model);
@@ -29,13 +36,18 @@ const DepartBasicInfo = (props: any) => {
         }
     }, [model]);
 
+    useEffect(() => {
+        if (postFetcher.type === 'done' && postFetcher.data) {
+            handleSaveResult(postFetcher.data);
+        }
+    }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        console.log(values);
+        postFetcher.submit(values, {method: 'put', action: '/system/departs/edit'});
     }
 
     return (
-        <Formik innerRef={formikRef} initialValues={model} onSubmit={handleOnSubmit}>
+        <Formik innerRef={formikRef} validationSchema={DepartSchema} initialValues={model} onSubmit={handleOnSubmit}>
             <Form>
                 <BootstrapInput label={'机构名称'} name={'departName'}/>
                 {parentDepartOptions.length > 0 &&
@@ -51,7 +63,7 @@ const DepartBasicInfo = (props: any) => {
                 <BootstrapInput label={'地址'} name={'address'}/>
                 <BootstrapInput label={'备注'} name={'memo'} rows={3} as={'textarea'}/>
                 <Card.Footer className={'mt-2 text-right pb-0'}>
-                    <Button type={'submit'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
+                    <Button type={'submit'} disabled={postFetcher.state === 'submitting'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
                 </Card.Footer>
             </Form>
         </Formik>
