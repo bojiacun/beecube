@@ -85,7 +85,7 @@ const DepartUserList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     deleteFetcher.submit({userId: row.id, depId: model.id},
-                        {method: 'delete', action: `/system/roles/users/delete?userId=${row.id}&depId=${model.id}`, replace: true}
+                        {method: 'delete', action: `/system/departs/users/delete?userIds=${row.id}&depId=${model.id}`, replace: true}
                     );
                 }, '确认移除用户吗?', '移除提醒', '确认移除');
                 break;

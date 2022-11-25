@@ -75,6 +75,7 @@ export const API_DEPARTMENT_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/depar
 export const API_USER_ADDSYSUSERROLE = `${BASE_URL}/jeecg-system/sys/user/addSysUserRole`;
 export const API_USER_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/user/userRoleList`;
 export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserRole`;
+export const API_USER_DEPARTMENT_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserInDepartBatch`;
 
 
 
