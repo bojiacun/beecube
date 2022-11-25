@@ -38,7 +38,7 @@ const GatewayEdit = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         console.log(values);
-        // postFetcher.submit(values, {method: 'post', action: '/monitor/gateway'});
+        postFetcher.submit(values, {method: 'post', action: '/monitor/gateway'});
     }
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {

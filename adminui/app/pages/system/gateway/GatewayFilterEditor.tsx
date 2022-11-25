@@ -16,13 +16,13 @@ const FilterRequestRateLimiter = (props: any) => {
                 {key: 'redis-rate-limiter.replenishRate', value: '20', id: 2},
                 {key: 'redis-rate-limiter.burstCapacity', value: '20', id: 3},
             ];
+            onUpdate();
         }
         setOptionValues(item.args);
-        onUpdate();
     }, [item.args]);
 
-    const removeItem = (item: any) => {
-        _.remove(optionValues, {id: item.id});
+    const removeItem = (argsItem: any) => {
+        _.remove(optionValues, {id: argsItem.id});
         setOptionValues([...optionValues]);
         item.args = optionValues;
         onUpdate();
@@ -30,18 +30,16 @@ const FilterRequestRateLimiter = (props: any) => {
     const addItem = () => {
         let newValues = [...optionValues, {key: '', value: '', id: optionValues.length+1}];
         setOptionValues(newValues);
-        item.args = optionValues;
+        item.args = newValues;
         onUpdate();
     }
 
     const onKeyChange = (e:any, item:any) => {
         item.key = e.target.value;
-        item.args = optionValues;
         onUpdate();
     }
     const onValueChange = (e:any, item:any) => {
         item.value = e.target.value;
-        item.args = optionValues;
         onUpdate();
     }
 

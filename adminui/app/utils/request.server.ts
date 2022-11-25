@@ -66,6 +66,10 @@ export const API_OSS_FILE_UPLOAD = `${BASE_URL}/jeecg-system/sys/oss/file/upload
 export const API_OSS_FILE_DELETE = `${BASE_URL}/jeecg-system/sys/oss/file/delete`;
 
 
+export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`;
+export const API_GATEWAY_DELETE = `${BASE_URL}/jeecg-system/sys/gatewayRoute/delete`;
+export const API_GATEWAY_UPDATEALL = `${BASE_URL}/jeecg-system/sys/gatewayRoute/updateAll`;
+
 export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
 
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
@@ -79,7 +83,6 @@ export const API_USER_DEPARTMENT_DELETE = `${BASE_URL}/jeecg-system/sys/user/del
 
 
 
-export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`;
 export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;
 export const API_LOG_LIST = `${BASE_URL}/jeecg-system/sys/log/list`;
 export const API_HTTPTRACE_LIST = `${BASE_URL}/jeecg-system/actuator/httptrace`;

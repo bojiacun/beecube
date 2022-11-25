@@ -9,13 +9,28 @@ import {
     Button, Row, Dropdown, Badge,
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
-import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_CRONJOB_LIST, API_DATALOG_LIST, API_GATEWAY_LIST, requestWithToken} from "~/utils/request.server";
+import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {
+    API_CRONJOB_LIST,
+    API_DATALOG_LIST,
+    API_GATEWAY_LIST,
+    API_GATEWAY_UPDATEALL,
+    API_SYSDEPART_EDIT,
+    postFormInit,
+    requestWithToken
+} from "~/utils/request.server";
 import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useContext, useEffect, useRef, useState} from "react";
-import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, PageSizeOptions, showDeleteAlert} from "~/utils/utils";
+import {
+    DefaultListSearchParams,
+    defaultRouteCatchBoundary,
+    defaultRouteErrorBoundary,
+    formData2Json, handleResult, handleSaveResult,
+    PageSizeOptions,
+    showDeleteAlert
+} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
@@ -47,7 +62,17 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_GATEWAY_LIST + queryString);
+    console.log(result);
     return json(result.result);
+}
+
+
+export const action: ActionFunction = async ({request}) => {
+    await requireAuthenticated(request);
+    const formData = await request.formData();
+    const postData = formData2Json(formData, false);
+    const result = await requestWithToken(request)(API_GATEWAY_UPDATEALL, postFormInit(JSON.stringify({router: postData})))
+    return json(result);
 }
 
 
@@ -56,28 +81,24 @@ const GatewayPages = () => {
     const [editModel, setEditModel] = useState<any>();
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
-
+    useEffect(() => {
+        if (deleteFetcher.type === 'done' && deleteFetcher.data) {
+            handleResult(deleteFetcher.data, '删除成功');
+            loadData();
+        }
+    }, [deleteFetcher.state]);
 
     const loadData = () => {
         searchFetcher.submit(searchState);
     }
 
-    const handlePageChanged = (e: any) => {
-        searchState.pageNo = e.selected + 1;
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
-    }
-    const handlePageSizeChanged = (newValue: any) => {
-        searchState.pageSize = parseInt(newValue.value);
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get'});
-    }
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'edit':
@@ -87,6 +108,7 @@ const GatewayPages = () => {
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
+                    deleteFetcher.submit({id: row.id},{method: 'delete',action: `/monitor/gateway/delete?id=${row.id}`});
                 });
                 break;
         }
@@ -96,13 +118,13 @@ const GatewayPages = () => {
             text: '路由ID',
             dataField: 'routerId',
             classes: 'text-cut',
-            headerStyle: {width: 400}
+            headerStyle: {width: 300}
         },
         {
             text: '路由名称',
             dataField: 'name',
             classes: 'text-cut',
-            headerStyle: {width: 200}
+            headerStyle: {width: 300}
         },
         {
             text: '路由URI',
@@ -146,14 +168,6 @@ const GatewayPages = () => {
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <h4 className="mb-0">网关路由</h4>
-                            <ReactSelectThemed
-                                placeholder={'分页大小'}
-                                isSearchable={false}
-                                defaultValue={PageSizeOptions[0]}
-                                options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                onChange={handlePageSizeChanged}
-                            />
                             <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={14} /> 新建</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>

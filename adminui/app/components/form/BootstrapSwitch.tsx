@@ -14,7 +14,7 @@ const BootstrapSwitch: FC<BootstrapSwitchProps> = (props) => {
     const {t} = useTranslation();
 
     const handleOnChange = (e:any) => {
-        formik.setFieldValue(name, e.target.checked);
+        formik.setFieldValue(name, e.target.checked? 1:0);
     }
 
     return (
