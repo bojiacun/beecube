@@ -6,19 +6,20 @@ import _ from "lodash";
 
 const FilterRequestRateLimiter = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    if(!item.args) {
-        item.args = [
-            {key: 'key-resolver', value: '#{@ipKeyResolver}', id: 1},
-            {key: 'redis-rate-limiter.replenishRate', value: '20', id: 2},
-            {key: 'redis-rate-limiter.burstCapacity', value: '20', id: 3},
-        ];
-    }
-    const [optionValues, setOptionValues] = useState<{key:string; value:string, id: number}[]>(item.args);
+    const [optionValues, setOptionValues] = useState<{key:string; value:string, id: number}[]>([]);
 
 
     useEffect(()=>{
+        if(item.args === null) {
+            item.args = [
+                {key: 'key-resolver', value: '#{@ipKeyResolver}', id: 1},
+                {key: 'redis-rate-limiter.replenishRate', value: '20', id: 2},
+                {key: 'redis-rate-limiter.burstCapacity', value: '20', id: 3},
+            ];
+        }
+        setOptionValues(item.args);
         onUpdate();
-    }, []);
+    }, [item.args]);
 
     const removeItem = (item: any) => {
         _.remove(optionValues, {id: item.id});
@@ -27,7 +28,7 @@ const FilterRequestRateLimiter = (props: any) => {
         onUpdate();
     }
     const addItem = () => {
-        let newValues = [...optionValues, {key: '', value: '', id: optionValues.length}];
+        let newValues = [...optionValues, {key: '', value: '', id: optionValues.length+1}];
         setOptionValues(newValues);
         item.args = optionValues;
         onUpdate();
