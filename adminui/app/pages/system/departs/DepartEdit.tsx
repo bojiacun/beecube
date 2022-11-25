@@ -45,6 +45,9 @@ const DepartEdit = (props: any) => {
 
 
     const handleOnSubmit = (values: any) => {
+        if(parentDepart) {
+            values.parentId = parentDepart.id;
+        }
         postFetcher.submit(values, {method: 'post', action: '/system/departs/add'});
     }
     useEffect(() => {
@@ -65,7 +68,7 @@ const DepartEdit = (props: any) => {
             show={!!model}
             onHide={onHide}
             backdrop={'static'}
-            aria-labelledby={'edit-modal'}
+            aria-labelledby={'add-depart-modal'}
         >
             <Modal.Header closeButton>
                 <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}部门</Modal.Title>
@@ -81,10 +84,13 @@ const DepartEdit = (props: any) => {
                                     {parentDepartOptions.length > 0 &&
                                         <BootstrapSelect label={'上级部门'} name={'parentId'} options={parentDepartOptions} isDisabled={true}
                                                          value={parentDepartOptions[0]}/>}
-                                    <BootstrapInput label={'机构编码'} name={'orgCode'} disabled={true}/>
-                                    <BootstrapRadioGroup options={[{label: '公司', value: '1'}, {label: '部门', value: '2'}, {label: '岗位', value: '3'}]}
-                                                         name={'orgType'}
-                                                         label={'机构类型'}/>
+                                    <BootstrapInput label={'机构编码'} name={'orgCode'} />
+                                    <BootstrapRadioGroup
+                                        options={[{label: '公司', value: '1'}, {label: '部门', value: '2'}, {label: '岗位', value: '3'}]}
+                                        name={'orgType'}
+                                        label={'机构类型'}
+                                        idPrefix={'add'}
+                                    />
                                     <BootstrapInput label={'排序'} name={'departOrder'} style={{maxWidth: 200}} type={'number'}/>
                                     <BootstrapInput label={'电话'} name={'mobile'}/>
                                     <BootstrapInput label={'传真'} name={'fax'}/>

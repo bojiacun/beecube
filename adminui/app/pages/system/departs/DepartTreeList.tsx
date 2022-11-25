@@ -44,14 +44,14 @@ const DepartTreeList = (props: any) => {
 
 
     const handleOnAdd = () => {
-        setEditModel({});
+        setEditModel({orgType: 1});
     }
     const handleOnAddChild = () => {
         setParentDepart(findTree(departments, 'id', checked[0]));
-        setEditModel({});
+        setEditModel({orgType: 2});
     }
     const handleOnDelete = () => {
-        deleteFetcher.submit({id: checked[0]}, {method: 'delete', action: `/system/departs/delete?id=${checked[0]}`});
+        deleteFetcher.submit({ids: checked[0]}, {method: 'delete', action: `/system/departs/delete?ids=${checked[0]}`});
     }
     useEffect(() => {
         if (deleteFetcher.type === 'done' && deleteFetcher.data) {

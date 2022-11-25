@@ -55,9 +55,12 @@ const DepartBasicInfo = (props: any) => {
                     <BootstrapSelect label={'上级部门'} name={'parentId'} options={parentDepartOptions} isDisabled={true}
                                      value={parentDepartOptions[0]}/>}
                 <BootstrapInput label={'机构编码'} name={'orgCode'} disabled={true}/>
-                <BootstrapRadioGroup options={[{label: '公司', value: '1'}, {label: '部门', value: '2'}, {label: '岗位', value: '3'}]}
-                                     name={'orgType'}
-                                     label={'机构类型'}/>
+                <BootstrapRadioGroup
+                    options={[{label: '公司', value: '1'}, {label: '部门', value: '2'}, {label: '岗位', value: '3'}]}
+                    name={'orgType'}
+                    label={'机构类型'}
+                    idPrefix={'edit'}
+                />
                 <BootstrapInput label={'排序'} name={'departOrder'} style={{maxWidth: 200}} type={'number'}/>
                 <BootstrapInput label={'电话'} name={'mobile'}/>
                 <BootstrapInput label={'传真'} name={'fax'}/>

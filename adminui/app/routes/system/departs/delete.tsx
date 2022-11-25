@@ -7,5 +7,5 @@ export const action: ActionFunction = async ({request, params}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
     const formData = await request.formData();
-    return await requestWithToken(request)(API_SYSDEPART_DELETE+'?id='+url.searchParams.get('id'), deleteFormInit(formData2Json(formData)));
+    return await requestWithToken(request)(API_SYSDEPART_DELETE+'?ids='+url.searchParams.get('ids'), deleteFormInit(formData2Json(formData)));
 }
