@@ -67,7 +67,7 @@ const DatabaseDictList = (props: any) => {
 
     useEffect(() => {
         if (refreshFetcher.type === 'done' && refreshFetcher.data) {
-            handleResult(refreshFetcher.data);
+            handleResult(refreshFetcher.data, '刷新成功');
         }
     }, [refreshFetcher.state]);
     useEffect(() => {
@@ -200,7 +200,7 @@ const DatabaseDictList = (props: any) => {
                                 onChange={handlePageSizeChanged}
                             />
                             <Button className={'mr-1'} onClick={handleOnAdd}><i className={'feather icon-plus'} />新增</Button>
-                            <Button onClick={handleOnRefresh}><i className={'feather icon-plus'} />刷新缓存</Button>
+                            <Button disabled={refreshFetcher.state === 'loading'} variant={'light'} onClick={handleOnRefresh}><i className={'feather icon-plus'} />刷新缓存</Button>
 
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
