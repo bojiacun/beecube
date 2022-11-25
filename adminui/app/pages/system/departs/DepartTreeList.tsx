@@ -31,10 +31,16 @@ const DepartTreeList = (props: any) => {
     useEffect(() => {
         let nodes = departments.map(translateTreeToNode);
         setTreeData(nodes);
-        setSelectedDepart(departments[0]);
-        setChecked([departments[0].id]);
-        setExpanded(departments.map((x: any) => x.id));
-    }, []);
+        if(checked.length > 0) {
+            setSelectedDepart(findTree(departments, 'id', checked[0]));
+        }
+        else {
+            setSelectedDepart(departments[0]);
+            setChecked([departments[0].id]);
+        }
+
+        setExpanded(tree2List(departments).filter((x:any)=>x.children != null && x.children.length > 0).map((x: any) => x.id));
+    }, [departments]);
 
 
     const handleOnAdd = () => {
