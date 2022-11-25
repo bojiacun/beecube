@@ -73,6 +73,7 @@ export const API_GATEWAY_UPDATEALL = `${BASE_URL}/jeecg-system/sys/gatewayRoute/
 export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
 
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
+export const API_USER_INFO = `${BASE_URL}/jeecg-system/sys/user/getUserInfo`;
 export const API_USER_ROLE_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/queryUserRole`;
 export const API_USER_DEPARTMENT_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/userDepartList`;
 export const API_DEPARTMENT_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/departUserList`;
