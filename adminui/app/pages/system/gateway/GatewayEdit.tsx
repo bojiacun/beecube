@@ -33,26 +33,12 @@ const GatewaySchema = Yup.object().shape({
 
 const GatewayEdit = (props: any) => {
     const {model, onHide, parentDepart} = props;
-    const [parentDepartOptions, setParentDepartOptions] = useState<any[]>([]);
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
-    useEffect(()=>{
-        if(parentDepart) {
-            let parentDepartOption = {label: parentDepart.departName, value: parentDepart.id};
-            setParentDepartOptions([parentDepartOption]);
-        }
-        else {
-            setParentDepartOptions([]);
-        }
-    }, [parentDepart]);
-
-
     const handleOnSubmit = (values: any) => {
-        if(parentDepart) {
-            values.parentId = parentDepart.id;
-        }
-        postFetcher.submit(values, {method: 'post', action: '/system/departs/add'});
+        console.log(values);
+        // postFetcher.submit(values, {method: 'post', action: '/monitor/gateway'});
     }
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
