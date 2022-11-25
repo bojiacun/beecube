@@ -66,7 +66,7 @@ const DepartBasicInfo = (props: any) => {
                 <BootstrapInput label={'传真'} name={'fax'}/>
                 <BootstrapInput label={'地址'} name={'address'}/>
                 <BootstrapInput label={'备注'} name={'memo'} rows={3} as={'textarea'}/>
-                <Card.Footer className={'mt-2 text-right pb-0'}>
+                <Card.Footer className={'mt-2 text-right pb-0 pr-0'}>
                     <Button type={'submit'} disabled={postFetcher.state === 'submitting'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
                 </Card.Footer>
             </Form>
@@ -141,7 +141,7 @@ const DepartPermissionTree = (props: any) => {
                 noCascade={true}
                 icons={defaultTreeIcons}
             />
-            <Card.Footer className={'mt-2 text-right pb-0'}>
+            <Card.Footer className={'mt-2 text-right pb-0 pr-0'}>
                 <Button type={'button'} onClick={handleOnSave} disabled={postFetcher.state == 'submitting'}><Save size={14} style={{marginRight: 5}}/>保存</Button>
             </Card.Footer>
         </>

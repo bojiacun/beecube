@@ -33,6 +33,7 @@ export const API_DEPARTMENT_PERMISSIONS = `${BASE_URL}/jeecg-system/sys/permissi
 export const API_DEPARTMENT_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/permission/saveDepartPermission`;
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
+export const API_USER_UPDATE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/updatePassword`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
