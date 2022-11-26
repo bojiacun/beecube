@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.aspect.annotation.PermissionData;
@@ -63,6 +64,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @ApiOperation(value = "获取Demo数据列表", notes = "获取所有Demo数据列表")
     @GetMapping(value = "/list")
     @PermissionData(pageComponent = "jeecg/JeecgDemoList")
+    @RequiresPermissions("tester:demolist")
     public Result<?> list(JeecgDemo jeecgDemo, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                           HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = QueryGenerator.initQueryWrapper(jeecgDemo, req.getParameterMap());

@@ -12,6 +12,7 @@ import {Field} from "formik";
 import classNames from "classnames";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import themeContext from 'themeConfig';
+import Error403Page from "~/components/error-page/403";
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进制
@@ -164,14 +165,21 @@ export function defaultRouteCatchBoundary() {
     } else if (caught.status === 404) {
         return <Error404Page/>
     }
+    else if(caught.status === 403) {
+        return <Error403Page />
+    }
     return <Error500Page/>
 }
 
 export function defaultRouteErrorBoundary() {
     const {stopPageLoading} = useContext(themeContext);
+
+
     useEffect(()=>{
         stopPageLoading();
     }, []);
+
+
     return <Error500Page/>;
 }
 

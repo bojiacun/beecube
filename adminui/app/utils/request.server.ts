@@ -116,5 +116,8 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     if(result.code === 401) {
         throw new Response(result.message, {status: 401});
     }
+    else if(result.code == 510) {
+        throw new Response(result.message, {status: 403});
+    }
     return result;
 }

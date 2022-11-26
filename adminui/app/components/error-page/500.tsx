@@ -14,7 +14,7 @@ const Error500Page = () => {
             <div className="misc-inner p-2 p-sm-5">
                 <div className="w-100 text-center">
                     <h2 className="mb-1"> 发生错误 🕵🏻‍♀️😖 500 </h2>
-                    <p className="mb-2"> 服务器内部发生错误 </p>
+                    <p className="mb-2">服务器内部发生错误</p>
                     <Button onClick={handleClick} variant="primary" className="mb-2 btn-sm-block"> 返回首页 </Button>
                     <Image fluid src={errorImageUrl} alt="页面发生错误" />
                 </div>
