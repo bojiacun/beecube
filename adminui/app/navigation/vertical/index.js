@@ -37,4 +37,4 @@ import systemPages from './system-pages';
 import monitorPages from './monitor';
 
 // 部件名数组
-export default [...dashboard,  ...systemPages, ...monitorPages]
+export default [...dashboard,  ...systemPages, ...monitorPages, ...others]
