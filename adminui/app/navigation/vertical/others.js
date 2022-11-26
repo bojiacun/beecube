@@ -4,7 +4,7 @@ export default [
   },
   {
     title: '测试页面',
-    route: '/test',
+    route: 'test',
     icon: 'Shield',
   },
 ]

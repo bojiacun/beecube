@@ -7,6 +7,7 @@ import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBou
 import {API_DEMO_TEST_JEECG_LIST, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
 import {Card} from "react-bootstrap";
+import {withPageLoading} from "~/utils/components";
 
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -40,4 +41,4 @@ const TestPage = () => {
     );
 }
 
-export default TestPage;
+export default withPageLoading(TestPage);
