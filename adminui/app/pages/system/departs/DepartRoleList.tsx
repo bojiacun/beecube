@@ -8,6 +8,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import UserListSelector from "~/pages/system/roles/UserListSelector";
 import UserEdit from "~/pages/system/roles/UserEdit";
+import DepartRolePermission from "~/pages/system/departs/DepartRolePermission";
 
 const API_USERS = '/system/departs/roles';
 
@@ -16,6 +17,7 @@ const DepartRoleList = (props: any) => {
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, deptId: model.id});
     const [editModal, setEditModal] = useState<any>();
+    const [authModel, setAuthModel] = useState<any>();
     const [userListShow, setUserListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -211,6 +213,7 @@ const DepartRoleList = (props: any) => {
                     </div>
                 }
             </Card>
+            {authModel && <DepartRolePermission model={authModel} setAuthModel={setAuthModel} department={model} />}
         </>
     );
 }
