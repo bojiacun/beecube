@@ -31,7 +31,6 @@ const TreePermissionList = (props: any) => {
             setChecked([]);
             startPageLoading();
             searchFetcher.load('/system/roles/tree');
-            rolePermissionFetcher.load('/system/roles/permissions?roleId='+model.id);
         }
     }, [model]);
 
@@ -46,8 +45,10 @@ const TreePermissionList = (props: any) => {
     useEffect(() => {
         if (rolePermissionFetcher.type === 'done' && rolePermissionFetcher.data) {
             stopPageLoading();
-            setLastPermissionIds(rolePermissionFetcher.data);
-            setChecked(rolePermissionFetcher.data);
+            if(rolePermissionFetcher.data) {
+                setLastPermissionIds(rolePermissionFetcher.data);
+                setChecked(rolePermissionFetcher.data);
+            }
         }
     }, [rolePermissionFetcher.state]);
     useEffect(() => {

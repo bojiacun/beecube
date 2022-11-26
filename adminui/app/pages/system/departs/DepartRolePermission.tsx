@@ -22,7 +22,6 @@ const DepartRolePermission = (props: any) => {
     const [checked, setChecked] = useState<any[]>([]);
     const [lastPermissionIds, setLastPermissionIds] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
-    const searchFetcher = useFetcher();
     const rolePermissionFetcher = useFetcher();
     const savePermissionFetcher = useFetcher();
 
@@ -30,24 +29,19 @@ const DepartRolePermission = (props: any) => {
         if (model) {
             setChecked([]);
             startPageLoading();
-            searchFetcher.load('/system/roles/tree');
             rolePermissionFetcher.load('/system/departs/roles/permissions?departId='+department.id);
         }
     }, [model]);
 
     useEffect(() => {
-        if (searchFetcher.type === 'done' && searchFetcher.data) {
-            let nodes = searchFetcher.data.treeList.map(translateTreeToNode);
-            setTreeData(nodes);
-            rolePermissionFetcher.load('/system/departs/roles/permissions?departId='+department.id);
-        }
-    }, [searchFetcher.state]);
-
-    useEffect(() => {
         if (rolePermissionFetcher.type === 'done' && rolePermissionFetcher.data) {
             stopPageLoading();
-            setLastPermissionIds(rolePermissionFetcher.data);
-            setChecked(rolePermissionFetcher.data);
+            if(rolePermissionFetcher.data) {
+                let nodes = rolePermissionFetcher.data.treeList.map(translateTreeToNode);
+                setTreeData(nodes);
+                setLastPermissionIds(rolePermissionFetcher.data.ids);
+                setChecked(rolePermissionFetcher.data.ids);
+            }
         }
     }, [rolePermissionFetcher.state]);
     useEffect(() => {

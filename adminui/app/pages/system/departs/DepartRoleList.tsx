@@ -9,8 +9,9 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import UserListSelector from "~/pages/system/roles/UserListSelector";
 import UserEdit from "~/pages/system/roles/UserEdit";
 import DepartRolePermission from "~/pages/system/departs/DepartRolePermission";
+import DepartRoleEdit from "~/pages/system/departs/DepartRoleEdit";
 
-const API_USERS = '/system/departs/roles';
+const API_DEPART_ROLES = '/system/departs/roles';
 
 const DepartRoleList = (props: any) => {
     const {model, departments} = props;
@@ -18,7 +19,6 @@ const DepartRoleList = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, deptId: model.id});
     const [editModal, setEditModal] = useState<any>();
     const [authModel, setAuthModel] = useState<any>();
-    const [userListShow, setUserListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
@@ -32,7 +32,7 @@ const DepartRoleList = (props: any) => {
         if (model) {
             searchState.depId = model.id;
             setSearchState({...searchState});
-            searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
+            searchFetcher.submit(searchState, {method: 'get', action: API_DEPART_ROLES});
         }
     }, [model]);
 
@@ -41,35 +41,32 @@ const DepartRoleList = (props: any) => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
                 showToastSuccess('取消成功');
-                searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
+                searchFetcher.submit(searchState, {method: 'get', action: API_DEPART_ROLES});
             } else {
                 showToastError(deleteFetcher.data.message);
             }
         }
     }, [deleteFetcher.state]);
 
-    const refreshRoleUsers = () => {
-        searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
+    const refreshRoles = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: API_DEPART_ROLES});
     }
+
+
     const handleOnAdd = () => {
-        setEditModal({});
+        setEditModal({departId: model.id});
     }
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
+        searchFetcher.submit(searchState, {method: 'get', action: API_DEPART_ROLES});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
+        searchFetcher.submit(searchState, {method: 'get', action: API_DEPART_ROLES});
     }
-    const handleSort = (field: any, order: any): void => {
-        searchState.column = field;
-        searchState.order = order;
-        setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: API_USERS});
-    }
+
     const handleOnSearchNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
@@ -83,13 +80,16 @@ const DepartRoleList = (props: any) => {
                 //编辑
                 setEditModal(row);
                 break;
+            case 'grant':
+                setAuthModel(row);
+                break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
                     deleteFetcher.submit({userIds: row.id, depId: model.id},
-                        {method: 'delete', action: `/system/departs/users/delete?userIds=${row.id}&depId=${model.id}`, replace: true}
+                        {method: 'delete', action: `/system/departs/roles/delete?ids=${row.id}`, replace: true}
                     );
-                }, '确认移除用户吗?', '移除提醒', '确认移除');
+                }, '确认删除部门角色吗?', '删除提醒', '确认删除');
                 break;
         }
     }
@@ -214,6 +214,10 @@ const DepartRoleList = (props: any) => {
                 }
             </Card>
             {authModel && <DepartRolePermission model={authModel} setAuthModel={setAuthModel} department={model} />}
+            {editModal && <DepartRoleEdit model={editModal} onHide={()=>{
+                setEditModal(null);
+                refreshRoles();
+            }} />}
         </>
     );
 }
