@@ -87,12 +87,18 @@ const PermissionList = () => {
         {
             text: '图标',
             dataField: 'icon',
-            headerStyle: {width: 260},
+            headerStyle: {width: 300},
             classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
+            headerStyle: {width: 260},
+            classes: 'text-cut'
+        },
+        {
+            text: '权限标识',
+            dataField: 'component',
             headerStyle: {width: 260},
             classes: 'text-cut'
         },

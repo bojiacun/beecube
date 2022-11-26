@@ -181,6 +181,7 @@ const PermissionEdit = (props: any) => {
                                         {values.menuType == 2 && <BootstrapInput label={'授权标识'} name={'perms'} />}
                                         {values.menuType == 2 && <BootstrapRadioGroup options={[{label: '可见/可访问', value: '1'},{label: '可编辑', value: '2'}]} name={'permsType'} label={'授权策略'}/>}
                                         {values.menuType < 2 && <BootstrapInput label={'访问路径'} name={'url'} />}
+                                        {values.menuType < 2 && <BootstrapInput label={'数据标识'} name={'component'} />}
                                         {values.menuType < 2 && <BootstrapInput label={'访问图标'} name={'icon'} />}
                                         {values.menuType < 2 && <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} />}
                                         {values.menuType < 2 && <BootstrapSwitch label={'是否路由菜单'} name={'route'} />}
