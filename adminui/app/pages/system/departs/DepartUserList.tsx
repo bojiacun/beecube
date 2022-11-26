@@ -110,6 +110,7 @@ const DepartUserList = (props: any) => {
         {
             text: '状态',
             dataField: 'status',
+            headerStyle: {width: 120},
             formatter: (cell: any, row: any) => {
                 return row.status == 1 ? <Badge variant={'success'}>正常</Badge> : <Badge variant={'danger'}>异常</Badge>
             }
@@ -118,7 +119,7 @@ const DepartUserList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            headerStyle: {width: 280},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -151,7 +152,7 @@ const DepartUserList = (props: any) => {
                         <Button variant={'secondary'} onClick={() => setUserListShow(true)}><Plus size={16}/>已有用户</Button>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'}
+                        <searchFetcher.Form action={'/system/departs/users'} className={'form-inline justify-content-end'}
                                             onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                             <FormControl name={'depId'} value={model.id} type={'hidden'}/>
@@ -216,7 +217,7 @@ const DepartUserList = (props: any) => {
                 refreshRoleUsers();
                 setEditModal(null);
             }}/>}
-            {userModel && <DepartUserRoleEditor model={userModel} setAuthModel={setUserModel} />}
+            {userModel && <DepartUserRoleEditor model={userModel} setAuthModel={setUserModel} department={model} />}
         </>
     );
 }

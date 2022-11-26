@@ -158,7 +158,7 @@ const DepartRoleList = (props: any) => {
                         <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16} style={{marginRight: 5}} />添加部门角色</Button>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                        <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'}
+                        <searchFetcher.Form action={'/system/departs/roles'} className={'form-inline justify-content-end'}
                                             onSubmit={handleOnSearchSubmit}>
                             <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                             <FormControl name={'deptId'} value={model.id} type={'hidden'}/>

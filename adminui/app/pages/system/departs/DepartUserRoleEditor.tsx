@@ -45,10 +45,11 @@ const DepartUserRoleEditor = (props: any) => {
     }, [rolePermissionFetcher.state]);
 
     useEffect(()=>{
-        stopPageLoading();
         if (userRolesFetcher.type === 'done' && userRolesFetcher.data) {
-            setLastPermissionIds(userRolesFetcher.data);
-            setChecked(userRolesFetcher.data);
+            stopPageLoading();
+            let checked = [userRolesFetcher.data.map((item:any)=>item.droleId)];
+            setLastPermissionIds(checked);
+            setChecked(checked);
         }
     }, [userRolesFetcher.state]);
 
