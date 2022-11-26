@@ -20,7 +20,7 @@ const translateTreeToNode = (treeNode: any) => {
 }
 
 const DepartTreeList = (props: any) => {
-    const {departments, setSelectedDepart, reloadDepartments, showControl = true} = props;
+    const {departments, setSelectedDepart, reloadDepartments, showControl = true, title='所有部门'} = props;
     const [treeData, setTreeData] = useState<any>([]);
     const [checked, setChecked] = useState<any[]>([]);
     const [expanded, setExpanded] = useState<any[]>([]);
@@ -64,7 +64,7 @@ const DepartTreeList = (props: any) => {
         <>
             <Card>
                 <Card.Header>
-                    <Card.Title>所有部门</Card.Title>
+                    <Card.Title>{title}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     {showControl &&

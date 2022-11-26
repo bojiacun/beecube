@@ -10,6 +10,7 @@ import CheckboxTree from "react-checkbox-tree";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import DepartUserList from "~/pages/system/departs/DepartUserList";
+import DepartRoleList from "~/pages/system/departs/DepartRoleList";
 
 const OrgTypes = [{label: '公司', value: '1'}, {label: '部门', value: '2'}, {label: '岗位', value: '3'}];
 
@@ -88,6 +89,9 @@ const DepartUserRoleDetail = (props: any) => {
                     </Tab>
                     <Tab title={'用户信息'} as={'li'} eventKey={'user-list'}>
                         <DepartUserList model={selectedDepart} departments={departments} />
+                    </Tab>
+                    <Tab title={'部门角色'} as={'li'} eventKey={'role-list'}>
+                        <DepartRoleList model={selectedDepart} departments={departments} />
                     </Tab>
                 </Tabs>
             </Card.Body>

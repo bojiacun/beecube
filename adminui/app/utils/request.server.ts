@@ -81,6 +81,7 @@ export const API_USER_INFO = `${BASE_URL}/jeecg-system/sys/user/getUserInfo`;
 export const API_USER_ROLE_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/queryUserRole`;
 export const API_USER_DEPARTMENT_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/userDepartList`;
 export const API_DEPARTMENT_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/departUserList`;
+export const API_DEPARTMENT_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/sysDepartRole/list`;
 export const API_USER_ADDSYSUSERROLE = `${BASE_URL}/jeecg-system/sys/user/addSysUserRole`;
 export const API_USER_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/user/userRoleList`;
 export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserRole`;

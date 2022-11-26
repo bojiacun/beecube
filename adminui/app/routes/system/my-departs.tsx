@@ -74,7 +74,7 @@ const MyDepartsPage = (props: any) => {
     return (
         <Row>
             <Col>
-                <DepartTreeList showControl={false} departments={departments} {...props} setSelectedDepart={setSelectedDepart} reloadDepartments={reloadDepartments} />
+                <DepartTreeList title={'我的部门'} showControl={false} departments={departments} {...props} setSelectedDepart={setSelectedDepart} reloadDepartments={reloadDepartments} />
             </Col>
             {selectedDepart && <Col>
                 <DepartUserRoleDetail selectedDepart={selectedDepart} departments={departments} reloadDepartments={reloadDepartments} />
