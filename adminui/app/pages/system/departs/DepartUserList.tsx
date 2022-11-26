@@ -8,6 +8,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import UserListSelector from "~/pages/system/roles/UserListSelector";
 import UserEdit from "~/pages/system/roles/UserEdit";
+import DepartUserRoleEditor from "~/pages/system/departs/DepartUserRoleEditor";
 
 const API_USERS = '/system/departs/users';
 
@@ -16,6 +17,7 @@ const DepartUserList = (props: any) => {
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, depId: model.id});
     const [editModal, setEditModal] = useState<any>();
+    const [userModel, setUserModel] = useState<any>();
     const [userListShow, setUserListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -81,6 +83,9 @@ const DepartUserList = (props: any) => {
                 //编辑
                 setEditModal(row);
                 break;
+            case 'depart-role':
+                setUserModel(row);
+                break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
@@ -121,6 +126,7 @@ const DepartUserList = (props: any) => {
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>取消关联</a>
                         <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'depart-role')}>部门角色</a>
                     </div>
                 );
             }
@@ -210,6 +216,7 @@ const DepartUserList = (props: any) => {
                 refreshRoleUsers();
                 setEditModal(null);
             }}/>}
+            {userModel && <DepartUserRoleEditor model={userModel} setAuthModel={setUserModel} />}
         </>
     );
 }

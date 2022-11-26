@@ -66,10 +66,10 @@ const DepartsPage = (props: any) => {
 
     return (
         <Row>
-            <Col>
+            <Col sm={12} md={6}>
                 <DepartTreeList departments={departments} {...props} setSelectedDepart={setSelectedDepart} reloadDepartments={reloadDepartments} />
             </Col>
-            {selectedDepart && <Col>
+            {selectedDepart && <Col sm={12} md={6}>
                 <DepartDetail selectedDepart={selectedDepart} departments={departments} reloadDepartments={reloadDepartments} />
             </Col>}
         </Row>
