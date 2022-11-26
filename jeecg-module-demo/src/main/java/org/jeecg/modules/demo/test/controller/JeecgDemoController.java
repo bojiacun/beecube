@@ -45,6 +45,7 @@ import java.util.List;
 @Api(tags = "单表DEMO")
 @RestController
 @RequestMapping("/test/jeecgDemo")
+@RequiresPermissions("tester:demolist")
 public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoService> {
     @Autowired
     private IJeecgDemoService jeecgDemoService;
@@ -64,7 +65,6 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @ApiOperation(value = "获取Demo数据列表", notes = "获取所有Demo数据列表")
     @GetMapping(value = "/list")
     @PermissionData(pageComponent = "jeecg/JeecgDemoList")
-    @RequiresPermissions("tester:demolist")
     public Result<?> list(JeecgDemo jeecgDemo, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                           HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = QueryGenerator.initQueryWrapper(jeecgDemo, req.getParameterMap());
