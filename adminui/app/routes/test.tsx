@@ -6,6 +6,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
 import {API_DEMO_TEST_JEECG_LIST, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
+import {Card} from "react-bootstrap";
 
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -31,9 +32,11 @@ const TestPage = () => {
     const data = useLoaderData();
 
     return (
-        <>
-            <FontAwesomeIcon className={'fa-regualr'} icon={'user'} />
-        </>
+        <Card>
+            <Card.Body>
+                {JSON.stringify(data)}
+            </Card.Body>
+        </Card>
     );
 }
 
