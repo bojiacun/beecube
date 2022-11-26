@@ -92,6 +92,10 @@ export const API_CRONJOB_LIST = `${BASE_URL}/jeecg-system/sys/quartzJob/list`;
 export const API_CRONJOB_RESUME = `${BASE_URL}/jeecg-system/sys/quartzJob/resume`;
 export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execute`;
 
+
+export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/list`;
+
+
 export const postFormInit = (data: any): RequestInit=> {
     return {method: 'post', body: data, headers: {'Content-Type': 'application/json'}};
 }
