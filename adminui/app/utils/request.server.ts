@@ -65,6 +65,9 @@ export const API_SYSDEPART_MY_LIST= `${BASE_URL}/jeecg-system/sys/sysDepart/quer
 export const API_SYSDEPART_EDIT = `${BASE_URL}/jeecg-system/sys/sysDepart/edit`;
 export const API_SYSDEPART_ADD = `${BASE_URL}/jeecg-system/sys/sysDepart/add`;
 export const API_SYSDEPART_DELETE = `${BASE_URL}/jeecg-system/sys/sysDepart/deleteBatch`;
+export const API_SYSDEPART_ROLE_ADD = `${BASE_URL}/jeecg-system/sys/sysDepartRole/add`;
+export const API_SYSDEPART_ROLE_EDIT = `${BASE_URL}/jeecg-system/sys/sysDepartRole/edit`;
+export const API_SYSDEPART_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/sysDepartRole/delete`;
 
 export const API_DUPLICATE_CEHCK = `${BASE_URL}/jeecg-system/sys/duplicate/check`;
 
