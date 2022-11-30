@@ -197,7 +197,7 @@ public class ShiroConfig {
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
         //自定义缓存实现,使用redis
-//        securityManager.setCacheManager(redisCacheManager());
+        securityManager.setCacheManager(redisCacheManager());
         securityManager.setRealm(myRealm);
         return securityManager;
     }
