@@ -175,6 +175,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**", "jwt");
 
         // 未授权界面返回JSON
+        assert jeecgBaseConfig != null;
         shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
         shiroFilterFactoryBean.setLoginUrl(jeecgBaseConfig.getShiro().getLoginUrl());
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
