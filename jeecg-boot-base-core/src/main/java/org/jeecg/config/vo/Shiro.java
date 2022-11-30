@@ -11,6 +11,9 @@ public class Shiro {
     private String excludeUrls = "";
     private List<String> filters;
 
+    private String unauthorizedUrl;
+    private String loginUrl;
+
     public String getExcludeUrls() {
         return excludeUrls;
     }
@@ -25,5 +28,21 @@ public class Shiro {
 
     public void setFilters(List<String> filters) {
         this.filters = filters;
+    }
+
+    public String getUnauthorizedUrl() {
+        return unauthorizedUrl;
+    }
+
+    public void setUnauthorizedUrl(String unauthorizedUrl) {
+        this.unauthorizedUrl = unauthorizedUrl;
+    }
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
     }
 }

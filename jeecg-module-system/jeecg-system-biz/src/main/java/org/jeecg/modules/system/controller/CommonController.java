@@ -52,7 +52,7 @@ public class CommonController {
      */
     @GetMapping("/403")
     public Result<?> noauth()  {
-        return Result.error("没有权限，请联系管理员授权");
+        return Result.error(403,"没有权限，请联系管理员授权");
     }
 
     /**

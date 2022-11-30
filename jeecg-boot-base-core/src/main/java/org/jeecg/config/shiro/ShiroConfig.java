@@ -148,17 +148,7 @@ public class ShiroConfig {
 
         //性能监控，放开排除会存在安全漏洞泄露TOEKN（durid连接池也有）
         //filterChainDefinitionMap.put("/actuator/**", "anon");
-        //增加自定义拦截器
-        if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
-            List<String> filters = jeecgBaseConfig.getShiro().getFilters();
-            if(oConvertUtils.isNotEmpty(filters)){
-                for(String url : filters){
-                    int firstSep = url.indexOf(",");
-                    log.debug("加载配置文件中的权限配置：{} {}", url.substring(0, firstSep), url.substring(firstSep+1));
-                    filterChainDefinitionMap.put(url.substring(0, firstSep), url.substring(firstSep+1));
-                }
-            }
-        }
+
         //测试模块排除
         filterChainDefinitionMap.put("/test/seata/**", "anon");
 
@@ -171,11 +161,22 @@ public class ShiroConfig {
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
+        //增加自定义拦截器
+        if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
+            List<String> filters = jeecgBaseConfig.getShiro().getFilters();
+            if(oConvertUtils.isNotEmpty(filters)){
+                for(String url : filters){
+                    int firstSep = url.indexOf(",");
+                    log.debug("加载配置文件中的权限配置：{} {}", url.substring(0, firstSep), url.substring(firstSep+1));
+                    filterChainDefinitionMap.put(url.substring(0, firstSep), url.substring(firstSep+1));
+                }
+            }
+        }
         filterChainDefinitionMap.put("/**", "jwt");
 
         // 未授权界面返回JSON
-        shiroFilterFactoryBean.setUnauthorizedUrl("/sys/common/403");
-        shiroFilterFactoryBean.setLoginUrl("/sys/common/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
+        shiroFilterFactoryBean.setLoginUrl(jeecgBaseConfig.getShiro().getLoginUrl());
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
