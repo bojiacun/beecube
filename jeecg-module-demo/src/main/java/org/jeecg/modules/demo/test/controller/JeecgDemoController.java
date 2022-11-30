@@ -52,6 +52,10 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @Autowired
     private RedisUtil redisUtil;
 
+
+
+
+
     /**
      * 分页列表查询
      *

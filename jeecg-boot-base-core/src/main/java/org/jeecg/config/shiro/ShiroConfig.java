@@ -33,6 +33,7 @@ import redis.clients.jedis.JedisCluster;
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: Scott
@@ -147,9 +148,21 @@ public class ShiroConfig {
 
         //性能监控，放开排除会存在安全漏洞泄露TOEKN（durid连接池也有）
         //filterChainDefinitionMap.put("/actuator/**", "anon");
-
+        //增加自定义拦截器
+        if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
+            List<String> filters = jeecgBaseConfig.getShiro().getFilters();
+            if(oConvertUtils.isNotEmpty(filters)){
+                for(String url : filters){
+                    int firstSep = url.indexOf(",");
+                    log.debug("加载配置文件中的权限配置：{} {}", url.substring(0, firstSep), url.substring(firstSep+1));
+                    filterChainDefinitionMap.put(url.substring(0, firstSep), url.substring(firstSep+1));
+                }
+            }
+        }
         //测试模块排除
         filterChainDefinitionMap.put("/test/seata/**", "anon");
+
+
 
         // 添加自己的过滤器并且取名为jwt
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);

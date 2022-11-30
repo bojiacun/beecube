@@ -1,5 +1,7 @@
 package org.jeecg.config.vo;
 
+import java.util.List;
+
 /**
  * @Description: TODO
  * @author: scott
@@ -7,6 +9,7 @@ package org.jeecg.config.vo;
  */
 public class Shiro {
     private String excludeUrls = "";
+    private List<String> filters;
 
     public String getExcludeUrls() {
         return excludeUrls;
@@ -14,5 +17,13 @@ public class Shiro {
 
     public void setExcludeUrls(String excludeUrls) {
         this.excludeUrls = excludeUrls;
+    }
+
+    public List<String> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<String> filters) {
+        this.filters = filters;
     }
 }
