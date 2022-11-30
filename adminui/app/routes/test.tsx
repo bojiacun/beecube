@@ -22,8 +22,7 @@ export const loader: LoaderFunction = async ({request}) => {
     } else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_DEMO_TEST_JEECG_LIST + queryString);
-    console.log(result);
+    const result = await requestWithToken(request)(API_DEMO_TEST_JEECG_LIST);
     return json(result.result);
 }
 
