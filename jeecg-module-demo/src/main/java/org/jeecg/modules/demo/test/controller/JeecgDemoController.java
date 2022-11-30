@@ -45,7 +45,6 @@ import java.util.List;
 @Api(tags = "单表DEMO")
 @RestController
 @RequestMapping("/test/jeecgDemo")
-@RequiresPermissions("tester:demolist")
 public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoService> {
     @Autowired
     private IJeecgDemoService jeecgDemoService;
