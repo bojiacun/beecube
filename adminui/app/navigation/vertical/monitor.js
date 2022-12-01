@@ -25,9 +25,9 @@ export default [
     },
     {
         title: 'SQL监控',
-        route: '/druid/login.html',
+        route: '/jeecg-system/druid/login.html',
         icon: 'Crosshair',
-        target: '_blank'
+        target: 'iframe'
     },
     {
         title: '请求追踪',

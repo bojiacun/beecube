@@ -39,13 +39,26 @@ const VerticalNavMenuLink = (props:any) => {
                 </Link>
             );
         }
-        else {
+        else if(item.target == '_blank'){
             return (
-                <NavLink className={'d-flex align-items-center'} href={item.route||item.href} target={item.target??''}>
+                <NavLink className={'d-flex align-items-center'} href={item.route||item.href} target={'_blank'}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
                 </NavLink>
+            );
+        }
+        else if(item.target == 'iframe') {
+            return (
+                <Link className={'d-flex align-items-center'} to={`/iframe?url=${encodeURIComponent(item.route)}`} onClick={()=> {
+                    if(!isActive) {
+                        startPageLoading();
+                    }
+                }}>
+                    {renderItemIcon(item)}
+                    <span className="menu-title text-truncate">{t(item.title)}</span>
+                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                </Link>
             );
         }
     }
