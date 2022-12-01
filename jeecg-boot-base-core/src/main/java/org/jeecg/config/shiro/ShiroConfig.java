@@ -18,6 +18,7 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.filters.CustomShiroFilterFactoryBean;
 import org.jeecg.config.shiro.filters.JwtFilter;
+import org.jeecg.config.shiro.filters.MyPermissionAuthorizationFilter;
 import org.jeecg.config.shiro.filters.MyRolesAuthorizationFilter;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,6 +161,7 @@ public class ShiroConfig {
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
         filterMap.put("myroles", new MyRolesAuthorizationFilter());
+        filterMap.put("myperms", new MyPermissionAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         //增加自定义拦截器

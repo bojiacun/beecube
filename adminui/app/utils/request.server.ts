@@ -106,7 +106,7 @@ export const API_CRONJOB_RESUME = `${BASE_URL}/jeecg-system/sys/quartzJob/resume
 export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execute`;
 
 
-export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/mpList`;
+export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/list`;
 
 
 export const postFormInit = (data: any): RequestInit=> {
@@ -126,6 +126,7 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers['Authorization'] = user.token;
     const res = await fetch(url, options);
     const result = await res.json();
+    console.log(result);
     if(result.code === 401) {
         throw new Response(result.message, {status: 401});
     }

@@ -2,13 +2,12 @@ package org.jeecg.config.shiro.filters;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authz.RolesAuthorizationFilter;
+import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.JwtToken;
 
-import javax.security.sasl.AuthenticationException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class MyRolesAuthorizationFilter extends RolesAuthorizationFilter {
+public class MyPermissionAuthorizationFilter extends PermissionsAuthorizationFilter {
 
     @Override
     public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
@@ -32,7 +31,6 @@ public class MyRolesAuthorizationFilter extends RolesAuthorizationFilter {
 
         JwtToken jwtToken = new JwtToken(token);
         subject.login(jwtToken);
-
         return super.isAccessAllowed(request, response, mappedValue);
     }
 
