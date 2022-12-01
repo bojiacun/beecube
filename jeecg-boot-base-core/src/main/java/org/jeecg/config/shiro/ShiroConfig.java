@@ -18,6 +18,7 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.filters.CustomShiroFilterFactoryBean;
 import org.jeecg.config.shiro.filters.JwtFilter;
+import org.jeecg.config.shiro.filters.MyRolesAuthorizationFilter;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -158,6 +159,7 @@ public class ShiroConfig {
         //如果cloudServer为空 则说明是单体 需要加载跨域配置【微服务跨域切换】
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
+        filterMap.put("myroles", new MyRolesAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         //增加自定义拦截器

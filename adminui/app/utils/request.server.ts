@@ -126,7 +126,6 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers['Authorization'] = user.token;
     const res = await fetch(url, options);
     const result = await res.json();
-    console.log(result);
     if(result.code === 401) {
         throw new Response(result.message, {status: 401});
     }
