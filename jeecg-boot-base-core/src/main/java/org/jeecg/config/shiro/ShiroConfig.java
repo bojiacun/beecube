@@ -186,6 +186,7 @@ public class ShiroConfig {
     @Bean("securityManager")
     public DefaultWebSecurityManager securityManager(ShiroRealm myRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(myRealm);
 
         /*
          * 关闭shiro自带的session，详情见文档
@@ -199,7 +200,6 @@ public class ShiroConfig {
         securityManager.setSubjectDAO(subjectDAO);
         //自定义缓存实现,使用redis
         securityManager.setCacheManager(redisCacheManager());
-        securityManager.setRealm(myRealm);
         return securityManager;
     }
 
