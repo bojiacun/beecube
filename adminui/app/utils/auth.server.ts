@@ -48,6 +48,7 @@ export const sessionStorage = createFileSessionStorage({
 export const auth = new Authenticator<LoginedUser>(sessionStorage);
 
 const translateMenu2MenuPerms = (menu:any): MenuPerm => {
+    if(menu.header) return menu;
     return {
         id: menu.id,
         title: menu.meta.title,
@@ -76,12 +77,20 @@ auth.use(
         options.headers['Authorization'] = token;
         const permsRes = await fetch(API_PERMISSION_CURRENT_USER, options);
         const permsResult = await permsRes.json();
-
-
         if(!permsResult.success) {
             throw new AuthorizationError(permsResult?.message || 'login fail');
         }
-        const perms = permsResult.result.menu.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
+        let menus:any[] = [];
+        permsResult.result.menu.filter((item:any)=>!item.hidden).forEach((item:any)=>{
+            //分组
+            menus.push({header: item.meta.title});
+            //子菜单
+            if(item.children) {
+                menus.push(...item.children);
+            }
+        });
+        console.log(menus);
+        const perms = menus.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
 
         return {
             token: token,
