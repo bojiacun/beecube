@@ -1,4 +1,4 @@
-import type {MetaFunction, LinksFunction} from "@remix-run/node";
+import type {MetaFunction, LinksFunction, LoaderFunction} from "@remix-run/node";
 import React, {CSSProperties, useEffect, useState} from 'react';
 import {
     Link,
@@ -40,6 +40,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons';
+import {requireAuthenticated} from "~/utils/auth.server";
 library.add(fas, far);
 
 
@@ -49,8 +50,10 @@ setDefaultLocale('zh-cn');
 i18n.changeLanguage('cn').then();
 
 
-export async function loader() {
+export async function loader({request}:any) {
+    const userInfo = await requireAuthenticated(request, false);
     return json({
+        userInfo: userInfo,
         ENV: {
             BASE_URL: process.env.BASE_URL,
             LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,

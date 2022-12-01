@@ -120,6 +120,7 @@ export const putFormInit = (data: any): RequestInit=> {
 }
 
 export const requestWithToken = (request: Request) => async (url:RequestInfo, options:any = {}) => {
+    //@ts-ignore
     const user: LoginedUser = await requireAuthenticated(request);
     options.headers = options.headers || {};
     options.headers['X-Access-Token'] = user.token;

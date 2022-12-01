@@ -18,6 +18,7 @@ export type LoginedUser = {
     token: string;
     userInfo: UserInfo;
     perms?: MenuPerm[];
+    originalPerms?: any[];
 }
 
 export type UserInfo = {
@@ -86,12 +87,16 @@ auth.use(
             token: token,
             userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone},
             perms: perms,
+            originalPerms: permsResult.result
         };
     })
 )
 
-export const requireAuthenticated = async (request: Request) => {
-    return await auth.isAuthenticated(request, {failureRedirect: LOGIN_URL});
+export const requireAuthenticated = async (request: Request, redirect = true) => {
+    if(redirect) {
+        return await auth.isAuthenticated(request, {failureRedirect: LOGIN_URL});
+    }
+    return await auth.isAuthenticated(request);
 }
 
 export const requireAuthenticatedLoader = async ({request}:{request: Request}) => {

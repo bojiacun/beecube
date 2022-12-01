@@ -12,6 +12,7 @@ import verticalMenuStyleUrl from "~/styles/base/core/menu/menu-types/vertical-me
 import VerticalNavMenuItems
     from "~/layouts/layout-vertical/components/vertical-nav-menu/components/vertical-nav-menu-items/VerticalNavMenuItems";
 import navMenuItems from '~/navigation/vertical'
+import {useLoaderData} from "@remix-run/react";
 
 export const links: LinksFunction = () => {
     return [
@@ -23,6 +24,7 @@ export const links: LinksFunction = () => {
 const VerticalNavMenu = (props:any) => {
     const {startPageLoading, stopPageLoading} = props;
     const {theme} = useContext(ThemeContext);
+    const rootLoaderData = useLoaderData();
     const {appName, appLogoImage} = theme.app;
     const {isVerticalMenuCollapsed, skin} = useAppConfig(theme);
     const {} = useVerticalNavMenu(props);
@@ -31,6 +33,8 @@ const VerticalNavMenu = (props:any) => {
         maxScrollbarLength: 60,
         wheelPropagation: false,
     }
+
+    console.log(rootLoaderData);
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
