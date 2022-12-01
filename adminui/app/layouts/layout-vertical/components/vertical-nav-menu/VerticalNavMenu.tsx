@@ -34,7 +34,6 @@ const VerticalNavMenu = (props:any) => {
         wheelPropagation: false,
     }
 
-    console.log(rootLoaderData);
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',

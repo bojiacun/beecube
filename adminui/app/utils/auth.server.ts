@@ -53,7 +53,7 @@ const translateMenu2MenuPerms = (menu:any): MenuPerm => {
         title: menu.meta.title,
         route: menu.path,
         icon: menu.meta.icon,
-        children: menu?.children?.map(translateMenu2MenuPerms) || null,
+        children: menu?.children?.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms) || null,
     }
 }
 

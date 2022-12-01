@@ -61,7 +61,6 @@ const PermissionEdit = (props: any) => {
         if (model) {
             if (model.parentId) {
                 const menu:any = findRecyle(menus, 'id', model.parentId);
-                console.log(model, menu, menus);
                 if(menu != null) {
                     const opt = {label: menu.name, value: menu.id, key: menu.id};
                     setParentOptions([opt]);

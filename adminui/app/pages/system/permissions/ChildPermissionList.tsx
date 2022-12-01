@@ -49,12 +49,18 @@ const ChildPermissionList = (props: any) => {
         {
             text: '图标',
             dataField: 'icon',
-            style: {width: 260},
+            style: {width: 300},
             classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
+            style: {width: 260},
+            classes: 'text-cut'
+        },
+        {
+            text: '权限标识',
+            dataField: 'component',
             style: {width: 260},
             classes: 'text-cut'
         },
