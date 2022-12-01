@@ -6,6 +6,7 @@ import _ from 'lodash';
 import {API_LOGIN, API_PERMISSION_CURRENT_USER, LOGIN_URL, postFormInit} from "~/utils/request.server";
 
 export type MenuPerm = {
+    id?: any;
     title?: string;
     route?: string;
     icon?: string;
@@ -45,6 +46,16 @@ export const sessionStorage = createFileSessionStorage({
 
 export const auth = new Authenticator<LoginedUser>(sessionStorage);
 
+const translateMenu2MenuPerms = (menu:any): MenuPerm => {
+    return {
+        id: menu.id,
+        title: menu.meta.title,
+        route: menu.path,
+        icon: menu.meta.icon,
+        children: menu?.children?.map(translateMenu2MenuPerms) || null,
+    }
+}
+
 auth.use(
     new FormStrategy<LoginedUser>(async ({form}) => {
         const data = {username: form.get("username"), password: form.get("password"), captcha: form.get("captcha"), checkKey: form.get("checkKey")};
@@ -53,9 +64,10 @@ auth.use(
         }
         const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
         const result = await res.json();
-        if(result.code !== 200) {
+        if(!result.success) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
+
         const userInfo = result.result.userInfo;
         const token = result.result.token;
         let options:any = { headers: {} };
@@ -63,15 +75,17 @@ auth.use(
         options.headers['Authorization'] = token;
         const permsRes = await fetch(API_PERMISSION_CURRENT_USER, options);
         const permsResult = await permsRes.json();
-        if(result.code !== 200) {
+
+
+        if(!permsResult.success) {
             throw new AuthorizationError(permsResult?.message || 'login fail');
         }
-        console.log(permsResult);
-        const perms = null;
+        const perms = permsResult.result.menu.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
 
         return {
             token: token,
             userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone},
+            perms: perms,
         };
     })
 )

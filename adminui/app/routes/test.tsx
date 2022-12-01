@@ -7,6 +7,7 @@ import {API_DEMO_TEST_JEECG_LIST, API_PERMISSION_CURRENT_USER, requestWithToken}
 import {useLoaderData} from "@remix-run/react";
 import {Card} from "react-bootstrap";
 import {withPageLoading} from "~/utils/components";
+import {requireAuthenticated} from "~/utils/auth.server";
 
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -22,8 +23,9 @@ export const loader: LoaderFunction = async ({request}) => {
     } else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_DEMO_TEST_JEECG_LIST);
-    return json(result.result);
+    // const result = await requestWithToken(request)(API_PERMISSION_CURRENT_USER);
+    const result = await requireAuthenticated(request);
+    return json(result);
 }
 
 
