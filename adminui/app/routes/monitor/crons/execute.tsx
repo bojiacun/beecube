@@ -15,5 +15,5 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_CRONJOB_EXECUTE + queryString);
-    return json(result.result);
+    return json(result);
 }

@@ -15,7 +15,14 @@ import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {useContext, useEffect, useRef, useState} from "react";
-import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, PageSizeOptions, showDeleteAlert} from "~/utils/utils";
+import {
+    DefaultListSearchParams,
+    defaultRouteCatchBoundary,
+    defaultRouteErrorBoundary,
+    handleResult,
+    PageSizeOptions,
+    showDeleteAlert
+} from "~/utils/utils";
 import BootstrapTable from 'react-bootstrap-table-next';
 import _ from 'lodash';
 import querystring from 'querystring';
@@ -24,7 +31,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import Error500Page from "~/components/error-page/500";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
-import {Delete, Edit, MoreVertical} from "react-feather";
+import {Delete, Edit, MoreVertical, Plus} from "react-feather";
 import CronEdit from "~/pages/monitor/crons/CronEdit";
 
 export const links: LinksFunction = () => {
@@ -57,6 +64,8 @@ const CronsPages = () => {
     const searchFetcher = useFetcher();
     const resumeFetcher = useFetcher();
     const runJobFetcher = useFetcher();
+    const pauseFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -68,6 +77,31 @@ const CronsPages = () => {
     const loadData = () => {
         searchFetcher.submit(searchState);
     }
+
+    useEffect(()=>{
+        if(pauseFetcher.type === 'done' && pauseFetcher.data) {
+            handleResult(pauseFetcher.data);
+            loadData();
+        }
+    }, [pauseFetcher.state]);
+    useEffect(()=>{
+        if(resumeFetcher.type === 'done' && resumeFetcher.data) {
+            handleResult(resumeFetcher.data);
+            loadData();
+        }
+    }, [resumeFetcher.state]);
+    useEffect(()=>{
+        if(runJobFetcher.type === 'done' && runJobFetcher.data) {
+            handleResult(runJobFetcher.data);
+            loadData();
+        }
+    }, [runJobFetcher.state]);
+    useEffect(()=>{
+        if(deleteFetcher.type === 'done' && deleteFetcher.data) {
+            handleResult(deleteFetcher.data);
+            loadData();
+        }
+    }, [deleteFetcher.state]);
 
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
@@ -83,17 +117,33 @@ const CronsPages = () => {
         switch (e) {
             case 'start':
                 //启动
-                resumeFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/resume'});
+                showDeleteAlert(function () {
+                    resumeFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/resume'});
+                }, '确定要开始运行任务吗', '确认开始');
+                break;
+            case 'pause':
+                //启动
+                showDeleteAlert(function () {
+                    pauseFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/pause'});
+                }, '确定要停止任务吗', '确认停止');
+                break;
+            case 'add':
+                //编辑
+                setEditModel({});
                 break;
             case 'edit':
                 //编辑
+                setEditModel(row);
                 break;
             case 'start-now':
-                runJobFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/execute'});
+                showDeleteAlert(function () {
+                    runJobFetcher.submit({id: row.id}, {method: 'get', action: '/monitor/crons/execute'});
+                }, '确认要立即执行任务吗', '确认执行');
                 break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
+                    runJobFetcher.submit({id: row.id}, {method: 'delete', action: '/monitor/crons/delete'});
                 });
                 break;
         }
@@ -138,7 +188,7 @@ const CronsPages = () => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'start')}>启动</a>
+                        {row.status == 0 ? <a href={'#'} onClick={() => handleOnAction(row, 'pause')}>停止</a> : <a href={'#'} onClick={() => handleOnAction(row, 'start')}>启动</a>}
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -187,6 +237,7 @@ const CronsPages = () => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
+                            <Button className={'mr-1'} onClick={()=>handleOnAction(null, 'add')}><Plus size={16}/>新建任务</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>

@@ -3,7 +3,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
-import {API_CRONJOB_RESUME, requestWithToken} from "~/utils/request.server";
+import {API_CRONJOB_PAUSE, API_CRONJOB_RESUME, requestWithToken} from "~/utils/request.server";
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
@@ -14,6 +14,6 @@ export const loader: LoaderFunction = async ({request}) => {
     } else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_CRONJOB_RESUME + queryString);
+    const result = await requestWithToken(request)(API_CRONJOB_PAUSE+ queryString);
     return json(result);
 }

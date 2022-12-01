@@ -118,7 +118,7 @@ export function showToastError(message: string) {
     });
 }
 
-export function showDeleteAlert(deleteCallback: Function, message: string = '您确定要删除本条数据吗', title='确认删除吗?', confirmText='确认删除！') {
+export function showDeleteAlert(deleteCallback: Function, message: string = '您确定要删除本条数据吗', title='确认删除吗?', confirmText='确认！') {
     Swal.fire({
         title: title,
         text: message,

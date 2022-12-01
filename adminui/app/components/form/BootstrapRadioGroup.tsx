@@ -26,9 +26,9 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
                             <Form.Check
                                 key={idPrefix+'-'+item.value}
                                 inline
-                                value={item.value}
+                                value={item.value.toString()}
                                 onChange={formik.handleChange}
-                                checked={formik.values[name]==item.value}
+                                checked={formik.values[name]==item.value.toString()}
                                 name={name}
                                 label={item.label}
                                 id={`${idPrefix}-${item.value}`}

@@ -79,7 +79,7 @@ const CronEdit = (props: any) => {
                                         {label: 'JSON', value: 'json'},
                                     ]}/>
                                     <BootstrapInput label={'参数'} rows={3} as={'textarea'} name={'parameter'} />
-                                    <BootstrapRadioGroup options={[{label: '正常', value: '1'}, {label: '停止', value: '0'}]} name={'status'} label={'状态'} />
+                                    <BootstrapRadioGroup options={[{label: '正常', value: '0'}, {label: '停止', value: '-1'}]} name={'status'} label={'状态'} />
                                     <BootstrapInput label={'描述'} rows={3} as={'textarea'} name={'description'} />
                                 </Modal.Body>
                                 <Modal.Footer>
