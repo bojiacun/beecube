@@ -48,11 +48,8 @@ export const loader: LoaderFunction = async ({request}) => {
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     const error = session.get(auth.sessionErrorKey) as LoaderData['error'];
     session.unset(auth.sessionErrorKey);
-    return json({error: error}, {
-        headers: {
-            "Set-Cookie": await sessionStorage.commitSession(session),
-        },
-    });
+    await sessionStorage.commitSession(session);
+    return json({error: error});
 }
 
 const LoginPage = () => {

@@ -1,4 +1,4 @@
-import {createCookie, createCookieSessionStorage, createMemorySessionStorage} from "@remix-run/node";
+import {createCookie, createCookieSessionStorage, createFileSessionStorage, createMemorySessionStorage} from "@remix-run/node";
 import {Authenticator, AuthorizationError} from "remix-auth";
 import {FormStrategy} from "remix-auth-form";
 //@ts-ignore
@@ -28,9 +28,9 @@ export type UserInfo = {
     id: string;
 }
 
-const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
+const sessionSecret:string = process.env["SESSION_SECRET"] || 'bojinhong';
 
-const sessionCookie = createCookie(process.env["COOKIE_NAME "] || 'RSESSIONID', {
+const sessionCookie = createCookie(process.env["COOKIE_NAME"] || 'RSESSIONID', {
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
@@ -38,8 +38,9 @@ const sessionCookie = createCookie(process.env["COOKIE_NAME "] || 'RSESSIONID', 
     secure: process.env.NODE_ENV === 'production',
 });
 
-export const sessionStorage = createMemorySessionStorage({
-    cookie: sessionCookie
+export const sessionStorage = createFileSessionStorage({
+    cookie: sessionCookie,
+    dir: process.env["SESSION_STORAGE"] || "/Users/baojinhong/remix-sessions"
 });
 
 export const auth = new Authenticator<LoginedUser>(sessionStorage);
@@ -50,23 +51,23 @@ auth.use(
         if(_.isEmpty(data.username) || _.isEmpty(data.password)) {
             throw new AuthorizationError('username or password is required');
         }
-        console.log(data);
         const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
         const result = await res.json();
-        console.log(result);
         if(result.code !== 200) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
         const userInfo = result.result.userInfo;
         const token = result.result.token;
-
-        // const permsRes = await fetch(API_PERMISSION_CURRENT_USER);
-        // const permsResult = await permsRes.json();
-        // if(result.code !== 200) {
-        //     throw new AuthorizationError(permsResult?.message || 'login fail');
-        // }
-        // console.log(permsResult);
-        // const perms = null;
+        let options:any = { headers: {} };
+        options.headers['X-Access-Token'] = token;
+        options.headers['Authorization'] = token;
+        const permsRes = await fetch(API_PERMISSION_CURRENT_USER, options);
+        const permsResult = await permsRes.json();
+        if(result.code !== 200) {
+            throw new AuthorizationError(permsResult?.message || 'login fail');
+        }
+        console.log(permsResult);
+        const perms = null;
 
         return {
             token: token,
