@@ -1,14 +1,22 @@
-import {createCookieSessionStorage} from "@remix-run/node";
+import {createCookie, createCookieSessionStorage, createMemorySessionStorage} from "@remix-run/node";
 import {Authenticator, AuthorizationError} from "remix-auth";
 import {FormStrategy} from "remix-auth-form";
 //@ts-ignore
 import _ from 'lodash';
-import {API_LOGIN, LOGIN_URL, postFormInit} from "~/utils/request.server";
+import {API_LOGIN, API_PERMISSION_CURRENT_USER, LOGIN_URL, postFormInit} from "~/utils/request.server";
 
+export type MenuPerm = {
+    title?: string;
+    route?: string;
+    icon?: string;
+    header?: string;
+    children?: MenuPerm[];
+}
 
 export type LoginedUser = {
     token: string;
     userInfo: UserInfo;
+    perms?: MenuPerm[];
 }
 
 export type UserInfo = {
@@ -22,16 +30,17 @@ export type UserInfo = {
 
 const sessionSecret:string = process.env["SESSION_SECRET "] || 'bojinhong';
 
-export const sessionStorage = createCookieSessionStorage({
-    cookie: {
-        name: process.env["COOKIE_NAME "] || 'RSESSIONID',
-        httpOnly: true,
-        path: '/',
-        sameSite: 'lax',
-        secrets: [sessionSecret],
-        secure: process.env.NODE_ENV === 'production',
-    }
-})
+const sessionCookie = createCookie(process.env["COOKIE_NAME "] || 'RSESSIONID', {
+    httpOnly: true,
+    path: '/',
+    sameSite: 'lax',
+    secrets: [sessionSecret],
+    secure: process.env.NODE_ENV === 'production',
+});
+
+export const sessionStorage = createMemorySessionStorage({
+    cookie: sessionCookie
+});
 
 export const auth = new Authenticator<LoginedUser>(sessionStorage);
 
@@ -41,13 +50,28 @@ auth.use(
         if(_.isEmpty(data.username) || _.isEmpty(data.password)) {
             throw new AuthorizationError('username or password is required');
         }
+        console.log(data);
         const res = await fetch(API_LOGIN, postFormInit(JSON.stringify(data)));
         const result = await res.json();
+        console.log(result);
         if(result.code !== 200) {
             throw new AuthorizationError(result?.message || 'login fail');
         }
         const userInfo = result.result.userInfo;
-        return {token: result.result.token, userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone}};
+        const token = result.result.token;
+
+        // const permsRes = await fetch(API_PERMISSION_CURRENT_USER);
+        // const permsResult = await permsRes.json();
+        // if(result.code !== 200) {
+        //     throw new AuthorizationError(permsResult?.message || 'login fail');
+        // }
+        // console.log(permsResult);
+        // const perms = null;
+
+        return {
+            token: token,
+            userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone},
+        };
     })
 )
 
