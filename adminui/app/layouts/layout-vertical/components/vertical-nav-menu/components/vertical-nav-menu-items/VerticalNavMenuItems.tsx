@@ -14,7 +14,7 @@ const VerticalNavMenuItems: FC<VerticalNavMenuItemsProps> = (props) => {
         <ul className={className}>
             {items&&items.map((item:any)=>{
                 let Component = resolveVerticalNavMenuItemComponent(item);
-                return <Component key={item.title || item.header} item={item} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} />
+                return <Component key={item.id || item.route || item.header} item={item} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} />
             })}
         </ul>
     );
