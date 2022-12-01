@@ -22,6 +22,7 @@ export const links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({request}) => {
+    console.log("layout vertical loader");
     return json(await auth.isAuthenticated(request, {failureRedirect: '/login'}));
 }
 
