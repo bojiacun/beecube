@@ -36,7 +36,7 @@ const TenantEdit = (props: any) => {
 
 
     const handleOnSubmit = (values: any) => {
-        if(values.id) {
+        if(model.id) {
             postFetcher.submit(values, {method: 'put', action: '/system/tenants/edit'});
         }
         else {
@@ -75,8 +75,8 @@ const TenantEdit = (props: any) => {
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapInput label={'租户名称'} name={'name'} />
                                     <BootstrapInput label={'租户编号'} name={'id'} disabled={model.id} />
-                                    <BootstrapDateTime label={'开始时间'} name={'beginDate'} />
-                                    <BootstrapDateTime label={'结束时间'} name={'endDate'} />
+                                    <BootstrapDateTime label={'开始时间'} name={'beginDate'} showTime={true} />
+                                    <BootstrapDateTime label={'结束时间'} name={'endDate'} showTime={true} />
                                     <BootstrapRadioGroup
                                         options={[{label: '正常', value: '1'}, {label: '冻结', value: '2'}]}
                                         name={'status'}

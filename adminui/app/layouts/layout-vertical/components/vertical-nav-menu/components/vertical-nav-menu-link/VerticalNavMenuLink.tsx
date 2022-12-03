@@ -21,7 +21,7 @@ const VerticalNavMenuLink = (props:any) => {
     const renderItemIcon = (item:any) => {
         if(item.icon) {
             let icon = item.icon.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-            return <span dangerouslySetInnerHTML={{__html: feather.icons[icon].toSvg({width: 14, height: 14})}} />;
+            return <span dangerouslySetInnerHTML={{__html: feather.icons[icon]?.toSvg({width: 14, height: 14})}} />;
             // return <span className={'feather icon-'+item.icon.toLowerCase()} />
         }
         return <Circle />;

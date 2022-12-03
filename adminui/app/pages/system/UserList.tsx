@@ -131,6 +131,7 @@ const UserList = (props: any) => {
         },
         {
             text: '头像',
+            dataField: 'avatar',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
                 return <Image src={row.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />;
@@ -177,6 +178,7 @@ const UserList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
+            isDummyField: true,
             headerStyle: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (

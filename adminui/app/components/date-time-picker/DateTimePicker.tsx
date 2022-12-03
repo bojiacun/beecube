@@ -31,7 +31,7 @@ const BootstrapFormControlInput = React.forwardRef(({value, inputName, onClick, 
 const DateTimePicker: FC<DateTimePickerProps> = (props) => {
     const {showTime = false, minDate = null, maxDate = null, inputName, placeholder = '选择时间'} = props;
     const [selectedDate, setSelectedDate] = useState<any>();
-    const formatter = showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
+    const formatter = showTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd';
     const formik = useFormikContext<any>();
 
     useEffect(()=>{
@@ -45,7 +45,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
 
     const handleOnDateChange = (date:any) => {
         if(date) {
-            const dateValue =  moment(date).format('YYYY-MM-DD');
+            const dateValue =  moment(date).format(showTime ? 'YYYY-MM-DD HH:mm:ss':'YYYY-MM-DD');
             formik.setFieldValue(inputName, dateValue);
         }
         else {

@@ -3,6 +3,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import {API_TENANT_LIST, requestWithToken} from "~/utils/request.server";
 import {defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
 import TenantList from "~/pages/system/TenantList";
+import {withPageLoading} from "~/utils/components";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -20,4 +21,4 @@ const TenantsPage = (props:any) => {
     return <TenantList {...props} />;
 }
 
-export default TenantsPage;
+export default withPageLoading(TenantsPage);
