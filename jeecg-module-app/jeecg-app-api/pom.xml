@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jeecg-module-app-api</artifactId>
+    <artifactId>jeecg-app-api</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
