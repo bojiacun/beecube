@@ -3,7 +3,6 @@
     <parent>
         <artifactId>jeecg-module-app</artifactId>
         <groupId>org.jeecgframework.boot</groupId>
-        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,8 +22,8 @@
         <!--引入业务模块-->
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
-            <artifactId>jeecg-module-app-biz</artifactId>
-            <version>1.0.0</version>
+            <artifactId>jeecg-app-biz</artifactId>
+            <version>${beecube.app.version}</version>
         </dependency>
 
     </dependencies>
