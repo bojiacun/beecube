@@ -6,15 +6,21 @@ import {useTranslation} from "react-i18next";
 export interface BootstrapSwitchProps extends Partial<any>{
     label: string;
     name: string;
+    valueType?: number;
 }
 
 const BootstrapSwitch: FC<BootstrapSwitchProps> = (props) => {
-    let {label, name, className, ...rest} = props;
+    let {label, name, className, valueType = 1, ...rest} = props;
     const formik = useFormikContext<any>();
     const {t} = useTranslation();
 
     const handleOnChange = (e:any) => {
-        formik.setFieldValue(name, e.target.checked? 1:0);
+        if(valueType == 1) {
+            formik.setFieldValue(name, e.target.checked? 1:0);
+        }
+        else {
+            formik.setFieldValue(name, !!e.target.checked);
+        }
     }
 
     return (

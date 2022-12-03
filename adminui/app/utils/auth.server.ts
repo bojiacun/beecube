@@ -12,6 +12,7 @@ export type MenuPerm = {
     icon?: string;
     header?: string;
     children?: MenuPerm[];
+    target: string;
 }
 
 export type LoginedUser = {
@@ -55,6 +56,7 @@ const translateMenu2MenuPerms = (menu:any): MenuPerm => {
         route: menu.path,
         icon: menu.meta.icon,
         children: menu?.children?.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms) || null,
+        target: menu.internalOrExternal ? 'iframe': '',
     }
 }
 

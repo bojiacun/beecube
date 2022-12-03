@@ -7,14 +7,12 @@ export interface BootstrapRadioGroupProps extends Partial<any> {
     options: {label: string, value: string}[];
     name: string;
     label: string;
-    idPrefix?: string;
 }
 
 const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
-    const {name, options, label, idPrefix = ''} = props;
+    const {name, options, label} = props;
     const formik = useFormikContext<any>();
     const {t} = useTranslation();
-    console.log(formik);
 
     return (
         <FormGroup>
@@ -24,14 +22,14 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
                     {options.map(item=>{
                         return (
                             <Form.Check
-                                key={idPrefix+'-'+item.value}
+                                key={name +'-'+item.value}
                                 inline
                                 value={item.value.toString()}
                                 onChange={formik.handleChange}
                                 checked={formik.values[name]==item.value.toString()}
                                 name={name}
                                 label={item.label}
-                                id={`${idPrefix}-${item.value}`}
+                                id={`${name}-${item.value}`}
                                 type={'radio'}
                             />
                         );

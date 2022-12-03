@@ -60,7 +60,7 @@ const VerticalNavMenu = (props:any) => {
             <div className={classNames("shadow-bottom", shallShadowBottom ? 'd-block':'')} />
 
             <PerfectScrollbar onScrollY={evt => setShallShadowBottom(evt.scrollTop > 0)} className={'main-menu-content scroll-area'} component={'div'} options={perfectScrollbarSettings}>
-                <VerticalNavMenuItems startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} className={'navigation navigation-main'} items={rootLoaderData.userInfo.perms} />
+                <VerticalNavMenuItems startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} className={'navigation navigation-main'} items={navMenuItems} />
             </PerfectScrollbar>
         </div>
     );
