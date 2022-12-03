@@ -27,7 +27,7 @@ const UserDropdown = () => {
         <>
             <div className="d-sm-flex d-none user-nav">
                 <p className="user-name font-weight-bolder mb-0">
-                    {userData?.realName || userData?.username}
+                    {userData?.realname || userData?.username}
                 </p>
                 <span className="user-status">{userData?.post}</span>
             </div>

@@ -40,6 +40,9 @@ export const API_PERMISSION_CURRENT_USER = `${BASE_URL}/jeecg-system/sys/permiss
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
 export const API_USER_UPDATE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/updatePassword`;
+export const API_USER_CHANGE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/changePassword`;
+export const API_USER_FROZEN = `${BASE_URL}/jeecg-system/sys/user/frozenBatch`;
+export const API_USER_DELETE = `${BASE_URL}/jeecg-system/sys/user/delete`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;

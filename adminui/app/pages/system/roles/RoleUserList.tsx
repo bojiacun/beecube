@@ -109,7 +109,7 @@ const RoleUserList = (props: any) => {
             text: '状态',
             dataField: 'status',
             formatter: (cell: any, row: any) => {
-                return row.status == 1 ? <Badge variant={'success'}>正常</Badge> : <Badge variant={'danger'}>异常</Badge>
+                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
             }
         },
 
