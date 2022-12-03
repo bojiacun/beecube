@@ -91,7 +91,6 @@ auth.use(
                 menus.push(...item.children);
             }
         });
-        console.log(menus);
         const perms = menus.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
 
         return {
