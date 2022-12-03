@@ -66,7 +66,7 @@ const UserPassword = (props: any) => {
                 <Modal.Title id={'edit-user-model'}>修改密码</Modal.Title>
             </Modal.Header>
             {model &&
-                <Formik innerRef={formikRef} initialValues={{}} validationSchema={UserPasswordSchema}
+                <Formik innerRef={formikRef} initialValues={model} validationSchema={UserPasswordSchema}
                         onSubmit={handleOnSubmit}>
                     {({isSubmitting, values, errors}) => {
                         return (

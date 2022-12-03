@@ -139,6 +139,7 @@ const UserList = (props: any) => {
         {
             text: '性别',
             dataField: 'sex_dictText',
+            headerStyle: {width: 100},
         },
         {
             text: '生日',
@@ -148,17 +149,18 @@ const UserList = (props: any) => {
             text: '手机号',
             dataField: 'phone',
         },
-        {
-            text: '部门',
-            dataField: 'orgCodeTxt',
-        },
-        {
-            text: '负责部门',
-            dataField: 'departIds_dictText',
-        },
+        // {
+        //     text: '部门',
+        //     dataField: 'orgCodeTxt',
+        // },
+        // {
+        //     text: '负责部门',
+        //     dataField: 'departIds_dictText',
+        // },
         {
             text: '状态',
             dataField: 'status_dictText',
+            headerStyle: {width: 100},
             formatter: (cell:any, row:any) => {
                 return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
             }
@@ -234,7 +236,8 @@ const UserList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建用户</Button>
+                            <Button onClick={handleOnAdd} className={'mr-1'}><i className={'feather icon-plus'} />新建用户</Button>
+                            <Button variant={'light'} onClick={()=>setShowTrash(true)}><i className={'feather icon-trash-2'} />回收站</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -289,7 +292,10 @@ const UserList = (props: any) => {
                 setPasswordModel(null);
                 loadData();
             }} />}
-            {showTrash && <UserTrash show={showTrash} onHide={()=>setShowTrash(false)} />}
+            {showTrash && <UserTrash show={showTrash} onHide={()=>{
+                setShowTrash(false)
+                loadData();
+            }} />}
         </>
     );
 }

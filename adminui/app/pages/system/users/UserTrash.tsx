@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
+    buildPageListFromData,
     DefaultListSearchParams,
     emptySortFunc, handleResult,
     headerSortingClasses,
@@ -25,12 +26,18 @@ import UserPassword from "~/pages/system/users/UserPassword";
 
 const UserTrash = (props: any) => {
     const {show, onHide} = props;
-    const [list, setList] = useState<any>(useLoaderData());
+    const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const restoreFetcher = useFetcher();
 
+
+    useEffect(()=>{
+        if(show) {
+            loadData();
+        }
+    }, [show]);
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get', action: '/system/users/trash'});
@@ -38,7 +45,7 @@ const UserTrash = (props: any) => {
 
     useEffect(() => {
         if (searchFetcher.type === 'done' && searchFetcher.data) {
-            setList(searchFetcher.data);
+            setList(buildPageListFromData(searchFetcher.data));
         }
     }, [searchFetcher.state]);
 
@@ -109,18 +116,9 @@ const UserTrash = (props: any) => {
             dataField: 'sex_dictText',
         },
         {
-            text: '创建时间',
-            dataField: 'createTime',
-            headerStyle: {width: 200},
-            sort: true,
-            onSort: handleSort,
-            headerSortingClasses,
-            sortFunc: emptySortFunc
-        },
-        {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -141,7 +139,7 @@ const UserTrash = (props: any) => {
     }
 
     return (
-        <Modal show={show} onHide={onHide} backdrop={'static'}
+        <Modal show={show} onHide={onHide} backdrop={'static'} size={'lg'}
                aria-labelledby={'edit-modal'}>
             <Modal.Body>
                 <div className={'m-2'}>
@@ -155,14 +153,14 @@ const UserTrash = (props: any) => {
                 </div>
 
                 <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
-                                data={list?.records}
+                                data={list?.records||[]}
                                 keyField={'id'}/>
 
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list?.size + 1} 至 {list?.current * list?.size > list?.total ? list?.total : list?.current * list?.size} 条</span>
                         </Col>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                             <SinglePagination
@@ -177,7 +175,7 @@ const UserTrash = (props: any) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button
-                    variant={'info'}
+                    variant={'light'}
                     type={'button'}
                     onClick={onHide}
                 >

@@ -259,3 +259,15 @@ export function findTree(items:any[], key:string, value:any):any{
     }
     return result;
 }
+
+export function buildPageListFromData(data: any[]) {
+    let size = 10;
+    let pages = Math.ceil(data.length / size);
+    return {
+        current: 1,
+        total: data.length,
+        records: data,
+        size: size,
+        pages: pages,
+    }
+}
