@@ -9,9 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>jeecg-module-app</artifactId>
-    <version>${beecube.app.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <beecube.app.version>1.0.0</beecube.app.version>
+    </properties>
     <!--项目子模块-->
     <modules>
         <module>jeecg-app-api</module>
