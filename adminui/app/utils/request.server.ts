@@ -85,7 +85,8 @@ export const API_GATEWAY_LIST = `${BASE_URL}/jeecg-system/sys/gatewayRoute/list`
 export const API_GATEWAY_DELETE = `${BASE_URL}/jeecg-system/sys/gatewayRoute/delete`;
 export const API_GATEWAY_UPDATEALL = `${BASE_URL}/jeecg-system/sys/gatewayRoute/updateAll`;
 
-export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
+export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/list`;
+export const API_TENANT_LIST_ALL = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
 
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
 export const API_USER_RECYCLE = `${BASE_URL}/jeecg-system/sys/user/recycleBin`;

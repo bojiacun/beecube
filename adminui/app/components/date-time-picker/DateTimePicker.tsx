@@ -4,9 +4,10 @@ import {FormControl} from "react-bootstrap";
 import {FormikProps, useFormikContext} from "formik";
 import moment from "moment";
 import classNames from "classnames";
+import {Portal} from "react-overlays";
 
 
-export interface DateTimePickerProps {
+export interface DateTimePickerProps extends Partial<any>{
     showTime?: boolean;
     minDate?: any;
     maxDate?: any;

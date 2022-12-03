@@ -86,7 +86,7 @@ const UserEdit = (props: any) => {
     useEffect(() => {
         if (model) {
             roleFetcher.load('/system/roles/all');
-            tenantFetcher.load('/system/tenants');
+            tenantFetcher.load('/system/tenants/all');
             if (model.id) {
                 userRoleFetcher.load(`/system/users/${model.id}/roles`);
                 userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
