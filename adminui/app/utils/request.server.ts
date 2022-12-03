@@ -39,10 +39,12 @@ export const API_DEPARTMENT_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/per
 export const API_PERMISSION_CURRENT_USER = `${BASE_URL}/jeecg-system/sys/permission/getUserPermissionByToken`;
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
+export const API_USER_RESTORE = `${BASE_URL}/jeecg-system/sys/user/putRecycleBin`;
 export const API_USER_UPDATE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/updatePassword`;
 export const API_USER_CHANGE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/changePassword`;
 export const API_USER_FROZEN = `${BASE_URL}/jeecg-system/sys/user/frozenBatch`;
 export const API_USER_DELETE = `${BASE_URL}/jeecg-system/sys/user/delete`;
+export const API_USER_TRASH_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteRecycleBin`;
 export const API_USER_ADD = `${BASE_URL}/jeecg-system/sys/user/add`;
 
 export const API_POSITION_LIST = `${BASE_URL}/jeecg-system/sys/position/list`;
@@ -86,6 +88,7 @@ export const API_GATEWAY_UPDATEALL = `${BASE_URL}/jeecg-system/sys/gatewayRoute/
 export const API_TENANT_LIST = `${BASE_URL}/jeecg-system/sys/tenant/queryList`;
 
 export const API_USER_LIST = `${BASE_URL}/jeecg-system/sys/user/list`;
+export const API_USER_RECYCLE = `${BASE_URL}/jeecg-system/sys/user/recycleBin`;
 export const API_USER_INFO = `${BASE_URL}/jeecg-system/sys/user/getUserInfo`;
 export const API_USER_ROLE_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/queryUserRole`;
 export const API_USER_DEPARTMENT_LIST_ALL = `${BASE_URL}/jeecg-system/sys/user/userDepartList`;

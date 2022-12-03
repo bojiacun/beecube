@@ -21,6 +21,7 @@ import * as Yup from "yup";
 import TreePermissionList from "~/pages/system/roles/TreePermissionList";
 import UserEdit from "~/pages/system/roles/UserEdit";
 import UserPassword from "~/pages/system/users/UserPassword";
+import UserTrash from "~/pages/system/users/UserTrash";
 
 
 const UserList = (props: any) => {
@@ -28,10 +29,12 @@ const UserList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [showTrash, setShowTrash] = useState<boolean>(false);
     const [passwordModel, setPasswordModel] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
+    const enableFetcher = useFetcher();
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
     }
@@ -46,10 +49,12 @@ const UserList = (props: any) => {
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             stopPageLoading();
-            handleResult(disableFetcher.data, '删除成功');
+            handleResult(deleteFetcher.data, '删除成功');
             loadData();
         }
     }, [deleteFetcher.state]);
+
+
     useEffect(() => {
         if (disableFetcher.data && disableFetcher.type === 'done') {
             stopPageLoading();
@@ -58,6 +63,13 @@ const UserList = (props: any) => {
         }
     }, [disableFetcher.state]);
 
+    useEffect(() => {
+        if (enableFetcher.data && enableFetcher.type === 'done') {
+            stopPageLoading();
+            handleResult(enableFetcher.data, '解冻成功');
+            loadData();
+        }
+    }, [enableFetcher.state]);
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
@@ -79,14 +91,14 @@ const UserList = (props: any) => {
                 showDeleteAlert(function () {
                     startPageLoading();
                     //@ts-ignore
-                    disableFetcher.submit({ids: row.id, status: 2}, {method: 'delete', action: `/system/users/frozen?ids=${row.id}`, replace: true});
+                    disableFetcher.submit({ids: row.id, status: 2}, {method: 'put', action: `/system/users/frozen?ids=${row.id}`, replace: true});
                 }, '确定要冻结该用户吗', '冻结用户');
                 break;
             case 'enable':
                 showDeleteAlert(function () {
                     startPageLoading();
                     //@ts-ignore
-                    disableFetcher.submit({ids: row.id, status: 1}, {method: 'delete', action: `/system/users/frozen?ids=${row.id}`, replace: true});
+                    enableFetcher.submit({ids: row.id, status: 1}, {method: 'put', action: `/system/users/frozen?ids=${row.id}`, replace: true});
                 }, '确定要解冻该用户吗', '解冻确认');
                 break;
         }
@@ -277,6 +289,7 @@ const UserList = (props: any) => {
                 setPasswordModel(null);
                 loadData();
             }} />}
+            {showTrash && <UserTrash show={showTrash} onHide={()=>setShowTrash(false)} />}
         </>
     );
 }
