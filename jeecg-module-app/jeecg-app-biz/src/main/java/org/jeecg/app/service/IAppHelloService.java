@@ -1,4 +1,4 @@
-package org.jeecg.modules.app.service;
+package org.jeecg.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.app.entity.AppHelloEntity;

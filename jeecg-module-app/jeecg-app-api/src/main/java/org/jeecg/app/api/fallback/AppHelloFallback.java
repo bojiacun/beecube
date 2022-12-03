@@ -1,7 +1,7 @@
-package org.jeecg.modules.app.api.fallback;
+package org.jeecg.app.api.fallback;
 
+import org.jeecg.app.api.AppHelloApi;
 import org.springframework.cloud.openfeign.FallbackFactory;
-import org.jeecg.modules.app.api.AppHelloApi;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
-package org.jeecg.modules.app.mapper;
+package org.jeecg.app.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.jeecg.modules.app.entity.AppHelloEntity;
+import org.jeecg.app.entity.AppHelloEntity;
 
 
 public interface AppHelloMapper extends BaseMapper<AppHelloEntity> {

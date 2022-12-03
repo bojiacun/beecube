@@ -1,4 +1,4 @@
-package org.jeecg.modules.app.vo;
+package org.jeecg.app.vo;
 import lombok.Data;
 
 @Data

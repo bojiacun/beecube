@@ -1,10 +1,10 @@
-package org.jeecg.modules.app.service.impl;
+package org.jeecg.app.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.modules.app.entity.AppHelloEntity;
-import org.jeecg.modules.app.mapper.AppHelloMapper;
-import org.jeecg.modules.app.service.IAppHelloService;
+import org.jeecg.app.mapper.AppHelloMapper;
+import org.jeecg.app.service.IAppHelloService;
 import org.springframework.stereotype.Service;
 
 /**

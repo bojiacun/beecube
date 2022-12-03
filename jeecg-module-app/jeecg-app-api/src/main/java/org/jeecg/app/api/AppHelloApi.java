@@ -1,8 +1,7 @@
-package org.jeecg.modules.app.api;
-import org.jeecg.modules.app.api.fallback.AppHelloFallback;
+package org.jeecg.app.api;
+import org.jeecg.app.api.fallback.AppHelloFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "jeecg-app", fallbackFactory = AppHelloFallback.class)
 public interface AppHelloApi {
