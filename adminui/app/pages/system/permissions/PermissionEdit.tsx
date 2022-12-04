@@ -183,8 +183,8 @@ const PermissionEdit = (props: any) => {
                                         {values.menuType < 2 && <BootstrapInput label={'数据标识'} name={'component'} />}
                                         {values.menuType < 2 && <BootstrapInput label={'访问图标'} name={'icon'} />}
                                         {values.menuType < 2 && <BootstrapInput label={'排序'} name={'sortNo'} style={{maxWidth: 200}} type={'number'} />}
-                                        {values.menuType < 2 && <BootstrapSwitch label={'是否路由菜单'} name={'route'} />}
-                                        {values.menuType < 2 && <BootstrapSwitch label={'隐藏路由'} name={'hidden'} />}
+                                        {values.menuType < 2 && <BootstrapSwitch label={'是否路由菜单'} name={'route'} valueType={2} />}
+                                        {values.menuType < 2 && <BootstrapSwitch label={'隐藏路由'} name={'hidden'} valueType={2} />}
                                         {values.menuType < 2 && <BootstrapSwitch label={'外部链接'} name={'internalOrExternal'} valueType={2} />}
                                         <BootstrapRadioGroup options={[{label: '有效', value: '1'},{label: '无效', value: '0'}]} name={'status'} label={'状态'}/>
                                     </Modal.Body>

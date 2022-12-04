@@ -91,7 +91,7 @@ const PredicateHeader = (props: any) => {
 
 const PredicateHost = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [hosts, setHosts] = useState<string[]>([]);
+    const [hosts, setHosts] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -131,7 +131,7 @@ const PredicateHost = (props: any) => {
 }
 const PredicateBefore = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [befores, setBefores] = useState<string[]>([]);
+    const [befores, setBefores] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -171,7 +171,7 @@ const PredicateBefore = (props: any) => {
 }
 const PredicateRemoteAddr = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [remoteAddrs, setRemoteAddrs] = useState<string[]>([]);
+    const [remoteAddrs, setRemoteAddrs] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -211,7 +211,7 @@ const PredicateRemoteAddr = (props: any) => {
 }
 const PredicateBetween = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [betweens, setBetweens] = useState<string[]>([]);
+    const [betweens, setBetweens] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -251,7 +251,7 @@ const PredicateBetween = (props: any) => {
 }
 const PredicateAfter = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [afters, setAfters] = useState<string[]>([]);
+    const [afters, setAfters] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -291,7 +291,7 @@ const PredicateAfter = (props: any) => {
 }
 const PredicateMethod = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [methods, setMethods] = useState<string[]>([]);
+    const [methods, setMethods] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -332,7 +332,7 @@ const PredicateMethod = (props: any) => {
 
 const PredicatePath = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [paths, setPaths] = useState<string[]>(item.args||[]);
+    const [paths, setPaths] = useState<string[]>(item.args);
     const [showInput, setShowInput] = useState<boolean>(false);
 
     const handleAdd = () => {
@@ -379,7 +379,7 @@ const GatewayPredicateEditor = (props: any) => {
     const [index, setIndex] = useState<number>(0);
 
     const handleOnSelect = (e: any) => {
-        setPredicates([...predicates, {name: e, args: {}, index: index}]);
+        setPredicates([...predicates, {name: e, args: [], index: index}]);
         setIndex(index + 1);
         updateFieldValue();
     }

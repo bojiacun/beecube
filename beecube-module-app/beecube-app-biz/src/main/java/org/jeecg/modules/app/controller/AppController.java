@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用实体类")
 @RestController
-@RequestMapping("/app/app")
+@RequestMapping("/app")
 public class AppController extends JeecgController<App, IAppService> {
 	@Autowired
 	private IAppService appService;

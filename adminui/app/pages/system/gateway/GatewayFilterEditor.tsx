@@ -6,7 +6,7 @@ import _ from "lodash";
 
 const FilterRequestRateLimiter = (props: any) => {
     const {item, onRemove, onUpdate} = props;
-    const [optionValues, setOptionValues] = useState<{key:string; value:string, id: number}[]>([]);
+    const [optionValues, setOptionValues] = useState<{key:string; value:string, id: number}[]>(item.args);
 
 
     useEffect(()=>{
