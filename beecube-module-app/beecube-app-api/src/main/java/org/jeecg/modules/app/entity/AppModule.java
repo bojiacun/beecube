@@ -1,4 +1,4 @@
-package cn.winkt.app.entity;
+package org.jeecg.modules.app.entity;
 
 import java.io.Serializable;
 import java.util.Date;

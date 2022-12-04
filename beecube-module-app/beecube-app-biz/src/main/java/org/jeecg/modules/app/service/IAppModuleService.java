@@ -1,6 +1,6 @@
-package cn.winkt.app.service;
+package org.jeecg.modules.app.service;
 
-import cn.winkt.app.entity.AppModule;
+import org.jeecg.modules.app.entity.AppModule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

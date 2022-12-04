@@ -1,8 +1,8 @@
-package cn.winkt.app.service.impl;
+package org.jeecg.modules.app.service.impl;
 
-import cn.winkt.app.entity.AppModule;
-import cn.winkt.app.mapper.AppModuleMapper;
-import cn.winkt.app.service.IAppModuleService;
+import org.jeecg.modules.app.entity.AppModule;
+import org.jeecg.modules.app.mapper.AppModuleMapper;
+import org.jeecg.modules.app.service.IAppModuleService;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

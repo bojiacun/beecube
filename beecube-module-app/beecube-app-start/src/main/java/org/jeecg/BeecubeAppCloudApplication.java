@@ -1,4 +1,4 @@
-package cn.winkt;
+package org.jeecg;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,9 +8,11 @@ import org.jeecg.common.constant.GlobalConstants;
 import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableFeignClients
+@EnableScheduling
 public class BeecubeAppCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

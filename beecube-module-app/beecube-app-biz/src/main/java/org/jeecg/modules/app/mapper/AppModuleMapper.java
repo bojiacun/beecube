@@ -1,9 +1,6 @@
-package cn.winkt.app.mapper;
+package org.jeecg.modules.app.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import cn.winkt.app.entity.AppModule;
+import org.jeecg.modules.app.entity.AppModule;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

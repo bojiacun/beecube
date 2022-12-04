@@ -1,5 +1,5 @@
-package cn.winkt.app.api;
-import cn.winkt.app.api.fallback.AppHelloFallback;
+package org.jeecg.modules.app.api;
+import org.jeecg.modules.app.api.fallback.AppHelloFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
