@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootApplication
 @EnableFeignClients
-public class JeecgAppCloudApplication implements CommandLineRunner {
+public class BeecubeAppCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     public static void main(String[] args) {
-        SpringApplication.run(JeecgAppCloudApplication.class, args);
+        SpringApplication.run(BeecubeAppCloudApplication.class, args);
     }
 
     /**
