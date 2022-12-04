@@ -23,7 +23,7 @@
         <!--引入业务模块-->
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
-            <artifactId>jeecg-app-biz</artifactId>
+            <artifactId>beecube-app-biz</artifactId>
             <version>${beecube.app.version}</version>
         </dependency>
 
