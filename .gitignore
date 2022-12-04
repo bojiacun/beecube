@@ -11,4 +11,4 @@ rebel.xml
 **/*.lock
 .DS_Store
 .vscode/
-.generate/
+generate/
