@@ -7,50 +7,31 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jeecg-app-start</artifactId>
+    <artifactId>beecube-app-biz</artifactId>
     <dependencies>
-        <!--微服务启动 starter-->
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
-            <artifactId>jeecg-boot-starter-cloud</artifactId>
-        </dependency>
-        <!--system cloud api-->
-        <dependency>
-            <groupId>org.jeecgframework.boot</groupId>
-            <artifactId>jeecg-system-cloud-api</artifactId>
-        </dependency>
-        
-        <!--引入业务模块-->
-        <dependency>
-            <groupId>org.jeecgframework.boot</groupId>
-            <artifactId>jeecg-app-biz</artifactId>
+            <artifactId>jeecg-app-api</artifactId>
             <version>${beecube.app.version}</version>
         </dependency>
-
     </dependencies>
     <build>
         <!-- 打包名称 -->
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
 </project>
