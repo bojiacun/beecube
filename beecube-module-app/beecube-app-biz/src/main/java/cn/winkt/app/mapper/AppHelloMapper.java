@@ -1,4 +1,4 @@
-package org.jeecg.app.mapper;
+package cn.winkt.app.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.app.entity.AppHelloEntity;

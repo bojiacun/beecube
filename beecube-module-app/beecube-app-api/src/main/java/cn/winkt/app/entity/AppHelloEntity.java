@@ -1,4 +1,4 @@
-package org.jeecg.app.entity;
+package cn.winkt.app.entity;
 import lombok.Data;
 
 

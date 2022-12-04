@@ -1,4 +1,4 @@
-package org.jeecg.app.vo;
+package cn.winkt.app.vo;
 import lombok.Data;
 
 @Data

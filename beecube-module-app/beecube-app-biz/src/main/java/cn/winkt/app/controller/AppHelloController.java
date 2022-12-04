@@ -1,9 +1,9 @@
-package org.jeecg.app.controller;
+package cn.winkt.app.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.app.entity.AppHelloEntity;
-import org.jeecg.app.service.IAppHelloService;
+import cn.winkt.app.service.IAppHelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

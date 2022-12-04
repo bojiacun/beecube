@@ -1,6 +1,6 @@
-package org.jeecg.app.api.fallback;
+package cn.winkt.app.api.fallback;
 
-import org.jeecg.app.api.AppHelloApi;
+import cn.winkt.app.api.AppHelloApi;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
