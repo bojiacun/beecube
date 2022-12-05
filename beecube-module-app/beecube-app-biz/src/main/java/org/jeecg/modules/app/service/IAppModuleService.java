@@ -10,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IAppModuleService extends IService<AppModule> {
-
+    AppModule queryByIdentify(String identify);
 }

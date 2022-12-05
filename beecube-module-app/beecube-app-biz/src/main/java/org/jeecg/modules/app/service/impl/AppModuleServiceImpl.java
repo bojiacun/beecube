@@ -16,4 +16,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class AppModuleServiceImpl extends ServiceImpl<AppModuleMapper, AppModule> implements IAppModuleService {
 
+    @Override
+    public AppModule queryByIdentify(String identify) {
+        return null;
+    }
 }

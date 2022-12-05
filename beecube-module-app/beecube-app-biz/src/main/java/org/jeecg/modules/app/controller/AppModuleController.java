@@ -126,6 +126,11 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		return Result.OK(appModule);
 	}
 
+	@GetMapping(value = "/queryByIdentify")
+	public boolean queryByIdentify(@RequestParam(name = "identify") String identify) {
+		return appModuleService.queryByIdentify(identify) != null;
+	}
+
   /**
    * 导出excel
    *
