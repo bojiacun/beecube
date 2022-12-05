@@ -8,4 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface AppApi {
     @PostMapping("/app/modules/register")
     void registerModule(AppModule module);
+
+
+    boolean moduleIsRegistered(String identify);
 }
