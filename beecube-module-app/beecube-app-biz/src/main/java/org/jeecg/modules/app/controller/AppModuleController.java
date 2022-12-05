@@ -4,6 +4,7 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.modules.app.entity.AppModule;
@@ -68,6 +69,15 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	public Result<?> add(@RequestBody AppModule appModule) {
 		appModuleService.save(appModule);
 		return Result.OK("添加成功！");
+	}
+
+	@PostMapping("/register")
+	public Result<?> register(@RequestBody AppModule appModule) {
+		if(appModuleService.queryByIdentify(appModule.getIdentify()) != null) {
+			throw new JeecgBootException("模块已经注册，请勿重复注册");
+		}
+		appModuleService.save(appModule);
+		return Result.OK("注册成功");
 	}
 	
 	/**
