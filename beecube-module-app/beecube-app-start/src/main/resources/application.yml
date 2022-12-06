@@ -6,7 +6,7 @@ spring:
   config:
     import:
       - optional:nacos:jeecg.yaml
-      - optional:nacos:beecube-app-@profile.name@.yaml
+      - optional:nacos:jeecg-@profile.name@.yaml
 
   cloud:
     nacos:
