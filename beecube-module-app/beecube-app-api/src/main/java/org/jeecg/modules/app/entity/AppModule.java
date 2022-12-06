@@ -56,6 +56,9 @@ public class AppModule {
 	@Excel(name = "版本号", width = 15)
     @ApiModelProperty(value = "版本号")
 	private java.lang.String version;
+	@Excel(name = "新版本号", width = 15)
+	@ApiModelProperty(value = "新版本号")
+	private String newVersion;
 	/**是否支持h5*/
 	@Excel(name = "是否支持h5", width = 15)
     @ApiModelProperty(value = "是否支持h5")
