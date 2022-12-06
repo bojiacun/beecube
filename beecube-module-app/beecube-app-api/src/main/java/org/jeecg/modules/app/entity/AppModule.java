@@ -43,7 +43,7 @@ public class AppModule {
 	/**模块LOGO*/
 	@Excel(name = "模块LOGO", width = 15)
     @ApiModelProperty(value = "模块LOGO")
-	private java.lang.Object logo;
+	private java.lang.String logo;
 	/**0为未安装1已安装2已卸载*/
 	@Excel(name = "0为未安装1已安装2已卸载", width = 15)
     @ApiModelProperty(value = "0为未安装1已安装2已卸载")
