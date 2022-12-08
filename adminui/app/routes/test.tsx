@@ -3,7 +3,6 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import _ from "lodash";
 import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
-import {API_DEMO_TEST_JEECG_LIST, API_PERMISSION_CURRENT_USER, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
 import {Card} from "react-bootstrap";
 import {withPageLoading} from "~/utils/components";

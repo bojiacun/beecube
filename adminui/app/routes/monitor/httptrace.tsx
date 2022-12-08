@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_HTTPTRACE_LIST, requestWithToken} from "~/utils/request.server";
+import {API_APP_HTTPTRACE_LIST, API_HTTPTRACE_LIST, requestWithToken} from "~/utils/request.server";
 import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import SinglePagination from "~/components/pagination/SinglePagination";
