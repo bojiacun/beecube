@@ -2,6 +2,7 @@ package org.jeecg.modules.app.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.modules.app.entity.AppModule;
@@ -34,6 +35,9 @@ public class AppModuleServiceImpl extends ServiceImpl<AppModuleMapper, AppModule
         //查询identify是否存在，有了则报错
         if(StringUtils.isEmpty(entity.getId()) && queryByIdentify(entity.getIdentify()) != null) {
             throw new JeecgBootException("已存在相同标识的模块:"+entity.getIdentify());
+        }
+        if(StringUtils.isEmpty(entity.getId())) {
+            entity.setId(IdWorker.getIdStr(entity));
         }
         return super.save(entity);
     }
