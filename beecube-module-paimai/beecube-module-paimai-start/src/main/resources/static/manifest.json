@@ -1,0 +1,56 @@
+{
+  "menus": [
+    {
+      "icon": "",
+      "hidden": false,
+      "component": "",
+      "name": "拍卖管理",
+      "menuType": 0,
+      "sortNo": 1,
+      "title": "拍卖管理",
+      "internalOrExternal": false,
+      "children": [
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "auction-list",
+          "name": "拍卖会管理",
+          "menuType": 1,
+          "sortNo": 1,
+          "title": "拍卖会管理",
+          "internalOrExternal": false,
+          "url": "/auctions"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "auction-goods-list",
+          "name": "拍品管理",
+          "menuType": 1,
+          "sortNo": 1,
+          "title": "拍品管理",
+          "internalOrExternal": false,
+          "url": "/auctions/goods"
+        }
+      ]
+    }
+  ],
+  "gateway": {
+    "routerId": "beecube-paimai",
+    "name": "汇智拍卖",
+    "uri": "lb://beecube-paimai",
+    "status": 1,
+    "predicates": [
+      {
+        "name": "Path",
+        "args": ["/paimai/**"]
+      }
+    ],
+    "filters": [
+
+    ]
+  },
+  "installUrl": "/beecube-paimai/install",
+  "uninstallUrl": "/beecube-paimai/uninstall",
+  "upgradeUrl": "/beecube-paimai/upgrade"
+}
