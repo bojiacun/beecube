@@ -5,6 +5,8 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import {DefaultListSearchParams} from "~/utils/utils";
 import FigureImage from "react-bootstrap/FigureImage";
 
+const semver = require("semver");
+
 
 const AppModuleList = () => {
     const [list, setList] = useState<any>(useLoaderData());
@@ -37,11 +39,13 @@ const AppModuleList = () => {
                         return (
                             <Col sm={12} md={3} lg={2} key={m.id}>
                                 <div className={'module-box d-flex flex-column align-items-center justify-space-around'}>
-                                    <FigureImage src={m.logo} width={60} height={60} />
+                                    <FigureImage src={m.logo} width={60} height={60} rounded={true} />
                                     <h5 className={'text-bold text-lg'}>{m.name}</h5>
-                                    <div className={'text-muted'}>{m.version}</div>
+                                    <div className={'text-muted'} style={{marginBottom: '0.5rem'}}>{m.version}</div>
                                     <div>
                                         {m.status == 0 && <Button variant={'primary'} size={'sm'}>安装</Button>}
+                                        {m.status == 1 && <Button variant={'danger'} size={'sm'}>卸载</Button>}
+                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button variant={'light'}>升级</Button>}
                                     </div>
                                 </div>
                             </Col>

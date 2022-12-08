@@ -54,6 +54,7 @@
     "remix-auth": "^3.3.0",
     "remix-auth-form": "^1.2.0",
     "remix-utils": "^4.1.0",
+    "semver": "^7.3.8",
     "sweetalert2": "^11.6.8",
     "yup": "^0.32.11"
   },
