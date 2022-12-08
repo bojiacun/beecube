@@ -1,8 +1,10 @@
 package org.jeecg.modules.paimai.config;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.config.mqtoken.UserTokenContext;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
@@ -22,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 @Component
+@Slf4j
 public class AutoRegisterModule implements ApplicationRunner {
 
     public static final String MODULE_IDENTITY = "paimai";
@@ -51,7 +54,13 @@ public class AutoRegisterModule implements ApplicationRunner {
             appModule.setVersion("1.0.0");
             appModule.setNewVersion("1.0.0");
             appModule.setManifest(JSON.toJSONString(new Object()));
-            appApi.registerModule(appModule);
+            Result<?> result = appApi.registerModule(appModule);
+            if(!result.isSuccess()) {
+                log.error("安装模块 {} 出错: {}", MODULE_IDENTITY, result.getMessage());
+            }
+            else {
+                log.info("安装模块 {} 成功", MODULE_IDENTITY);
+            }
         }
         UserTokenContext.remove();
     }
