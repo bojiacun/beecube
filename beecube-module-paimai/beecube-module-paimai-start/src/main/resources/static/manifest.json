@@ -50,6 +50,9 @@
 
     ]
   },
+  "resources": {
+    "ui": "/beecube-paimai/resources/ui"
+  },
   "installUrl": "/beecube-paimai/install",
   "uninstallUrl": "/beecube-paimai/uninstall",
   "upgradeUrl": "/beecube-paimai/upgrade"

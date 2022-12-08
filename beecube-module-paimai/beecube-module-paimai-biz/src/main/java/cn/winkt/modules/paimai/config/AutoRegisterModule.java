@@ -65,6 +65,10 @@ public class AutoRegisterModule implements ApplicationRunner {
                 log.info("安装模块 {} 成功", MODULE_IDENTITY);
             }
         }
+        else {
+            //升级操作
+
+        }
         UserTokenContext.remove();
     }
     /**
