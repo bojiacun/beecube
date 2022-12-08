@@ -2,7 +2,7 @@ import {Button, Card, Col, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {DefaultListSearchParams} from "~/utils/utils";
+import {DefaultListSearchParams, handleSaveResult} from "~/utils/utils";
 import FigureImage from "react-bootstrap/FigureImage";
 
 const semver = require("semver");
@@ -12,6 +12,9 @@ const AppModuleList = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const searchFetcher = useFetcher();
+    const installFetcher = useFetcher();
+    const uninstallFetcher = useFetcher();
+    const upgradeFetcher = useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
@@ -21,10 +24,23 @@ const AppModuleList = () => {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
+
+    useEffect(() => {
+        if (installFetcher.type === 'done' && installFetcher.data) {
+            handleSaveResult(installFetcher.data);
+        }
+    }, [installFetcher.state]);
+
+
+
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
         loadData();
+    }
+
+    const handleOnInstall = (m:any) => {
+        installFetcher.submit({}, {method: "put", action: "/app/install/"+m.id});
     }
 
 
@@ -43,9 +59,9 @@ const AppModuleList = () => {
                                     <h5 className={'text-bold text-lg'}>{m.name}</h5>
                                     <div className={'text-muted'} style={{marginBottom: '0.5rem'}}>{m.version}</div>
                                     <div>
-                                        {m.status == 0 && <Button variant={'primary'} size={'sm'}>安装</Button>}
-                                        {m.status == 1 && <Button variant={'danger'} size={'sm'}>卸载</Button>}
-                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button variant={'light'}>升级</Button>}
+                                        {m.status == 0 && <Button onClick={()=>handleOnInstall(m)} disabled={installFetcher.state === 'submitting'} variant={'primary'} size={'sm'}>安装</Button>}
+                                        {m.status == 1 && <Button disabled={uninstallFetcher.state === 'submitting'} variant={'danger'} size={'sm'}>卸载</Button>}
+                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button disabled={upgradeFetcher.state === 'submitting'} variant={'light'}>升级</Button>}
                                     </div>
                                 </div>
                             </Col>

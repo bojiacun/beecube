@@ -105,6 +105,16 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		//安装路由
 
+		//安装菜单
+
+		//调用模块安装方法
+
+		//执行安装成功后续操作
+
+		appModule.setStatus(1);
+
+		appModuleService.save(appModule);
+
 
 		return Result.OK(true);
 	}
