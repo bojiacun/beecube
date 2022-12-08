@@ -109,6 +109,7 @@ export const API_USER_DEPARTMENT_DELETE = `${BASE_URL}/jeecg-system/sys/user/del
 
 export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_INSTALL = `${BASE_URL}/beecube-app/app/modules/install`;
+export const API_APP_MODULE_UNINSTALL = `${BASE_URL}/beecube-app/app/modules/uninstall`;
 export const API_APP_LIST = `${BASE_URL}/beecube-app/app/list`;
 
 export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;
