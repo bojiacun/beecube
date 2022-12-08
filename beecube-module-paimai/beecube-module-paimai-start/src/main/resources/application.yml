@@ -1,12 +1,14 @@
 server:
-  port: 7010
+  port: 7011
 spring:
+  profiles:
+    active: dev
   application:
-    name: jeecg-paimai
+    name: beecube-paimai
   config:
     import:
       - optional:nacos:jeecg.yaml
-      - optional:nacos:jeecg-@profile.name@.yaml
+
   cloud:
     nacos:
       config:

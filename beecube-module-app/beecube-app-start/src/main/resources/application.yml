@@ -1,12 +1,13 @@
 server:
   port: 7010
 spring:
+  profiles:
+    active: dev
   application:
     name: beecube-app
   config:
     import:
       - optional:nacos:jeecg.yaml
-      - optional:nacos:jeecg-@profile.name@.yaml
 
   cloud:
     nacos:
