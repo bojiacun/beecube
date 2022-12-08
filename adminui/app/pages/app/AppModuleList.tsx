@@ -26,10 +26,10 @@ const AppModuleList = () => {
     }, [searchFetcher.state]);
 
     useEffect(() => {
-        if (installFetcher.type === 'done' && installFetcher.data) {
+        if (installFetcher.data) {
             handleSaveResult(installFetcher.data);
         }
-    }, [installFetcher.state]);
+    }, [installFetcher.data]);
 
 
 
