@@ -118,6 +118,32 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		return Result.OK(true);
 	}
+	@PutMapping("/uninstall/{id}")
+	@AutoLog(value = "应用模块-卸载")
+	@ApiOperation(value="应用模块-卸载", notes="应用模块-卸载")
+	public Result<?> uninstallModule(@PathVariable String id) {
+		AppModule appModule = appModuleService.getById(id);
+		if(appModule == null) {
+			throw new JeecgBootException("找不到模块 "+id);
+		}
+		if(appModule.getStatus() == null || appModule.getStatus() != 1) {
+			throw new JeecgBootException("模块状态异常，不可卸载");
+		}
+		JSONObject manifest = JSONObject.parseObject(appModule.getManifest());
+		if(manifest == null) {
+			throw new JeecgBootException("没有找到模块的安装信息");
+		}
+
+		//卸载路由
+		//卸载菜单
+		//调用模块卸载方法
+		//执行卸载后操作
+		appModule.setStatus(2);
+
+		appModuleService.updateById(appModule);
+
+		return Result.OK(true);
+	}
 
 	/**
 	 * 编辑
