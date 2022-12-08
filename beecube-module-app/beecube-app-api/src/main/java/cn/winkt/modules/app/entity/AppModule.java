@@ -74,7 +74,7 @@ public class AppModule {
 	/**安装信息*/
 	@Excel(name = "安装信息", width = 15)
     @ApiModelProperty(value = "安装信息")
-	private java.lang.Object manifest;
+	private java.lang.String manifest;
 	/**模块注册时间*/
 	@Excel(name = "模块注册时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

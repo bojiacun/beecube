@@ -3,6 +3,8 @@ package cn.winkt.modules.app.controller;
 import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -72,6 +74,8 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	}
 
 	@PostMapping("/register")
+	@AutoLog(value = "应用模块-注册")
+	@ApiOperation(value="应用模块-注册", notes="应用模块-注册")
 	public Result<?> register(@RequestBody AppModule appModule) {
 		if(appModuleService.queryByIdentify(appModule.getIdentify()) != null) {
 			throw new JeecgBootException("模块已经注册，请勿重复注册");
@@ -79,7 +83,32 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		appModuleService.save(appModule);
 		return Result.OK("注册成功");
 	}
-	
+
+	@PutMapping("/install/{id}")
+	@AutoLog(value = "应用模块-安装")
+	@ApiOperation(value="应用模块-安装", notes="应用模块-安装")
+	public Result<?> installModule(@PathVariable String id) {
+		AppModule appModule = appModuleService.getById(id);
+		if(appModule == null) {
+			throw new JeecgBootException("找不到模块 "+id);
+		}
+		if(appModule.getStatus() == null || appModule.getStatus() != 0) {
+			throw new JeecgBootException("模块状态异常，不可安装");
+		}
+		JSONObject manifest = JSONObject.parseObject(appModule.getManifest());
+		if(manifest == null) {
+			throw new JeecgBootException("模块无可安装信息");
+		}
+
+
+		//以下执行模块安装操作
+
+		//安装路由
+
+
+		return Result.OK(true);
+	}
+
 	/**
 	 * 编辑
 	 *
@@ -138,7 +167,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 	@GetMapping(value = "/queryByIdentify")
 	@AutoLog(value = "应用模块-通过identify查询")
-	@ApiOperation(value="应用模块-通过identify查询", notes="应用模块-通过indentify查询")
+	@ApiOperation(value="应用模块-通过identify查询", notes="应用模块-通过identify查询")
 	public boolean queryByIdentify(@RequestParam(name = "identify") String identify) {
 		return appModuleService.queryByIdentify(identify) != null;
 	}
