@@ -238,7 +238,6 @@ export default function App() {
                         </motion.div>
                     </AnimatePresence>
                 </Layout>
-                <ToastContainer />
                 <ClipLoader
                     color={'#3366CC'}
                     loading={loading}
@@ -254,6 +253,7 @@ export default function App() {
                 )}`,
             }}
         />
+        <ToastContainer />
         <Scripts/>
         <LiveReload/>
         </body>

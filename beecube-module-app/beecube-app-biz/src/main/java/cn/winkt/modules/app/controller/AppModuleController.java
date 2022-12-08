@@ -113,7 +113,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		appModule.setStatus(1);
 
-		appModuleService.save(appModule);
+		appModuleService.updateById(appModule);
 
 
 		return Result.OK(true);
