@@ -137,6 +137,8 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	}
 
 	@GetMapping(value = "/queryByIdentify")
+	@AutoLog(value = "应用模块-通过identify查询")
+	@ApiOperation(value="应用模块-通过identify查询", notes="应用模块-通过indentify查询")
 	public boolean queryByIdentify(@RequestParam(name = "identify") String identify) {
 		return appModuleService.queryByIdentify(identify) != null;
 	}

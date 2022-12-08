@@ -11,12 +11,14 @@ import org.jeecg.modules.app.api.AppApi;
 import org.jeecg.modules.app.entity.AppModule;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Component
 public class AutoRegisterModule implements ApplicationRunner {
@@ -34,9 +36,9 @@ public class AutoRegisterModule implements ApplicationRunner {
             AppModule appModule = new AppModule();
             appModule.setIdentify(MODULE_IDENTITY);
             appModule.setName("汇智拍卖");
-            File file = ResourceUtils.getFile("static/logo.jpeg");
-            FileInputStream imageStream = new FileInputStream(file);
-            byte[] buffer = new byte[(int)file.length()];
+            ClassPathResource logoResource = new ClassPathResource("static/logo.jpeg");
+            InputStream imageStream = logoResource.getInputStream();
+            byte[] buffer = new byte[(int)logoResource.getFile().length()];
             IOUtils.readFully(imageStream, buffer);
             imageStream.close();
             appModule.setLogo(new String(Base64.encodeBase64(buffer)));
@@ -60,7 +62,7 @@ public class AutoRegisterModule implements ApplicationRunner {
         RedisUtil redisUtil = SpringContextUtils.getBean(RedisUtil.class);
         //模拟登录生成临时Token
         //参数说明：第一个参数是用户名、第二个参数是密码的加密串
-        String token = JwtUtil.sign("??", "??");
+        String token = JwtUtil.sign("admin","cb362cfeefbf3d8d");
         // 设置Token缓存有效时间为 5 分钟
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
