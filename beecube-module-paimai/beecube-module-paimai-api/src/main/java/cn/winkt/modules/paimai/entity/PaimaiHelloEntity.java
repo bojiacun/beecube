@@ -1,4 +1,4 @@
-package org.jeecg.modules.paimai.entity;
+package cn.winkt.modules.paimai.entity;
 import lombok.Data;
 
 

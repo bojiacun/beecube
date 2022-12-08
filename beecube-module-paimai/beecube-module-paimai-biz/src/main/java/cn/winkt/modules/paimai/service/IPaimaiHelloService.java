@@ -1,7 +1,7 @@
-package org.jeecg.modules.paimai.service;
+package cn.winkt.modules.paimai.service;
 
+import cn.winkt.modules.paimai.entity.PaimaiHelloEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.jeecg.modules.paimai.entity.PaimaiHelloEntity;
 
 /**
  * 测试接口

@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"org.jeecg", "cn.winkt"})
 @EnableFeignClients
 @EnableScheduling
 public class BeecubeAppCloudApplication implements CommandLineRunner {

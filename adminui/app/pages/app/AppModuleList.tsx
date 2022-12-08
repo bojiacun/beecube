@@ -37,7 +37,7 @@ const AppModuleList = () => {
                         return (
                             <Col sm={12} md={3} lg={2} key={m.id}>
                                 <div className={'module-box d-flex flex-column align-items-center justify-space-around'}>
-                                    <FigureImage src={m.logo} width={80} height={80} />
+                                    <FigureImage src={m.logo} width={60} height={60} />
                                     <h5 className={'text-bold text-lg'}>{m.name}</h5>
                                     <div className={'text-muted'}>{m.version}</div>
                                     <div>

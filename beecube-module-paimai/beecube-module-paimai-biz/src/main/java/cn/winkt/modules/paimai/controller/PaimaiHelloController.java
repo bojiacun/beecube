@@ -1,9 +1,8 @@
-package org.jeecg.modules.paimai.controller;
+package cn.winkt.modules.paimai.controller;
 
+import cn.winkt.modules.paimai.service.IPaimaiHelloService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.jeecg.modules.paimai.entity.PaimaiHelloEntity;
-import org.jeecg.modules.paimai.service.IPaimaiHelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

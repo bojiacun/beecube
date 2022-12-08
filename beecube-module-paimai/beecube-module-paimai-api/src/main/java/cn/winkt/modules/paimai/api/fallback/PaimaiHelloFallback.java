@@ -1,7 +1,7 @@
-package org.jeecg.modules.paimai.api.fallback;
+package cn.winkt.modules.paimai.api.fallback;
 
+import cn.winkt.modules.paimai.api.PaimaiHelloApi;
 import org.springframework.cloud.openfeign.FallbackFactory;
-import org.jeecg.modules.paimai.api.PaimaiHelloApi;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;

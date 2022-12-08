@@ -1,4 +1,4 @@
-package org.jeecg;
+package cn.winkt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +9,7 @@ import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"org.jeecg", "cn.winkt"})
 @EnableFeignClients
 public class BeecubePaimaiCloudApplication implements CommandLineRunner {
     @Autowired

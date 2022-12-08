@@ -1,4 +1,4 @@
-package org.jeecg.modules.paimai.vo;
+package cn.winkt.modules.paimai.vo;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
-package org.jeecg.modules.paimai.mapper;
+package cn.winkt.modules.paimai.mapper;
 
+import cn.winkt.modules.paimai.entity.PaimaiHelloEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.jeecg.modules.paimai.entity.PaimaiHelloEntity;
 
 
 public interface PaimaiHelloMapper extends BaseMapper<PaimaiHelloEntity> {

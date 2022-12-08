@@ -1,4 +1,4 @@
-package org.jeecg.modules.paimai.config;
+package cn.winkt.modules.paimai.config;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
