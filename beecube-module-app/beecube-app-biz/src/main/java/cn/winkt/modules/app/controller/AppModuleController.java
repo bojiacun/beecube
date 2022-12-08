@@ -92,7 +92,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		if(appModule == null) {
 			throw new JeecgBootException("找不到模块 "+id);
 		}
-		if(appModule.getStatus() == null || appModule.getStatus() != 0) {
+		if(appModule.getStatus() == null || appModule.getStatus() == 1) {
 			throw new JeecgBootException("模块状态异常，不可安装");
 		}
 		JSONObject manifest = JSONObject.parseObject(appModule.getManifest());

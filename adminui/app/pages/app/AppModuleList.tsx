@@ -27,13 +27,13 @@ const AppModuleList = () => {
 
     useEffect(() => {
         if (installFetcher.data) {
-            handleSaveResult(installFetcher.data);
+            handleSaveResult(installFetcher.data, '安装成功');
             loadData();
         }
     }, [installFetcher.data]);
     useEffect(() => {
         if (uninstallFetcher.data) {
-            handleSaveResult(uninstallFetcher.data);
+            handleSaveResult(uninstallFetcher.data, '卸载成功');
             loadData();
         }
     }, [uninstallFetcher.data]);
