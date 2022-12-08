@@ -38,10 +38,16 @@ public class AutoRegisterModule implements ApplicationRunner {
             appModule.setIdentify(MODULE_IDENTITY);
             appModule.setName("汇智拍卖");
             ClassPathResource logoResource = new ClassPathResource("static/logo.jpeg");
+            ClassPathResource manifestResouce = new ClassPathResource("static/manifest.json");
             InputStream imageStream = logoResource.getInputStream();
             byte[] buffer = new byte[(int)logoResource.getFile().length()];
             IOUtils.readFully(imageStream, buffer);
             imageStream.close();
+            byte[] manifestBuffer = new byte[(int)manifestResouce.getFile().length()];
+            IOUtils.readFully(manifestResouce.getInputStream(), manifestBuffer);
+            manifestResouce.getInputStream().close();
+
+
             appModule.setLogo("data:image/jpeg;base64,"+new String(Base64.encodeBase64(buffer)));
             appModule.setAuthor("Mr Bo");
             appModule.setStatus(0);
@@ -50,7 +56,7 @@ public class AutoRegisterModule implements ApplicationRunner {
             appModule.setSupportDouyin(0);
             appModule.setVersion("1.0.0");
             appModule.setNewVersion("1.0.0");
-            appModule.setManifest(JSON.toJSONString(new Object()));
+            appModule.setManifest(new String(manifestBuffer));
             Result<?> result = appApi.registerModule(appModule);
             if(!result.isSuccess()) {
                 log.error("安装模块 {} 出错: {}", MODULE_IDENTITY, result.getMessage());
