@@ -1,4 +1,4 @@
-import {Card, Col, Row} from "react-bootstrap";
+import {Button, Card, Col, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -35,11 +35,14 @@ const AppModuleList = () => {
                 <Row>
                     {list?.records.map((m:any)=>{
                         return (
-                            <Col sm={1} md={6} lg={9}>
-                                <div className={'module-box d-flex flex-columns align-items-center justify-space-around'}>
+                            <Col sm={12} md={3} lg={2} key={m.id}>
+                                <div className={'module-box d-flex flex-column align-items-center justify-space-around'}>
                                     <FigureImage src={m.logo} width={80} height={80} />
-                                    <div className={'text-bold text-lg'}>{m.name}</div>
-                                    <div className={'text-gray text-sm'}>{m.version}</div>
+                                    <h5 className={'text-bold text-lg'}>{m.name}</h5>
+                                    <div className={'text-muted'}>{m.version}</div>
+                                    <div>
+                                        {m.status == 0 && <Button variant={'primary'} size={'sm'}>安装</Button>}
+                                    </div>
                                 </div>
                             </Col>
                         );

@@ -1,5 +1,6 @@
 package org.jeecg.modules.paimai.config;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.jeecg.common.config.mqtoken.UserTokenContext;
@@ -41,13 +42,15 @@ public class AutoRegisterModule implements ApplicationRunner {
             byte[] buffer = new byte[(int)logoResource.getFile().length()];
             IOUtils.readFully(imageStream, buffer);
             imageStream.close();
-            appModule.setLogo(new String(Base64.encodeBase64(buffer)));
+            appModule.setLogo("data:image/jpeg;base64,"+new String(Base64.encodeBase64(buffer)));
             appModule.setAuthor("Mr Bo");
             appModule.setStatus(0);
             appModule.setSupportWechat(1);
             appModule.setSupportH5(1);
+            appModule.setSupportDouyin(0);
             appModule.setVersion("1.0.0");
-            appModule.setManifest("");
+            appModule.setNewVersion("1.0.0");
+            appModule.setManifest(JSON.toJSONString(new Object()));
             appApi.registerModule(appModule);
         }
         UserTokenContext.remove();
