@@ -38,6 +38,14 @@ const GatewayEdit = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         console.log(values);
+        if(!_.isString(values.filters)) {
+            values.filters = JSON.stringify(values.filters);
+        }
+        if(!_.isString(values.predicates)) {
+            values.predicates = JSON.stringify(values.predicates);
+        }
+        // values.filters = JSON.stringify(values.filters);
+        // values.predicates = JSON.stringify(values.predicates);
         postFetcher.submit(values, {method: 'post', action: '/monitor/gateway'});
     }
     useEffect(() => {

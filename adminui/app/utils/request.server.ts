@@ -142,15 +142,19 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers = options.headers || {};
     options.headers['X-Access-Token'] = user.token;
     options.headers['Authorization'] = user.token;
+    if(!options.headers['Content-Type']) {
+        options.headers['Content-Type'] = 'application/json';
+    }
     const res = await fetch(url, options);
+    if(res.status != 200) {
+        throw new Response(res.statusText, {status: 500});
+    }
     const result = await res.json();
-    if(result.code === 401) {
+    if (result.code === 401) {
         throw new Response(result.message, {status: 401});
-    }
-    else if(result.code == 510) {
+    } else if (result.code == 510) {
         throw new Response(result.message, {status: 403});
-    }
-    else if(result.code == 403) {
+    } else if (result.code == 403) {
         throw new Response(result.message, {status: 403});
     }
     return result;
