@@ -1,9 +1,13 @@
 package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.vo.AppGateway;
+import cn.winkt.modules.app.vo.AppManifest;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
@@ -36,6 +40,9 @@ import io.swagger.annotations.ApiOperation;
 public class AppModuleController extends JeecgController<AppModule, IAppModuleService> {
 	@Autowired
 	private IAppModuleService appModuleService;
+
+	@Resource
+	private SystemApi systemApi;
 	
 	/**
 	 * 分页列表查询
@@ -102,8 +109,11 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 
 		//以下执行模块安装操作
+		AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
 
 		//安装路由
+		AppGateway appGateway = appManifest.getGateway();
+		systemApi.updateAll(appGateway);
 
 		//安装菜单
 
