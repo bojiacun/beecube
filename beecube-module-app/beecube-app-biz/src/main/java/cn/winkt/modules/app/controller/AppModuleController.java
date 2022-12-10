@@ -9,6 +9,7 @@ import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
 import com.alibaba.fastjson.JSONObject;
+import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -43,7 +44,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 	@Resource
 	private SystemApi systemApi;
-	
+
 	/**
 	 * 分页列表查询
 	 *
