@@ -45,6 +45,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@Resource
 	private SystemApi systemApi;
 
+
 	/**
 	 * 分页列表查询
 	 *
