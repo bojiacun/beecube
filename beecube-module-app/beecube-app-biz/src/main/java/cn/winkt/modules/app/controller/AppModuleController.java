@@ -113,9 +113,17 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		//安装路由
 		AppGateway appGateway = appManifest.getGateway();
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("router", appGateway);
-		systemApi.updateAll(jsonObject);
+		JSONObject appGatewayJson = new JSONObject();
+		appGatewayJson.put("name", appGateway.getName());
+		appGatewayJson.put("status", appGateway.getStatus());
+		appGatewayJson.put("filters", JSONObject.toJSONString(appGateway.getFilters()));
+		appGatewayJson.put("predicates", JSONObject.toJSONString(appGateway.getPredicates()));
+		appGatewayJson.put("routerId", appGateway.getRouterId());
+		appGatewayJson.put("uri", appGateway.getUri());
+
+		JSONObject postData = new JSONObject();
+		postData.put("router", appGatewayJson);
+		systemApi.updateAll(postData);
 
 		//安装菜单
 
