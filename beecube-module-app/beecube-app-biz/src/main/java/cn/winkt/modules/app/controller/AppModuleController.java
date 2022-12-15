@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -151,12 +152,19 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		if(appModule.getStatus() == null || appModule.getStatus() != 1) {
 			throw new JeecgBootException("模块状态异常，不可卸载");
 		}
-		JSONObject manifest = JSONObject.parseObject(appModule.getManifest());
-		if(manifest == null) {
+		AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
+		if(appManifest == null) {
 			throw new JeecgBootException("没有找到模块的安装信息");
 		}
-
+		Result<?> result = systemApi.gatewayList();
+		List<JSONObject> gateways = (List<JSONObject>) result.getResult();
 		//卸载路由
+		gateways.forEach(o -> {
+			if(o.getString("routerId").equals(appManifest.getGateway().getRouterId())) {
+				String deleteId = o.getString("id");
+				systemApi.delete(deleteId);
+			}
+		});
 		//卸载菜单
 		//调用模块卸载方法
 		//执行卸载后操作
