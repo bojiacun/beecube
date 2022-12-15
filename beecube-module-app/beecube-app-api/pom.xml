@@ -13,7 +13,6 @@
             <groupId>org.jeecgframework.boot</groupId>
             <artifactId>jeecg-boot-base-core</artifactId>
         </dependency>
-
         <!-- feign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
