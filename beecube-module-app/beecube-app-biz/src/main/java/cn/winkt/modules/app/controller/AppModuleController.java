@@ -125,7 +125,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		JSONObject postData = new JSONObject();
 		postData.put("router", appGatewayJson);
-		systemApi.updateAll(postData);
+		systemApi.gatewayUpdateAll(postData);
 
 		//安装菜单
 
