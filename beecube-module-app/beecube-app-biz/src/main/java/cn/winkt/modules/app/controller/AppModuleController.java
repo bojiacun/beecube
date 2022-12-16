@@ -12,6 +12,7 @@ import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
 import cn.winkt.modules.app.vo.AppMenu;
 import com.alibaba.fastjson.JSONObject;
+import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
@@ -120,6 +121,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			throw new JeecgBootException("模块无可安装信息");
 		}
 
+		log.info("事务XID为：{}", RootContext.getXID());
 
 		//以下执行模块安装操作
 		AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);

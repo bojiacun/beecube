@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -364,6 +365,7 @@ public class SysPermissionController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@Transactional(rollbackFor = Exception.class)
 	public Result<SysPermission> add(@RequestBody SysPermission permission) {
+		log.info("事务XID为：{}", RootContext.getXID());
 		Result<SysPermission> result = new Result<SysPermission>();
 		try {
 			permission = PermissionDataUtil.intelligentProcessData(permission);
