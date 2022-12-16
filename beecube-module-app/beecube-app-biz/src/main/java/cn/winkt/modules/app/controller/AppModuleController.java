@@ -12,6 +12,7 @@ import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
 import cn.winkt.modules.app.vo.AppMenu;
 import com.alibaba.fastjson.JSONObject;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
@@ -103,6 +104,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@PutMapping("/install/{id}")
 	@AutoLog(value = "应用模块-安装")
 	@ApiOperation(value="应用模块-安装", notes="应用模块-安装")
+	@GlobalTransactional
 	public Result<?> installModule(@PathVariable String id) {
 		AppModule appModule = appModuleService.getById(id);
 		if(appModule == null) {

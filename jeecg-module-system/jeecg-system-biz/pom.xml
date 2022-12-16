@@ -23,7 +23,11 @@
 			<groupId>org.jeecgframework.boot</groupId>
 			<artifactId>hibernate-re</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.jeecgframework.boot</groupId>
+			<artifactId>jeecg-boot-starter-seata</artifactId>
+			<version>${jeecgboot.version}</version>
+		</dependency>
 		<!-- 企业微信/钉钉 api -->
 		<dependency>
 			<groupId>org.jeecgframework</groupId>

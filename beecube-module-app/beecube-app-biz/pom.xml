@@ -14,6 +14,11 @@
             <artifactId>beecube-app-api</artifactId>
             <version>${beecube.app.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jeecgframework.boot</groupId>
+            <artifactId>jeecg-boot-starter-seata</artifactId>
+            <version>${jeecgboot.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->
