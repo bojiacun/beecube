@@ -65,6 +65,8 @@
         <module>jeecg-boot-base-core</module>
         <module>jeecg-module-demo</module>
         <module>jeecg-module-system</module>
+		<module>beecube-module-app</module>
+		<module>beecube-module-paimai</module>
 	</modules>
 
 	<repositories>
