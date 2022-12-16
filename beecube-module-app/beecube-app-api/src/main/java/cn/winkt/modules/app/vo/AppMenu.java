@@ -19,7 +19,7 @@ public class AppMenu {
     private Boolean internalOrExternal = false;
     private Boolean leaf = false;
     private Boolean route = true;
-    private Boolean status = true;
+    private String status = "1";
     private String url;
     private AppMenu[] children;
 }

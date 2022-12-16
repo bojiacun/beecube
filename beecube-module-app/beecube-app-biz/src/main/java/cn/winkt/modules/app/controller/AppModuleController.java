@@ -174,11 +174,13 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		AppMenu searchMenu = new AppMenu();
 		searchMenu.setComponentName(appModule.getIdentify());
 		List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
-		List<String> ids = new ArrayList<>();
-		menus.forEach(m -> {
-			takeMenuId(m, ids);
-		});
-		systemApi.deleteBatch(String.join(",", ids));
+		if(menus != null) {
+			List<String> ids = new ArrayList<>();
+			menus.forEach(m -> {
+				takeMenuId(m, ids);
+			});
+			systemApi.deleteBatch(String.join(",", ids));
+		}
 		//调用模块卸载方法
 		//执行卸载后操作
 		appModule.setStatus(2);
