@@ -28,7 +28,7 @@ public interface SystemApi {
     Result<AppMenu> createMenu(@RequestBody AppMenu appMenu);
 
     @GetMapping("/sys/permission/list")
-    Result<List<AppMenu>> listMenu(AppMenu searchMenu);
+    Result<List<AppMenu>> listMenu(@RequestParam AppMenu searchMenu);
 
     @DeleteMapping("/sys/permission/deleteBatch")
     Result<AppMenu> deleteBatch(@RequestParam String ids);
