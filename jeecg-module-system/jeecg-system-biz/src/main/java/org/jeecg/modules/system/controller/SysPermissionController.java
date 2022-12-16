@@ -88,6 +88,9 @@ public class SysPermissionController {
 			if(oConvertUtils.isNotEmpty(sysPermission.getName())){
 				query.like(SysPermission::getName, sysPermission.getName());
 			}
+			if(oConvertUtils.isNotEmpty(sysPermission.getComponentName())){
+				query.eq(SysPermission::getComponentName, sysPermission.getComponentName());
+			}
 			List<SysPermission> list = sysPermissionService.list(query);
 			List<SysPermissionTree> treeList = new ArrayList<>();
 
