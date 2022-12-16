@@ -91,12 +91,14 @@ const UserEdit = (props: any) => {
                 userRoleFetcher.load(`/system/users/${model.id}/roles`);
                 userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
                 const newModel: any = {...model, selectedroles: '', selecteddeparts: ''};
-                const posts = newModel.post.split(',');
-                const postTexts = newModel.post_dictText.split(',');
+                const posts = newModel.post?.split(',');
+                const postTexts = newModel.post_dictText?.split(',') || [];
                 const postValueOptions: any[] = [];
-                posts.forEach((v: any, i: number) => {
-                    postValueOptions.push({value: v, label: postTexts[i]});
-                });
+                if(posts) {
+                    posts.forEach((v: any, i: number) => {
+                        postValueOptions.push({value: v, label: postTexts[i]??''});
+                    });
+                }
                 setPostValue(postValueOptions);
             }
         }
