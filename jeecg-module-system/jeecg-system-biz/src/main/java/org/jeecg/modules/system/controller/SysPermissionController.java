@@ -363,6 +363,7 @@ public class SysPermissionController {
 		try {
 			permission = PermissionDataUtil.intelligentProcessData(permission);
 			sysPermissionService.addPermission(permission);
+			result.setResult(permission);
 			result.success("添加成功！");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -383,6 +384,7 @@ public class SysPermissionController {
 		try {
 			permission = PermissionDataUtil.intelligentProcessData(permission);
 			sysPermissionService.editPermission(permission);
+			result.setResult(permission);
 			result.success("修改成功！");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
