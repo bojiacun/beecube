@@ -22,6 +22,7 @@ import org.jeecg.modules.system.model.TreeModel;
 import org.jeecg.modules.system.service.*;
 import org.jeecg.modules.system.util.PermissionDataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -361,6 +362,7 @@ public class SysPermissionController {
 	 */
 	//@RequiresRoles({ "admin" })
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@Transactional(rollbackFor = Exception.class)
 	public Result<SysPermission> add(@RequestBody SysPermission permission) {
 		Result<SysPermission> result = new Result<SysPermission>();
 		try {

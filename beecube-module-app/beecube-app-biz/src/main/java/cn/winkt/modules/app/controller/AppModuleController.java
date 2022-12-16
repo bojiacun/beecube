@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -104,7 +105,8 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@PutMapping("/install/{id}")
 	@AutoLog(value = "应用模块-安装")
 	@ApiOperation(value="应用模块-安装", notes="应用模块-安装")
-	@GlobalTransactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
+	@GlobalTransactional
 	public Result<?> installModule(@PathVariable String id) {
 		AppModule appModule = appModuleService.getById(id);
 		if(appModule == null) {
