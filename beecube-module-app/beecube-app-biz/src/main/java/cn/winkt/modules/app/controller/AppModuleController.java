@@ -179,8 +179,8 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			menus.forEach(m -> {
 				takeMenuId(m, ids);
 			});
-//			systemApi.deleteBatch(String.join(",", ids));
 			log.info("要删除的菜单有 {}", String.join(",", ids));
+			systemApi.deleteBatch(String.join(",", ids));
 		}
 		//调用模块卸载方法
 		//执行卸载后操作
