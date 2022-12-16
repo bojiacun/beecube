@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
@@ -170,6 +171,14 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			}
 		});
 		//卸载菜单
+		AppMenu searchMenu = new AppMenu();
+		searchMenu.setComponentName(appModule.getIdentify());
+		List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
+		List<String> ids = new ArrayList<>();
+		menus.forEach(m -> {
+			takeMenuId(m, ids);
+		});
+		systemApi.deleteBatch(String.join(",", ids));
 		//调用模块卸载方法
 		//执行卸载后操作
 		appModule.setStatus(2);
@@ -276,6 +285,14 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	  if(menu.getChildren() != null) {
 		  Arrays.stream(menu.getChildren()).forEach(child -> {
 			  installMenu(child, appModule, p);
+		  });
+	  }
+  }
+  private void takeMenuId(AppMenu menu, List<String> ids) {
+	  ids.add(menu.getId());
+	  if(menu.getChildren() != null) {
+		  Arrays.stream(menu.getChildren()).forEach(m -> {
+			  takeMenuId(m, ids);
 		  });
 	  }
   }

@@ -8,6 +8,8 @@ import org.jeecg.common.constant.ServiceNameConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
 public interface SystemApi {
 
@@ -24,4 +26,10 @@ public interface SystemApi {
 
     @PostMapping("/sys/permission/add")
     Result<AppMenu> createMenu(@RequestBody AppMenu appMenu);
+
+    @GetMapping("/sys/permission/list")
+    Result<List<AppMenu>> listMenu(AppMenu searchMenu);
+
+    @DeleteMapping("/sys/permission/deleteBatch")
+    Result<AppMenu> deleteBatch(@RequestParam String ids);
 }
