@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.ServiceNameConstants;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface SystemApi {
     Result<AppMenu> createMenu(@RequestBody AppMenu appMenu);
 
     @GetMapping("/sys/permission/list")
-    Result<List<AppMenu>> listMenu(@RequestParam AppMenu searchMenu);
+    Result<List<AppMenu>> listMenu(@SpringQueryMap AppMenu searchMenu);
 
     @DeleteMapping("/sys/permission/deleteBatch")
     Result<AppMenu> deleteBatch(@RequestParam String ids);
