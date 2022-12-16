@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
+import cn.winkt.modules.app.vo.AppMenu;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
@@ -129,6 +130,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		systemApi.gatewayUpdateAll(postData);
 
 		//安装菜单
+		Arrays.stream(appManifest.getMenus()).forEach(appMenu -> {
+			installMenu(appMenu, appModule, null);
+		});
 
 		//调用模块安装方法
 
@@ -261,4 +265,18 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
       return super.importExcel(request, response, AppModule.class);
   }
 
+
+
+  private void installMenu(AppMenu menu, AppModule appModule, AppMenu parent) {
+	  menu.setComponentName(appModule.getIdentify());
+	  if(parent != null) {
+		  menu.setParentId(parent.getId());
+	  }
+	  AppMenu p = systemApi.createMenu(menu).getResult();
+	  if(menu.getChildren() != null) {
+		  Arrays.stream(menu.getChildren()).forEach(child -> {
+			  installMenu(child, appModule, p);
+		  });
+	  }
+  }
 }
