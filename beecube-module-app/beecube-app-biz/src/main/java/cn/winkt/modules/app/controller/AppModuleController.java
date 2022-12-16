@@ -27,6 +27,7 @@ import org.jeecg.common.system.base.controller.JeecgController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 	@Resource
 	private SystemApi systemApi;
+
+	@Resource
+	private RestTemplate restTemplate;
 
 
 	/**
@@ -136,6 +140,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		});
 
 		//调用模块安装方法
+		restTemplate.put("lb://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
 
 		//执行安装成功后续操作
 
@@ -161,6 +166,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		if(appManifest == null) {
 			throw new JeecgBootException("没有找到模块的安装信息");
 		}
+		AppGateway appGateway = appManifest.getGateway();
 		Result<?> result = systemApi.gatewayList();
 		List<JSONObject> gateways = (List<JSONObject>) result.getResult();
 		//卸载路由
@@ -183,6 +189,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			systemApi.deleteBatch(String.join(",", ids));
 		}
 		//调用模块卸载方法
+		restTemplate.put("lb://"+ appGateway.getRouterId()+appManifest.getUninstallUrl(), null);
 		//执行卸载后操作
 		appModule.setStatus(2);
 
