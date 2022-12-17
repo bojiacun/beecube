@@ -145,7 +145,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		});
 
 		//调用模块安装方法
-		restTemplate.put("lb://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
+//		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
 
 		//执行安装成功后续操作
 
@@ -159,6 +159,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@PutMapping("/uninstall/{id}")
 	@AutoLog(value = "应用模块-卸载")
 	@ApiOperation(value="应用模块-卸载", notes="应用模块-卸载")
+	@GlobalTransactional
 	public Result<?> uninstallModule(@PathVariable String id) {
 		AppModule appModule = appModuleService.getById(id);
 		if(appModule == null) {
@@ -194,7 +195,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			systemApi.deleteBatch(String.join(",", ids));
 		}
 		//调用模块卸载方法
-		restTemplate.put("lb://"+ appGateway.getRouterId()+appManifest.getUninstallUrl(), null);
+//		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getUninstallUrl(), null);
 		//执行卸载后操作
 		appModule.setStatus(2);
 
