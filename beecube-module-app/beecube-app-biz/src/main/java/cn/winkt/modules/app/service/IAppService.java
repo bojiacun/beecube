@@ -1,6 +1,8 @@
 package cn.winkt.modules.app.service;
 
 import cn.winkt.modules.app.entity.App;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IAppService extends IService<App> {
-
+    IPage<App> selectPageJoinAppModule(IPage<App> page, Wrapper<App> queryWrapper);
 }

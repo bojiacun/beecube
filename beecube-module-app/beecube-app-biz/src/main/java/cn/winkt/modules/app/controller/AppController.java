@@ -53,7 +53,7 @@ public class AppController extends JeecgController<App, IAppService> {
 								   HttpServletRequest req) {
 		QueryWrapper<App> queryWrapper = QueryGenerator.initQueryWrapper(app, req.getParameterMap());
 		Page<App> page = new Page<App>(pageNo, pageSize);
-		IPage<App> pageList = appService.page(page, queryWrapper);
+		IPage<App> pageList = appService.selectPageJoinAppModule(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
