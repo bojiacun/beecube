@@ -5,19 +5,8 @@ import cn.winkt.modules.app.vo.AppModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.config.mqtoken.UserTokenContext;
-import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.RedisUtil;
-import org.jeecg.common.util.SpringContextUtils;
-import cn.winkt.modules.app.api.AppApi;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
