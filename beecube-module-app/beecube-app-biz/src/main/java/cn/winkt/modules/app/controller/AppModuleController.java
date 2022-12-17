@@ -12,6 +12,7 @@ import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
 import cn.winkt.modules.app.vo.AppMenu;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.jeecg.common.api.vo.Result;
@@ -75,7 +76,15 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		IPage<AppModule> pageList = appModuleService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "应用模块-所有可用模块")
+	 @ApiOperation(value="应用模块-所有可用模块", notes="应用模块-所有可用模块")
+	 @GetMapping(value = "/all")
+	 public Result<?> queryAllList() {
+		 LambdaQueryWrapper<AppModule> queryWrapper = new LambdaQueryWrapper<>();
+		 queryWrapper.eq(AppModule::getStatus, 1);
+		 List<AppModule> list = appModuleService.list(queryWrapper);
+		 return Result.OK(list);
+	 }
 	/**
 	 * 添加
 	 *
