@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.entity.App;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import cn.winkt.modules.app.service.IAppService;
@@ -47,6 +48,7 @@ public class AppController extends JeecgController<App, IAppService> {
 	@AutoLog(value = "应用实体类-分页列表查询")
 	@ApiOperation(value="应用实体类-分页列表查询", notes="应用实体类-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(App app,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
