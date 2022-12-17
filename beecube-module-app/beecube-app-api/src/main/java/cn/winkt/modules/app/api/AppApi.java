@@ -1,8 +1,8 @@
 package cn.winkt.modules.app.api;
 
 import cn.winkt.modules.app.constant.AppModuleConstants;
+import cn.winkt.modules.app.vo.AppModule;
 import org.jeecg.common.api.vo.Result;
-import cn.winkt.modules.app.entity.AppModule;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

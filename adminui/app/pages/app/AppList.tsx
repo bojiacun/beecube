@@ -29,8 +29,6 @@ const AppList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
-    const [showTrash, setShowTrash] = useState<boolean>(false);
-    const [passwordModel, setPasswordModel] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
@@ -83,9 +81,6 @@ const AppList = (props: any) => {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/users/delete?id=${row.id}`, replace: true});
                 });
-                break;
-            case 'password':
-                setPasswordModel(row);
                 break;
             case 'disable':
                 showDeleteAlert(function () {
@@ -218,7 +213,6 @@ const AppList = (props: any) => {
                                 onChange={handlePageSizeChanged}
                             />
                             <Button onClick={handleOnAdd} className={'mr-1'}><i className={'feather icon-plus'} />新建应用</Button>
-                            <Button variant={'light'} onClick={()=>setShowTrash(true)}><i className={'feather icon-trash-2'} />回收站</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -267,14 +261,6 @@ const AppList = (props: any) => {
             </Card>
             {editModal && <UserEdit model={editModal} onHide={()=>{
                 setEditModal(null);
-                loadData();
-            }} />}
-            {passwordModel && <UserPassword model={passwordModel} onHide={()=>{
-                setPasswordModel(null);
-                loadData();
-            }} />}
-            {showTrash && <UserTrash show={showTrash} onHide={()=>{
-                setShowTrash(false)
                 loadData();
             }} />}
         </>

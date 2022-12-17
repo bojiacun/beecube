@@ -1,6 +1,6 @@
 package cn.winkt.modules.paimai.config;
 
-import com.alibaba.fastjson.JSON;
+import cn.winkt.modules.app.vo.AppModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +11,6 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import cn.winkt.modules.app.api.AppApi;
-import cn.winkt.modules.app.entity.AppModule;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
