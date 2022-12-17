@@ -73,7 +73,7 @@ const ChildPermissionList = (props: any) => {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            style: {width: 180},
+            style: {width: 190},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>

@@ -144,10 +144,12 @@ const AppList = (props: any) => {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 180},
+            headerStyle: {width: 190},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={`/console?appid=${row.id}`} onClick={() => handleOnAction(row, 'edit')}>控制台</a>
+                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
