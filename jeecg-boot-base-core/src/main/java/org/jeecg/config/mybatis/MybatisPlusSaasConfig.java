@@ -26,7 +26,7 @@ import net.sf.jsqlparser.expression.LongValue;
  *
  */
 @Configuration
-@MapperScan(value={"org.jeecg.modules.**.mapper*", "cn.winkt.**.mapper*"})
+@MapperScan(value={"org.jeecg.modules.**.mapper*", "cn.winkt.modules.**.mapper*"})
 public class MybatisPlusSaasConfig {
     /**
      * tenant_id 字段名
