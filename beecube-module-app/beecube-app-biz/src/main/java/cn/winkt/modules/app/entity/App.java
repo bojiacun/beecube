@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -52,6 +53,7 @@ public class App {
 	/**应用状态,0是禁用，1是正常*/
 	@Excel(name = "应用状态,0是禁用，1是正常", width = 15)
     @ApiModelProperty(value = "应用状态,0是禁用，1是正常")
+	@Dict(dicCode = "app_status")
 	private java.lang.Integer status;
 	/**应用过期时间*/
 	@Excel(name = "应用过期时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
