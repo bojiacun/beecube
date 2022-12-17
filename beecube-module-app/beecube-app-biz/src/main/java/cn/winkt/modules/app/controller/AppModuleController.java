@@ -138,12 +138,15 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 		JSONObject postData = new JSONObject();
 		postData.put("router", appGatewayJson);
-		systemApi.gatewayUpdateAll(postData);
+//		systemApi.gatewayUpdateAll(postData);
 
 		//安装菜单
 		Arrays.stream(appManifest.getMenus()).forEach(appMenu -> {
 			installMenu(appMenu, appModule, null);
 		});
+		if(systemApi != null) {
+			throw new JeecgBootException("测试分布式事务");
+		}
 
 		//调用模块安装方法
 		restTemplate.put("lb://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
