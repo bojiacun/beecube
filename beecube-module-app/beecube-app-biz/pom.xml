@@ -14,7 +14,11 @@
             <artifactId>beecube-app-api</artifactId>
             <version>${beecube.app.version}</version>
         </dependency>
-
+        <!--system cloud api-->
+        <dependency>
+            <groupId>org.jeecgframework.boot</groupId>
+            <artifactId>jeecg-system-cloud-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->

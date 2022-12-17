@@ -1,5 +1,6 @@
 package cn.winkt;
 
+import org.jeecg.common.system.api.ISysBaseAPI;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +11,8 @@ import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.annotation.Resource;
 
 @SpringBootApplication(scanBasePackages = {"org.jeecg", "cn.winkt"})
 @EnableFeignClients

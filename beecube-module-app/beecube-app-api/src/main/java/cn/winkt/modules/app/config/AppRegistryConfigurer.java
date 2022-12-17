@@ -5,6 +5,7 @@ import cn.winkt.modules.app.vo.AppModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.config.mqtoken.UserTokenContext;
 import org.jeecg.common.constant.CommonConstant;
@@ -23,7 +24,6 @@ import java.io.InputStream;
 public abstract class AppRegistryConfigurer implements ApplicationRunner {
     @Resource
     protected AppApi appApi;
-
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
