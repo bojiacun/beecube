@@ -106,7 +106,6 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@PutMapping("/install/{id}")
 	@AutoLog(value = "应用模块-安装")
 	@ApiOperation(value="应用模块-安装", notes="应用模块-安装")
-	@Transactional(rollbackFor = Exception.class)
 	@GlobalTransactional
 	public Result<?> installModule(@PathVariable String id) {
 		AppModule appModule = appModuleService.getById(id);

@@ -363,7 +363,6 @@ public class SysPermissionController {
 	 */
 	//@RequiresRoles({ "admin" })
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@Transactional(rollbackFor = Exception.class)
 	public Result<SysPermission> add(@RequestBody SysPermission permission) {
 		log.info("事务XID为：{}", RootContext.getXID());
 		Result<SysPermission> result = new Result<SysPermission>();
