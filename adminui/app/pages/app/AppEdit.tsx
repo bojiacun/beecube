@@ -97,7 +97,7 @@ const AppEdit = (props: any) => {
                                             isClearable={false}
                                             isSearchable={false}
                                             isMulti={false}
-                                            disabled={model?.id}
+                                            isDisabled={model?.id}
                                         />
                                         <FormGroup>
                                             <FormLabel htmlFor={'endTime'}>过期日期</FormLabel>
