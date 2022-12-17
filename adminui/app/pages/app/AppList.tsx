@@ -111,6 +111,10 @@ const AppList = (props: any) => {
             }
         },
         {
+            text: '模块',
+            dataField: 'moduleName',
+        },
+        {
             text: '创建时间',
             dataField: 'createTime',
             headerStyle: {width: 200},
@@ -161,7 +165,7 @@ const AppList = (props: any) => {
     }
 
     const handleOnAdd = () => {
-        setEditModal({});
+        setEditModal({status: '1'});
     }
     return (
         <>

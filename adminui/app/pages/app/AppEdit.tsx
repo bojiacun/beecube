@@ -30,6 +30,7 @@ const AppEdit = (props: any) => {
 
     const appSchema = Yup.object().shape({
         name: Yup.string().required('必填字段'),
+        moduleId: Yup.string().required('必要字段')
     });
 
     const handleOnSubmit = (values: any) => {
@@ -71,7 +72,6 @@ const AppEdit = (props: any) => {
             <Modal
                 show={!!model}
                 onHide={onHide}
-                size={'lg'}
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
             >
@@ -102,6 +102,7 @@ const AppEdit = (props: any) => {
                                             <FormLabel htmlFor={'endTime'}>过期日期</FormLabel>
                                             <DateTimePicker inputName={'endTime'} />
                                         </FormGroup>
+                                        <BootstrapInput label={'备注'} name={'description'} rows={3} as={'textarea'} />
                                         <BootstrapRadioGroup  options={[{label: '正常', value: '1'},{label: '禁用', value: '0'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>
