@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM, configuration = FeignSeataInterceptor.class)
+@FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
 public interface SystemApi {
 
 
