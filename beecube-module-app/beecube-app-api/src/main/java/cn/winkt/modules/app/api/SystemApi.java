@@ -27,6 +27,12 @@ public interface SystemApi extends CommonAPI {
     @PostMapping("/sys/role/add")
     Result<AppRole> createRole(@RequestBody AppRole role);
 
+    @DeleteMapping("/sys/role/delete")
+    Result<?> deleteRole(@RequestParam String id);
+
+    @PostMapping("/sys/permission/saveRolePermission")
+    Result<String> saveRolePermissions(@RequestBody JSONObject jsonObject);
+
     @PostMapping("/sys/gatewayRoute/updateAll")
     Result<?> gatewayUpdateAll(JSONObject appGateway);
 
@@ -34,7 +40,7 @@ public interface SystemApi extends CommonAPI {
     Result<?> gatewayList();
 
     @DeleteMapping("/sys/gatewayRoute/delete")
-    Result<?> delete(@RequestParam String id);
+    Result<?> deleteGateway(@RequestParam String id);
 
 
     @PostMapping("/sys/permission/add")

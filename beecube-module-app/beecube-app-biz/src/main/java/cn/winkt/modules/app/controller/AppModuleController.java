@@ -3,12 +3,14 @@ package cn.winkt.modules.app.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.entity.AppModuleMenu;
+import cn.winkt.modules.app.entity.AppModuleRole;
 import cn.winkt.modules.app.entity.AppModuleRoute;
 import cn.winkt.modules.app.service.IAppModuleMenuService;
 import cn.winkt.modules.app.service.IAppModuleRouteService;
@@ -67,7 +69,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	private IAppModuleMenuService appModuleMenuService;
 
 	@Resource
-	private IAppModuleRoleService appModuleRuleService;
+	private IAppModuleRoleService appModuleRoleService;
 
 	/**
 	 * 分页列表查询
@@ -204,6 +206,20 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			AppRole role = systemApi.createRole(appManifest.getRole()).getResult();
 			if(role != null) {
 				//映射角色关系
+				AppModuleRole appModuleRole = new AppModuleRole();
+				appModuleRole.setModuleId(appModule.getId());
+				appModuleRole.setModuleName(appModule.getName());
+				appModuleRole.setRoleId(role.getId());
+				appModuleRole.setRoleName(role.getRoleName());
+
+				appModuleRoleService.save(appModuleRole);
+				//设置角色权限
+				JSONObject post = new JSONObject();
+				assert role != null;
+				post.put("roleId", role.getId());
+				post.put("permissionIds", "");
+				post.put("lastpermissionIds", String.join(",", ids));
+				systemApi.saveRolePermissions(post);
 			}
 		}
 
@@ -236,28 +252,27 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		if(appManifest == null) {
 			throw new JeecgBootException("没有找到模块的安装信息");
 		}
-		AppGateway appGateway = appManifest.getGateway();
-		Result<?> result = systemApi.gatewayList();
-		List<JSONObject> gateways = (List<JSONObject>) result.getResult();
 		//卸载路由
-		gateways.forEach(o -> {
-			if(o.getString("routerId").equals(appManifest.getGateway().getRouterId())) {
-				String deleteId = o.getString("id");
-				systemApi.delete(deleteId);
-			}
+		LambdaQueryWrapper<AppModuleRoute> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(AppModuleRoute::getModuleId, appModule.getId());
+		List<AppModuleRoute> moduleRoutes = appModuleRouteService.list(queryWrapper);
+		moduleRoutes.forEach(mr -> {
+			systemApi.deleteGateway(mr.getRouterId());
 		});
+
 		//卸载菜单
-		AppMenu searchMenu = new AppMenu();
-		searchMenu.setComponentName(appModule.getIdentify());
-		List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
-		if(menus != null) {
-			List<String> ids = new ArrayList<>();
-			menus.forEach(m -> {
-				takeMenuId(m, ids);
-			});
-			log.info("要删除的菜单有 {}", String.join(",", ids));
-			systemApi.deleteBatch(String.join(",", ids));
-		}
+		LambdaQueryWrapper<AppModuleMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+		menuLambdaQueryWrapper.eq(AppModuleMenu::getModuleId, appModule.getId());
+		List<AppModuleMenu> moduleMenus = appModuleMenuService.list(menuLambdaQueryWrapper);
+		systemApi.deleteBatch(moduleMenus.stream().map(AppModuleMenu::getMenuId).collect(Collectors.joining(",")));
+		//卸载角色
+		LambdaQueryWrapper<AppModuleRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+		roleLambdaQueryWrapper.eq(AppModuleRole::getModuleId, appModule.getId());
+		List<AppModuleRole> moduleRoles = appModuleRoleService.list(roleLambdaQueryWrapper);
+		moduleRoles.forEach(role -> {
+			systemApi.deleteRole(role.getRoleId());
+		});
+
 		//调用模块卸载方法
 //		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getUninstallUrl(), null);
 		//执行卸载后操作

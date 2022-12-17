@@ -28,7 +28,7 @@ public class AppModuleRole {
 	/**角色ID*/
 	@Excel(name = "角色ID", width = 15)
     @ApiModelProperty(value = "角色ID")
-	private java.lang.String ruleId;
+	private java.lang.String roleId;
 	/**模块名称*/
 	@Excel(name = "模块名称", width = 15)
     @ApiModelProperty(value = "模块名称")
@@ -36,5 +36,5 @@ public class AppModuleRole {
 	/**角色名称*/
 	@Excel(name = "角色名称", width = 15)
     @ApiModelProperty(value = "角色名称")
-	private java.lang.String ruleName;
+	private java.lang.String roleName;
 }
