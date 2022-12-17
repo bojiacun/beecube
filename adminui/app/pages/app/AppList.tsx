@@ -148,7 +148,7 @@ const AppList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={`/console?appid=${row.id}`} onClick={() => handleOnAction(row, 'edit')}>控制台</a>
+                        <a href={`/console?appid=${row.id}`} target={'_blank'}>控制台</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
