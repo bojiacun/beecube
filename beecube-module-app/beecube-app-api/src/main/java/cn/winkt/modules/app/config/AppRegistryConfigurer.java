@@ -29,6 +29,7 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         UserTokenContext.setToken(getTemporaryToken());
         String identity = getModuleName();
+        log.info("---检测模块是否已经注册---");
         if(!appApi.moduleIsRegistered(identity)) {
             AppModule appModule = buildModule();
             Result<?> result = appApi.registerModule(appModule);

@@ -94,9 +94,10 @@ const AppEdit = (props: any) => {
                                             label={'绑定模块'}
                                             options={modules.map((item: any) => ({label: item.name, value: item.id.toString()}))}
                                             placeholder={'选择模块'}
-                                            isClearable={true}
+                                            isClearable={false}
                                             isSearchable={false}
-                                            isMulti={true}
+                                            isMulti={false}
+                                            disabled={model?.id}
                                         />
                                         <FormGroup>
                                             <FormLabel htmlFor={'endTime'}>过期日期</FormLabel>
