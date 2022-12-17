@@ -46,7 +46,6 @@ public class App {
 	@Excel(name = "模块ID", width = 15)
     @ApiModelProperty(value = "模块ID")
 	private java.lang.String moduleId;
-	private String moduleName;
 	/**应用LOGO地址*/
 	@Excel(name = "应用LOGO地址", width = 15)
     @ApiModelProperty(value = "应用LOGO地址")

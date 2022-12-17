@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.vo.AppDTO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -54,8 +55,8 @@ public class AppController extends JeecgController<App, IAppService> {
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		QueryWrapper<App> queryWrapper = QueryGenerator.initQueryWrapper(app, req.getParameterMap());
-		Page<App> page = new Page<App>(pageNo, pageSize);
-		IPage<App> pageList = appService.selectPageJoinAppModule(page, queryWrapper);
+		Page<AppDTO> page = new Page<AppDTO>(pageNo, pageSize);
+		IPage<AppDTO> pageList = appService.selectPageJoinAppModule(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	

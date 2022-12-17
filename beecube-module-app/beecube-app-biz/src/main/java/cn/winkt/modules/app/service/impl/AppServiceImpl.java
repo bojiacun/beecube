@@ -3,6 +3,7 @@ package cn.winkt.modules.app.service.impl;
 import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.mapper.AppMapper;
 import cn.winkt.modules.app.service.IAppService;
+import cn.winkt.modules.app.vo.AppDTO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements IAppS
     @Resource
     private AppMapper appMapper;
     @Override
-    public IPage<App> selectPageJoinAppModule(IPage<App> page, Wrapper<App> queryWrapper) {
+    public IPage<AppDTO> selectPageJoinAppModule(IPage<AppDTO> page, Wrapper<App> queryWrapper) {
         return appMapper.selectPageJoinAppModule(page, queryWrapper);
     }
 }
