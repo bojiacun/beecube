@@ -10,18 +10,10 @@ import {
     showToastSuccess
 } from "~/utils/utils";
 import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
-import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {Field, Formik, Form as FormikForm} from "formik";
-import classNames from "classnames";
-import {AwesomeButton} from "react-awesome-button";
-import * as Yup from "yup";
-import TreePermissionList from "~/pages/system/roles/TreePermissionList";
-import UserEdit from "~/pages/system/roles/UserEdit";
-import UserPassword from "~/pages/system/users/UserPassword";
-import UserTrash from "~/pages/system/users/UserTrash";
+import AppEdit from "~/pages/app/AppEdit";
 
 
 const AppList = (props: any) => {
@@ -79,22 +71,8 @@ const AppList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/users/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/app/delete?id=${row.id}`, replace: true});
                 });
-                break;
-            case 'disable':
-                showDeleteAlert(function () {
-                    startPageLoading();
-                    //@ts-ignore
-                    disableFetcher.submit({ids: row.id, status: 2}, {method: 'put', action: `/system/users/frozen?ids=${row.id}`, replace: true});
-                }, '确定要冻结该用户吗', '冻结用户');
-                break;
-            case 'enable':
-                showDeleteAlert(function () {
-                    startPageLoading();
-                    //@ts-ignore
-                    enableFetcher.submit({ids: row.id, status: 1}, {method: 'put', action: `/system/users/frozen?ids=${row.id}`, replace: true});
-                }, '确定要解冻该用户吗', '解冻确认');
                 break;
         }
     }
@@ -133,14 +111,6 @@ const AppList = (props: any) => {
             }
         },
         {
-            text: '状态',
-            dataField: 'status_dictText',
-            headerStyle: {width: 100},
-            formatter: (cell:any, row:any) => {
-                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
-            }
-        },
-        {
             text: '创建时间',
             dataField: 'createTime',
             headerStyle: {width: 200},
@@ -148,6 +118,23 @@ const AppList = (props: any) => {
             onSort: handleSort,
             headerSortingClasses,
             sortFunc: emptySortFunc
+        },
+        {
+            text: '结束时间',
+            dataField: 'endTime',
+            headerStyle: {width: 200},
+            sort: true,
+            onSort: handleSort,
+            headerSortingClasses,
+            sortFunc: emptySortFunc
+        },
+        {
+            text: '状态',
+            dataField: 'status_dictText',
+            headerStyle: {width: 100},
+            formatter: (cell:any, row:any) => {
+                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
+            }
         },
         {
             text: '操作',
@@ -159,27 +146,7 @@ const AppList = (props: any) => {
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'password')}>密码</a>
-                        <span className={'divider'}/>
-                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
-                            <Dropdown.Toggle as={'span'} className={'noafter'}>
-                                <MoreVertical size={16} style={{marginTop: -2}}/>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {row.status == 2 ?
-                                    <Dropdown.Item eventKey={'enable'}>
-                                        <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>解冻</div>
-                                    </Dropdown.Item>
-                                    :
-                                <Dropdown.Item eventKey={'disable'}>
-                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>冻结</div>
-                                </Dropdown.Item>
-                                }
-                                <Dropdown.Item eventKey={'delete'}>
-                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
                 );
             }
@@ -259,7 +226,7 @@ const AppList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            {editModal && <UserEdit model={editModal} onHide={()=>{
+            {editModal && <AppEdit model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}

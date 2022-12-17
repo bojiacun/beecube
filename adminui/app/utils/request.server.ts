@@ -111,7 +111,11 @@ export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_ALL_LIST = `${BASE_URL}/beecube-app/app/modules/all`;
 export const API_APP_MODULE_INSTALL = `${BASE_URL}/beecube-app/app/modules/install`;
 export const API_APP_MODULE_UNINSTALL = `${BASE_URL}/beecube-app/app/modules/uninstall`;
+
 export const API_APP_LIST = `${BASE_URL}/beecube-app/app/list`;
+export const API_APP_DELETE = `${BASE_URL}/beecube-app/app/delete`;
+export const API_APP_ADD = `${BASE_URL}/beecube-app/app/add`;
+export const API_APP_EDIT = `${BASE_URL}/beecube-app/app/edit`;
 export const API_APP_HTTPTRACE_LIST = `${BASE_URL}/beecube-app/actuator/httptrace`;
 
 export const API_DATALOG_LIST = `${BASE_URL}/jeecg-system/sys/dataLog/list`;

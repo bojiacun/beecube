@@ -34,9 +34,9 @@ const AppEdit = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
+            postFetcher.submit(values, {method: 'post', action: '/app/edit'});
         } else {
-            postFetcher.submit(values, {method: 'post', action: '/system/users/add'});
+            postFetcher.submit(values, {method: 'post', action: '/app/add'});
         }
     }
     useEffect(() => {
