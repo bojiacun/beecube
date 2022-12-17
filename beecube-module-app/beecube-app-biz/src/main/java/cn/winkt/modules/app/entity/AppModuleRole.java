@@ -1,18 +1,11 @@
 package cn.winkt.modules.app.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
@@ -22,11 +15,11 @@ import org.jeecgframework.poi.excel.annotation.Excel;
  * @Version: V1.0
  */
 @Data
-@TableName("beecube_module_rules")
+@TableName("beecube_module_roles")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="beecube_module_rules对象", description="模块路由映射表")
-public class AppModuleRule {
+@ApiModel(value="beecube_module_roles对象", description="模块路由映射表")
+public class AppModuleRole {
     
 	/**模块ID*/
 	@Excel(name = "模块ID", width = 15)

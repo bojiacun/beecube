@@ -10,4 +10,5 @@ public class AppManifest {
     private String uninstallUrl;
     private String upgradeUrl;
     private AppResource resources;
+    private AppRole role;
 }

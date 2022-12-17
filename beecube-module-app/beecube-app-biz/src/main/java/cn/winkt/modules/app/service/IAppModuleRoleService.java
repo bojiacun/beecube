@@ -1,6 +1,6 @@
 package cn.winkt.modules.app.service;
 
-import org.jeecg.modules.app.entity.AppModuleRule;
+import cn.winkt.modules.app.entity.AppModuleRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Date:   2022-12-17
  * @Version: V1.0
  */
-public interface IAppModuleRuleService extends IService<AppModuleRule> {
+public interface IAppModuleRoleService extends IService<AppModuleRole> {
 
 }

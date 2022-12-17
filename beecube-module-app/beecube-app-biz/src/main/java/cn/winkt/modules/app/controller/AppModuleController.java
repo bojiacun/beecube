@@ -8,9 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.entity.AppModuleMenu;
+import cn.winkt.modules.app.entity.AppModuleRoute;
+import cn.winkt.modules.app.service.IAppModuleMenuService;
+import cn.winkt.modules.app.service.IAppModuleRouteService;
+import cn.winkt.modules.app.service.IAppModuleRoleService;
 import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppManifest;
 import cn.winkt.modules.app.vo.AppMenu;
+import cn.winkt.modules.app.vo.AppRole;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.seata.core.context.RootContext;
@@ -54,6 +60,14 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@Resource
 	private RestTemplate restTemplate;
 
+	@Resource
+	private IAppModuleRouteService appModuleRouteService;
+
+	@Resource
+	private IAppModuleMenuService appModuleMenuService;
+
+	@Resource
+	private IAppModuleRoleService appModuleRuleService;
 
 	/**
 	 * 分页列表查询
@@ -141,17 +155,60 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		appGatewayJson.put("predicates", JSONObject.toJSONString(appGateway.getPredicates()));
 		appGatewayJson.put("routerId", appGateway.getRouterId());
 		appGatewayJson.put("uri", appGateway.getUri());
-
 		JSONObject postData = new JSONObject();
 		postData.put("router", appGatewayJson);
 		systemApi.gatewayUpdateAll(postData);
+		//查找出刚刚注册完成的路由映射ID
+		Result<?> result = systemApi.gatewayList();
+		List<JSONObject> gateways = (List<JSONObject>) result.getResult();
+		gateways.forEach(o -> {
+			if(o.getString("routerId").equals(appGateway.getRouterId())) {
+				String routerId = o.getString("id");
+				AppModuleRoute appModuleRoute = new AppModuleRoute();
+				appModuleRoute.setModuleId(appModule.getId());
+				appModuleRoute.setModuleName(appModule.getName());
+				appModuleRoute.setRouterId(routerId);
+				appModuleRoute.setRouterName(o.getString("name"));
+				appModuleRouteService.save(appModuleRoute);
+			}
+		});
+
 
 		//安装菜单
 		Arrays.stream(appManifest.getMenus()).forEach(appMenu -> {
 			installMenu(appMenu, appModule, null);
 		});
+		AppMenu searchMenu = new AppMenu();
+		searchMenu.setComponentName(appModule.getIdentify());
+		List<String> ids = new ArrayList<>();
+		List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
+		if(menus != null) {
+			menus.forEach(m -> takeMenuId(m, ids));
+		}
+		searchMenu.setComponentName("app");
+		menus = systemApi.listMenu(searchMenu).getResult();
+		if(menus != null) {
+			menus.forEach(m -> takeMenuId(m, ids));
+		}
+		ids.forEach(mid -> {
+			AppModuleMenu menu = new AppModuleMenu();
+			menu.setModuleId(appModule.getId());
+			menu.setModuleName(appModule.getName());
+			menu.setMenuId(mid);
+			menu.setMenuName("-");
+			appModuleMenuService.save(menu);
+		});
 
-		//调用模块安装方法
+		//安装角色
+		if(appManifest.getRole() != null) {
+			AppRole role = systemApi.createRole(appManifest.getRole()).getResult();
+			if(role != null) {
+				//映射角色关系
+			}
+		}
+
+
+			//调用模块安装方法
 //		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
 
 		//执行安装成功后续操作

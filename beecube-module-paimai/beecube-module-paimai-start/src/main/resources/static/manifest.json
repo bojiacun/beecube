@@ -55,5 +55,9 @@
   },
   "installUrl": "/beecube-paimai/install",
   "uninstallUrl": "/beecube-paimai/uninstall",
-  "upgradeUrl": "/beecube-paimai/upgrade"
+  "upgradeUrl": "/beecube-paimai/upgrade",
+  "role": {
+    "roleName": "拍卖主管理员",
+    "roleCode": "role_paimai"
+  }
 }
