@@ -3,6 +3,7 @@ package cn.winkt.modules.app.service.impl;
 import cn.winkt.modules.app.entity.AppModuleRole;
 import cn.winkt.modules.app.mapper.AppModuleRoleMapper;
 import cn.winkt.modules.app.service.IAppModuleRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,4 +17,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class AppModuleRoleServiceImpl extends ServiceImpl<AppModuleRoleMapper, AppModuleRole> implements IAppModuleRoleService {
 
+
+    /**
+     * 获取模块对应的预留角色
+     * @param moduleId
+     * @return
+     */
+    public AppModuleRole getRoleByModuleId(String moduleId) {
+        LambdaQueryWrapper<AppModuleRole> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppModuleRole::getModuleId, moduleId);
+        return getBaseMapper().selectOne(queryWrapper);
+    }
 }

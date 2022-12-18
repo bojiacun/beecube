@@ -10,5 +10,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IAppModuleRoleService extends IService<AppModuleRole> {
-
+    /**
+     * 获取模块对应的预留角色
+     * @param moduleId
+     * @return
+     */
+    AppModuleRole getRoleByModuleId(String moduleId);
 }

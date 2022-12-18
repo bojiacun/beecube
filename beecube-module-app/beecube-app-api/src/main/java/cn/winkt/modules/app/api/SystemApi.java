@@ -25,6 +25,9 @@ public interface SystemApi extends CommonAPI {
     @PostMapping("/sys/user/addSysUserRole")
     Result<String> addSysUserRole(@RequestBody SysUserRoleVO data);
 
+    @DeleteMapping("/sys/user/deleteUserRole")
+    Result<String> deleteSysUserRole(@RequestParam String roleId, @RequestParam String userId);
+
     @PostMapping("/sys/role/add")
     Result<AppRole> createRole(@RequestBody AppRole role);
 

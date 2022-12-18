@@ -103,6 +103,13 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 		 List<JSONObject> users = systemApi.queryUsersByIds(userIdList);
 		 //绑定管理员
 		 users.forEach(u -> {
+			 LambdaQueryWrapper<AppUser> existsQueryWrapper = new LambdaQueryWrapper<>();
+			 existsQueryWrapper.eq(AppUser::getUserId, u.getString("id"));
+			 existsQueryWrapper.eq(AppUser::getAppId, appId);
+			 int exitsCount = (int)appUserService.count(existsQueryWrapper);
+			 if(exitsCount > 0) {
+				 return;
+			 }
 			 AppUser appUser = new AppUser();
 			 appUser.setAppId(appId);
 			 appUser.setUserId(u.getString("id"));
@@ -110,9 +117,7 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 			 appUserService.save(appUser);
 			 //把用户加入本APP所关联模块的角色
 			 App app = appService.getById(appId);
-			 LambdaQueryWrapper<AppModuleRole> queryWrapper = new LambdaQueryWrapper<>();
-			 queryWrapper.eq(AppModuleRole::getModuleId, app.getModuleId());
-			 AppModuleRole appModuleRole = appModuleRoleService.getOne(queryWrapper);
+			 AppModuleRole appModuleRole = appModuleRoleService.getRoleByModuleId(app.getModuleId());
 			 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
 			 sysUserRoleVO.setRoleId(appModuleRole.getRoleId());
 			 sysUserRoleVO.setUserIdList(Collections.singletonList(appUser.getUserId()));
@@ -156,11 +161,16 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 	@AutoLog(value = "应用管理员表-通过id删除")
 	@ApiOperation(value="应用管理员表-通过id删除", notes="应用管理员表-通过id删除")
 	@DeleteMapping(value = "/delete")
+	@GlobalTransactional
 	public Result<?> delete(@RequestParam(name="appId",required=true) String appId, @RequestParam(name="userId") String userId) {
 		Map<String, Object> deleteMap = new HashMap<>();
 		deleteMap.put("app_id", appId);
 		deleteMap.put("user_id", userId);
 		appUserService.removeByMap(deleteMap);
+		//移除用户的角色权限
+		App app = appService.getById(appId);
+		AppModuleRole appModuleRole = appModuleRoleService.getRoleByModuleId(app.getModuleId());
+		systemApi.deleteSysUserRole(appModuleRole.getRoleId(), userId);
 		return Result.OK("删除成功!");
 	}
 	
