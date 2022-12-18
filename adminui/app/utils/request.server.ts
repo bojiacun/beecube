@@ -115,6 +115,7 @@ export const API_APP_MODULE_UNINSTALL = `${BASE_URL}/beecube-app/app/modules/uni
 export const API_APP_LIST = `${BASE_URL}/beecube-app/app/list`;
 export const API_APP_USER_LIST = `${BASE_URL}/beecube-app/app/users/list`;
 export const API_APP_USER_BIND = `${BASE_URL}/beecube-app/app/users/bind`;
+export const API_APP_USER_DELETE = `${BASE_URL}/beecube-app/app/users/delete`;
 export const API_APP_DELETE = `${BASE_URL}/beecube-app/app/delete`;
 export const API_APP_ADD = `${BASE_URL}/beecube-app/app/add`;
 export const API_APP_EDIT = `${BASE_URL}/beecube-app/app/edit`;

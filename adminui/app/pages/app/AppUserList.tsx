@@ -88,7 +88,7 @@ const AppUserList = (props: any) => {
                 showDeleteAlert(function () {
                     startPageLoading();
                     deleteFetcher.submit({userId: row.id, appId: selectedApp.id},
-                        {method: 'delete', action: `/system/roles/users/delete?userId=${row.id}&roleId=${selectedApp.id}`, replace: true}
+                        {method: 'delete', action: `/app/users/delete?userId=${row.id}&appId=${selectedApp.id}`, replace: true}
                     );
                 }, '确认取消关联吗?', '取消提醒', '确认取消');
                 break;

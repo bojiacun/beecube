@@ -1,14 +1,15 @@
 package cn.winkt.modules.app.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.vo.SysUser;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -16,7 +17,6 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.app.entity.AppUser;
 import cn.winkt.modules.app.service.IAppUserService;
-import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,6 +50,9 @@ import io.swagger.annotations.ApiOperation;
 public class AppUserController extends JeecgController<AppUser, IAppUserService> {
 	@Autowired
 	private IAppUserService appUserService;
+
+	@Resource
+	private SystemApi systemApi;
 	
 	/**
 	 * 分页列表查询
@@ -82,8 +85,17 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 	 public Result<?> bind(@RequestBody JSONObject jsonObject) {
 		 String appId = jsonObject.getString("appId");
 		 String userIdList = jsonObject.getString("userIdList");
+		 List<JSONObject> users = systemApi.queryUsersByIds(userIdList);
+		 //绑定管理员
+		 users.forEach(u -> {
+			 AppUser appUser = new AppUser();
+			 appUser.setAppId(appId);
+			 appUser.setUserId(u.getString("id"));
+			 appUser.setUsername(u.getString("username"));
 
-		 return Result.OK("添加成功！");
+			 appUserService.save(appUser);
+		 });
+		 return Result.OK("绑定成功！");
 	 }
 
 	/**
@@ -115,16 +127,17 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 	}
 	
 	/**
-	 * 通过id删除
-	 *
-	 * @param id
+	 * 解绑用户
 	 * @return
 	 */
 	@AutoLog(value = "应用管理员表-通过id删除")
 	@ApiOperation(value="应用管理员表-通过id删除", notes="应用管理员表-通过id删除")
 	@DeleteMapping(value = "/delete")
-	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		appUserService.removeById(id);
+	public Result<?> delete(@RequestParam(name="appId",required=true) String appId, @RequestParam(name="userId") String userId) {
+		Map<String, Object> deleteMap = new HashMap<>();
+		deleteMap.put("app_id", appId);
+		deleteMap.put("user_id", userId);
+		appUserService.removeByMap(deleteMap);
 		return Result.OK("删除成功!");
 	}
 	
