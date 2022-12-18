@@ -87,7 +87,7 @@ auth.use(
         let menus:any[] = [];
         permsResult.result.menu.filter((item:any)=>!item.hidden).forEach((item:any)=>{
             //分组
-            menus.push({header: item.meta.title, componentName: item.meta.componentName});
+            menus.push({header: item.meta.title, componentName: item.meta.componentName, id: item.id});
             //子菜单
             if(item.children) {
                 menus.push(...item.children);

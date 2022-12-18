@@ -33,14 +33,12 @@ export async function loader({request}:any) {
     const result = await requestWithToken(request)(API_APP_MENU_LIST+queryString);
     const appMenus = result.result;
     const menus = appMenus.map((m:any)=>m.menuId);
-    console.log(menus);
     userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
     return {userInfo: userInfo};
 }
 
 export default function Console() {
     const {startPageLoading, stopPageLoading} = useContext(ThemeContext);
-    console.log(startPageLoading, stopPageLoading);
     return (
         <LayoutVertical startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
 
