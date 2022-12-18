@@ -152,7 +152,7 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     }
     const res = await fetch(url, options);
     if(res.status != 200) {
-        throw new Response(res.statusText, {status: 500});
+        throw new Response(res.statusText, {status: res.status});
     }
     const result = await res.json();
     if (result.code === 401) {
