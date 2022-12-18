@@ -1,13 +1,11 @@
 import type {MetaFunction, LinksFunction, LoaderFunction} from "@remix-run/node";
 import React, {CSSProperties, useEffect, useState} from 'react';
 import {
-    Link,
     Links,
     LiveReload,
     Meta,
-    Outlet,
     Scripts,
-    ScrollRestoration, useCatch, useFetcher, useLoaderData, useNavigate, useOutlet, useTransition,
+    ScrollRestoration, useCatch, useLoaderData, useNavigate, useOutlet,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -15,8 +13,6 @@ import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
-import logoSvg from 'assets/images/logo/logo.svg';
-import {Button, Card, Image, NavLink} from "react-bootstrap";
 import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
