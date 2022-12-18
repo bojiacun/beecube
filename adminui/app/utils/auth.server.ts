@@ -11,6 +11,7 @@ export type MenuPerm = {
     route?: string;
     icon?: string;
     header?: string;
+    componentName?:string;
     children?: MenuPerm[];
     target: string;
 }
@@ -55,6 +56,7 @@ const translateMenu2MenuPerms = (menu:any): MenuPerm => {
         title: menu.meta.title,
         route: menu.path,
         icon: menu.meta.icon,
+        componentName: menu.meta.componentName,
         children: menu?.children?.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms) || null,
         target: menu.meta.internalOrExternal ? 'iframe': '',
     }

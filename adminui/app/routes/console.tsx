@@ -32,7 +32,9 @@ export async function loader({request}:any) {
     }
     const result = await requestWithToken(request)(API_APP_MENU_LIST+queryString);
     const appMenus = result.result;
-    userInfo.perms = userInfo.perms.map((p:any)=>recursiveFilterPerms(p, appMenus.map((m:any)=>m.menuId)));
+    const menus = appMenus.map((m:any)=>m.menuId);
+    console.log(menus);
+    userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
     return {userInfo: userInfo};
 }
 

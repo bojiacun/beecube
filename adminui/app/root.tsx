@@ -47,7 +47,12 @@ i18n.changeLanguage('cn').then();
 
 
 export async function loader({request}:any) {
-    const userInfo = await requireAuthenticated(request, false);
+    let userInfo = await requireAuthenticated(request, false);
+    //处理用户菜单，过滤非系统菜单
+    if(userInfo) {
+        userInfo!.perms = userInfo!.perms!.filter((p:any)=>!p.componentName);
+    }
+
     return json({
         userInfo: userInfo,
         ENV: {
