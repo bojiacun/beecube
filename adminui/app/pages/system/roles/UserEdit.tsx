@@ -143,7 +143,7 @@ const UserEdit = (props: any) => {
             formikRef.current!.setSubmitting(false);
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
-                onHide();
+                onHide(postFetcher.data.result);
             }
         }
     }, [postFetcher.state]);

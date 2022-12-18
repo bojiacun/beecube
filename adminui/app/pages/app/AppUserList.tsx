@@ -1,5 +1,13 @@
 import {useEffect, useState} from "react";
-import {defaultEmptyTable, DefaultListSearchParams, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {
+    defaultEmptyTable,
+    DefaultListSearchParams,
+    handleResult,
+    PageSizeOptions,
+    showDeleteAlert,
+    showToastError,
+    showToastSuccess
+} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import {Plus, XCircle} from "react-feather";
@@ -21,6 +29,11 @@ const AppUserList = (props: any) => {
     const bindFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
+
+    const loadData = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
+    }
+
     useEffect(() => {
         if (searchFetcher.data) {
             stopPageLoading();
@@ -38,19 +51,19 @@ const AppUserList = (props: any) => {
 
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
-            if (deleteFetcher.data.success) {
-                stopPageLoading();
-                showToastSuccess('取消成功');
-                searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
-            } else {
-                showToastError(deleteFetcher.data.message);
-            }
+            stopPageLoading();
+            handleResult(deleteFetcher.data, "取消成功");
+            loadData();
         }
     }, [deleteFetcher.state]);
 
-    const loadData = () => {
-        searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
-    }
+    useEffect(() => {
+        if (bindFetcher.data && bindFetcher.type === 'done') {
+            stopPageLoading();
+            loadData();
+        }
+    }, [bindFetcher.state]);
+
     const handleOnAdd = () => {
         setEditModal({});
     }
@@ -123,15 +136,6 @@ const AppUserList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <ReactSelectThemed
-                                id={'role-user-page-size'}
-                                placeholder={'分页大小'}
-                                isSearchable={false}
-                                defaultValue={PageSizeOptions[0]}
-                                options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                onChange={handlePageSizeChanged}
-                            />
                             <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
                             <Button variant={'secondary'} onClick={()=>setUserListShow(true)}><Plus size={16}/>已有用户</Button>
                         </Col>
@@ -145,11 +149,10 @@ const AppUserList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'username'}>用户账号</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
-                                                         placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'username'} style={{width: 140}} autoComplete={'off'} onChange={handleOnSearchNameChanged}
+                                                         placeholder={'搜索账号名称'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
@@ -202,6 +205,7 @@ const AppUserList = (props: any) => {
             />
             {editModal && <UserEdit model={editModal} onHide={(user:any)=>{
                 setEditModal(null);
+                startPageLoading();
                 //添加完用户紧接着绑定用户
                 if(user) {
                     let data = {appId: selectedApp.id, userIdList: user.id};

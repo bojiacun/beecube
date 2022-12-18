@@ -32,10 +32,10 @@ const AppListPage = (props:any) => {
     const [selectedApp, setSelectedApp] = useState<any>();
     return (
         <Row>
-            <Col>
+            <Col md={selectedApp ? 7 : 12}>
                 <AppList {...props} setSelectedApp={setSelectedApp} />
             </Col>
-            {selectedApp && <Col>
+            {selectedApp && <Col md={5}>
                 <AppUserList {...props} selectedApp={selectedApp} setSelectedApp={setSelectedApp} />
             </Col>}
         </Row>

@@ -142,15 +142,15 @@ const AppList = (props: any) => {
                     <div className={'d-flex align-items-center'}>
                         <a href={`/console?appid=${row.id}`} target={'_blank'}>控制台</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'bind-admin')}>管理员</a>
                         <span className={'divider'}/>
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>
                                 <MoreVertical size={16} style={{marginTop: -2}}/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item eventKey={'bind-admin'}>
-                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>管理员</div>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'delete'}>
                                     <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
