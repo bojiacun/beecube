@@ -12,9 +12,9 @@ const LayoutFull: React.FC<any> = (props:any) => {
         }
     }, []);
     return (
-        <div className={theme.layout.contentWidth == 'boxed' ? 'container p-0':''} style={{height: '100%', overflow: 'auto'}}>
+        <>
             {children}
-        </div>
+        </>
     );
 }
 

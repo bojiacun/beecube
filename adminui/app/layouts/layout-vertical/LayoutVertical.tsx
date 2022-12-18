@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(await auth.isAuthenticated(request, {failureRedirect: '/login'}));
 }
 
-export interface LayoutVerticalProps {
+export interface LayoutVerticalProps extends Partial<any>{
     children?: any;
 }
 

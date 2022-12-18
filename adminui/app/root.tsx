@@ -170,7 +170,7 @@ export default function App() {
     const stopPageLoading = () => {
         setLoading(false);
     }
-    const excludeAdminPaths = ['/login'];
+    const excludeAdminPaths = ['/login', '/console'];
 
     let Layout: any;
     if (_.indexOf(excludeAdminPaths, location.pathname) > -1) {
