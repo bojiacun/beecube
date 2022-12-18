@@ -102,18 +102,6 @@ const AppUserList = (props: any) => {
             dataField: 'username',
         },
         {
-            text: '用户名称',
-            dataField: 'realname',
-        },
-        {
-            text: '状态',
-            dataField: 'status',
-            formatter: (cell: any, row: any) => {
-                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
-            }
-        },
-
-        {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 120},
