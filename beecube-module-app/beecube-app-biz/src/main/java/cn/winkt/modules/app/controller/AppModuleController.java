@@ -215,10 +215,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 				appModuleRoleService.save(appModuleRole);
 				//设置角色权限
 				JSONObject post = new JSONObject();
-				assert role != null;
 				post.put("roleId", role.getId());
-				post.put("permissionIds", "");
-				post.put("lastpermissionIds", String.join(",", ids));
+				post.put("permissionIds", String.join(",", ids));
+				post.put("lastpermissionIds", "");
 				systemApi.saveRolePermissions(post);
 			}
 		}
@@ -258,6 +257,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		List<AppModuleRoute> moduleRoutes = appModuleRouteService.list(queryWrapper);
 		moduleRoutes.forEach(mr -> {
 			systemApi.deleteGateway(mr.getRouterId());
+			appModuleRouteService.removeById(mr.getId());
 		});
 
 		//卸载菜单
@@ -265,12 +265,14 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		menuLambdaQueryWrapper.eq(AppModuleMenu::getModuleId, appModule.getId());
 		List<AppModuleMenu> moduleMenus = appModuleMenuService.list(menuLambdaQueryWrapper);
 		systemApi.deleteBatch(moduleMenus.stream().map(AppModuleMenu::getMenuId).collect(Collectors.joining(",")));
+		appModuleMenuService.removeBatchByIds(moduleMenus.stream().map(AppModuleMenu::getId).collect(Collectors.toList()));
 		//卸载角色
 		LambdaQueryWrapper<AppModuleRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
 		roleLambdaQueryWrapper.eq(AppModuleRole::getModuleId, appModule.getId());
 		List<AppModuleRole> moduleRoles = appModuleRoleService.list(roleLambdaQueryWrapper);
 		moduleRoles.forEach(role -> {
 			systemApi.deleteRole(role.getRoleId());
+			appModuleRoleService.removeById(role.getId());
 		});
 
 		//调用模块卸载方法

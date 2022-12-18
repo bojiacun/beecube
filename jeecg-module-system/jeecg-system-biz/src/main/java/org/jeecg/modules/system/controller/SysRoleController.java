@@ -115,6 +115,7 @@ public class SysRoleController {
 		try {
 			role.setCreateTime(new Date());
 			sysRoleService.save(role);
+			result.setResult(role);
 			result.success("添加成功！");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
