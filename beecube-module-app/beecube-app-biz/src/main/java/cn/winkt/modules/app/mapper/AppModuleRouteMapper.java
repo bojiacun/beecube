@@ -2,8 +2,8 @@ package cn.winkt.modules.app.mapper;
 
 import java.util.List;
 
+import cn.winkt.modules.app.entity.AppModuleRoute;
 import org.apache.ibatis.annotations.Param;
-import org.jeecg.modules.app.entity.AppModuleRoute;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
