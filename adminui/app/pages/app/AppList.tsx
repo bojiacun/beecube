@@ -99,47 +99,21 @@ const AppList = (props: any) => {
     }
     const columns: any[] = [
         {
-            text: 'ID',
-            dataField: 'id',
-            headerStyle: {width: 230},
-        },
-        {
-            text: '应用名称',
-            dataField: 'name',
-        },
-        {
-            text: 'LOGO',
+            text: '应用',
             dataField: 'logo',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
-                return <Image src={row.logo} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />;
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        <Image src={row.logo} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />
+                        <span className={'ml-1'}>{row.name}</span>
+                    </div>
+                );
             }
         },
         {
             text: '模块',
             dataField: 'moduleName',
-        },
-        {
-            text: '主管理员',
-            dataField: 'adminUsername',
-        },
-        {
-            text: '创建时间',
-            dataField: 'createTime',
-            headerStyle: {width: 200},
-            sort: true,
-            onSort: handleSort,
-            headerSortingClasses,
-            sortFunc: emptySortFunc
-        },
-        {
-            text: '结束时间',
-            dataField: 'endTime',
-            headerStyle: {width: 200},
-            sort: true,
-            onSort: handleSort,
-            headerSortingClasses,
-            sortFunc: emptySortFunc
         },
         {
             text: '状态',
@@ -167,7 +141,7 @@ const AppList = (props: any) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item eventKey={'bind-admin'}>
-                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>绑定管理员</div>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>管理员</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'delete'}>
                                     <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
