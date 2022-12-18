@@ -14,6 +14,8 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AppEdit from "~/pages/app/AppEdit";
+import {Delete, Edit, MoreVertical} from "react-feather";
+import UserSelector from "~/pages/app/UserSelector";
 
 
 const AppList = (props: any) => {
@@ -21,6 +23,8 @@ const AppList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [bindModel, setBindModel] = useState<any>();
+    const [showUserSelector, setShowUserSelector] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
@@ -63,6 +67,10 @@ const AppList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'bind-admin':
+                setBindModel(row);
+                setShowUserSelector(true);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -97,6 +105,7 @@ const AppList = (props: any) => {
         {
             text: 'ID',
             dataField: 'id',
+            headerStyle: {width: 230},
         },
         {
             text: '应用名称',
@@ -113,6 +122,10 @@ const AppList = (props: any) => {
         {
             text: '模块',
             dataField: 'moduleName',
+        },
+        {
+            text: '主管理员',
+            dataField: 'adminUsername',
         },
         {
             text: '创建时间',
@@ -152,7 +165,19 @@ const AppList = (props: any) => {
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'bind-admin'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>绑定管理员</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                 );
             }
@@ -234,6 +259,10 @@ const AppList = (props: any) => {
             </Card>
             {editModal && <AppEdit model={editModal} onHide={()=>{
                 setEditModal(null);
+                loadData();
+            }} />}
+            {showUserSelector && <UserSelector show={showUserSelector} selectedApp={bindModel} onHide={()=>{
+                setShowUserSelector(false);
                 loadData();
             }} />}
         </>

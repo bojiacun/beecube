@@ -13,7 +13,10 @@ public class AppDTO {
     private java.lang.String description;
 
     private java.lang.String moduleId;
+
     private String moduleName;
+
+    private String adminUsername;
 
     private java.lang.String logo;
 
