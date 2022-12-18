@@ -30,9 +30,7 @@ const AppUserList = (props: any) => {
     useEffect(() => {
         if (selectedApp) {
             startPageLoading();
-            searchState.appId = selectedApp.id;
-            setSearchState({...searchState});
-            searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
+            loadData();
         }
     }, [selectedApp]);
 
@@ -49,8 +47,8 @@ const AppUserList = (props: any) => {
         }
     }, [deleteFetcher.state]);
 
-    const refreshRoleUsers = () => {
-        searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
+    const loadData = () => {
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
     }
     const handleOnAdd = () => {
         setEditModal({});

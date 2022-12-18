@@ -56,9 +56,9 @@ public class App {
 	@Dict(dicCode = "app_status")
 	private java.lang.Integer status;
 	/**应用过期时间*/
-	@Excel(name = "应用过期时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@Excel(name = "应用过期时间", width = 20, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "应用过期时间")
 	private java.util.Date endTime;
 	/**创建时间*/

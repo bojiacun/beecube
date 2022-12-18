@@ -116,6 +116,15 @@ const AppList = (props: any) => {
             dataField: 'moduleName',
         },
         {
+            text: '到期时间',
+            dataField: 'endTime',
+            headerStyle: {width: 200},
+            sort: true,
+            onSort: handleSort,
+            headerSortingClasses,
+            sortFunc: emptySortFunc
+        },
+        {
             text: '状态',
             dataField: 'status_dictText',
             headerStyle: {width: 100},
