@@ -4,10 +4,9 @@
 
 
     <select id="selectPageJoinAppModule" parameterType="Object" resultType="cn.winkt.modules.app.vo.AppDTO">
-        select a.*, m.name as module_name, au.username as admin_username
+        select a.*, m.name as module_name
         from beecube_apps a
                  left join beecube_modules m on m.id = a.module_id
-                 left join beecube_app_users au on au.app_id = a.id
     </select>
 
 

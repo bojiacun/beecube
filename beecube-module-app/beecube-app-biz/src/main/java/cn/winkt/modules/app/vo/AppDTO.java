@@ -16,8 +16,6 @@ public class AppDTO {
 
     private String moduleName;
 
-    private String adminUsername;
-
     private java.lang.String logo;
 
     @Dict(dicCode = "app_status")
