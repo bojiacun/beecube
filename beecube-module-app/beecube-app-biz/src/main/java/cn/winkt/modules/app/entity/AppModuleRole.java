@@ -1,5 +1,7 @@
 package cn.winkt.modules.app.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +22,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="beecube_module_roles对象", description="模块路由映射表")
 public class AppModuleRole {
-    
+	/**模块ID*/
+	@TableId(type = IdType.ASSIGN_ID)
+	@ApiModelProperty(value = "模块ID")
+	private java.lang.String id;
 	/**模块ID*/
 	@Excel(name = "模块ID", width = 15)
     @ApiModelProperty(value = "模块ID")

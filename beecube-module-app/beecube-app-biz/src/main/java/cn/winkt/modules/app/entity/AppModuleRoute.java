@@ -27,7 +27,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="beecube_module_routes对象", description="模块路由映射表")
 public class AppModuleRoute {
-    
+	/**模块ID*/
+	@TableId(type = IdType.ASSIGN_ID)
+	@ApiModelProperty(value = "模块ID")
+	private java.lang.String id;
 	/**模块ID*/
 	@Excel(name = "模块ID", width = 15)
     @ApiModelProperty(value = "模块ID")
