@@ -15,16 +15,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AppEdit from "~/pages/app/AppEdit";
 import {Delete, Edit, MoreVertical} from "react-feather";
-import UserSelector from "~/pages/app/UserSelector";
 
 
 const AppList = (props: any) => {
-    const {startPageLoading, stopPageLoading} = props;
+    const {startPageLoading, stopPageLoading, setSelectedApp} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
-    const [bindModel, setBindModel] = useState<any>();
-    const [showUserSelector, setShowUserSelector] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
@@ -68,8 +65,7 @@ const AppList = (props: any) => {
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'bind-admin':
-                setBindModel(row);
-                setShowUserSelector(true);
+                setSelectedApp(row);
                 break;
             case 'edit':
                 //编辑
@@ -259,10 +255,6 @@ const AppList = (props: any) => {
             </Card>
             {editModal && <AppEdit model={editModal} onHide={()=>{
                 setEditModal(null);
-                loadData();
-            }} />}
-            {showUserSelector && <UserSelector show={showUserSelector} selectedApp={bindModel} onHide={()=>{
-                setShowUserSelector(false);
                 loadData();
             }} />}
         </>

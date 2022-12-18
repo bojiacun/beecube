@@ -4,9 +4,11 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {API_APP_LIST, API_APP_MODULE_LIST, requestWithToken} from "~/utils/request.server";
-import AppModuleList from "~/pages/app/AppModuleList";
 import {withPageLoading} from "~/utils/components";
 import AppList from "~/pages/app/AppList";
+import {useState} from "react";
+import {Row, Col} from "react-bootstrap";
+import AppUserList from "~/pages/app/AppUserList";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -27,7 +29,17 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 const AppListPage = (props:any) => {
-    return <AppList {...props} />
+    const [selectedApp, setSelectedApp] = useState<any>();
+    return (
+        <Row>
+            <Col>
+                <AppList {...props} setSelectedApp={setSelectedApp} />
+            </Col>
+            {selectedApp && <Col>
+                <AppUserList {...props} selectedApp={selectedApp} setSelectedApp={setSelectedApp} />
+            </Col>}
+        </Row>
+    );
 }
 
 export default withPageLoading(AppListPage);
