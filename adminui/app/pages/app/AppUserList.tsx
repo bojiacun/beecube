@@ -41,7 +41,7 @@ const AppUserList = (props: any) => {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
                 showToastSuccess('取消成功');
-                searchFetcher.submit(searchState, {method: 'get', action: '/system/roles/users'});
+                searchFetcher.submit(searchState, {method: 'get', action: '/app/users'});
             } else {
                 showToastError(deleteFetcher.data.message);
             }
@@ -88,7 +88,7 @@ const AppUserList = (props: any) => {
                 showDeleteAlert(function () {
                     startPageLoading();
                     deleteFetcher.submit({userId: row.id, appId: selectedApp.id},
-                        {method: 'delete', action: `/app/users/delete?userId=${row.id}&appId=${selectedApp.id}`, replace: true}
+                        {method: 'delete', action: `/app/users/delete?userId=${row.userId}&appId=${selectedApp.id}`, replace: true}
                     );
                 }, '确认取消关联吗?', '取消提醒', '确认取消');
                 break;
@@ -116,14 +116,11 @@ const AppUserList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            headerStyle: {width: 120},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
-                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>取消关联</a>
-                        <span className={'divider'}/>
                     </div>
                 );
             }
@@ -151,7 +148,7 @@ const AppUserList = (props: any) => {
                             <Button variant={'secondary'} onClick={()=>setUserListShow(true)}><Plus size={16}/>已有用户</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/app/users'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'appId'} value={selectedApp.id} type={'hidden'}/>
@@ -211,6 +208,7 @@ const AppUserList = (props: any) => {
                 show={userListShow}
                 onHide={()=>{
                     setUserListShow(false);
+                    loadData();
                 }}
                 selectedApp={selectedApp}
             />

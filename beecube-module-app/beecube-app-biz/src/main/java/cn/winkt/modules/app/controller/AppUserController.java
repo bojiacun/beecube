@@ -9,8 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppModuleRole;
+import cn.winkt.modules.app.service.IAppModuleRoleService;
+import cn.winkt.modules.app.service.IAppModuleRouteService;
+import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.vo.SysUser;
+import cn.winkt.modules.app.vo.SysUserRoleVO;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -52,6 +60,12 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 	private IAppUserService appUserService;
 
 	@Resource
+	private IAppModuleRoleService appModuleRoleService;
+
+	@Resource
+	private IAppService appService;
+
+	@Resource
 	private SystemApi systemApi;
 	
 	/**
@@ -82,6 +96,7 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 	 @AutoLog(value = "应用管理员表-绑定管理员")
 	 @ApiOperation(value="应用管理员表-绑定管理员", notes="应用管理员表-绑定管理员")
 	 @PostMapping(value = "/bind")
+	 @GlobalTransactional
 	 public Result<?> bind(@RequestBody JSONObject jsonObject) {
 		 String appId = jsonObject.getString("appId");
 		 String userIdList = jsonObject.getString("userIdList");
@@ -92,8 +107,16 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 			 appUser.setAppId(appId);
 			 appUser.setUserId(u.getString("id"));
 			 appUser.setUsername(u.getString("username"));
-
 			 appUserService.save(appUser);
+			 //把用户加入本APP所关联模块的角色
+			 App app = appService.getById(appId);
+			 LambdaQueryWrapper<AppModuleRole> queryWrapper = new LambdaQueryWrapper<>();
+			 queryWrapper.eq(AppModuleRole::getModuleId, app.getModuleId());
+			 AppModuleRole appModuleRole = appModuleRoleService.getOne(queryWrapper);
+			 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
+			 sysUserRoleVO.setRoleId(appModuleRole.getRoleId());
+			 sysUserRoleVO.setUserIdList(Collections.singletonList(appUser.getUserId()));
+			 systemApi.addSysUserRole(sysUserRoleVO);
 		 });
 		 return Result.OK("绑定成功！");
 	 }

@@ -1,9 +1,6 @@
 package cn.winkt.modules.app.api;
 
-import cn.winkt.modules.app.vo.AppGateway;
-import cn.winkt.modules.app.vo.AppMenu;
-import cn.winkt.modules.app.vo.AppRole;
-import cn.winkt.modules.app.vo.SysUser;
+import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.dto.DataLogDTO;
@@ -25,6 +22,8 @@ import java.util.Set;
 @FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
 public interface SystemApi extends CommonAPI {
 
+    @PostMapping("/sys/user/addSysUserRole")
+    Result<String> addSysUserRole(@RequestBody SysUserRoleVO data);
 
     @PostMapping("/sys/role/add")
     Result<AppRole> createRole(@RequestBody AppRole role);

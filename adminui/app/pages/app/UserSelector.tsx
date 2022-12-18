@@ -97,7 +97,6 @@ const UserSelector = (props: any) => {
     const handleOnBind = () => {
         if(selectedRows.length > 0) {
             //添加
-            console.log(selectedRows);
             let data:any = {appId: selectedApp.id, userIdList: selectedRows};
             editFetcher.submit(data, {method: 'post', action: '/app/users/bind'})
         }
