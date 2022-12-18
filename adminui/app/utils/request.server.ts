@@ -113,6 +113,7 @@ export const API_APP_MODULE_INSTALL = `${BASE_URL}/beecube-app/app/modules/insta
 export const API_APP_MODULE_UNINSTALL = `${BASE_URL}/beecube-app/app/modules/uninstall`;
 
 export const API_APP_LIST = `${BASE_URL}/beecube-app/app/list`;
+export const API_APP_MENU_LIST = `${BASE_URL}/beecube-app/app/menus/all`;
 export const API_APP_USER_LIST = `${BASE_URL}/beecube-app/app/users/list`;
 export const API_APP_USER_BIND = `${BASE_URL}/beecube-app/app/users/bind`;
 export const API_APP_USER_DELETE = `${BASE_URL}/beecube-app/app/users/delete`;

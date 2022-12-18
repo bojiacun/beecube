@@ -6,11 +6,15 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.entity.AppModuleMenu;
 import cn.winkt.modules.app.service.IAppModuleMenuService;
+import cn.winkt.modules.app.service.IAppService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -45,10 +49,13 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="模块路由映射表")
 @RestController
-@RequestMapping("/app/appModuleMenu")
+@RequestMapping("/app/menus")
 public class AppModuleMenuController extends JeecgController<AppModuleMenu, IAppModuleMenuService> {
 	@Autowired
 	private IAppModuleMenuService appModuleMenuService;
+
+	@Resource
+	private IAppService appService;
 	
 	/**
 	 * 分页列表查询
@@ -71,7 +78,17 @@ public class AppModuleMenuController extends JeecgController<AppModuleMenu, IApp
 		IPage<AppModuleMenu> pageList = appModuleMenuService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+
+	 @AutoLog(value = "查询应用所有菜单")
+	 @ApiOperation(value="查询应用所有菜单", notes="查询应用所有菜单")
+	 @GetMapping(value = "/all")
+	 public Result<?> queryPageList(@RequestParam String appid) {
+		 App app = appService.getById(appid);
+		 LambdaQueryWrapper<AppModuleMenu> queryWrapper = new LambdaQueryWrapper<>();
+		 queryWrapper.eq(AppModuleMenu::getModuleId, app.getModuleId());
+		 List<AppModuleMenu> pageList = appModuleMenuService.list(queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *
