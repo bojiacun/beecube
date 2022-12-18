@@ -21,7 +21,7 @@ import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 const checkHandlers: any = {};
 
 const UserEdit = (props: any) => {
-    const {model, onHide} = props;
+    const {model, onHide, selectedRole} = props;
     const [positionListShow, setPositionListShow] = useState<boolean>(false);
     const [departmentSelectorShow, setDepartmentSelectorShow] = useState<boolean>(false);
     const [positionOptions, setPositionOptions] = useState<any[]>([]);
@@ -80,6 +80,7 @@ const UserEdit = (props: any) => {
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
         } else {
+            values.selectedroles = selectedRole?.id;
             postFetcher.submit(values, {method: 'post', action: '/system/users/add'});
         }
     }
