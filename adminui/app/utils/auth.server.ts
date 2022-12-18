@@ -87,14 +87,13 @@ auth.use(
         let menus:any[] = [];
         permsResult.result.menu.filter((item:any)=>!item.hidden).forEach((item:any)=>{
             //分组
-            menus.push({header: item.meta.title});
+            menus.push({header: item.meta.title, componentName: item.meta.componentName});
             //子菜单
             if(item.children) {
                 menus.push(...item.children);
             }
         });
         const perms = menus.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
-        console.log(perms);
 
         return {
             token: token,

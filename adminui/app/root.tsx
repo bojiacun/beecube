@@ -50,7 +50,7 @@ export async function loader({request}:any) {
     let userInfo = await requireAuthenticated(request, false);
     //处理用户菜单，过滤非系统菜单
     if(userInfo) {
-        // userInfo!.perms = userInfo!.perms!.filter((p:any)=>p.componentName == 'index');
+        userInfo!.perms = userInfo!.perms!.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
     }
 
     return json({
