@@ -94,6 +94,7 @@ auth.use(
             }
         });
         const perms = menus.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
+        console.log(perms);
 
         return {
             token: token,
