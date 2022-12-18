@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -70,7 +72,20 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 		IPage<AppUser> pageList = appUserService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+
+	 /**
+	  * 绑定管理员
+	  */
+	 @AutoLog(value = "应用管理员表-绑定管理员")
+	 @ApiOperation(value="应用管理员表-绑定管理员", notes="应用管理员表-绑定管理员")
+	 @PostMapping(value = "/bind")
+	 public Result<?> bind(@RequestBody JSONObject jsonObject) {
+		 String appId = jsonObject.getString("appId");
+		 String userIdList = jsonObject.getString("userIdList");
+
+		 return Result.OK("添加成功！");
+	 }
+
 	/**
 	 * 添加
 	 *

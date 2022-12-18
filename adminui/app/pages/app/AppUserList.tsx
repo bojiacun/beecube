@@ -18,6 +18,7 @@ const AppUserList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const [userListShow, setUserListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
+    const bindFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
     useEffect(() => {
@@ -213,8 +214,13 @@ const AppUserList = (props: any) => {
                 }}
                 selectedApp={selectedApp}
             />
-            {editModal && <UserEdit model={editModal} onHide={()=>{
+            {editModal && <UserEdit model={editModal} onHide={(user:any)=>{
                 setEditModal(null);
+                //添加完用户紧接着绑定用户
+                if(user) {
+                    let data = {appId: selectedApp.id, userIdList: user.id};
+                    bindFetcher.submit(data, {method: 'post', action: '/app/users/bind'});
+                }
             }} />}
         </>
     );

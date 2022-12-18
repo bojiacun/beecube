@@ -3,6 +3,7 @@ package cn.winkt.modules.app.api;
 import cn.winkt.modules.app.vo.AppGateway;
 import cn.winkt.modules.app.vo.AppMenu;
 import cn.winkt.modules.app.vo.AppRole;
+import cn.winkt.modules.app.vo.SysUser;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.dto.DataLogDTO;
@@ -16,6 +17,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
