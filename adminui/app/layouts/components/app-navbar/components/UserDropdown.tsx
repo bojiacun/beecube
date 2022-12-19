@@ -23,14 +23,6 @@ const UserDropdown = () => {
         }
     }, [userFetcher.type]);
 
-    useEffect(() => {
-        if (logoutFetcher.data) {
-            let url = logoutFetcher.data;
-            console.log(url);
-            navigate(url, {replace: true});
-        }
-    }, [logoutFetcher.state]);
-
 
     const dropdownTitle = (
         <>

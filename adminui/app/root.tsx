@@ -60,6 +60,8 @@ export async function loader({request}:any) {
         }
     }
 
+    console.log('root loader runed');
+
     return json({
         userInfo: userInfo,
         from: session.get("FROM"),
