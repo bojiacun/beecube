@@ -32,24 +32,52 @@ public class MybatisPlusSaasConfig {
      * tenant_id 字段名
      */
     private static final String TENANT_FIELD_NAME = "tenant_id";
+    private static final String APPID_FIELD_NAME = "app_id";
     /**
      * 哪些表需要做多租户 表需要添加一个字段 tenant_id
      */
     public static final List<String> TENANT_TABLE = new ArrayList<String>();
+    public static final List<String> APP_TABLE = new ArrayList<String>();
 
     static {
-        TENANT_TABLE.add("demo");
+//        TENANT_TABLE.add("demo");
 
 //        //角色、菜单、部门
 //        tenantTable.add("sys_role");
 //        tenantTable.add("sys_permission");
 //        tenantTable.add("sys_depart");
+        APP_TABLE.add("beecube_app_settings");
+        APP_TABLE.add("beecube_app_members");
     }
 
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
+        //添加APP租户
+        interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
+            @Override
+            public Expression getTenantId() {
+                String appId = oConvertUtils.getString(AppContext.getApp(),"0");
+                return new LongValue(appId);
+            }
+
+            @Override
+            public String getTenantIdColumn() {
+                return APPID_FIELD_NAME;
+            }
+            @Override
+            public boolean ignoreTable(String tableName) {
+                for(String temp: APP_TABLE){
+                    if(temp.equalsIgnoreCase(tableName)){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }));
+
         // 先 add TenantLineInnerInterceptor 再 add PaginationInnerInterceptor
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
             @Override
