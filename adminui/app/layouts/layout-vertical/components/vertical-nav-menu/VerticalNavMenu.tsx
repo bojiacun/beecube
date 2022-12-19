@@ -33,6 +33,7 @@ const VerticalNavMenu = (props:any) => {
         maxScrollbarLength: 60,
         wheelPropagation: false,
     }
+    const app = rootLoaderData?.app ? JSON.parse(rootLoaderData?.app) : null;
 
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
@@ -41,19 +42,19 @@ const VerticalNavMenu = (props:any) => {
             <div className={'navbar-header expanded'}>
                 <ul className={'nav navbar-nav flex-row'}>
                     <li className={'nav-item mr-auto'}>
-                        <NavLink href={'/'} className={'navbar-brand'}>
+                        <NavLink href={app?'#':'/'} className={'navbar-brand'}>
                             <span className={'brand-logo'}>
-                                <Image src={appLogoImage} alt={'logo'} width={36} height={36} />
+                                <Image src={app? app.logo: appLogoImage} alt={'logo'} width={36} height={36} />
                             </span>
-                            <h2 className={'brand-text'}>{appName}</h2>
+                            <h2 className={'brand-text'}>{app?app.name:appName}</h2>
                         </NavLink>
                     </li>
-                    <li className="nav-item nav-toggle">
-                        <NavLink className={'nav-link modern-nav-toggle'}>
-                            <X size={20} className={'d-none d-xl-none'} />
-                            <Disc size={20} className={'d-none d-xl-block collapse-toggle-icon'} />
-                        </NavLink>
-                    </li>
+                    {/*<li className="nav-item nav-toggle">*/}
+                    {/*    <NavLink className={'nav-link modern-nav-toggle'}>*/}
+                    {/*        <X size={20} className={'d-none d-xl-none'} />*/}
+                    {/*        <Disc size={20} className={'d-none d-xl-block collapse-toggle-icon'} />*/}
+                    {/*    </NavLink>*/}
+                    {/*</li>*/}
                 </ul>
             </div>
 

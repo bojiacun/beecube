@@ -8,6 +8,7 @@ export const action: ActionFunction = async ({request}) => {
     }
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     session.unset("APPID");
+    session.unset("APP");
     session.unset("FROM");
     session.unset("APP_MENUS");
     await sessionStorage.commitSession(session);
