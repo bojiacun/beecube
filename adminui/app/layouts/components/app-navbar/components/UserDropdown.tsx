@@ -23,6 +23,14 @@ const UserDropdown = () => {
         }
     }, [userFetcher.type]);
 
+    useEffect(() => {
+        if (logoutFetcher.data) {
+            let url = logoutFetcher.data;
+            console.log(url);
+            navigate(url, {replace: true});
+        }
+    }, [logoutFetcher.state]);
+
 
     const dropdownTitle = (
         <>
@@ -58,7 +66,7 @@ const UserDropdown = () => {
                     <span>用户设置</span>
                 </Dropdown.Item>
                 {rootLoaderData.from === 'platform' &&
-                    <Dropdown.Item key={'user-settings'} onSelect={backToPlatform} className={'d-flex align-items-center'}>
+                    <Dropdown.Item key={'user-back'} onSelect={backToPlatform} className={'d-flex align-items-center'}>
                         <ArrowLeft className={'mr-50'} size={16}/>
                         <span>返回平台</span>
                     </Dropdown.Item>
