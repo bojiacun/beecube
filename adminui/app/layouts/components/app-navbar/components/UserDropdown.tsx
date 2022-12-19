@@ -44,7 +44,7 @@ const UserDropdown = () => {
         navigate('/account/settings');
     }
     const backToPlatform = () => {
-        logoutFetcher.load('/back');
+        logoutFetcher.submit({},{action:'/back', method: 'put'});
     }
     return (
         //@ts-ignore

@@ -1,7 +1,7 @@
-import {LoaderFunction, redirect} from "@remix-run/node";
+import {ActionFunction, redirect} from "@remix-run/node";
 import {requireAuthenticated, sessionStorage} from "~/utils/auth.server";
 
-export const loader: LoaderFunction = async ({request}) => {
+export const action: ActionFunction = async ({request}) => {
     let userInfo = await requireAuthenticated(request, true);
     if(userInfo) {
         userInfo!.perms = userInfo!.perms!.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
