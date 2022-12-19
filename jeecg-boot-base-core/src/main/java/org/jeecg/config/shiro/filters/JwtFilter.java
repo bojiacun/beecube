@@ -7,6 +7,7 @@ import org.jeecg.common.config.TenantContext;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.mybatis.AppContext;
 import org.jeecg.config.shiro.JwtToken;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -104,6 +105,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         String tenantId = httpServletRequest.getHeader(CommonConstant.TENANT_ID);
         TenantContext.setTenant(tenantId);
         //update-end-author:taoyan date:20200708 for:多租户用到
+
+        //设置APP
+        String appId = httpServletRequest.getHeader(CommonConstant.X_APP_ID);
+        AppContext.setApp(appId);
 
         return super.preHandle(request, response);
     }

@@ -314,6 +314,7 @@ public interface CommonConstant {
     String X_TIMESTAMP = "X-TIMESTAMP";
     /** 租户 请求头*/
     String TENANT_ID = "tenant-id";
+    String X_APP_ID = "X-App-Id";
     /**===============================================================================================*/
 
     String TOKEN_IS_INVALID_MSG = "Token失效，请重新登录!";
