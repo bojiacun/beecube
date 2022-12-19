@@ -5,6 +5,7 @@ import java.util.List;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
+import net.sf.jsqlparser.expression.StringValue;
 import org.jeecg.common.config.TenantContext;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.util.oConvertUtils;
@@ -60,7 +61,7 @@ public class MybatisPlusSaasConfig {
             @Override
             public Expression getTenantId() {
                 String appId = oConvertUtils.getString(AppContext.getApp(),"0");
-                return new LongValue(appId);
+                return new StringValue(appId);
             }
 
             @Override
