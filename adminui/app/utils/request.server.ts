@@ -1,4 +1,4 @@
-import {LoginedUser, requireAuthenticated} from "~/utils/auth.server";
+import {LoginedUser, requireAuthenticated, sessionStorage} from "~/utils/auth.server";
 import {json, RequestInfo} from "@remix-run/node";
 import {showToastError} from "~/utils/utils";
 
@@ -154,6 +154,10 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers['Authorization'] = user.token;
     if(!options.headers['Content-Type']) {
         options.headers['Content-Type'] = 'application/json';
+    }
+    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+    if(session.has("APPID")) {
+        options.headers['X-App-Id'] = session.get("APPID");
     }
     const res = await fetch(url, options);
     if(res.status != 200) {
