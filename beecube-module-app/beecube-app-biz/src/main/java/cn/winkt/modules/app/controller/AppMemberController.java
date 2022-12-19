@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用会员表")
 @RestController
-@RequestMapping("/app/appMember")
+@RequestMapping("/app/members")
 public class AppMemberController extends JeecgController<AppMember, IAppMemberService> {
 	@Autowired
 	private IAppMemberService appMemberService;

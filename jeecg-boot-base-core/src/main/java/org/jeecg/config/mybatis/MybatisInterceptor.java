@@ -1,6 +1,8 @@
 package org.jeecg.config.mybatis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -40,6 +42,7 @@ public class MybatisInterceptor implements Interceptor {
 		}
 		if (SqlCommandType.INSERT == sqlCommandType) {
 			LoginUser sysUser = this.getLoginUser();
+			String appId = AppContext.getApp();
 			Field[] fields = oConvertUtils.getAllFields(parameter);
 			for (Field field : fields) {
 				log.debug("------field.name------" + field.getName());
@@ -55,6 +58,16 @@ public class MybatisInterceptor implements Interceptor {
 								field.set(parameter, sysUser.getUsername());
 								field.setAccessible(false);
 							}
+						}
+					}
+					if("appId".equals(field.getName())) {
+						field.setAccessible(true);
+						Object localAppId = field.get(parameter);
+						field.setAccessible(false);
+						if(ObjectUtils.isEmpty(localAppId) && StringUtils.isNotEmpty(appId)) {
+							field.setAccessible(true);
+							field.set(parameter, appId);
+							field.setAccessible(false);
 						}
 					}
 					// 注入创建时间
