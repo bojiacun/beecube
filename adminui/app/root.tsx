@@ -31,7 +31,7 @@ import Error404Page from "~/components/error-page/404";
 import Error401Page from "~/components/error-page/401";
 import pageMiscStyle from '~/styles/react/pages/page-misc.css';
 import ClipLoader from "react-spinners/ClipLoader";
-
+import {sessionStorage} from "~/utils/auth.server";
 //字体设置
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -48,9 +48,16 @@ i18n.changeLanguage('cn').then();
 
 export async function loader({request}:any) {
     let userInfo = await requireAuthenticated(request, false);
+    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     //处理用户菜单，过滤非系统菜单
     if(userInfo) {
-        userInfo!.perms = userInfo!.perms!.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
+        if(session.has("APPID")) {
+            //如果有APPID，则说明要进去应用控制台
+            userInfo.perms = session.get("APP_MENUS");
+        }
+        else {
+            userInfo.perms = userInfo.perms?.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
+        }
     }
 
     return json({

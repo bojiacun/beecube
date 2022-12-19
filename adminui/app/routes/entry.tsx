@@ -29,6 +29,7 @@ export const action: ActionFunction = async ({request}) => {
     userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
     session.set("APPID", appId);
+    session.set("APP_MENUS", userInfo.perms);
     await sessionStorage.commitSession(session);
     //取出该应用的菜单跳转到第一个
     const perms = userInfo!.perms;
