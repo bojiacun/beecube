@@ -18,7 +18,9 @@ function recursiveFilterPerms(perm:any, menus:any) {
 
 export const action: ActionFunction = async ({request}) => {
     let userInfo = await requireAuthenticated(request, false);
-    if(!userInfo || !userInfo.perms) throw new Response("用户无权访问该页面", {status: 403});
+    if(!userInfo || !userInfo.perms) {
+        throw new Response("用户无权访问该页面", {status: 403});
+    }
     const formData = await request.formData();
     const appId = formData.get("id");
     //处理当前用户的权限，过滤掉应用的权限,取用户权限和应用权限交集部分
@@ -29,6 +31,7 @@ export const action: ActionFunction = async ({request}) => {
     userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
     session.set("APPID", appId);
+    session.set("FROM", "platform");
     session.set("APP_MENUS", userInfo.perms);
     await sessionStorage.commitSession(session);
     //取出该应用的菜单跳转到第一个

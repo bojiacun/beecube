@@ -79,7 +79,7 @@ const AppList = (props: any) => {
         switch (e) {
             case 'console':
                 //进入应用控制台
-                entryFetcher.submit({app: row}, {method: 'post', action: '/entry'});
+                entryFetcher.submit(row, {method: 'post', action: '/entry'});
                 break;
             case 'bind-admin':
                 setSelectedApp(row);
@@ -157,7 +157,7 @@ const AppList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} target={'_blank'} onClick={()=>handleOnAction(row, 'console')}>
+                        <a href={'#'} onClick={()=>handleOnAction(row, 'console')}>
                             {entryFetcher.state === 'submitting' ? '进入中':'控制台'}
                         </a>
                         <span className={'divider'}/>

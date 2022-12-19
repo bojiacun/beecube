@@ -62,6 +62,7 @@ export async function loader({request}:any) {
 
     return json({
         userInfo: userInfo,
+        from: session.get("FROM"),
         ENV: {
             BASE_URL: process.env.BASE_URL,
             LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,
