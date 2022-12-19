@@ -26,6 +26,10 @@ const AppList = (props: any) => {
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
     const enableFetcher = useFetcher();
+    const entryFetcher = useFetcher();
+
+
+
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
     }
@@ -62,8 +66,21 @@ const AppList = (props: any) => {
         }
     }, [enableFetcher.state]);
 
+
+    useEffect(() => {
+        if (entryFetcher.data && entryFetcher.type === 'done') {
+            //重新进入
+
+        }
+    }, [enableFetcher.state]);
+
+
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'console':
+                //进入应用控制台
+                entryFetcher.submit({app: row}, {method: 'post', action: '/entry'});
+                break;
             case 'bind-admin':
                 setSelectedApp(row);
                 break;
@@ -140,7 +157,9 @@ const AppList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={`/console?appid=${row.id}`} target={'_blank'}>控制台</a>
+                        <a href={'#'} target={'_blank'} onClick={()=>handleOnAction(row, 'console')}>
+                            {entryFetcher.state === 'submitting' ? '进入中':'控制台'}
+                        </a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'bind-admin')}>管理员</a>
                         <span className={'divider'}/>
