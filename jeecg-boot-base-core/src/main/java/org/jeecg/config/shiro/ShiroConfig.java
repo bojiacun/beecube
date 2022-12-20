@@ -15,6 +15,7 @@ import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisClusterManager;
 import org.crazycake.shiro.RedisManager;
 import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.filters.CustomShiroFilterFactoryBean;
@@ -192,6 +193,10 @@ public class ShiroConfig {
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
         securityManager.setRealms(realms);
+        Object appRealm = SpringContextUtils.getBean("AppRealm");
+        if(appRealm != null) {
+            realms.add((Realm) appRealm);
+        }
 
         /*
          * 关闭shiro自带的session，详情见文档
