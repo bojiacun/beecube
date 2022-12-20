@@ -68,6 +68,7 @@ export async function loader({request}:any) {
         app: session.get("APP"),
         ENV: {
             BASE_URL: process.env.BASE_URL,
+            API_BASE_URL: process.env.API_BASE_URL,
             LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,
             LOGIN_URL: process.env.LOGIN_URL,
             LOGOUT_URL: process.env.LOGOUT_URL,
