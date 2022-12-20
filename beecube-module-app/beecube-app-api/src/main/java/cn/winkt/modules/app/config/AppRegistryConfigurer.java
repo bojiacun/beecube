@@ -12,6 +12,7 @@ import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
+import org.jeecg.config.shiro.LoginType;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -57,7 +58,7 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
         RedisUtil redisUtil = SpringContextUtils.getBean(RedisUtil.class);
         //模拟登录生成临时Token
         //参数说明：第一个参数是用户名、第二个参数是密码的加密串
-        String token = JwtUtil.sign("admin","cb362cfeefbf3d8d");
+        String token = JwtUtil.sign("admin","cb362cfeefbf3d8d", LoginType.Admin);
         // 设置Token缓存有效时间为 5 分钟
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
