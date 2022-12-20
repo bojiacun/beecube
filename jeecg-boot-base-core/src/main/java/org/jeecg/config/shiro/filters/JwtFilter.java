@@ -7,7 +7,7 @@ import org.jeecg.common.config.TenantContext;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.config.mybatis.AppContext;
+import org.jeecg.config.AppContext;
 import org.jeecg.config.shiro.JwtToken;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

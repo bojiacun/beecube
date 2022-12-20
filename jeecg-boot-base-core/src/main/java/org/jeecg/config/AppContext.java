@@ -1,4 +1,4 @@
-package org.jeecg.config.mybatis;//package org.jeecg.config.mybatis;
+package org.jeecg.config;//package org.jeecg.config.mybatis;
 
 import lombok.extern.slf4j.Slf4j;
 

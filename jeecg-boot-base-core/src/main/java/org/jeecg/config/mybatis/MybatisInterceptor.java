@@ -11,6 +11,7 @@ import org.apache.ibatis.plugin.*;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
