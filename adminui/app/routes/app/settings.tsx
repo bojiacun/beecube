@@ -31,19 +31,21 @@ export const loader: LoaderFunction = async ({request}) => {
 }
 
 const AppSettings = () => {
-    const {module} = useLoaderData();
+    const {module} = useLoaderData() || {};
+
+    if(!module) return <></>
 
     return (
         <Tab.Container id={'account-settings-container'} defaultActiveKey={'wechat'}>
             <Row>
                 <Col sm={2}>
                     <Nav variant={'pills'} className={'flex-column'}>
-                        {module.supportH5 &&
+                        {module?.supportH5 &&
                             <Nav.Item>
                                 <Nav.Link eventKey={'wechat'}>公众号</Nav.Link>
                             </Nav.Item>
                         }
-                        {module.supportWechat &&
+                        {module?.supportWechat &&
                             <Nav.Item>
                                 <Nav.Link eventKey={'wxapp'}>微信小程序</Nav.Link>
                             </Nav.Item>

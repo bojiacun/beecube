@@ -14,7 +14,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AppEdit from "~/pages/app/AppEdit";
-import {Delete, Edit, MoreVertical} from "react-feather";
+import {Delete, Edit, MoreVertical, User} from "react-feather";
 
 
 const AppMemberList = (props: any) => {
@@ -104,25 +104,28 @@ const AppMemberList = (props: any) => {
     }
     const columns: any[] = [
         {
-            text: '应用',
-            dataField: 'logo',
+            text: '头像昵称',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <Image src={row.logo} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />
-                        <span className={'ml-1'}>{row.name}</span>
+                        {!row.avatar ? <User size={40} /> : <Image src={row.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        <span className={'ml-1'}>{row.nickname}</span>
                     </div>
                 );
             }
         },
         {
-            text: '模块',
-            dataField: 'moduleName',
+            text: '账号',
+            dataField: 'username',
         },
         {
-            text: '到期时间',
-            dataField: 'endTime',
+            text: '手机号',
+            dataField: 'mobile',
+        },
+        {
+            text: '创建时间',
+            dataField: 'createTime',
             headerStyle: {width: 200},
             sort: true,
             onSort: handleSort,
