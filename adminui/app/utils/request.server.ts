@@ -116,6 +116,7 @@ export const API_APP_LIST = `${BASE_URL}/beecube-app/app/list`;
 export const API_APP_SETTING_LIST = `${BASE_URL}/beecube-app/app/settings/all`;
 export const API_APP_MEMBER_LIST = `${BASE_URL}/beecube-app/app/members/list`;
 export const API_APP_DETAIL = `${BASE_URL}/beecube-app/app/queryById`;
+export const API_APP_MODULE_DETAIL = `${BASE_URL}/beecube-app/app/modules/queryById`;
 export const API_APP_MENU_LIST = `${BASE_URL}/beecube-app/app/menus/all`;
 export const API_APP_USER_LIST = `${BASE_URL}/beecube-app/app/users/list`;
 export const API_APP_USER_BIND = `${BASE_URL}/beecube-app/app/users/bind`;
