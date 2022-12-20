@@ -208,4 +208,8 @@ public class ShiroRealm extends AuthorizingRealm {
         super.clearCache(principals);
     }
 
+    @Override
+    public String getName() {
+        return "AdminRealm";
+    }
 }

@@ -5,6 +5,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -188,7 +189,9 @@ public class ShiroConfig {
     @Bean("securityManager")
     public DefaultWebSecurityManager securityManager(ShiroRealm myRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(myRealm);
+        Collection<Realm> realms = new ArrayList<>();
+        realms.add(myRealm);
+        securityManager.setRealms(realms);
 
         /*
          * 关闭shiro自带的session，详情见文档
