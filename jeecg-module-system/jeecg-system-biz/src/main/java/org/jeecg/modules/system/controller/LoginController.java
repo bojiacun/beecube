@@ -18,6 +18,7 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.*;
 import org.jeecg.common.util.encryption.EncryptedString;
 import org.jeecg.config.JeecgBaseConfig;
+import org.jeecg.config.shiro.LoginType;
 import org.jeecg.modules.base.service.BaseCommonService;
 import org.jeecg.modules.system.entity.SysDepart;
 import org.jeecg.modules.system.entity.SysRoleIndex;
@@ -428,7 +429,7 @@ public class LoginController {
 		JSONObject obj = new JSONObject(new LinkedHashMap<>());
 
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword);
+		String token = JwtUtil.sign(username, syspassword, LoginType.Admin);
 		// 设置token缓存有效时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);

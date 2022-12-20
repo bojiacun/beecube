@@ -27,6 +27,7 @@ import org.jeecg.common.system.vo.SysUserCacheInfo;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.shiro.LoginType;
 
 /**
  * @Author Scott
@@ -96,7 +97,19 @@ public class JwtUtil {
 			return null;
 		}
 	}
-
+	/**
+	 * 获得token中的信息无需secret解密也能获得
+	 *
+	 * @return token中包含登录类型
+	 */
+	public static LoginType getLoginType(String token) {
+		try {
+			DecodedJWT jwt = JWT.decode(token);
+			return LoginType.valueOf(jwt.getClaim("loginType").asString());
+		} catch (JWTDecodeException e) {
+			return null;
+		}
+	}
 	/**
 	 * 生成签名,5min后过期
 	 *
@@ -104,12 +117,11 @@ public class JwtUtil {
 	 * @param secret   用户的密码
 	 * @return 加密的token
 	 */
-	public static String sign(String username, String secret) {
+	public static String sign(String username, String secret, LoginType loginType) {
 		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
 		// 附带username信息
-		return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
-
+		return JWT.create().withClaim("username", username).withClaim("loginType", loginType.name()).withExpiresAt(date).sign(algorithm);
 	}
 
 	/**
