@@ -190,6 +190,7 @@ public class ShiroConfig {
     @Bean("securityManager")
     public DefaultWebSecurityManager securityManager(ShiroRealm myRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setAuthenticator(new LoginTypeModularRealmAuthenticator());
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
         securityManager.setRealms(realms);
