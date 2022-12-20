@@ -31,9 +31,13 @@ const WechatSettingsEditor = () => {
     const handleOnSubmit = (values: any) => {
         postFetcher.submit({wechat: values}, {method: 'post', action:'/app/settings/update'});
     }
+    let settingsValue:any = {};
+    settings.filter((st:any) => st.groupName === 'wechat').forEach((item:any)=>{
+        settingsValue[item.settingKey] = item.settingValue;
+    });
 
     return (
-        <Formik initialValues={settings.filter((st:any) => st.groupName === 'wechat')} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
+        <Formik initialValues={settingsValue} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
             <Form method={'post'}>
                 <Card>
                     <Card.Header>

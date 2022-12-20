@@ -25,9 +25,9 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const settingsResult = await requestWithToken(request)(API_APP_SETTING_LIST+ queryString);
-    const appDetailResult = await requestWithToken(request)(API_APP_DETAIL+'?appid='+session.get("APPID"));
-    const appModuleResult = await requestWithToken(request)(API_APP_MODULE_DETAIL + '?mid='+appDetailResult.result.moduleId);
-    return json({settings: settingsResult.result, app: appDetailResult.result, module: appModuleResult.result});
+    const appDetailResult = await requestWithToken(request)(API_APP_DETAIL+'?id='+session.get("APPID"));
+    const appModuleResult = await requestWithToken(request)(API_APP_MODULE_DETAIL + '?id='+appDetailResult.result.moduleId);
+    return json({settings: settingsResult.result||[], app: appDetailResult.result, module: appModuleResult.result});
 }
 
 const AppSettings = () => {
