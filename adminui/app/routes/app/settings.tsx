@@ -36,7 +36,7 @@ const AppSettings = () => {
     return (
         <Tab.Container id={'account-settings-container'} defaultActiveKey={'wechat'}>
             <Row>
-                <Col sm={3}>
+                <Col sm={2}>
                     <Nav variant={'pills'} className={'flex-column'}>
                         {module.supportH5 &&
                             <Nav.Item>
@@ -50,7 +50,7 @@ const AppSettings = () => {
                         }
                     </Nav>
                 </Col>
-                <Col sm={9} className={'mt-1 mt-md-0'}>
+                <Col sm={10} className={'mt-1 mt-md-0'}>
                     <Tab.Content>
                         <Tab.Pane eventKey={'wechat'}>
                             <WechatSettingsEditor />

@@ -8,6 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -20,6 +23,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.mybatis.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -27,6 +31,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -44,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用配置表")
 @RestController
-@RequestMapping("/app/appSetting")
+@RequestMapping("/app/settings")
 public class AppSettingController extends JeecgController<AppSetting, IAppSettingService> {
 	@Autowired
 	private IAppSettingService appSettingService;
@@ -70,7 +75,16 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 		IPage<AppSetting> pageList = appSettingService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "应用配置表-应用所有配置")
+	 @ApiOperation(value="应用配置表-应用所有配置", notes="应用配置表-应用所有配置")
+	 @GetMapping(value = "/all")
+	 public Result<?> queryAllByAppId(@RequestParam(name="appid") String appid) {
+		 LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();
+		 queryWrapper.eq(AppSetting::getAppId, appid);
+
+		 List<AppSetting> pageList = appSettingService.list(queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *
@@ -98,7 +112,36 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 		appSettingService.updateById(appSetting);
 		return Result.OK("编辑成功!");
 	}
-	
+
+	 /**
+	  * 批量更新
+	  *
+	  * @return
+	  */
+	 @AutoLog(value = "应用配置表-编辑")
+	 @ApiOperation(value="应用配置表-编辑", notes="应用配置表-编辑")
+	 @RequestMapping(value = "/updateAll", method = RequestMethod.POST)
+	 @Transactional
+	 public Result<?> updateAll(@RequestBody JSONObject jsonObject) {
+		 //分组更新设置
+		 jsonObject.keySet().forEach(group -> {
+			 //先移除group的配置，然后再次全量插入
+			 LambdaQueryWrapper<AppSetting> removeQueryWrapper = new LambdaQueryWrapper<>();
+			 removeQueryWrapper.eq(AppSetting::getGroupKey, group);
+			 appSettingService.remove(removeQueryWrapper);
+
+			 JSONObject config = jsonObject.getJSONObject(group);
+			 config.keySet().forEach(key -> {
+				 AppSetting appSetting = new AppSetting();
+				 appSetting.setAppId(AppContext.getApp());
+				 appSetting.setSettingValue(config.getString(key));
+				 appSetting.setSettingKey(key);
+				 appSetting.setGroupKey(group);
+				 appSettingService.save(appSetting);
+			 });
+		 });
+		 return Result.OK("更新成功!");
+	 }
 	/**
 	 * 通过id删除
 	 *
