@@ -193,10 +193,6 @@ public class ShiroConfig {
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
         securityManager.setRealms(realms);
-        Object appRealm = SpringContextUtils.getBean("AppRealm");
-        if(appRealm != null) {
-            realms.add((Realm) appRealm);
-        }
 
         /*
          * 关闭shiro自带的session，详情见文档
