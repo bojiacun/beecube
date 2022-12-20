@@ -169,7 +169,7 @@ public class ShiroConfig {
             List<String> filters = jeecgBaseConfig.getShiro().getFilters();
             if(oConvertUtils.isNotEmpty(filters)){
                 for(String url : filters){
-                    int firstSep = url.indexOf(",");
+                    int firstSep = url.indexOf("=");
                     log.debug("加载配置文件中的权限配置：{} {}", url.substring(0, firstSep), url.substring(firstSep+1));
                     filterChainDefinitionMap.put(url.substring(0, firstSep), url.substring(firstSep+1));
                 }
