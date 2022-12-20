@@ -1,11 +1,17 @@
 package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppModule;
+import cn.winkt.modules.app.service.IAppModuleService;
 import cn.winkt.modules.app.vo.AppDTO;
+import cn.winkt.modules.app.vo.AppManifest;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -17,13 +23,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
 
+import org.jeecg.config.AppContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.servlet.view.RedirectView;
 
- /**
+/**
  * @Description: 应用实体类
  * @Author: jeecg-boot
  * @Date:   2022-12-04
@@ -36,6 +44,9 @@ import io.swagger.annotations.ApiOperation;
 public class AppController extends JeecgController<App, IAppService> {
 	@Autowired
 	private IAppService appService;
+
+	@Resource
+	private IAppModuleService appModuleService;
 	
 	/**
 	 * 分页列表查询
@@ -58,6 +69,21 @@ public class AppController extends JeecgController<App, IAppService> {
 		Page<AppDTO> page = new Page<AppDTO>(pageNo, pageSize);
 		IPage<AppDTO> pageList = appService.selectPageJoinAppModule(page, queryWrapper);
 		return Result.OK(pageList);
+	}
+
+
+	@GetMapping("/entry")
+	@ResponseBody
+	public RedirectView entry() {
+		String appId = AppContext.getApp();
+		App app = appService.getById(appId);
+		AppModule appModule = appModuleService.getById(app.getModuleId());
+		String homeUrl = "/";
+		AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
+		if(StringUtils.isNotEmpty(appManifest.getHomeUrl())) {
+			homeUrl = appManifest.getHomeUrl();
+		}
+		return new RedirectView(homeUrl);
 	}
 	
 	/**
