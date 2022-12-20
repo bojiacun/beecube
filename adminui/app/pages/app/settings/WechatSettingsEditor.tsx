@@ -29,7 +29,7 @@ const WechatSettingsEditor = () => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        postFetcher.submit({...values}, {method: 'put', action:'/system/users/edit'});
+        postFetcher.submit({wechat: values}, {method: 'post', action:'/app/settings/update'});
     }
 
     return (

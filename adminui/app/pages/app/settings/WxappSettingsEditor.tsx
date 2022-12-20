@@ -27,8 +27,7 @@ const WxappSettingsEditor = () => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        console.log(values);
-        postFetcher.submit({...values}, {method: 'put', action:'/system/users/edit'});
+        postFetcher.submit({wxapp:values}, {method: 'post', action:'/app/settings/update'});
     }
 
     return (
