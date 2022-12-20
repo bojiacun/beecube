@@ -9,6 +9,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.StaticConfig;
+import org.jeecg.config.shiro.LoginType;
 import org.jeecg.modules.message.handle.ISendMsgHandle;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.mapper.SysUserMapper;
@@ -105,7 +106,7 @@ public class EmailSendMsgHandle implements ISendMsgHandle {
      */
     private String getToken(SysUser user) {
         // 生成token
-        String token = JwtUtil.sign(user.getUsername(), user.getPassword());
+        String token = JwtUtil.sign(user.getUsername(), user.getPassword(), LoginType.Admin);
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         // 设置超时时间 1个小时
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 1 / 1000);

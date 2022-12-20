@@ -10,6 +10,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.config.shiro.LoginType;
 import org.jeecg.modules.cas.util.CasServiceUtil;
 import org.jeecg.modules.cas.util.XmlUtils;
 import org.jeecg.modules.system.entity.SysDepart;
@@ -78,7 +79,7 @@ public class CasClientController {
 	  		if(!result.isSuccess()) {
 	  			return result;
 	  		}
-	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword());
+	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword(), LoginType.Admin);
 	 		// 设置超时时间
 	 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 	 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);

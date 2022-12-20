@@ -9,6 +9,7 @@ import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.exception.JeecgBoot401Exception;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.config.shiro.LoginType;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,6 +57,10 @@ public class TokenUtils {
         if (username == null) {
             throw new JeecgBoot401Exception("token非法无效!");
         }
+        LoginType loginType = JwtUtil.getLoginType(token);
+        if (loginType == null) {
+            throw new JeecgBoot401Exception("token非法无效!");
+        }
 
         // 查询用户信息
         LoginUser user = TokenUtils.getLoginUser(username, commonApi, redisUtil);
@@ -68,7 +73,7 @@ public class TokenUtils {
             throw new JeecgBoot401Exception("账号已被锁定,请联系管理员!");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
+        if (!jwtTokenRefresh(token, username, loginType, user.getPassword(), redisUtil)) {
             throw new JeecgBoot401Exception(CommonConstant.TOKEN_IS_INVALID_MSG);
         }
         return true;
@@ -82,12 +87,12 @@ public class TokenUtils {
      * @param redisUtil
      * @return
      */
-    private static boolean jwtTokenRefresh(String token, String userName, String passWord, RedisUtil redisUtil) {
+    private static boolean jwtTokenRefresh(String token, String userName, LoginType loginType, String passWord, RedisUtil redisUtil) {
         String cacheToken = oConvertUtils.getString(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
             // 校验token有效性
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord);
+                String newAuthorization = JwtUtil.sign(userName, passWord, loginType);
                 // 设置Toekn缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
