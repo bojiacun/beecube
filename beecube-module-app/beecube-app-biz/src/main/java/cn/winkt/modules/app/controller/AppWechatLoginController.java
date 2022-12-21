@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.common.util.UUIDGenerator;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.LoginType;
@@ -103,6 +104,8 @@ public class AppWechatLoginController {
         member.setSex(wxMpUser.getSex());
         member.setCreateTime(new Date());
         member.setStatus(1);
+        member.setUsername(generateUsername());
+        member.setPassword("123456");
         appMemberService.save(member);
 
 
@@ -117,4 +120,16 @@ public class AppWechatLoginController {
         }
         return new RedirectView(redirectUrl);
     }
+
+    private String generateUsername() {
+        String username = UUIDGenerator.generate();
+        LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppMember::getUsername, username);
+        long count = appMemberService.count(queryWrapper);
+        if(count > 0) {
+            return generateUsername();
+        }
+        return username;
+    }
+
 }
