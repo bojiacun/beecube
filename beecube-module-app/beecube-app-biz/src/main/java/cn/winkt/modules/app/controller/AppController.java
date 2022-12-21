@@ -45,9 +45,7 @@ public class AppController extends JeecgController<App, IAppService> {
 	@Autowired
 	private IAppService appService;
 
-	@Resource
-	private IAppModuleService appModuleService;
-	
+
 	/**
 	 * 分页列表查询
 	 *
@@ -72,19 +70,7 @@ public class AppController extends JeecgController<App, IAppService> {
 	}
 
 
-	@GetMapping("/entry")
-	@ResponseBody
-	public RedirectView entry() {
-		String appId = AppContext.getApp();
-		App app = appService.getById(appId);
-		AppModule appModule = appModuleService.getById(app.getModuleId());
-		String homeUrl = "/";
-		AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
-		if(StringUtils.isNotEmpty(appManifest.getHomeUrl())) {
-			homeUrl = appManifest.getHomeUrl();
-		}
-		return new RedirectView(homeUrl);
-	}
+
 	
 	/**
 	 * 添加
