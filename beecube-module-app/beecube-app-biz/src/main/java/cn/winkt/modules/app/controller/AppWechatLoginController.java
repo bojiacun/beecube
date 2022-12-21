@@ -12,6 +12,7 @@ import cn.winkt.modules.app.service.IAppUserService;
 import cn.winkt.modules.app.vo.AppManifest;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.mikael.urlbuilder.UrlBuilder;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -19,8 +20,10 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.UUIDGenerator;
 import org.jeecg.config.AppContext;
@@ -58,7 +61,8 @@ public class AppWechatLoginController {
     private RedisUtil redisUtil;
 
     @GetMapping("/entry")
-    public RedirectView entry(@RequestParam(name = "redirectUrl", required = false) String redirectUrl) {
+    public RedirectView entry(@RequestParam(name = "redirectUrl", required = false) String redirectUrl,
+                              @RequestParam(name = "token", required = false) String token) {
         String appId = AppContext.getApp();
         App app = appService.getById(appId);
         AppModule appModule = appModuleService.getById(app.getModuleId());
@@ -71,6 +75,8 @@ public class AppWechatLoginController {
             if(StringUtils.isNotEmpty(appManifest.getHomeUrl())) {
                 homeUrl = appManifest.getHomeUrl();
             }
+        }
+        if(StringUtils.isEmpty(token)) {
         }
         return new RedirectView(homeUrl);
     }
@@ -118,6 +124,7 @@ public class AppWechatLoginController {
         if(StringUtils.isEmpty(redirectUrl)) {
             redirectUrl = jeecgBaseConfig.getDomainUrl()+"/mp/entry";
         }
+        redirectUrl = UrlBuilder.fromString(redirectUrl).addParameter("token", token).toString();
         return new RedirectView(redirectUrl);
     }
 
