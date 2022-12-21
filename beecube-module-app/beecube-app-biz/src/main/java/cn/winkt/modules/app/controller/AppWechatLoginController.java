@@ -76,8 +76,7 @@ public class AppWechatLoginController {
                 homeUrl = appManifest.getHomeUrl();
             }
         }
-        if(StringUtils.isEmpty(token)) {
-        }
+        homeUrl = UrlBuilder.fromString(homeUrl).addParameter("token", token).toString();
         return new RedirectView(homeUrl);
     }
 
