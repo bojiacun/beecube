@@ -29,7 +29,7 @@ const WechatSettingsEditor = () => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        postFetcher.submit({wechat: values}, {method: 'post', action:'/app/settings/update'});
+        postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=wechat'});
     }
     let settingsValue:any = {};
     settings.filter((st:any) => st.groupName === 'wechat').forEach((item:any)=>{

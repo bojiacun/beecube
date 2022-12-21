@@ -27,7 +27,7 @@ const WxappSettingsEditor = () => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        postFetcher.submit({wxapp:values}, {method: 'post', action:'/app/settings/update'});
+        postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=wxapp'});
     }
     let settingsValue:any = {};
     settings.filter((st:any) => st.groupName === 'wxapp').forEach((item:any)=>{
