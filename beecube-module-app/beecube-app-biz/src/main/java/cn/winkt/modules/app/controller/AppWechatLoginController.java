@@ -19,8 +19,12 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
+import org.jeecg.config.shiro.LoginType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +52,9 @@ public class AppWechatLoginController {
 
     @Resource
     private IAppMemberService appMemberService;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     @GetMapping("/entry")
     public RedirectView entry(@RequestParam(name = "redirectUrl", required = false) String redirectUrl) {
@@ -97,6 +104,13 @@ public class AppWechatLoginController {
         member.setCreateTime(new Date());
         member.setStatus(1);
         appMemberService.save(member);
+
+
+        String token = JwtUtil.sign(member.getUsername(), member.getPassword(), LoginType.App);
+        // 设置超时时间
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+
 
         if(StringUtils.isEmpty(redirectUrl)) {
             redirectUrl = jeecgBaseConfig.getDomainUrl()+"/mp/entry";
