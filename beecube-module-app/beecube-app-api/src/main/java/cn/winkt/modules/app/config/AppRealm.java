@@ -6,6 +6,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.jeecg.common.config.TenantContext;
@@ -21,6 +22,8 @@ import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Set;
 
 @Slf4j
 public class AppRealm extends AuthorizingRealm {
@@ -35,7 +38,25 @@ public class AppRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        log.debug("===============Shiro权限认证开始============ [ roles、permissions]==========");
+        String username = null;
+        if (principals != null) {
+            LoginUser sysUser = (LoginUser) principals.getPrimaryPrincipal();
+            username = sysUser.getUsername();
+        }
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+
+        // 设置用户拥有的角色集合，比如“admin,test”
+        Set<String> roleSet = Collections.singleton("app-member");
+        //System.out.println(roleSet.toString());
+        info.setRoles(roleSet);
+
+        // 设置用户拥有的权限集合，比如“sys:role:add,sys:user:add”
+        Set<String> permissionSet = Collections.emptySet();
+        info.addStringPermissions(permissionSet);
+        //System.out.println(permissionSet);
+        log.info("===============Shiro权限认证成功==============");
+        return info;
     }
 
     @Override
