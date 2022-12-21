@@ -33,6 +33,7 @@ export const action: ActionFunction = async ({request}) => {
     userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
     session.set("APPID", appId);
+    console.log(app);
     session.set("APP", JSON.stringify(app));
     session.set("FROM", "platform");
     session.set("APP_MENUS", userInfo.perms);

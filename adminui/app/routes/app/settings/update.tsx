@@ -12,5 +12,6 @@ export const action: ActionFunction = async ({request}) => {
     const data = formData2Json(formData);
     let postData:any = {};
     postData[groupKey] = data;
+    console.log(postData);
     return await requestWithToken(request)(API_APP_SETTINGS_UPDATE, postFormInit(postData))
 }
