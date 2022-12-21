@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     const url = new URL(request.url);
-    let queryString = '';
+    let queryString = 'appid='+session.get("APPID");
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
     } else {
