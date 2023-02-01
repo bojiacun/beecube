@@ -166,7 +166,7 @@ public class ShiroConfig {
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         assert jeecgBaseConfig != null;
         //增加自定义拦截器
-        if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
+        if(jeecgBaseConfig.getShiro()!=null){
             List<String> filters = jeecgBaseConfig.getShiro().getFilters();
             if(oConvertUtils.isNotEmpty(filters)){
                 for(String url : filters){
