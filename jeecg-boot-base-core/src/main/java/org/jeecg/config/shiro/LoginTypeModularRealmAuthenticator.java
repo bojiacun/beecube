@@ -14,13 +14,16 @@ public class LoginTypeModularRealmAuthenticator extends ModularRealmAuthenticato
     @Override
     protected AuthenticationInfo doAuthenticate(AuthenticationToken authenticationToken) throws AuthenticationException {
         assertRealmsConfigured();
-        Collection<Realm> realms = getRealms();
         JwtToken token = (JwtToken) authenticationToken;
-        LoginType loginType = JwtUtil.getLoginType((String)token.getPrincipal());
-        assert loginType != null;
+        Collection<Realm> realms = getRealms();
         Collection<Realm> typedRealms = new ArrayList<>();
+        LoginType loginType = LoginType.Admin;
+        if (token.getPrincipal() != null) {
+            loginType = JwtUtil.getLoginType((String) token.getPrincipal());
+        }
+        assert loginType != null;
         for (Realm realm : realms) {
-            if(realm.getName().startsWith(loginType.name())) {
+            if (realm.getName().startsWith(loginType.name())) {
                 typedRealms.add(realm);
             }
         }
