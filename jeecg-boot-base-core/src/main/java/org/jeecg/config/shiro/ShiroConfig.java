@@ -164,6 +164,7 @@ public class ShiroConfig {
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
+        assert jeecgBaseConfig != null;
         //增加自定义拦截器
         if(jeecgBaseConfig!=null && jeecgBaseConfig.getShiro()!=null){
             List<String> filters = jeecgBaseConfig.getShiro().getFilters();
@@ -178,7 +179,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**", "jwt");
 
         // 未授权界面返回JSON
-        assert jeecgBaseConfig != null;
         shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
         shiroFilterFactoryBean.setLoginUrl(jeecgBaseConfig.getShiro().getLoginUrl());
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

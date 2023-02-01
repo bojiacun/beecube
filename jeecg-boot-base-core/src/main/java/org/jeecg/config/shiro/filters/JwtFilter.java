@@ -125,6 +125,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
         //log.info("------清空线程中多租户的ID={}------",TenantContext.getTenant());
         TenantContext.clear();
-        AppContext.clear();;
+        AppContext.clear();
     }
 }
