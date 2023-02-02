@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class WechatJwtFilter extends JwtFilter{
 
+    public WechatJwtFilter() {
+    }
+
+    public WechatJwtFilter(boolean allowOrigin) {
+        super(allowOrigin);
+    }
+
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
