@@ -17,11 +17,7 @@ public class LoginTypeModularRealmAuthenticator extends ModularRealmAuthenticato
         JwtToken token = (JwtToken) authenticationToken;
         Collection<Realm> realms = getRealms();
         Collection<Realm> typedRealms = new ArrayList<>();
-        LoginType loginType = LoginType.Admin;
-        if (token.getPrincipal() != null) {
-            loginType = JwtUtil.getLoginType((String) token.getPrincipal());
-        }
-        assert loginType != null;
+        LoginType loginType = token.getLoginType();
         for (Realm realm : realms) {
             if (realm.getName().startsWith(loginType.name())) {
                 typedRealms.add(realm);

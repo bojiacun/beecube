@@ -9,6 +9,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.shiro.JwtToken;
+import org.jeecg.config.shiro.LoginType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
