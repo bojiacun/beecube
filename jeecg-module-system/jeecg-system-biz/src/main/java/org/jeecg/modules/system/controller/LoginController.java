@@ -591,7 +591,7 @@ public class LoginController {
 		obj.put("userInfo", sysUser);
 		
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword, LoginType.Admin);
+		String token = JwtUtil.sign(username, syspassword);
 		// 设置超时时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);

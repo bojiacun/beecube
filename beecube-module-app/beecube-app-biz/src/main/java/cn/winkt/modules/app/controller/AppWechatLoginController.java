@@ -114,7 +114,7 @@ public class AppWechatLoginController {
         appMemberService.save(member);
 
 
-        String token = JwtUtil.sign(member.getUsername(), member.getPassword(), LoginType.App);
+        String token = JwtUtil.sign(member.getUsername(), member.getPassword());
         // 设置超时时间
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
