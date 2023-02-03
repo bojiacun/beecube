@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/mp")
+@RequestMapping("/app/wechat")
 public class AppWechatLoginController {
     @Autowired
     private IAppService appService;

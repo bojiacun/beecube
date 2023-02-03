@@ -120,10 +120,6 @@ public class WechatShiroRealm extends AuthorizingRealm {
         if (username == null) {
             throw new AuthenticationException("token非法无效!");
         }
-        LoginType loginType = JwtUtil.getLoginType(token);
-        if(loginType == null) {
-            throw new AuthenticationException("token非法无效!");
-        }
 
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
@@ -137,7 +133,7 @@ public class WechatShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, loginUser.getPassword(), loginType)) {
+        if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
             throw new AuthenticationException(CommonConstant.TOKEN_IS_INVALID_MSG);
         }
         //update-begin-author:taoyan date:20210609 for:校验用户的tenant_id和前端传过来的是否一致
@@ -171,12 +167,12 @@ public class WechatShiroRealm extends AuthorizingRealm {
      * @param passWord
      * @return
      */
-    public boolean jwtTokenRefresh(String token, String userName, String passWord, LoginType loginType) {
+    public boolean jwtTokenRefresh(String token, String userName, String passWord) {
         String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
             // 校验token有效性
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord, loginType);
+                String newAuthorization = JwtUtil.sign(userName, passWord);
                 // 设置超时时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);

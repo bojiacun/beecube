@@ -117,11 +117,11 @@ public class JwtUtil {
 	 * @param secret   用户的密码
 	 * @return 加密的token
 	 */
-	public static String sign(String username, String secret, LoginType loginType) {
+	public static String sign(String username, String secret) {
 		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
 		// 附带username信息
-		return JWT.create().withClaim("username", username).withClaim("loginType", loginType.name()).withExpiresAt(date).sign(algorithm);
+		return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
 	}
 
 	/**

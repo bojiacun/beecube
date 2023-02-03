@@ -189,6 +189,8 @@ public class ShiroConfig {
         securityManager.setAuthenticator(new LoginTypeModularRealmAuthenticator());
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
+        WechatShiroRealm wechatShiroRealm = new WechatShiroRealm();
+        realms.add(wechatShiroRealm);
         securityManager.setRealms(realms);
 
         /*
