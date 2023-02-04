@@ -429,7 +429,7 @@ public class LoginController {
 		JSONObject obj = new JSONObject(new LinkedHashMap<>());
 
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword, LoginType.Admin);
+		String token = JwtUtil.sign(username, syspassword);
 		// 设置token缓存有效时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);

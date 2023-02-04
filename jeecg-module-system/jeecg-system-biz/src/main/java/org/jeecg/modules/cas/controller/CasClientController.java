@@ -79,7 +79,7 @@ public class CasClientController {
 	  		if(!result.isSuccess()) {
 	  			return result;
 	  		}
-	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword(), LoginType.Admin);
+	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword());
 	 		// 设置超时时间
 	 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 	 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
