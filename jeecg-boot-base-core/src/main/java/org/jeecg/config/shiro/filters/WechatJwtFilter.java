@@ -2,6 +2,7 @@ package org.jeecg.config.shiro.filters;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.JwtToken;
 import org.jeecg.config.shiro.LoginType;
@@ -18,6 +19,17 @@ public class WechatJwtFilter extends JwtFilter{
 
     public WechatJwtFilter(boolean allowOrigin) {
         super(allowOrigin);
+    }
+
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        try {
+            executeLogin(request, response);
+            return true;
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+        }
+        return false;
     }
 
     @Override
