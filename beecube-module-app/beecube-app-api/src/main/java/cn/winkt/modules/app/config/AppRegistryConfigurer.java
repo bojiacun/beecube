@@ -19,12 +19,14 @@ import org.jeecg.config.shiro.LoginType;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
+@Component
 public abstract class AppRegistryConfigurer implements ApplicationRunner {
     @Resource
     protected AppApi appApi;
