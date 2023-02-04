@@ -6,6 +6,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.shiro.LoginType;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public class WebsocketFilter implements Filter {
         log.debug("Websocket连接 Token安全校验，Path = {}，token:{}", request.getRequestURI(), token);
 
         try {
-            TokenUtils.verifyToken(token, commonApi, redisUtil);
+            TokenUtils.verifyToken(token, commonApi, redisUtil, LoginType.Admin);
         } catch (Exception exception) {
             //log.error("Websocket连接 Token安全校验失败，IP:{}, Token:{}, Path = {}，异常：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());
             log.debug("Websocket连接 Token安全校验失败，IP:{}, Token:{}, Path = {}，异常：{}", oConvertUtils.getIpAddrByRequest(request), token, request.getRequestURI(), exception.getMessage());

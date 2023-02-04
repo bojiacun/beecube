@@ -5,6 +5,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.SysUserCacheInfo;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
+import org.jeecg.config.shiro.LoginType;
 import org.jeecg.modules.jmreport.api.JmReportTokenServiceI;
 import org.jeecg.modules.system.service.impl.SysBaseApiImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class JimuReportTokenService implements JmReportTokenServiceI {
 
     @Override
     public Boolean verifyToken(String token) {
-        return TokenUtils.verifyToken(token, sysBaseApi, redisUtil);
+        return TokenUtils.verifyToken(token, sysBaseApi, redisUtil, LoginType.Admin);
     }
 
     @Override

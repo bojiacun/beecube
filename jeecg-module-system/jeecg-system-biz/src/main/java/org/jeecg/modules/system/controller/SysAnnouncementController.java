@@ -21,6 +21,7 @@ import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.shiro.LoginType;
 import org.jeecg.modules.message.enums.RangeDateEnum;
 import org.jeecg.modules.message.websocket.WebSocket;
 import org.jeecg.modules.system.entity.SysAnnouncement;
@@ -492,7 +493,7 @@ public class SysAnnouncementController {
             boolean tokenOk = false;
             try {
                 // 验证Token有效性
-                tokenOk = TokenUtils.verifyToken(request, sysBaseApi, redisUtil);
+                tokenOk = TokenUtils.verifyToken(request, sysBaseApi, redisUtil, LoginType.Admin);
             } catch (Exception ignored) {
             }
             // 判断是否传递了Token，并且Token有效，如果传了就不做查看限制，直接返回

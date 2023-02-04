@@ -38,16 +38,16 @@ public class TokenUtils {
     /**
      * 验证Token
      */
-    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonApi, RedisUtil redisUtil) {
+    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonApi, RedisUtil redisUtil, LoginType loginType) {
         log.debug(" -- url --" + request.getRequestURL());
         String token = getTokenByRequest(request);
-        return TokenUtils.verifyToken(token, commonApi, redisUtil);
+        return verifyToken(token, commonApi, redisUtil, loginType);
     }
 
     /**
      * 验证Token
      */
-    public static boolean verifyToken(String token, CommonAPI commonApi, RedisUtil redisUtil) {
+    public static boolean verifyToken(String token, CommonAPI commonApi, RedisUtil redisUtil, LoginType loginType) {
         if (StringUtils.isBlank(token)) {
             throw new JeecgBoot401Exception("token不能为空!");
         }
@@ -57,13 +57,9 @@ public class TokenUtils {
         if (username == null) {
             throw new JeecgBoot401Exception("token非法无效!");
         }
-        LoginType loginType = JwtUtil.getLoginType(token);
-        if (loginType == null) {
-            throw new JeecgBoot401Exception("token非法无效!");
-        }
 
         // 查询用户信息
-        LoginUser user = TokenUtils.getLoginUser(username, commonApi, redisUtil);
+        LoginUser user = TokenUtils.getLoginUser(username, commonApi, redisUtil, loginType);
         //LoginUser user = commonApi.getUserByName(username);
         if (user == null) {
             throw new JeecgBoot401Exception("用户不存在!");
