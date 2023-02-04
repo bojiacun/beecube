@@ -34,8 +34,7 @@ public class WechatJwtFilter extends AccessControlFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         try {
-            executeLogin(request, response);
-            return true;
+            return executeLogin(request, response);
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(),e);
         }
