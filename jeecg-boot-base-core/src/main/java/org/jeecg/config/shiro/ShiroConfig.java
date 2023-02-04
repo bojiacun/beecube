@@ -159,7 +159,6 @@ public class ShiroConfig {
         //如果cloudServer为空 则说明是单体 需要加载跨域配置【微服务跨域切换】
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
-        filterMap.put("wechat", new WechatJwtFilter(cloudServer == null));
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         assert jeecgBaseConfig != null;
@@ -189,8 +188,6 @@ public class ShiroConfig {
         securityManager.setAuthenticator(new LoginTypeModularRealmAuthenticator());
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
-        WechatShiroRealm wechatShiroRealm = new WechatShiroRealm();
-        realms.add(wechatShiroRealm);
         securityManager.setRealms(realms);
 
         /*

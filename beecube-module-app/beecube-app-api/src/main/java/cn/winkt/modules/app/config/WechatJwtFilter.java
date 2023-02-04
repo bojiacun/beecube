@@ -1,4 +1,4 @@
-package org.jeecg.config.shiro.filters;
+package cn.winkt.modules.app.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.constant.CommonConstant;
@@ -6,13 +6,14 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.JwtToken;
 import org.jeecg.config.shiro.LoginType;
+import org.jeecg.config.shiro.filters.JwtFilter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
-public class WechatJwtFilter extends JwtFilter{
+public class WechatJwtFilter extends JwtFilter {
 
     public WechatJwtFilter() {
     }
