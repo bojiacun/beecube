@@ -53,6 +53,9 @@ public class ShiroConfig {
     @Resource
     private JeecgBaseConfig jeecgBaseConfig;
 
+    @Resource
+    private ShiroConfigurer shiroConfigurer;
+
     /**
      * Filter Chain定义说明
      *
@@ -159,6 +162,9 @@ public class ShiroConfig {
         //如果cloudServer为空 则说明是单体 需要加载跨域配置【微服务跨域切换】
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
+        if(shiroConfigurer != null) {
+            filterMap.putAll(shiroConfigurer.extendFilters());
+        }
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         assert jeecgBaseConfig != null;
@@ -188,6 +194,9 @@ public class ShiroConfig {
         securityManager.setAuthenticator(new LoginTypeModularRealmAuthenticator());
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm);
+        if(shiroConfigurer!=null) {
+            realms.addAll(shiroConfigurer.extendRealms());
+        }
         securityManager.setRealms(realms);
 
         /*

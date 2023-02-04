@@ -5,6 +5,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.jeecg.common.constant.CommonConstant;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -22,11 +23,14 @@ public class AppRealmConfiguration implements ApplicationRunner {
     @Resource
     Environment env;
 
-
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
+    @Bean
+    public void extendShiroConfig() {
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         shiroFilterFactoryBean.getFilters().put("wechat", new WechatJwtFilter(cloudServer == null));
         defaultWebSecurityManager.getRealms().add(new AppRealm());
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
     }
 }
