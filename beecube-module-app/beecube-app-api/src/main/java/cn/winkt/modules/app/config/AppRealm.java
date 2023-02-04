@@ -73,13 +73,7 @@ public class AppRealm extends AuthorizingRealm {
             throw new AuthenticationException("token为空!");
         }
         // 校验token有效性
-        LoginUser loginUser = null;
-        try {
-            loginUser = this.checkUserTokenIsEffect(token);
-        } catch (AuthenticationException e) {
-            JwtUtil.responseError(SpringContextUtils.getHttpServletResponse(),401,e.getMessage());
-            return null;
-        }
+        LoginUser loginUser = this.checkUserTokenIsEffect(token);
         return new SimpleAuthenticationInfo(loginUser, token, getName());
     }
 
