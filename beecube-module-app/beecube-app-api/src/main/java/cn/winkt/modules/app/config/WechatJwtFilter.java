@@ -3,14 +3,13 @@ package cn.winkt.modules.app.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.jeecg.common.config.TenantContext;
 import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.shiro.JwtToken;
 import org.jeecg.config.shiro.LoginType;
-import org.jeecg.config.shiro.filters.JwtFilter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,6 +42,7 @@ public class WechatJwtFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        WebUtils.issueRedirect(request, response, getLoginUrl());
         return false;
     }
 

@@ -20,6 +20,7 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.JwtToken;
 import org.jeecg.config.shiro.LoginType;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,14 +28,15 @@ import java.util.Collections;
 import java.util.Set;
 
 @Slf4j
+@Component
 public class AppRealm extends AuthorizingRealm {
 
     @Lazy
     @Resource
     private RedisUtil redisUtil;
 
-    @Resource
     @Lazy
+    @Resource
     private AppMemberProvider appMemberProvider;
     @Override
     public boolean supports(AuthenticationToken token) {

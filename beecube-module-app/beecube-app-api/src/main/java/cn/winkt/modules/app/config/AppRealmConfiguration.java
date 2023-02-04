@@ -21,12 +21,15 @@ public class AppRealmConfiguration implements ShiroConfigurer {
     @Resource
     Environment env;
 
+    @Resource
+    AppRealm appRealm;
 
 
     @Override
     public Collection<Realm> extendRealms() {
-        return Collections.singletonList(new AppRealm());
+        return Collections.singletonList(appRealm);
     }
+
 
     @Override
     public Map<String, Filter> extendFilters() {
