@@ -121,7 +121,7 @@ public class TokenUtils {
                 //解密用户
                 SensitiveInfoUtil.handlerObject(loginUser, false);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         } else {
             // 查询用户信息
