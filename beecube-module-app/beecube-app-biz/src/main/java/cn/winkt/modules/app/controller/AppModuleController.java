@@ -15,14 +15,15 @@ import cn.winkt.modules.app.entity.AppModuleRoute;
 import cn.winkt.modules.app.service.IAppModuleMenuService;
 import cn.winkt.modules.app.service.IAppModuleRouteService;
 import cn.winkt.modules.app.service.IAppModuleRoleService;
-import cn.winkt.modules.app.vo.AppGateway;
-import cn.winkt.modules.app.vo.AppManifest;
-import cn.winkt.modules.app.vo.AppMenu;
-import cn.winkt.modules.app.vo.AppRole;
+import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.commons.compress.archivers.zip.ZipUtil;
+import org.apache.commons.compress.compressors.bzip2.BZip2Utils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -223,13 +224,19 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		}
 
 
-			//调用模块安装方法
-//		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
+		//调用模块安装方法
+		if(StringUtils.isNotEmpty(appManifest.getInstallUrl())) {
+			restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
+		}
+
+
+		//安装APP资源文件
+		AppResource appResource = appManifest.getResources();
+		if(StringUtils.isNotEmpty(appResource.getUi())) {
+		}
 
 		//执行安装成功后续操作
-
 		appModule.setStatus(1);
-
 		appModuleService.updateById(appModule);
 
 
@@ -276,7 +283,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		});
 
 		//调用模块卸载方法
-//		restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getUninstallUrl(), null);
+		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
+			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
+		}
 		//执行卸载后操作
 		appModule.setStatus(2);
 
