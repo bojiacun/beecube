@@ -61,4 +61,6 @@ public class AppModule {
 	/**模块注册时间*/
 
 	private Date createTime;
+
+	private String description;
 }

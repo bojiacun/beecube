@@ -12,4 +12,13 @@ public class AppManifest {
     private String homeUrl;
     private AppResource resources;
     private AppRole role;
+    private String name;
+    private String identify;
+    private String logo;
+    private String author;
+    private String version;
+    private String supportWechat;
+    private String supportDouyin;
+    private String supportH5;
+    private String description;
 }

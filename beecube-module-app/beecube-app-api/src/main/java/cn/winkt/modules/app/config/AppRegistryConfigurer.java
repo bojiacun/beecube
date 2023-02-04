@@ -1,10 +1,13 @@
 package cn.winkt.modules.app.config;
 
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppManifest;
 import cn.winkt.modules.app.vo.AppModule;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.config.mqtoken.UserTokenContext;
@@ -29,21 +32,8 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         UserTokenContext.setToken(getTemporaryToken());
-        String identity = getModuleName();
-        log.info("---检测模块是否已经注册---");
-        if(!appApi.moduleIsRegistered(identity)) {
-            AppModule appModule = buildModule();
-            Result<?> result = appApi.registerModule(appModule);
-            if(!result.isSuccess()) {
-                log.error("安装模块 {} 出错: {}", identity, result.getMessage());
-            }
-            else {
-                log.info("安装模块 {} 成功", identity);
-            }
-        }
-        else {
-            //升级操作
-        }
+        AppModule appModule = buildModule();
+        appApi.registerModule(appModule);
         UserTokenContext.remove();
     }
 
@@ -64,7 +54,31 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
         return token;
     }
+    protected AppModule buildModule() throws IOException {
+        AppModule appModule = new AppModule();
+        ClassPathResource manifestResouce = new ClassPathResource("static/manifest.json");
+        byte[] manifestBuffer = new byte[(int) manifestResouce.getFile().length()];
+        IOUtils.readFully(manifestResouce.getInputStream(), manifestBuffer);
+        manifestResouce.getInputStream().close();
+        AppManifest appManifest = JSONObject.parseObject(new String(manifestBuffer), AppManifest.class);
+        appModule.setIdentify(appManifest.getIdentify());
+        appModule.setName(appManifest.getName());
+        appModule.setDescription(appManifest.getDescription());
 
-    protected abstract String getModuleName();
-    protected abstract AppModule buildModule() throws IOException;
+        ClassPathResource logoResource = new ClassPathResource("static/logo.jpeg");
+        InputStream imageStream = logoResource.getInputStream();
+        byte[] buffer = new byte[(int) logoResource.getFile().length()];
+        IOUtils.readFully(imageStream, buffer);
+        imageStream.close();
+        appModule.setLogo("data:image/jpeg;base64," + new String(Base64.encodeBase64(buffer)));
+
+        appModule.setAuthor(appManifest.getAuthor());
+        appModule.setStatus(0);
+        appModule.setSupportWechat(NumberUtils.toInt(appManifest.getSupportWechat(),0));
+        appModule.setSupportH5(NumberUtils.toInt(appManifest.getSupportH5(), 0));
+        appModule.setSupportDouyin(NumberUtils.toInt(appManifest.getSupportDouyin(), 0));
+        appModule.setVersion(appManifest.getVersion());
+        appModule.setManifest(new String(manifestBuffer));
+        return appModule;
+    };
 }
