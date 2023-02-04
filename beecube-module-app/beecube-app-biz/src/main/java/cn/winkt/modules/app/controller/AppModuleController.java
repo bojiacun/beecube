@@ -304,6 +304,14 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		return Result.OK(true);
 	}
 
+	@PutMapping("/upgrade/{id}")
+	@AutoLog(value = "应用模块-更新")
+	@ApiOperation(value="应用模块-更新", notes="应用模块-更新")
+	@GlobalTransactional
+	public Result<?> upgradeModule(@PathVariable String id) {
+		return Result.OK(true);
+	}
+
 	/**
 	 * 编辑
 	 *
