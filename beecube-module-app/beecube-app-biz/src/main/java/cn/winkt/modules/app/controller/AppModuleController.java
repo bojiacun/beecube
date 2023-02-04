@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.config.BeecubeConfig;
 import cn.winkt.modules.app.entity.AppModuleMenu;
 import cn.winkt.modules.app.entity.AppModuleRole;
 import cn.winkt.modules.app.entity.AppModuleRoute;
 import cn.winkt.modules.app.service.IAppModuleMenuService;
 import cn.winkt.modules.app.service.IAppModuleRouteService;
 import cn.winkt.modules.app.service.IAppModuleRoleService;
+import cn.winkt.modules.app.utils.ZipUtils;
 import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -72,6 +75,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 	@Resource
 	private IAppModuleRoleService appModuleRoleService;
+
+	@Resource
+	BeecubeConfig beecubeConfig;
 
 	/**
 	 * 分页列表查询
@@ -132,7 +138,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@AutoLog(value = "应用模块-安装")
 	@ApiOperation(value="应用模块-安装", notes="应用模块-安装")
 	@GlobalTransactional
-	public Result<?> installModule(@PathVariable String id) {
+	public Result<?> installModule(@PathVariable String id) throws Exception {
 		AppModule appModule = appModuleService.getById(id);
 		if(appModule == null) {
 			throw new JeecgBootException("找不到模块 "+id);
@@ -234,6 +240,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		//安装APP资源文件
 		AppResource appResource = appManifest.getResources();
 		if(StringUtils.isNotEmpty(appResource.getUi())) {
+			String uiZipFile = beecubeConfig.getAppUiPath()+"/ui.zip";
+			ZipUtils.download("http://"+appGateway.getRouterId()+"/"+appResource.getUi(), uiZipFile);
+			ZipUtils.unzip(uiZipFile, beecubeConfig.getAppUiPath());
 		}
 
 		//执行安装成功后续操作
