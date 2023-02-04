@@ -17,6 +17,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.shiro.JwtToken;
 import org.jeecg.config.shiro.LoginType;
 import org.springframework.context.annotation.Lazy;
 
@@ -35,7 +36,10 @@ public class AppRealm extends AuthorizingRealm {
     @Resource
     @Lazy
     private AppMemberProvider appMemberProvider;
-
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         log.debug("===============Shiro权限认证开始============ [ roles、permissions]==========");
@@ -74,7 +78,6 @@ public class AppRealm extends AuthorizingRealm {
             loginUser = this.checkUserTokenIsEffect(token);
         } catch (AuthenticationException e) {
             JwtUtil.responseError(SpringContextUtils.getHttpServletResponse(),401,e.getMessage());
-            e.printStackTrace();
             return null;
         }
         return new SimpleAuthenticationInfo(loginUser, token, getName());
