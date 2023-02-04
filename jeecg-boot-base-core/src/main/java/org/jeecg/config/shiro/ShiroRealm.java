@@ -123,7 +123,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
-        LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
+        LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil, LoginType.Admin);
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");

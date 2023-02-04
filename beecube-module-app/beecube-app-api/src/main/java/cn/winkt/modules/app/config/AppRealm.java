@@ -88,7 +88,7 @@ public class AppRealm extends AuthorizingRealm {
 
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
-        LoginUser loginUser = TokenUtils.getLoginUser(username, appMemberProvider, redisUtil);
+        LoginUser loginUser = TokenUtils.getLoginUser(username, appMemberProvider, redisUtil, LoginType.App);
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");
