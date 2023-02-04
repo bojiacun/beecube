@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
+import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.*;
@@ -53,7 +54,7 @@ public class ShiroConfig {
     @Resource
     private JeecgBaseConfig jeecgBaseConfig;
 
-    @Resource
+    @Autowired(required = false)
     private ShiroConfigurer shiroConfigurer;
 
     /**
