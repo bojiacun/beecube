@@ -27,7 +27,7 @@ public class WechatJwtFilter extends JwtFilter{
             executeLogin(request, response);
             return true;
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage(),e);
         }
         return false;
     }
