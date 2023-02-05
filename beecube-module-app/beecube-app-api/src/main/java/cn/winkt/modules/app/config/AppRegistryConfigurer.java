@@ -18,6 +18,7 @@ import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.config.shiro.LoginType;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Configuration
 @Slf4j
 public class AppRegistryConfigurer implements ApplicationRunner {
     @Resource
