@@ -68,7 +68,6 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	private SystemApi systemApi;
 
 	@Resource
-	@LoadBalanced
 	private RestTemplate restTemplate;
 
 	@Resource
