@@ -40,6 +40,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
@@ -139,7 +140,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 			module.setSupportWechat(appModule.getSupportWechat());
 			module.setName(appModule.getName());
 			module.setNewVersion(appModule.getVersion());
-			appModuleService.save(module);
+			appModuleService.updateById(module);
 		}
 		else {
 			appModuleService.save(appModule);

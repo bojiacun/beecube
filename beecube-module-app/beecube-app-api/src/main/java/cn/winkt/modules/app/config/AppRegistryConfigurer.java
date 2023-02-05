@@ -26,17 +26,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
-@Component
-public abstract class AppRegistryConfigurer implements ApplicationRunner {
+public class AppRegistryConfigurer implements ApplicationRunner {
     @Resource
     protected AppApi appApi;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        UserTokenContext.setToken(getTemporaryToken());
         AppModule appModule = buildModule();
-        appApi.registerModule(appModule);
-        UserTokenContext.remove();
+        if(appModule != null) {
+            UserTokenContext.setToken(getTemporaryToken());
+            appApi.registerModule(appModule);
+            UserTokenContext.remove();
+        }
     }
 
 
@@ -57,11 +58,14 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
         return token;
     }
     protected AppModule buildModule() throws IOException {
+        ClassPathResource manifestResource = new ClassPathResource("manifest.json");
+        if(!manifestResource.exists()) {
+            return null;
+        }
         AppModule appModule = new AppModule();
-        ClassPathResource manifestResouce = new ClassPathResource("manifest.json");
-        byte[] manifestBuffer = new byte[(int) manifestResouce.getFile().length()];
-        IOUtils.readFully(manifestResouce.getInputStream(), manifestBuffer);
-        manifestResouce.getInputStream().close();
+        byte[] manifestBuffer = new byte[(int) manifestResource.getFile().length()];
+        IOUtils.readFully(manifestResource.getInputStream(), manifestBuffer);
+        manifestResource.getInputStream().close();
         AppManifest appManifest = JSONObject.parseObject(new String(manifestBuffer), AppManifest.class);
         appModule.setIdentify(appManifest.getIdentify());
         appModule.setName(appManifest.getName());
