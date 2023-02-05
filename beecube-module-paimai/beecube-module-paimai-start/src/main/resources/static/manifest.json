@@ -59,7 +59,7 @@
     ]
   },
   "resources": {
-    "ui": "/resources/ui"
+    "ui": "/ui.zip"
   },
   "installUrl": "/install",
   "uninstallUrl": "/uninstall",

@@ -42,6 +42,7 @@ import org.jeecg.common.system.base.controller.JeecgController;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -67,6 +68,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	private SystemApi systemApi;
 
 	@Resource
+	@LoadBalanced
 	private RestTemplate restTemplate;
 
 	@Resource
@@ -246,18 +248,18 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 
 
 		//调用模块安装方法
-		if(StringUtils.isNotEmpty(appManifest.getInstallUrl())) {
-			restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
-		}
-
-
-		//安装APP资源文件
-		AppResource appResource = appManifest.getResources();
-		if(StringUtils.isNotEmpty(appResource.getUi())) {
-			String uiZipFile = beecubeConfig.getAppUiPath()+"/ui.zip";
-			ZipUtils.download("http://"+appGateway.getRouterId()+"/"+appResource.getUi(), uiZipFile);
-			ZipUtils.unzip(uiZipFile, beecubeConfig.getAppUiPath());
-		}
+//		if(StringUtils.isNotEmpty(appManifest.getInstallUrl())) {
+//			restTemplate.put("http://"+ appGateway.getRouterId()+appManifest.getInstallUrl(), null);
+//		}
+//
+//
+//		//安装APP资源文件
+//		AppResource appResource = appManifest.getResources();
+//		if(StringUtils.isNotEmpty(appResource.getUi())) {
+//			String uiZipFile = beecubeConfig.getAppUiPath()+"/ui.zip";
+//			ZipUtils.download("http://"+appGateway.getRouterId()+"/"+appResource.getUi(), uiZipFile);
+//			ZipUtils.unzip(uiZipFile, beecubeConfig.getAppUiPath());
+//		}
 
 		//执行安装成功后续操作
 		appModule.setStatus(1);
@@ -307,9 +309,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		});
 
 		//调用模块卸载方法
-		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
-			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
-		}
+//		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
+//			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
+//		}
 		//执行卸载后操作
 		appModule.setStatus(2);
 
