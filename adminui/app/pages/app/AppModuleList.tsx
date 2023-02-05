@@ -37,6 +37,12 @@ const AppModuleList = () => {
             loadData();
         }
     }, [uninstallFetcher.data]);
+    useEffect(() => {
+        if (uninstallFetcher.data) {
+            handleSaveResult(upgradeFetcher.data, '升级成功');
+            loadData();
+        }
+    }, [upgradeFetcher.data]);
 
 
     const handlePageChanged = (e: any) => {
@@ -50,6 +56,9 @@ const AppModuleList = () => {
     }
     const handleOnUnInstall = (m:any) => {
         uninstallFetcher.submit({}, {method: "put", action: "/app/uninstall/"+m.id});
+    }
+    const handleOnUpgrade = (m:any) => {
+        upgradeFetcher.submit({}, {method: "put", action: "/app/upgrade/"+m.id});
     }
 
 
@@ -70,7 +79,7 @@ const AppModuleList = () => {
                                     <div>
                                         {m.status != 1 && <Button onClick={()=>handleOnInstall(m)} disabled={installFetcher.state === 'submitting'} variant={'primary'} size={'sm'}>安装</Button>}
                                         {m.status == 1 && <Button onClick={()=>handleOnUnInstall(m)} disabled={uninstallFetcher.state === 'submitting'} variant={'danger'} size={'sm'}>卸载</Button>}
-                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button disabled={upgradeFetcher.state === 'submitting'} variant={'light'}>升级</Button>}
+                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button onClick={()=>handleOnUpgrade(m)} className={'ml-1'} disabled={upgradeFetcher.state === 'submitting'} variant={'warning'} size={'sm'}>升级</Button>}
                                     </div>
                                 </div>
                             </Col>
