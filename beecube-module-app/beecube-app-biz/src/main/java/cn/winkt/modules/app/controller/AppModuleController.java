@@ -324,6 +324,13 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@ApiOperation(value="应用模块-更新", notes="应用模块-更新")
 	@GlobalTransactional
 	public Result<?> upgradeModule(@PathVariable String id) {
+		AppModule appModule = appModuleService.getById(id);
+
+
+		//这里执行升级操作
+
+		appModule.setVersion(appModule.getNewVersion());
+		appModuleService.updateById(appModule);
 		return Result.OK(true);
 	}
 
