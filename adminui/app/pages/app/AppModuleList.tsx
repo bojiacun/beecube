@@ -38,7 +38,7 @@ const AppModuleList = () => {
         }
     }, [uninstallFetcher.data]);
     useEffect(() => {
-        if (uninstallFetcher.data) {
+        if (upgradeFetcher.data) {
             handleSaveResult(upgradeFetcher.data, '升级成功');
             loadData();
         }
