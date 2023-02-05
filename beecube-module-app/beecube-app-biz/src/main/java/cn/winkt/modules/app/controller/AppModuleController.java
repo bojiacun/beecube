@@ -308,9 +308,9 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 		});
 
 		//调用模块卸载方法
-		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
-			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
-		}
+//		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
+//			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
+//		}
 		//执行卸载后操作
 		appModule.setStatus(2);
 
