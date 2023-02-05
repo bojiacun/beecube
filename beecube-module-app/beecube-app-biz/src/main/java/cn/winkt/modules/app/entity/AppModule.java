@@ -37,6 +37,8 @@ public class AppModule {
     @ApiModelProperty(value = "模块标识")
 	private java.lang.String identify;
 
+	@Excel(name = "模块描述", width = 20)
+	@ApiModelProperty(value = "模块描述")
 	private String description;
 	/**模块名称*/
 	@Excel(name = "模块名称", width = 15)
