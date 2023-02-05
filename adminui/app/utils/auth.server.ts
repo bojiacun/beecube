@@ -94,7 +94,6 @@ auth.use(
             }
         });
         const perms = menus.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms);
-
         return {
             token: token,
             userInfo: {realname: userInfo.realname, username: userInfo.username, id: userInfo.id, avatar: userInfo.avatar, post: userInfo.post, phone: userInfo.phone},
