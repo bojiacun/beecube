@@ -58,7 +58,7 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
     }
     protected AppModule buildModule() throws IOException {
         AppModule appModule = new AppModule();
-        ClassPathResource manifestResouce = new ClassPathResource("static/manifest.json");
+        ClassPathResource manifestResouce = new ClassPathResource("manifest.json");
         byte[] manifestBuffer = new byte[(int) manifestResouce.getFile().length()];
         IOUtils.readFully(manifestResouce.getInputStream(), manifestBuffer);
         manifestResouce.getInputStream().close();
@@ -67,7 +67,7 @@ public abstract class AppRegistryConfigurer implements ApplicationRunner {
         appModule.setName(appManifest.getName());
         appModule.setDescription(appManifest.getDescription());
 
-        ClassPathResource logoResource = new ClassPathResource("static/logo.jpeg");
+        ClassPathResource logoResource = new ClassPathResource("logo.jpeg");
         InputStream imageStream = logoResource.getInputStream();
         byte[] buffer = new byte[(int) logoResource.getFile().length()];
         IOUtils.readFully(imageStream, buffer);
