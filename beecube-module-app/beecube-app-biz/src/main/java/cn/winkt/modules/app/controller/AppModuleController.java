@@ -128,10 +128,22 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
 	@AutoLog(value = "应用模块-注册")
 	@ApiOperation(value="应用模块-注册", notes="应用模块-注册")
 	public Result<?> register(@RequestBody AppModule appModule) {
-		if(appModuleService.queryByIdentify(appModule.getIdentify()) != null) {
-			throw new JeecgBootException("模块已经注册，请勿重复注册");
+		AppModule module = appModuleService.queryByIdentify(appModule.getIdentify());
+		if(module != null) {
+			module.setLogo(appModule.getLogo());
+			module.setAuthor(appModule.getAuthor());
+			module.setDescription(appModule.getDescription());
+			module.setManifest(appModule.getManifest());
+			module.setSupportDouyin(appModule.getSupportDouyin());
+			module.setSupportH5(appModule.getSupportH5());
+			module.setSupportWechat(appModule.getSupportWechat());
+			module.setName(appModule.getName());
+			module.setNewVersion(appModule.getVersion());
+			appModuleService.save(module);
 		}
-		appModuleService.save(appModule);
+		else {
+			appModuleService.save(appModule);
+		}
 		return Result.OK("注册成功");
 	}
 
