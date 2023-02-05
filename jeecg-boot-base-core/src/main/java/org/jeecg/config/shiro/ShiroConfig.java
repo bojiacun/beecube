@@ -140,18 +140,11 @@ public class ShiroConfig {
         //大屏模板例子
         filterChainDefinitionMap.put("/test/bigScreen/**", "anon");
         filterChainDefinitionMap.put("/bigscreen/template1/**", "anon");
-        //filterChainDefinitionMap.put("/test/jeecgDemo/rabbitMqClientTest/**", "anon"); //MQ测试
-        //filterChainDefinitionMap.put("/test/jeecgDemo/html", "anon"); //模板页面
-        //filterChainDefinitionMap.put("/test/jeecgDemo/redis/**", "anon"); //redis测试
 
         //websocket排除
         filterChainDefinitionMap.put("/websocket/**", "anon");//系统通知和公告
         filterChainDefinitionMap.put("/newsWebsocket/**", "anon");//CMS模块
         filterChainDefinitionMap.put("/vxeSocket/**", "anon");//JVxeTable无痕刷新示例
-
-
-        //性能监控，放开排除会存在安全漏洞泄露TOEKN（durid连接池也有）
-        //filterChainDefinitionMap.put("/actuator/**", "anon");
 
         //测试模块排除
         filterChainDefinitionMap.put("/test/seata/**", "anon");
@@ -180,7 +173,6 @@ public class ShiroConfig {
                 }
             }
         }
-        filterChainDefinitionMap.put("/**", "jwt");
 
         // 未授权界面返回JSON
         shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
