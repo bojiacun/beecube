@@ -153,12 +153,12 @@ const AppList = (props: any) => {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 190},
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={()=>handleOnAction(row, 'console')}>
-                            {entryFetcher.state === 'submitting' ? '进入中':'控制台'}
+                            {entryFetcher.state === 'submitting' ? '进入中':'进入后台'}
                         </a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'bind-admin')}>管理员</a>
