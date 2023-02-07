@@ -1,15 +1,9 @@
 import {Button, Card} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {json, LoaderFunction} from "@remix-run/node";
-import {requireAuthenticated} from "~/utils/auth.server";
-import _ from "lodash";
-import querystring from "querystring";
-import {DefaultListSearchParams, handleSaveResult} from "~/utils/utils";
-import {API_USER_INFO, requestWithToken} from "~/utils/request.server";
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import { handleSaveResult} from "~/utils/utils";
+import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import FileBrowserInput from "~/components/filebrowser/form";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useEffect} from "react";
 
@@ -18,8 +12,8 @@ const SettingsSchema = Yup.object().shape({
 });
 
 
-const WechatSettingsEditor = () => {
-    const {settings} = useLoaderData<any>();
+const WechatSettingsEditor = (props:any) => {
+    const {settings} = props;
     const postFetcher = useFetcher();
 
     useEffect(() => {
@@ -32,9 +26,11 @@ const WechatSettingsEditor = () => {
         postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=wechat'});
     }
     let settingsValue:any = {};
-    settings.filter((st:any) => st.groupKey=== 'wechat').forEach((item:any)=>{
-        settingsValue[item.settingKey] = item.settingValue;
-    });
+    if(settings) {
+        settings.filter((st: any) => st.groupKey === 'wechat').forEach((item: any) => {
+            settingsValue[item.settingKey] = item.settingValue;
+        });
+    }
 
     return (
         <Formik initialValues={settingsValue} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
