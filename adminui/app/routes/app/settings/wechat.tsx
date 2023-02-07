@@ -1,4 +1,5 @@
 import WechatSettingsEditor from "~/pages/app/settings/WechatSettingsEditor";
+import {withPageLoading} from "~/utils/components";
 
 
 
@@ -8,4 +9,4 @@ const AppSettingsWechat = () => {
     );
 }
 
-export default AppSettingsWechat;
+export default withPageLoading(AppSettingsWechat);

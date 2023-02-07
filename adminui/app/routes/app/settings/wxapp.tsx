@@ -1,4 +1,5 @@
 import WxappSettingsEditor from "~/pages/app/settings/WxappSettingsEditor";
+import {withPageLoading} from "~/utils/components";
 
 
 const AppSettingsWxapp= () => {
@@ -7,4 +8,4 @@ const AppSettingsWxapp= () => {
     );
 }
 
-export default AppSettingsWxapp;
+export default withPageLoading(AppSettingsWxapp);
