@@ -19,7 +19,7 @@ const AppSettingsWechat = () => {
     const appSettings:any = useLoaderData();
     const settings:any = {};
 
-    appSettings.filter((s:any) => s.groupKey === 'wechat').forEach((s:any) => {
+    appSettings?.filter((s:any) => s.groupKey === 'wechat').forEach((s:any) => {
         settings[s.settingKey] = s.settingValue;
     });
 
