@@ -23,14 +23,9 @@ const WxappSettingsEditor = (props:any) => {
     const handleOnSubmit = (values: any) => {
         postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=wxapp'});
     }
-    let settingsValue:any = {};
-    if(settings) {
-        settings.filter((st: any) => st.groupName === 'wxapp').forEach((item: any) => {
-            settingsValue[item.settingKey] = item.settingValue;
-        });
-    }
+
     return (
-        <Formik initialValues={settingsValue} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
+        <Formik initialValues={settings} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
             <Form method={'post'}>
                 <Card>
                     <Card.Header>
