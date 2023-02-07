@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -108,23 +109,25 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 	 @ApiOperation(value="应用配置表-编辑", notes="应用配置表-编辑")
 	 @RequestMapping(value = "/updateAll", method = RequestMethod.POST)
 	 @Transactional
-	 public Result<?> updateAll(@RequestBody JSONObject jsonObject) {
+	 public Result<?> updateAll(@RequestBody JSONObject jsonObject, @RequestParam String group) {
 		 //分组更新设置
-		 jsonObject.keySet().forEach(group -> {
-			 //先移除group的配置，然后再次全量插入
-			 LambdaQueryWrapper<AppSetting> removeQueryWrapper = new LambdaQueryWrapper<>();
-			 removeQueryWrapper.eq(AppSetting::getGroupKey, group);
-			 appSettingService.remove(removeQueryWrapper);
+		 String appId = AppContext.getApp();
+		 if(StringUtils.isEmpty(appId)) {
+			 return Result.error("找不到当前应用ID");
+		 }
+		 //先移除group的配置，然后再次全量插入
+		 LambdaQueryWrapper<AppSetting> removeQueryWrapper = new LambdaQueryWrapper<>();
+		 removeQueryWrapper.eq(AppSetting::getGroupKey, group);
+		 removeQueryWrapper.eq(AppSetting::getAppId, appId);
+		 appSettingService.remove(removeQueryWrapper);
 
-			 JSONObject config = jsonObject.getJSONObject(group);
-			 config.keySet().forEach(key -> {
-				 AppSetting appSetting = new AppSetting();
-				 appSetting.setAppId(AppContext.getApp());
-				 appSetting.setSettingValue(config.getString(key));
-				 appSetting.setSettingKey(key);
-				 appSetting.setGroupKey(group);
-				 appSettingService.save(appSetting);
-			 });
+		 jsonObject.keySet().forEach(key-> {
+			 AppSetting appSetting = new AppSetting();
+			 appSetting.setAppId(appId);
+			 appSetting.setSettingValue(jsonObject.getString(key));
+			 appSetting.setSettingKey(key);
+			 appSetting.setGroupKey(group);
+			 appSettingService.save(appSetting);
 		 });
 		 return Result.OK("更新成功!");
 	 }
