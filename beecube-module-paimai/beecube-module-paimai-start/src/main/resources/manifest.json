@@ -27,7 +27,7 @@
           "sortNo": 1,
           "title": "拍品管理",
           "internalOrExternal": false,
-          "url": "/goods"
+          "url": "/paimai/goods"
         },
         {
           "icon": "",
@@ -38,7 +38,7 @@
           "sortNo": 2,
           "title": "专场管理",
           "internalOrExternal": false,
-          "url": "/performances"
+          "url": "/paimai/performances"
         },
         {
           "icon": "",
@@ -49,7 +49,7 @@
           "sortNo": 3,
           "title": "拍卖会管理",
           "internalOrExternal": false,
-          "url": "/auctions"
+          "url": "/paimai/auctions"
         }
       ]
     },
@@ -72,7 +72,7 @@
           "sortNo": 1,
           "title": "订单管理",
           "internalOrExternal": false,
-          "url": "/orders"
+          "url": "/paimai/orders"
         },
         {
           "icon": "",
@@ -83,7 +83,7 @@
           "sortNo": 2,
           "title": "售后订单",
           "internalOrExternal": false,
-          "url": "/orders/afters"
+          "url": "/paimai/orders/afters"
         }
       ]
     }

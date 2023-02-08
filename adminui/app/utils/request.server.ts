@@ -138,6 +138,9 @@ export const API_CRONJOB_DELETE = `${BASE_URL}/jeecg-system/sys/quartzJob/delete
 export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execute`;
 
 
+export const API_PAIMAI_GOODS_LIST = `${BASE_URL}/paimai/goods/list`;
+
+
 export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/list`;
 
 
@@ -164,7 +167,6 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     if(session.has("APPID")) {
         options.headers['X-App-Id'] = session.get("APPID");
     }
-    console.log(options);
     const res = await fetch(url, options);
     if(res.status != 200) {
         throw new Response(res.statusText, {status: res.status});
