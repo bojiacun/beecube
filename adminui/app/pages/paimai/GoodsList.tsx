@@ -21,6 +21,8 @@ import * as Yup from "yup";
 import TreePermissionList from "~/pages/system/roles/TreePermissionList";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import FallbackImage from "~/components/fallback-image";
+import UserEdit from "~/pages/system/roles/UserEdit";
+import GoodsEditor from "~/pages/paimai/GoodsEditor";
 
 
 const POST_RANKS = [
@@ -31,10 +33,7 @@ const POST_RANKS = [
     {label: '正高级', value: '5'},
 ];
 
-const EditRoleSchema = Yup.object().shape({
-    code: Yup.string().required(),
-    name: Yup.string().required()
-});
+
 const GoodsList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
@@ -43,6 +42,10 @@ const GoodsList = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+
+    const loadData = () => {
+        searchFetcher.submit(searchState, {method: 'get'});
+    }
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -207,54 +210,12 @@ const GoodsList = (props: any) => {
                         </Col>
                     </Row>
                 </div>
-
             </Card>
 
-            <Modal
-                show={!!editModal}
-                onHide={() => setEditModal(null)}
-                centered
-                backdrop={'static'}
-                aria-labelledby={'edit-modal'}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id={'edit-modal'}>编辑职务</Modal.Title>
-                </Modal.Header>
-                {editModal &&
-                    <Formik initialValues={editModal} validationSchema={EditRoleSchema} onSubmit={handleOnEditSubmit}>
-                        {(formik:any) => {
-                            return (
-                                <FormikForm>
-                                    <Modal.Body>
-                                        <FormGroup>
-                                            <Form.Label htmlFor={'code'}>职务编码</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.code ? 'is-invalid' : '')} id={'roleCode'}
-                                                   name={'code'} placeholder={'职务编码'} readOnly={editModal.id}/>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Form.Label htmlFor={'name'}>职务名称</Form.Label>
-                                            <Field className={classNames('form-control', !!formik.errors.name ? 'is-invalid' : '')} id={'roleName'}
-                                                   name={'name'} placeholder={'职务名称'}/>
-                                        </FormGroup>
-                                        <BootstrapSelect name={'postRank'} label={'职务等级'} options={POST_RANKS} formik={formik} />
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button
-                                            type={'submit'}
-                                            variant={'primary'}
-                                            disabled={editFetcher.state === 'submitting'}
-                                        >
-                                            保存
-                                        </Button>
-                                    </Modal.Footer>
-                                </FormikForm>
-                            );
-                        }}
-
-                    </Formik>
-                }
-            </Modal>
-
+            {editModal && <GoodsEditor model={editModal} onHide={()=>{
+                setEditModal(null);
+                loadData();
+            }} />}
         </>
     );
 }
