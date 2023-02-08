@@ -1,4 +1,4 @@
-package cn.winkt.modules.paimai.controller;
+package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.app.entity.AppPayLog;
+import cn.winkt.modules.app.service.IAppPayLogService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,66 +36,66 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 拍品表
+ * @Description: 支付记录表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="拍品表")
+@Api(tags="支付记录表")
 @RestController
-@RequestMapping("/paimai/goods")
-public class GoodsController extends JeecgController<Goods, IGoodsService> {
+@RequestMapping("/app/appPayLog")
+public class AppPayLogController extends JeecgController<AppPayLog, IAppPayLogService> {
 	@Autowired
-	private IGoodsService goodsService;
+	private IAppPayLogService appPayLogService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param goods
+	 * @param appPayLog
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-分页列表查询")
-	@ApiOperation(value="拍品表-分页列表查询", notes="拍品表-分页列表查询")
+	@AutoLog(value = "支付记录表-分页列表查询")
+	@ApiOperation(value="支付记录表-分页列表查询", notes="支付记录表-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(Goods goods,
+	public Result<?> queryPageList(AppPayLog appPayLog,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
-		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-		IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+		QueryWrapper<AppPayLog> queryWrapper = QueryGenerator.initQueryWrapper(appPayLog, req.getParameterMap());
+		Page<AppPayLog> page = new Page<AppPayLog>(pageNo, pageSize);
+		IPage<AppPayLog> pageList = appPayLogService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 * 添加
 	 *
-	 * @param goods
+	 * @param appPayLog
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-添加")
-	@ApiOperation(value="拍品表-添加", notes="拍品表-添加")
+	@AutoLog(value = "支付记录表-添加")
+	@ApiOperation(value="支付记录表-添加", notes="支付记录表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody Goods goods) {
-		goodsService.save(goods);
+	public Result<?> add(@RequestBody AppPayLog appPayLog) {
+		appPayLogService.save(appPayLog);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param goods
+	 * @param appPayLog
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-编辑")
-	@ApiOperation(value="拍品表-编辑", notes="拍品表-编辑")
+	@AutoLog(value = "支付记录表-编辑")
+	@ApiOperation(value="支付记录表-编辑", notes="支付记录表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody Goods goods) {
-		goodsService.updateById(goods);
+	public Result<?> edit(@RequestBody AppPayLog appPayLog) {
+		appPayLogService.updateById(appPayLog);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -105,11 +105,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id删除")
-	@ApiOperation(value="拍品表-通过id删除", notes="拍品表-通过id删除")
+	@AutoLog(value = "支付记录表-通过id删除")
+	@ApiOperation(value="支付记录表-通过id删除", notes="支付记录表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		goodsService.removeById(id);
+		appPayLogService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -119,11 +119,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-批量删除")
-	@ApiOperation(value="拍品表-批量删除", notes="拍品表-批量删除")
+	@AutoLog(value = "支付记录表-批量删除")
+	@ApiOperation(value="支付记录表-批量删除", notes="支付记录表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.goodsService.removeByIds(Arrays.asList(ids.split(",")));
+		this.appPayLogService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功！");
 	}
 	
@@ -133,23 +133,23 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id查询")
-	@ApiOperation(value="拍品表-通过id查询", notes="拍品表-通过id查询")
+	@AutoLog(value = "支付记录表-通过id查询")
+	@ApiOperation(value="支付记录表-通过id查询", notes="支付记录表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		Goods goods = goodsService.getById(id);
-		return Result.OK(goods);
+		AppPayLog appPayLog = appPayLogService.getById(id);
+		return Result.OK(appPayLog);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param goods
+   * @param appPayLog
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, Goods goods) {
-      return super.exportXls(request, goods, Goods.class, "拍品表");
+  public ModelAndView exportXls(HttpServletRequest request, AppPayLog appPayLog) {
+      return super.exportXls(request, appPayLog, AppPayLog.class, "支付记录表");
   }
 
   /**
@@ -161,7 +161,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, Goods.class);
+      return super.importExcel(request, response, AppPayLog.class);
   }
 
 }

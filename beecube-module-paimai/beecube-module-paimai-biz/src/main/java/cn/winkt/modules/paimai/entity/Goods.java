@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
- * @Description: 拍品
+ * @Description: 拍品表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
@@ -25,7 +25,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @TableName("paimai_goods")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="paimai_goods对象", description="拍品")
+@ApiModel(value="paimai_goods对象", description="拍品表")
 public class Goods {
     
 	/**id*/
@@ -124,4 +124,8 @@ public class Goods {
 	@Excel(name = "图片", width = 15)
     @ApiModelProperty(value = "图片")
 	private java.lang.String images;
+	/**状态（0下架1上架）*/
+	@Excel(name = "状态（0下架1上架）", width = 15)
+    @ApiModelProperty(value = "状态（0下架1上架）")
+	private java.lang.Integer status;
 }

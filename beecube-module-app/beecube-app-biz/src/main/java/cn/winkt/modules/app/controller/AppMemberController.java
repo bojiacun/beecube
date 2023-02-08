@@ -38,13 +38,13 @@ import io.swagger.annotations.ApiOperation;
  /**
  * @Description: 应用会员表
  * @Author: jeecg-boot
- * @Date:   2022-12-18
+ * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
 @Api(tags="应用会员表")
 @RestController
-@RequestMapping("/app/members")
+@RequestMapping("/app/appMember")
 public class AppMemberController extends JeecgController<AppMember, IAppMemberService> {
 	@Autowired
 	private IAppMemberService appMemberService;

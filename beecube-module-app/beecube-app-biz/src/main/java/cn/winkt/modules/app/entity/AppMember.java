@@ -18,7 +18,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 /**
  * @Description: 应用会员表
  * @Author: jeecg-boot
- * @Date:   2022-12-18
+ * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Data
@@ -36,6 +36,10 @@ public class AppMember {
 	@Excel(name = "应用ID", width = 15)
     @ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;
+	/**分享人ID*/
+	@Excel(name = "分享人ID", width = 15)
+    @ApiModelProperty(value = "分享人ID")
+	private java.lang.String shareId;
 	/**微信公众号OPENID*/
 	@Excel(name = "微信公众号OPENID", width = 15)
     @ApiModelProperty(value = "微信公众号OPENID")
@@ -64,13 +68,21 @@ public class AppMember {
 	@Excel(name = "登录密码", width = 15)
     @ApiModelProperty(value = "登录密码")
 	private java.lang.String password;
+	/**用户余额*/
+	@Excel(name = "用户余额", width = 15)
+    @ApiModelProperty(value = "用户余额")
+	private java.lang.Float money;
+	/**用户积分*/
+	@Excel(name = "用户积分", width = 15)
+    @ApiModelProperty(value = "用户积分")
+	private java.lang.Float score;
 	/**用户手机号*/
 	@Excel(name = "用户手机号", width = 15)
     @ApiModelProperty(value = "用户手机号")
 	private java.lang.String mobile;
-	/**用户邮箱*/
-	@Excel(name = "用户邮箱", width = 15)
-	@ApiModelProperty(value = "用户邮箱")
+	/**邮箱地址*/
+	@Excel(name = "邮箱地址", width = 15)
+    @ApiModelProperty(value = "邮箱地址")
 	private java.lang.String email;
 	/**用户昵称*/
 	@Excel(name = "用户昵称", width = 15)

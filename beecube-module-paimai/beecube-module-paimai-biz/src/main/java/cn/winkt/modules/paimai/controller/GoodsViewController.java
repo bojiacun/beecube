@@ -12,8 +12,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.paimai.entity.GoodsView;
+import cn.winkt.modules.paimai.service.IGoodsViewService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,66 +36,66 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 拍品表
+ * @Description: 围观记录表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="拍品表")
+@Api(tags="围观记录表")
 @RestController
-@RequestMapping("/paimai/goods")
-public class GoodsController extends JeecgController<Goods, IGoodsService> {
+@RequestMapping("/paimai/goodsView")
+public class GoodsViewController extends JeecgController<GoodsView, IGoodsViewService> {
 	@Autowired
-	private IGoodsService goodsService;
+	private IGoodsViewService goodsViewService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param goods
+	 * @param goodsView
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-分页列表查询")
-	@ApiOperation(value="拍品表-分页列表查询", notes="拍品表-分页列表查询")
+	@AutoLog(value = "围观记录表-分页列表查询")
+	@ApiOperation(value="围观记录表-分页列表查询", notes="围观记录表-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(Goods goods,
+	public Result<?> queryPageList(GoodsView goodsView,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
-		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-		IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+		QueryWrapper<GoodsView> queryWrapper = QueryGenerator.initQueryWrapper(goodsView, req.getParameterMap());
+		Page<GoodsView> page = new Page<GoodsView>(pageNo, pageSize);
+		IPage<GoodsView> pageList = goodsViewService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 * 添加
 	 *
-	 * @param goods
+	 * @param goodsView
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-添加")
-	@ApiOperation(value="拍品表-添加", notes="拍品表-添加")
+	@AutoLog(value = "围观记录表-添加")
+	@ApiOperation(value="围观记录表-添加", notes="围观记录表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody Goods goods) {
-		goodsService.save(goods);
+	public Result<?> add(@RequestBody GoodsView goodsView) {
+		goodsViewService.save(goodsView);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param goods
+	 * @param goodsView
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-编辑")
-	@ApiOperation(value="拍品表-编辑", notes="拍品表-编辑")
+	@AutoLog(value = "围观记录表-编辑")
+	@ApiOperation(value="围观记录表-编辑", notes="围观记录表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody Goods goods) {
-		goodsService.updateById(goods);
+	public Result<?> edit(@RequestBody GoodsView goodsView) {
+		goodsViewService.updateById(goodsView);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -105,11 +105,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id删除")
-	@ApiOperation(value="拍品表-通过id删除", notes="拍品表-通过id删除")
+	@AutoLog(value = "围观记录表-通过id删除")
+	@ApiOperation(value="围观记录表-通过id删除", notes="围观记录表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		goodsService.removeById(id);
+		goodsViewService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -119,11 +119,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-批量删除")
-	@ApiOperation(value="拍品表-批量删除", notes="拍品表-批量删除")
+	@AutoLog(value = "围观记录表-批量删除")
+	@ApiOperation(value="围观记录表-批量删除", notes="围观记录表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.goodsService.removeByIds(Arrays.asList(ids.split(",")));
+		this.goodsViewService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功！");
 	}
 	
@@ -133,23 +133,23 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id查询")
-	@ApiOperation(value="拍品表-通过id查询", notes="拍品表-通过id查询")
+	@AutoLog(value = "围观记录表-通过id查询")
+	@ApiOperation(value="围观记录表-通过id查询", notes="围观记录表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		Goods goods = goodsService.getById(id);
-		return Result.OK(goods);
+		GoodsView goodsView = goodsViewService.getById(id);
+		return Result.OK(goodsView);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param goods
+   * @param goodsView
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, Goods goods) {
-      return super.exportXls(request, goods, Goods.class, "拍品表");
+  public ModelAndView exportXls(HttpServletRequest request, GoodsView goodsView) {
+      return super.exportXls(request, goodsView, GoodsView.class, "围观记录表");
   }
 
   /**
@@ -161,7 +161,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, Goods.class);
+      return super.importExcel(request, response, GoodsView.class);
   }
 
 }

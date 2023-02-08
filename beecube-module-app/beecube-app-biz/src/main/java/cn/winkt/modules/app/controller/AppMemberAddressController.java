@@ -1,4 +1,4 @@
-package cn.winkt.modules.paimai.controller;
+package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.app.entity.AppMemberAddress;
+import cn.winkt.modules.app.service.IAppMemberAddressService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,66 +36,66 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 拍品表
+ * @Description: 应用会员地址信息表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="拍品表")
+@Api(tags="应用会员地址信息表")
 @RestController
-@RequestMapping("/paimai/goods")
-public class GoodsController extends JeecgController<Goods, IGoodsService> {
+@RequestMapping("/app/appMemberAddress")
+public class AppMemberAddressController extends JeecgController<AppMemberAddress, IAppMemberAddressService> {
 	@Autowired
-	private IGoodsService goodsService;
+	private IAppMemberAddressService appMemberAddressService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param goods
+	 * @param appMemberAddress
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-分页列表查询")
-	@ApiOperation(value="拍品表-分页列表查询", notes="拍品表-分页列表查询")
+	@AutoLog(value = "应用会员地址信息表-分页列表查询")
+	@ApiOperation(value="应用会员地址信息表-分页列表查询", notes="应用会员地址信息表-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(Goods goods,
+	public Result<?> queryPageList(AppMemberAddress appMemberAddress,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
-		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-		IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+		QueryWrapper<AppMemberAddress> queryWrapper = QueryGenerator.initQueryWrapper(appMemberAddress, req.getParameterMap());
+		Page<AppMemberAddress> page = new Page<AppMemberAddress>(pageNo, pageSize);
+		IPage<AppMemberAddress> pageList = appMemberAddressService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 * 添加
 	 *
-	 * @param goods
+	 * @param appMemberAddress
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-添加")
-	@ApiOperation(value="拍品表-添加", notes="拍品表-添加")
+	@AutoLog(value = "应用会员地址信息表-添加")
+	@ApiOperation(value="应用会员地址信息表-添加", notes="应用会员地址信息表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody Goods goods) {
-		goodsService.save(goods);
+	public Result<?> add(@RequestBody AppMemberAddress appMemberAddress) {
+		appMemberAddressService.save(appMemberAddress);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param goods
+	 * @param appMemberAddress
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-编辑")
-	@ApiOperation(value="拍品表-编辑", notes="拍品表-编辑")
+	@AutoLog(value = "应用会员地址信息表-编辑")
+	@ApiOperation(value="应用会员地址信息表-编辑", notes="应用会员地址信息表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody Goods goods) {
-		goodsService.updateById(goods);
+	public Result<?> edit(@RequestBody AppMemberAddress appMemberAddress) {
+		appMemberAddressService.updateById(appMemberAddress);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -105,11 +105,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id删除")
-	@ApiOperation(value="拍品表-通过id删除", notes="拍品表-通过id删除")
+	@AutoLog(value = "应用会员地址信息表-通过id删除")
+	@ApiOperation(value="应用会员地址信息表-通过id删除", notes="应用会员地址信息表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		goodsService.removeById(id);
+		appMemberAddressService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -119,11 +119,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-批量删除")
-	@ApiOperation(value="拍品表-批量删除", notes="拍品表-批量删除")
+	@AutoLog(value = "应用会员地址信息表-批量删除")
+	@ApiOperation(value="应用会员地址信息表-批量删除", notes="应用会员地址信息表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.goodsService.removeByIds(Arrays.asList(ids.split(",")));
+		this.appMemberAddressService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功！");
 	}
 	
@@ -133,23 +133,23 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "拍品表-通过id查询")
-	@ApiOperation(value="拍品表-通过id查询", notes="拍品表-通过id查询")
+	@AutoLog(value = "应用会员地址信息表-通过id查询")
+	@ApiOperation(value="应用会员地址信息表-通过id查询", notes="应用会员地址信息表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		Goods goods = goodsService.getById(id);
-		return Result.OK(goods);
+		AppMemberAddress appMemberAddress = appMemberAddressService.getById(id);
+		return Result.OK(appMemberAddress);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param goods
+   * @param appMemberAddress
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, Goods goods) {
-      return super.exportXls(request, goods, Goods.class, "拍品表");
+  public ModelAndView exportXls(HttpServletRequest request, AppMemberAddress appMemberAddress) {
+      return super.exportXls(request, appMemberAddress, AppMemberAddress.class, "应用会员地址信息表");
   }
 
   /**
@@ -161,7 +161,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, Goods.class);
+      return super.importExcel(request, response, AppMemberAddress.class);
   }
 
 }

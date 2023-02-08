@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * @Description: 应用会员表
  * @Author: jeecg-boot
- * @Date:   2022-12-18
+ * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Service
