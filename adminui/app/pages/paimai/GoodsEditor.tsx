@@ -232,7 +232,7 @@ const GoodsEditor = (props: any) => {
                                             isSearchable={false}
                                             isMulti={true}
                                         />
-                                        <BootstrapRadioGroup  options={[{label: '下架', value: '0'},{label: '上架', value: '1'}]} name={'activitiSync'} label={'状态'} />
+                                        <BootstrapRadioGroup  options={[{label: '下架', value: '0'},{label: '上架', value: '1'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button

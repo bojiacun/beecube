@@ -213,7 +213,7 @@ const GoodsList = (props: any) => {
             </Card>
 
             {editModal && <GoodsEditor model={editModal} onHide={()=>{
-                setEditModal(null);
+                setEditModal({status:0});
                 loadData();
             }} />}
         </>
