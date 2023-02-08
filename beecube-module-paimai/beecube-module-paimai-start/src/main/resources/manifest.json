@@ -21,24 +21,69 @@
         {
           "icon": "",
           "hidden": false,
-          "component": "auction-list",
-          "name": "拍卖会管理",
-          "menuType": 1,
-          "sortNo": 1,
-          "title": "拍卖会管理",
-          "internalOrExternal": false,
-          "url": "/auctions"
-        },
-        {
-          "icon": "",
-          "hidden": false,
           "component": "auction-goods-list",
           "name": "拍品管理",
           "menuType": 1,
           "sortNo": 1,
           "title": "拍品管理",
           "internalOrExternal": false,
-          "url": "/auctions/goods"
+          "url": "/goods"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "performance-list",
+          "name": "专场管理",
+          "menuType": 1,
+          "sortNo": 2,
+          "title": "专场管理",
+          "internalOrExternal": false,
+          "url": "/performances"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "auction-list",
+          "name": "拍卖会管理",
+          "menuType": 1,
+          "sortNo": 3,
+          "title": "拍卖会管理",
+          "internalOrExternal": false,
+          "url": "/auctions"
+        }
+      ]
+    },
+    {
+      "icon": "",
+      "hidden": false,
+      "component": "",
+      "name": "订单管理",
+      "menuType": 0,
+      "sortNo": 1,
+      "title": "订单管理",
+      "internalOrExternal": false,
+      "children": [
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "order-list",
+          "name": "订单管理",
+          "menuType": 1,
+          "sortNo": 1,
+          "title": "订单管理",
+          "internalOrExternal": false,
+          "url": "/orders"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "order-after-list",
+          "name": "售后订单",
+          "menuType": 1,
+          "sortNo": 2,
+          "title": "售后订单",
+          "internalOrExternal": false,
+          "url": "/orders/afters"
         }
       ]
     }
