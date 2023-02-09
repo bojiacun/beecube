@@ -50,6 +50,17 @@
           "title": "拍卖会管理",
           "internalOrExternal": false,
           "url": "/paimai/auctions"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "goods-setting",
+          "name": "拍品设置",
+          "menuType": 1,
+          "sortNo": 4,
+          "title": "拍品设置",
+          "internalOrExternal": false,
+          "url": "/paimai/goods/settings"
         }
       ]
     },

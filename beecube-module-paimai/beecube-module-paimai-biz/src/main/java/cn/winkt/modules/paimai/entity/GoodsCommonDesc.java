@@ -44,4 +44,8 @@ public class GoodsCommonDesc {
 	@Excel(name = "描述标题", width = 15)
     @ApiModelProperty(value = "描述标题")
 	private java.lang.String descTitle;
+	/**appId*/
+	@Excel(name = "appId", width = 15)
+    @ApiModelProperty(value = "appId")
+	private java.lang.String appId;
 }

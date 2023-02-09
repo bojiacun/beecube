@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="拍品公共信息表")
 @RestController
-@RequestMapping("/paimai/goodsCommonDesc")
+@RequestMapping("/paimai/settings")
 public class GoodsCommonDescController extends JeecgController<GoodsCommonDesc, IGoodsCommonDescService> {
 	@Autowired
 	private IGoodsCommonDescService goodsCommonDescService;
@@ -70,7 +70,12 @@ public class GoodsCommonDescController extends JeecgController<GoodsCommonDesc, 
 		IPage<GoodsCommonDesc> pageList = goodsCommonDescService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "拍品公共信息表-所有")
+	 @ApiOperation(value="拍品公共信息表-所有", notes="拍品公共信息表-所有")
+	 @GetMapping(value = "/all")
+	 public Result<?> allPageList() {
+		 return Result.OK(goodsCommonDescService.list());
+	 }
 	/**
 	 * 添加
 	 *
