@@ -17,7 +17,7 @@ public interface IOssFileService extends IService<OssFile> {
      * @param multipartFile
      * @throws IOException
      */
-	void upload(MultipartFile multipartFile, Integer type) throws Exception;
+	OssFile upload(MultipartFile multipartFile, Integer type) throws Exception;
 
     /**
      * oss文件删除

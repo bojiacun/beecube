@@ -50,7 +50,8 @@ public class OssFileController {
 	public Result upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam(value = "type", defaultValue = "1") Integer type) {
 		Result result = new Result();
 		try {
-			ossFileService.upload(multipartFile, type);
+			OssFile ossFile = ossFileService.upload(multipartFile, type);
+			result.setResult(ossFile);
 			result.success("上传成功！");
 		}
 		catch (Exception ex) {

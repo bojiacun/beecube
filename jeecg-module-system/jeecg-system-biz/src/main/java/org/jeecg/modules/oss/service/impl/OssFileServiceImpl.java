@@ -19,7 +19,7 @@ import java.io.IOException;
 public class OssFileServiceImpl extends ServiceImpl<OssFileMapper, OssFile> implements IOssFileService {
 
 	@Override
-	public void upload(MultipartFile multipartFile, Integer type) throws Exception {
+	public OssFile upload(MultipartFile multipartFile, Integer type) throws Exception {
 		String fileName = multipartFile.getOriginalFilename();
 		fileName = CommonUtils.getFileName(fileName);
 		OssFile ossFile = new OssFile();
@@ -31,6 +31,7 @@ public class OssFileServiceImpl extends ServiceImpl<OssFileMapper, OssFile> impl
 		ossFile.setUrl(OssBootUtil.getOriginalUrl(url));
 		//update-end--Author:scott  Date:20201227 for：JT-361【文件预览】阿里云原生域名可以文件预览，自己映射域名kkfileview提示文件下载失败-------------------
 		this.save(ossFile);
+		return ossFile;
 	}
 
 	@Override
