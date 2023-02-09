@@ -8,6 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -20,6 +24,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -27,6 +32,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -75,6 +81,30 @@ public class GoodsCommonDescController extends JeecgController<GoodsCommonDesc, 
 	 @GetMapping(value = "/all")
 	 public Result<?> allPageList() {
 		 return Result.OK(goodsCommonDescService.list());
+	 }
+	 @AutoLog(value = "拍品配置表-编辑")
+	 @ApiOperation(value="拍品配置表-编辑", notes="拍品配置表-编辑")
+	 @RequestMapping(value = "/updateAll", method = RequestMethod.POST)
+	 @Transactional
+	 public Result<?> updateAll(@RequestBody JSONObject jsonObject) {
+		 //分组更新设置
+		 String appId = AppContext.getApp();
+		 if(StringUtils.isEmpty(appId)) {
+			 return Result.error("找不到当前应用ID");
+		 }
+		 //先移除group的配置，然后再次全量插入
+		 LambdaQueryWrapper<GoodsCommonDesc> removeQueryWrapper = new LambdaQueryWrapper<>();
+		 removeQueryWrapper.eq(GoodsCommonDesc::getAppId, appId);
+		 goodsCommonDescService.remove(removeQueryWrapper);
+
+		 jsonObject.keySet().forEach(key-> {
+			 GoodsCommonDesc appSetting = new GoodsCommonDesc();
+			 appSetting.setAppId(appId);
+			 appSetting.setDescValue(jsonObject.getString(key));
+			 appSetting.setDescKey(key);
+			 goodsCommonDescService.save(appSetting);
+		 });
+		 return Result.OK("更新成功!");
 	 }
 	/**
 	 * 添加
