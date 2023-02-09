@@ -176,10 +176,10 @@ const GoodsEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}用户</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}拍品</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{selectedroles: '', selecteddeparts: '', ...model}} validationSchema={GoodsSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{status: 0,type: 1, ...model}} validationSchema={GoodsSchema} onSubmit={handleOnSubmit}>
                         {(formik)=>{
                             return (
                                 <Form method={'post'}>
