@@ -23,7 +23,7 @@ const PaimaiSettingsEditor = (props:any) => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=wechat'});
+        postFetcher.submit(values, {method: 'post', action:'/paimai/goods/settings/update'});
     }
 
 

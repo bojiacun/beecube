@@ -27,7 +27,7 @@
           "sortNo": 1,
           "title": "拍品管理",
           "internalOrExternal": false,
-          "url": "/paimai/goods"
+          "url": "/paimai/goods/list"
         },
         {
           "icon": "",
