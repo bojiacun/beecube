@@ -6,13 +6,14 @@ interface TinymceEditorProps {
     width?: string | number;
     height?: string | number;
     value?: string;
+    name?: string;
     onChange?: (value: string) => void;
 }
 
 const UPLOAD_URL = "/system/oss/file/upload";
 
 const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
-    const { width = '100%', height = 400, onChange, value } = props;
+    const { width = '100%', height = 400, onChange, value, name } = props;
     const handleEditorChange = (e: any) => {
         let html = e.target.getContent();
         typeof onChange === 'function' && onChange(html);
@@ -22,6 +23,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
             apiKey={"8x16kx5cbqpuv0ppcc9yamh9biaokrtmfa76tmlpn8ydxx6f"}
             initialValue={value}
             onBlur={handleEditorChange}
+            textareaName={name}
             init={{
                 height: height,
                 width: width,

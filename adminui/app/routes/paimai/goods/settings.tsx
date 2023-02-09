@@ -1,9 +1,9 @@
-import WechatSettingsEditor from "~/pages/app/settings/WechatSettingsEditor";
 import {withPageLoading} from "~/utils/components";
 import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
-import {API_APP_SETTING_LIST, API_PAIMAI_SETTING_LIST, requestWithToken} from "~/utils/request.server";
+import {API_PAIMAI_SETTING_LIST, requestWithToken} from "~/utils/request.server";
 import {useLoaderData} from "@remix-run/react";
+import PaimaiSettingsEditor from "~/pages/paimai/PaimaiSettingsEditor";
 
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -24,7 +24,7 @@ const GoodsSettings = () => {
     });
 
     return (
-        <WechatSettingsEditor settings={settings} />
+        <PaimaiSettingsEditor settings={settings} />
     );
 }
 
