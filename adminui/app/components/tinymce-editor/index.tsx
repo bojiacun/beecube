@@ -1,27 +1,28 @@
 import React from 'react';
-import { Editor } from '@tinymce/tinymce-react';
+import {Editor} from '@tinymce/tinymce-react';
+import {useFormikContext} from "formik";
+import {useTranslation} from "react-i18next";
 
 
 interface TinymceEditorProps {
     width?: string | number;
     height?: string | number;
-    value?: string;
-    name?: string;
-    onChange?: (value: string) => void;
+    name: string;
 }
 
 const UPLOAD_URL = "/system/oss/file/upload";
 
 const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
-    const { width = '100%', height = 400, onChange, value, name } = props;
+    const {width = '100%', height = 400, name, ...rest} = props;
+    const formik = useFormikContext<any>();
     const handleEditorChange = (e: any) => {
         let html = e.target.getContent();
-        typeof onChange === 'function' && onChange(html);
+        formik.setFieldValue(name, html);
     }
     return (
         <Editor
             apiKey={"8x16kx5cbqpuv0ppcc9yamh9biaokrtmfa76tmlpn8ydxx6f"}
-            initialValue={value}
+            initialValue={formik.values[name]}
             onBlur={handleEditorChange}
             textareaName={name}
             init={{
@@ -30,8 +31,8 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                 menubar: false,
                 images_upload_url: UPLOAD_URL,
                 images_upload_credentials: true,
-                images_upload_handler: (blobInfo, success, failure, progress:any) => {
-                    let xhr:any, formData;
+                images_upload_handler: (blobInfo, success, failure, progress: any) => {
+                    let xhr: any, formData;
 
                     xhr = new XMLHttpRequest();
                     xhr.withCredentials = false;
@@ -39,7 +40,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                     xhr.setRequestHeader('Accept', 'application/json');
                     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-                    xhr.upload.onprogress = function (e:any) {
+                    xhr.upload.onprogress = function (e: any) {
                         progress(e.loaded / e.total * 100);
                     };
 
@@ -47,7 +48,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                         var json;
 
                         if (xhr.status === 403) {
-                            failure('HTTP Error: ' + xhr.status, { remove: true });
+                            failure('HTTP Error: ' + xhr.status, {remove: true});
                             return;
                         }
 
@@ -85,6 +86,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
             alignleft aligncenter alignright | image | \
             bullist numlist outdent indent | help'
             }}
+            {...rest}
         />
     );
 }

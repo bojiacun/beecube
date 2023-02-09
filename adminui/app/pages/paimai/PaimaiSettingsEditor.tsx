@@ -39,6 +39,10 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel htmlFor={'desc_flow'}>拍品流程</FormLabel>
                             <TinymceEditor name={'desc_flow'} />
                         </FormGroup>
+                        <FormGroup>
+                            <FormLabel htmlFor={'desc_delivery'}>物流运输</FormLabel>
+                            <TinymceEditor name={'desc_delivery'} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
