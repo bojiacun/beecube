@@ -100,7 +100,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     </InputGroup.Append>
                 </InputGroup>
             }
-            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'} style={{display: 'block'}}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
             {imagePreview &&
                 <Row style={{marginTop: 0, minWidth: 60}}>
                     <Col sm={2} className={'previewItem'}>

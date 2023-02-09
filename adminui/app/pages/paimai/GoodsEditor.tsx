@@ -16,6 +16,7 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import BootstrapDateTime from "~/components/form/BootstrapDateTime";
 
 
 const checkHandlers: any = {};
@@ -46,7 +47,7 @@ const GoodsEditor = (props: any) => {
         type: Yup.number().required('必填字段'),
         startPrice: Yup.number().required('必填字段'),
         uprange: Yup.string().required('必填字段'),
-        endTime: Yup.date().required('必填字段'),
+        endTime: Yup.string().required('必填字段'),
         images: Yup.string().required('必填字段'),
     });
 
@@ -179,7 +180,7 @@ const GoodsEditor = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}拍品</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{status: 0,type: 1, ...model}} validationSchema={GoodsSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{status: 0,type: 1, endTime: '', images: '', ...model}} validationSchema={GoodsSchema} onSubmit={handleOnSubmit}>
                         {(formik)=>{
                             return (
                                 <Form method={'post'}>
@@ -187,16 +188,14 @@ const GoodsEditor = (props: any) => {
                                         <BootstrapInput label={'标题'} name={'title'}/>
                                         <BootstrapInput label={'副标题'} name={'subTitle'}/>
                                         <FormGroup>
-                                            <FormLabel htmlFor={'avatar'}>拍品图片</FormLabel>
-                                            <FileBrowserInput name={'avatar'} type={1} multi={true} />
+                                            <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
+                                            <FileBrowserInput name={'images'} type={1} multi={true} />
                                         </FormGroup>
-                                        <FormGroup>
-                                            <FormLabel htmlFor={'endTime'}>结束时间</FormLabel>
-                                            <DateTimePicker inputName={'endTime'} />
-                                        </FormGroup>
+
+                                        <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true} />
                                         <BootstrapInput label={'起拍价'} name={'startPrice'} />
-                                        <BootstrapInput label={'保证金'} name={'deposit'} />
-                                        <BootstrapInput label={'延时周期'} name={'delayTime'} />
+                                        <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'} />
+                                        <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'} />
                                         <BootstrapRadioGroup  options={[{label: '普通拍品', value: '1'},{label: '一口价', value: '2'}]} name={'type'} label={'拍品类型'} />
 
                                         <FormGroup>

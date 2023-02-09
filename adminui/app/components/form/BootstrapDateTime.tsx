@@ -28,7 +28,7 @@ const BootstrapDateTime : FC<BootstrapDateTimeProps> = (props) => {
                 className={classNames(className,(!!formik.errors[name]) ? 'is-invalid':'')}
                 {...rest}
             />
-            {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'} style={{display: 'block'}}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
         </FormGroup>
     );
 }
