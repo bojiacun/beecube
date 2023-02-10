@@ -102,7 +102,7 @@ const LoginPage = () => {
                         <Card.Text>
                             请登录您的帐户开始体验
                         </Card.Text>
-                        <Alert variant='primary' show>
+                        <Alert variant='primary' show style={{padding: 0}}>
                             <div className="alert-body font-small-2">
                                 <p>
                                     <small className="mr-50"><span
