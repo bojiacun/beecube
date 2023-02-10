@@ -63,9 +63,11 @@ const GoodsEditor = (props: any) => {
     }, [goodsClassFetcher.state]);
     useEffect(() => {
         if (settingsFetcher.type === 'done' && settingsFetcher.data) {
-            settingsFetcher.data?.forEach((s:any) => {
-                formikRef.current.setFieldValue(s.descKey,s.descValue);
-            });
+            if(!model?.id) {
+                settingsFetcher.data?.forEach((s: any) => {
+                    formikRef.current.setFieldValue(s.descKey, s.descValue);
+                });
+            }
         }
     }, [settingsFetcher.state]);
 
@@ -112,6 +114,7 @@ const GoodsEditor = (props: any) => {
                                     {formik.values['type'] == 1 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     {formik.values['type'] == 1 && <BootstrapInput label={'起拍价'} name={'startPrice'}/>}
                                     {formik.values['type'] == 1 && <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>}
+                                    {formik.values['type'] == 1 && <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比'}/>}
                                     {formik.values['type'] == 2 && <BootstrapInput label={'商品价格'} name={'startPrice'} placeholder={'一口价商品价格'}/>}
                                     {formik.values['type'] == 1 && <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>}
 
@@ -133,24 +136,24 @@ const GoodsEditor = (props: any) => {
                                         </Row>
                                     </FormGroup>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'desc_flow'}>拍品流程</FormLabel>
-                                        <TinymceEditor name={'desc_flow'}/>
+                                        <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
+                                        <TinymceEditor name={'descFlow'}/>
                                     </FormGroup>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'desc_delivery'}>物流运输</FormLabel>
-                                        <TinymceEditor name={'desc_delivery'}/>
+                                        <FormLabel htmlFor={'descDelivery'}>物流运输</FormLabel>
+                                        <TinymceEditor name={'descDelivery'}/>
                                     </FormGroup>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'desc_notice'}>注意事项</FormLabel>
-                                        <TinymceEditor name={'desc_notice'}/>
+                                        <FormLabel htmlFor={'descNotice'}>注意事项</FormLabel>
+                                        <TinymceEditor name={'descNotice'}/>
                                     </FormGroup>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'desc_read'}>拍卖须知</FormLabel>
-                                        <TinymceEditor name={'desc_read'}/>
+                                        <FormLabel htmlFor={'descRead'}>拍卖须知</FormLabel>
+                                        <TinymceEditor name={'descRead'}/>
                                     </FormGroup>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'desc_deposit'}>保证金说明</FormLabel>
-                                        <TinymceEditor name={'desc_deposit'}/>
+                                        <FormLabel htmlFor={'descDeposit'}>保证金说明</FormLabel>
+                                        <TinymceEditor name={'descDeposit'}/>
                                     </FormGroup>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>

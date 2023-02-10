@@ -23,6 +23,7 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 import FallbackImage from "~/components/fallback-image";
 import UserEdit from "~/pages/system/roles/UserEdit";
 import GoodsEditor from "~/pages/paimai/GoodsEditor";
+import FigureImage from "react-bootstrap/FigureImage";
 
 
 const POST_RANKS = [
@@ -86,7 +87,7 @@ const GoodsList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/system/positions/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
@@ -113,8 +114,28 @@ const GoodsList = (props: any) => {
             isDummyField: true,
             formatter: (cell:any, row:any) => {
                 let previewUrl = row.images?.split(',')[0];
-                return <FallbackImage  href={previewUrl} style={{width: 100, height: 100}} />
+                return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
             }
+        },
+        {
+            text: '拍品类型',
+            dataField: 'type_dictText',
+        },
+        {
+            text: '起拍价',
+            dataField: 'startPrice',
+        },
+        {
+            text: '保证金',
+            dataField: 'deposit',
+        },
+        {
+            text: '结束时间',
+            dataField: 'endTime',
+        },
+        {
+            text: '状态',
+            dataField: 'status_dictText',
         },
         {
             text: '操作',

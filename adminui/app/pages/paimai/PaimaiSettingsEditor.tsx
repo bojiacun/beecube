@@ -36,24 +36,24 @@ const PaimaiSettingsEditor = (props:any) => {
                     </Card.Header>
                     <Card.Body>
                         <FormGroup>
-                            <FormLabel htmlFor={'desc_flow'}>拍品流程</FormLabel>
-                            <TinymceEditor name={'desc_flow'} />
+                            <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
+                            <TinymceEditor name={'descFlow'} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'desc_delivery'}>物流运输</FormLabel>
-                            <TinymceEditor name={'desc_delivery'} />
+                            <FormLabel htmlFor={'descDelivery'}>物流运输</FormLabel>
+                            <TinymceEditor name={'descDelivery'} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'desc_notice'}>注意事项</FormLabel>
-                            <TinymceEditor name={'desc_notice'} />
+                            <FormLabel htmlFor={'descNotice'}>注意事项</FormLabel>
+                            <TinymceEditor name={'descNotice'} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'desc_read'}>拍卖须知</FormLabel>
-                            <TinymceEditor name={'desc_read'} />
+                            <FormLabel htmlFor={'descRead'}>拍卖须知</FormLabel>
+                            <TinymceEditor name={'descRead'} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'desc_deposit'}>保证金说明</FormLabel>
-                            <TinymceEditor name={'desc_deposit'} />
+                            <FormLabel htmlFor={'descDeposit'}>保证金说明</FormLabel>
+                            <TinymceEditor name={'descDeposit'} />
                         </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
