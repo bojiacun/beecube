@@ -105,7 +105,7 @@ const GoodsClassList = (props: any) => {
         },
         {
             text: '分类状态',
-            dataField: 'status_DictText',
+            dataField: 'status_dictText',
         },
         {
             text: '操作',
