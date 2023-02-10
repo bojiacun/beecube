@@ -143,6 +143,7 @@ export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;
 
 export const API_PAIMAI_GOODS_CLASS_LIST = `${BASE_URL}/paimai/goods/class/list`;
+export const API_PAIMAI_GOODS_CLASS_ALLLIST = `${BASE_URL}/paimai/goods/class/all`;
 export const API_PAIMAI_GOODS_CLASS_ADD = `${BASE_URL}/paimai/goods/class/add`;
 export const API_PAIMAI_GOODS_CLASS_EDIT = `${BASE_URL}/paimai/goods/class/edit`;
 export const API_PAIMAI_GOODS_CLASS_DELETE = `${BASE_URL}/paimai/goods/class/delete`;

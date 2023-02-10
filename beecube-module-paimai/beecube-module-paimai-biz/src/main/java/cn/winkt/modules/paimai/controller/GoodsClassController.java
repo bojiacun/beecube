@@ -70,8 +70,14 @@ public class GoodsClassController extends JeecgController<GoodsClass, IGoodsClas
 		IPage<GoodsClass> pageList = goodsClassService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
-	/**
+	 @AutoLog(value = "拍品分类表-列表查询")
+	 @ApiOperation(value="拍品分类表-列表查询", notes="拍品分类表-列表查询")
+	 @GetMapping(value = "/list")
+	 public Result<?> allList() {
+		 return Result.OK(goodsClassService.list());
+	 }
+
+	 /**
 	 * 添加
 	 *
 	 * @param goodsClass

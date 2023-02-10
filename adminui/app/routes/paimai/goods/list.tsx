@@ -3,8 +3,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
-import {API_PAIMAI_GOODS_LIST, API_POSITION_LIST, requestWithToken} from "~/utils/request.server";
-import PositionList from "~/pages/system/PositionList";
+import {API_PAIMAI_GOODS_CLASS_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
 import GoodsList from "~/pages/paimai/GoodsList";
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -21,7 +20,7 @@ export const loader: LoaderFunction = async ({request}) => {
     else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_PAIMAI_GOODS_LIST+ queryString);
+    const result = await requestWithToken(request)(API_PAIMAI_GOODS_CLASS_LIST+ queryString);
     return json(result.result);
 }
 
