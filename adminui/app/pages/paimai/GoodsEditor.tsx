@@ -23,7 +23,7 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
 const GoodsEditor = (props: any) => {
-    const {model, onHide, selectedRole} = props;
+    const {model, onHide} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
     const goodsClassFetcher = useFetcher();
     const settingsFetcher = useFetcher();
@@ -43,10 +43,9 @@ const GoodsEditor = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
+            postFetcher.submit(values, {method: 'post', action: '/paimai/goods/edit'});
         } else {
-            values.selectedroles = selectedRole?.id;
-            postFetcher.submit(values, {method: 'post', action: '/system/users/add'});
+            postFetcher.submit(values, {method: 'post', action: '/paimai/goods/add'});
         }
     }
     useEffect(() => {
