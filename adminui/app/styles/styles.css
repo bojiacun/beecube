@@ -2485,4 +2485,12 @@ fieldset legend {
   color: #2a2e30 !important;
 }
 
+.alert {
+  padding: 0.71rem 1rem;
+}
+
+.form-check-label {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=styles.css.map */

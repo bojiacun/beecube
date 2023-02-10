@@ -5,12 +5,12 @@ import {PlusCircle} from "react-feather";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 
-export interface UprangeConfigerProps {
+export interface DescListConfigerProps {
     name: string;
     label: string;
 }
 
-const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
+const DescListConfiger : FC<DescListConfigerProps> = (props) => {
     const {name, label} = props;
     const [list, setList] = useState<any[]>([]);
     const [show, setShow] = useState<boolean>(false);
@@ -25,7 +25,7 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
     }, []);
 
     const handleOnAdd = () => {
-        list.push({min: 0, max: 0, price: 0});
+        list.push({key: '', value: ''});
         setList([...list]);
     }
 
@@ -49,21 +49,19 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>拍品加价配置</Modal.Title>
+                    <Modal.Title>拍品字段描述</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert variant={'warning'}>区间要连贯，例如0-20区间加价10元，21-30区间加价20元</Alert>
+                    <Alert variant={'warning'}>字段描述，可添加多个，例如：颜色=蓝色</Alert>
                     <Row className={'mb-1'}>
-                        <Col md={4}>区间（左）</Col>
-                        <Col md={4}>区间（右）</Col>
-                        <Col md={4}>加价</Col>
+                        <Col md={4}>标题</Col>
+                        <Col md={8}>内容</Col>
                     </Row>
                     {list.map((item,index)=>{
                         return (
                             <Row className={'mb-1'} key={'range-'+index}>
-                                <Col md={4}><FormControl value={item.min} onChange={e => hanldeOnItemChange(e, item, 'min')} /></Col>
-                                <Col md={4}><FormControl value={item.max} onChange={e => hanldeOnItemChange(e, item, 'max')} /></Col>
-                                <Col md={4}><FormControl value={item.price} onChange={e => hanldeOnItemChange(e, item, 'price')} /></Col>
+                                <Col md={4}><FormControl value={item.min} onChange={e => hanldeOnItemChange(e, item, 'key')} /></Col>
+                                <Col md={8}><FormControl value={item.max} onChange={e => hanldeOnItemChange(e, item, 'value')} /></Col>
                             </Row>
                         );
                     })}
@@ -81,4 +79,4 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
     );
 }
 
-export default UprangConfiger;
+export default DescListConfiger;
