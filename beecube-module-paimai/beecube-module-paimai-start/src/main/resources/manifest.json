@@ -11,12 +11,13 @@
     {
       "icon": "",
       "hidden": false,
-      "component": "",
+      "component": "paimai",
       "name": "拍卖管理",
       "menuType": 0,
       "sortNo": 1,
       "title": "拍卖管理",
       "internalOrExternal": false,
+      "url": "/paimai/goods",
       "children": [
         {
           "icon": "",
@@ -61,18 +62,30 @@
           "title": "拍品设置",
           "internalOrExternal": false,
           "url": "/paimai/goods/settings"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "goods-class",
+          "name": "分类设置",
+          "menuType": 1,
+          "sortNo": 5,
+          "title": "分类设置",
+          "internalOrExternal": false,
+          "url": "/paimai/goods/classes"
         }
       ]
     },
     {
       "icon": "",
       "hidden": false,
-      "component": "",
+      "component": "paimai",
       "name": "订单管理",
       "menuType": 0,
       "sortNo": 1,
       "title": "订单管理",
       "internalOrExternal": false,
+      "url": "/paimai/orders",
       "children": [
         {
           "icon": "",
@@ -83,7 +96,7 @@
           "sortNo": 1,
           "title": "订单管理",
           "internalOrExternal": false,
-          "url": "/paimai/orders"
+          "url": "/paimai/orders/list"
         },
         {
           "icon": "",
