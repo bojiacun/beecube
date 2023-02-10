@@ -1,22 +1,29 @@
-import {Modal} from "react-bootstrap";
-import {FC} from "react";
+import {Button, Modal} from "react-bootstrap";
+import {FC, useState} from "react";
+import {useFormikContext} from "formik";
 
 export interface UprangeConfigerProps {
-    show: boolean;
-    onHide: ()=>void;
+    name: string;
+    label: string;
 }
 
 const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
-    const {show, onHide} = props;
+    const {name, label} = props;
+    const [show, setShow] = useState<boolean>(false);
+    const formik = useFormikContext<any>();
+
     return (
-        <Modal
-            show={show}
-            onHide={onHide}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>拍品加价配置</Modal.Title>
-            </Modal.Header>
-        </Modal>
+        <>
+            <Button onClick={() => setShow(true)}>{label}</Button>
+            <Modal
+                show={show}
+                onHide={() => setShow(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>拍品加价配置</Modal.Title>
+                </Modal.Header>
+            </Modal>
+        </>
     );
 }
 

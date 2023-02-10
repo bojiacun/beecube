@@ -109,11 +109,8 @@ const GoodsEditor = (props: any) => {
                             <FormGroup>
                                 <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                 <Row>
-                                    <Col sm={10}>
-                                        {formikRef.current.values['uprange'] ? '已配置': '未配置'}
-                                    </Col>
-                                    <Col sm={2}>
-                                        <Button onClick={() => setUprangConfigerShow(true)}>点击配置</Button>
+                                    <Col sm={12}>
+                                        <UprangConfiger  label={'点击配置'} name={'uprange'} />
                                     </Col>
                                 </Row>
                             </FormGroup>
@@ -151,7 +148,6 @@ const GoodsEditor = (props: any) => {
                     </Form>
                 </Formik>
             </Modal>
-            <UprangConfiger show={uprangConfigerShow} onHide={() => setUprangConfigerShow(false)}/>
         </>
     );
 }
