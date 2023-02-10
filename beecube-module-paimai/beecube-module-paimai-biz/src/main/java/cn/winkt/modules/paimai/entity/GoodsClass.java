@@ -50,4 +50,6 @@ public class GoodsClass {
     @ApiModelProperty(value = "状态（0不显示、1显示）")
 	@Dict(dicCode = "paimai_goods_class_status")
 	private java.lang.Integer status;
+	@ApiModelProperty(value = "创建时间")
+	private Date createTime;
 }
