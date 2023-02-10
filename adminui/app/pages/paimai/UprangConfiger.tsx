@@ -20,7 +20,7 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
     useEffect(()=>{
         let initValue = formik.values[name];
         if(initValue) {
-            setList(JSON.parse(initValue));
+            setList(JSON.parse(initValue) || []);
         }
     }, []);
 
@@ -31,6 +31,7 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
 
     const handleOnSubmit = () => {
         formik.setFieldValue(name, JSON.stringify(list));
+        setShow(false);
     }
 
     const hanldeOnItemChange = (e:any, item:any, key:string) => {
@@ -40,7 +41,7 @@ const UprangConfiger: FC<UprangeConfigerProps> = (props) => {
 
     return (
         <>
-            <Button onClick={() => setShow(true)} className={classNames((!!formik.errors[name]) ? 'is-invalid':'')}>{label}</Button>
+            <Button onClick={() => setShow(true)} className={classNames((!!formik.errors[name]) ? 'is-invalid':'')}>{list.length > 0 ? '已配置':label}</Button>
             {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
             <Modal
                 show={show}
