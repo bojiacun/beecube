@@ -12,13 +12,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 /**
  * @Description: 拍品表
  * @Author: jeecg-boot
- * @Date:   2023-02-08
+ * @Date:   2023-02-10
  * @Version: V1.0
  */
 @Data
@@ -32,6 +33,10 @@ public class Goods {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
 	private java.lang.String id;
+	/**分类ID*/
+	@Excel(name = "分类ID", width = 15)
+    @ApiModelProperty(value = "分类ID")
+	private java.lang.String classId;
 	/**主标题*/
 	@Excel(name = "主标题", width = 15)
     @ApiModelProperty(value = "主标题")
@@ -43,6 +48,7 @@ public class Goods {
 	/**拍品类型（1普通拍品、2一口价）*/
 	@Excel(name = "拍品类型（1普通拍品、2一口价）", width = 15)
     @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
+	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
 	/**单品保证金*/
 	@Excel(name = "单品保证金", width = 15)
@@ -127,5 +133,6 @@ public class Goods {
 	/**状态（0下架1上架）*/
 	@Excel(name = "状态（0下架1上架）", width = 15)
     @ApiModelProperty(value = "状态（0下架1上架）")
+	@Dict(dicCode = "paimai_goods_status")
 	private java.lang.Integer status;
 }

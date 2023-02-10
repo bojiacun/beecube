@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -61,6 +62,7 @@ public class GoodsOrderAfter {
 	/**状态（0待处理、1已处理、2拒绝）*/
 	@Excel(name = "状态（0待处理、1已处理、2拒绝）", width = 15)
     @ApiModelProperty(value = "状态（0待处理、1已处理、2拒绝）")
+	@Dict(dicCode = "paimai_order_after_status")
 	private java.lang.Integer status;
 	/**订单商品ID*/
 	@Excel(name = "订单商品ID", width = 15)

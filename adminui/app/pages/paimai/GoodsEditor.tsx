@@ -18,28 +18,16 @@ import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapDateTime from "~/components/form/BootstrapDateTime";
 import TinymceEditor from "~/components/tinymce-editor";
+import UprangConfiger from "~/pages/paimai/UprangConfiger";
 
-
-const checkHandlers: any = {};
 
 const GoodsEditor = (props: any) => {
     const {model, onHide, selectedRole} = props;
-    const [positionListShow, setPositionListShow] = useState<boolean>(false);
-    const [departmentSelectorShow, setDepartmentSelectorShow] = useState<boolean>(false);
-    const [positionOptions, setPositionOptions] = useState<any[]>([]);
-    const [departmentOptions, setDepartmentOptions] = useState<any[]>([]);
-    const [postValue, setPostValue] = useState<any[]>([]);
-    const [departmentValue, setDepartmentValue] = useState<any[]>([]);
-    const [allRoles, setAllRoles] = useState<any[]>([]);
-    const [allTenants, setAllTenants] = useState<any[]>([]);
-    const userNameCheckFetcher = useFetcher();
-    const emailNameCheckFetcher = useFetcher();
-    const phoneNameCheckFetcher = useFetcher();
+    const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
+    const [uprangConfigerShow, setUprangConfigerShow] = useState<boolean>(false);
+
+    const goodsClassFetcher = useFetcher();
     const postFetcher = useFetcher();
-    const roleFetcher = useFetcher();
-    const userRoleFetcher = useFetcher();
-    const userDepartmentFetcher = useFetcher();
-    const tenantFetcher = useFetcher();
     const formikRef = useRef<any>();
 
 
@@ -53,7 +41,6 @@ const GoodsEditor = (props: any) => {
     });
 
     const handleOnSubmit = (values: any) => {
-        console.log(values);
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/system/users/edit'});
         } else {
@@ -63,56 +50,17 @@ const GoodsEditor = (props: any) => {
     }
     useEffect(() => {
         if (model) {
-            roleFetcher.load('/system/roles/all');
-            tenantFetcher.load('/system/tenants/all');
-            if (model.id) {
-                userRoleFetcher.load(`/system/users/${model.id}/roles`);
-                userDepartmentFetcher.load(`/system/users/${model.id}/departments`);
-                const newModel: any = {...model, selectedroles: '', selecteddeparts: ''};
-                const posts = newModel.post?.split(',');
-                const postTexts = newModel.post_dictText?.split(',') || [];
-                const postValueOptions: any[] = [];
-                if(posts) {
-                    posts.forEach((v: any, i: number) => {
-                        postValueOptions.push({value: v, label: postTexts[i]??''});
-                    });
-                }
-                setPostValue(postValueOptions);
-            }
+            goodsClassFetcher.load('/paimai/goods/classes/all');
         }
     }, [model]);
 
+    //拍品分类
     useEffect(() => {
-        if (userNameCheckFetcher.type === 'done' && userNameCheckFetcher.data) {
-            checkHandlers.username(userNameCheckFetcher.data.success);
+        if (goodsClassFetcher.type === 'done' && goodsClassFetcher.data) {
+            setGoodsClassOptions(goodsClassFetcher.data.map((item:any)=>({label: item.name, value: item.id})));
         }
-    }, [userNameCheckFetcher.state]);
-    useEffect(() => {
-        if (emailNameCheckFetcher.type === 'done' && emailNameCheckFetcher.data) {
-            checkHandlers.email(emailNameCheckFetcher.data.success);
-        }
-    }, [emailNameCheckFetcher.state]);
-    useEffect(() => {
-        if (phoneNameCheckFetcher.type === 'done' && phoneNameCheckFetcher.data) {
-            checkHandlers.phone(phoneNameCheckFetcher.data.success);
-        }
-    }, [phoneNameCheckFetcher.state]);
+    }, [goodsClassFetcher.state]);
 
-
-    useEffect(() => {
-        if (userRoleFetcher.type === 'done' && userRoleFetcher.data) {
-            //获取用户角色列表
-            formikRef.current!.setFieldValue('selectedroles', userRoleFetcher.data.join(','));
-        }
-    }, [userRoleFetcher.state]);
-
-    useEffect(() => {
-        if (userDepartmentFetcher.type === 'done' && userDepartmentFetcher.data) {
-            //获取用户角色列表
-            formikRef.current!.setFieldValue('selecteddeparts', userDepartmentFetcher.data.map((item: any) => item.value).join(','));
-            setDepartmentValue(userDepartmentFetcher.data.map((item: any) => ({label: item.title, value: item.value})));
-        }
-    }, [userDepartmentFetcher.state]);
 
 
     useEffect(() => {
@@ -126,46 +74,6 @@ const GoodsEditor = (props: any) => {
     }, [postFetcher.state]);
 
 
-    useEffect(() => {
-        if (roleFetcher.type === 'done' && roleFetcher.data) {
-            setAllRoles(roleFetcher.data);
-        }
-    }, [roleFetcher.state]);
-    useEffect(() => {
-        if (tenantFetcher.type === 'done' && tenantFetcher.data) {
-            setAllTenants(tenantFetcher.data);
-        }
-    }, [tenantFetcher.state]);
-
-
-    const handleOnPositionSelect = (rows: any) => {
-        let newOptions = rows.map((x: any) => ({label: x.name, value: x.code, key: x.id}));
-        setPositionOptions(_.uniqBy([...positionOptions, ...newOptions], 'key'));
-
-        let data = {name: 'post', value: newOptions.map((item: any) => item.value).join(',')};
-        let e = {currentTarget: data};
-        formikRef.current!.handleChange(e);
-        setPostValue(newOptions);
-    }
-    const handleOnPositionSelectChanged = (currentValue: any) => {
-        let data = {name: 'post', value: currentValue.map((item: any) => item.value).join(',')};
-        let e = {currentTarget: data};
-        formikRef.current!.handleChange(e);
-        setPostValue(currentValue);
-    }
-    const handleOnDepartmentSelect = (rows: any) => {
-        let newOptions = rows.map((x: any) => ({label: x.label, value: x.value, key: x.value}));
-        setDepartmentOptions(_.uniqBy([...departmentOptions, ...newOptions], 'key'));
-        const newValue = newOptions.map((item: any) => item.value).join(',');
-        formikRef.current!.setFieldValue('selecteddeparts', newValue);
-        setDepartmentValue(newOptions);
-        setDepartmentSelectorShow(false);
-    }
-    const handleOnDepartmentSelectChanged = (currentValue: any) => {
-        const newValue = currentValue.map((item: any) => item.value).join(',');
-        formikRef.current!.setFieldValue('selecteddeparts', newValue);
-        setDepartmentValue(currentValue);
-    }
     if (!model) return <></>
 
     return (
@@ -186,6 +94,7 @@ const GoodsEditor = (props: any) => {
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                                        <BootstrapSelect name={'class_id'} label={'分类'} options={goodsClassOptions} />
                                         <BootstrapInput label={'标题'} name={'title'}/>
                                         <BootstrapInput label={'副标题'} name={'subTitle'}/>
                                         <FormGroup>
@@ -200,38 +109,15 @@ const GoodsEditor = (props: any) => {
                                         <BootstrapRadioGroup  options={[{label: '普通拍品', value: '1'},{label: '一口价', value: '2'}]} name={'type'} label={'拍品类型'} />
 
                                         <FormGroup>
-                                            <FormLabel htmlFor={'post'}>职务</FormLabel>
+                                            <FormLabel htmlFor={'post'}>加价配置</FormLabel>
                                             <Row>
                                                 <Col sm={10}>
-                                                    <ReactSelectThemed
-                                                        id={'post'}
-                                                        name={'post'}
-
-                                                        components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
-                                                        placeholder={'选择职务'}
-                                                        isClearable={true}
-                                                        isSearchable={false}
-                                                        isMulti={true}
-                                                        openMenuOnClick={false}
-                                                        options={positionOptions}
-                                                        onChange={handleOnPositionSelectChanged}
-                                                        value={postValue}
-                                                    />
                                                 </Col>
                                                 <Col sm={2}>
-                                                    <Button onClick={() => setPositionListShow(true)}>选择</Button>
+                                                    <Button onClick={() => setUprangConfigerShow(true)}>选择</Button>
                                                 </Col>
                                             </Row>
                                         </FormGroup>
-                                        <BootstrapSelect
-                                            name={'selectedroles'}
-                                            label={'角色'}
-                                            options={allRoles.map((item: any) => ({label: item.roleName, value: item.id}))}
-                                            placeholder={'选择角色'}
-                                            isClearable={true}
-                                            isSearchable={false}
-                                            isMulti={true}
-                                        />
                                         <FormGroup>
                                             <FormLabel htmlFor={'desc_flow'}>拍品流程</FormLabel>
                                             <TinymceEditor name={'desc_flow'} />
@@ -269,8 +155,7 @@ const GoodsEditor = (props: any) => {
                     </Formik>
                 }
             </Modal>
-            <PositionListSelector show={positionListShow} setPositionListShow={setPositionListShow} onSelect={handleOnPositionSelect}/>
-            <DepartmentTreeSelector show={departmentSelectorShow} setShow={setDepartmentSelectorShow} onSelect={handleOnDepartmentSelect}/>
+            <UprangConfiger show={uprangConfigerShow} onHide={()=>setUprangConfigerShow(false)} />
         </>
     );
 }
