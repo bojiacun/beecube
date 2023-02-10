@@ -114,7 +114,7 @@ const GoodsEditor = (props: any) => {
                                                 <Col sm={10}>
                                                 </Col>
                                                 <Col sm={2}>
-                                                    <Button onClick={() => setUprangConfigerShow(true)}>选择</Button>
+                                                    <Button onClick={() => setUprangConfigerShow(true)}>点击配置</Button>
                                                 </Col>
                                             </Row>
                                         </FormGroup>
