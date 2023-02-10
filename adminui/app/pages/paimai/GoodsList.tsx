@@ -112,7 +112,7 @@ const GoodsList = (props: any) => {
             dataField: '',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
-                let previewUrl = row.images.split(',')[0];
+                let previewUrl = row.images?.split(',')[0];
                 return <FallbackImage  href={previewUrl} style={{width: 100, height: 100}} />
             }
         },
