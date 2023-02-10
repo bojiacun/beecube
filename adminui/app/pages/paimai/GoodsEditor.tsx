@@ -17,6 +17,7 @@ import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapDateTime from "~/components/form/BootstrapDateTime";
+import TinymceEditor from "~/components/tinymce-editor";
 
 
 const checkHandlers: any = {};
@@ -231,6 +232,26 @@ const GoodsEditor = (props: any) => {
                                             isSearchable={false}
                                             isMulti={true}
                                         />
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'desc_flow'}>拍品流程</FormLabel>
+                                            <TinymceEditor name={'desc_flow'} />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'desc_delivery'}>物流运输</FormLabel>
+                                            <TinymceEditor name={'desc_delivery'} />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'desc_notice'}>注意事项</FormLabel>
+                                            <TinymceEditor name={'desc_notice'} />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'desc_read'}>拍卖须知</FormLabel>
+                                            <TinymceEditor name={'desc_read'} />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel htmlFor={'desc_deposit'}>保证金说明</FormLabel>
+                                            <TinymceEditor name={'desc_deposit'} />
+                                        </FormGroup>
                                         <BootstrapRadioGroup  options={[{label: '下架', value: '0'},{label: '上架', value: '1'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>

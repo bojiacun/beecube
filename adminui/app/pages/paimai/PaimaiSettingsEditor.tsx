@@ -43,6 +43,18 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel htmlFor={'desc_delivery'}>物流运输</FormLabel>
                             <TinymceEditor name={'desc_delivery'} />
                         </FormGroup>
+                        <FormGroup>
+                            <FormLabel htmlFor={'desc_notice'}>注意事项</FormLabel>
+                            <TinymceEditor name={'desc_notice'} />
+                        </FormGroup>
+                        <FormGroup>
+                            <FormLabel htmlFor={'desc_read'}>拍卖须知</FormLabel>
+                            <TinymceEditor name={'desc_read'} />
+                        </FormGroup>
+                        <FormGroup>
+                            <FormLabel htmlFor={'desc_deposit'}>保证金说明</FormLabel>
+                            <TinymceEditor name={'desc_deposit'} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
