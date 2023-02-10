@@ -107,9 +107,10 @@ const GoodsEditor = (props: any) => {
                                                  label={'拍品类型'}/>
 
                             <FormGroup>
-                                <FormLabel htmlFor={'post'}>加价配置</FormLabel>
+                                <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                 <Row>
                                     <Col sm={10}>
+                                        {formikRef.current.values['uprange'] ? '已配置': '未配置'}
                                     </Col>
                                     <Col sm={2}>
                                         <Button onClick={() => setUprangConfigerShow(true)}>点击配置</Button>
