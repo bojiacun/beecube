@@ -23,7 +23,6 @@ const GoodsClassEditor = (props: any) => {
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/paimai/goods/classes/edit'});
         } else {
-            values.selectedroles = selectedRole?.id;
             postFetcher.submit(values, {method: 'post', action: '/paimai/goods/classes/add'});
         }
     }
@@ -60,7 +59,7 @@ const GoodsClassEditor = (props: any) => {
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                        <BootstrapInput label={'分类名称'} name={'title'}/>
+                                        <BootstrapInput label={'分类名称'} name={'name'}/>
                                         <BootstrapRadioGroup  options={[{label: '不显示', value: '0'},{label: '显示', value: '1'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>

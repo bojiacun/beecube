@@ -5,7 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
 import {API_PAIMAI_GOODS_CLASS_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
-import GoodsList from "~/pages/paimai/GoodsList";
+import GoodsClassList from "~/pages/paimai/GoodsClassList";
 export const ErrorBoundary = defaultRouteErrorBoundary;
 
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const GoodsClassesPage = (props:any) => {
     return (
-        <GoodsList {...props} />
+        <GoodsClassList {...props} />
     );
 }
 

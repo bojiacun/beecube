@@ -72,7 +72,7 @@ public class GoodsClassController extends JeecgController<GoodsClass, IGoodsClas
 	}
 	 @AutoLog(value = "拍品分类表-列表查询")
 	 @ApiOperation(value="拍品分类表-列表查询", notes="拍品分类表-列表查询")
-	 @GetMapping(value = "/list")
+	 @GetMapping(value = "/all")
 	 public Result<?> allList() {
 		 return Result.OK(goodsClassService.list());
 	 }
