@@ -78,7 +78,7 @@ const PerformanceEditor = (props: any) => {
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapInput label={'标题'} name={'title'}/>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'preview'}>拍品图片</FormLabel>
+                                        <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
                                     <BootstrapRadioGroup options={[{label: '限时拍', value: '1'}, {label: '同步拍', value: '2'}]} name={'type'}

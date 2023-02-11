@@ -50,7 +50,7 @@ public class Performance {
 	/**预览图片*/
 	@Excel(name = "预览图片", width = 15)
     @ApiModelProperty(value = "预览图片")
-	private java.lang.String perview;
+	private java.lang.String preview;
 	/**拍卖会ID*/
 	@Excel(name = "拍卖会ID", width = 15)
     @ApiModelProperty(value = "拍卖会ID")

@@ -95,7 +95,7 @@ const PerformanceList = (props: any) => {
             dataField: '',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
-                let previewUrl = row.perview;
+                let previewUrl = row.preview;
                 return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
             }
         },
