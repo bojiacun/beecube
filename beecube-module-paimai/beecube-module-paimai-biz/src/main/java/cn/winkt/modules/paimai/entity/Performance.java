@@ -58,6 +58,7 @@ public class Performance {
 	/**专场类型（1限时拍、2为同步拍)*/
 	@Excel(name = "专场类型（1限时拍、2为同步拍)", width = 15)
     @ApiModelProperty(value = "专场类型（1限时拍、2为同步拍)")
+	@Dict(dicCode = "paimai_performance_type")
 	private java.lang.Integer type;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")

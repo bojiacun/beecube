@@ -144,6 +144,11 @@ export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 
 
+export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performance/list`;
+export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performance/add`;
+export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performance/edit`;
+export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performance/delete`;
+
 export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;
 

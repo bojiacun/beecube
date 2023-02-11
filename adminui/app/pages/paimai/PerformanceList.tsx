@@ -2,8 +2,6 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
-    emptySortFunc,
-    headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
     showToastError,
@@ -13,13 +11,13 @@ import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, In
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import GoodsEditor from "~/pages/paimai/GoodsEditor";
 import FigureImage from "react-bootstrap/FigureImage";
+import PerformanceEditor from "~/pages/paimai/PerformanceEditor";
 
 
 
 
-const GoodsList = (props: any) => {
+const PerformanceList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
@@ -89,7 +87,7 @@ const GoodsList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
-            text: '拍品名称',
+            text: '专场名称',
             dataField: 'title',
         },
         {
@@ -97,21 +95,21 @@ const GoodsList = (props: any) => {
             dataField: '',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
-                let previewUrl = row.images?.split(',')[0];
+                let previewUrl = row.perview;
                 return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
             }
         },
         {
-            text: '拍品类型',
+            text: '专场类型',
             dataField: 'type_dictText',
-        },
-        {
-            text: '起拍价',
-            dataField: 'startPrice',
         },
         {
             text: '保证金',
             dataField: 'deposit',
+        },
+        {
+            text: '开拍时间',
+            dataField: 'startTime',
         },
         {
             text: '结束时间',
@@ -153,7 +151,7 @@ const GoodsList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">拍品管理</h4>
+                            <h4 className="mb-0">专场管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -163,7 +161,7 @@ const GoodsList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建拍品</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建专场</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -173,7 +171,7 @@ const GoodsList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>拍品名称</FormLabel>
+                                    <FormLabel htmlFor={'name'}>专场名称</FormLabel>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
@@ -211,7 +209,7 @@ const GoodsList = (props: any) => {
                 </div>
             </Card>
 
-            {editModal && <GoodsEditor model={editModal} onHide={()=>{
+            {editModal && <PerformanceEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}
@@ -219,4 +217,4 @@ const GoodsList = (props: any) => {
     );
 }
 
-export default GoodsList;
+export default PerformanceList;
