@@ -9,6 +9,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -44,7 +45,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="订单表")
 @RestController
-@RequestMapping("/paimai/goodsOrder")
+@RequestMapping("/paimai/order")
 public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrderService> {
 	@Autowired
 	private IGoodsOrderService goodsOrderService;
@@ -61,6 +62,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 	@AutoLog(value = "订单表-分页列表查询")
 	@ApiOperation(value="订单表-分页列表查询", notes="订单表-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(GoodsOrder goodsOrder,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,

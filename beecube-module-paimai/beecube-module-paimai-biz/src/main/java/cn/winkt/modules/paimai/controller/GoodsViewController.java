@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="围观记录表")
 @RestController
-@RequestMapping("/paimai/goodsView")
+@RequestMapping("/paimai/view")
 public class GoodsViewController extends JeecgController<GoodsView, IGoodsViewService> {
 	@Autowired
 	private IGoodsViewService goodsViewService;
