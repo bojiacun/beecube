@@ -69,7 +69,7 @@ const PerformanceList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/performances/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }

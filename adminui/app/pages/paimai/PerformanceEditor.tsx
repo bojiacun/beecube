@@ -31,7 +31,7 @@ const PerformanceEditor = (props: any) => {
     const GoodsSchema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
         type: Yup.number().required('必填字段'),
-        startTime: Yup.number().required('必填字段'),
+        startTime: Yup.string().required('必填字段'),
         deposit: Yup.string().required('必填字段'),
         endTime: Yup.string().required('必填字段'),
         preview: Yup.string().required('必填字段'),
@@ -84,7 +84,7 @@ const PerformanceEditor = (props: any) => {
                                     <BootstrapRadioGroup options={[{label: '限时拍', value: '1'}, {label: '同步拍', value: '2'}]} name={'type'}
                                                          label={'专场类型'}/>
 
-                                    {formik.values['type'] == 1 && <BootstrapInput label={'起拍时间'} name={'startTime'}/>}
+                                    {formik.values['type'] == 1 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
                                     {formik.values['type'] == 1 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
 
