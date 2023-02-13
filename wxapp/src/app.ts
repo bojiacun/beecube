@@ -1,6 +1,8 @@
 import { Component, PropsWithChildren } from 'react'
 import "windi.css";
-import './app.scss'
+import './app.scss';
+const QQMapWX = require('./utils/qqmap-wx-jssdk.min');
+
 
 class App extends Component<PropsWithChildren> {
 
