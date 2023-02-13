@@ -1,6 +1,6 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "wxapp",
+  "projectname": "汇智拍卖",
   "description": "汇智拍卖",
   "appid": "wx6a459460d394f202",
   "setting": {
