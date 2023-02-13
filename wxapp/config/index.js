@@ -1,15 +1,26 @@
 const config = {
-  projectName: 'wxapp',
+  projectName: '汇智拍卖',
   date: '2023-2-13',
-  designWidth: 750,
+  // designWidth: 750,
+  // deviceRatio: {
+  //   640: 2.34 / 2,
+  //   750: 1,
+  //   828: 1.81 / 2
+  // },
+  // 配置 NutUI 375 尺寸
+  designWidth: 375,
   deviceRatio: {
     640: 2.34 / 2,
     750: 1,
-    828: 1.81 / 2
+    828: 1.81 / 2,
+    375: 2 / 1,
+  },
+  sass: {
+    data: `@import "@nutui/nutui-taro/dist/styles/variables.scss";`,
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  plugins: [],
+  plugins: ['@tarojs/plugin-html'],
   defineConstants: {
   },
   copy: {
