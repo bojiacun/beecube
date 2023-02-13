@@ -1,11 +1,11 @@
 import {Context, LatLng} from "../../context";
 import {
-    SET_CONTEXT, SET_GEO,
-    SET_PAGELOADING, SET_POSITION,
-    SET_REFERER,
-    SET_SETTINGS,
-    SET_SIETINFO, SET_SITE,
-    SET_USERINFO
+  SET_CONTEXT, SET_GEO,
+  SET_PAGELOADING, SET_POSITION,
+  SET_REFERER,
+  SET_SETTINGS,
+  SET_SIETINFO, SET_SITE, SET_SYSTEMINFO,
+  SET_USERINFO
 } from "../constants"
 
 
@@ -36,7 +36,12 @@ export const setSiteInfo = (siteInfo) => {
         payload: siteInfo
     }
 }
-
+export const setSystemInfo = (systemInfo) => {
+  return {
+    type: SET_SYSTEMINFO,
+    payload: systemInfo
+  }
+}
 
 export const setPageLoading = (loading: boolean) => {
     return {
