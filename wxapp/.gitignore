@@ -4,7 +4,4 @@ deploy_versions/
 .rn_temp/
 node_modules/
 .DS_Store
-.idea/
-hz_recycle/
-node/
-!src/manager/static
+.swc

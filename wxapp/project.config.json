@@ -1,23 +1,15 @@
 {
-	"miniprogramRoot": "dist/",
-	"projectname": "BookShop",
-	"description": "没大没小书店商城",
-	"appid": "wx4dc9f56c180565dc",
-	"setting": {
-		"urlCheck": false,
-		"es6": false,
-		"postcss": false,
-		"preloadBackgroundData": false,
-		"minified": true,
-		"newFeature": true,
-		"autoAudits": false,
-		"coverView": true,
-		"showShadowRootInWxmlPanel": false,
-		"scopeDataCheck": false,
-		"useCompilerModule": false
-	},
-	"compileType": "miniprogram",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"condition": {}
+  "miniprogramRoot": "./dist",
+  "projectname": "wxapp",
+  "description": "汇智拍卖",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "enhance": false,
+    "compileHotReLoad": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
 }
