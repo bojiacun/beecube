@@ -1,0 +1,18 @@
+.classItem {
+    margin: 5px 20rpx 5px 5px;
+    padding: 20rpx;
+    image {
+        width: 120rpx;
+        height: 120rpx;
+    }
+}
+.classItem:last-child {
+    margin-right: 0;
+}
+.classItemActive {
+    outline: solid 5px var(--green);
+}
+
+.weightActive {
+    outline: solid 5px var(--green);
+}

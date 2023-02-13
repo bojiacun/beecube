@@ -5,7 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
 import {API_PAIMAI_AUCTION_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
-import PerformanceList from "~/pages/paimai/PerformanceList";
+import AuctionList from "~/pages/paimai/AuctionList";
 export const ErrorBoundary = defaultRouteErrorBoundary;
 
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -24,10 +24,10 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(result.result);
 }
 
-const PerformanceListPage = (props:any) => {
+const AuctionListPage = (props:any) => {
     return (
-        <PerformanceList {...props} />
+        <AuctionList {...props} />
     );
 }
 
-export default withPageLoading(PerformanceListPage);
+export default withPageLoading(AuctionListPage);
