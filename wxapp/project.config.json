@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "wxapp",
   "description": "汇智拍卖",
-  "appid": "touristappid",
+  "appid": "wx6a459460d394f202",
   "setting": {
     "urlCheck": true,
     "es6": false,
