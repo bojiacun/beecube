@@ -13,7 +13,6 @@ const store = configStore();
 class App extends Component<PropsWithChildren> {
 
   componentDidMount() {
-    console.log('did mount');
     store.dispatch(setPageLoading(true));
     const siteInfo = require('./siteinfo');
     store.dispatch(setSiteInfo(siteInfo));
@@ -21,11 +20,12 @@ class App extends Component<PropsWithChildren> {
   }
 
   onLaunch(options) {
-    console.log('on launch');
     let {context} = store.getState();
     context.referer = options;
     request.get('/app/settings/all').then(res=>{
-      console.log(res);
+      console.log('settings is',res);
+    }).catch(error=>{
+      console.log('error is',error);
     })
   }
 

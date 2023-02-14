@@ -9,7 +9,7 @@ else {
 }
 module.exports = {
     name: "汇智拍卖",
-    appId: '123',
+    appId: '1604495135656910850',
     version: "1.0.0",
     siteroot: baseUrl,
     design_method: "3"
