@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用导航表")
 @RestController
-@RequestMapping("/app/appNav")
+@RequestMapping("/app/navs")
 public class AppNavController extends JeecgController<AppNav, IAppNavService> {
 	@Autowired
 	private IAppNavService appNavService;
