@@ -24,9 +24,7 @@ class App extends Component<PropsWithChildren> {
     context.referer = options;
     request.get('/app/settings/all').then(res=>{
       console.log('settings is',res);
-    }).catch(error=>{
-      console.log('error is',error);
-    })
+    });
   }
 
   componentDidShow() {
