@@ -40,13 +40,13 @@ const VerticalNavMenuLink = (props:any) => {
                 </Link>
             );
         }
-        else if(item.target == '_blank'){
+        else if(item.target == '_blank' || item.target == 'iframe'){
             return (
-                <NavLink className={'d-flex align-items-center'} href={item.route||item.href} target={'_blank'}>
+                <Link className={'d-flex align-items-center'} to={item.route||item.href} target={'_blank'}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
                     {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
-                </NavLink>
+                </Link>
             );
         }
         else if(item.target == 'iframe') {
