@@ -53,7 +53,18 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
                 </Formik>
             </div>
             <div style={{ padding: 15 }}>
+                <Formik initialValues={_data.style} onSubmit={handleOnSubmit2}>
+                    {
+                        (formik) => {
+                            return (
+                                <Form method={'post'} onChange={(e)=>formik.submitForm()}>
+                                    <BootstrapInput label={'遮罩层透明度'} name={'opacity'} />
+                                </Form>
+                            );
+                        }
+                    }
 
+                </Formik>
             </div>
         </AttributeTabs>
     );
