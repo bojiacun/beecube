@@ -1,7 +1,7 @@
-import {DragEventHandler, useState} from "react";
+import {DragEventHandler, useEffect, useState} from "react";
 import _ from "lodash";
 import {ControlType, getControl, getControls, getModule, getModules, ModuleType} from "~/components/page-designer/component";
-import PageSettings from "~/components/page-designer/page";
+import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page";
 import {Button, Col, Collapse, Container, Form, Row} from "react-bootstrap";
 import register from './registers';
 import classNames from "classnames";
@@ -45,6 +45,25 @@ const PageDesigner = (props: any) => {
     const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
     const [currentData, setCurrentData] = useState<any>();
     const [newPageVisible, setNewPageVisible] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (pages) {
+            pages.forEach(item => {
+                let controls = item.controls || [];
+                if (_.findIndex(controls, o => o.key == MINI_APP_HEADER) < 0) {
+                    let control = {...getControl(MINI_APP_HEADER)};
+                    delete control.designer;
+                    delete control.settings;
+                    //添加默认导航栏
+                    controls.push(control);
+                }
+                item.controls = controls;
+                item.style = {...DEFAULT_PAGE_DATA, ...item?.style};
+            });
+            setPages([...pages]);
+        }
+    }, []);
+
     const groupedModules: string[] = _.union(getModules().map(item => item.group).sort((a, b) => {
         if (a < b) return -1;
         if (a > b) return 1;
@@ -186,8 +205,8 @@ const PageDesigner = (props: any) => {
                     <Button>保存</Button>
                 </Col>
             </Row>
-            <Row style={{height: 'calc(100vh - 64px)', position: 'relative', overflow: 'hidden', width: '100vw'}}>
-                <Col className={'diy-content'}>
+            <div style={{height: 'calc(100vh - 64px)', position: 'relative', overflow: 'hidden', width: '100vw'}}>
+                <div className={'diy-content'}>
                     <div className={'sider'}>
                         <ul className={'menu'}>
                             <li key='module' onClick={() => setTabIndex('module')}
@@ -212,7 +231,7 @@ const PageDesigner = (props: any) => {
                                         return (
                                             <li key={index}>
                                                 <div
-                                                    style={{color: currentPageIndex == index ? '#000': '#333'}}>{item.title}</div>
+                                                    style={{color: currentPageIndex == index ? '#3366CC': '#333'}}>{item.title}</div>
                                                 <div>
                                                     <Edit2 onClick={() => onPageChanged(item, index)} size={16} className={'anticon'}/>
                                                     {currentPageIndex == index &&
@@ -325,8 +344,8 @@ const PageDesigner = (props: any) => {
 
 
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </Container>
     );
 }
