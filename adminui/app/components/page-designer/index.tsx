@@ -9,6 +9,7 @@ import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle,
 import {showDeleteAlert} from "~/utils/utils";
 import { MINI_APP_HEADER } from "./controls/MiniAppHeader";
 import { POP_ADVERTISE } from "./controls/PopAdvertise";
+import {AnimatePresence, motion} from "framer-motion";
 
 export declare interface PageType {
     title: string;
@@ -85,6 +86,7 @@ const PageDesigner = (props: any) => {
         pages[index] = page;
         setPages([...pages]);
     }
+    let SettingsComponent = currentData?.type ? currentData!.settings : null;
     const onControlSelected = (e: any, item: ControlType) => {
         currentPage.controls = currentPage.controls || [];
         if (e.target.checked) {
@@ -342,6 +344,29 @@ const PageDesigner = (props: any) => {
                                 <div className={'nomodule'}><h2>拖动或点击左侧模块进行页面DIY</h2></div>}
                         </div>
 
+                        <AnimatePresence mode={'wait'}>
+                            {currentData != null &&
+                            <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'} style={{height: '100%', overflow: 'auto', borderTop: '1px solid #eee'}}>
+                                {SettingsComponent && <SettingsComponent data={currentData?.data} onUpdate={(data: any) => {
+                                    let itemData = {};
+                                    if (currentData!.type == 1) {
+                                        //控件类型数据
+                                        itemData = currentPage!.controls![currentData!.dataIndex].data;
+                                        itemData = {...itemData, ...data};
+                                        currentPage!.controls![currentData!.dataIndex].data = itemData;
+                                    } else if (currentData!.type == 2) {
+                                        itemData = currentPage!.modules![currentData!.dataIndex].data;
+                                        itemData = {...itemData, ...data};
+                                        currentPage!.modules![currentData!.dataIndex].data = itemData;
+                                    } else if (currentData!.type == 3) {
+                                        itemData = data;
+                                        currentPage.style = itemData;
+                                    }
+                                    refreshPage();
+                                }}/>}
+                            </motion.div>
+                            }
+                        </AnimatePresence>
 
                     </div>
                 </div>

@@ -158,6 +158,24 @@
         z-index : 0;
         position: absolute;
       }
+
+
+
+      .attributeContainer {
+        width     : 400px;
+        position  : absolute;
+        right     : -400px;
+        top       : 0;
+        height    : 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #fff;
+        box-shadow: #ddd 0 0 10px;
+        z-index   : 21;
+        opacity   : 1;
+      }
+
+
     }
     .pages {
       display: block;
@@ -187,21 +205,6 @@
 
   }
 
-
-
-  .attributeContainer {
-    width     : 400px;
-    position  : absolute;
-    right     : -400px;
-    top       : 0;
-    height    : 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #fff;
-    box-shadow: #ddd 0 0 10px;
-    z-index   : 21;
-    opacity   : 1;
-  }
 
   .title {
     height    : 50px;

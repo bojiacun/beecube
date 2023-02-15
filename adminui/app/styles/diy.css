@@ -10287,6 +10287,19 @@ h3 {
   z-index: 0;
   position: absolute;
 }
+#diy-container .diy-content .main .attributeContainer {
+  width: 400px;
+  position: absolute;
+  right: -400px;
+  top: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+  box-shadow: #ddd 0 0 10px;
+  z-index: 21;
+  opacity: 1;
+}
 #diy-container .diy-content .pages {
   display: block;
   width: 100%;
@@ -10309,19 +10322,6 @@ h3 {
   font-size: 14px;
   color: #999;
   cursor: pointer;
-}
-#diy-container .attributeContainer {
-  width: 400px;
-  position: absolute;
-  right: -400px;
-  top: 0;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: #fff;
-  box-shadow: #ddd 0 0 10px;
-  z-index: 21;
-  opacity: 1;
 }
 #diy-container .title {
   height: 50px;

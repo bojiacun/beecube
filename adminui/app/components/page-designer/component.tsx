@@ -38,7 +38,7 @@ export const AttributeTabs: React.FC<AttributeTabProps> = (props) => {
             <Row className={'tabs'}>
                 {tabs.map((item, index) => {
                     return (
-                        <Col className={classNames(activeIndex === index ? 'active':'tab')} key={index} onClick={() => tabChange(index)}>{item}</Col>
+                        <Col className={classNames(activeIndex === index ? 'active tab':'tab')} key={index} onClick={() => tabChange(index)}>{item}</Col>
                     );
                 })}
             </Row>
