@@ -1,0 +1,346 @@
+@import 'base/bootstrap';
+.menu {
+    padding: 0;
+    width  : 100%;
+
+    li {
+        color          : #8e9499;
+        cursor         : pointer;
+        height         : 100px;
+        display        : flex;
+        align-items    : center;
+        justify-content: center;
+        flex-direction : column;
+        font-weight    : 700;
+        font-size      : 14px;
+
+        &.on {
+            background: #cccccc;
+            color     : #fff;
+        }
+    }
+}
+
+.control {
+    overflow        : hidden auto;
+    position        : relative;
+    height          : 100%;
+    background-color: white;
+    width           : 370px;
+    border-top      : 1px solid #eee;
+    border-left     : 1px solid #eee;
+    padding         : 12px 20px;
+
+    .componentItem {
+        cursor    : move;
+        text-align: center;
+        padding   : 10px;
+        border    : 1px solid #f7f7f7;
+
+        img {
+            width        : 100%;
+            margin-bottom: 10px;
+        }
+
+        &:hover {
+            border-color: $primary;
+            box-shadow  : $primary-active 0 0 10px;
+        }
+    }
+}
+
+.pages {
+    display: block;
+    width  : 100%;
+    padding: 0;
+
+    li {
+        height         : 50px;
+        border         : 1px solid #eee;
+        border-radius  : 5px;
+        margin-bottom  : 12px;
+        display        : flex;
+        background     : #f7f7f7;
+        padding        : 0 12px;
+        justify-content: space-between;
+        align-items    : center;
+        font-size      : 14px;
+        color          : #666;
+
+        .anticon {
+            font-size: 14px;
+            color    : #999;
+            cursor   : pointer;
+        }
+    }
+}
+
+.previewClose {
+    right: -30px;
+    top      : -30px;
+    position : absolute;
+    font-size: 28px;
+    color    : white;
+    z-index  : 10000;
+    cursor   : pointer;
+}
+
+.mobileContainer {
+    width         : 375px;
+    height        : 667px;
+    display       : flex;
+    flex-direction: column;
+    top           : 35px;
+    left          : 450px;
+    position      : absolute;
+    background    : #f5f5f5;
+    box-shadow    : #eee 0 0 12px;
+    border-radius : 0;
+    z-index       : 21;
+
+    .noscroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    &.mobileContainerPreview {
+        box-shadow: none;
+        top       : auto;
+        left      : auto;
+        position  : relative;
+    }
+
+    .module {
+        margin-top: 50px;
+        flex      : 1;
+        position  : relative;
+        height    : 100%;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .moduleItem {
+            display : block;
+            position: relative;
+
+            &.moduleItemOn {
+                .xline {
+                    display: block;
+                }
+            }
+
+            .xline {
+                z-index : 2;
+                position: absolute;
+                display : none;
+
+                &:nth-child(1) {
+                    left       : 0;
+                    border-left: 1px dashed $primary;
+                    top        : 0;
+                    height     : 100%;
+                }
+
+                &:nth-child(2) {
+                    left      : 0;
+                    border-top: 1px dashed $primary;
+                    top       : 0;
+                    width     : 100%;
+                }
+
+                &:nth-child(3) {
+                    right       : 0;
+                    border-right: 1px dashed $primary;
+                    top         : 0;
+                    height      : 100%;
+                }
+
+                &:nth-child(4) {
+                    left         : 0;
+                    border-bottom: 1px dashed $primary;
+                    bottom       : 0;
+                    width        : 100%;
+                }
+            }
+        }
+    }
+}
+
+.designerContent {
+    width   : 100%;
+    height  : 100%;
+    top     : 0;
+    left    : 370px;
+    z-index : 0;
+    position: absolute;
+}
+
+.attributeContainer {
+    width     : 400px;
+    position  : absolute;
+    right     : -400px;
+    top       : 0;
+    height    : 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+    box-shadow: #ddd 0 0 10px;
+    z-index   : 21;
+    opacity   : 1;
+}
+
+.title {
+    height    : 50px;
+    position  : relative;
+    background: #fff;
+    text-align: center;
+
+    .arrow {
+        position       : absolute;
+        left           : 0;
+        top            : 0;
+        z-index        : 1;
+        width          : 40px;
+        height         : 100%;
+        color          : #888;
+        cursor         : pointer;
+        font-size      : 16px;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+    }
+
+    .tit {
+        font-size  : 15px;
+        line-height: 50px;
+        margin     : 0;
+        padding    : 0;
+        position   : relative;
+        z-index    : 1;
+    }
+
+    img {
+        position     : absolute;
+        z-index      : 1;
+        right        : 12px;
+        top          : 50%;
+        transform    : translateY(-50%);
+        width        : 72px;
+        height       : 30px;
+        background   : rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+    }
+
+    .moduleBackground {
+        background: #fff;
+        position  : absolute;
+        left      : 0;
+        top       : 0;
+        right     : 0;
+        bottom    : 0;
+    }
+}
+
+.tabs {
+    border-bottom: 1px solid #eee;
+
+    .tab {
+        cursor          : pointer;
+        font-weight     : bold;
+        background-color: white;
+        padding         : 15px;
+        text-align      : center;
+        border-right    : 1px solid #eee;
+
+        &.active {
+            color: $primary;
+        }
+    }
+
+    .tab:last-child {
+        border-right: none;
+    }
+}
+
+.placeholder {
+    height         : 80px;
+    margin         : 10px 0;
+    display        : flex;
+    justify-content: center;
+    background     : #eee;
+    color          : #eee;
+    align-items    : center;
+    border         : 1px dashed #eee;
+
+    &.placeholderOn {
+        color       : $primary;
+        border-color: $primary;
+        background  : $secondary;
+    }
+
+}
+
+.nomodule {
+    width          : 100%;
+    height         : 100%;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+
+    h2 {
+        font-size: 15px;
+    }
+}
+
+.xcxModuleOption {
+    position  : absolute;
+    top       : 0;
+    right     : -25px;
+    width     : 25px;
+    background: rgba(0, 0, 0, 0.6);
+    z-index   : 20;
+
+    li {
+        padding: 0;
+        margin : 0;
+        cursor : pointer;
+
+        span {
+            height         : 25px;
+            transform      : scale(1);
+            display        : block;
+            font-size      : 12px;
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            color          : #fff;
+        }
+
+        &:hover {
+            background: $primary;
+        }
+    }
+}
+
+.mask {
+    background: rgba(0, 0, 0, 0.7);
+    position  : fixed;
+    left      : 0;
+    top       : 0;
+    width     : 100%;
+    height    : 100%;
+    z-index   : 998;
+}
+
+.previewContainer {
+    width          : 100%;
+    height         : 100%;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    position       : absolute;
+    top            : 0;
+    left           : 0;
+    z-index        : 1000;
+}

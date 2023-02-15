@@ -1,0 +1,99 @@
+@import 'base/bootstrap';
+#diy-container {
+  padding: 0px;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+  }
+
+  .diy-content {
+    display: flex;
+    .sider {
+      background-color: white;
+      height: 100%;
+      width: 80px;
+      .menu {
+        padding: 0;
+        width  : 100%;
+
+        li {
+          color          : #8e9499;
+          cursor         : pointer;
+          height         : 100px;
+          display        : flex;
+          align-items    : center;
+          justify-content: center;
+          flex-direction : column;
+          font-weight    : 700;
+          font-size      : 14px;
+
+          &.on {
+            background: #cccccc;
+            color     : #fff;
+          }
+        }
+      }
+    }
+    .main {
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      .control {
+        overflow        : hidden auto;
+        position        : relative;
+        height          : 100%;
+        background-color: white;
+        width           : 370px;
+        border-top      : 1px solid #eee;
+        border-left     : 1px solid #eee;
+        padding         : 12px 20px;
+
+        .componentItem {
+          cursor    : move;
+          text-align: center;
+          padding   : 10px;
+          border    : 1px solid #f7f7f7;
+
+          img {
+            width        : 100%;
+            margin-bottom: 10px;
+          }
+
+          &:hover {
+            border-color: $primary;
+            box-shadow  : $primary 0 0 10px;
+          }
+        }
+      }
+    }
+    .pages {
+      display: block;
+      width  : 100%;
+      padding: 0;
+
+      li {
+        height         : 50px;
+        border         : 1px solid #eee;
+        border-radius  : 5px;
+        margin-bottom  : 12px;
+        display        : flex;
+        background     : #f7f7f7;
+        padding        : 0 12px;
+        justify-content: space-between;
+        align-items    : center;
+        font-size      : 14px;
+        color          : #666;
+
+        .anticon {
+          font-size: 14px;
+          color    : #999;
+          cursor   : pointer;
+        }
+      }
+    }
+
+  }
+
+}
