@@ -346,7 +346,7 @@ const PageDesigner = (props: any) => {
 
                         <AnimatePresence mode={'wait'}>
                             {currentData != null &&
-                            <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'} style={{height: '100%', overflow: 'auto', borderTop: '1px solid #eee'}}>
+                            <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'} style={{height: '100%', borderTop: '1px solid #eee'}}>
                                 {SettingsComponent && <SettingsComponent data={currentData?.data} onUpdate={(data: any) => {
                                     let itemData = {};
                                     if (currentData!.type == 1) {

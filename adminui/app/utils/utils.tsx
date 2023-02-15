@@ -222,7 +222,7 @@ export function tree2List(tree:any[]):any[] {
     return list;
 }
 export function resolveUrl(path: string) {
-    return path.startsWith('http')? path : '/'+path;
+    return path.startsWith('http') || path.startsWith('/')? path : '/'+path;
 }
 
 export function formData2Json(formData: FormData, stringify = true) {
