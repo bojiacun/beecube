@@ -3,7 +3,7 @@ import _ from "lodash";
 import {ControlType, getControl, getControls, getModules, ModuleType} from "~/components/page-designer/component";
 import PageSettings from "~/components/page-designer/page";
 import {Button, Col, Collapse, Container, Form, Row} from "react-bootstrap";
-import './registers';
+import register from './registers';
 import classNames from "classnames";
 import {Delete, Edit2, File, Grid, Layers, PlusCircle, Settings} from "react-feather";
 import {showDeleteAlert} from "~/utils/utils";
@@ -26,6 +26,7 @@ export declare interface PageDesignerProps {
     lockPage?: boolean;
 }
 
+register();
 
 
 const PageDesigner = (props: any) => {
@@ -141,7 +142,7 @@ const PageDesigner = (props: any) => {
                                                 <Form.Check disabled={item.required}
                                                             checked={index >= 0}
                                                             onChange={(e: any) => onControlSelected(e, item)} label={item.name}/>
-                                                <Settings onClick={() => {
+                                                <Settings size={16} onClick={() => {
                                                     if (index >= 0) {
                                                         const settings = getControl(item.key).settings;
                                                         let data = currentPage.controls![index].data;
