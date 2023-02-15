@@ -57,4 +57,6 @@ const MiniAppHeader = (props: any) => {
     );
 };
 
+console.log('app header')
+
 registerControl(MINI_APP_HEADER, true, "顶部导航栏", MiniAppHeader, AttributeView, defaultAppHeaderData);

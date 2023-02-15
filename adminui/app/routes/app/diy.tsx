@@ -16,7 +16,14 @@ export const links: LinksFunction = () => {
 
 
 const DiyPage = (props:any) => {
-    const [pages, setPages] = useState<any>([]);
+    const [pages, setPages] = useState<any>([
+        {
+            controls: [],
+            modules: [],
+            title: '首页',
+            canDelete: false,
+        }
+    ]);
 
     return (
         <PageDesigner pages={pages} lockPage={true} />

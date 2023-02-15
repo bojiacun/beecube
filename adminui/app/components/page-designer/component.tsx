@@ -38,7 +38,7 @@ export const AttributeTabs: React.FC<AttributeTabProps> = (props) => {
             <Row className={'tabs'}>
                 {tabs.map((item, index) => {
                     return (
-                        <Col className={classNames(activeIndex === index ? 'active':'tab')} flex={1} key={index} onClick={() => tabChange(index)}>{item}</Col>
+                        <Col className={classNames(activeIndex === index ? 'active':'tab')} key={index} onClick={() => tabChange(index)}>{item}</Col>
                     );
                 })}
             </Row>
@@ -126,6 +126,7 @@ const withSettingsComponent = (key: string, Component: React.FunctionComponent) 
         render() {
             const { ...rest } = this.props;
             return (
+                //@ts-ignore
                 <Component {...rest} />
             );
         }
@@ -155,6 +156,7 @@ const registerControl = (key: string, required: boolean, name: string, designer:
     if (registeredControls[key]) {
         // throw new Error("组件注册失败，已有同名组件");
     }
+    console.log('register control', key);
     registeredControls[key] = { key, required, name, designer: withDesignComponent(key, designer), settings: withSettingsComponent(key, settings), data };
 }
 

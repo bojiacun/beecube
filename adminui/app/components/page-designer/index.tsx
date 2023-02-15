@@ -99,15 +99,13 @@ const PageDesigner = (props: any) => {
                                         return (
                                             <li key={index}>
                                                 <div
-                                                    style={{color: currentPageIndex == index ? settings.primaryColor : '#333'}}>{item.title}</div>
+                                                    style={{color: currentPageIndex == index ? '#000': '#333'}}>{item.title}</div>
                                                 <div>
-                                                    <Edit2 onClick={() => onPageChanged(item, index)}
-                                                           className={'anticon'}/>
+                                                    <Edit2 onClick={() => onPageChanged(item, index)} size={16} className={'anticon'}/>
                                                     {currentPageIndex == index &&
-                                                        <Settings onClick={() => onPageSettings(item, index)}
-                                                                  className={'anticon'}/>}
+                                                        <Settings style={{marginLeft: 10}} onClick={() => onPageSettings(item, index)} size={16} className={'anticon'}/>}
                                                     {(currentPageIndex != index && item?.canDelete && !lockPage) ?
-                                                        <Delete className={'anticon'} onClick={() => {
+                                                        <Delete style={{marginLeft: 10}} className={'anticon'} size={16} onClick={() => {
                                                             showDeleteAlert(() => {
                                                                 if (index !== currentPageIndex) {
                                                                     pages.splice(index, 1);
