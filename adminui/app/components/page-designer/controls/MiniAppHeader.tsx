@@ -32,7 +32,10 @@ const AttributeView: React.FC<any> = (props) => {
         _data.basic = values;
         onUpdate({..._data});
     }
-
+    const handleOnSubmit2 = (values:any) => {
+        _data.style = values;
+        onUpdate({..._data});
+    }
 
     return (
         <AttributeTabs tabs={['控件设置', '样式设置']}>
@@ -56,7 +59,18 @@ const AttributeView: React.FC<any> = (props) => {
                 </Formik>
             </div>
             <div style={{padding: 15}}>
+                <Formik initialValues={_data.style} onSubmit={handleOnSubmit2}>
+                    {
+                        (formik) => {
+                            return (
+                                <Form method={'post'} onChange={(e)=>formik.submitForm()}>
+                                    <BootstrapInput label={'背景颜色'} name={'background'} />
+                                </Form>
+                            );
+                        }
+                    }
 
+                </Formik>
             </div>
         </AttributeTabs>
     );
