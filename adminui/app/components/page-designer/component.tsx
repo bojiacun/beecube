@@ -156,7 +156,6 @@ const registerControl = (key: string, required: boolean, name: string, designer:
     if (registeredControls[key]) {
         // throw new Error("组件注册失败，已有同名组件");
     }
-    console.log('register control', key);
     registeredControls[key] = { key, required, name, designer: withDesignComponent(key, designer), settings: withSettingsComponent(key, settings), data };
 }
 
