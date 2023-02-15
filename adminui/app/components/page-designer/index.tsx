@@ -1,19 +1,39 @@
 import {useState} from "react";
 import _ from "lodash";
-import {getControls, getModules} from "~/components/page-designer/component";
+import {ControlType, getControl, getControls, getModules, ModuleType} from "~/components/page-designer/component";
 import PageSettings from "~/components/page-designer/page";
-import {Button, Col, Collapse, Container, Row} from "react-bootstrap";
+import {Button, Col, Collapse, Container, Form, Row} from "react-bootstrap";
 import classNames from "classnames";
 import {Delete, Edit2, File, Grid, Layers, PlusCircle, Settings} from "react-feather";
-import {PageType} from "~/routes/app/diy";
+import {showDeleteAlert} from "~/utils/utils";
 
-const PageDesigner = (props:any) => {
-    const {settings} = props;
+export declare interface PageType {
+    title: string;
+    id: number;
+    canDelete: boolean;
+    style?: any;
+    modules?: ModuleType[],
+    controls?: ControlType[],
+}
+
+export declare interface PageDesignerProps {
+    pages: PageType[];
+    style?: any;
+    settings?: any;
+    backable?: boolean;
+    onDataSaved?: (values: any) => Promise<any>;
+    lockPage?: boolean;
+}
+
+
+const PageDesigner = (props: any) => {
+    const {settings, lockPage = false} = props;
     const [tabIndex, setTabIndex] = useState("module");
     const [pages, setPages] = useState<PageType[]>(props.pages);
     const [currentPage, setCurrentPage] = useState<PageType>(props.pages[0]);
     const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
     const [currentData, setCurrentData] = useState<any>();
+    const [newPageVisible, setNewPageVisible] = useState<boolean>(false);
     const groupedModules: string[] = _.union(getModules().map(item => item.group).sort((a, b) => {
         if (a < b) return -1;
         if (a > b) return 1;
@@ -33,7 +53,17 @@ const PageDesigner = (props:any) => {
         pages[index] = page;
         setPages([...pages]);
     }
-
+    const onControlSelected = (e: any, item: ControlType) => {
+        currentPage.controls = currentPage.controls || [];
+        if (e.target.checked) {
+            if (_.findIndex(currentPage.controls, (o) => o.key == item.key) < 0) {
+                currentPage.controls.push({...item});
+            }
+        } else {
+            _.remove(currentPage.controls, o => o.key == item.key);
+        }
+        setCurrentPage({...currentPage});
+    }
     return (
         <Container id={'diy-container'} fluid>
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
@@ -47,16 +77,16 @@ const PageDesigner = (props:any) => {
                     <div className={'sider'}>
                         <ul className={'menu'}>
                             <li key='module' onClick={() => setTabIndex('module')}
-                                className={classNames(tabIndex === 'module' ? 'on': '')}>
-                                <Grid size={18} style={{fontSize: 18, marginBottom: 5}} />模块
+                                className={classNames(tabIndex === 'module' ? 'on' : '')}>
+                                <Grid size={18} style={{fontSize: 18, marginBottom: 5}}/>模块
                             </li>
                             <li key='page' onClick={() => setTabIndex('page')}
-                                className={classNames(tabIndex === 'page' ? 'on': '')}><File size={18}
-                                                                                             style={{fontSize: 18, marginBottom: 5}}/> 页面
+                                className={classNames(tabIndex === 'page' ? 'on' : '')}>
+                                <File size={18} style={{fontSize: 18, marginBottom: 5}}/> 页面
                             </li>
                             <li key='control' onClick={() => setTabIndex('control')}
-                                className={classNames(tabIndex === 'control' ? 'on': '')}><Layers size={18}
-                                                                                                  style={{fontSize: 18, marginBottom: 5}}/>控件
+                                className={classNames(tabIndex === 'control' ? 'on' : '')}>
+                                <Layers size={18} style={{fontSize: 18, marginBottom: 5}}/>控件
                             </li>
                         </ul>
                     </div>
@@ -76,17 +106,16 @@ const PageDesigner = (props:any) => {
                                                         <Settings onClick={() => onPageSettings(item, index)}
                                                                   className={'anticon'}/>}
                                                     {(currentPageIndex != index && item?.canDelete && !lockPage) ?
-                                                        <Popconfirm title="确认要删除此页面吗？" okText="确定" cancelText="取消"
-                                                                    onConfirm={() => {
-                                                                        if (index !== currentPageIndex) {
-                                                                            pages.splice(index, 1);
-                                                                            setPages([...pages]);
-                                                                            setCurrentPageIndex(0);
-                                                                            setCurrentPage(pages[0]);
-                                                                        }
-                                                                    }}>
-                                                            <Delete className={'anticon'}/>
-                                                        </Popconfirm>
+                                                        <Delete className={'anticon'} onClick={() => {
+                                                            showDeleteAlert(() => {
+                                                                if (index !== currentPageIndex) {
+                                                                    pages.splice(index, 1);
+                                                                    setPages([...pages]);
+                                                                    setCurrentPageIndex(0);
+                                                                    setCurrentPage(pages[0]);
+                                                                }
+                                                            })
+                                                        }}/>
                                                         : <></>}
                                                 </div>
                                             </li>
@@ -95,45 +124,12 @@ const PageDesigner = (props:any) => {
                                 }
                             </ul>
                             {!lockPage &&
-                                <Button style={{borderRadius: 40}} type="primary" block icon={<PlusCircle />}
-                                        size="large" onClick={() => setNewPageVisible(true)}>新建自定义页面</Button>
+                                <Button style={{borderRadius: 40}} type="primary" block
+                                        onClick={() => setNewPageVisible(true)}>新建自定义页面</Button>
                             }
                         </div>
-                        <div className={'control'}
-                             style={{display: tabIndex === 'module' ? 'block' : 'none', padding: 0}}>
-                            <Collapse expandIconPosition="right" bordered={false} ghost={true}>
-                                {
-                                    groupedModules.map(group => {
-                                        return (
-                                            <Collapse.Panel key={group} header={group}>
-                                                <Row gutter={[10, 10]}>
-                                                    {
-                                                        getModules().filter(item => item.group == group).sort((a, b) => {
-                                                            if (a.key < b.key) return -1;
-                                                            if (a.key > b.key) return 1;
-                                                            return 0;
-                                                        }).map((item) => {
-                                                            return (
-                                                                <Col span={8} key={item.key}>
-                                                                    <div className={styles.componentItem}
-                                                                         onClick={() => addModule(item)} draggable={true}
-                                                                         data-item={item.key} onDragEnd={onModuleDragEnd}
-                                                                         onDragStart={onModuleDragStart}>
-                                                                        <img src={item.image} draggable="false"
-                                                                             alt={item.name}
-                                                                             style={{minHeight: 45, objectFit: 'cover'}}/>
-                                                                        <span>{item.name}</span>
-                                                                    </div>
-                                                                </Col>
-                                                            );
-                                                        })
-                                                    }
-                                                </Row>
-                                            </Collapse.Panel>
-                                        );
-                                    })
-                                }
-                            </Collapse>
+                        <div className={'control'} style={{display: tabIndex === 'module' ? 'block' : 'none', padding: 0}}>
+                            <div></div>
                         </div>
                         <div className={'control'} style={{display: tabIndex === 'control' ? 'block' : 'none'}}>
                             <ul className={'pages'}>
@@ -142,11 +138,11 @@ const PageDesigner = (props:any) => {
                                         const index = _.findIndex(currentPage.controls, o => o.key == item.key);
                                         return (
                                             <li key={item.key}>
-                                                <Checkbox disabled={item.required}
-                                                          checked={index>= 0}
-                                                          onChange={(e) => onControlSelected(e, item)}>{item.name}</Checkbox>
+                                                <Form.Check disabled={item.required}
+                                                            checked={index >= 0}
+                                                            onChange={(e: any) => onControlSelected(e, item)} label={item.name}/>
                                                 <Settings onClick={() => {
-                                                    if(index>=0) {
+                                                    if (index >= 0) {
                                                         const settings = getControl(item.key).settings;
                                                         let data = currentPage.controls![index].data;
                                                         setCurrentData({

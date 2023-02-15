@@ -1,8 +1,5 @@
-import { FILE_TYPE_IMAGE } from "../FileBrowser";
-import FileBrowserInput from "../FileBrowser/form";
 import { presetColors, withSettingsComponent } from "./component";
-import {Form} from "react-bootstrap";
-import {resolveUrl} from "~/utils/utils";
+import {Formik} from "formik";
 
 export const DEFAULT_PAGE_DATA = {
     backgroundColor: '#f5f5f5',
@@ -13,16 +10,10 @@ export const DEFAULT_PAGE_DATA = {
 };
 
 const PageSettings = (props: any) => {
-    const [styleForm] = Form.useForm();
     const { onUpdate, data } = props;
     let _data = { ...DEFAULT_PAGE_DATA, ...data };
     return (
-        <Form key="style" form={styleForm} layout="vertical" initialValues={{ ..._data }} onValuesChange={(changedValues, allValues) => {
-            if (allValues.backgroundImageUrl) {
-                allValues.background = 'url("' + resolveUrl(allValues.backgroundImageUrl) + '") no-repeat top center';
-                allValues.backgroundSize = 'contain';
-            }
-            onUpdate({ ...allValues });
+        <Formik key="style" initialValues={{ ..._data }} onSubmit={(changedValues, allValues) => {
         }}>
             {/*<Collapse expandIconPosition="right" bordered={false} ghost={true} defaultActiveKey={['页面样式']}>*/}
             {/*    <Collapse.Panel header="页面样式" key="页面样式">*/}
@@ -43,7 +34,7 @@ const PageSettings = (props: any) => {
             {/*        </ProFormItem>*/}
             {/*    </Collapse.Panel>*/}
             {/*</Collapse>*/}
-        </Form>
+        </Formik>
     );
 }
 
