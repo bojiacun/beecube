@@ -3,6 +3,7 @@ import {withPageLoading} from "~/utils/components";
 import diyPageStyleUrl from 'app/styles/diy.css';
 import {LinksFunction} from "@remix-run/node";
 import PageDesigner from "~/components/page-designer";
+import { useState } from "react";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -15,8 +16,10 @@ export const links: LinksFunction = () => {
 
 
 const DiyPage = (props:any) => {
+    const [pages, setPages] = useState<any>([]);
+
     return (
-        <PageDesigner />
+        <PageDesigner pages={pages} lockPage={true} />
     );
 }
 

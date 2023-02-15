@@ -4,6 +4,7 @@ import {ControlType, getControl, getControls, getModules, ModuleType} from "~/co
 import PageSettings from "~/components/page-designer/page";
 import {Button, Col, Collapse, Container, Form, Row} from "react-bootstrap";
 import classNames from "classnames";
+import './controls/MiniAppHeader';
 import {Delete, Edit2, File, Grid, Layers, PlusCircle, Settings} from "react-feather";
 import {showDeleteAlert} from "~/utils/utils";
 

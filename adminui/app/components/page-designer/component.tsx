@@ -6,6 +6,7 @@ import classNames from "classnames";
 
 export declare interface AttributeTabProps {
     tabs: string[];
+    children: any;
 }
 export declare interface ModuleType {
     key: string;
