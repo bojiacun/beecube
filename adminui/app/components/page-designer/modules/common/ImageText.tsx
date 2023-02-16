@@ -8,6 +8,7 @@ import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import {FormGroup, FormLabel} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
+import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 
 
 export const IMAGE_TEXT_MODULE = "IMAGE_TEXT_MODULE";
@@ -48,6 +49,10 @@ const ImageTextModuleAttribute = (props: any) => {
                                         <FileBrowserInput name={'image'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <BootstrapInput label={'标题'} name={'description'} />
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'url'}>链接地址</FormLabel>
+                                        <BootstrapLinkSelector name={'url'} />
+                                    </FormGroup>
                                 </Form>
                             );
                         }
