@@ -51,7 +51,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     const handleOnChanged = (currentValue: any) => {
         const newValue = isMulti ? currentValue.map((item: any) => item.value).join(','): currentValue.value;
         formik.setFieldValue(name, newValue);
-        onSelectChanged && onSelectChanged(newValue);
+        onSelectChanged && onSelectChanged(newValue, currentValue);
     }
 
     return (

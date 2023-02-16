@@ -43,11 +43,11 @@ export const AppLinks: LinkItem[] = [
         url: '/shop/pages/orders',
         urlSuffix: {label: '状态', value: 'tab'},
         suffixOptions: [
-            {label: '已取消', value: -1},
-            {label: '待支付', value: 0},
-            {label: '待发货', value: 1},
-            {label: '待收货', value: 2},
-            {label: '已完成', value: 3},
+            {label: '已取消', value: '-1'},
+            {label: '待支付', value: '0'},
+            {label: '待发货', value: '1'},
+            {label: '待收货', value: '2'},
+            {label: '已完成', value: '3'},
         ]
     },
     {
