@@ -51,6 +51,7 @@
     "react-select": "^5.7.0",
     "react-spinners": "^0.13.6",
     "react-syntax-highlighter": "^15.5.0",
+    "react-tiga-swiper": "^1.0.10",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
     "remix-auth": "^3.3.0",
