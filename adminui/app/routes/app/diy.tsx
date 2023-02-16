@@ -7,6 +7,7 @@ import { useState } from "react";
 import {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
 import {MINI_APP_HEADER} from "~/components/page-designer/controls/MiniAppHeader";
 import { getControl } from "~/components/page-designer/component";
+import {AppLinks} from './links';
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -31,7 +32,7 @@ const DiyPage = (props:any) => {
     ]);
 
     return (
-        <PageDesigner pages={pages} lockPage={true} />
+        <PageDesigner pages={pages} lockPage={true} links={AppLinks} />
     );
 }
 

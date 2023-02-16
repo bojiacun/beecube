@@ -35,7 +35,7 @@ register();
 
 
 const PageDesigner = (props: any) => {
-    const {settings, lockPage = false} = props;
+    const {links, lockPage = false} = props;
     const [tabIndex, setTabIndex] = useState("module");
     const [pages, setPages] = useState<PageType[]>(props.pages);
     const [placeholder, setPlaceholder] = useState<boolean>(false);
@@ -334,7 +334,7 @@ const PageDesigner = (props: any) => {
                                 const Component = getControl(item.key).designer;
                                 const settings = getControl(item.key).settings;
                                 const index = _.findIndex(currentPage.controls, o => o.key == item.key);
-                                return <Component key={item.key} data={item?.data} dataKey={item.key} onActive={(key: string) => {
+                                return <Component key={item.key} links={links} data={item?.data} dataKey={item.key} onActive={(key: string) => {
                                     setCurrentData({type: 1, dataIndex: index, settings: settings, data: item.data});
                                 }}/>
                             })}
@@ -350,6 +350,7 @@ const PageDesigner = (props: any) => {
                                     return <Component onMouseEnter={onModuleMouseEnter} onMouseLeave={onModuleMouseLeave}
                                                       placeholder={placeholder}
                                                       dataKey={item.key}
+                                                      links={links}
                                                       className={classNames('moduleItem', onClassName)} index={index}
                                                       key={item.key + index} data={item?.data} onActive={(key: string) => {
                                         setCurrentData({type: 2, dataIndex: index, settings: settings, data: item.data});
@@ -360,7 +361,7 @@ const PageDesigner = (props: any) => {
                                 const Component = getControl(item.key).designer;
                                 const settings = getControl(item.key).settings;
                                 const index = _.findIndex(currentPage.controls, o => o.key == item.key);
-                                return <Component key={item.key} data={item?.data} dataKey={item.key} onActive={(key: string) => {
+                                return <Component key={item.key} data={item?.data} links={links} dataKey={item.key} onActive={(key: string) => {
                                     setCurrentData({type: 1, dataIndex: index, settings: settings, data: item.data});
                                 }}/>
                             })}
@@ -381,7 +382,7 @@ const PageDesigner = (props: any) => {
                         <AnimatePresence mode={'wait'}>
                             {currentData != null &&
                             <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'} style={{height: '100%', borderTop: '1px solid #eee'}}>
-                                {SettingsComponent && <SettingsComponent data={currentData?.data} onUpdate={(data: any) => {
+                                {SettingsComponent && <SettingsComponent links={links} data={currentData?.data} onUpdate={(data: any) => {
                                     let itemData = {};
                                     if (currentData!.type == 1) {
                                         //控件类型数据

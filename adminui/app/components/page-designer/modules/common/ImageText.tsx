@@ -24,7 +24,7 @@ export const defaultData = {
 };
 
 const ImageTextModuleAttribute = (props: any) => {
-    const { onUpdate, data } = props;
+    const { onUpdate, data, links } = props;
 
     let _data = { ...defaultData, ...data };
     const handleOnSubmit1 = (values:any) => {
@@ -51,7 +51,7 @@ const ImageTextModuleAttribute = (props: any) => {
                                     <BootstrapInput label={'标题'} name={'description'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'url'}>链接地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url'} />
+                                        <BootstrapLinkSelector name={'url'} links={links} onSelect={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );

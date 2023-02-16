@@ -1,7 +1,7 @@
 import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {useFormikContext} from "formik";
-import FileBrowser from "~/components/filebrowser";
+import BootstrapSelect from "~/components/form/BootstrapSelect";
 
 export interface LinkItem {
     label: string;
@@ -10,8 +10,14 @@ export interface LinkItem {
     suffixOptions?: any;
 }
 
+export interface BootstrapLinkSelectProps {
+    links: LinkItem[],
+    onChange?: any;
+    value?: any;
+}
+
 const BootstrapLinkSelector = (props: any) => {
-    let {label, name, placeholder = '', className, ...rest} = props;
+    let {label, name, placeholder = '', className, links, onSelect, ...rest} = props;
     const formik = useFormikContext<any>();
     const [value, setValue] = useState<string>(formik.values[name]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -22,7 +28,11 @@ const BootstrapLinkSelector = (props: any) => {
     }, [formik.values[name]]);
 
     const doSelect = () => {
+        const newValue = formik.values['_url'];
+        setValue(newValue);
+        formik.setFieldValue(name, newValue);
         setModalVisible(false);
+        onSelect && onSelect();
     }
     const handleInputValueChanged = (e: any) => {
         // formik.handleChange(e);
@@ -64,7 +74,9 @@ const BootstrapLinkSelector = (props: any) => {
                         选择链接
                     </Modal.Title>
                 </Modal.Header>
-
+                <Modal.Body>
+                    <BootstrapSelect name={'_url'} label={'选择链接'} options={links?.map((item:LinkItem)=>({label: item.label, value: item.url}))} />
+                </Modal.Body>
                 <Modal.Footer>
                     {renderFooter()}
                 </Modal.Footer>
