@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { resolveUrl } from "~/utils/utils";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
 import Swiper, { SwipeRef } from 'react-tiga-swiper';
-import 'react-tiga-swiper/dist/index.css';
 import FallbackImage from "~/components/fallback-image";
 
 
