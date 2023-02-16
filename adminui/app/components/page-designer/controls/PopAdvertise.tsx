@@ -25,6 +25,7 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
     let _data = { ...defaultData, ...data };
 
     const handleOnSubmit1 = (values:any) => {
+        console.log('pop advertise', values);
         _data.basic = values;
         onUpdate({..._data});
     }
@@ -36,14 +37,14 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
     return (
         <AttributeTabs tabs={['控件设置', '样式设置']}>
             <div style={{ padding: 15 }}>
-                <Formik initialValues={_data.style} onSubmit={handleOnSubmit1}>
+                <Formik initialValues={_data.basic} onSubmit={handleOnSubmit1}>
                     {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
                                     <FormGroup>
                                         <FormLabel htmlFor={'image'}>广告图</FormLabel>
-                                        <FileBrowserInput name={'image'} type={1} multi={false} />
+                                        <FileBrowserInput name={'image'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );

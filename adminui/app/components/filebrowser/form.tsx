@@ -17,13 +17,14 @@ interface FileBrowserInputProps {
     previewWidth?: number;
     previewHeight?: number;
     name: string;
+    onRemove?: Function;
 }
 
 
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, onRemove, ...rest } = props;
     const formik = useFormikContext<any>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
@@ -53,8 +54,9 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const doSelect = () => {
         if (selectedFiles && selectedFiles.length > 0) {
             let newValue = selectedFiles.map(item => item.url).join(',');
-            formik.handleChange({currentTarget: {name: name, value: newValue}});
+            // formik.handleChange({currentTarget: {name: name, value: newValue}});
             setValue(newValue);
+            formik.setFieldValue(name, newValue);
         }
         setModalVisible(false);
     }
@@ -72,15 +74,18 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
         setSelectedFiles(values);
     }
     const handleInputValueChanged = (e:any) => {
-        formik.handleChange(e);
+        // formik.handleChange(e);
         setValue(e.currentTarget.value);
+        formik.setFieldValue(name, e.currentTarget.value);
     }
     const removeFile = (v:string) => {
         let values = value?.split(',');
         values = values?.filter(val => val != v);
         let newValue = values?.join(',');
-        formik.handleChange({currentTarget: {name: name, value: newValue}});
+        // formik.handleChange({currentTarget: {name: name, value: newValue}});
         setValue(newValue);
+        formik.setFieldValue(name, newValue);
+        onRemove?.();
     }
     return (
         <div className={'filebrowser'}>
