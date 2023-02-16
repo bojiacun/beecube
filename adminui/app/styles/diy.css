@@ -5,6 +5,7 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+@import "rc-collapse/assets/index.css";
 :root {
   --blue: #00cfe8;
   --indigo: #6610f2;
@@ -23234,6 +23235,54 @@ body.dark-layout {
   border-radius: 0;
   z-index: 21;
 }
+#diy-container .diy-content .main .mobileContainer .title {
+  height: 50px;
+  position: absolute;
+  text-align: center;
+  left: 0;
+  top: 0;
+  right: 0;
+}
+#diy-container .diy-content .main .mobileContainer .title .arrow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 40px;
+  height: 100%;
+  color: #888;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#diy-container .diy-content .main .mobileContainer .title .tit {
+  font-size: 15px;
+  line-height: 50px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+#diy-container .diy-content .main .mobileContainer .title img {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+}
+#diy-container .diy-content .main .mobileContainer .title .moduleBackground {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
 #diy-container .diy-content .main .mobileContainer .noscroll::-webkit-scrollbar {
   display: none;
 }
@@ -23333,13 +23382,13 @@ body.dark-layout {
   color: #999;
   cursor: pointer;
 }
-#diy-container .title {
+#diy-container > .title {
   height: 50px;
   position: relative;
   background: #fff;
   text-align: center;
 }
-#diy-container .title .arrow {
+#diy-container > .title .arrow {
   position: absolute;
   left: 0;
   top: 0;
@@ -23353,7 +23402,7 @@ body.dark-layout {
   justify-content: center;
   align-items: center;
 }
-#diy-container .title .tit {
+#diy-container > .title .tit {
   font-size: 15px;
   line-height: 50px;
   margin: 0;
@@ -23361,7 +23410,7 @@ body.dark-layout {
   position: relative;
   z-index: 1;
 }
-#diy-container .title img {
+#diy-container > .title img {
   position: absolute;
   z-index: 1;
   right: 12px;
@@ -23372,7 +23421,7 @@ body.dark-layout {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 30px;
 }
-#diy-container .title .moduleBackground {
+#diy-container > .title .moduleBackground {
   background: #fff;
   position: absolute;
   left: 0;
@@ -23429,6 +23478,7 @@ body.dark-layout {
   width: 25px;
   background: rgba(0, 0, 0, 0.6);
   z-index: 20;
+  list-style: none;
 }
 #diy-container .xcxModuleOption li {
   padding: 0;
@@ -23466,6 +23516,34 @@ body.dark-layout {
   top: 0;
   left: 0;
   z-index: 1000;
+}
+
+.rc-collapse > .rc-collapse-item > .rc-collapse-header {
+  flex-direction: row-reverse;
+  border-bottom: 1px solid #eee;
+  padding: 12px 16px;
+}
+.rc-collapse > .rc-collapse-item > .rc-collapse-header .rc-collapse-header-text {
+  flex: 1;
+  font-weight: bold;
+}
+
+.rc-collapse > .rc-collapse-item > .rc-collapse-header .arrow {
+  margin-right: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid #666;
+}
+
+.rc-collapse > .rc-collapse-item-active > .rc-collapse-header .arrow {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #666;
+}
+
+.rc-collapse {
+  background-color: #ffffff;
+  border: none;
 }
 
 /*# sourceMappingURL=diy.css.map */

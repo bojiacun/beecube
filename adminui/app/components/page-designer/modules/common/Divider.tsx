@@ -9,7 +9,7 @@ import BootstrapInput from "~/components/form/BootstrapInput";
 export const DIVIDER_MODULE = "DIVIDER_MODULE";
 export const defaultData = {
     basic: {
-        height: 10,
+        height: '10px',
     },
     style: {
         ...DEFAULT_BOX_STYLES,

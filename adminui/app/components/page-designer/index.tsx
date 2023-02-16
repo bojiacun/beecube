@@ -5,12 +5,13 @@ import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import register from './registers';
 import classNames from "classnames";
-import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, XCircle} from "react-feather";
+import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, X} from "react-feather";
 import {showDeleteAlert} from "~/utils/utils";
 import { MINI_APP_HEADER } from "./controls/MiniAppHeader";
 import { POP_ADVERTISE } from "./controls/PopAdvertise";
 import {AnimatePresence, motion} from "framer-motion";
 import Collapse from 'rc-collapse';
+import collapseMotion from "~/components/page-designer/motion";
 
 export declare interface PageType {
     title: string;
@@ -263,7 +264,7 @@ const PageDesigner = (props: any) => {
                             }
                         </div>
                         <div className={'control'} style={{display: tabIndex === 'module' ? 'block' : 'none', padding: 0}}>
-                            <Collapse accordion={true}>
+                            <Collapse accordion={true} openMotion={collapseMotion}>
                                 {
                                     groupedModules.map(group => {
                                         return (
@@ -276,7 +277,7 @@ const PageDesigner = (props: any) => {
                                                             return 0;
                                                         }).map((item) => {
                                                             return (
-                                                                <Col key={item.key}>
+                                                                <Col key={item.key} sm={4}>
                                                                     <div className={'componentItem'}
                                                                          onClick={() => addModule(item)} draggable={true}
                                                                          data-item={item.key} onDragEnd={onModuleDragEnd}
@@ -337,7 +338,7 @@ const PageDesigner = (props: any) => {
                                     setCurrentData({type: 1, dataIndex: index, settings: settings, data: item.data});
                                 }}/>
                             })}
-                            <div className={'module'} style={{marginTop: currentPage.controls![0].data.basic.hide? 0:50}} onDrop={onModuleContainerDrop}
+                            <div className={'module'} style={{marginTop: currentPage.controls![0].data.basic.hide ? 0:50}} onDrop={onModuleContainerDrop}
                                  onDragEnter={onModuleContainerDragEnter} onDragLeave={onModuleContainerDragLeave}
                                  onDragOver={onModuleContainerDragOver}>
                                 {placeholder &&
@@ -367,10 +368,10 @@ const PageDesigner = (props: any) => {
                                 showTools &&
                                 <ul style={{top: toolTop, padding: 0}} onMouseEnter={() => setShowTools(true)}
                                     onMouseLeave={() => setShowTools(false)} className={'xcxModuleOption'}>
-                                    {activeIndex > 0 && <li onClick={up}><ArrowUp size={14} /></li>}
-                                    <li onClick={removeModule}><XCircle size={14} /></li>
-                                    <li onClick={copy}><Copy size={14} /></li>
-                                    {activeIndex < _modules.length - 1 && <li onClick={down}><ArrowDown size={14} /></li>}
+                                    {activeIndex > 0 && <li onClick={up}><span><ArrowUp size={14} /></span></li>}
+                                    <li onClick={removeModule}><span><X size={14} /></span></li>
+                                    <li onClick={copy}><span><Copy size={14} /></span></li>
+                                    {activeIndex < _modules.length - 1 && <li onClick={down}><span><ArrowDown size={14} /></span></li>}
                                 </ul>
                             }
                             {_modules.length == 0 && !placeholder &&
