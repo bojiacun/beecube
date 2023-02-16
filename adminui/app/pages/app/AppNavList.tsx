@@ -15,12 +15,15 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AppEdit from "~/pages/app/AppEdit";
 import {Delete, Edit, MoreVertical, User} from "react-feather";
+import GoodsEditor from "~/pages/paimai/GoodsEditor";
+import AppNavEdit from "~/pages/app/AppNavEdit";
 
 
 const AppNavList = (props: any) => {
-    const {startPageLoading, stopPageLoading, setSelectedApp} = props;
+    const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
@@ -101,6 +104,9 @@ const AppNavList = (props: any) => {
         searchState.order = order;
         setSearchState({...searchState});
         loadData();
+    }
+    const handleOnAdd = () => {
+        setEditModal({});
     }
     const columns: any[] = [
         {
@@ -197,6 +203,7 @@ const AppNavList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建导航</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -243,6 +250,11 @@ const AppNavList = (props: any) => {
                     </Row>
                 </div>
             </Card>
+
+            {editModal && <AppNavEdit model={editModal} onHide={()=>{
+                setEditModal(null);
+                loadData();
+            }} />}
         </>
     );
 }
