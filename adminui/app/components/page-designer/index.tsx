@@ -2,7 +2,7 @@ import {DragEventHandler, useEffect, useState} from "react";
 import _ from "lodash";
 import {ControlType, getControl, getControls, getModule, getModules, ModuleType} from "~/components/page-designer/component";
 import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page";
-import {Button, Col, Collapse, Container, Form, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import register from './registers';
 import classNames from "classnames";
 import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, XCircle} from "react-feather";
@@ -10,6 +10,7 @@ import {showDeleteAlert} from "~/utils/utils";
 import { MINI_APP_HEADER } from "./controls/MiniAppHeader";
 import { POP_ADVERTISE } from "./controls/PopAdvertise";
 import {AnimatePresence, motion} from "framer-motion";
+import Collapse from 'rc-collapse';
 
 export declare interface PageType {
     title: string;
@@ -262,7 +263,39 @@ const PageDesigner = (props: any) => {
                             }
                         </div>
                         <div className={'control'} style={{display: tabIndex === 'module' ? 'block' : 'none', padding: 0}}>
-                            <div></div>
+                            <Collapse accordion={true}>
+                                {
+                                    groupedModules.map(group => {
+                                        return (
+                                            <Collapse.Panel key={group} header={group}>
+                                                <Row>
+                                                    {
+                                                        getModules().filter(item => item.group == group).sort((a, b) => {
+                                                            if (a.key < b.key) return -1;
+                                                            if (a.key > b.key) return 1;
+                                                            return 0;
+                                                        }).map((item) => {
+                                                            return (
+                                                                <Col key={item.key}>
+                                                                    <div className={'componentItem'}
+                                                                         onClick={() => addModule(item)} draggable={true}
+                                                                         data-item={item.key} onDragEnd={onModuleDragEnd}
+                                                                         onDragStart={onModuleDragStart}>
+                                                                        <img src={item.image} draggable="false"
+                                                                             alt={item.name}
+                                                                             style={{minHeight: 45, objectFit: 'cover'}}/>
+                                                                        <span>{item.name}</span>
+                                                                    </div>
+                                                                </Col>
+                                                            );
+                                                        })
+                                                    }
+                                                </Row>
+                                            </Collapse.Panel>
+                                        );
+                                    })
+                                }
+                            </Collapse>
                         </div>
                         <div className={'control'} style={{display: tabIndex === 'control' ? 'block' : 'none'}}>
                             <ul className={'pages'}>

@@ -25,7 +25,6 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
     let _data = { ...defaultData, ...data };
 
     const handleOnSubmit1 = (values:any) => {
-        console.log('pop advertise', values);
         _data.basic = values;
         onUpdate({..._data});
     }
