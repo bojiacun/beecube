@@ -30,27 +30,18 @@ const formSchema = Yup.object().shape({
 
 const AppNavEdit = (props: any) => {
     const {model, onHide} = props;
-    const [modules, setModules] = useState<any[]>([]);
     const postFetcher = useFetcher();
     const modulesFetcher = useFetcher();
     const formikRef = useRef<any>();
 
 
-
-
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/app/edit'});
+            postFetcher.submit(values, {method: 'post', action: '/app/navs/edit'});
         } else {
-            postFetcher.submit(values, {method: 'post', action: '/app/add'});
+            postFetcher.submit(values, {method: 'post', action: '/app/navs/add'});
         }
     }
-    useEffect(() => {
-        if (model) {
-            modulesFetcher.load('/app/modules/all');
-        }
-    }, [model]);
-
 
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
@@ -61,13 +52,6 @@ const AppNavEdit = (props: any) => {
             }
         }
     }, [postFetcher.state]);
-
-    useEffect(() => {
-        if (modulesFetcher.type === 'done' && modulesFetcher.data) {
-            setModules(modulesFetcher.data);
-        }
-    }, [modulesFetcher.state]);
-
 
 
     if (!model) return <></>
@@ -81,7 +65,7 @@ const AppNavEdit = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}应用</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}导航</Modal.Title>
                 </Modal.Header>
                 {model &&
                     <Formik innerRef={formikRef} initialValues={{status: 1,ordernum: 1, ...model}} validationSchema={formSchema} onSubmit={handleOnSubmit}>
