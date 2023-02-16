@@ -104,24 +104,41 @@ const AppNavList = (props: any) => {
     }
     const columns: any[] = [
         {
-            text: '头像昵称',
+            text: '标题',
+            dataField: 'title',
+        },
+
+        {
+            text: '文本颜色',
+            dataField: 'textColor',
+        },
+        {
+            text: '文本激活颜色',
+            dataField: 'textColorActive',
+        },
+        {
+            text: '图标',
+            dataField: 'icon',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {!row.avatar ? <User size={40} /> : <Image src={row.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        <span className={'ml-1'}>{row.nickname}</span>
+                        <Image src={row.icon} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />
                     </div>
                 );
             }
         },
         {
-            text: '账号',
-            dataField: 'username',
-        },
-        {
-            text: '手机号',
-            dataField: 'mobile',
+            text: '图标激活',
+            dataField: 'iconActive',
+            isDummyField: true,
+            formatter: (cell:any, row:any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        <Image src={row.iconActive} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />
+                    </div>
+                );
+            }
         },
         {
             text: '创建时间',
@@ -170,7 +187,7 @@ const AppNavList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">会员管理</h4>
+                            <h4 className="mb-0">导航菜单管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -189,10 +206,10 @@ const AppNavList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'nickname'}>会员昵称</FormLabel>
+                                    <FormLabel htmlFor={'title'}>标题</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'nickname'} onChange={handleOnUsernameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'title'} onChange={handleOnUsernameChanged} placeholder={'请输入要搜索的内容'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>

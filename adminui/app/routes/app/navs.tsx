@@ -5,7 +5,7 @@ import _ from "lodash";
 import querystring from "querystring";
 import { API_APP_NAV_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
-import AppMemberList from "~/pages/app/AppMemberList";
+import AppNavList from "~/pages/app/AppNavList";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const AppNavListPage = (props:any) => {
     return (
-        <AppMemberList {...props} />
+        <AppNavList {...props} />
     );
 }
 
