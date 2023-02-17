@@ -12,7 +12,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {API_APP_DIY_PAGE_LIST, API_APP_MEMBER_LIST, requestWithToken} from "~/utils/request.server";
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import {useFetcher, useFetchers, useLoaderData} from "@remix-run/react";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -46,7 +46,7 @@ const DiyPage = (props:any) => {
     const appData = useLoaderData();
     const [loading, setLoading] = useState(true);
     const [pages, setPages] = useState<any>([]);
-    const postFetcher = useFetcher();
+    const posters = useFetchers();
 
     useEffect(()=>{
         registers(null);
@@ -72,9 +72,6 @@ const DiyPage = (props:any) => {
 
     const handleDataSave = (pages:any) => {
         return Promise.all(pages.map((p:any)=>{
-            if(p.id == 0) {
-                return postFetcher
-            }
         }));
     }
 
