@@ -8,13 +8,13 @@ import Collapse from "rc-collapse";
 import collapseMotion from "~/components/page-designer/motion";
 import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import BootstrapSwitch from "~/components/form/BootstrapSwitch";
-import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
+import {FormControl, FormGroup, FormLabel, Button} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import BootstrapFormList from "~/components/form/BootstrapFormList";
 import Divider from "~/components/divider";
+import {Plus} from "react-feather";
 
 
 export const MENUS_MODULE = "MENUS_MODULE";
@@ -56,6 +56,11 @@ const MenusModuleAttribute = (props: any) => {
         onUpdate({..._data});
     }
 
+    const handleOnAdd = () => {
+        _data.basic.menus.push({image:'', url: '', text: '菜单'+_data.basic.menus.length+1});
+        onUpdate({...data});
+    }
+
     return (
         <AttributeTabs tabs={['控件设置', '样式设置']}>
             <div style={{ padding: 15 }}>
@@ -72,23 +77,24 @@ const MenusModuleAttribute = (props: any) => {
                                     />
                                     <BootstrapFormList list={_data.basic.menus}>
                                         {(item:any, index:number)=>{
-                                            return (<>
+                                            return (<div key={'menu'+index}>
                                                 <FormGroup>
                                                     <FormLabel>菜单{index+1}名称</FormLabel>
-                                                    <FormControl value={item.text} />
+                                                    <FormControl value={item.text} onChange={()=>{}} />
                                                 </FormGroup>
                                                 <FormGroup>
                                                     <FormLabel>菜单{index+1}图标</FormLabel>
-                                                    <FileBrowserInput type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                                    <FileBrowserInput type={1} multi={false} onChange={()=>formik.submitForm()} />
                                                 </FormGroup>
                                                 <FormGroup>
-                                                    <FormLabel>链接地址</FormLabel>
+                                                    <FormLabel>菜单{index+1}地址</FormLabel>
                                                     <BootstrapLinkSelector links={links} onSelect={()=>formik.submitForm()} />
                                                 </FormGroup>
                                                 <Divider />
-                                            </>);
+                                            </div>);
                                         }}
                                     </BootstrapFormList>
+                                    <Button block onClick={handleOnAdd}><Plus size={14} />增加一个菜单</Button>
                                 </Form>
                             );
                         }
