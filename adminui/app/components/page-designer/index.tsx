@@ -3,7 +3,6 @@ import _ from "lodash";
 import {ControlType, getControl, getControls, getModule, getModules, ModuleType} from "~/components/page-designer/component";
 import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import register from './registers';
 import classNames from "classnames";
 import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, X} from "react-feather";
 import {showDeleteAlert} from "~/utils/utils";
@@ -31,7 +30,6 @@ export declare interface PageDesignerProps {
     lockPage?: boolean;
 }
 
-register();
 
 
 const PageDesigner = (props: any) => {

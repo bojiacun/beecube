@@ -67,6 +67,7 @@
           text-align: center;
           padding   : 10px;
           border    : 1px solid #f7f7f7;
+          margin-bottom: 20px;
 
           img {
             width        : 100%;
@@ -425,7 +426,6 @@
 //这里是手风琴样式
 .rc-collapse > .rc-collapse-item > .rc-collapse-header {
   flex-direction: row-reverse;
-  border-bottom: 1px solid #eee;
   padding: 12px 16px;
   .rc-collapse-header-text {
     flex: 1;

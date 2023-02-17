@@ -237,7 +237,7 @@ export default function App() {
             <Links/>
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading}}>
+        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
             <div id='app' className='h-100'>
                 <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
                     <AnimatePresence mode={'wait'} initial={false}>

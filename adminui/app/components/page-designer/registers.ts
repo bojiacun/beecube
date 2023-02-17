@@ -9,13 +9,13 @@ import registerModuleSwiper from './modules/common/Swiper';
 
 
 
-export default function register() {
-    registerMiniAppHeader();
-    registerPopAdvertise();
-    registerModuleDivider();
-    registerModuleImageText();
-    registerModuleMenus();
-    registerModuleSwiper();
-    registerModuleMultipleImages();
-    registerModuleSingleImage();
+export default function register(module=null) {
+    registerMiniAppHeader(module);
+    registerPopAdvertise(module);
+    registerModuleDivider(module);
+    registerModuleImageText(module);
+    registerModuleMenus(module);
+    registerModuleSwiper(module);
+    registerModuleMultipleImages(module);
+    registerModuleSingleImage(module);
 }

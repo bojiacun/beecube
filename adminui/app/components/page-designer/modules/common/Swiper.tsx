@@ -1,16 +1,23 @@
 import { AttributeTabs, registerModule } from "../../component"
 import image from 'assets/designer/swiper.png';
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { resolveUrl } from "~/utils/utils";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
 import Swiper, { SwipeRef } from 'react-tiga-swiper';
 import FallbackImage from "~/components/fallback-image";
+import {Form, Formik} from "formik";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
+import {FormGroup, FormLabel} from "react-bootstrap";
+import FileBrowserInput from "~/components/filebrowser/form";
+import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
+import BootstrapInput from "~/components/form/BootstrapInput";
+import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
 export const SWIPER_MODULE = "SWIPER_MODULE";
 export const defaultData = {
     basic: {
-        height: 350,
+        height: '350px',
         images: [
             { image: '', url: '', text: '轮播图1' },
             { image: '', url: '', text: '轮播图2' },
@@ -23,17 +30,52 @@ export const defaultData = {
 };
 
 const SwiperModuleAttribute = (props: any) => {
-    const { onUpdate, data } = props;
+    const { onUpdate, data, links } = props;
 
     let _data = { ...defaultData, ...data };
-
+    const handleOnSubmit1 = (values:any) => {
+        _data.basic = values;
+        onUpdate({..._data});
+    }
+    const handleOnSubmit2 = (values:any) => {
+        _data.style = values;
+        onUpdate({..._data});
+    }
     return (
         <AttributeTabs tabs={['控件设置', '样式设置']}>
             <div style={{ padding: 15 }}>
-
+                <Formik initialValues={_data.basic} onSubmit={handleOnSubmit1}>
+                    {
+                        (formik) => {
+                            return (
+                                <Form method={'post'} onChange={(e)=>formik.submitForm()}>
+                                    <BootstrapInput label={'高度'} name={'height'} />
+                                    <BootstrapRadioGroup options={[
+                                        {label: 'aspectFit', value: 'aspectFit'},
+                                        {label: 'aspectFill', value: 'aspectFill'},
+                                        {label: 'scaleToFill', value: 'scaleToFill'},
+                                        {label: 'widthFix', value: 'widthFix'},
+                                        {label: 'heightFix', value: 'heightFix'},
+                                    ]} name={'mode'} label={'布局方式'} />
+                                </Form>
+                            );
+                        }
+                    }
+                </Formik>
             </div>
             <div style={{ padding: 15 }}>
+                <Formik initialValues={_data.style} onSubmit={handleOnSubmit2}>
+                    {
+                        (formik) => {
+                            return (
+                                <Form method={'post'} onChange={(e)=>formik.submitForm()}>
+                                    <BoxSettings />
+                                </Form>
+                            );
+                        }
+                    }
 
+                </Formik>
             </div>
         </AttributeTabs>
     );
