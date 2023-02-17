@@ -204,7 +204,7 @@ const PageDesigner = (props: any) => {
         <Container id={'diy-container'} fluid>
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
                 <Col className={'header'}>
-                    <Button variant={'light'} style={{marginRight: 20}}>预览</Button>
+                    <Button variant={'light'} style={{marginRight: 20, display: 'none'}}>预览</Button>
                     <Button>保存</Button>
                 </Col>
             </Row>
