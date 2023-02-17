@@ -84,8 +84,6 @@ const DiyPage = (props:any) => {
 
     const handleDataSave = (page:any) => {
         let data = {...page};
-        delete data.canDelete;
-        delete data.style;
         return axios.post('/app/diy/save', data);
     }
 
