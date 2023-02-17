@@ -1,4 +1,4 @@
-import {DragEventHandler, useEffect, useState} from "react";
+import {DragEventHandler, FC, useEffect, useState} from "react";
 import _ from "lodash";
 import {ControlType, getControl, getControls, getModule, getModules, ModuleType} from "~/components/page-designer/component";
 import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page";
@@ -21,10 +21,9 @@ export declare interface PageType {
     controls?: ControlType[],
 }
 
-export declare interface PageDesignerProps {
+export declare interface PageDesignerProps extends Partial<any>{
     pages: PageType[];
     style?: any;
-    settings?: any;
     backable?: boolean;
     onDataSaved?: (values: any) => Promise<any>;
     lockPage?: boolean;
@@ -32,8 +31,8 @@ export declare interface PageDesignerProps {
 
 
 
-const PageDesigner = (props: any) => {
-    const {links, lockPage = false} = props;
+const PageDesigner : FC<PageDesignerProps> = (props) => {
+    const {links, lockPage = false, onDataSaved} = props;
     const [tabIndex, setTabIndex] = useState("module");
     const [pages, setPages] = useState<PageType[]>(props.pages);
     const [placeholder, setPlaceholder] = useState<boolean>(false);
@@ -204,7 +203,12 @@ const PageDesigner = (props: any) => {
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
                 <Col className={'header'}>
                     <Button variant={'light'} style={{marginRight: 20, display: 'none'}}>预览</Button>
-                    <Button>保存</Button>
+                    <Button disabled={saving} onClick={()=>{
+                        setSaving(true);
+                        if(onDataSaved) {
+                            onDataSaved(pages).then(()=>setSaving(false));
+                        }
+                    }}>保存</Button>
                 </Col>
             </Row>
             <div style={{height: 'calc(100vh - 64px)', position: 'relative', overflow: 'hidden', width: '100vw'}}>
