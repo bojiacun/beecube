@@ -199,6 +199,7 @@ const PageDesigner = (props: any) => {
         currentPage.modules = _modules;
         refreshPage();
     };
+    console.log(currentPage.style);
     return (
         <Container id={'diy-container'} fluid>
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
@@ -327,7 +328,7 @@ const PageDesigner = (props: any) => {
 
 
                         <div className={'designerContent'} onClick={() => setCurrentData(null)}>&nbsp;</div>
-                        <div className={'mobileContainer'} style={currentPage.style}>
+                        <div className={'mobileContainer'} style={{...currentPage.style, backgroundImage: `url(${currentPage.style.backgroundImage})`}}>
                             {_controls.filter(item => item.key === MINI_APP_HEADER).map((item: any) => {
                                 const Component = getControl(item.key).designer;
                                 const settings = getControl(item.key).settings;

@@ -2,9 +2,15 @@ import {AttributeTabs, withSettingsComponent} from "./component";
 import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import React from "react";
+import {FormGroup, FormLabel} from "react-bootstrap";
+import FileBrowserInput from "~/components/filebrowser/form";
 
 export const DEFAULT_PAGE_DATA = {
     backgroundColor: '#f5f5f5',
+    backgroundImage: '',
+    backgroundPosition: 'top center',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
     paddingLeft: '0px',
     paddingRight: '0px',
     paddingTop: '0px',
@@ -27,7 +33,17 @@ const PageSettings = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e) => formik.submitForm()}>
-                                    <BootstrapInput label={'页面背景颜色'} name={'backgroundColor'}/>
+                                    <BootstrapInput label={'背景颜色'} name={'backgroundColor'}/>
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'backgroundImage'}>背景图片</FormLabel>
+                                        <FileBrowserInput name={'backgroundImage'} type={1} multi={false} onChange={()=>formik.submitForm()} />
+                                    </FormGroup>
+                                    <BootstrapInput label={'背景图位置'} name={'backgroundPosition'}/>
+                                    <BootstrapInput label={'背景图大小'} name={'backgroundSize'}/>
+                                    <BootstrapInput label={'背景图重复'} name={'backgroundRepeat'}/>
+
+                                    <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
+                                    <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
                                     <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
                                     <BootstrapInput label={'上边距'} name={'paddingTop'}/>
                                     <BootstrapInput label={'右边距'} name={'paddingRight'}/>
