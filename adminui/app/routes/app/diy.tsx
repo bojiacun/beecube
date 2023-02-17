@@ -73,7 +73,7 @@ const DiyPage = (props:any) => {
 
     const handleDataSave = (pages:any) => {
         return Promise.all(pages.map((p:any)=>{
-            return axios.post('/app/diy');
+            return axios.post('/app/diy', p);
         }));
     }
 
