@@ -62,7 +62,6 @@ const DiyPage = (props:any) => {
     const appData = useLoaderData();
     const [loading, setLoading] = useState(true);
     const [pages, setPages] = useState<any>([]);
-    const posters = useFetchers();
 
     useEffect(()=>{
         registers(null);
