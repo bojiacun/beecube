@@ -59,9 +59,6 @@ export async function loader({request}:any) {
             userInfo.perms = userInfo.perms?.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
         }
     }
-
-    console.log('root loader runed');
-
     return json({
         userInfo: userInfo,
         from: session.get("FROM"),

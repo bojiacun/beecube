@@ -48,16 +48,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const pages = result.result;
     return json({module: session.get("MODULE"), pages});
 }
-export const action: ActionFunction = async ({request}) => {
-    await requireAuthenticated(request);
-    const data = await request.json();
-    if(data.id == 0) {
-        return await requestWithToken(request)(API_APP_DIY_PAGE_ADD, postFormInit(data));
-    }
-    else {
-        return await requestWithToken(request)(API_APP_DIY_PAGE_EDIT, postFormInit(data));
-    }
-}
+
 
 const DiyPage = (props:any) => {
     const appData = useLoaderData();
@@ -88,7 +79,7 @@ const DiyPage = (props:any) => {
 
     const handleDataSave = (pages:any) => {
         return Promise.all(pages.map((p:any)=>{
-            return axios.post('/app/diy', p);
+            return axios.post('/app/diy/save', p);
         }));
     }
 
