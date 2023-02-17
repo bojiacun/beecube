@@ -1,7 +1,7 @@
-import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
+import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, formData2Json} from "~/utils/utils";
 import {withPageLoading} from "~/utils/components";
 import diyPageStyleUrl from 'app/styles/diy.css';
-import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import PageDesigner from "~/components/page-designer";
 import {useEffect, useState} from "react";
 import {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
@@ -11,8 +11,14 @@ import registers from '~/components/page-designer/registers';
 import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
-import {API_APP_DIY_PAGE_LIST, API_APP_MEMBER_LIST, requestWithToken} from "~/utils/request.server";
-import {useFetcher, useFetchers, useLoaderData} from "@remix-run/react";
+import {
+    API_APP_DIY_PAGE_ADD,
+    API_APP_DIY_PAGE_EDIT,
+    API_APP_DIY_PAGE_LIST,
+    postFormInit,
+    requestWithToken
+} from "~/utils/request.server";
+import {useFetchers, useLoaderData} from "@remix-run/react";
 import axios from "~/utils/request.client";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -41,7 +47,16 @@ export const loader: LoaderFunction = async ({request}) => {
     const pages = result.result;
     return json({module: session.get("MODULE"), pages});
 }
-
+export const action: ActionFunction = async ({request}) => {
+    await requireAuthenticated(request);
+    const data = await request.json();
+    if(data.id == 0) {
+        return await requestWithToken(request)(API_APP_DIY_PAGE_ADD, postFormInit(data));
+    }
+    else {
+        return await requestWithToken(request)(API_APP_DIY_PAGE_EDIT, postFormInit(data));
+    }
+}
 
 const DiyPage = (props:any) => {
     const appData = useLoaderData();
