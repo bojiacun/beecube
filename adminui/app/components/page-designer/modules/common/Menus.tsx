@@ -9,11 +9,12 @@ import collapseMotion from "~/components/page-designer/motion";
 import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
-import {FormGroup, FormLabel} from "react-bootstrap";
+import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import BootstrapFormList from "~/components/form/BootstrapFormList";
+import Divider from "~/components/divider";
 
 
 export const MENUS_MODULE = "MENUS_MODULE";
@@ -70,8 +71,22 @@ const MenusModuleAttribute = (props: any) => {
                                         onSelectChanged={()=>formik.submitForm()}
                                     />
                                     <BootstrapFormList list={_data.basic.menus}>
-                                        {(item:any)=>{
-                                            return ('项目'+item.text);
+                                        {(item:any, index:number)=>{
+                                            return (<>
+                                                <FormGroup>
+                                                    <FormLabel>菜单{index+1}名称</FormLabel>
+                                                    <FormControl value={item.text} />
+                                                </FormGroup>
+                                                <FormGroup>
+                                                    <FormLabel>菜单{index+1}图标</FormLabel>
+                                                    <FileBrowserInput type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                                </FormGroup>
+                                                <FormGroup>
+                                                    <FormLabel>链接地址</FormLabel>
+                                                    <BootstrapLinkSelector links={links} onSelect={()=>formik.submitForm()} />
+                                                </FormGroup>
+                                                <Divider />
+                                            </>);
                                         }}
                                     </BootstrapFormList>
                                 </Form>

@@ -20,7 +20,7 @@ export interface BootstrapLinkSelectProps {
 }
 
 const BootstrapLinkSelector = (props: any) => {
-    let {label, name, placeholder = '', className, links, onSelect, ...rest} = props;
+    let {label, name='', placeholder = '', className, links, onSelect, ...rest} = props;
     const formik = useFormikContext<any>();
     const [value, setValue] = useState<string>(formik.values[name]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -41,14 +41,18 @@ const BootstrapLinkSelector = (props: any) => {
             newValue += '?' + querystring.stringify(params);
         }
         setValue(newValue);
-        formik.setFieldValue(name, newValue);
+        if(name) {
+            formik.setFieldValue(name, newValue);
+        }
         setModalVisible(false);
         onSelect && onSelect();
     }
     const handleInputValueChanged = (e: any) => {
         // formik.handleChange(e);
         setValue(e.currentTarget.value);
-        formik.setFieldValue(name, e.currentTarget.value);
+        if(name) {
+            formik.setFieldValue(name, e.currentTarget.value);
+        }
     }
     const renderFooter = () => {
         return (

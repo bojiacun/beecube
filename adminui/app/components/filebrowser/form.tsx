@@ -16,15 +16,16 @@ interface FileBrowserInputProps {
     imagePreview?: boolean;
     previewWidth?: number;
     previewHeight?: number;
-    name: string;
+    name?: string;
     onRemove?: Function;
+    onChange?: Function;
 }
 
 
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name, onRemove, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name = '', onRemove, onChange, ...rest } = props;
     const formik = useFormikContext<any>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
@@ -32,7 +33,9 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const {t} = useTranslation();
 
     useEffect(()=>{
-        setValue(formik.values[name]);
+        if(name) {
+            setValue(formik.values[name]);
+        }
     }, [formik.values[name]]);
 
 
@@ -56,7 +59,10 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
             let newValue = selectedFiles.map(item => item.url).join(',');
             // formik.handleChange({currentTarget: {name: name, value: newValue}});
             setValue(newValue);
-            formik.setFieldValue(name, newValue);
+            if(name) {
+                formik.setFieldValue(name, newValue);
+            }
+            onChange?.(newValue);
         }
         setModalVisible(false);
     }
@@ -76,7 +82,10 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
     const handleInputValueChanged = (e:any) => {
         // formik.handleChange(e);
         setValue(e.currentTarget.value);
-        formik.setFieldValue(name, e.currentTarget.value);
+        if(name) {
+            formik.setFieldValue(name, e.currentTarget.value);
+        }
+        onChange?.(e.currentTarget.value);
     }
     const removeFile = (v:string) => {
         let values = value?.split(',');
@@ -84,7 +93,10 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
         let newValue = values?.join(',');
         // formik.handleChange({currentTarget: {name: name, value: newValue}});
         setValue(newValue);
-        formik.setFieldValue(name, newValue);
+        if(name) {
+            formik.setFieldValue(name, newValue);
+        }
+        onChange?.(newValue);
         onRemove?.();
     }
     return (
