@@ -206,9 +206,9 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                     <Button disabled={saving} onClick={()=>{
                         setSaving(true);
                         if(onDataSaved) {
-                            onDataSaved(pages).then(()=>{
-                                setSaving(false);
+                            onDataSaved(pages).then((res)=>{
                                 showToastSuccess('保存成功！');
+                                setSaving(false);
                             }).catch(e=>{
                                 setSaving(false);
                                 showToastError('保存失败');
