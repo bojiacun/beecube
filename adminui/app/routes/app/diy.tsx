@@ -46,6 +46,11 @@ export const loader: LoaderFunction = async ({request}) => {
     }
     const result = await requestWithToken(request)(API_APP_DIY_PAGE_LIST + queryString);
     const pages = result.result;
+    pages.forEach((p:any)=>{
+        p.controls = JSON.parse(p.controls);
+        p.modules = JSON.parse(p.modules);
+        p.style = JSON.parse(p.styles);
+    })
     return json({module: session.get("MODULE"), pages});
 }
 
@@ -59,7 +64,7 @@ const DiyPage = (props:any) => {
         registers(appData.module);
         let _pages = (appData.pages && appData.pages.length > 0) ? appData.pages : [
             {
-                id: 0,
+                id: '',
                 controls: [{key: MINI_APP_HEADER, data: defaultAppHeaderData}],
                 modules: [],
                 title: '首页',
@@ -79,7 +84,13 @@ const DiyPage = (props:any) => {
 
     const handleDataSave = (pages:any) => {
         return Promise.all(pages.map((p:any)=>{
-            return axios.post('/app/diy/save', p);
+            let data = {...p};
+            data.controls = JSON.stringify(data.controls);
+            data.modules = JSON.stringify(data.modules);
+            data.styles = JSON.stringify(data.style);
+            delete data.canDelete;
+            delete data.style;
+            return axios.post('/app/diy/save', data);
         }));
     }
 

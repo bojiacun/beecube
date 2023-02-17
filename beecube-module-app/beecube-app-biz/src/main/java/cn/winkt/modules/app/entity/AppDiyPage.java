@@ -39,11 +39,11 @@ public class AppDiyPage {
 	/**控件配置*/
 	@Excel(name = "控件配置", width = 15)
     @ApiModelProperty(value = "控件配置")
-	private java.lang.Object controls;
+	private java.lang.String controls;
 	/**页面模块配置*/
 	@Excel(name = "页面模块配置", width = 15)
     @ApiModelProperty(value = "页面模块配置")
-	private java.lang.Object modules;
+	private java.lang.String modules;
 	/**页面标题*/
 	@Excel(name = "页面标题", width = 15)
     @ApiModelProperty(value = "页面标题")
@@ -51,7 +51,7 @@ public class AppDiyPage {
 	/**页面样式*/
 	@Excel(name = "页面样式", width = 15)
     @ApiModelProperty(value = "页面样式")
-	private java.lang.Object styles;
+	private java.lang.String styles;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private java.util.Date createTime;

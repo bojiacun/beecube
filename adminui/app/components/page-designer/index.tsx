@@ -208,12 +208,14 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                         if(onDataSaved) {
                             onDataSaved(pages).then((res)=>{
                                 setSaving(false);
-                                if(!res[0].success) {
-                                    showToastError(res[0].message);
-                                }
-                                else {
-                                    showToastSuccess('保存成功！');
-                                }
+                                res.forEach((r:any)=>{
+                                    if(!r.data.success) {
+                                        showToastError(r.data.message);
+                                    }
+                                    else {
+                                        showToastSuccess('保存成功！');
+                                    }
+                                })
                             }).catch(e=>{
                                 setSaving(false);
                                 showToastError('保存失败');
