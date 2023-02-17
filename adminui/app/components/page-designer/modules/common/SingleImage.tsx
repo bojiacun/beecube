@@ -50,15 +50,15 @@ const SingleImageModuleAttribute = (props: any) => {
                                     <BootstrapSwitch  label={'显示标题'} name={'showTitle'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'titleImage'}>标题图片</FormLabel>
-                                        <FileBrowserInput name={'titleImage'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'titleImage'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'image'}>广告图</FormLabel>
-                                        <FileBrowserInput name={'image'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'image'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'url'}>链接地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url'} links={links} onSelect={()=>formik.submitForm()} />
+                                        <BootstrapLinkSelector name={'url'} links={links} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );

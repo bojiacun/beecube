@@ -1,6 +1,6 @@
 import { AttributeTabs, registerModule } from "../../component"
 import image from 'assets/designer/s1_1.png';
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
 import FallbackImage from "~/components/fallback-image";
 import { resolveUrl } from "~/utils/utils";
@@ -42,9 +42,11 @@ export const defaultData = {
 const MenusModuleAttribute = (props: any) => {
     const { onUpdate, data, links } = props;
     let _data = { ...defaultData, ...data };
+    const [menus, setMenus] = useState(_data.basic.menus);
+
+
     const handleOnSubmit1 = (values:any) => {
         _data.basic = values;
-        console.log(values);
         onUpdate({..._data});
     }
     const handleOnSubmit2 = (values:any) => {
@@ -57,7 +59,9 @@ const MenusModuleAttribute = (props: any) => {
     }
 
     const handleOnAdd = () => {
-        _data.basic.menus.push({image:'', url: '', text: '菜单'+_data.basic.menus.length+1});
+        let newMenus = [...menus, {image:'', url: '', text: '菜单'+(menus.length+1)}];
+        setMenus(newMenus);
+        _data.basic.menus = newMenus;
         onUpdate({...data});
     }
 
@@ -75,20 +79,32 @@ const MenusModuleAttribute = (props: any) => {
                                         options={[{ label: '3列', value: '3' }, { label: '4列', value: '4' }, { label: '5列', value: '5' }]}
                                         onSelectChanged={()=>formik.submitForm()}
                                     />
-                                    <BootstrapFormList list={_data.basic.menus}>
+                                    <BootstrapFormList name={'menus'} list={menus}>
                                         {(item:any, index:number)=>{
                                             return (<div key={'menu'+index}>
                                                 <FormGroup>
                                                     <FormLabel>菜单{index+1}名称</FormLabel>
-                                                    <FormControl value={item.text} onChange={()=>{}} />
+                                                    <FormControl value={item.text} onChange={(e)=>{
+                                                        item.text = e.currentTarget.value;
+                                                        _data.basic.menus = menus;
+                                                        onUpdate({...data});
+                                                    }} />
                                                 </FormGroup>
                                                 <FormGroup>
                                                     <FormLabel>菜单{index+1}图标</FormLabel>
-                                                    <FileBrowserInput type={1} multi={false} onChange={()=>formik.submitForm()} />
+                                                    <FileBrowserInput type={1} multi={false} initValue={item.image} onChange={(val:any)=>{
+                                                        item.image = val;
+                                                        _data.basic.menus = menus;
+                                                        onUpdate({...data});
+                                                    }} />
                                                 </FormGroup>
                                                 <FormGroup>
                                                     <FormLabel>菜单{index+1}地址</FormLabel>
-                                                    <BootstrapLinkSelector links={links} onSelect={()=>formik.submitForm()} />
+                                                    <BootstrapLinkSelector links={links} initValue={item.url} onChange={(val:any)=>{
+                                                        item.url = val;
+                                                        _data.basic.menus = menus;
+                                                        onUpdate({...data});
+                                                    }} />
                                                 </FormGroup>
                                                 <Divider />
                                             </div>);

@@ -1,5 +1,5 @@
 import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useFormikContext} from "formik";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import BootstrapInput from "~/components/form/BootstrapInput";
@@ -13,29 +13,31 @@ export interface LinkItem {
     suffixOptions?: any;
 }
 
-export interface BootstrapLinkSelectProps {
-    links: LinkItem[],
-    onChange?: any;
-    value?: any;
+export interface BootstrapLinkSelectProps extends Partial<any>{
+    links: LinkItem[];
+    onChange?: Function;
+    initValue?: any;
 }
 
-const BootstrapLinkSelector = (props: any) => {
-    let {label, name='', placeholder = '', className, links, onSelect, ...rest} = props;
+const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
+    let {label, name='', placeholder = '', className, links, onChange, initValue, ...rest} = props;
     const formik = useFormikContext<any>();
-    const [value, setValue] = useState<string>(formik.values[name]);
+    const [value, setValue] = useState<string>(name?formik.values[name]:initValue);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedLinkItem, setSelectedLinkItem] = useState<LinkItem>();
 
 
     useEffect(() => {
-        setValue(formik.values[name]);
+        if(name) {
+            setValue(formik.values[name]);
+        }
     }, [formik.values[name]]);
 
     const doSelect = () => {
         let newValue = formik.values['_url'];
         const _url_suffix = formik.values['_url_suffix'];
         const _url_suffix_option = formik.values['_url_suffix_option'];
-        if(selectedLinkItem) {
+        if(selectedLinkItem?.urlSuffix) {
             let params:any = {};
             params[selectedLinkItem.urlSuffix!.value] = _url_suffix ? _url_suffix : _url_suffix_option;
             newValue += '?' + querystring.stringify(params);
@@ -45,7 +47,7 @@ const BootstrapLinkSelector = (props: any) => {
             formik.setFieldValue(name, newValue);
         }
         setModalVisible(false);
-        onSelect && onSelect();
+        onChange && onChange(newValue);
     }
     const handleInputValueChanged = (e: any) => {
         // formik.handleChange(e);
@@ -53,6 +55,7 @@ const BootstrapLinkSelector = (props: any) => {
         if(name) {
             formik.setFieldValue(name, e.currentTarget.value);
         }
+        onChange && onChange(e.currentTarget.value);
     }
     const renderFooter = () => {
         return (

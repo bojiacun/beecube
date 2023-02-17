@@ -17,6 +17,7 @@ interface FileBrowserInputProps {
     previewWidth?: number;
     previewHeight?: number;
     name?: string;
+    initValue?: string;
     onRemove?: Function;
     onChange?: Function;
 }
@@ -25,11 +26,11 @@ interface FileBrowserInputProps {
 
 
 const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBrowserInputProps>((props, ref) => {
-    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name = '', onRemove, onChange, ...rest } = props;
+    const { type, multi=false, imagePreview=false, previewHeight=80, previewWidth=80, name = '', onRemove, onChange, initValue, ...rest } = props;
     const formik = useFormikContext<any>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
-    const [value, setValue] = useState<string>(formik.values[name]);
+    const [value, setValue] = useState<string>(name?formik.values[name]:initValue);
     const {t} = useTranslation();
 
     useEffect(()=>{

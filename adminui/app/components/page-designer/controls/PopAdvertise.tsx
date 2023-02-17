@@ -43,7 +43,7 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
                                     <FormGroup>
                                         <FormLabel htmlFor={'image'}>广告图</FormLabel>
-                                        <FileBrowserInput name={'image'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'image'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );

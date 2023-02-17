@@ -51,7 +51,7 @@ const ImageTextModuleAttribute = (props: any) => {
                                     <BootstrapInput label={'标题'} name={'description'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'url'}>链接地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url'} links={links} onSelect={()=>formik.submitForm()} />
+                                        <BootstrapLinkSelector name={'url'} links={links} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );

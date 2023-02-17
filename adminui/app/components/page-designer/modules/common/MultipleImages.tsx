@@ -55,29 +55,29 @@ const MultipleImagesModuleAttribute = (props: any) => {
                                     <Divider />
                                     <FormGroup>
                                         <FormLabel htmlFor={'image1'}>图片1</FormLabel>
-                                        <FileBrowserInput name={'image1'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'image1'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'url1'}>图片1地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url1'} links={links} onSelect={()=>formik.submitForm()} />
+                                        <BootstrapLinkSelector name={'url1'} links={links} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <Divider />
                                     <FormGroup>
                                         <FormLabel htmlFor={'image2'}>图片2</FormLabel>
-                                        <FileBrowserInput name={'image2'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'image2'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'url2'}>图片2地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url2'} links={links} onSelect={()=>formik.submitForm()} />
+                                        <BootstrapLinkSelector name={'url2'} links={links} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <Divider />
                                     <FormGroup>
                                         <FormLabel htmlFor={'image3'}>图片3</FormLabel>
-                                        <FileBrowserInput name={'image3'} type={1} multi={false} onRemove={()=>formik.submitForm()} />
+                                        <FileBrowserInput name={'image3'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'url3'}>图片3地址</FormLabel>
-                                        <BootstrapLinkSelector name={'url3'} links={links} onSelect={()=>formik.submitForm()} />
+                                        <BootstrapLinkSelector name={'url3'} links={links} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
                                 </Form>
                             );
