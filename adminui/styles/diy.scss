@@ -422,6 +422,9 @@
   }
 }
 
+.rc-collapse > .rc-collapse-item {
+  border-top: 1px solid #eee;
+}
 
 //这里是手风琴样式
 .rc-collapse > .rc-collapse-item > .rc-collapse-header {

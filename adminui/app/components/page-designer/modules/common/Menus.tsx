@@ -13,6 +13,7 @@ import {FormGroup, FormLabel} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
+import BootstrapFormList from "~/components/form/BootstrapFormList";
 
 
 export const MENUS_MODULE = "MENUS_MODULE";
@@ -42,6 +43,7 @@ const MenusModuleAttribute = (props: any) => {
     let _data = { ...defaultData, ...data };
     const handleOnSubmit1 = (values:any) => {
         _data.basic = values;
+        console.log(values);
         onUpdate({..._data});
     }
     const handleOnSubmit2 = (values:any) => {
@@ -61,7 +63,17 @@ const MenusModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
-                                    <BootstrapSelect name={'columns'} label={'列数'} options={[{ label: '3列', value: '3' }, { label: '4列', value: '4' }, { label: '5列', value: '5' }]} />
+                                    <BootstrapSelect
+                                        name={'columns'}
+                                        label={'列数'}
+                                        options={[{ label: '3列', value: '3' }, { label: '4列', value: '4' }, { label: '5列', value: '5' }]}
+                                        onSelectChanged={()=>formik.submitForm()}
+                                    />
+                                    <BootstrapFormList list={_data.basic.menus}>
+                                        {(item:any)=>{
+                                            return ('项目'+item.text);
+                                        }}
+                                    </BootstrapFormList>
                                 </Form>
                             );
                         }

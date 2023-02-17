@@ -13,6 +13,7 @@ export interface BootstrapSelectProps extends Partial<any> {
     isClearable?: boolean;
     isSearchable?: boolean;
     isMulti?: boolean;
+    onSelectChanged ?: Function;
 }
 
 const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
