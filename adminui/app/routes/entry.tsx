@@ -2,7 +2,7 @@ import {ActionFunction, redirect} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {sessionStorage} from "~/utils/auth.server";
 import _ from 'lodash';
-import {API_APP_DETAIL, API_APP_MENU_LIST, requestWithToken} from "~/utils/request.server";
+import {API_APP_DETAIL, API_APP_MENU_LIST, API_APP_MODULE_DETAIL, requestWithToken} from "~/utils/request.server";
 
 
 function recursiveFilterPerms(perm:any, menus:any) {
@@ -30,9 +30,13 @@ export const action: ActionFunction = async ({request}) => {
     const appMenus = result.result;
     const menus = appMenus.map((m:any)=>m.menuId);
     userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
+    const appModuleResult = await requestWithToken(request)(API_APP_MODULE_DETAIL+'?id='+app.moduleId);
+    const appModule = appModuleResult.result;
+
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
     session.set("APPID", appId);
     session.set("APP", JSON.stringify(app));
+    session.set("MODULE", appModule.identifier);
     session.set("FROM", "platform");
     session.set("APP_MENUS", userInfo.perms);
     await sessionStorage.commitSession(session);

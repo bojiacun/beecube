@@ -70,7 +70,14 @@ public class AppDiyPageController extends JeecgController<AppDiyPage, IAppDiyPag
 		IPage<AppDiyPage> pageList = appDiyPageService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "应用页面设计表-列表查询")
+	 @ApiOperation(value="应用页面设计表-列表查询", notes="应用页面设计表-列表查询")
+	 @GetMapping(value = "/all")
+	 public Result<?> allPageList(AppDiyPage appDiyPage, HttpServletRequest req) {
+		 QueryWrapper<AppDiyPage> queryWrapper = QueryGenerator.initQueryWrapper(appDiyPage, req.getParameterMap());
+		 List<AppDiyPage> pageList = appDiyPageService.list(queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *
