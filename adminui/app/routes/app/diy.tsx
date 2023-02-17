@@ -12,6 +12,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {API_APP_DIY_PAGE_LIST, API_APP_MEMBER_LIST, requestWithToken} from "~/utils/request.server";
+import {useFetcher, useLoaderData} from "@remix-run/react";
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -26,7 +27,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     if(session.has("APPID")) {
-
+        url.searchParams.set('appId', session.get("APPID"));
     }
     let queryString = '';
     if (_.isEmpty(url.search)) {
@@ -36,17 +37,22 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_APP_DIY_PAGE_LIST + queryString);
-    return json(result.result);
+    const pages = result.result;
+    return json({module: session.get("MODULE"), pages});
 }
 
 
 const DiyPage = (props:any) => {
+    const appData = useLoaderData();
     const [loading, setLoading] = useState(true);
     const [pages, setPages] = useState<any>([]);
+    const postFetcher = useFetcher();
+
     useEffect(()=>{
         registers(null);
-        setPages([
+        let _pages = appData.pages ?? [
             {
+                id: 0,
                 controls: [{key: MINI_APP_HEADER, data: defaultAppHeaderData}],
                 modules: [],
                 title: '首页',
@@ -54,7 +60,8 @@ const DiyPage = (props:any) => {
                 canDelete: false,
                 style: DEFAULT_PAGE_DATA
             }
-        ]);
+        ];
+        setPages(_pages);
     }, []);
 
     useEffect(()=>{
@@ -63,10 +70,18 @@ const DiyPage = (props:any) => {
         }
     }, [pages]);
 
+    const handleDataSave = (pages:any) => {
+        return Promise.all(pages.map((p:any)=>{
+            if(p.id == 0) {
+                return postFetcher
+            }
+        }));
+    }
+
     if(loading) return <></>;
 
     return (
-        <PageDesigner pages={pages} lockPage={true} links={AppLinks} />
+        <PageDesigner pages={pages} lockPage={true} links={AppLinks} onDataSaved={handleDataSave} />
     );
 }
 

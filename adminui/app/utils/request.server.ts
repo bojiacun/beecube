@@ -123,6 +123,8 @@ export const API_APP_NAV_EDIT = `${BASE_URL}/beecube-app/app/navs/edit`;
 export const API_APP_NAV_DELETE = `${BASE_URL}/beecube-app/app/navs/delete`;
 
 export const API_APP_DIY_PAGE_LIST = `${BASE_URL}/beecube-app/app/diy/pages/all`;
+export const API_APP_DIY_PAGE_EDIT = `${BASE_URL}/beecube-app/app/diy/pages/edit`;
+export const API_APP_DIY_PAGE_ADD = `${BASE_URL}/beecube-app/app/diy/pages/add`;
 
 export const API_APP_DETAIL = `${BASE_URL}/beecube-app/app/queryById`;
 export const API_APP_MODULE_DETAIL = `${BASE_URL}/beecube-app/app/modules/queryById`;
