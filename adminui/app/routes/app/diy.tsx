@@ -82,16 +82,11 @@ const DiyPage = (props:any) => {
         }
     }, [pages]);
 
-    const handleDataSave = (pages:any) => {
-        return Promise.all(pages.map((p:any)=>{
-            let data = {...p};
-            data.controls = JSON.stringify(data.controls);
-            data.modules = JSON.stringify(data.modules);
-            data.styles = JSON.stringify(data.style);
-            delete data.canDelete;
-            delete data.style;
-            return axios.post('/app/diy/save', data);
-        }));
+    const handleDataSave = (page:any) => {
+        let data = {...page};
+        delete data.canDelete;
+        delete data.style;
+        return axios.post('/app/diy/save', data);
     }
 
     if(loading) return <></>;

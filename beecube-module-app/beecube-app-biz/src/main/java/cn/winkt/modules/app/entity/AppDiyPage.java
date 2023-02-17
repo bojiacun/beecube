@@ -26,7 +26,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="beecube_app_diy_pages对象", description="应用页面设计表")
-public class AppDiyPage {
+public class AppDiyPage implements Serializable {
     
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
