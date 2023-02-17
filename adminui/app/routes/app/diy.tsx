@@ -3,10 +3,9 @@ import {withPageLoading} from "~/utils/components";
 import diyPageStyleUrl from 'app/styles/diy.css';
 import {LinksFunction} from "@remix-run/node";
 import PageDesigner from "~/components/page-designer";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
-import {MINI_APP_HEADER} from "~/components/page-designer/controls/MiniAppHeader";
-import { getControl } from "~/components/page-designer/component";
+import {defaultAppHeaderData, MINI_APP_HEADER} from "~/components/page-designer/controls/MiniAppHeader";
 import {AppLinks} from './links';
 import registers from '~/components/page-designer/registers';
 
@@ -25,10 +24,9 @@ const DiyPage = (props:any) => {
     const [pages, setPages] = useState<any>([]);
     useEffect(()=>{
         registers(null);
-        const appHeaderControl = {...getControl(MINI_APP_HEADER)};
         setPages([
             {
-                controls: [appHeaderControl],
+                controls: [{key: MINI_APP_HEADER, data: defaultAppHeaderData}],
                 modules: [],
                 title: '首页',
                 identifier: 'HOME',

@@ -199,7 +199,6 @@ const PageDesigner = (props: any) => {
         currentPage.modules = _modules;
         refreshPage();
     };
-    console.log(currentPage.style);
     return (
         <Container id={'diy-container'} fluid>
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
