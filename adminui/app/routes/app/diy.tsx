@@ -31,6 +31,7 @@ const DiyPage = (props:any) => {
                 controls: [appHeaderControl],
                 modules: [],
                 title: '首页',
+                identifier: 'HOME',
                 canDelete: false,
                 style: DEFAULT_PAGE_DATA
             }
