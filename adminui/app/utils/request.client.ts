@@ -1,7 +1,10 @@
 import axios from "axios";
-
 //@ts-ignore
-export const BASE_URL =  window.ENV.BASE_URL || 'http://localhost:9999';
+export const BASE_URL =  window.ENV.BASE_URL || 'http://localhost:3000';
 
-axios.defaults.baseURL = BASE_URL;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+const instance = axios.create({
+    baseURL: BASE_URL,
+});
+instance.defaults.headers['Content-Type'] = 'application/json';
+
+export default instance;
