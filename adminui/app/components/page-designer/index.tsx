@@ -5,7 +5,7 @@ import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import classNames from "classnames";
 import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, X} from "react-feather";
-import {showDeleteAlert} from "~/utils/utils";
+import {handleSaveResult, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import { MINI_APP_HEADER } from "./controls/MiniAppHeader";
 import { POP_ADVERTISE } from "./controls/PopAdvertise";
 import {AnimatePresence, motion} from "framer-motion";
@@ -206,7 +206,13 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                     <Button disabled={saving} onClick={()=>{
                         setSaving(true);
                         if(onDataSaved) {
-                            onDataSaved(pages).then(()=>setSaving(false));
+                            onDataSaved(pages).then(()=>{
+                                setSaving(false);
+                                showToastSuccess('保存成功！');
+                            }).catch(e=>{
+                                setSaving(false);
+                                showToastError('保存失败');
+                            });
                         }
                     }}>保存</Button>
                 </Col>

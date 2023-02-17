@@ -20,6 +20,7 @@ import {
 } from "~/utils/request.server";
 import {useFetchers, useLoaderData} from "@remix-run/react";
 import axios from "~/utils/request.client";
+import {sessionStorage} from '~/utils/auth.server';
 
 export const ErrorBoundary = defaultRouteErrorBoundary;
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -64,8 +65,8 @@ const DiyPage = (props:any) => {
     const [pages, setPages] = useState<any>([]);
 
     useEffect(()=>{
-        registers(null);
-        let _pages = appData.pages ?? [
+        registers(appData.module);
+        let _pages = (appData.pages && appData.pages.length > 0) ? appData.pages : [
             {
                 id: 0,
                 controls: [{key: MINI_APP_HEADER, data: defaultAppHeaderData}],
