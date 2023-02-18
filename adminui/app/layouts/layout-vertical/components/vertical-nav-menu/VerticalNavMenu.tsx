@@ -34,7 +34,7 @@ const VerticalNavMenu = (props:any) => {
         wheelPropagation: false,
     }
     const app = rootLoaderData?.app ? JSON.parse(rootLoaderData?.app) : null;
-    console.log('root loader data is',rootLoaderData);
+    console.log('root loader data perms is',rootLoaderData.userInfo.perms);
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
             !isVerticalMenuCollapsed || (isVerticalMenuCollapsed) ? 'expanded':'', skin === 'dark' ? 'menu-dark':'menu-light')}
