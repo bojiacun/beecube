@@ -35,6 +35,9 @@ export const theme = {
     customizer: true,
     enableScrollToTop: true,
   },
+  userInfo: {
+    perms: []
+  }
 };
 
 // 主题配置

@@ -171,10 +171,11 @@ const loaderCss: CSSProperties = {
     zIndex: '999999'
 };
 export default function App() {
+    const data = useLoaderData();
+    theme.userInfo = data.userInfo;
     const [themeContext, setThemeContext] = useState(theme);
     const navigate = useNavigate();
     const location = useLocation();
-    const data = useLoaderData();
     const [loading, setLoading] = useState(false);
     const outlet = useOutlet();
 

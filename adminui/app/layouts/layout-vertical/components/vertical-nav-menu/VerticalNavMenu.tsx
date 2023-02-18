@@ -34,7 +34,6 @@ const VerticalNavMenu = (props:any) => {
         wheelPropagation: false,
     }
     const app = rootLoaderData?.app ? JSON.parse(rootLoaderData?.app) : null;
-    console.log('root loader data perms is',rootLoaderData.userInfo.perms);
     return (
         <div className={classNames('main-menu menu-fixed menu-accordion menu-shadow',
             !isVerticalMenuCollapsed || (isVerticalMenuCollapsed) ? 'expanded':'', skin === 'dark' ? 'menu-dark':'menu-light')}
@@ -61,7 +60,7 @@ const VerticalNavMenu = (props:any) => {
             <div className={classNames("shadow-bottom", shallShadowBottom ? 'd-block':'')} />
 
             <PerfectScrollbar onScrollY={evt => setShallShadowBottom(evt.scrollTop > 0)} className={'main-menu-content scroll-area'} component={'div'} options={perfectScrollbarSettings}>
-                <VerticalNavMenuItems startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} className={'navigation navigation-main'} items={rootLoaderData?.userInfo.perms} />
+                <VerticalNavMenuItems startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} className={'navigation navigation-main'} items={theme.userInfo.perms} />
             </PerfectScrollbar>
         </div>
     );
