@@ -102,22 +102,22 @@ const LoginPage = () => {
                         <Card.Text>
                             请登录您的帐户开始体验
                         </Card.Text>
-                        <Alert variant='primary' show style={{padding: 0}}>
-                            <div className="alert-body font-small-2">
-                                <p>
-                                    <small className="mr-50"><span
-                                        className="font-weight-bold">管理员:</span> admin@demo.com 密码: admin</small>
-                                </p>
-                                <p>
-                                    <small className="mr-50"><span
-                                        className="font-weight-bold">客户:</span> client@demo.com 密码: client</small>
-                                </p>
-                            </div>
-                            <OverlayTrigger placement={'top'}
-                                            overlay={<Tooltip id={'help'}>管理员和客户账号登录后体验不一样哦</Tooltip>}>
-                                <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />
-                            </OverlayTrigger>
-                        </Alert>
+                        {/*<Alert variant='primary' show style={{padding: 0}}>*/}
+                        {/*    <div className="alert-body font-small-2">*/}
+                        {/*        <p>*/}
+                        {/*            <small className="mr-50"><span*/}
+                        {/*                className="font-weight-bold">管理员:</span> admin@demo.com 密码: admin</small>*/}
+                        {/*        </p>*/}
+                        {/*        <p>*/}
+                        {/*            <small className="mr-50"><span*/}
+                        {/*                className="font-weight-bold">客户:</span> client@demo.com 密码: client</small>*/}
+                        {/*        </p>*/}
+                        {/*    </div>*/}
+                        {/*    <OverlayTrigger placement={'top'}*/}
+                        {/*                    overlay={<Tooltip id={'help'}>管理员和客户账号登录后体验不一样哦</Tooltip>}>*/}
+                        {/*        <HelpCircle size={18} className='position-absolute' style={{top: 10, right: 10}} />*/}
+                        {/*    </OverlayTrigger>*/}
+                        {/*</Alert>*/}
                         {loaderData.error && <Alert variant='danger'>
                             <div className="alert-body font-small-2">
                                 <p>
