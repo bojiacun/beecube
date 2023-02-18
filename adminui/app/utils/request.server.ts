@@ -2,6 +2,7 @@ import {LoginedUser, requireAuthenticated, sessionStorage} from "~/utils/auth.se
 import {json, RequestInfo} from "@remix-run/node";
 import {showToastError} from "~/utils/utils";
 
+console.log(process.env);
 export const BASE_URL =  process.env.BASE_URL || 'http://localhost:9999';
 export const LOGIN_SUCCESS_URL =  process.env.LOGIN_SUCCESS_URL || '/';
 export const LOGIN_URL = process.env.LOGIN_URL || '/login';

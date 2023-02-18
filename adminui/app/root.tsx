@@ -200,10 +200,6 @@ export default function App() {
         window.navigate = navigate;
     }, []);
 
-    useEffect(() => {
-        // startPageLoading();
-    }, [location.pathname]);
-
 
     // 设置主题颜色
     const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
@@ -225,7 +221,6 @@ export default function App() {
         //@ts-ignore
         window.theme = theme;
     }
-
 
     return (
         <html lang="cn">
