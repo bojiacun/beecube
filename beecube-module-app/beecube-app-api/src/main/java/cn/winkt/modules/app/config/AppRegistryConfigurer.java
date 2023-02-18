@@ -65,10 +65,9 @@ public class AppRegistryConfigurer implements ApplicationRunner {
             return null;
         }
         AppModule appModule = new AppModule();
-        byte[] manifestBuffer = new byte[(int) manifestResource.getFile().length()];
-        IOUtils.readFully(manifestResource.getInputStream(), manifestBuffer);
-        manifestResource.getInputStream().close();
-        AppManifest appManifest = JSONObject.parseObject(new String(manifestBuffer), AppManifest.class);
+        InputStream manifestInputStream = manifestResource.getInputStream();
+        AppManifest appManifest = JSONObject.parseObject(manifestInputStream, AppManifest.class);
+        manifestInputStream.close();
         appModule.setIdentify(appManifest.getIdentify());
         appModule.setName(appManifest.getName());
         appModule.setDescription(appManifest.getDescription());
@@ -86,7 +85,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
         appModule.setSupportH5(NumberUtils.toInt(appManifest.getSupportH5(), 0));
         appModule.setSupportDouyin(NumberUtils.toInt(appManifest.getSupportDouyin(), 0));
         appModule.setVersion(appManifest.getVersion());
-        appModule.setManifest(new String(manifestBuffer));
+        appModule.setManifest(JSONObject.toJSONString(appManifest));
         return appModule;
     };
 }
