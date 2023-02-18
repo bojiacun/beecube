@@ -6,23 +6,10 @@ import {LoginedUser, UserInfo} from "~/utils/auth.server";
 import {useEffect, useState} from "react";
 
 const UserDropdown = () => {
-    const [userData, setUserData] = useState<UserInfo>();
     const rootLoaderData = useLoaderData();
     const logoutFetcher = useFetcher();
-    const userFetcher = useFetcher<LoginedUser>();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        // @ts-ignore
-        userFetcher.load(window.ENV.USER_INFO_URL);
-    }, []);
-
-    useEffect(() => {
-        if (userFetcher.type === 'done') {
-            setUserData(userFetcher.data.userInfo);
-        }
-    }, [userFetcher.type]);
-
+    const userData = rootLoaderData.userInfo;
 
     const dropdownTitle = (
         <>
