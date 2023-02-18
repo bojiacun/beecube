@@ -157,7 +157,7 @@ const AppList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'console')} target={'_blank'}>
+                        <a href={'#'} onClick={()=>handleOnAction(row, 'console')}>
                             {entryFetcher.state === 'submitting' ? '进入中':'进入后台'}
                         </a>
                         <span className={'divider'}/>
