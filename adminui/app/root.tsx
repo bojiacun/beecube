@@ -37,8 +37,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons';
 import {requireAuthenticated} from "~/utils/auth.server";
+import ServerEnv from "~/env";
 library.add(fas, far);
-
 
 registerLocale('zh-cn', zhCN);
 setDefaultLocale('zh-cn');
@@ -64,12 +64,12 @@ export async function loader({request}:any) {
         from: session.get("FROM"),
         app: session.get("APP"),
         ENV: {
-            BASE_URL: process.env.BASE_URL,
-            API_BASE_URL: process.env.API_BASE_URL,
-            LOGIN_SUCCESS_URL: process.env.LOGIN_SUCCESS_URL,
-            LOGIN_URL: process.env.LOGIN_URL,
-            LOGOUT_URL: process.env.LOGOUT_URL,
-            USER_INFO_URL: process.env.USER_INFO_URL,
+            BASE_URL: ServerEnv.BASE_URL,
+            API_BASE_URL: ServerEnv.API_BASE_URL,
+            LOGIN_SUCCESS_URL: ServerEnv.LOGIN_SUCCESS_URL,
+            LOGIN_URL: ServerEnv.LOGIN_URL,
+            LOGOUT_URL: ServerEnv.LOGOUT_URL,
+            USER_INFO_URL: ServerEnv.USER_INFO_URL,
         },
     });
 }
