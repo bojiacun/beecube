@@ -6,6 +6,7 @@ import cn.winkt.modules.app.vo.AppModule;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jeecg.common.api.CommonAPI;
@@ -74,7 +75,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
 
         ClassPathResource logoResource = new ClassPathResource("logo.jpeg");
         InputStream imageStream = logoResource.getInputStream();
-        byte[] buffer = new byte[(int) logoResource.getFile().length()];
+        byte[] buffer = new byte[0];
         IOUtils.readFully(imageStream, buffer);
         imageStream.close();
         appModule.setLogo("data:image/jpeg;base64," + new String(Base64.encodeBase64(buffer)));
