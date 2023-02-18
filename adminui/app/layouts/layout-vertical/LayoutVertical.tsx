@@ -37,14 +37,6 @@ const LayoutVertical: FC<LayoutVerticalProps> = (props:any) => {
 
     const {navbarType, footerType, isVerticalMenuCollapsed, isNavMenuHidden, navbarBackgroundColor, enableScrollToTop} = useAppConfig(theme);
     const {layoutClasses, navbarTypeClass, overlayClasses, footerTypeClass} = useVerticalLayout(navbarType, footerType, 'xl', isVerticalMenuCollapsed);
-    //检验用户是否登录
-    useEffect(()=> {
-        //@ts-ignore
-        window.setCurrentLink = (pathname: string) => {
-            // @ts-ignore
-            document.getElementById('link-' + pathname).classList.add('active');
-        }
-    }, []);
 
     return (
         <div className={classNames('vertical-layout h-100', layoutClasses)} data-col={isNavMenuHidden ? '1-column': null}>
