@@ -1,4 +1,4 @@
-import {ActionFunction, redirect} from "@remix-run/node";
+import {ActionFunction, json, redirect} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import {sessionStorage} from "~/utils/auth.server";
 import _ from 'lodash';
@@ -44,5 +44,6 @@ export const action: ActionFunction = async ({request}) => {
     const perms = userInfo!.perms;
     //从用户的可用菜单中取出第一个菜单并重定向到该菜单地址
     const url = perms == null ? '/': perms[1].route;
-    return redirect(url!);
+    // return redirect(url!);
+    return json({redirectTo: url, app: app, perms: perms});
 }

@@ -2,12 +2,20 @@ import {Image, Dropdown, NavLink} from "react-bootstrap";
 import classNames from "classnames";
 import {User, Settings, LogOut, ArrowLeft} from 'react-feather';
 import {useFetcher, useLoaderData, useNavigate} from "@remix-run/react";
+import {useEffect} from "react";
 
 const UserDropdown = () => {
     const rootLoaderData = useLoaderData();
     const logoutFetcher = useFetcher();
     const navigate = useNavigate();
     const userData = rootLoaderData.userInfo.userInfo;
+
+    useEffect(() => {
+        if (logoutFetcher.data && logoutFetcher.type === 'done') {
+            //重新进入
+            navigate(logoutFetcher.data.redirectTo);
+        }
+    }, [logoutFetcher.state]);
 
     const dropdownTitle = (
         <>

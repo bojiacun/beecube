@@ -1,13 +1,11 @@
 import {useEffect, useState} from "react";
-import {useFetcher, useLoaderData} from "@remix-run/react";
+import {useFetcher, useLoaderData, useNavigate} from "@remix-run/react";
 import {
     DefaultListSearchParams,
     emptySortFunc, handleResult,
     headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
-    showToastError,
-    showToastSuccess
 } from "~/utils/utils";
 import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -22,25 +20,19 @@ const AppList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const navigate = useNavigate();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-    const disableFetcher = useFetcher();
-    const enableFetcher = useFetcher();
     const entryFetcher = useFetcher();
-
-
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
     }
-
     useEffect(() => {
         if (searchFetcher.type === 'done' && searchFetcher.data) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
-
-
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             stopPageLoading();
@@ -48,31 +40,12 @@ const AppList = (props: any) => {
             loadData();
         }
     }, [deleteFetcher.state]);
-
-
-    useEffect(() => {
-        if (disableFetcher.data && disableFetcher.type === 'done') {
-            stopPageLoading();
-            handleResult(disableFetcher.data, '冻结成功');
-            loadData();
-        }
-    }, [disableFetcher.state]);
-
-    useEffect(() => {
-        if (enableFetcher.data && enableFetcher.type === 'done') {
-            stopPageLoading();
-            handleResult(enableFetcher.data, '解冻成功');
-            loadData();
-        }
-    }, [enableFetcher.state]);
-
-
     useEffect(() => {
         if (entryFetcher.data && entryFetcher.type === 'done') {
             //重新进入
-
+            navigate(entryFetcher.data.redirectTo);
         }
-    }, [enableFetcher.state]);
+    }, [entryFetcher.state]);
 
 
     const handleOnAction = (row: any, e: any) => {
