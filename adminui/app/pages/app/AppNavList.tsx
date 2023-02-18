@@ -156,7 +156,7 @@ const AppNavList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={()=>handleOnAction(row, 'edit')}> 编辑 </a>
+                        <Button variant={'link'} onClick={()=>handleOnAction(row, 'edit')}>编辑</Button>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
