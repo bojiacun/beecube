@@ -2,20 +2,14 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
-    emptySortFunc, handleResult,
-    headerSortingClasses,
+    handleResult,
     PageSizeOptions,
     showDeleteAlert,
-    showToastError,
-    showToastSuccess
 } from "~/utils/utils";
 import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import AppEdit from "~/pages/app/AppEdit";
-import {Delete, Edit, MoreVertical, User} from "react-feather";
-import GoodsEditor from "~/pages/paimai/GoodsEditor";
 import AppNavEdit from "~/pages/app/AppNavEdit";
 
 
@@ -145,15 +139,6 @@ const AppNavList = (props: any) => {
                     </div>
                 );
             }
-        },
-        {
-            text: '创建时间',
-            dataField: 'createTime',
-            headerStyle: {width: 200},
-            sort: true,
-            onSort: handleSort,
-            headerSortingClasses,
-            sortFunc: emptySortFunc
         },
         {
             text: '状态',
