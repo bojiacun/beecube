@@ -13,7 +13,7 @@ let ServerEnv = {
 if (process.env.NODE_ENV === 'development') {
 
 } else {
-
+    ServerEnv.AXIOS_BASE_URL = 'https://beecube.winkt.cn';
 }
 
 
