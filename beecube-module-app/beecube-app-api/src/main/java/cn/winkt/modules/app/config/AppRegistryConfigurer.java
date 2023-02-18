@@ -61,7 +61,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
     }
     protected AppModule buildModule() throws IOException {
         ClassPathResource manifestResource = new ClassPathResource("manifest.json");
-        if(!manifestResource.exists()) {
+        if(!manifestResource.exists() || !manifestResource.isReadable()) {
             return null;
         }
         AppModule appModule = new AppModule();
