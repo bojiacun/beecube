@@ -23,7 +23,7 @@ const UserDropdown = () => {
     );
     const logout = () => {
         // @ts-ignore
-        logoutFetcher.load(window.ENV.LOGOUT_URL);
+        logoutFetcher.submit({}, {action: window.ENV.LOGOUT_URL, method: 'post'});
     }
     const navigateToAccountSettings = () => {
         navigate('/account/settings');
