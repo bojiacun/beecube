@@ -75,8 +75,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
 
         ClassPathResource logoResource = new ClassPathResource("logo.jpeg");
         InputStream imageStream = logoResource.getInputStream();
-        byte[] buffer = new byte[0];
-        IOUtils.readFully(imageStream, buffer);
+        byte[] buffer = IOUtils.toByteArray(imageStream);
         imageStream.close();
         appModule.setLogo("data:image/jpeg;base64," + new String(Base64.encodeBase64(buffer)));
 
