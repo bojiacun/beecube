@@ -5,6 +5,7 @@ import java.util.List;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.StringValue;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.config.TenantContext;
@@ -30,6 +31,7 @@ import net.sf.jsqlparser.expression.LongValue;
  */
 @Configuration
 @MapperScan(value={"org.jeecg.modules.**.mapper*", "cn.winkt.modules.**.mapper*"})
+@Slf4j
 public class MybatisPlusSaasConfig {
     /**
      * tenant_id 字段名
@@ -42,7 +44,7 @@ public class MybatisPlusSaasConfig {
     public static final List<String> TENANT_TABLE = new ArrayList<String>();
     public static final List<String> APP_TABLE = new ArrayList<String>();
 
-    public static final String APP_TABLE_REGX = "beecube_";
+    public static final String APP_TABLE_REGX = "beecube";
 
     static {
 //        TENANT_TABLE.add("demo");
@@ -75,15 +77,14 @@ public class MybatisPlusSaasConfig {
             }
             @Override
             public boolean ignoreTable(String tableName) {
+                log.info("自动SaaS注入AppId，tableName是 {}", tableName);
                 for(String temp: APP_TABLE){
                     if(temp.equalsIgnoreCase(tableName)){
                         return false;
                     }
                 }
-                if(tableName.startsWith(APP_TABLE_REGX)) {
-                    return false;
-                }
-                return true;
+                log.info("自动SaaS注入AppId，tableName是 {} {}", APP_TABLE_REGX, tableName.startsWith(APP_TABLE_REGX));
+                return !tableName.startsWith(APP_TABLE_REGX);
             }
         }));
 
