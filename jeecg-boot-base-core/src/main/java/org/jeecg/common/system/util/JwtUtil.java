@@ -28,6 +28,7 @@ import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.LoginType;
+import org.springframework.http.HttpStatus;
 
 /**
  * @Author Scott
@@ -49,13 +50,13 @@ public class JwtUtil {
     public static void responseError(ServletResponse response, Integer code, String errorMsg) {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		// issues/I4YH95浏览器显示乱码问题
-		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.setHeader("Content-type", "application/json; charset=UTF-8");
         Result<Object> jsonResult = Result.error(code, errorMsg);
         OutputStream os = null;
         try {
             os = httpServletResponse.getOutputStream();
 			httpServletResponse.setCharacterEncoding("UTF-8");
-			httpServletResponse.setStatus(code);
+			httpServletResponse.setStatus(HttpStatus.OK.value());
             os.write(new ObjectMapper().writeValueAsString(jsonResult).getBytes("UTF-8"));
             os.flush();
             os.close();
