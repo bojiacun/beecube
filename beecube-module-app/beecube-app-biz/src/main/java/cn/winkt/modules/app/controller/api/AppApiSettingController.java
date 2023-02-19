@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/app/api/settings")
-public class AppSettingController {
+public class AppApiSettingController {
 
     @Resource
     IAppSettingService appSettingService;
