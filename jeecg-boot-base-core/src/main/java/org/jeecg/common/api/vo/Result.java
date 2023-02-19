@@ -82,7 +82,7 @@ public class Result<T> implements Serializable {
 		r.setSuccess(true);
 		r.setCode(CommonConstant.SC_OK_200);
 		//Result OK(String msg)方法会造成兼容性问题 issues/I4IP3D
-		r.setResult((T) msg);
+		r.setResult(null);
 		r.setMessage(msg);
 		return r;
 	}

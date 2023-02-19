@@ -50,7 +50,7 @@ public class JwtUtil {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		// issues/I4YH95浏览器显示乱码问题
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
-        Result jsonResult = new Result(code, errorMsg);
+        Result<Object> jsonResult = Result.error(code, errorMsg);
         OutputStream os = null;
         try {
             os = httpServletResponse.getOutputStream();
