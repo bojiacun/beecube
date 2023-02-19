@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import "windi.css";
 import './app.scss';
 import configStore from "./store";
-import {setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
+import {setContext, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
 import request from './lib/request';
 
@@ -22,8 +22,14 @@ class App extends Component<PropsWithChildren> {
   onLaunch(options) {
     let {context} = store.getState();
     context.referer = options;
-    request.get('/app/settings/all').then(res=>{
-      console.log('settings is',res);
+    Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all')]).then(reses=>{
+      let settings = reses[0].data.result;
+      let dist = {};
+      settings.forEach(item=>dist[item.settingKey] = item.settingValue);
+      context.settings = dist;
+      context.tabs = reses[1].data.result;
+      store.dispatch(setContext(context));
+      store.dispatch(setPageLoading(false));
     });
   }
 

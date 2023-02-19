@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-commonjs
 let baseUrl = "";
 if(process.env.NODE_ENV === 'development') {
-    baseUrl = "http://localhost:9999";
-    // baseUrl = "https://mdmx.winkt.cn";
+    // baseUrl = "http://localhost:9999";
+    baseUrl = "https://api.beecube.winkt.cn";
 }
 else {
     baseUrl = "https://localhost:9999";

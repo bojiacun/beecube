@@ -1,3 +1,4 @@
+
 export interface SiteInfo {
   name: string;
   appid: string;
@@ -19,6 +20,17 @@ export declare interface LatLng {
   lng: number
 }
 
+export declare interface TabBarItem {
+  selected: boolean,
+  selectedColor: string,
+  color: string,
+  iconPath: string,
+  selectedIconPath: string,
+  url: string,
+  text: string,
+  additional?: boolean,
+}
+
 export declare interface Context {
   settings: any,
   siteInfo: SiteInfo | null,
@@ -34,6 +46,7 @@ export declare interface Context {
   district?: string;
   districtId?: string;
   headerHeight?: number;
+  tabs: TabBarItem[];
 }
 
 const context: Context = {
@@ -50,6 +63,7 @@ const context: Context = {
   cityId: undefined,
   district: undefined,
   districtId: undefined,
+  tabs: [],
 }
 
 export default context;
