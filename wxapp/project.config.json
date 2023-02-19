@@ -4,7 +4,7 @@
   "description": "汇智拍卖",
   "appid": "wx6a459460d394f202",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "compileHotReLoad": false,

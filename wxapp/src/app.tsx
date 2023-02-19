@@ -23,6 +23,7 @@ class App extends Component<PropsWithChildren> {
     let {context} = store.getState();
     context.referer = options;
     Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all')]).then(reses=>{
+      console.log(reses);
       let settings = reses[0].data.result;
       let dist = {};
       settings.forEach(item=>dist[item.settingKey] = item.settingValue);
