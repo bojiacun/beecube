@@ -10,7 +10,7 @@ const instance = axios.create({
   baseURL: API_URL,
   timeout: 10000,
   adapter: TaroAdapter, // add this line，添加这一行使用taroAdapter
-  headers: {'X-APP-ID': siteinfo.appId},
+  headers: {'X-App-Id': siteinfo.appId},
 });
 
 const hanldeOnResponseError = (error:any) => {
