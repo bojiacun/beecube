@@ -6,6 +6,7 @@ import java.util.List;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
 import net.sf.jsqlparser.expression.StringValue;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.config.TenantContext;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.util.oConvertUtils;
@@ -41,6 +42,8 @@ public class MybatisPlusSaasConfig {
     public static final List<String> TENANT_TABLE = new ArrayList<String>();
     public static final List<String> APP_TABLE = new ArrayList<String>();
 
+    public static final String APP_TABLE_REGX = "beecube_";
+
     static {
 //        TENANT_TABLE.add("demo");
 
@@ -49,6 +52,7 @@ public class MybatisPlusSaasConfig {
 //        tenantTable.add("sys_permission");
 //        tenantTable.add("sys_depart");
         APP_TABLE.add("beecube_app_settings");
+        APP_TABLE.add("beecube_app_navs");
         APP_TABLE.add("beecube_app_members");
     }
 
@@ -75,6 +79,9 @@ public class MybatisPlusSaasConfig {
                     if(temp.equalsIgnoreCase(tableName)){
                         return false;
                     }
+                }
+                if(tableName.startsWith(APP_TABLE_REGX)) {
+                    return false;
                 }
                 return true;
             }

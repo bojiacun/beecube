@@ -66,10 +66,7 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 	 @ApiOperation(value="应用配置表-应用所有配置", notes="应用配置表-应用所有配置")
 	 @GetMapping(value = "/all")
 	 public Result<?> queryAllByAppId() {
-		 LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();
-		 queryWrapper.eq(AppSetting::getAppId, AppContext.getApp());
-
-		 List<AppSetting> pageList = appSettingService.list(queryWrapper);
+		 List<AppSetting> pageList = appSettingService.list();
 		 return Result.OK(pageList);
 	 }
 	/**
