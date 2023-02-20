@@ -42,9 +42,9 @@ import io.swagger.annotations.ApiOperation;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="围观记录表")
+@Api(tags="关注记录表")
 @RestController
-@RequestMapping("/paimai/goodsFollow")
+@RequestMapping("/paimai/follows")
 public class GoodsFollowController extends JeecgController<GoodsFollow, IGoodsFollowService> {
 	@Autowired
 	private IGoodsFollowService goodsFollowService;

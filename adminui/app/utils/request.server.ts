@@ -154,15 +154,15 @@ export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 
 
-export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performance/list`;
-export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performance/add`;
-export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performance/edit`;
-export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performance/delete`;
+export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;
+export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performances/add`;
+export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performances/edit`;
+export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performances/delete`;
 
-export const API_PAIMAI_AUCTION_LIST = `${BASE_URL}/paimai/auction/list`;
-export const API_PAIMAI_AUCTION_ADD = `${BASE_URL}/paimai/auction/add`;
-export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auction/edit`;
-export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auction/delete`;
+export const API_PAIMAI_AUCTION_LIST = `${BASE_URL}/paimai/auctions/list`;
+export const API_PAIMAI_AUCTION_ADD = `${BASE_URL}/paimai/auctions/add`;
+export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auctions/edit`;
+export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 
 export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;

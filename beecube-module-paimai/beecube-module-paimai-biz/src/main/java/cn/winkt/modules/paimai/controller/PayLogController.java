@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="微信支付记录")
 @RestController
-@RequestMapping("/paimai/payLog")
+@RequestMapping("/paimai/paylogs")
 public class PayLogController extends JeecgController<PayLog, IPayLogService> {
 	@Autowired
 	private IPayLogService payLogService;
