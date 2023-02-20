@@ -15,8 +15,7 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import GoodsEditor from "~/pages/paimai/GoodsEditor";
 import FigureImage from "react-bootstrap/FigureImage";
-
-
+import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 
 
 const GoodsList = (props: any) => {
@@ -96,9 +95,9 @@ const GoodsList = (props: any) => {
             text: '预览图',
             dataField: '',
             isDummyField: true,
-            formatter: (cell:any, row:any) => {
+            formatter: (cell: any, row: any) => {
                 let previewUrl = row.images?.split(',')[0];
-                return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
+                return <FigureImage src={previewUrl} style={{width: 60, height: 60}}/>
             }
         },
         {
@@ -124,13 +123,33 @@ const GoodsList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>出价记录</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
+                        <span className={'divider'}/>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'views'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>围观记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'follows'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>关注记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                 );
             }
@@ -163,7 +182,7 @@ const GoodsList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建拍品</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建拍品</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -211,10 +230,10 @@ const GoodsList = (props: any) => {
                 </div>
             </Card>
 
-            {editModal && <GoodsEditor model={editModal} onHide={()=>{
+            {editModal && <GoodsEditor model={editModal} onHide={() => {
                 setEditModal(null);
                 loadData();
-            }} />}
+            }}/>}
         </>
     );
 }
