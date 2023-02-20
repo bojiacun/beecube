@@ -1,11 +1,6 @@
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, FormGroup, FormLabel} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {json, LoaderFunction} from "@remix-run/node";
-import {requireAuthenticated} from "~/utils/auth.server";
-import _ from "lodash";
-import querystring from "querystring";
-import {DefaultListSearchParams, handleSaveResult} from "~/utils/utils";
-import {API_USER_INFO, requestWithToken} from "~/utils/request.server";
+import {handleSaveResult} from "~/utils/utils";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import * as Yup from "yup";
 import BootstrapInput from "~/components/form/BootstrapInput";
@@ -28,8 +23,7 @@ const UserProfileEditor = () => {
     }, [postFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
-        console.log(values);
-        postFetcher.submit({userInfo, ...values}, {method: 'put', action:'/system/users/edit'});
+        postFetcher.submit({userInfo, ...values}, {method: 'put', action:'/system/users/profile'});
     }
 
     return (
@@ -43,7 +37,10 @@ const UserProfileEditor = () => {
                         <BootstrapInput  label={'用户姓名'} name={'realname'} />
                         <BootstrapInput  label={'Email'} name={'email'} disabled={true} />
                         <BootstrapInput  label={'手机号'} name={'phone'} disabled={true} />
-                        <FileBrowserInput name={'avatar'} type={1} />
+                        <FormGroup>
+                            <FormLabel htmlFor={'avatar'}>用户头像</FormLabel>
+                            <FileBrowserInput name={'avatar'} type={1} multi={false} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>

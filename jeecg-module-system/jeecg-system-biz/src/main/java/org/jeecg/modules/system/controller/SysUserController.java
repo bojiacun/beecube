@@ -189,6 +189,26 @@ public class SysUserController {
 		return result;
 	}
 
+    @RequestMapping(value = "/profile", method = {RequestMethod.PUT,RequestMethod.POST})
+    public Result<SysUser> updateProfile(@RequestBody JSONObject jsonObject) {
+        Result<SysUser> result = new Result<SysUser>();
+        SysUser sysUser = sysUserService.getById(jsonObject.getString("id"));
+        if(sysUser == null) {
+            result.error500("未找到对应实体");
+        }
+        else {
+            SysUser user = JSON.parseObject(jsonObject.toJSONString(), SysUser.class);
+            sysUser.setAvatar(user.getAvatar());
+            sysUser.setRealname(user.getRealname());
+            sysUser.setPhone(user.getPhone());
+            sysUser.setEmail(user.getEmail());
+
+            sysUserService.updateById(sysUser);
+            result.success("修改成功!");
+        }
+        return result;
+    }
+
     //@RequiresRoles({"admin"})
     //@RequiresPermissions("system:user:edit")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})

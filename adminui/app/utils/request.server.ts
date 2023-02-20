@@ -39,6 +39,7 @@ export const API_DEPARTMENT_PERMISSIONS_SAVE = `${BASE_URL}/jeecg-system/sys/per
 export const API_PERMISSION_CURRENT_USER = `${BASE_URL}/jeecg-system/sys/permission/getUserPermissionByToken`;
 
 export const API_USER_EDIT = `${BASE_URL}/jeecg-system/sys/user/edit`;
+export const API_USER_EDIT_PROFILE = `${BASE_URL}/jeecg-system/sys/user/profile`;
 export const API_USER_RESTORE = `${BASE_URL}/jeecg-system/sys/user/putRecycleBin`;
 export const API_USER_UPDATE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/updatePassword`;
 export const API_USER_CHANGE_PASSWORD = `${BASE_URL}/jeecg-system/sys/user/changePassword`;
