@@ -53,7 +53,6 @@ public class MybatisPlusSaasConfig {
 //        tenantTable.add("sys_role");
 //        tenantTable.add("sys_permission");
 //        tenantTable.add("sys_depart");
-        APP_TABLE.add("beecube_apps");
         APP_TABLE.add("beecube_app_diy_pages");
         APP_TABLE.add("beecube_app_members");
         APP_TABLE.add("beecube_app_navs");

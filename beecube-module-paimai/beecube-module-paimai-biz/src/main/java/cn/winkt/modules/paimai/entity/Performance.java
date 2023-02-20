@@ -79,4 +79,8 @@ public class Performance {
     @ApiModelProperty(value = "状态（0下架、1上架）")
 	@Dict(dicCode = "paimai_performance_status")
 	private java.lang.Integer status;
+
+	@Excel(name = "应用ID", width = 15)
+	@ApiModelProperty(value = "应用ID")
+	private java.lang.String appId;
 }
