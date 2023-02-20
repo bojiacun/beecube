@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.paimai.vo.OrderVo;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -69,7 +71,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 								   HttpServletRequest req) {
 		QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
 		Page<GoodsOrder> page = new Page<GoodsOrder>(pageNo, pageSize);
-		IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
+		IPage<OrderVo> pageList = goodsOrderService.queryOrderPage(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	

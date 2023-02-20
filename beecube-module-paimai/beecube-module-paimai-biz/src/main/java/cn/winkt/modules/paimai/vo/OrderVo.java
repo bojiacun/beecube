@@ -10,8 +10,9 @@ public class OrderVo implements Serializable {
     private String id;
     private java.lang.String goodsId;
     private String goodsName;
-    private String goodsImage;
+    private String goodsImages;
     private Integer goodsCount;
+    private Integer goodsType;
     private java.lang.String goodsOfferId;
     private java.lang.String memberId;
     private java.lang.String memberName;
