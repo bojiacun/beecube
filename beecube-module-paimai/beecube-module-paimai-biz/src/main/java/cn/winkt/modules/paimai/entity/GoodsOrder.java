@@ -37,6 +37,9 @@ public class GoodsOrder {
 	@Excel(name = "拍品ID", width = 15)
     @ApiModelProperty(value = "拍品ID")
 	private java.lang.String goodsId;
+	@Excel(name = "拍品数量", width = 15)
+	@ApiModelProperty(value = "拍品数量")
+	private java.lang.Integer goodsCount;
 	@Excel(name = "出价记录ID", width = 15)
 	@ApiModelProperty(value = "出价记录ID")
 	private java.lang.String goodsOfferId;

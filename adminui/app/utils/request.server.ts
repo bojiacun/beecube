@@ -164,6 +164,10 @@ export const API_PAIMAI_AUCTION_ADD = `${BASE_URL}/paimai/auctions/add`;
 export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auctions/edit`;
 export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 
+
+
+export const API_PAIMAI_ORDER_LIST = `${BASE_URL}/paimai/orders/list`;
+
 export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;
 
