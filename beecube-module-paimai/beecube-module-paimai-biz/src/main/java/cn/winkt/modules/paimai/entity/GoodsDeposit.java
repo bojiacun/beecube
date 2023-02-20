@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -67,4 +68,11 @@ public class GoodsDeposit {
 	@Excel(name = "创建人", width = 15)
     @ApiModelProperty(value = "创建人")
 	private java.lang.String createBy;
+	@Excel(name = "应用ID", width = 15)
+	@ApiModelProperty(value = "应用ID")
+	private java.lang.String appId;
+	@Excel(name = "状态（0下架1上架）", width = 15)
+	@ApiModelProperty(value = "状态（0下架1上架）")
+	@Dict(dicCode = "paimai_deposit_status")
+	private java.lang.Integer status;
 }

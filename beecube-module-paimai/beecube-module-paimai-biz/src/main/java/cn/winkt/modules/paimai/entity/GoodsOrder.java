@@ -37,6 +37,9 @@ public class GoodsOrder {
 	@Excel(name = "拍品ID", width = 15)
     @ApiModelProperty(value = "拍品ID")
 	private java.lang.String goodsId;
+	@Excel(name = "出价记录ID", width = 15)
+	@ApiModelProperty(value = "出价记录ID")
+	private java.lang.String goodsOfferId;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)
     @ApiModelProperty(value = "会员ID")
@@ -83,4 +86,7 @@ public class GoodsOrder {
 	@Excel(name = "更新人", width = 15)
     @ApiModelProperty(value = "更新人")
 	private java.lang.String updateBy;
+	@Excel(name = "应用ID", width = 15)
+	@ApiModelProperty(value = "应用ID")
+	private java.lang.String appId;
 }

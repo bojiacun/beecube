@@ -55,4 +55,7 @@ public class GoodsOffer {
 	@Excel(name = "拍品ID", width = 15)
     @ApiModelProperty(value = "拍品ID")
 	private java.lang.String goodsId;
+	@Excel(name = "应用ID", width = 15)
+	@ApiModelProperty(value = "应用ID")
+	private java.lang.String appId;
 }
