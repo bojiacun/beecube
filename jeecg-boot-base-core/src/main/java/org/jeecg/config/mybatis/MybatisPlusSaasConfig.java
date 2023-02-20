@@ -44,7 +44,7 @@ public class MybatisPlusSaasConfig {
     public static final List<String> TENANT_TABLE = new ArrayList<String>();
     public static final List<String> APP_TABLE = new ArrayList<String>();
 
-    public static final String APP_TABLE_REGX = "beecube";
+    public static final List<String> APP_TABLE_REGXS = new ArrayList<>();
 
     static {
 //        TENANT_TABLE.add("demo");
@@ -53,9 +53,14 @@ public class MybatisPlusSaasConfig {
 //        tenantTable.add("sys_role");
 //        tenantTable.add("sys_permission");
 //        tenantTable.add("sys_depart");
-        APP_TABLE.add("beecube_app_settings");
-        APP_TABLE.add("beecube_app_navs");
+        APP_TABLE.add("beecube_apps");
+        APP_TABLE.add("beecube_app_diy_pages");
         APP_TABLE.add("beecube_app_members");
+        APP_TABLE.add("beecube_app_navs");
+        APP_TABLE.add("beecube_app_settings");
+
+        APP_TABLE_REGXS.add("app_");
+        APP_TABLE_REGXS.add("paimai_");
     }
 
 
@@ -77,14 +82,18 @@ public class MybatisPlusSaasConfig {
             }
             @Override
             public boolean ignoreTable(String tableName) {
-                log.info("自动SaaS注入AppId，tableName是 {}", tableName);
                 for(String temp: APP_TABLE){
                     if(temp.equalsIgnoreCase(tableName)){
                         return false;
                     }
                 }
-                log.info("自动SaaS注入AppId，tableName是 {} {}", APP_TABLE_REGX, tableName.startsWith(APP_TABLE_REGX));
-                return !tableName.startsWith(APP_TABLE_REGX);
+                for (String regx : APP_TABLE_REGXS) {
+                    if(tableName.startsWith(regx)) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }));
 
