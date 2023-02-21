@@ -258,10 +258,22 @@ const GoodsList = (props: any) => {
                 loadData();
             }}/>}
 
-            <OfferList show={offersShow} selectedRow={selectedRow} />
-            <DepositList show={depositsShow} selectedRow={selectedRow} />
-            <ViewList show={viewsShow} selectedRow={selectedRow} />
-            <FollowList show={followsShow} selectedRow={selectedRow} />
+            {selectedRow && <OfferList show={offersShow} onHide={()=>{
+                setSelectedRow(null);
+                setOffersShow(false);
+            }} selectedRow={selectedRow} />}
+            {selectedRow && <DepositList show={depositsShow} onHide={()=>{
+                setSelectedRow(null)
+                setDepositsShow(false);
+            }}  selectedRow={selectedRow} />}
+            {selectedRow && <ViewList show={viewsShow} onHide={()=>{
+                setSelectedRow(null)
+                setViewsShow(false);
+            }}  selectedRow={selectedRow} />}
+            {selectedRow && <FollowList show={followsShow} onHide={()=>{
+                setSelectedRow(null)
+                setFollowsShow(false);
+            }}  selectedRow={selectedRow} />}
         </>
     );
 }

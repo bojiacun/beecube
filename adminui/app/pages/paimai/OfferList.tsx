@@ -9,7 +9,7 @@ import FigureImage from "react-bootstrap/FigureImage";
 
 
 const OfferList = (props: any) => {
-    const {show, setUserListShow, selectedRow} = props;
+    const {show, onHide, selectedRow} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, goodsId: selectedRow.id});
     const searchFetcher = useFetcher();
@@ -80,7 +80,7 @@ const OfferList = (props: any) => {
         <Modal
             show={show}
             size={'lg'}
-            onHide={()=>setUserListShow(false)}
+            onHide={onHide}
             centered
             backdrop={'static'}
             aria-labelledby={'edit-modal'}
