@@ -2,8 +2,6 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
-    emptySortFunc,
-    headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
     showToastError,
@@ -18,6 +16,8 @@ import FigureImage from "react-bootstrap/FigureImage";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 import OfferList from "~/pages/paimai/OfferList";
 import DepositList from "~/pages/paimai/DepositList";
+import ViewList from "~/pages/paimai/ViewList";
+import FollowList from "~/pages/paimai/FollowList";
 
 
 const GoodsList = (props: any) => {
@@ -260,6 +260,8 @@ const GoodsList = (props: any) => {
 
             <OfferList show={offersShow} selectedRow={selectedRow} />
             <DepositList show={depositsShow} selectedRow={selectedRow} />
+            <ViewList show={viewsShow} selectedRow={selectedRow} />
+            <FollowList show={followsShow} selectedRow={selectedRow} />
         </>
     );
 }
