@@ -16,6 +16,8 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import GoodsEditor from "~/pages/paimai/GoodsEditor";
 import FigureImage from "react-bootstrap/FigureImage";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
+import OfferList from "~/pages/paimai/OfferList";
+import DepositList from "~/pages/paimai/DepositList";
 
 
 const GoodsList = (props: any) => {
@@ -23,6 +25,11 @@ const GoodsList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [selectedRow, setSelectedRow] = useState<any>();
+    const [viewsShow, setViewsShow] = useState<boolean>(false);
+    const [followsShow, setFollowsShow] = useState<boolean>(false);
+    const [depositsShow, setDepositsShow] = useState<boolean>(false);
+    const [offersShow, setOffersShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -62,6 +69,22 @@ const GoodsList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'offers':
+                setSelectedRow(row);
+                setOffersShow(true);
+                break;
+            case 'deposits':
+                setSelectedRow(row);
+                setDepositsShow(true);
+                break;
+            case 'views':
+                setSelectedRow(row);
+                setViewsShow(true);
+                break;
+            case 'follows':
+                setSelectedRow(row);
+                setFollowsShow(true);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -234,6 +257,9 @@ const GoodsList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }}/>}
+
+            <OfferList show={offersShow} selectedRow={selectedRow} />
+            <DepositList show={depositsShow} selectedRow={selectedRow} />
         </>
     );
 }

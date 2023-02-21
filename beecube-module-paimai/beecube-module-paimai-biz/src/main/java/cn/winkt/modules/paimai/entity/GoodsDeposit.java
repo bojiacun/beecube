@@ -72,7 +72,7 @@ public class GoodsDeposit {
 	@ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;
 	@Excel(name = "状态（0下架1上架）", width = 15)
-	@ApiModelProperty(value = "状态（0下架1上架）")
+	@ApiModelProperty(value = "状态（0未支付1已支付）")
 	@Dict(dicCode = "paimai_deposit_status")
 	private java.lang.Integer status;
 }
