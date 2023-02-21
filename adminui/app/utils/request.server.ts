@@ -183,6 +183,9 @@ export const API_PAIMAI_GOODS_CLASS_EDIT = `${BASE_URL}/paimai/goods/class/edit`
 export const API_PAIMAI_GOODS_CLASS_DELETE = `${BASE_URL}/paimai/goods/class/delete`;
 
 
+export const API_APP_USER_QUERY = `${BASE_URL}/beecube-app/app/users/admin`;
+
+
 export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/list`;
 
 

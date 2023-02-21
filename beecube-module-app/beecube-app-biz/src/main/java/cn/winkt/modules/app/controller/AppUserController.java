@@ -90,6 +90,15 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 		return Result.OK(pageList);
 	}
 
+	 @AutoLog(value = "应用管理员表-查询管理员")
+	 @ApiOperation(value="应用管理员表-查询管理员", notes="应用管理员表-查询管理员")
+	 @GetMapping(value = "/admin")
+	public Result<AppUser> queryAppAdmin(@RequestParam String userId) {
+		QueryWrapper<AppUser> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("userId", userId);
+		return Result.OK(appUserService.getOne(queryWrapper));
+	}
+
 	 /**
 	  * 绑定管理员
 	  */
