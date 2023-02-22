@@ -34,6 +34,7 @@ const WxappSettingsEditor = (props:any) => {
                     <Card.Body>
                         <BootstrapInput label={'APPID'} name={'appid'} placeholder={'微信小程序Appid'} />
                         <BootstrapInput  label={'APPSECRET'} name={'appsecret'}  placeholder={'微信小程序secret'} />
+                        <BootstrapInput  label={'腾讯地图秘钥'} name={'tencentMapKey'}  placeholder={'腾讯地图秘钥'} />
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
