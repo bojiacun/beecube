@@ -1,11 +1,9 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
+import {handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";

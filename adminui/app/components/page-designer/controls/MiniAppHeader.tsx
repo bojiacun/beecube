@@ -84,7 +84,7 @@ const MiniAppHeader = (props: any) => {
     }
 
     return (
-        <div className={'title'} {...rest} style={{...data.style, position: data.basic.fixed == 1 ? 'fixed': 'relative'}}>
+        <div className={'title'} {...rest} style={{...data.style}}>
             <span className={'arrow'}>
                 <ArrowLeft/>
             </span>
