@@ -48,8 +48,7 @@ const TabBar = (props: TabBarProps) => {
     console.log(systemInfo);
 
     return (
-        <View className={classNames(tabStyles.tabbar_box, 'cu-bar tabbar')}
-              style={{backgroundColor: backgroundColor, paddingBottom: Taro.pxTransform(systemInfo.screenHeight - systemInfo.safeArea.bottom)}}>
+        <View className={'flex'} style={{backgroundColor: backgroundColor, paddingBottom: Taro.pxTransform(systemInfo.screenHeight - systemInfo.safeArea.bottom)}}>
             {
                 tabs.map((item: TabBarItem) => {
                     return (
