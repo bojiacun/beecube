@@ -1,24 +1,20 @@
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, formData2Json} from "~/utils/utils";
 import {withPageLoading} from "~/utils/components";
 import diyPageStyleUrl from 'app/styles/diy.css';
-import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
+import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import PageDesigner from "~/components/page-designer";
 import {useEffect, useState} from "react";
 import {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
 import {defaultAppHeaderData, MINI_APP_HEADER} from "~/components/page-designer/controls/MiniAppHeader";
-import {AppLinks} from './links';
 import registers from '~/components/page-designer/registers';
 import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {
-    API_APP_DIY_PAGE_ADD,
-    API_APP_DIY_PAGE_EDIT,
     API_APP_DIY_PAGE_LIST,
-    postFormInit,
     requestWithToken
 } from "~/utils/request.server";
-import {useFetchers, useLoaderData} from "@remix-run/react";
+import {useFetcher, useFetchers, useLoaderData} from "@remix-run/react";
 import axios from "~/utils/request.client";
 import {sessionStorage} from '~/utils/auth.server';
 
@@ -59,6 +55,19 @@ const DiyPage = (props:any) => {
     const appData = useLoaderData();
     const [loading, setLoading] = useState(true);
     const [pages, setPages] = useState<any>([]);
+    const [links, setLinks] = useState<any[]>([]);
+    const searchFetcher = useFetcher();
+
+
+    useEffect(()=>{
+        searchFetcher.load("/app/links");
+    }, []);
+
+    useEffect(() => {
+        if (searchFetcher.type === 'done' && searchFetcher.data) {
+            setLinks(searchFetcher.data);
+        }
+    }, [searchFetcher.state]);
 
     useEffect(()=>{
         registers(appData.module);
@@ -90,7 +99,7 @@ const DiyPage = (props:any) => {
     if(loading) return <></>;
 
     return (
-        <PageDesigner pages={pages} lockPage={true} links={AppLinks} onDataSaved={handleDataSave} />
+        <PageDesigner pages={pages} lockPage={true} links={links} onDataSaved={handleDataSave} />
     );
 }
 

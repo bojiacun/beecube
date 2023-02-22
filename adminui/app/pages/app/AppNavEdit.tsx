@@ -33,9 +33,21 @@ const formSchema = Yup.object().shape({
 
 const AppNavEdit = (props: any) => {
     const {model, onHide} = props;
+    const [links, setLinks] = useState<any[]>([]);
     const postFetcher = useFetcher();
+    const searchFetcher = useFetcher();
     const formikRef = useRef<any>();
 
+
+    useEffect(()=>{
+        searchFetcher.load("/app/links");
+    }, []);
+
+    useEffect(() => {
+        if (searchFetcher.type === 'done' && searchFetcher.data) {
+            setLinks(searchFetcher.data);
+        }
+    }, [searchFetcher.state]);
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
@@ -76,7 +88,7 @@ const AppNavEdit = (props: any) => {
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapInput label={'导航名称'} readOnly={model?.id} name={'title'}/>
-                                        <BootstrapLinkSelector links={AppLinks} label={'链接地址'} name={'url'} />
+                                        <BootstrapLinkSelector links={links} label={'链接地址'} name={'url'} />
                                         <FormGroup>
                                             <FormLabel htmlFor={'icon'}>图标</FormLabel>
                                             <FileBrowserInput name={'icon'} type={1} multi={false} />
