@@ -1,73 +1,70 @@
 import {Component} from "react";
 import PageLoading from "../components/pageloading";
-import StatusBar from "../components/statusbar";
+import StatusBar, {StatusbarProps} from "../components/statusbar";
 import TabBar from "../components/tabbar";
 import {View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
+import styles from './index.module.scss';
 
 // @ts-ignore
-@connect((state:any)=>(
+@connect((state: any) => (
   {
     tabs: state.tabs,
     pageLoading: state.pageLoading,
     systemInfo: state.context.systemInfo,
     settings: state.context.settings,
-    navBarHeight: state.context.navBarHeight,
     context: state.context
   }
 ))
 
-class PageLayout extends Component<any, any> {
+class PageLayout extends Component<PayLayoutProps, any> {
+  state = {
+    pageStyle: {}
+  }
 
-    render() {
-      const {
-        pageLoading,
-        tabs,
-        children,
-        showStatusBar,
-        showTabBar,
-        statusBarProps,
-        style = {},
-        className,
-        loading,
-      } = this.props;
+  componentDidMount() {
+    const {systemInfo} = this.props;
+    this.setState({pageStyle: {paddingBottom: Taro.pxTransform(systemInfo.safeArea.bottom - systemInfo.safeArea.height)}});
+  }
 
-      let menuButtonRect = Taro.getMenuButtonBoundingClientRect();
-      let _statusBarProps = {
-        title: '',
-        titleCenter: true,
-        statusHeight: menuButtonRect.top,
-        navBarHeight: menuButtonRect.height,
-        bgColor: '#ffffff',
-        color: '#000000',
-        hide: false,
-        position: 'sticky',
-        theme: 'light'
-      };
-      _statusBarProps = Object.assign({}, _statusBarProps, statusBarProps);
+  render() {
+    const {
+      pageLoading,
+      tabs,
+      children,
+      showStatusBar = true,
+      showTabBar = false,
+      style = {},
+      className,
+      loading,
+      statusBarProps = {}
+    } = this.props;
 
-      if (!showStatusBar || statusBarProps.hide) {
-        //顶部导航栏显示则增加页面内容PaddingTop
-        // style.paddingTop = _statusBarProps.statusHeight + _statusBarProps.navBarHeight;
-      }
-      style.position = 'relative';
 
-      if(pageLoading || loading) return <PageLoading />;
-      return (
-        <>
-          {showStatusBar && <StatusBar {..._statusBarProps} />}
-          <View style={style} className={className}>
-            {children}
-            {showTabBar && <View style={{height: Taro.pxTransform(100)}}/>}
-            {showTabBar && <TabBar tabs={tabs}/>}
-          </View>
-        </>
-      );
-    }
+    if (pageLoading || loading) return <PageLoading/>;
+
+
+    return (
+      <View className={styles.page} style={this.state.pageStyle}>
+        {showStatusBar && <StatusBar {...statusBarProps} />}
+        <View style={style} className={className}>
+          {children}
+          {showTabBar && <View style={{height: Taro.pxTransform(100)}}/>}
+          {showTabBar && <TabBar tabs={tabs}/>}
+        </View>
+      </View>
+    );
+  }
 
 }
 
+
+export interface PayLayoutProps extends Partial<any> {
+  statusBarProps?: StatusbarProps;
+  showStatusBar?: boolean;
+  showTabBar?: boolean;
+}
 
 
 export default PageLayout

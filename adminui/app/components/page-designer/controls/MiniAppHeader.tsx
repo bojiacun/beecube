@@ -17,6 +17,7 @@ export const defaultAppHeaderData = {
         fontWeight: 1,
         fontStyle: 'normal',
         hide: 0,
+        fixed: 0,
     },
     style: {
         background: '#ffffff',
@@ -46,6 +47,7 @@ const AttributeView: React.FC<any> = (props) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
                                     <BootstrapSwitch label={'隐藏控件'} name={'hide'} />
+                                    <BootstrapSwitch label={'固定标头'} name={'fixed'} />
                                     <BootstrapInput label={'页面标题'} name={'text'} />
                                     <BootstrapSwitch label={'字体加粗'} name={'fontWeight'} />
                                     <BootstrapInput label={'字体颜色'} name={'color'} />
@@ -82,7 +84,7 @@ const MiniAppHeader = (props: any) => {
     }
 
     return (
-        <div className={'title'} {...rest} style={data.style}>
+        <div className={'title'} {...rest} style={{...data.style, position: data.basic.fixed == 1 ? 'fixed': 'relative'}}>
             <span className={'arrow'}>
                 <ArrowLeft/>
             </span>
@@ -95,3 +97,4 @@ const MiniAppHeader = (props: any) => {
 export default function register() {
     registerControl(MINI_APP_HEADER, true, "顶部导航栏", MiniAppHeader, AttributeView, defaultAppHeaderData);
 }
+
