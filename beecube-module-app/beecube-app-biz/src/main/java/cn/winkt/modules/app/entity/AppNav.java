@@ -49,6 +49,11 @@ public class AppNav {
 	@Excel(name = "文本颜色", width = 15)
     @ApiModelProperty(value = "文本颜色")
 	private java.lang.String textColor;
+
+	@Excel(name = "链接地址", width = 15)
+	@ApiModelProperty(value = "链接地址")
+	private java.lang.String url;
+
 	/**激活文本颜色*/
 	@Excel(name = "激活文本颜色", width = 15)
     @ApiModelProperty(value = "激活文本颜色")

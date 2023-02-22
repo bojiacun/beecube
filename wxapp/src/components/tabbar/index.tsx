@@ -1,6 +1,5 @@
 import Taro,{useRouter} from '@tarojs/taro';
 import {Image, Navigator, Text, View} from "@tarojs/components";
-import classNames from "classnames";
 import PropTypes from 'prop-types';
 // @ts-ignore
 import tabStyles from './index.module.scss';
@@ -15,7 +14,7 @@ export declare interface TabBarItem {
     iconPath: string,
     selectedIconPath: string,
     url: string,
-    text: string,
+    title: string,
     additional?: boolean,
 }
 
@@ -45,7 +44,7 @@ const TabBar = (props: TabBarProps) => {
         return <></>
     }
 
-    console.log(systemInfo);
+    console.log(tabs);
 
     return (
         <View className={'flex'} style={{backgroundColor: backgroundColor, paddingBottom: Taro.pxTransform(systemInfo.screenHeight - systemInfo.safeArea.bottom)}}>
@@ -56,13 +55,13 @@ const TabBar = (props: TabBarProps) => {
                             url={item.url}
                             openType={'redirect'}
                             hoverClass="none"
-                            className={classNames('action')}
+                            className={'flex-1'}
                             style={{color: (item.selected ? item.selectedColor : item.color)}}>
                             <View className={tabStyles.tabbar_icon} data-num={cartNum}>
                                 <Image src={item.selected ? utils.resolveUrl(item.selectedIconPath) : utils.resolveUrl(item.iconPath)}/>
                                 {cartNum > 0 && <view className={tabStyles.cartNum}>{cartNum}</view>}
                             </View>
-                            <View style={{marginTop: '12rpx'}}>{item.text}</View>
+                            <View style={{marginTop: '12rpx'}}>{item.title}</View>
                         </Navigator>
                     );
                 })
