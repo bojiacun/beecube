@@ -16,6 +16,8 @@ import BootstrapSelect from "~/components/form/BootstrapSelect";
 import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
 import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
+import {AppLinks} from "~/routes/app/links";
 
 
 const formSchema = Yup.object().shape({
@@ -25,13 +27,13 @@ const formSchema = Yup.object().shape({
     textColor: Yup.string().required('必要字段'),
     textColorActive: Yup.string().required('必要字段'),
     ordernum: Yup.number().required('必要字段'),
+    url: Yup.string().required('必要字段'),
 });
 
 
 const AppNavEdit = (props: any) => {
     const {model, onHide} = props;
     const postFetcher = useFetcher();
-    const modulesFetcher = useFetcher();
     const formikRef = useRef<any>();
 
 
@@ -74,6 +76,7 @@ const AppNavEdit = (props: any) => {
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapInput label={'导航名称'} readOnly={model?.id} name={'title'}/>
+                                        <BootstrapLinkSelector links={AppLinks} label={'链接地址'} name={'url'} />
                                         <FormGroup>
                                             <FormLabel htmlFor={'icon'}>图标</FormLabel>
                                             <FileBrowserInput name={'icon'} type={1} multi={false} />

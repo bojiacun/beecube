@@ -73,6 +73,9 @@ const AppNavList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'edit':
+                setEditModal(row);
+                break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
