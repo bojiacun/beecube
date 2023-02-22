@@ -8,6 +8,28 @@
   "supportDouyin": "0",
   "description": "标准拍卖程序",
   "diy": [],
+  "links": [
+    {
+      "label": "首页",
+      "url": "/pages/index/index"
+    },
+    {
+      "label": "往期拍卖",
+      "url": "/pages/performance/list"
+    },
+    {
+      "label": "参拍记录",
+      "url": "/pages/offers"
+    },
+    {
+      "label": "购物车",
+      "url": "/pages/cart"
+    },
+    {
+      "label": "个人中心",
+      "url": "/pages/my/index"
+    }
+  ],
   "menus": [
     {
       "icon": "",

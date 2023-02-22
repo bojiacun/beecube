@@ -45,6 +45,8 @@ public class AppController extends JeecgController<App, IAppService> {
 	@Autowired
 	private IAppService appService;
 
+	@Resource
+	private IAppModuleService appModuleService;
 
 	/**
 	 * 分页列表查询
@@ -69,6 +71,15 @@ public class AppController extends JeecgController<App, IAppService> {
 		return Result.OK(pageList);
 	}
 
+	@AutoLog(value = "应用实体类-应用前端链接地址")
+	@ApiOperation(value="应用实体类-应用前端链接地址", notes="应用实体类-应用前端链接地址")
+	@GetMapping("/links")
+	public Result<?> appLinks(@RequestParam String id) {
+		App app = appService.getById(id);
+		AppModule appModule = appModuleService.getById(app.getModuleId());
+		JSONObject jsonObject = JSONObject.parseObject(appModule.getManifest());
+		return Result.OK(jsonObject.getJSONObject("links"));
+	}
 
 
 	
