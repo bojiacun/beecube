@@ -225,7 +225,7 @@ const AppNavList = (props: any) => {
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list?.size + 1} 至 {list?.current * list?.size > list?.total ? list?.total : list?.current * list.size} 条</span>
                         </Col>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                             <SinglePagination
