@@ -1,6 +1,7 @@
 import { Component, PropsWithChildren } from 'react'
 import { View, Text } from '@tarojs/components'
 import './index.scss'
+import PageLayout from "../../layouts/PageLayout";
 
 export default class Index extends Component<PropsWithChildren> {
 
@@ -16,9 +17,9 @@ export default class Index extends Component<PropsWithChildren> {
 
   render () {
     return (
-      <View className='text-red-900 text-lg'>
+      <PageLayout>
         <Text>Hello world!</Text>
-      </View>
+      </PageLayout>
     )
   }
 }
