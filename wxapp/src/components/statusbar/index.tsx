@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro';
 import React from "react";
 import styles from './index.module.scss';
 import {useSelector} from "react-redux";
+import classNames from "classnames";
 
 
 export declare interface StatusbarProps {
@@ -64,7 +65,7 @@ const StatusBar = (props: StatusbarProps): any => {
 
 
   return (
-    <View className={styles.status_bar} style={navigatorBarStyle}>
+    <View className={classNames(styles.status_bar, 'bg-white')} style={navigatorBarStyle}>
       {button !== null && button}
       {button === null && pages?.length > 1 &&
         <Image className={'margin-left-sm'} style={imageStyle} src="../../assets/images/backPageImg.png" onClick={goBack}/>}

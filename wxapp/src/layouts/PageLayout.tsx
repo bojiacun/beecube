@@ -6,6 +6,7 @@ import {View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import styles from './index.module.scss';
+import classNames from "classnames";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -23,8 +24,8 @@ class PageLayout extends Component<PayLayoutProps, any> {
   }
 
   componentDidMount() {
-    const {systemInfo} = this.props;
-    this.setState({pageStyle: {paddingBottom: Taro.pxTransform(systemInfo.safeArea.bottom - systemInfo.safeArea.height)}});
+    const {systemInfo, showTabBar = false} = this.props;
+    this.setState({pageStyle: {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))}});
   }
 
   render() {
@@ -43,7 +44,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
     if (pageLoading || loading) return <PageLoading/>;
 
     return (
-      <View className={styles.page} style={this.state.pageStyle}>
+      <View className={classNames(styles.page, 'bg-gray-50')} style={this.state.pageStyle}>
         {showStatusBar && <StatusBar {...statusBarProps} />}
         <View style={style} className={className}>
           {children}
