@@ -28,6 +28,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const appUsers = result.result;
     //应用管理员
     if(appUsers.length == 1) {
+        let result = appUsers[0];
         const appId = result.appId;
         const appResult = await requestWithToken(request)(API_APP_DETAIL+"?id="+appId);
         const app = appResult.result;
