@@ -17,7 +17,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   render () {
     return (
-      <PageLayout statusBarProps={{title: '首页'}}>
+      <PageLayout statusBarProps={{title: '首页'}} showTabBar={true}>
         <Text>Hello world!</Text>
       </PageLayout>
     )

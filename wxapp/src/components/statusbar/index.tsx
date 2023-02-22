@@ -25,8 +25,6 @@ const StatusBar = (props: StatusbarProps): any => {
   const showHome = pages.length > 1;
   const systemInfo = useSelector(({context}) => context.systemInfo);
 
-  console.log(systemInfo);
-
   const mainStyle: any = {width: '100%', zIndex: 99999};
   if (isFixed) {
     mainStyle.position = 'fixed';

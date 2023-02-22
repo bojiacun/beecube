@@ -10,7 +10,6 @@ import styles from './index.module.scss';
 // @ts-ignore
 @connect((state: any) => (
   {
-    tabs: state.tabs,
     pageLoading: state.pageLoading,
     systemInfo: state.context.systemInfo,
     settings: state.context.settings,
@@ -31,7 +30,6 @@ class PageLayout extends Component<PayLayoutProps, any> {
   render() {
     const {
       pageLoading,
-      tabs,
       children,
       showStatusBar = true,
       showTabBar = false,
@@ -44,14 +42,12 @@ class PageLayout extends Component<PayLayoutProps, any> {
 
     if (pageLoading || loading) return <PageLoading/>;
 
-
     return (
       <View className={styles.page} style={this.state.pageStyle}>
         {showStatusBar && <StatusBar {...statusBarProps} />}
         <View style={style} className={className}>
           {children}
-          {showTabBar && <View style={{height: Taro.pxTransform(100)}}/>}
-          {showTabBar && <TabBar tabs={tabs}/>}
+          {showTabBar && <TabBar />}
         </View>
       </View>
     );
