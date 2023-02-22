@@ -6,16 +6,17 @@ import {View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 
-@connect((state:any)=>{
-  return {
+// @ts-ignore
+@connect((state:any)=>(
+  {
     tabs: state.tabs,
     pageLoading: state.pageLoading,
     systemInfo: state.context.systemInfo,
     settings: state.context.settings,
     navBarHeight: state.context.navBarHeight,
     context: state.context
-  };
-},()=>{})
+  }
+))
 
 class PageLayout extends Component<any, any> {
 

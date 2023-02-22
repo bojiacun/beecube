@@ -4,8 +4,8 @@ import classNames from "classnames";
 import PropTypes from 'prop-types';
 // @ts-ignore
 import tabStyles from './index.module.scss';
-import util from '../../utils/we7/util';
-import { Tabs } from '../../global';
+import utils from '../../lib/utils';
+import {useSelector} from "react-redux";
 
 
 export declare interface TabBarItem {
@@ -27,9 +27,10 @@ export declare interface TabBarProps {
 }
 
 const TabBar = (props: TabBarProps) => {
-    const {backgroundColor, cartNum, tabs, onTabChange} = props;
+    const {backgroundColor, cartNum, onTabChange} = props;
+    const tabs = useSelector((state:any) => state.context.tabs);
     const router = useRouter();
-    const switchUrls = Tabs;
+    const switchUrls = tabs.map(item=>item.url);
     const getOpenType = url => {
         if (switchUrls.filter(s => url == s).length > 0) {
             return 'switchTab';
@@ -78,8 +79,8 @@ const TabBar = (props: TabBarProps) => {
                             style={{color: (item.selected ? item.selectedColor : item.color)}}>
                             <View className={tabStyles.tabbar_icon} data-num={cartNum}>
                                 <Image
-                                    src={item.selected ? util.resolveUrl(item.selectedIconPath) : util.resolveUrl(item.iconPath)}/>
-                                {cartNum > 0 && <view className={tabStyles.cartNum}>{{cartNum}}</view>}
+                                    src={item.selected ? utils.resolveUrl(item.selectedIconPath) : utils.resolveUrl(item.iconPath)}/>
+                                {cartNum > 0 && <view className={tabStyles.cartNum}>{cartNum}</view>}
                             </View>
                             <View style={{marginTop: '12rpx'}}>{item.text}</View>
                         </Navigator>

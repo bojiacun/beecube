@@ -1,7 +1,5 @@
 import {Image, Text, View} from "@tarojs/components";
 import Taro, {useRouter} from '@tarojs/taro';
-import { Tabs } from "../../global";
-import util from "../../utils/we7/util";
 import {useEffect, useState} from "react";
 
 
@@ -39,18 +37,12 @@ const StatusBar = (props: StatusbarProps): any => {
         hide,
         position
     } = props;
-    const router = useRouter();
     const [pages, setPages] = useState<any[]>([]);
     const [showHome, setShowHome] = useState<boolean>(false);
 
     useEffect(()=>{
         let _pages = Taro.getCurrentPages();
         setPages(_pages);
-        if(_pages.length <= 1 && router) {
-            if(!util.indexOf(Tabs, router.path)) {
-                setShowHome(true);
-            }
-        }
     }, []);
 
     const mainStyle: any = {width: '100%', background: bgColor, color: color, position: position, top: 0, left: 0, right: 0, zIndex: 99999};
