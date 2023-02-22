@@ -25,8 +25,9 @@ export const loader: LoaderFunction = async ({request}) => {
     let redirectUrl = '/';
     //查询用户是否为某个APP的管理员，如果是直接跳转到应用页面
     let result = await requestWithToken(request)(API_APP_USER_QUERY + '?userId='+userInfo.userInfo.id);
-    result = result.result;
-    if(result) {
+    const appUsers = result.result;
+    //应用管理员
+    if(appUsers.length == 1) {
         const appId = result.appId;
         const appResult = await requestWithToken(request)(API_APP_DETAIL+"?id="+appId);
         const app = appResult.result;
