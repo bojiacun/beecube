@@ -5,14 +5,12 @@ import Taro from '@tarojs/taro';
 
 const MultipleImagesModule = (props: any) => {
     let { style, basic, ...rest } = props;
-
     basic = {...basic};
-
     basic.space = Taro.pxTransform(basic.space);
 
     return (
         <View {...rest} style={style}>
-            <View {...rest} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <View className={'flex items-center justify-center'} {...rest}>
                 <View style={{ flex: 1, marginRight: basic.space}} onClick={()=>utils.gotoLink(basic.url1)}>
                     <FallbackImage src={utils.resolveUrl(basic.image1)} style={{width: '100%'}} width='100%' />
                 </View>
