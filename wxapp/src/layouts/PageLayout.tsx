@@ -25,6 +25,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
 
   componentDidMount() {
     const {systemInfo, showTabBar = false} = this.props;
+    console.log(systemInfo);
     this.setState({pageStyle: {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))}});
   }
 
