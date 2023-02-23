@@ -59,7 +59,7 @@ const TabBar = (props: TabBarProps) => {
               hoverClass="none"
               className={'flex-1 flex flex-col items-center relative justify-around space-y-1.5'}
               style={{color: (item.selected ? item.textColorActive: item.textColor)}}>
-              <Image style={{display: 'block', maxWidth: Taro.pxTransform(40), maxHeight: Taro.pxTransform(40)}} mode={'heightFix'} src={item.selected ? utils.resolveUrl(item.iconActive) : utils.resolveUrl(item.icon)}/>
+              <Image style={{display: 'block', width: Taro.pxTransform(28), height: Taro.pxTransform(28)}} mode={'aspectFit'} src={item.selected ? utils.resolveUrl(item.iconActive) : utils.resolveUrl(item.icon)}/>
               {cartNum > 0 && <view className={tabStyles.cartNum}>{cartNum}</view>}
               <View className={'flex-none text-xs'}>{item.title}</View>
             </Navigator>
