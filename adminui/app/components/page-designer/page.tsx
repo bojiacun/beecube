@@ -43,8 +43,6 @@ const PageSettings = (props: any) => {
                                     <BootstrapInput label={'背景图重复'} name={'backgroundRepeat'}/>
 
                                     <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
-                                    <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
-                                    <BootstrapInput label={'左边距'} name={'paddingLeft'}/>
                                     <BootstrapInput label={'上边距'} name={'paddingTop'}/>
                                     <BootstrapInput label={'右边距'} name={'paddingRight'}/>
                                     <BootstrapInput label={'下边距'} name={'paddingBottom'}/>
