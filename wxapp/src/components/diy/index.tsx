@@ -5,9 +5,12 @@ import modules from "../../modules";
 import request from "../../lib/request";
 
 
+export interface DiyPageProps extends Partial<any> {
+  pageIdentifier: string;
+}
 
 
-const DiyPage: FC<any> = (props) => {
+const DiyPage: FC<DiyPageProps> = (props) => {
     const { pageIdentifier } = props;
     const [loading, setLoading] = useState<boolean>(true);
     const [statusBarProps, setStatusBarProps] = useState<any>({});
@@ -41,13 +44,6 @@ const DiyPage: FC<any> = (props) => {
 
     return (
         <PageLayout style={page?.style} showTabBar={true} showStatusBar={true} statusBarProps={statusBarProps} pageLoading={loading}>
-            {page?.controls.filter(o=>o.key==='USER_HEADER').map((m: any) => {
-                const Module = modules[m.key];
-                if (Module) {
-                    return <Module {...m.data} />;
-                }
-                return <></>;
-            })}
             {page?.modules.map((m: any) => {
                 const Module = modules[m.key];
                 if (Module) {

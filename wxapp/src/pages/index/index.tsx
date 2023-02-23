@@ -1,7 +1,6 @@
 import { Component, PropsWithChildren } from 'react'
-import { View, Text } from '@tarojs/components'
 import './index.scss'
-import PageLayout from "../../layouts/PageLayout";
+import DiyPage from "../../components/diy";
 
 export default class Index extends Component<PropsWithChildren> {
 
@@ -17,9 +16,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   render () {
     return (
-      <PageLayout statusBarProps={{title: '首页'}} showTabBar={true}>
-        <Text>Hello world!</Text>
-      </PageLayout>
+      <DiyPage pageIdentifier={'HOME'} />
     )
   }
 }
