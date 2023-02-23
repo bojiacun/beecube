@@ -17,7 +17,7 @@ const DiyPage: FC<DiyPageProps> = (props) => {
     const [page, setPage] = useState<any>();
 
     useEffect(() => {
-        request.get('/app/pages' + pageIdentifier).then(res => {
+        request.get('/app/api/pages/' + pageIdentifier).then(res => {
             let page = res.data.data;
             page.modules = JSON.parse(page.modules);
             page.controls = JSON.parse(page.controls);
