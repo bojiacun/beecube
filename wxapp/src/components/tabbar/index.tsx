@@ -55,7 +55,7 @@ const TabBar = (props: TabBarProps) => {
           return (
             <Navigator
               url={item.url}
-              openType={'redirect'}
+              openType={'switchTab'}
               hoverClass="none"
               className={'flex-1 flex flex-col items-center relative justify-around space-y-1.5'}
               style={{color: (item.selected ? item.textColorActive: item.textColor)}}>

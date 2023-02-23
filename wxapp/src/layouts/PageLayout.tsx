@@ -25,7 +25,6 @@ class PageLayout extends Component<PayLayoutProps, any> {
 
   componentDidMount() {
     const {systemInfo, showTabBar = false} = this.props;
-    console.log(systemInfo);
     this.setState({pageStyle: {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))}});
   }
 
@@ -41,13 +40,12 @@ class PageLayout extends Component<PayLayoutProps, any> {
       statusBarProps = {}
     } = this.props;
 
-
     if (pageLoading || loading) return <PageLoading/>;
 
     return (
-      <View className={classNames(styles.page, 'bg-gray-50')} style={this.state.pageStyle}>
+      <View className={classNames(styles.page)} style={{...style, ...this.state.pageStyle}}>
         {showStatusBar && <StatusBar {...statusBarProps} />}
-        <View style={style} className={className}>
+        <View className={className}>
           {children}
           {showTabBar && <TabBar />}
         </View>
