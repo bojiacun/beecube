@@ -3,8 +3,6 @@ import CustomSwiper from "../../../../components/swiper";
 
 const SwiperModule = (props: any) => {
     const {index, style, basic, imageStyle, ...rest} = props;
-    console.log('swiper',basic);
-
     return (
         <View {...rest} style={style}>
             {basic.showTitle &&
