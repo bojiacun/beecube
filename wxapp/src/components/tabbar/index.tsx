@@ -48,7 +48,7 @@ const TabBar = (props: TabBarProps) => {
   if(safeBottom > 10) safeBottom -= 10;
 
   return (
-    <View className={classNames('flex py-2 bottom-0 fixed w-screen border-0 border-t-1 border-gray-200 border-solid box-content', tabStyles.tabbar)}
+    <View className={classNames('flex py-2 bottom-0 fixed w-screen box-content', tabStyles.tabbar)}
           style={{backgroundColor: backgroundColor, paddingBottom: safeBottom > 0 ? Taro.pxTransform(safeBottom) : ''}}>
       {
         tabs.map((item: TabBarItem) => {
@@ -77,7 +77,7 @@ TabBar.propTypes = {
 }
 
 TabBar.defaultProps = {
-  backgroundColor: 'rgba(255,255,255,.98)',
+  backgroundColor: 'rgba(255,255,255,1)',
   cartNum: 0,
   onTabChange: () => null
 }
