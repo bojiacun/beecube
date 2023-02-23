@@ -3,7 +3,6 @@ package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.entity.AppDiyPage;
 import cn.winkt.modules.app.service.IAppDiyPageService;
-import cn.winkt.modules.app.service.IAppService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,7 @@ import javax.annotation.Resource;
 
 @RequestMapping("/app/api/pages")
 @RestController
-public class AppDiyPageController {
+public class AppApiDiyPageController {
 
     @Resource
     IAppDiyPageService appDiyPageService;

@@ -44,8 +44,6 @@ const TabBar = (props: TabBarProps) => {
     return <></>
   }
 
-  console.log(tabs);
-
   let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
   if(safeBottom > 10) safeBottom -= 10;
 

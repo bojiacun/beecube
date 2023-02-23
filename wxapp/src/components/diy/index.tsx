@@ -18,10 +18,10 @@ const DiyPage: FC<DiyPageProps> = (props) => {
 
     useEffect(() => {
         request.get('/app/api/pages/' + pageIdentifier).then(res => {
-            let page = res.data.data;
+            let page = res.data.result;
             page.modules = JSON.parse(page.modules);
             page.controls = JSON.parse(page.controls);
-            page.style = JSON.parse(page.style);
+            page.style = JSON.parse(page.styles);
             //设置状态栏
             let statusBarDiyData = page.controls[0].data;
             statusBarProps.hide = statusBarDiyData.basic.hide;
