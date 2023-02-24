@@ -23,15 +23,16 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-mp</artifactId>
-            <version>4.4.0</version>
-        </dependency>
+
         <dependency>
             <groupId>io.mikael</groupId>
             <artifactId>urlbuilder</artifactId>
             <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.apifan.common</groupId>
+            <artifactId>common-random</artifactId>
+            <version>1.0.19</version>
         </dependency>
     </dependencies>
     <build>

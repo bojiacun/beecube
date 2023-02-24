@@ -1,0 +1,69 @@
+package cn.winkt.modules.app.controller.api;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.winkt.modules.app.entity.AppMember;
+import cn.winkt.modules.app.service.IAppMemberService;
+import com.apifan.common.random.RandomSource;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.lang3.RandomUtils;
+import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.es.QueryStringBuilder;
+import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.CommonUtils;
+import org.jeecg.common.util.PasswordUtil;
+import org.jeecg.common.util.RedisUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+@RestController
+@RequestMapping("/app/api/wxapp/login")
+public class AppApiWxappLoginController {
+
+    @Resource
+    WxMaService wxMaService;
+
+    @Resource
+    IAppMemberService appMemberService;
+
+    @Resource
+    RedisUtil redisUtil;
+
+    @GetMapping
+    public Result<String> code2Session(@RequestParam String code) throws WxErrorException {
+        WxMaJscode2SessionResult result = wxMaService.jsCode2SessionInfo(code);
+        QueryWrapper<AppMember> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("wxapp_openid", result.getOpenid());
+        queryWrapper.eq("wechat_unionid", result.getUnionid());
+        AppMember appMember = appMemberService.getOne(queryWrapper);
+        String password = RandomSource.personInfoSource().randomStrongPassword(8, false);
+        String salt = "bojinhong123";
+        if(appMember == null) {
+            appMember = new AppMember();
+            appMember.setWxappOpenid(result.getOpenid());
+            appMember.setWechatUnionid(result.getUnionid());
+            appMember.setUsername(result.getOpenid());
+            appMember.setPassword(PasswordUtil.encrypt(result.getOpenid(), password, salt));
+            appMember.setStatus(1);
+            appMemberService.save(appMember);
+        }
+        //执行登录操作
+        if(appMember.getStatus() == 0)  {
+            throw new JeecgBootException("登录失败，您的账户已被禁用");
+        }
+        String token = JwtUtil.sign(appMember.getUsername(), password);
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), token);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), JwtUtil.EXPIRE_TIME * 2 / 1000);
+        return Result.ok(token);
+    }
+}

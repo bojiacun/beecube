@@ -19,6 +19,21 @@
             <groupId>org.jeecgframework.boot</groupId>
             <artifactId>jeecg-system-cloud-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.2.5.B</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>4.2.7.B</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->
