@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12754142",
+      "name": "右箭头",
+      "font_class": "youjiantou_huaban",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
       "icon_id": "963803",
       "name": "待支付订单",
       "font_class": "daizhifudingdan",
