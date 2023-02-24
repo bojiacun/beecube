@@ -39,7 +39,6 @@ const DiyPage: FC<DiyPageProps> = (props) => {
             setPage(page);
             setStatusBarProps(statusBarProps);
             setLoading(false);
-            console.log(page.style);
         });
     }, []);
 

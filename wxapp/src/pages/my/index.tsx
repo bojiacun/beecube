@@ -69,34 +69,34 @@ export default class Index extends Component<PropsWithChildren<any>> {
               <View>足迹</View>
             </View>
           </View>
-          <View className={'rounded-md bg-white mt-2 text-blue-600 py-4'}>
+          <View className={'rounded-md bg-white mt-2 text-blue-600 py-4 shadow-lg'}>
             <View className={'grid grid-cols-5 gap-1 text-center'}>
               <View>
                 <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}} />
-                <View className={'text-black'}>待结算</View>
+                <View className={'text-gray-500 mt-1 text-sm'}>待结算</View>
               </View>
               <View>
                 <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}} />
-                <View className={'text-black'}>待发货</View>
+                <View className={'text-gray-500 mt-1'}>待发货</View>
               </View>
               <View>
                 <View className={'iconfont icon-daishouhuo'} style={{fontSize: 24}} />
-                <View className={'text-black'}>待收货</View>
+                <View className={'text-gray-500 mt-1'}>待收货</View>
               </View>
               <View>
                 <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}} />
-                <View className={'text-black'}>已完成</View>
+                <View className={'text-gray-500 mt-1'}>已完成</View>
               </View>
-              <View>
+              <View className={'border-l-1 border-gray-100'}>
                 <View className={'iconfont icon-quanbu'} style={{fontSize: 24}} />
-                <View className={'text-black'}>全部</View>
+                <View className={'text-gray-500 mt-1'}>全部</View>
               </View>
             </View>
           </View>
 
         </View>
-        <View className={'mt-4 p-2 bg-white'}>
-          <View className={'flex items-center justify-between'}>
+        <View className={'mt-6 bg-white divide-y divide-gray-100 text-gray-600'}>
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
             <View className={'flex items-center space-x-2'}>
               <View className={'iconfont icon-qianbao'} style={{fontSize: 24}} />
               <View>我的余额</View>
@@ -108,6 +108,93 @@ export default class Index extends Component<PropsWithChildren<any>> {
               <View className={'iconfont icon-youjiantou_huaban'} />
             </View>
           </View>
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-zhuanzhang'} style={{fontSize: 24}} />
+              <View>转账记录</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}} />
+              <View>地址管理</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-quanbu'} style={{fontSize: 24}} />
+              <View>我的二维码</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-shangchuan'} style={{fontSize: 24}} />
+              <View>我的送拍</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-kaipiaoxinxi'} style={{fontSize: 24}} />
+              <View>开具发票</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-zhanghu'} style={{fontSize: 24}} />
+              <View>公司账户</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}} />
+              <View>帮助中心</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
+
+          <View className={'flex items-center justify-between py-2.5 px-4'}>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}} />
+              <View>联系客服</View>
+            </View>
+            <View className={'flex items-center space-x-2'}>
+              <View className={'iconfont icon-youjiantou_huaban'} />
+            </View>
+          </View>
+
         </View>
       </PageLayout>
     )
