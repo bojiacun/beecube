@@ -2,6 +2,7 @@ package cn.winkt.modules.app.controller.api;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.apifan.common.random.RandomSource;
@@ -17,6 +18,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.CommonUtils;
 import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.config.AppContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,8 +31,7 @@ import javax.annotation.Resource;
 public class AppApiWxappLoginController {
 
     @Resource
-    WxMaService wxMaService;
-
+    WxMiniappServices wxMiniappServices;
     @Resource
     IAppMemberService appMemberService;
 
@@ -39,6 +40,7 @@ public class AppApiWxappLoginController {
 
     @GetMapping
     public Result<String> code2Session(@RequestParam String code) throws WxErrorException {
+        WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
         WxMaJscode2SessionResult result = wxMaService.jsCode2SessionInfo(code);
         QueryWrapper<AppMember> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("wxapp_openid", result.getOpenid());
