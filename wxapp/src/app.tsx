@@ -6,6 +6,7 @@ import configStore from "./store";
 import {setContext, setGeo, setPageLoading, setPosition, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
 import request from './lib/request';
+import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
 const store = configStore();
