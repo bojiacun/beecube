@@ -63,7 +63,7 @@ public class AppApiWxappLoginController {
         if(appMember.getStatus() == 0)  {
             throw new JeecgBootException("登录失败，您的账户已被禁用");
         }
-        String token = JwtUtil.sign(appMember.getUsername(), password);
+        String token = JwtUtil.sign(appMember.getUsername(), appMember.getPassword());
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), token);
