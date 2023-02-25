@@ -41,6 +41,14 @@ export default class Index extends Component<any, any> {
                             <View className={'iconfont icon-youjiantou_huaban'}/>
                         </View>
                     </View>
+                    <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center space-x-2'}>
+                            <View>昵称</View>
+                        </View>
+                        <View className={'flex items-center space-x-2'}>
+                            <View className={'iconfont icon-youjiantou_huaban'}/>
+                        </View>
+                    </View>
                 </>
             );
         }
@@ -53,6 +61,22 @@ export default class Index extends Component<any, any> {
                 <LoginView refreshUserInfo={true}>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
                         {this.renderNicknameAvatar()}
+                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>性别</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </View>
+                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>手机号</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </View>
                     </View>
                 </LoginView>
             </PageLayout>
