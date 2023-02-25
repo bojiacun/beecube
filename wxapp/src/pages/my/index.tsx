@@ -8,6 +8,9 @@ import classNames from "classnames";
 import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
 import LoginView from "../../components/login";
+import request from "../../lib/request";
+import {UserInfo} from "../../context";
+import utils from "../../lib/utils";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -17,8 +20,12 @@ import LoginView from "../../components/login";
     }
 ))
 export default class Index extends Component<PropsWithChildren<any>> {
+    state:MyIndexViewState = {
+        userInfo : undefined,
+    }
 
     componentWillMount() {
+        this.setState({userInfo: this.props.context.userInfo});
     }
 
     componentDidMount() {
@@ -28,16 +35,20 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     componentDidShow() {
-        console.log('on show');
+        utils.showLoading();
+        request.get('/app/api/members/profile').then(res=>{
+            this.setState({userInfo: res.data.result});
+        })
     }
 
     componentDidHide() {
     }
 
     render() {
-        const {systemInfo, context} = this.props;
-        const {userInfo} = context;
+        const {systemInfo} = this.props;
+        const {userInfo} = this.state;
 
+        // @ts-ignore
         return (
             <PageLayout showTabBar={true} showStatusBar={false}>
                 <LoginView refreshUserInfo={true}>
@@ -50,7 +61,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                 <FallbackImage src={avatar} errorImage={avatar} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                 <View className={'space-y-1 flex flex-col'}>
                                     <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
-                                    <Text></Text>
+                                    <Text>{userInfo?.username}</Text>
                                 </View>
                             </View>
                             <View><Text className={'iconfont icon-31shezhi'} style={{fontSize: 24}}/></View>
@@ -203,4 +214,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
             </PageLayout>
         )
     }
+}
+
+interface MyIndexViewState extends Partial<any> {
+    userInfo?: UserInfo;
 }

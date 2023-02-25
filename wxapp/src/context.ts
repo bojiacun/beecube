@@ -13,6 +13,7 @@ export declare interface  UserInfo {
     wechatUnionid: string;
     nickname: string;
     realname: string;
+    username: string;
     avatar: string;
     idCard: string;
     sex: number;

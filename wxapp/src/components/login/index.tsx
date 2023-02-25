@@ -1,5 +1,5 @@
 import {Component, PropsWithChildren} from "react";
-import Taro from '@tarojs/taro';
+import Taro, {getCurrentInstance} from '@tarojs/taro';
 import request from "../../lib/request";
 import {connect} from "react-redux";
 import {setUserInfo} from "../../store/actions";
@@ -17,6 +17,11 @@ import {setUserInfo} from "../../store/actions";
     }
 })
 export default class LoginView extends Component<LoginViewProps, any> {
+    $instance = getCurrentInstance();
+
+    componentWillMount() {
+    }
+
     componentDidMount() {
         const token = Taro.getStorageSync("TOKEN");
         //本地未存储token则执行登录操作
@@ -39,9 +44,6 @@ export default class LoginView extends Component<LoginViewProps, any> {
         }
     }
 
-    componentDidShow() {
-
-    }
 
     render() {
         return this.props.children;
