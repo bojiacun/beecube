@@ -24,12 +24,14 @@ export default class LoginView extends Component<LoginViewProps, any> {
             Taro.login().then(res => {
                 request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
                     Taro.setStorageSync("TOKEN", res.data.result);
-                    request.get('/app/api/members/profile').then(res=>{
-                        this.props.updateUserInfo!(res.data.result);
-                    })
+                    if(this.props.refreshUserInfo) {
+                        request.get('/app/api/members/profile').then(res => {
+                            this.props.updateUserInfo!(res.data.result);
+                        })
+                    }
                 });
             })
-        }else {
+        }else if(this.props.refreshUserInfo){
             //刷新新用户信息
             request.get('/app/api/members/profile').then(res=>{
                 this.props.updateUserInfo!(res.data.result);

@@ -35,11 +35,12 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     render() {
-        const {systemInfo} = this.props;
+        const {systemInfo, context} = this.props;
+        const {userInfo} = context;
 
         return (
             <PageLayout showTabBar={true} showStatusBar={false}>
-                <LoginView>
+                <LoginView refreshUserInfo={true}>
                     <View
                         className={classNames('text-white flex flex-col px-4', styles.userProfile)}
                         style={{paddingTop: Taro.pxTransform(systemInfo.safeArea.top + 40)}}
@@ -48,8 +49,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             <View className={'flex items-center space-x-2'}>
                                 <FallbackImage src={avatar} errorImage={avatar} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                 <View className={'space-y-1 flex flex-col'}>
-                                    <Text>用户姓名</Text>
-                                    <Text>LEVEL</Text>
+                                    <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
+                                    <Text></Text>
                                 </View>
                             </View>
                             <View><Text className={'iconfont icon-31shezhi'} style={{fontSize: 24}}/></View>
