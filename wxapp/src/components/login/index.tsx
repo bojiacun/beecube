@@ -6,12 +6,11 @@ import request from "../../lib/request";
 export default class LoginView extends Component<PropsWithChildren, any> {
     componentDidMount() {
         const token = Taro.getStorageSync("TOKEN");
-        console.log(token);
         //本地未存储token则执行登录操作
         if (!token) {
             Taro.login().then(res => {
                 request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
-                    console.log(res.data.result);
+                    console.log(res.data);
                 })
             })
         }

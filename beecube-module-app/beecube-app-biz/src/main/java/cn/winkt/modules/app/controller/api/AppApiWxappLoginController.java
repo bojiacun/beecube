@@ -66,6 +66,6 @@ public class AppApiWxappLoginController {
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), JwtUtil.EXPIRE_TIME * 2 / 1000);
-        return Result.ok(token);
+        return Result.OK(token);
     }
 }
