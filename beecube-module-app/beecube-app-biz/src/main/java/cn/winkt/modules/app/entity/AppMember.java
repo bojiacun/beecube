@@ -81,7 +81,7 @@ public class AppMember {
 	/**用户手机号*/
 	@Excel(name = "用户手机号", width = 15)
     @ApiModelProperty(value = "用户手机号")
-	private java.lang.String mobile;
+	private java.lang.String phone;
 	/**邮箱地址*/
 	@Excel(name = "邮箱地址", width = 15)
     @ApiModelProperty(value = "邮箱地址")

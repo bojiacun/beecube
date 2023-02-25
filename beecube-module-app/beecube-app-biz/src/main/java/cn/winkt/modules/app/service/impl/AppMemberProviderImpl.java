@@ -5,7 +5,9 @@ import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.oConvertUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,19 +21,17 @@ public class AppMemberProviderImpl extends AppMemberProvider {
 
     @Override
     public LoginUser getUserByName(String username) {
-        LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AppMember::getUsername, username);
-        AppMember member = appMemberService.getOne(queryWrapper);
-        if(member == null) {
+        if(oConvertUtils.isEmpty(username)) {
             return null;
         }
-        LoginUser loginUser = new LoginUser();
-        loginUser.setEmail(member.getEmail());
-        loginUser.setPhone(member.getMobile());
-        loginUser.setAvatar(member.getAvatar());
-        loginUser.setUsername(member.getUsername());
-        loginUser.setSex(member.getSex());
-        loginUser.setStatus(member.getStatus());
-        return loginUser;
+        LoginUser user = appMemberService.getEncodeUserInfo(username);
+
+        try {
+            SensitiveInfoUtil.handlerObject(user, false);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }

@@ -14,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface AppMemberMapper extends BaseMapper<AppMember> {
 
+    AppMember getUserByName(@Param("username") String username);
 }
