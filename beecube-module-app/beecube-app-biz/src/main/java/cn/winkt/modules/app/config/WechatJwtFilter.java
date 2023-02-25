@@ -94,4 +94,10 @@ public class WechatJwtFilter extends AccessControlFilter {
 
         return super.preHandle(request, response);
     }
+
+    @Override
+    public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
+        TenantContext.clear();
+        AppContext.clear();
+    }
 }

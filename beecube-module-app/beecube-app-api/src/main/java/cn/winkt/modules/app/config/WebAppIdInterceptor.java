@@ -24,4 +24,10 @@ public class WebAppIdInterceptor implements HandlerInterceptor {
         log.info("设置Header中的AppId和TenantId {} {}", appId, tenantId);
         return true;
     }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        TenantContext.clear();
+        AppContext.clear();
+    }
 }
