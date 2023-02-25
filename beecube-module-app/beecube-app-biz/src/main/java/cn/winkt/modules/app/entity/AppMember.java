@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -67,6 +68,7 @@ public class AppMember {
 	/**登录密码*/
 	@Excel(name = "登录密码", width = 15)
     @ApiModelProperty(value = "登录密码")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private java.lang.String password;
 	/**用户余额*/
 	@Excel(name = "用户余额", width = 15)
@@ -88,6 +90,16 @@ public class AppMember {
 	@Excel(name = "用户昵称", width = 15)
     @ApiModelProperty(value = "用户昵称")
 	private java.lang.String nickname;
+
+	@Excel(name = "用户真实姓名", width = 15)
+	@ApiModelProperty(value = "用户真实姓名")
+	private String realname;
+
+
+	@Excel(name = "用户身份证号", width = 15)
+	@ApiModelProperty(value = "用户身份证号")
+	private String idCard;
+
 	/**用户头像*/
 	@Excel(name = "用户头像", width = 15)
     @ApiModelProperty(value = "用户头像")

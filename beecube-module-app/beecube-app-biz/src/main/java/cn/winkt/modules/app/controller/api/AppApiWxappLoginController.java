@@ -6,6 +6,7 @@ import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.apifan.common.random.RandomSource;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.RandomUtils;
@@ -42,12 +43,13 @@ public class AppApiWxappLoginController {
     public Result<String> code2Session(@RequestParam String code) throws WxErrorException {
         WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
         WxMaJscode2SessionResult result = wxMaService.jsCode2SessionInfo(code);
-        QueryWrapper<AppMember> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("wxapp_openid", result.getOpenid());
-        queryWrapper.eq("wechat_unionid", result.getUnionid());
+        LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppMember::getWxappOpenid, result.getOpenid())
+                .or()
+                .eq(AppMember::getWechatUnionid, result.getUnionid());
         AppMember appMember = appMemberService.getOne(queryWrapper);
         String password = RandomSource.personInfoSource().randomStrongPassword(8, false);
-        String salt = "bojinhong123";
+        String salt = RandomSource.personInfoSource().randomStrongPassword(6,false);
         if(appMember == null) {
             appMember = new AppMember();
             appMember.setWxappOpenid(result.getOpenid());
