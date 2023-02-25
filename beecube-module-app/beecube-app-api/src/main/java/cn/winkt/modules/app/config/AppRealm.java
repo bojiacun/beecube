@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.config;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -89,6 +90,7 @@ public class AppRealm extends AuthorizingRealm {
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
         LoginUser loginUser = TokenUtils.getLoginUser(username, appMemberProvider, redisUtil);
+        log.info("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");

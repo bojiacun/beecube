@@ -36,6 +36,7 @@ public class AppRealmConfiguration implements ShiroConfigurer {
         Map<String, Filter> map = new HashMap<>();
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
         map.put("wechat", new WechatJwtFilter(cloudServer == null));
+        map.put("wxapp", new WxAppJwtFilter(cloudServer == null));
         return map;
     }
 }

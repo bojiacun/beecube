@@ -3,6 +3,8 @@ package cn.winkt.modules.app.service.impl;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.mapper.AppMemberMapper;
 import cn.winkt.modules.app.service.IAppMemberService;
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.desensitization.annotation.SensitiveEncode;
 import org.jeecg.common.system.vo.LoginUser;
@@ -22,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  * @Date:   2023-02-08
  * @Version: V1.0
  */
+@Slf4j
 @Service
 public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember> implements IAppMemberService {
 
@@ -42,7 +45,16 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
         if(appMember == null) {
             return null;
         }
-        BeanUtils.copyProperties(loginUser, appMember);
+        loginUser.setId(appMember.getId());
+        loginUser.setSex(appMember.getSex());
+        loginUser.setAvatar(appMember.getAvatar());
+        loginUser.setPhone(appMember.getPhone());
+        loginUser.setStatus(appMember.getStatus());
+        loginUser.setEmail(appMember.getEmail());
+        loginUser.setUsername(appMember.getUsername());
+        loginUser.setPassword(appMember.getPassword());
+        loginUser.setCreateTime(appMember.getCreateTime());
+        loginUser.setRealname(appMember.getRealname());
         return loginUser;
     }
 }
