@@ -1,11 +1,13 @@
 import { Image } from "@tarojs/components";
-import { useState } from "react";
 import defaultImage from '../../assets/images/img.jpg';
 
 const FallbackImage = (props:any) => {
-    const {mode = "aspectFit", style = {display: 'block'}, errorImage = null} = props;
-    const [url, setUrl] = useState<string>(props.src);
-    return <Image src={url} mode={mode} onError={()=>setUrl(errorImage || defaultImage)} style={style} />
+    const {mode = "aspectFit", style = {}, errorImage = null} = props;
+    const url = props.src;
+    if(!url) {
+        return <Image src={errorImage || defaultImage} mode={mode} style={style} />
+    }
+    return <Image src={url} mode={mode} style={style} />
 }
 
 export default FallbackImage;

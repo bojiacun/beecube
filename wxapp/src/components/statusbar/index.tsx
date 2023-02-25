@@ -8,67 +8,70 @@ import backImage from '../../assets/images/backPageImg.png';
 
 
 export declare interface StatusbarProps {
-  isFixed?: boolean;
-  title?: string;
-  titleCenter?: boolean;
-  button?: React.ReactElement;
-  hide?: boolean;
+    isFixed?: boolean;
+    title?: string;
+    titleCenter?: boolean;
+    button?: React.ReactElement;
+    hide?: boolean;
 }
 
 const StatusBar = (props: StatusbarProps): any => {
-  const {
-    isFixed = false,
-    title = '',
-    titleCenter = true,
-    button = null,
-    hide = false,
-  } = props;
-  const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
-  const systemInfo = useSelector(({context}) => context.systemInfo);
-  const mainStyle: any = {width: '100%', zIndex: 99999};
+    const {
+        isFixed = false,
+        title = '',
+        titleCenter = true,
+        button = null,
+        hide = false,
+    } = props;
+    const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
+    const systemInfo = useSelector(({context}) => context.systemInfo);
+    const mainStyle: any = {width: '100%', zIndex: 99999};
 
-  useDidShow(()=>{
-      setPages(Taro.getCurrentPages());
-  });
+    useDidShow(() => {
+        setPages(Taro.getCurrentPages());
+    });
 
-  if (isFixed) {
-    mainStyle.position = 'fixed';
-    mainStyle.top = 0;
-  }
+    if (isFixed) {
+        mainStyle.position = 'fixed';
+        mainStyle.top = 0;
+    }
 
-  const navigatorBarStyle: any = {
-    paddingTop: Taro.pxTransform(systemInfo.safeArea.top),
-  };
+    const navigatorBarStyle: any = {
+        paddingTop: Taro.pxTransform(systemInfo.safeArea.top),
+    };
 
-  if (titleCenter) {
-    navigatorBarStyle.textAlign = 'center';
-  }
+    if (titleCenter) {
+        navigatorBarStyle.textAlign = 'center';
+    }
 
-  const goBack = () => {
-    Taro.navigateBack().then();
-  }
+    const goBack = () => {
+        Taro.navigateBack().then();
+    }
 
-  if (hide) {
-    return <></>;
-  }
+    if (hide) {
+        return <></>;
+    }
 
-
-  return (
-    <View className={classNames(styles.status_bar, 'bg-white')} style={navigatorBarStyle}>
-      {button !== null && button}
-      {button === null && pages?.length > 1 &&
-        <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
-      <Text>{title}</Text>
-    </View>
-  );
+    return (
+        <View className={classNames(styles.status_bar, 'bg-white')} style={navigatorBarStyle}>
+            {button !== null && button}
+            {button === null && pages?.length > 1 && <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
+            {pages?.length == 1 && pages[0].route != 'pages/index/index'
+                &&
+                <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
+                    <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
+                </View>}
+            <Text>{title}</Text>
+        </View>
+    );
 }
 
 
 StatusBar.defaultProps = {
-  isFixed: false,
-  title: '',
-  titleCenter: true,
-  button: null
+    isFixed: false,
+    title: '',
+    titleCenter: true,
+    button: null
 }
 
 
