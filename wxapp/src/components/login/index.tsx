@@ -10,8 +10,8 @@ export default class LoginView extends Component<PropsWithChildren, any> {
         if (!token) {
             Taro.login().then(res => {
                 request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
-                    console.log(res.data);
-                })
+                    Taro.setStorageSync("TOKEN", res.data.result);
+                });
             })
         }
     }

@@ -21,6 +21,17 @@ const handleOnResponseError = (error: any) => {
     utils.hideLoading();
 }
 
+instance.interceptors.request.use((request)=>{
+    const token = Taro.getStorageSync("TOKEN");
+    if(token) {
+        request.headers['X-Access-Token'] = token;
+        request.headers['Authorization'] = token;
+    }
+    return request;
+}, (error)=>{
+    return Promise.reject(error);
+});
+
 instance.interceptors.response.use((response) => {
     utils.hideLoading();
     return response;
