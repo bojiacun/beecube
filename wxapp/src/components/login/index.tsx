@@ -1,9 +1,22 @@
 import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import request from "../../lib/request";
+import {connect} from "react-redux";
+import {setUserInfo} from "../../store/actions";
 
-
-export default class LoginView extends Component<PropsWithChildren, any> {
+// @ts-ignore
+@connect((state: any) => (
+    {
+        context: state.context
+    }
+), (dispatch)=>{
+    return {
+        updateUserInfo: (userInfo) => {
+            dispatch(setUserInfo(userInfo))
+        }
+    }
+})
+export default class LoginView extends Component<LoginViewProps, any> {
     componentDidMount() {
         const token = Taro.getStorageSync("TOKEN");
         //本地未存储token则执行登录操作
@@ -11,7 +24,15 @@ export default class LoginView extends Component<PropsWithChildren, any> {
             Taro.login().then(res => {
                 request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
                     Taro.setStorageSync("TOKEN", res.data.result);
+                    request.get('/app/api/members/profile').then(res=>{
+                        this.props.updateUserInfo!(res.data.result);
+                    })
                 });
+            })
+        }else {
+            //刷新新用户信息
+            request.get('/app/api/members/profile').then(res=>{
+                this.props.updateUserInfo!(res.data.result);
             })
         }
     }
@@ -23,4 +44,9 @@ export default class LoginView extends Component<PropsWithChildren, any> {
     render() {
         return this.props.children;
     }
+}
+
+export interface LoginViewProps extends PropsWithChildren {
+    refreshUserInfo?: boolean;
+    updateUserInfo?: Function;
 }

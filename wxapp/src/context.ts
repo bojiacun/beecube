@@ -9,10 +9,20 @@ export interface SiteInfo {
 }
 
 export declare interface  UserInfo {
-  sessionid: string,
-  openid: string,
-  unionid: string,
-  memberInfo: any
+    wxappOpenid: string;
+    wechatUnionid: string;
+    nickname: string;
+    realname: string;
+    avatar: string;
+    idCard: string;
+    sex: number;
+    createTime: string;
+    email: string;
+    mobile: string;
+    money: number;
+    scrore: number;
+    id: string;
+    status: number;
 }
 
 export declare interface LatLng {
