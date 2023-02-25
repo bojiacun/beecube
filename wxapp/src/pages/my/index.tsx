@@ -1,7 +1,7 @@
 import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
-import {View, Text} from "@tarojs/components";
+import {View, Text, Navigator} from "@tarojs/components";
 import {connect} from "react-redux";
 import styles from './index.module.scss';
 import classNames from "classnames";
@@ -64,7 +64,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                     <Text>{userInfo?.username}</Text>
                                 </View>
                             </View>
-                            <View><Text className={'iconfont icon-31shezhi'} style={{fontSize: 24}}/></View>
+                            <Navigator url={'profile'} openType={'navigate'}><Text className={'iconfont icon-31shezhi'} style={{fontSize: 24}}/></Navigator>
                         </View>
                         <View className={'grid grid-cols-4 gap-4 text-center mt-4'}>
                             <View>

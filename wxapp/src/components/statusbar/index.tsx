@@ -1,9 +1,10 @@
 import {Image, Text, View} from "@tarojs/components";
-import Taro from '@tarojs/taro';
-import React from "react";
+import Taro, {useDidShow} from '@tarojs/taro';
+import React, {useState} from "react";
 import styles from './index.module.scss';
 import {useSelector} from "react-redux";
 import classNames from "classnames";
+import backImage from '../../assets/images/backPageImg.png';
 
 
 export declare interface StatusbarProps {
@@ -22,11 +23,14 @@ const StatusBar = (props: StatusbarProps): any => {
     button = null,
     hide = false,
   } = props;
-  const pages = Taro.getCurrentPages();
-  const showHome = pages.length > 1;
+  const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
   const systemInfo = useSelector(({context}) => context.systemInfo);
-
   const mainStyle: any = {width: '100%', zIndex: 99999};
+
+  useDidShow(()=>{
+      setPages(Taro.getCurrentPages());
+  });
+
   if (isFixed) {
     mainStyle.position = 'fixed';
     mainStyle.top = 0;
@@ -38,21 +42,6 @@ const StatusBar = (props: StatusbarProps): any => {
 
   if (titleCenter) {
     navigatorBarStyle.textAlign = 'center';
-  }
-
-  const imageStyle: any = {
-    position: 'absolute',
-    left: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 9999,
-    width: '50rpx',
-    height: '50rpx',
-    borderRadius: '100rpx',
-    padding: '6rpx',
-    background: 'rgba(255,255,255,0.6)',
-    boxSizing: 'content-box'
   }
 
   const goBack = () => {
@@ -68,8 +57,7 @@ const StatusBar = (props: StatusbarProps): any => {
     <View className={classNames(styles.status_bar, 'bg-white')} style={navigatorBarStyle}>
       {button !== null && button}
       {button === null && pages?.length > 1 &&
-        <Image className={'margin-left-sm'} style={imageStyle} src="../../assets/images/backPageImg.png" onClick={goBack}/>}
-      {showHome && <Text className="cuIcon-home" style={imageStyle} onClick={() => Taro.redirectTo({url: '/pages/index/index'})}/>}
+        <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
       <Text>{title}</Text>
     </View>
   );
