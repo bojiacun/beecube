@@ -6,6 +6,7 @@ import {View} from "@tarojs/components";
 import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
+import avatarImage from '../../assets/images/avatar.png';
 
 // @ts-ignore
 @connect((state: any) => (
@@ -36,7 +37,7 @@ export default class Index extends Component<any, any> {
                             <View>我的头像</View>
                         </View>
                         <View className={'flex items-center space-x-2'}>
-                            <View> <FallbackImage src={userInfo?.avatar}  className={'rounded'} style={{width: 20, height: 20}} /> </View>
+                            <FallbackImage src={userInfo?.avatar} errorImage={avatarImage}  style={{width: 20, height: 20}} />
                             <View className={'iconfont icon-youjiantou_huaban'}/>
                         </View>
                     </View>
