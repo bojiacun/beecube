@@ -77,6 +77,22 @@ export default class Index extends Component<any, any> {
                                 <View className={'iconfont icon-youjiantou_huaban'}/>
                             </View>
                         </View>
+                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>邮箱</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </View>
+                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>实名认证</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </View>
                     </View>
                 </LoginView>
             </PageLayout>

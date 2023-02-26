@@ -100,6 +100,19 @@ public class AppMember {
 	@ApiModelProperty(value = "用户身份证号")
 	private String idCard;
 
+
+	@Excel(name = "用户身份证正面照", width = 15)
+	@ApiModelProperty(value = "用户身份证正面照")
+	private String cardFace;
+
+	@Excel(name = "用户身份证反面照", width = 15)
+	@ApiModelProperty(value = "用户身份证反面照")
+	private String cardBack;
+
+	@Excel(name = "用户实名认证状态0为未认证、1为已认证通过", width = 15)
+	@ApiModelProperty(value = "用户实名认证状态0为未认证、1为已认证通过")
+	private String authStatus;
+
 	/**用户头像*/
 	@Excel(name = "用户头像", width = 15)
     @ApiModelProperty(value = "用户头像")
