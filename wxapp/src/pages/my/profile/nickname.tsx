@@ -44,7 +44,7 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '修改昵称'}}>
-                <LoginView refreshUserInfo={true}>
+                <LoginView>
                     <Form onSubmit={this.handleSubmit}>
                         <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                             <View className={'p-4'}>
