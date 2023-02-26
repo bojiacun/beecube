@@ -5,6 +5,7 @@ import cn.winkt.modules.app.service.IAppMemberService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CacheConstant;
@@ -55,6 +56,13 @@ public class AppApiAppMemberController {
                 .set(AppMember::getIdCard, appMember.getIdCard())
                 .eq(AppMember::getId, old.getId());
 
+        //使命认真
+        if(StringUtils.isAnyEmpty(appMember.getCardBack(), appMember.getCardFace(), appMember.getRealname())) {
+           lambdaUpdateWrapper.set(AppMember::getAuthStatus, 0);
+        }
+        else {
+            lambdaUpdateWrapper.set(AppMember::getAuthStatus, 1);
+        }
         appMemberService.update(lambdaUpdateWrapper);
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
