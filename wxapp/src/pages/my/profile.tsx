@@ -86,6 +86,7 @@ export default class Index extends Component<any, any> {
                             <View>昵称</View>
                         </View>
                         <View className={'flex items-center space-x-2'}>
+                            <View>{userInfo?.nickname}</View>
                             <View className={'iconfont icon-youjiantou_huaban'}/>
                         </View>
                     </Navigator>
@@ -97,7 +98,7 @@ export default class Index extends Component<any, any> {
     handleSexChange(e) {
         const index = e.detail.value;
         let userInfo = {...this.props.context.userInfo};
-        userInfo.sex = index;
+        userInfo.sex = this.state.sexes[index].id;
         //提交到远程服务器
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
@@ -108,7 +109,7 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
 
-        const userSex = userInfo?.sex ? this.state.sexes[userInfo?.sex]?.name : '';
+        const userSex = userInfo?.sex ? this.state.sexes[userInfo?.sex-1]?.name : '';
 
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>

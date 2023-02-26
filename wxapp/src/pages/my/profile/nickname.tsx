@@ -5,6 +5,7 @@ import {Button, Form, Input, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import {saveUserInfo} from "./services";
 import {setUserInfo} from "../../../store/actions";
+import utils from "../../../lib/utils";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -31,6 +32,7 @@ export default class Index extends Component<any, any> {
         userInfo.nickname = e.detail.value.nickname;
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
+            utils.showSuccess();
         })
     }
 

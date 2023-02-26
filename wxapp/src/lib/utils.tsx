@@ -92,6 +92,9 @@ export default {
 
         return 0
     },
+    showSuccess: (msg = '保存成功') => {
+        Taro.showToast({title: msg, icon: 'success'}).then();
+    },
     showLoading: () => {
         Taro.showLoading({title: '加载中'}).then();
     },

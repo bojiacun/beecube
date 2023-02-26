@@ -3,6 +3,8 @@ package cn.winkt.modules.app.controller.api;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
@@ -36,8 +38,18 @@ public class AppApiAppMemberController {
         if(old == null) {
             throw new JeecgBootException("更新失败,未找到用户信息");
         }
-        BeanUtils.copyProperties(old, appMember);
-        appMemberService.updateById(old);
-        return Result.OK(old);
+        LambdaUpdateWrapper<AppMember> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper
+                .set(AppMember::getNickname, appMember.getNickname())
+                .set(AppMember::getPhone, appMember.getPhone())
+                .set(AppMember::getRealname, appMember.getRealname())
+                .set(AppMember::getSex, appMember.getSex())
+                .set(AppMember::getCardFace, appMember.getCardFace())
+                .set(AppMember::getCardBack, appMember.getCardBack())
+                .set(AppMember::getIdCard, appMember.getIdCard())
+                .eq(AppMember::getId, old.getId());
+
+        appMemberService.update(lambdaUpdateWrapper);
+        return Result.OK(appMemberService.getById(appMember.getId()));
     }
 }
