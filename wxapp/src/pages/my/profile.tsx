@@ -104,7 +104,8 @@ export default class Index extends Component<any, any> {
             return (
                 <>
                     <View className={''}>
-                        <Button style={{border: 'none'}} onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true} className={'p-4 block border-0 flex items-center justify-between '}>
+                        <Button style={{border: 'none'}} onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}
+                                className={'p-4 block border-0 flex items-center justify-between '}>
                             <View className={'flex items-center space-x-2'}>
                                 <View>我的头像</View>
                             </View>
@@ -224,14 +225,16 @@ export default class Index extends Component<any, any> {
                                     </View>
                                 </Navigator>
                             </View>
-                            <View className={'flex items-center justify-between p-4'}>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>实名认证</View>
-                                </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
-                                    <View className={'iconfont icon-youjiantou_huaban'}/>
-                                </View>
+                            <View className={''}>
+                                <Navigator className={'flex items-center justify-between p-4'} url={'profile/auth'}>
+                                    <View className={'flex items-center space-x-2'}>
+                                        <View>实名认证</View>
+                                    </View>
+                                    <View className={'flex items-center space-x-2'}>
+                                        <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
+                                        <View className={'iconfont icon-youjiantou_huaban'}/>
+                                    </View>
+                                </Navigator>
                             </View>
                         </View>
                         <View className={'container mx-auto mt-4 text-center'}>

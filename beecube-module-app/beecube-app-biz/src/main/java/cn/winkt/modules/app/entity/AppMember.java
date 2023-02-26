@@ -111,7 +111,7 @@ public class AppMember {
 
 	@Excel(name = "用户实名认证状态0为未认证、1为已认证通过", width = 15)
 	@ApiModelProperty(value = "用户实名认证状态0为未认证、1为已认证通过")
-	private String authStatus;
+	private Integer authStatus;
 
 	/**用户头像*/
 	@Excel(name = "用户头像", width = 15)

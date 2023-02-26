@@ -80,7 +80,6 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {userInfo} = this.props.context;
         return (
             <PageLayout statusBarProps={{title: '手机号认证'}}>
                 <LoginView>
@@ -99,7 +98,7 @@ export default class Index extends Component<any, any> {
                                     <View>验证码</View>
                                 </View>
                                 <View className={'flex items-center space-x-2'}>
-                                    <Input name={'code'} value={userInfo.phone} className={'text-right'} />
+                                    <Input name={'code'}  className={'text-right'} />
                                     <Button className={classNames('px-4 py-2')} style={{color: 'black'}} onClick={this.handleSendCode} disabled={this.state.sending}>{this.state.sending ? this.state.counter+'':'获取验证码'}</Button>
                                 </View>
                             </View>
