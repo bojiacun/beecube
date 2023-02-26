@@ -50,7 +50,7 @@ export default class Index extends Component<any, any> {
                         </View>
 
                         <View className={'container mx-auto mt-4 text-center'}>
-                            <Button className={'btn-primary hover:bg-indigo-700'} formType={'submit'}>保存</Button>
+                            <Button className={'btn-primary'} formType={'submit'}>保存</Button>
                         </View>
                     </Form>
                 </LoginView>
