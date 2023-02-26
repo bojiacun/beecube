@@ -12,11 +12,13 @@ const instance = axios.create({
     headers: {'X-App-Id': siteinfo.appId},
 });
 
-const handleOnResponseError = (error: any) => {
+const handleOnResponseError = async (error: any) => {
     if (!error.status) {
-        return Taro.showToast({icon: 'none', title: '网络请求发生错误!', duration: 1500}).then();
+        Taro.showToast({icon: 'none', title: '网络请求发生错误!', duration: 1500}).then();
+        return Promise.reject(error);
     }
-    else {
+    else if(error.status == 401){
+        //登录超时，或者是未登录，重新执行登录流程
     }
     utils.hideLoading();
 }
@@ -29,15 +31,16 @@ instance.interceptors.request.use((request)=>{
     }
     return request;
 }, (error)=>{
+    console.log('request error',error);
     return Promise.reject(error);
 });
 
 instance.interceptors.response.use((response) => {
     utils.hideLoading();
     return response;
-}, (error) => {
-    handleOnResponseError(error);
-    return Promise.reject(error);
+}, async (error) => {
+    console.log('response error',error);
+    return await handleOnResponseError(error);
 });
 
 export default instance;
