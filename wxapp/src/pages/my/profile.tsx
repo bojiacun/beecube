@@ -32,6 +32,11 @@ export default class Index extends Component<any, any> {
         ]
     }
 
+    constructor() {
+        super();
+        this.handleSexChange = this.handleSexChange.bind(this);
+    }
+
     componentWillMount() {
         this.setState({sdkVersion: Taro.getAppBaseInfo().SDKVersion});
     }
@@ -68,6 +73,9 @@ export default class Index extends Component<any, any> {
 
     handleSexChange(e) {
         const index = e.detail.value;
+        let userInfo = {...this.props.context.userInfo};
+        userInfo.sex = index;
+        this.props.updateUserInfo(userInfo);
     }
 
     render() {
