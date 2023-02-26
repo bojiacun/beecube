@@ -3,9 +3,8 @@ import PageLayout from "../../../layouts/PageLayout";
 import LoginView from "../../../components/login";
 import {Button, Form, Input, View} from "@tarojs/components";
 import {connect} from "react-redux";
-import {saveUserInfo} from "./services";
 import {setUserInfo} from "../../../store/actions";
-import utils from "../../../lib/utils";
+import Taro from "@tarojs/taro";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -34,11 +33,8 @@ export default class Index extends Component<any, any> {
         this.setState({saving: true});
         const {userInfo} = this.props.context;
         userInfo.nickname = e.detail.value.nickname;
-        saveUserInfo(userInfo).then(res => {
-            this.props.updateUserInfo(res.data.result);
-            this.setState({saving: false});
-            utils.showSuccess(true);
-        })
+        this.props.updateUserInfo(userInfo);
+        Taro.navigateBack().then();
     }
 
     render() {
@@ -55,7 +51,7 @@ export default class Index extends Component<any, any> {
                         </View>
 
                         <View className={'container mx-auto mt-4 text-center'}>
-                            <Button className={'btn-primary'} formType={'submit'} disabled={this.state.saving}>保存</Button>
+                            <Button className={'btn-primary'} formType={'submit'} disabled={this.state.saving}>确定</Button>
                         </View>
                     </Form>
                 </LoginView>

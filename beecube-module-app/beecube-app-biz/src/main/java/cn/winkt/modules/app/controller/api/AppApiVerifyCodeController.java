@@ -7,10 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.config.AppContext;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -34,7 +31,18 @@ public class AppApiVerifyCodeController {
         String vcode = RandomStringUtils.randomNumeric(6);
         service.sendCode(mobile, vcode);
         log.info("{} 手机号下发的短信验证码为{}", mobile, vcode);
-        httpSession.setAttribute("MOBILE_CODE", vcode);
+        httpSession.setAttribute("MOBILE_CODE", mobile+":"+vcode);
         return Result.OK(true);
+    }
+
+    @PutMapping("/check")
+    public Result<Boolean> checkCode(@RequestBody Map<String, String> postData, HttpSession httpSession) {
+        String mobile = postData.get("mobile");
+        String code = postData.get("code");
+        String vcode = (String)httpSession.getAttribute("MOBILE_CODE");
+        if(vcode.equals(mobile+":"+code)) {
+            return Result.OK(true);
+        }
+        return Result.OK(false);
     }
 }

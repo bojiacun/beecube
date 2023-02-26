@@ -7,9 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.CacheConstant;
+import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,6 +36,7 @@ public class AppApiAppMemberController {
 
 
     @PutMapping("/update")
+    @CacheEvict(value = CacheConstant.SYS_USERS_CACHE, allEntries = true)
     public Result<AppMember> updateMember(@RequestBody AppMember appMember) {
         AppMember old = appMemberService.getById(appMember.getId());
         if(old == null) {

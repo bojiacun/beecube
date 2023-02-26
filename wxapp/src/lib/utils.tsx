@@ -100,8 +100,18 @@ export default {
             }, 1000);
         }
     },
-    showLoading: (msg='记载中') => {
+    showLoading: (msg='加载中') => {
         Taro.showLoading({title: msg}).then();
+    },
+    showMessage: (content:string, callback: Function = ()=>{}, showCancel = false, cancelCallback: Function = ()=>{}, title = '友情提示') => {
+        return Taro.showModal({title: title, content: content, showCancel: showCancel}).then(res=>{
+            if(res.confirm) {
+                callback();
+            }
+            else {
+                cancelCallback && cancelCallback();
+            }
+        });
     },
     hideLoading() {
         Taro.hideLoading();
