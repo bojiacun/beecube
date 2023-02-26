@@ -5,6 +5,7 @@ export default defineAppConfig({
         'pages/my/profile',
         'pages/my/profile/phone',
         'pages/my/profile/nickname',
+        'pages/my/profile/email',
         'pages/my/profile/auth',
     ],
     window: {

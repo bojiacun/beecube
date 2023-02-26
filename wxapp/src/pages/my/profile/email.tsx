@@ -33,7 +33,7 @@ export default class Index extends Component<any, any> {
     handleSubmit(e) {
         this.setState({saving: true});
         const {userInfo} = this.props.context;
-        userInfo.nickname = e.detail.value.nickname;
+        userInfo.email = e.detail.value.email;
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
             this.setState({saving: false});
@@ -43,13 +43,13 @@ export default class Index extends Component<any, any> {
 
     render() {
         return (
-            <PageLayout statusBarProps={{title: '修改昵称'}}>
+            <PageLayout statusBarProps={{title: '修改邮箱'}}>
                 <LoginView refreshUserInfo={true}>
                     <Form onSubmit={this.handleSubmit}>
                         <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                             <View className={'p-4'}>
                                 <View className={'flex items-center space-x-2'}>
-                                    <Input name={'nickname'} className={'block w-full'} placeholder={'修改昵称'}/>
+                                    <Input name={'email'} className={'block w-full'} placeholder={'修改邮箱'}/>
                                 </View>
                             </View>
                         </View>

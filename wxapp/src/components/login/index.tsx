@@ -1,5 +1,5 @@
 import {Component, PropsWithChildren} from "react";
-import Taro, {getCurrentInstance} from '@tarojs/taro';
+import Taro, {eventCenter, getCurrentInstance} from '@tarojs/taro';
 import request from "../../lib/request";
 import {connect} from "react-redux";
 import {setUserInfo} from "../../store/actions";
@@ -9,7 +9,7 @@ import {setUserInfo} from "../../store/actions";
     {
         context: state.context
     }
-), (dispatch)=>{
+), (dispatch) => {
     return {
         updateUserInfo: (userInfo) => {
             dispatch(setUserInfo(userInfo))
@@ -19,7 +19,25 @@ import {setUserInfo} from "../../store/actions";
 export default class LoginView extends Component<LoginViewProps, any> {
     $instance = getCurrentInstance();
 
+    constructor(props: any) {
+        super(props);
+        this.onShow = this.onShow.bind(this);
+    }
+
     componentWillMount() {
+        const onShowEventId = this.$instance.router!.onShow
+        // 监听
+        eventCenter.on(onShowEventId, this.onShow)
+    }
+
+    onShow() {
+        console.log('child component on show');
+        const token = Taro.getStorageSync("TOKEN");
+        if (token && this.props.refreshUserInfo) {
+            request.get('/app/api/members/profile').then(res => {
+                this.props.updateUserInfo!(res.data.result);
+            })
+        }
     }
 
     componentDidMount() {
@@ -29,16 +47,14 @@ export default class LoginView extends Component<LoginViewProps, any> {
             Taro.login().then(res => {
                 request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
                     Taro.setStorageSync("TOKEN", res.data.result);
-                    if(this.props.refreshUserInfo) {
-                        request.get('/app/api/members/profile').then(res => {
-                            this.props.updateUserInfo!(res.data.result);
-                        })
-                    }
+                    request.get('/app/api/members/profile').then(res => {
+                        this.props.updateUserInfo!(res.data.result);
+                    })
                 });
             })
-        }else if(this.props.refreshUserInfo){
-            //刷新新用户信息
-            request.get('/app/api/members/profile').then(res=>{
+        }
+        else if(!this.props.refreshUserInfo) {
+            request.get('/app/api/members/profile').then(res => {
                 this.props.updateUserInfo!(res.data.result);
             })
         }

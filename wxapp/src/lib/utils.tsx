@@ -92,8 +92,13 @@ export default {
 
         return 0
     },
-    showSuccess: (msg = '保存成功') => {
+    showSuccess: (autoBack = false,msg = '保存成功') => {
         Taro.showToast({title: msg, icon: 'success'}).then();
+        if(autoBack) {
+            setTimeout(()=>{
+                Taro.navigateBack().then();
+            }, 1000);
+        }
     },
     showLoading: () => {
         Taro.showLoading({title: '加载中'}).then();

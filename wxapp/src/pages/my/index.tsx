@@ -8,9 +8,6 @@ import classNames from "classnames";
 import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
 import LoginView from "../../components/login";
-import request from "../../lib/request";
-import {UserInfo} from "../../context";
-import utils from "../../lib/utils";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -20,33 +17,24 @@ import utils from "../../lib/utils";
     }
 ))
 export default class Index extends Component<PropsWithChildren<any>> {
-    state:MyIndexViewState = {
-        userInfo : undefined,
-    }
-
-    componentWillMount() {
-        this.setState({userInfo: this.props.context.userInfo});
-    }
 
     componentDidMount() {
+
     }
 
     componentWillUnmount() {
     }
 
     componentDidShow() {
-        utils.showLoading();
-        request.get('/app/api/members/profile').then(res=>{
-            this.setState({userInfo: res.data.result});
-        })
+        this.setState({userInfo: this.props.context.userInfo});
     }
 
     componentDidHide() {
     }
 
     render() {
-        const {systemInfo} = this.props;
-        const {userInfo} = this.state;
+        const {systemInfo, context} = this.props;
+        const {userInfo} = context;
 
         // @ts-ignore
         return (
@@ -216,6 +204,3 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 }
 
-interface MyIndexViewState extends Partial<any> {
-    userInfo?: UserInfo;
-}

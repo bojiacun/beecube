@@ -578,4 +578,7 @@ navigator, picker {
     &.button-hover {
         @apply transform scale-90;
     }
+    &[disabled] {
+        @apply bg-none bg-gray-400;
+    }
 }

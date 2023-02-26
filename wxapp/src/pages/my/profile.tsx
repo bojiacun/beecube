@@ -113,7 +113,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>
-                <LoginView refreshUserInfo={true}>
+                <LoginView>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
                         {this.renderNicknameAvatar()}
                         <View className={'p-4'}>

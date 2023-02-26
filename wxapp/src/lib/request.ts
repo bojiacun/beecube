@@ -1,5 +1,5 @@
 // api.js
-import axios from "taro-axios";
+import axios, {AxiosResponse} from "taro-axios";
 import Taro from "@tarojs/taro";
 import utils from "./utils";
 
@@ -12,15 +12,24 @@ const instance = axios.create({
     headers: {'X-App-Id': siteinfo.appId},
 });
 
-const handleOnResponseError = async (error: any) => {
-    if (!error.status) {
-        Taro.showToast({icon: 'none', title: '网络请求发生错误!', duration: 1500}).then();
-        return Promise.reject(error);
+const handleOnResponse = async (response: AxiosResponse) => {
+    let res = response.data;
+    if(res.code == 401) {
+        //登录态失效，重新执行登录
+        const res:any = await Taro.login();
+        const result:any = await instance.get('/app/api/wxapp/login', {params: {code: res.code}});
+        const token = result.data.result;
+        Taro.setStorageSync("TOKEN", token);
+        //重新发起请求
+        response.config.headers['X-Access-Token'] = token;
+        response.config.headers['Authorization'] = token;
+        return await instance.request(response.config);
     }
-    else if(error.status == 401){
-        //登录超时，或者是未登录，重新执行登录流程
+    else if(res.code == 403) {
+        Taro.showToast({icon: 'none', title: '无权限访问!', duration: 1500}).then();
+        return Promise.reject(new Error("无权限访问"));
     }
-    utils.hideLoading();
+    return response;
 }
 
 instance.interceptors.request.use((request)=>{
@@ -31,16 +40,16 @@ instance.interceptors.request.use((request)=>{
     }
     return request;
 }, (error)=>{
-    console.log('request error',error);
     return Promise.reject(error);
 });
 
-instance.interceptors.response.use((response) => {
+instance.interceptors.response.use(async (response) => {
     utils.hideLoading();
-    return response;
+    return await handleOnResponse(response);
 }, async (error) => {
-    console.log('response error',error);
-    return await handleOnResponseError(error);
+    Taro.showToast({icon: 'none', title: '网络错误!', duration: 1500}).then();
+    utils.hideLoading();
+    return Promise.reject(error);
 });
 
 export default instance;
