@@ -134,7 +134,7 @@ const PermissionEdit = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}菜单{model?.id ? model.id:''}</Modal.Title>
                 </Modal.Header>
                 {model &&
                     <Formik innerRef={formikRef} initialValues={{menuType: 0, status: 1, ...model}} validationSchema={PermissionSchema} onSubmit={handleOnSubmit}>
