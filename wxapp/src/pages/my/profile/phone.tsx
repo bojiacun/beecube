@@ -5,18 +5,27 @@ import {Button, Form, Input, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import request from "../../../lib/request";
 import utils from "../../../lib/utils";
+import {setUserInfo} from "../../../store/actions";
+import classNames from "classnames";
 
 // @ts-ignore
 @connect((state: any) => (
     {
         context: state.context
     }
-))
+), (dispatch) => {
+    return {
+        updateUserInfo(userInfo) {
+            dispatch(setUserInfo(userInfo));
+        }
+    }
+})
 export default class Index extends Component<any, any> {
 
     state = {
         sending: false,
         counter: 60,
+        saving: false,
     }
     timer: any;
     mobileRef: any;
@@ -40,16 +49,30 @@ export default class Index extends Component<any, any> {
                     if(v.counter <= 0) {
                         clearInterval(this.timer);
                         v.counter = 60;
+                        v.sending = false;
                     }
                     return v;
                 })
             }, 1000);
-            this.setState({sending: false});
         });
     }
 
     handleSubmit(e) {
-        console.log(e);
+        let values = e.detail.value;
+        this.setState({saving: true});
+
+        request.put("/app/api/sms/check", values).then(res=>{
+            if(res.data.result) {
+                let userInfo = this.props.context.userInfo;
+                userInfo.phone = values.mobile;
+                this.props.updateUserInfo(userInfo);
+                utils.showSuccess(true);
+            }
+            else {
+                utils.showMessage('验证码不正确').then();
+            }
+            this.setState({saving: false});
+        })
     }
 
     componentWillUnmount() {
@@ -60,7 +83,7 @@ export default class Index extends Component<any, any> {
         const {userInfo} = this.props.context;
         return (
             <PageLayout statusBarProps={{title: '手机号认证'}}>
-                <LoginView refreshUserInfo={true}>
+                <LoginView>
                     <Form onSubmit={this.handleSubmit}>
                         <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                             <View className={'p-4 flex items-center justify-between'}>
@@ -68,7 +91,7 @@ export default class Index extends Component<any, any> {
                                     <View>手机号</View>
                                 </View>
                                 <View className={'flex items-center space-x-2'}>
-                                    <Input ref={this.mobileRef} value={userInfo.phone} className={'text-right'} />
+                                    <Input name={'mobile'} ref={this.mobileRef} className={'text-right'} />
                                 </View>
                             </View>
                             <View className={'p-4 flex items-center justify-between'}>
@@ -76,8 +99,8 @@ export default class Index extends Component<any, any> {
                                     <View>验证码</View>
                                 </View>
                                 <View className={'flex items-center space-x-2'}>
-                                    <Input value={userInfo.phone} className={'text-right'} />
-                                    <Button className={'px-4 py-2'} onClick={this.handleSendCode} disabled={this.state.sending}>{this.state.sending ? this.state.counter:'获取验证码'}</Button>
+                                    <Input name={'code'} value={userInfo.phone} className={'text-right'} />
+                                    <Button className={classNames('px-4 py-2')} style={{color: 'black'}} onClick={this.handleSendCode} disabled={this.state.sending}>{this.state.sending ? this.state.counter+'':'获取验证码'}</Button>
                                 </View>
                             </View>
                         </View>
