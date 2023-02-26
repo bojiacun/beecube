@@ -42,6 +42,7 @@ public class AppApiAppMemberController {
         lambdaUpdateWrapper
                 .set(AppMember::getNickname, appMember.getNickname())
                 .set(AppMember::getPhone, appMember.getPhone())
+                .set(AppMember::getEmail, appMember.getEmail())
                 .set(AppMember::getRealname, appMember.getRealname())
                 .set(AppMember::getSex, appMember.getSex())
                 .set(AppMember::getCardFace, appMember.getCardFace())
