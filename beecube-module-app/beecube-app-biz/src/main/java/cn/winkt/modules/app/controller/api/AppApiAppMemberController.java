@@ -7,10 +7,8 @@ import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -29,5 +27,17 @@ public class AppApiAppMemberController {
             throw new JeecgBootException("当前未登录");
         }
         return Result.OK(appMemberService.getById(sysUser.getId()));
+    }
+
+
+    @PutMapping("/update")
+    public Result<AppMember> updateMember(@RequestBody AppMember appMember) {
+        AppMember old = appMemberService.getById(appMember.getId());
+        if(old == null) {
+            throw new JeecgBootException("更新失败,未找到用户信息");
+        }
+        BeanUtils.copyProperties(old, appMember);
+        appMemberService.updateById(old);
+        return Result.OK(old);
     }
 }

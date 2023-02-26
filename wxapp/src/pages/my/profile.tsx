@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
+import request from "../../lib/request";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -32,8 +33,8 @@ export default class Index extends Component<any, any> {
         ]
     }
 
-    constructor() {
-        super();
+    constructor(props:any) {
+        super(props);
         this.handleSexChange = this.handleSexChange.bind(this);
     }
 
@@ -75,7 +76,10 @@ export default class Index extends Component<any, any> {
         const index = e.detail.value;
         let userInfo = {...this.props.context.userInfo};
         userInfo.sex = index;
-        this.props.updateUserInfo(userInfo);
+        //提交到远程服务器
+        request.post('/app/api/members/update', userInfo).then(res=>{
+            this.props.updateUserInfo(res.data.result);
+        });
     }
 
     render() {
