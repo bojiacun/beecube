@@ -43,7 +43,7 @@ public class WxAppJwtFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        JwtUtil.responseError(response, 403, "您所在的用户组无权访问");
+        JwtUtil.responseError(response, 401, "登录失效");
         return false;
     }
 

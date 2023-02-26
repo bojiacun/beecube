@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
-import {View} from "@tarojs/components";
+import {View, Navigator, Picker} from "@tarojs/components";
 import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
@@ -19,6 +19,10 @@ import avatarImage from '../../assets/images/avatar.png';
 export default class Index extends Component<any, any> {
     state = {
         sdkVersion: '',
+        sexes: [
+            {id: 1, name: '男'},
+            {id: 2, name: '女'},
+        ]
     }
 
     componentWillMount() {
@@ -32,16 +36,16 @@ export default class Index extends Component<any, any> {
         if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
             return (
                 <>
-                    <View className={'flex items-center justify-between py-2.5 px-4'}>
+                    <View className={'flex items-center justify-between p-4'}>
                         <View className={'flex items-center space-x-2'}>
                             <View>我的头像</View>
                         </View>
                         <View className={'flex items-center space-x-2'}>
-                            <FallbackImage src={userInfo?.avatar} errorImage={avatarImage}  style={{width: 20, height: 20}} />
+                            <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 20, height: 20}}/>
                             <View className={'iconfont icon-youjiantou_huaban'}/>
                         </View>
                     </View>
-                    <View className={'flex items-center justify-between py-2.5 px-4'}>
+                    <View className={'flex items-center justify-between p-4'}>
                         <View className={'flex items-center space-x-2'}>
                             <View>昵称</View>
                         </View>
@@ -55,41 +59,57 @@ export default class Index extends Component<any, any> {
         return <></>
     }
 
+    handleSexChange(e) {
+        console.log(e);
+    }
+
     render() {
+        const {userInfo} = this.props;
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>
                 <LoginView refreshUserInfo={true}>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
                         {this.renderNicknameAvatar()}
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>性别</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+                        <View className={'p-4'}>
+                            <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'id'}
+                                    className={'flex items-center justify-between'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>性别</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo && this.state.sexes[userInfo.sex]}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Picker>
                         </View>
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>手机号</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+                        <View className={'p-4'}>
+                            <Navigator className={'flex items-center justify-between'} url={'profile/phone'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>手机号</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo?.phone}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
                         </View>
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>邮箱</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+                        <View className={'p-4'}>
+                            <Navigator className={'flex items-center justify-between'} url={'profile/email'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>邮箱</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo?.email}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
                         </View>
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View>实名认证</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
+                                <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
                                 <View className={'iconfont icon-youjiantou_huaban'}/>
                             </View>
                         </View>
