@@ -16,6 +16,11 @@
         </dependency>
         <!--system cloud api-->
         <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.318</version>
+        </dependency>
+        <dependency>
             <groupId>org.jeecgframework.boot</groupId>
             <artifactId>jeecg-system-cloud-api</artifactId>
         </dependency>
