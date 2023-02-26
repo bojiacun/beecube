@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
-import request from "../../lib/request";
+import {saveUserInfo} from "./profile/services";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -33,7 +33,7 @@ export default class Index extends Component<any, any> {
         ]
     }
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
         this.handleSexChange = this.handleSexChange.bind(this);
     }
@@ -46,7 +46,7 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
 
-        if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
+        if (utils.compareVersion(this.state.sdkVersion, '2.21.2') && false) {
             return (
                 <>
                     <View className={'flex items-center justify-between p-4'}>
@@ -69,7 +69,29 @@ export default class Index extends Component<any, any> {
                 </>
             );
         }
-        return <></>
+        return (
+            <>
+                <View className={'flex items-center justify-between p-4'}>
+                    <View className={'flex items-center space-x-2'}>
+                        <View>我的头像</View>
+                    </View>
+                    <View className={'flex items-center space-x-2'}>
+                        <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 20, height: 20}}/>
+                        <View className={'iconfont icon-youjiantou_huaban'}/>
+                    </View>
+                </View>
+                <View className={''}>
+                    <Navigator className={'flex items-center justify-between p-4'} url={'profile/nickname'}>
+                        <View className={'flex items-center space-x-2'}>
+                            <View>昵称</View>
+                        </View>
+                        <View className={'flex items-center space-x-2'}>
+                            <View className={'iconfont icon-youjiantou_huaban'}/>
+                        </View>
+                    </Navigator>
+                </View>
+            </>
+        );
     }
 
     handleSexChange(e) {
@@ -77,7 +99,7 @@ export default class Index extends Component<any, any> {
         let userInfo = {...this.props.context.userInfo};
         userInfo.sex = index;
         //提交到远程服务器
-        request.post('/app/api/members/update', userInfo).then(res=>{
+        saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
         });
     }
@@ -106,8 +128,8 @@ export default class Index extends Component<any, any> {
                                 </View>
                             </Picker>
                         </View>
-                        <View className={'p-4'}>
-                            <Navigator className={'flex items-center justify-between'} url={'profile/phone'}>
+                        <View className={''}>
+                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/phone'}>
                                 <View className={'flex items-center space-x-2'}>
                                     <View>手机号</View>
                                 </View>
@@ -117,8 +139,8 @@ export default class Index extends Component<any, any> {
                                 </View>
                             </Navigator>
                         </View>
-                        <View className={'p-4'}>
-                            <Navigator className={'flex items-center justify-between'} url={'profile/email'}>
+                        <View className={''}>
+                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>
                                 <View className={'flex items-center space-x-2'}>
                                     <View>邮箱</View>
                                 </View>

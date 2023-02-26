@@ -4,6 +4,8 @@ export default defineAppConfig({
         'pages/my/index',
         'pages/my/profile',
         'pages/my/profile/phone',
+        'pages/my/profile/nickname',
+        'pages/my/profile/auth',
     ],
     window: {
         backgroundTextStyle: 'light',
