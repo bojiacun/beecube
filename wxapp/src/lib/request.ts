@@ -4,7 +4,7 @@ import Taro from "@tarojs/taro";
 import utils from "./utils";
 
 const siteinfo = require('../siteinfo');
-const API_URL = siteinfo.siteroot;
+export const API_URL = siteinfo.siteroot;
 
 const instance = axios.create({
     baseURL: API_URL,

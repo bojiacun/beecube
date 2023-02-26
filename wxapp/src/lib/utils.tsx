@@ -100,8 +100,8 @@ export default {
             }, 1000);
         }
     },
-    showLoading: () => {
-        Taro.showLoading({title: '加载中'}).then();
+    showLoading: (msg='记载中') => {
+        Taro.showLoading({title: msg}).then();
     },
     hideLoading() {
         Taro.hideLoading();

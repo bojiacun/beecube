@@ -9,6 +9,7 @@ import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
+import {API_URL} from "../../lib/request";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -36,10 +37,36 @@ export default class Index extends Component<any, any> {
     constructor(props: any) {
         super(props);
         this.handleSexChange = this.handleSexChange.bind(this);
+        this.handleChooseAvatar = this.handleChooseAvatar.bind(this);
     }
 
     componentWillMount() {
         this.setState({sdkVersion: Taro.getAppBaseInfo().SDKVersion});
+    }
+
+    handleChooseAvatar() {
+        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(res=>{
+            const file = res.tempFilePaths[0];
+            const token = Taro.getStorageSync("TOKEN");
+            //upload image
+            utils.showLoading('上传中');
+            Taro.uploadFile({
+                url: API_URL+'/sys/oss/file/upload',
+                name: 'file',
+                filePath: file,
+                header: {
+                    "X-Access-Token": token,
+                    "Authorization": token,
+                    "Content-Type": 'application/json'
+                }
+            }).then((res:any)=>{
+                let result = JSON.parse(res.data);
+                let avatar = result.result.url;
+                let userInfo = this.props.context.userInfo;
+                userInfo.avatar = avatar;
+                this.updateUserInfo(userInfo);
+            });
+        });
     }
 
     renderNicknameAvatar() {
@@ -71,7 +98,7 @@ export default class Index extends Component<any, any> {
         }
         return (
             <>
-                <View className={'flex items-center justify-between p-4'}>
+                <View className={'flex items-center justify-between p-4'} onClick={this.handleChooseAvatar}>
                     <View className={'flex items-center space-x-2'}>
                         <View>我的头像</View>
                     </View>
@@ -97,8 +124,12 @@ export default class Index extends Component<any, any> {
 
     handleSexChange(e) {
         const index = e.detail.value;
-        let userInfo = {...this.props.context.userInfo};
+        let userInfo = this.props.context.userInfo;
         userInfo.sex = this.state.sexes[index].id;
+        this.updateUserInfo(userInfo);
+    }
+
+    updateUserInfo(userInfo) {
         //提交到远程服务器
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
