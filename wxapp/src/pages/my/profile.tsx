@@ -7,6 +7,7 @@ import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
+import {setUserInfo} from "../../store/actions";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -15,7 +16,13 @@ import avatarImage from '../../assets/images/avatar.png';
         settings: state.context.settings,
         context: state.context
     }
-))
+), (dispatch) => {
+    return {
+        updateUserInfo(userInfo) {
+            dispatch(setUserInfo(userInfo));
+        }
+    }
+})
 export default class Index extends Component<any, any> {
     state = {
         sdkVersion: '',
@@ -60,25 +67,30 @@ export default class Index extends Component<any, any> {
     }
 
     handleSexChange(e) {
-        console.log(e);
+        const index = e.detail.value;
     }
 
     render() {
-        const {userInfo} = this.props;
+        const {context} = this.props;
+        const {userInfo} = context;
+
+        const userSex = userInfo?.sex ? this.state.sexes[userInfo?.sex]?.name : '';
+
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>
                 <LoginView refreshUserInfo={true}>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
                         {this.renderNicknameAvatar()}
                         <View className={'p-4'}>
-                            <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'id'}
-                                    className={'flex items-center justify-between'}>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>性别</View>
-                                </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo && this.state.sexes[userInfo.sex]}</View>
-                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                            <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'name'}>
+                                <View className={'flex items-center justify-between'}>
+                                    <View className={'flex items-center space-x-2'}>
+                                        <View>性别</View>
+                                    </View>
+                                    <View className={'flex items-center space-x-2'}>
+                                        <View>{userSex}</View>
+                                        <View className={'iconfont icon-youjiantou_huaban'}/>
+                                    </View>
                                 </View>
                             </Picker>
                         </View>
