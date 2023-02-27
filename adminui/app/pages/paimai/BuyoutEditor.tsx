@@ -1,9 +1,11 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {handleSaveResult} from "~/utils/utils";
+import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
+import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
@@ -20,7 +22,7 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
-const GoodsEditor = (props: any) => {
+const BuyoutEditor = (props: any) => {
     const {model, onHide} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
     const goodsClassFetcher = useFetcher();
@@ -32,14 +34,12 @@ const GoodsEditor = (props: any) => {
     const GoodsSchema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
         startPrice: Yup.number().required('必填字段'),
-        uprange: Yup.string().required('必填字段'),
-        endTime: Yup.string().required('必填字段'),
         images: Yup.string().required('必填字段'),
         classId: Yup.number().required('必填字段'),
     });
 
     const handleOnSubmit = (values: any) => {
-        values.type = 1;
+        values.type = 2;
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/paimai/goods/edit'});
         } else {
@@ -92,7 +92,7 @@ const GoodsEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}拍品</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}一口价拍品</Modal.Title>
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
                         onSubmit={handleOnSubmit}>
@@ -107,21 +107,7 @@ const GoodsEditor = (props: any) => {
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>
                                     </FormGroup>
-                                    <BootstrapRadioGroup options={[{label: '普通拍品', value: '1'}, {label: '一口价', value: '2'}]} name={'type'}
-                                                         label={'拍品类型'}/>
-                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
-                                    <BootstrapInput label={'起拍价'} name={'startPrice'}/>
-                                    <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
-                                    <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比'}/>
-                                    <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
-                                        <Row>
-                                            <Col sm={12}>
-                                                <UprangConfiger  label={'点击配置'} name={'uprange'} />
-                                            </Col>
-                                        </Row>
-                                    </FormGroup>
+                                    <BootstrapInput label={'一口价'} name={'startPrice'}/>
                                     <FormGroup>
                                         <FormLabel htmlFor={'fields'}>其他字段</FormLabel>
                                         <Row>
@@ -171,4 +157,4 @@ const GoodsEditor = (props: any) => {
     );
 }
 
-export default GoodsEditor;
+export default BuyoutEditor;
