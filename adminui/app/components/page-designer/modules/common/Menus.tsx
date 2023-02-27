@@ -67,8 +67,8 @@ const MenusModuleAttribute = (props: any) => {
     }
 
     const deleteMenu = (index:number) => {
-        _.remove(menus, n => n === index);
         let newMenus = [...menus];
+        _.pullAt(newMenus, index);
         setMenus(newMenus);
         _data.basic.menus = newMenus;
         onUpdate({...data});
@@ -90,9 +90,9 @@ const MenusModuleAttribute = (props: any) => {
                                     />
                                     <BootstrapFormList name={'menus'} list={menus}>
                                         {(item:any, index:number)=>{
-                                            return (<div key={'menu'+index}>
+                                            return (<div key={'menu'+index+item.url}>
                                                 <FormGroup>
-                                                    <FormLabel style={{position: 'relative', width: '100%'}}>菜单{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0, position: 'absolute'}} size={16} /></FormLabel>
+                                                    <FormLabel style={{position: 'relative', width: '100%'}}>菜单{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0, position: 'absolute', cursor: 'pointer'}} size={16} /></FormLabel>
                                                     <FormControl value={item.text} onChange={(e)=>{
                                                         item.text = e.currentTarget.value;
                                                         _data.basic.menus = menus;
