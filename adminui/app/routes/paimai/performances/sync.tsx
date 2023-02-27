@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const PerformanceListPage = (props:any) => {
     return (
-        <PerformanceList {...props} />
+        <PerformanceList type={2} {...props} />
     );
 }
 

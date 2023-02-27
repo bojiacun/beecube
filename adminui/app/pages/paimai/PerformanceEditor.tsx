@@ -8,29 +8,20 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
-import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
 import FileBrowserInput from "~/components/filebrowser/form";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import BootstrapSelect from "~/components/form/BootstrapSelect";
-import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
-import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapDateTime from "~/components/form/BootstrapDateTime";
-import TinymceEditor from "~/components/tinymce-editor";
-import UprangConfiger from "~/pages/paimai/UprangConfiger";
-import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
 const PerformanceEditor = (props: any) => {
-    const {model, onHide} = props;
+    const {model, onHide, type} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
 
     const GoodsSchema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
-        type: Yup.number().required('必填字段'),
         startTime: Yup.string().required('必填字段'),
         deposit: Yup.string().required('必填字段'),
         endTime: Yup.string().required('必填字段'),
@@ -38,6 +29,7 @@ const PerformanceEditor = (props: any) => {
     });
 
     const handleOnSubmit = (values: any) => {
+        values.type = type;
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/paimai/performances/edit'});
         } else {
@@ -68,7 +60,7 @@ const PerformanceEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}专场</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}{type == 1 ? '限时拍':'同步拍'}专场</Modal.Title>
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
                         onSubmit={handleOnSubmit}>
@@ -81,11 +73,8 @@ const PerformanceEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
-                                    <BootstrapRadioGroup options={[{label: '限时拍', value: '1'}, {label: '同步拍', value: '2'}]} name={'type'}
-                                                         label={'专场类型'}/>
-
-                                    {formik.values['type'] == 1 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
-                                    {formik.values['type'] == 1 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
+                                    {type == 1 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
+                                    {type == 1 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
 
 
