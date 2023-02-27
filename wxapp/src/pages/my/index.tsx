@@ -46,7 +46,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     >
                         <View className={classNames('flex items-center justify-between space-x-2')}>
                             <View className={'flex items-center space-x-2'}>
-                                <FallbackImage src={userInfo?.avatar} errorImage={avatar} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
+                                <FallbackImage className={'rounded-full'} src={userInfo?.avatar} errorImage={avatar} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                 <View className={'space-y-1 flex flex-col'}>
                                     <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
                                     <Text>{userInfo?.username}</Text>

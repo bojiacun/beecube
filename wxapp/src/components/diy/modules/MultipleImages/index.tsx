@@ -12,15 +12,15 @@ const MultipleImagesModule = (props: any) => {
         <View {...rest} style={style}>
             <View className={'flex items-center justify-center'} {...rest}>
                 <View style={{ flex: 1, marginRight: basic.space}} onClick={()=>utils.gotoLink(basic.url1)}>
-                    <FallbackImage src={utils.resolveUrl(basic.image1)} style={{width: '100%'}} width='100%' />
+                    <FallbackImage mode={'widthFix'} src={utils.resolveUrl(basic.image1)} style={{width: '100%'}} width='100%' />
                 </View>
                 <View style={{ flex: 1}} onClick={()=>utils.gotoLink(basic.url2)}>
-                    <FallbackImage src={utils.resolveUrl(basic.image2)} style={{width: '100%'}} width='100%' />
+                    <FallbackImage mode={'widthFix'} src={utils.resolveUrl(basic.image2)} style={{width: '100%'}} width='100%' />
                 </View>
             </View>
             {basic.style == 2 && <>
                 <View style={{ width: '100%', marginTop: basic.space}} onClick={()=>utils.gotoLink(basic.url3)}>
-                    <FallbackImage src={utils.resolveUrl(basic.image3)} style={{width: '100%'}} width='100%' />
+                    <FallbackImage mode={'widthFix'} src={utils.resolveUrl(basic.image3)} style={{width: '100%'}} width='100%' />
                 </View>
             </>}
         </View>
