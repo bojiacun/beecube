@@ -53,9 +53,10 @@ const SwiperModuleAttribute = (props: any) => {
         onUpdate({...data});
     }
     const deleteMenu = (index:number) => {
-        let newMenus = _.slice(images, index);
+        _.remove(images, n => n === index);
+        let newMenus = [...images];
         setImages(newMenus);
-        _data.basic.menus = newMenus;
+        _data.basic.images = newMenus;
         onUpdate({...data});
     }
     return (
@@ -79,7 +80,7 @@ const SwiperModuleAttribute = (props: any) => {
                                         {(item:any, index:number)=>{
                                             return (<div key={'menu'+index}>
                                                 <FormGroup>
-                                                    <FormLabel style={{position: 'relative'}}>轮播图{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0}} size={16} /></FormLabel>
+                                                    <FormLabel style={{position: 'relative', width: '100%'}}>轮播图{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0, position: 'absolute'}} size={16} /></FormLabel>
                                                     <FormControl value={item.text} onChange={(e)=>{
                                                         item.text = e.currentTarget.value;
                                                         _data.basic.images = images;

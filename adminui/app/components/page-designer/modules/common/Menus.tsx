@@ -67,7 +67,8 @@ const MenusModuleAttribute = (props: any) => {
     }
 
     const deleteMenu = (index:number) => {
-        let newMenus = _.slice(menus, index);
+        _.remove(menus, n => n === index);
+        let newMenus = [...menus];
         setMenus(newMenus);
         _data.basic.menus = newMenus;
         onUpdate({...data});
@@ -91,7 +92,7 @@ const MenusModuleAttribute = (props: any) => {
                                         {(item:any, index:number)=>{
                                             return (<div key={'menu'+index}>
                                                 <FormGroup>
-                                                    <FormLabel style={{position: 'relative'}}>菜单{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0}} size={16} /></FormLabel>
+                                                    <FormLabel style={{position: 'relative', width: '100%'}}>菜单{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0, position: 'absolute'}} size={16} /></FormLabel>
                                                     <FormControl value={item.text} onChange={(e)=>{
                                                         item.text = e.currentTarget.value;
                                                         _data.basic.menus = menus;
