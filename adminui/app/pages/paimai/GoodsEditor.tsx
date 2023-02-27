@@ -107,8 +107,7 @@ const GoodsEditor = (props: any) => {
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>
                                     </FormGroup>
-                                    <BootstrapRadioGroup options={[{label: '普通拍品', value: '1'}, {label: '一口价', value: '2'}]} name={'type'}
-                                                         label={'拍品类型'}/>
+
                                     <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'起拍价'} name={'startPrice'}/>
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
