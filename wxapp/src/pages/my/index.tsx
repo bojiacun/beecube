@@ -99,7 +99,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
                     </View>
                     <View className={'mt-6 bg-white divide-y divide-gray-100 text-gray-600'}>
-                        <View className={'flex items-center justify-between p-4'}>
+                        <Navigator url={'wallet'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
                                 <View>我的余额</View>
@@ -110,7 +110,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                 </View>
                                 <View className={'iconfont icon-youjiantou_huaban'}/>
                             </View>
-                        </View>
+                        </Navigator>
 
                         <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>

@@ -13,6 +13,7 @@ export declare interface StatusbarProps {
     titleCenter?: boolean;
     button?: React.ReactElement;
     hide?: boolean;
+    style?: any;
 }
 
 const StatusBar = (props: StatusbarProps): any => {
@@ -22,19 +23,15 @@ const StatusBar = (props: StatusbarProps): any => {
         titleCenter = true,
         button = null,
         hide = false,
+        style = {fontSize: 18, fontWeight: 'bold'},
     } = props;
     const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
     const systemInfo = useSelector(({context}) => context.systemInfo);
-    const mainStyle: any = {width: '100%', zIndex: 99999};
 
     useDidShow(() => {
         setPages(Taro.getCurrentPages());
     });
 
-    if (isFixed) {
-        mainStyle.position = 'fixed';
-        mainStyle.top = 0;
-    }
 
     const navigatorBarStyle: any = {
         paddingTop: Taro.pxTransform(systemInfo.safeArea.top),
@@ -42,6 +39,10 @@ const StatusBar = (props: StatusbarProps): any => {
 
     if (titleCenter) {
         navigatorBarStyle.textAlign = 'center';
+    }
+    if(isFixed) {
+        navigatorBarStyle.position = 'fixed';
+        navigatorBarStyle.top = 0;
     }
 
     const goBack = () => {
@@ -53,7 +54,7 @@ const StatusBar = (props: StatusbarProps): any => {
     }
 
     return (
-        <View className={classNames(styles.status_bar, 'bg-white')} style={navigatorBarStyle}>
+        <View className={classNames(styles.status_bar, 'bg-white')} style={{...style, ...navigatorBarStyle}}>
             {button !== null && button}
             {button === null && pages?.length > 1 && <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
             {pages?.length == 1 && pages[0].route != 'pages/index/index'

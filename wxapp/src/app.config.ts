@@ -2,6 +2,7 @@ export default defineAppConfig({
     pages: [
         'pages/index/index',
         'pages/my/index',
+        'pages/my/wallet',
         'pages/my/profile',
         'pages/my/profile/phone',
         'pages/my/profile/nickname',
