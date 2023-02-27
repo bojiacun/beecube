@@ -173,7 +173,7 @@ export default class Index extends Component<any, any> {
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
             this.setState({saving: false});
-            utils.showSuccess();
+            utils.showSuccess(true);
         });
     }
 
