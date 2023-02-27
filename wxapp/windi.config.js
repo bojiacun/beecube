@@ -87,7 +87,7 @@ export default {
             },
             maxWidth: ({ theme, breakpoints }) => ({
                 none: 'none',
-                0: '0rem',
+                0: '0px',
                 xs: '280px',
                 sm: '336px',
                 md: '392px',
@@ -99,12 +99,6 @@ export default {
                 '5xl': '896px',
                 '6xl': '1008px',
                 '7xl': '1120px',
-                full: '100%',
-                min: 'min-content',
-                max: 'max-content',
-                fit: 'fit-content',
-                prose: '65ch',
-                ...breakpoints(theme('screens')),
             }),
             spacing: {
                 px: '1px',

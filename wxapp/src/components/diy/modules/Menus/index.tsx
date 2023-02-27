@@ -7,16 +7,14 @@ const MenusModule = (props: any) => {
     const {index, style, basic, imageStyle, checkLogin, ...rest} = props;
     const menus = basic.menus;
     const columns = basic.columns;
-    console.log('columns is ', columns, menus);
-
     switch (parseInt(columns)) {
         case 3:
             return (
                 <View {...rest} style={style}>
-                    <View className={`grid grid-cols-3 gap-2`}>
+                    <View className={`grid grid-cols-3 gap-6`}>
                         {menus.map((item: any, i: number) => {
                             return (
-                                <View className={'flex flex-col items-center relative space-y-2'} onClick={() => utils.gotoLink(item.url)}
+                                <View className={'flex flex-col items-center relative space-y-1'} onClick={() => utils.gotoLink(item.url)}
                                       key={'menus' + index + '' + i}>
                                     {item.badge && <View className='cu-tag badge'
                                                          style={{top: Taro.pxTransform(7), right: Taro.pxTransform(10)}}>{item.badge}</View>}
@@ -31,10 +29,10 @@ const MenusModule = (props: any) => {
         case 4:
             return (
                 <View {...rest} style={style}>
-                    <View className={`grid grid-cols-4 gap-2`}>
+                    <View className={`grid grid-cols-4 gap-4`}>
                         {menus.map((item: any, i: number) => {
                             return (
-                                <View className={'flex flex-col items-center relative space-y-2'} onClick={() => utils.gotoLink(item.url)}
+                                <View className={'flex flex-col items-center relative space-y-1'} onClick={() => utils.gotoLink(item.url)}
                                       key={'menus' + index + '' + i}>
                                     {item.badge && <View className='cu-tag badge'
                                                          style={{top: Taro.pxTransform(7), right: Taro.pxTransform(10)}}>{item.badge}</View>}
@@ -49,10 +47,10 @@ const MenusModule = (props: any) => {
         case 5:
             return (
                 <View {...rest} style={style}>
-                    <View className={`grid grid-cols-5 gap-2`}>
+                    <View className={`grid grid-cols-5 gap-3`}>
                         {menus.map((item: any, i: number) => {
                             return (
-                                <View className={'flex flex-col items-center relative space-y-2'} onClick={() => utils.gotoLink(item.url)}
+                                <View className={'flex flex-col items-center relative space-y-1'} onClick={() => utils.gotoLink(item.url)}
                                       key={'menus' + index + '' + i}>
                                     {item.badge && <View className='cu-tag badge'
                                                          style={{top: Taro.pxTransform(7), right: Taro.pxTransform(10)}}>{item.badge}</View>}

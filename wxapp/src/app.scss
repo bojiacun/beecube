@@ -580,7 +580,7 @@ navigator, picker {
 
 .btn-primary {
     border: none;
-    @apply from-indigo-400 to-indigo-600 bg-gradient-to-r w-36 shadow-xl px-4 py-2 inline text-white rounded-full;
+    @apply from-indigo-400 to-indigo-600 bg-gradient-to-r w-56 shadow-xl p-3 inline text-white rounded-full;
     &.button-hover {
         @apply transform scale-90;
     }

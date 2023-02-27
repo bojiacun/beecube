@@ -99,7 +99,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
                     </View>
                     <View className={'mt-6 bg-white divide-y divide-gray-100 text-gray-600'}>
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
                                 <View>我的余额</View>
@@ -112,7 +112,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </View>
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-zhuanzhang'} style={{fontSize: 24}}/>
                                 <View>转账记录</View>
@@ -123,7 +123,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
 
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}}/>
                                 <View>地址管理</View>
@@ -133,7 +133,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </View>
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
                                 <View>我的二维码</View>
@@ -144,7 +144,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
 
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-shangchuan'} style={{fontSize: 24}}/>
                                 <View>我的送拍</View>
@@ -154,7 +154,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </View>
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-kaipiaoxinxi'} style={{fontSize: 24}}/>
                                 <View>开具发票</View>
@@ -165,7 +165,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
 
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-zhanghu'} style={{fontSize: 24}}/>
                                 <View>公司账户</View>
@@ -176,7 +176,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
 
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>
                                 <View>帮助中心</View>
@@ -187,7 +187,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
 
 
-                        <View className={'flex items-center justify-between py-2.5 px-4'}>
+                        <View className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>
                                 <View>联系客服</View>
