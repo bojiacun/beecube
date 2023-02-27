@@ -14,7 +14,8 @@ import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapFormList from "~/components/form/BootstrapFormList";
 import Divider from "~/components/divider";
-import {Plus} from "react-feather";
+import {Plus, XCircle} from "react-feather";
+import _ from "lodash";
 
 
 export const SWIPER_MODULE = "SWIPER_MODULE";
@@ -51,7 +52,12 @@ const SwiperModuleAttribute = (props: any) => {
         _data.basic.images = newImages;
         onUpdate({...data});
     }
-
+    const deleteMenu = (index:number) => {
+        let newMenus = _.slice(images, index);
+        setImages(newMenus);
+        _data.basic.menus = newMenus;
+        onUpdate({...data});
+    }
     return (
         <AttributeTabs tabs={['控件设置', '样式设置']}>
             <div style={{ padding: 15 }}>
@@ -73,7 +79,7 @@ const SwiperModuleAttribute = (props: any) => {
                                         {(item:any, index:number)=>{
                                             return (<div key={'menu'+index}>
                                                 <FormGroup>
-                                                    <FormLabel>轮播图{index+1}名称</FormLabel>
+                                                    <FormLabel style={{position: 'relative'}}>轮播图{index+1}名称 <XCircle onClick={()=>deleteMenu(index)} style={{right: 0}} size={16} /></FormLabel>
                                                     <FormControl value={item.text} onChange={(e)=>{
                                                         item.text = e.currentTarget.value;
                                                         _data.basic.images = images;
