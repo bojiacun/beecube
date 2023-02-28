@@ -38,9 +38,12 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
             setValue(formik.values[name]);
         }
     }, [formik.values[name]]);
+
     useEffect(()=>{
-        //@ts-ignore
-        setValue(initValue);
+        if(!name) {
+            //@ts-ignore
+            setValue(initValue);
+        }
     }, [initValue]);
 
 
