@@ -9,7 +9,6 @@ import FallbackImage from "../../components/FallbackImage";
 
 export default class Index extends Component<any, any> {
     state = {
-        data: [],
         tabs: [],
     }
 
@@ -30,8 +29,8 @@ export default class Index extends Component<any, any> {
 
     renderTemplate(data:any) {
         return (
-            <View className={'bg-white rounded-lg overflow-hidden rounded'}>
-                <FallbackImage mode={'widthFix'} className={'rounded block'} />
+            <View className={'bg-white rounded-lg overflow-hidden rounded shadow-lg'}>
+                <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]} />
                 <View>{data.title}</View>
                 <View>RMB {data.startPrice}</View>
             </View>
@@ -44,10 +43,8 @@ export default class Index extends Component<any, any> {
             let tabs = classes.map((cls)=>{
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
             });
+            tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
             this.setState({tabs: tabs});
-            request.get('/paimai/api/goods/list', {params: {type: 1, column: 'createTime', orderBy: 'desc'}}).then(res=>{
-                this.setState({data: res.data.result});
-            });
         });
     }
 

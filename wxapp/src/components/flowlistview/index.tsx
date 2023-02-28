@@ -1,9 +1,10 @@
-import {FC, ReactElement, useState} from "react";
+import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import utils from "../../lib/utils";
 
 export interface ListViewTabItem {
     label: string;
@@ -16,23 +17,34 @@ export interface ListViewProps extends Partial<any> {
     tabs: ListViewTabItem[];
     onTabChanged?: Function;
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
+    tabJustify?: 'justify-between'|'justify-start'
 }
 
 const FlowListView: FC<ListViewProps> = (props) => {
     const {
-        tabs, onTabChanged = () => {
-        }, dataFetcher
+        tabs, onTabChanged = () => {}, dataFetcher,
+        tabJustify = 'justify-start'
     } = props;
     const initDatas = tabs.map(() => []);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [datas, setDatas] = useState<any[]>(initDatas);
     const [page, setPage] = useState<number>(1);
 
+    useEffect(()=>{
+        if(tabs && tabs.length > 0) {
+            utils.showLoading();
+            dataFetcher(1, tabs[0], 0).then(res => {
+                datas[selectedIndex] = res.data.result.records;
+                setDatas([...datas]);
+                utils.hideLoading();
+            }).catch(() => utils.hideLoading());
+        }
+    }, [tabs]);
 
     //下拉刷新
     usePullDownRefresh(() => {
         dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex] = res.data.result;
+            datas[selectedIndex] = res.data.result.records;
             setDatas([...datas]);
         });
         setPage(1);
@@ -41,7 +53,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
     //下拉加载
     useReachBottom(() => {
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex].pushAll(res.data.result);
+            datas[selectedIndex].pushAll(res.data.result.records);
             setDatas([...datas]);
         })
         setPage(page + 1);
@@ -50,7 +62,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            {tabs.length > 0 && <View className={'bg-white px-4 py-3 flex items-center justify-between space-x-2 text-gray-700'}
+            {tabs.length > 0 && <View className={classNames('bg-white px-4 py-3 flex items-center space-x-4 text-gray-700', tabJustify)}
                   style={{overflowY: 'hidden', overflowX: 'auto'}}>
                 {tabs.map((tab, index) => {
                     return (
@@ -59,7 +71,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                             onTabChanged(tab, index);
                             setPage(1);
                             dataFetcher(1, tab, index).then(res => {
-                                datas[index] = res.data.result;
+                                datas[index] = res.data.result.records;
                                 setDatas([...datas]);
                             });
                         }}>
@@ -69,7 +81,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 })}
             </View>}
             {tabs.map((tab, index) => {
-                let data = datas[index];
+                let data = datas[index] || [];
                 if (data.length == 0) {
                     return (
                         <View style={{display: selectedIndex === index ? 'block': 'none'}} className={'text-center mt-20 text-gray-300'}>
@@ -79,8 +91,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 }
                 return (
-                    <View style={{display: selectedIndex === index ? 'block': 'none'}}>
-                        {tab.template(data)}
+                    <View className={'grid grid-cols-2 gap-4 p-4'} style={{display: selectedIndex === index ? 'grid': 'none'}}>
+                        {data.map((item:any)=>tab.template(item))}
                     </View>
                 );
             })}
