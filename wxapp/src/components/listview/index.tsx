@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
+import {usePullDownRefresh} from "@tarojs/taro";
 
 export interface ListViewTabItem {
     label: string;
@@ -13,11 +14,17 @@ export interface ListViewTabItem {
 export interface ListViewProps extends Partial<any>{
     tabs: ListViewTabItem[];
     onTabChanged?: Function;
+    dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
 }
 
 const ListView : FC<ListViewProps> = (props) => {
-    const {children, tabs, onTabChanged = ()=>{}} = props;
+    const {children, tabs, onTabChanged = ()=>{}, dataFetcher} = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [datas, setDatas] = useState<any[]>([]);
+    const [page, setPage] = useState<number>(1);
+
+
+    usePullDownRefresh(()=>{});
 
     return (
         <>
@@ -27,13 +34,17 @@ const ListView : FC<ListViewProps> = (props) => {
                         <Text className={classNames(index === selectedIndex ? styles.active:'')} onClick={()=>{
                             setSelectedIndex(index);
                             onTabChanged(tab, index);
+                            setPage(1);
+                            dataFetcher(1,tab, index).then(res=>{
+                                setDatas(res.data.result);
+                            });
                         }}>
                             {tab.label}
                         </Text>
                     );
                 })}
             </View>
-            {children}
+
         </>
     );
 }
