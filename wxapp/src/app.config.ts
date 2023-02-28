@@ -1,6 +1,8 @@
 export default defineAppConfig({
     pages: [
         'pages/index/index',
+        'pages/goods/buyouts',
+        'pages/goods/auctions',
         'pages/my/index',
         'pages/my/wallet',
         'pages/my/views',
