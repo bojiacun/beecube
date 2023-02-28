@@ -67,12 +67,14 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(index === selectedIndex ? styles.active : '')} onClick={() => {
-                            setSelectedIndex(index);
+                            utils.showLoading();
                             onTabChanged(tab, index);
-                            setPage(1);
                             dataFetcher(1, tab, index).then(res => {
                                 datas[index] = res.data.result.records;
                                 setDatas([...datas]);
+                                setSelectedIndex(index);
+                                setPage(1);
+                                utils.hideLoading();
                             });
                         }}>
                             {tab.label}
