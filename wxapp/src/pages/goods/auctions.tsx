@@ -31,10 +31,10 @@ export default class Index extends Component<any, any> {
 
     renderTemplate(data:any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-lg', styles.flow)}>
+            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-xl', styles.flow)}>
                 <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]} />
-                <View>{data.title}</View>
-                <View>RMB {data.startPrice}</View>
+                <View className={'px-2 mt-2'}>{data.title}</View>
+                <View className={'px-2 mb-2'}>RMB {data.startPrice}</View>
             </View>
         );
     }
