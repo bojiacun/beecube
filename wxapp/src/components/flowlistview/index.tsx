@@ -5,6 +5,7 @@ import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
+import stylesFlow from '../../flow.module.scss';
 
 export interface ListViewTabItem {
     label: string;
@@ -93,7 +94,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 }
                 return (
-                    <View className={'grid grid-cols-2 gap-4 p-4'} style={{display: selectedIndex === index ? 'grid': 'none'}}>
+                    <View className={classNames('p-4', stylesFlow.flowWrapper)} style={{display: selectedIndex === index ? '': 'none'}}>
                         {data.map((item:any)=>tab.template(item))}
                     </View>
                 );

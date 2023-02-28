@@ -5,6 +5,8 @@ import request from "../../lib/request";
 import { View } from "@tarojs/components";
 import FlowListView from "../../components/flowlistview";
 import FallbackImage from "../../components/FallbackImage";
+import styles from '../../flow.module.scss';
+import classNames from "classnames";
 
 
 export default class Index extends Component<any, any> {
@@ -29,7 +31,7 @@ export default class Index extends Component<any, any> {
 
     renderTemplate(data:any) {
         return (
-            <View className={'bg-white rounded-lg overflow-hidden rounded shadow-lg'}>
+            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-lg', styles.flow)}>
                 <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]} />
                 <View>{data.title}</View>
                 <View>RMB {data.startPrice}</View>
