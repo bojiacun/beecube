@@ -48,6 +48,8 @@ export default class Index extends Component<any, any> {
         });
     }
 
+
+
     render() {
         return (
             <PageLayout statusBarProps={{title: '所有拍品'}}>

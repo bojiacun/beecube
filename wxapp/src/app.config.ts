@@ -3,6 +3,7 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/goods/buyouts',
         'pages/goods/auctions',
+        'pages/goods/detail',
         'pages/my/index',
         'pages/my/wallet',
         'pages/my/views',
