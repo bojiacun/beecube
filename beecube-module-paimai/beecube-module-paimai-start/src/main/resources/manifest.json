@@ -28,6 +28,18 @@
     {
       "label": "个人中心",
       "url": "/pages/my/index"
+    },
+    {
+      "label": "拍品列表",
+      "url": "/pages/goods/auctions",
+      "urlSuffix": {"label": "标签", "value": "class_id"},
+      "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类"
+    },
+    {
+      "label": "一口价拍品列表",
+      "url": "/pages/goods/buyouts",
+      "urlSuffix": {"label": "标签", "value": "class_id"},
+      "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类"
     }
   ],
   "menus": [

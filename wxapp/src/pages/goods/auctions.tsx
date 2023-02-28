@@ -48,7 +48,9 @@ export default class Index extends Component<any, any> {
         });
     }
 
+    onPullDownRefresh() {
 
+    }
 
     render() {
         return (
