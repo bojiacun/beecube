@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import {Navigator, Text, View} from "@tarojs/components";
 import LoginView from "../../components/login";
 import {connect} from "react-redux";
-import ListView from "../../components/listview";
+import ListView, {ListViewTabItem} from "../../components/listview";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -15,6 +15,17 @@ export default class Index extends Component<any, any> {
     constructor(props) {
         super(props);
         this.handleWithdraw = this.handleWithdraw.bind(this);
+        this.loadData = this.loadData.bind(this);
+
+    }
+
+    tabs: [
+        {label: '全部', id: ''}, {label: '支出', id: '1'}, {label: '收入', id: '2'},{label: '充值', id: '3'},{label: '提现', id: '4'}
+    ]
+
+
+    loadData(pageIndex: number, tab: ListViewTabItem, index: number) {
+
     }
 
     handleWithdraw() {
@@ -37,9 +48,10 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
 
-                    <ListView tabs={[{label: '全部', id: ''}, {label: '支出', id: '1'}, {label: '收入', id: '2'},{label: '充值', id: '3'},{label: '提现', id: '4'}]}>
-                        123
-                    </ListView>
+                    <ListView
+                        tabs={this.tabs}
+                        dataFetcher={}
+                    />
                 </LoginView>
             </PageLayout>
         );
