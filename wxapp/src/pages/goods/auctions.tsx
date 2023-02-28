@@ -4,6 +4,7 @@ import {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import { View } from "@tarojs/components";
 import FlowListView from "../../components/flowlistview";
+import FallbackImage from "../../components/FallbackImage";
 
 
 export default class Index extends Component<any, any> {
@@ -29,7 +30,11 @@ export default class Index extends Component<any, any> {
 
     renderTemplate(data:any) {
         return (
-            <View></View>
+            <View className={'bg-white rounded-lg overflow-hidden rounded'}>
+                <FallbackImage mode={'widthFix'} className={'rounded block'} />
+                <View>{data.title}</View>
+                <View>RMB {data.startPrice}</View>
+            </View>
         );
     }
 
