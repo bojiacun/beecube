@@ -72,13 +72,14 @@ const ListView: FC<ListViewProps> = (props) => {
                 let data = datas[index];
                 if (data.length == 0) {
                     return (
-                        <View className={'text-center text-3xl mt-12'}>
-                            <Text className={'iconfont icon-zanwushuju'}/>
+                        <View style={{display: selectedIndex === index ? 'block': 'none'}} className={'text-center mt-20 text-gray-300'}>
+                            <View className={'iconfont icon-zanwushuju text-9xl'} />
+                            <View>暂无数据</View>
                         </View>
                     );
                 }
                 return (
-                    <View>
+                    <View style={{display: selectedIndex === index ? 'block': 'none'}}>
                         {tab.template(data)}
                     </View>
                 );
