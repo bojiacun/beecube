@@ -1,7 +1,6 @@
 // api.js
 import axios, {AxiosResponse} from "taro-axios";
 import Taro from "@tarojs/taro";
-import utils from "./utils";
 
 const siteinfo = require('../siteinfo');
 export const API_URL = siteinfo.siteroot;
@@ -44,11 +43,9 @@ instance.interceptors.request.use((request)=>{
 });
 
 instance.interceptors.response.use(async (response) => {
-    utils.hideLoading();
     return await handleOnResponse(response);
 }, async (error) => {
     Taro.showToast({icon: 'none', title: '网络错误!', duration: 1500}).then();
-    utils.hideLoading();
     return Promise.reject(error);
 });
 
