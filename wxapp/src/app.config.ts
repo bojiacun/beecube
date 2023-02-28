@@ -3,6 +3,8 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/my/index',
         'pages/my/wallet',
+        'pages/my/views',
+        'pages/my/follows',
         'pages/my/profile',
         'pages/my/profile/phone',
         'pages/my/profile/nickname',
