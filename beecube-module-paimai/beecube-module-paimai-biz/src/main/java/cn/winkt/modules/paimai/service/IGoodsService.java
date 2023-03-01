@@ -1,7 +1,11 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.mapper.GoodsMapper;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import javax.annotation.Resource;
 
 /**
  * @Description: 拍品表
@@ -10,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IGoodsService extends IService<Goods> {
-
+    GoodsVO getDetail(String id);
 }
