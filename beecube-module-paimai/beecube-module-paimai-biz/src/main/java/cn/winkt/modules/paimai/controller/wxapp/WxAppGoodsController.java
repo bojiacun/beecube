@@ -9,9 +9,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,5 +54,13 @@ public class WxAppGoodsController {
         lambdaQueryWrapper.eq(GoodsClass::getStatus, 1);
         lambdaQueryWrapper.orderByDesc(GoodsClass::getCreateTime);
         return Result.OK(goodsClassService.list(lambdaQueryWrapper));
+    }
+
+    @GetMapping("/detail")
+    public Result<Goods> detail(@RequestParam(name="id", defaultValue = "0") String id) {
+        if(StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        return Result.OK(goodsService.getById(id));
     }
 }

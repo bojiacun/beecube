@@ -32,14 +32,26 @@
     {
       "label": "拍品列表",
       "url": "/pages/goods/auctions",
-      "urlSuffix": {"label": "标签", "value": "class_id"},
+      "urlSuffix": {"label": "分类", "value": "class_id"},
       "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类"
+    },
+    {
+      "label": "拍品详情",
+      "url": "/pages/goods/detail",
+      "urlSuffix": {"label": "ID", "value": "id"},
+      "suffixOptions": "请输入拍品的ID"
     },
     {
       "label": "一口价拍品列表",
       "url": "/pages/goods/buyouts",
       "urlSuffix": {"label": "标签", "value": "class_id"},
       "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类"
+    },
+    {
+      "label": "一口价拍品详情",
+      "url": "/pages/goods/detail2",
+      "urlSuffix": {"label": "ID", "value": "id"},
+      "suffixOptions": "请输入一口价拍品的ID"
     }
   ],
   "menus": [
