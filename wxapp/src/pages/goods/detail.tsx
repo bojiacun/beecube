@@ -48,10 +48,10 @@ export default class Index extends Component<any, any> {
             const {context} = this.props;
             const {userInfo} = context;
             if(userInfo != null && this.state.goods) {
-                request.post('/paimai/api/goods/views', null, {params: {id: this.state.id}}).then(res => {
+                request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
                     console.log(res.data.result);
                 });
-                request.get('/paimai/api/goods/isfollow', {params: {id: this.state.id}}).then(res => {
+                request.get('/paimai/api/members/isfollow', {params: {id: this.state.id}}).then(res => {
                     let goods = this.state.goods;
                     goods.followed = res.data.result;
                     this.setState({goods: goods});
@@ -98,7 +98,7 @@ export default class Index extends Component<any, any> {
     }
 
     toggleFollow() {
-        request.put('/paimai/goods/follow/toggle', {id: this.state.id}).then(res => {
+        request.put('/paimai/api/members/follow/toggle', {id: this.state.id}).then(res => {
             let goods = this.state.goods;
             goods.followed = res.data.result;
             this.setState({goods: goods});
