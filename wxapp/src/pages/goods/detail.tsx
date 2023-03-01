@@ -180,20 +180,23 @@ export default class Index extends Component<any, any> {
                 <View style={{height: Taro.pxTransform(124)}}/>
 
                 <LoginView>
-                    <View className={'bg-white flex items-center justify-between fixed bottom-0'} style={{paddingBottom: safeBottom}}>
-                        <View className={'flex flex-col items-center space-y-1'} onClick={this.onShareAppMessage}>
-                            <View className={'iconfont icon-fenxiang'}/>
-                            <View>分享</View>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View>
+                            <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
+                                <View className={'iconfont icon-fenxiang text-lg'}/>
+                                <View>分享</View>
+                            </Button>
                         </View>
                         <View>
-                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center space-y-1'}>
-                                <View className={'iconfont icon-lianxikefu'}/>
+                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
+                                <View className={'iconfont icon-lianxikefu text-xl'}/>
                                 <View>客服</View>
                             </Button>
                         </View>
                         <View onClick={this.toggleFollow}
                               className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
-                            <View className={classNames('iconfont icon-31guanzhu1')}/>
+                            <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
                             <View>关注</View>
                         </View>
                         <View>

@@ -577,8 +577,11 @@ page {
 navigator, picker {
     display: block;
 }
-button {
+button, button[plain] {
     border: none;
+    &::after {
+        border: none;
+    }
     &:after {
         border: none;
     }

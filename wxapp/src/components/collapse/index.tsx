@@ -44,7 +44,7 @@ const Collapse: FC<CollapseProps> = (props) => {
                 </View>
                 <View className={'flex-1 flex items-center justify-between'}>
                     <View>{description}</View>
-                    {showArrow && <Text className={classNames('iconfont icon-youjiantou_huaban text-gray-400', childrenShow? 'transform rotate-90':'transform rotate-0')}/>}
+                    {showArrow && <Text className={classNames('transition-transform iconfont icon-youjiantou_huaban text-gray-400 transform', childrenShow? 'rotate-90':'rotate-0')}/>}
                 </View>
             </View>
             {childrenShow && <View className={'py-4'} style={{border: 'none'}}>
