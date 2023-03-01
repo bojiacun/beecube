@@ -3,9 +3,10 @@ import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Text, View} from "@tarojs/components";
+import {RichText, Text, View} from "@tarojs/components";
 import Clocker from 'clocker-js/Clocker';
 import Taro from "@tarojs/taro";
+import Collapse from "../../components/collapse";
 
 const numeral = require('numeral');
 
@@ -24,8 +25,11 @@ export default class Index extends Component<any, any> {
         utils.showLoading();
         this.setState({id: options.id});
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res => {
-            this.setState({goods: res.data.result});
-            let endDate = new Date(res.data.result.endTime);
+            let data = res.data.result;
+            data.fields = JSON.parse(data.fields || '[]');
+
+            this.setState({goods: data});
+            let endDate = new Date(data.endTime);
             this.clocker = new Clocker(endDate);
             this.clocker.countDown = true;
             utils.hideLoading();
@@ -102,13 +106,22 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'bg-white px-4 divide-y'}>
-                    <View className={'py-4 flex'}>
-                        <View className={'text-gray-400'} style={{width: Taro.pxTransform(90)}}>拍卖专场</View>
-                        <View className={'flex-1 flex items-center justify-between'}>
-                            <View>111</View>
-                            <Text className={'iconfont icon-youjiantou_huaban text-gray-400'}/>
-                        </View>
+                    <Collapse showArrow={true} title={'拍卖专场'} description={'111'} url={goods.performanceId?`/pages/performance/detail?id=${goods.performanceId}`:''} />
+                    <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime} />
+                    {goods.fields.map(f=>{
+                        return <Collapse title={f.key} description={f.value} />
+                    })}
+                </View>
+                <View className={'p-4'}>
+                    <View className={'font-bold'}>拍品描述</View>
+                    <View>
+                        <RichText nodes={goods.description} />
                     </View>
+                </View>
+                <View className={'bg-white px-4 divide-y'}>
+                    <Collapse title={'拍卖流程'} showArrow={true}>
+                        <RichText nodes={goods.descFlow} />
+                    </Collapse>
                 </View>
             </PageLayout>
         );
