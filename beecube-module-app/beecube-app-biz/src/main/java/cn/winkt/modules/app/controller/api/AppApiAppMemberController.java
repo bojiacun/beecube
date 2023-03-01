@@ -29,25 +29,6 @@ public class AppApiAppMemberController {
 
     @Resource
     IAppMemberService appMemberService;
-    @Resource
-    AppMemberProvider appMemberProvider;
-
-    @GetMapping("/queryUserByName")
-    public LoginUser getUserByName(@RequestParam(name = "username", defaultValue = "") String username) {
-        return appMemberProvider.getUserByName(username);
-    }
-    @GetMapping("/queryDictItemsByCode")
-    public List<DictModel> queryDictItemsByCode(@RequestParam(name = "code", defaultValue = "") String code) {
-        return appMemberProvider.queryDictItemsByCode(code);
-    }
-    @GetMapping("/queryPermissionDataRule")
-    public List<SysPermissionDataRuleModel> queryPermissionDataRule(String component, String requestPath, String username) {
-        return appMemberProvider.queryPermissionDataRule(component, requestPath, username);
-    }
-    @GetMapping("/queryUserRoles")
-    public Set<String> queryUserRoles(String username) {
-        return appMemberProvider.queryUserRoles(username);
-    }
 
     //    获取当前用户信息
     @GetMapping("/profile")
