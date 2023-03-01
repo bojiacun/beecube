@@ -34,11 +34,7 @@ public class WxAppGoodsController {
     @Resource
     IGoodsClassService goodsClassService;
 
-    @Resource
-    IGoodsFollowService goodsFollowService;
 
-    @Resource
-    IGoodsViewService goodsViewService;
 
     @Resource
     IGoodsOfferService goodsOfferService;
@@ -91,67 +87,4 @@ public class WxAppGoodsController {
     }
 
 
-    @PostMapping("/views")
-    public Result<Boolean> viewGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser != null) {
-            LambdaQueryWrapper<GoodsView> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsView::getGoodsId, id);
-            queryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
-            if(goodsViewService.count(queryWrapper) == 0) {
-                //没有浏览记录，则生成浏览记录
-                GoodsView goodsView = new GoodsView();
-                goodsView.setGoodsId(id);
-                goodsView.setMemberId(loginUser.getId());
-                goodsView.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
-                goodsView.setMemberAvatar(loginUser.getAvatar());
-                goodsViewService.save(goodsView);
-                return Result.OK(true);
-            }
-        }
-        return Result.OK(false);
-    }
-
-    @GetMapping("/isfollow")
-    public Result<Boolean> queryGoodsFollow(@RequestParam(name = "id", defaultValue = "0") String id) {
-        if (StringUtils.isEmpty(id)) {
-            throw new JeecgBootException("找不到拍品");
-        }
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if (loginUser == null) {
-            return Result.OK(false);
-        }
-        LambdaQueryWrapper<GoodsFollow> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsFollow::getMemberId, loginUser.getId());
-        queryWrapper.eq(GoodsFollow::getGoodsId, id);
-        return Result.OK(goodsFollowService.count(queryWrapper) > 0);
-    }
-
-    @PutMapping("/follow/toggle")
-    public Result<Boolean> toggleFollow(@RequestBody JSONObject params) {
-        String id = params.getString("id");
-        if (StringUtils.isEmpty(id)) {
-            throw new JeecgBootException("操作失败找不到拍品");
-        }
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        LambdaQueryWrapper<GoodsFollow> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsFollow::getGoodsId, id);
-        queryWrapper.eq(GoodsFollow::getMemberId, loginUser.getId());
-
-
-        long count = goodsFollowService.count(queryWrapper);
-        if (count > 0) {
-            //删除所有关注记录
-            goodsFollowService.remove(queryWrapper);
-            return Result.OK(false);
-        } else {
-            GoodsFollow goodsFollow = new GoodsFollow();
-            goodsFollow.setGoodsId(id);
-            goodsFollow.setMemberId(loginUser.getId());
-            goodsFollow.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
-            goodsFollow.setMemberAvatar(loginUser.getAvatar());
-            goodsFollowService.save(goodsFollow);
-            return Result.OK(true);
-        }
-    }
 }
