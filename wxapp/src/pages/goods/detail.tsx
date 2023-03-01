@@ -5,7 +5,6 @@ import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {RichText, Text, View} from "@tarojs/components";
 import Clocker from 'clocker-js/Clocker';
-import Taro from "@tarojs/taro";
 import Collapse from "../../components/collapse";
 
 const numeral = require('numeral');
@@ -121,6 +120,18 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white px-4 divide-y'}>
                     <Collapse title={'拍卖流程'} showArrow={true}>
                         <RichText nodes={goods.descFlow} />
+                    </Collapse>
+                    <Collapse title={'物流运输'} showArrow={true}>
+                        <RichText nodes={goods.descDelivery} />
+                    </Collapse>
+                    <Collapse title={'注意事项'} showArrow={true}>
+                        <RichText nodes={goods.descNotice} />
+                    </Collapse>
+                    <Collapse title={'拍卖须知'} showArrow={true}>
+                        <RichText nodes={goods.descRead} />
+                    </Collapse>
+                    <Collapse title={'保证金说明'} showArrow={true}>
+                        <RichText nodes={goods.descDeposit} />
                     </Collapse>
                 </View>
             </PageLayout>
