@@ -57,32 +57,6 @@ public class WxAppGoodsController {
         return Result.OK(pageList);
     }
 
-    @GetMapping("/views")
-    public Result<?> queryMemberViewGoods(
-            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser == null) {
-            return Result.OK(null);
-        }
-        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-        IPage<Goods> pageList = goodsService.queryMemberViewGoods(loginUser.getId(), page);
-        return Result.OK(pageList);
-    }
-    @GetMapping("/follows")
-    public Result<?> queryMemberFollowGoods(
-            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser == null) {
-            return Result.OK(null);
-        }
-        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-        IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
-        return Result.OK(pageList);
-    }
 
     @GetMapping("/offers")
     public Result<?> goodsOfferList(@RequestParam(name = "id", defaultValue = "0") String id,
@@ -132,6 +106,7 @@ public class WxAppGoodsController {
                 goodsView.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
                 goodsView.setMemberAvatar(loginUser.getAvatar());
                 goodsViewService.save(goodsView);
+                return Result.OK(true);
             }
         }
         return Result.OK(false);

@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, RichText, Text, View} from "@tarojs/components";
+import {Button, Navigator, RichText, Text, View} from "@tarojs/components";
 import Clocker from 'clocker-js/Clocker';
 import Collapse from "../../components/collapse";
 import Taro from "@tarojs/taro";
@@ -38,20 +38,26 @@ export default class Index extends Component<any, any> {
     }
 
 
+    componentDidMount() {
+
+    }
+
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        const {context} = this.props;
-        const {userInfo} = context;
-        console.log(userInfo);
-        if(userInfo) {
-            request.post('/paimai/api/goods/views', null, {params: {id: this.state.id}}).then(res=>{
-                console.log(res.data.result);
-            });
-            request.get('/paimai/api/goods/isfollow', {params: {id: this.state.id}}).then(res=>{
-                let goods = this.state.goods;
-                goods.followed = res.data.result;
-                this.setState({goods: goods});
-            })
+        console.log('did update');
+        if(prevProps.context.userInfo == null || prevState.goods == null) {
+            const {context} = this.props;
+            const {userInfo} = context;
+            if(userInfo != null && this.state.goods) {
+                request.post('/paimai/api/goods/views', null, {params: {id: this.state.id}}).then(res => {
+                    console.log(res.data.result);
+                });
+                request.get('/paimai/api/goods/isfollow', {params: {id: this.state.id}}).then(res => {
+                    let goods = this.state.goods;
+                    goods.followed = res.data.result;
+                    this.setState({goods: goods});
+                });
+            }
         }
     }
 
@@ -158,7 +164,7 @@ export default class Index extends Component<any, any> {
                     <View>
                         <View className={'py-4 flex justify-between'}>
                             <View className={'font-bold'}>出价记录({goods.offerCount})</View>
-                            <View>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></View>
+                            <Navigator url={`offers?id=${this.state.id}`}>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></Navigator>
                         </View>
                     </View>
                 </View>

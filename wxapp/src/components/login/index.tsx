@@ -19,15 +19,22 @@ import {setUserInfo} from "../../store/actions";
 export default class LoginView extends Component<LoginViewProps, any> {
     $instance = getCurrentInstance();
 
+    showEventId: any;
+
     constructor(props: any) {
         super(props);
         this.onShow = this.onShow.bind(this);
     }
 
     componentWillMount() {
-        const onShowEventId = this.$instance.router!.onShow
+        this.showEventId = this.$instance.router!.onShow
         // 监听
-        eventCenter.on(onShowEventId, this.onShow)
+        eventCenter.on(this.showEventId, this.onShow)
+    }
+
+
+    componentWillUnmount() {
+        eventCenter.off(this.showEventId, this.onShow);
     }
 
     onShow() {
