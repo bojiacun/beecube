@@ -27,6 +27,8 @@ export default class Index extends Component<any, any> {
         goods: null,
         counting: false,
     }
+    clocker: any;
+    timer: any;
 
     constructor(props) {
         super(props);
@@ -36,8 +38,22 @@ export default class Index extends Component<any, any> {
     }
 
 
-    clocker: any;
-    timer: any;
+    // @ts-ignore
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+        const {context} = this.props;
+        const {userInfo} = context;
+        console.log(userInfo);
+        if(userInfo) {
+            request.post('/paimai/api/goods/views', null, {params: {id: this.state.id}}).then(res=>{
+                console.log(res.data.result);
+            });
+            request.get('/paimai/api/goods/isfollow', {params: {id: this.state.id}}).then(res=>{
+                let goods = this.state.goods;
+                goods.followed = res.data.result;
+                this.setState({goods: goods});
+            })
+        }
+    }
 
     onLoad(options) {
         utils.showLoading();
