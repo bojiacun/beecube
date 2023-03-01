@@ -3,19 +3,37 @@ import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {RichText, Text, View} from "@tarojs/components";
+import {Button, RichText, Text, View} from "@tarojs/components";
 import Clocker from 'clocker-js/Clocker';
 import Collapse from "../../components/collapse";
+import Taro from "@tarojs/taro";
+import {connect} from "react-redux";
+import classNames from "classnames";
 
 const numeral = require('numeral');
 
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context
+    }
+))
 export default class Index extends Component<any, any> {
     state: any = {
         id: 0,
         goods: null,
         counting: false,
     }
+
+    constructor(props) {
+        super(props);
+        this.onShareAppMessage = this.onShareAppMessage.bind(this);
+        this.onShareTimeline = this.onShareTimeline.bind(this);
+        this.toggleFollow = this.toggleFollow.bind(this);
+    }
+
 
     clocker: any;
     timer: any;
@@ -43,6 +61,24 @@ export default class Index extends Component<any, any> {
             }
         });
     }
+    onShareTimeline() {
+        return {
+            title: this.state.goods?.title,
+        }
+    }
+    onShareAppMessage() {
+        return {
+            title: this.state.goods?.title,
+            path: '/pages/goods/detail?id=' + this.state.id
+        }
+    }
+    toggleFollow() {
+        request.put('/paimai/goods/follow/toggle', {id: this.state.id}).then(res=>{
+            let goods = this.state.goods;
+            goods.followed = res.data.result;
+            this.setState({goods: goods});
+        });
+    }
 
     componentWillUnmount() {
         clearInterval(this.timer);
@@ -50,12 +86,14 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {goods} = this.state;
+        const {systemInfo} = this.props;
         if (goods == null) return <></>;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
             return {id: index, url: '#', image: item};
         });
-
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
 
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
@@ -105,34 +143,59 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'bg-white px-4 divide-y'}>
-                    <Collapse showArrow={true} title={'拍卖专场'} description={'111'} url={goods.performanceId?`/pages/performance/detail?id=${goods.performanceId}`:''} />
-                    <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime} />
-                    {goods.fields.map(f=>{
-                        return <Collapse title={f.key} description={f.value} />
+                    <Collapse showArrow={true} title={'拍卖专场'} description={'111'}
+                              url={goods.performanceId ? `/pages/performance/detail?id=${goods.performanceId}` : ''}/>
+                    <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
+                    {goods.fields.map(f => {
+                        return <Collapse title={f.key} description={f.value}/>
                     })}
                 </View>
                 <View className={'p-4'}>
                     <View className={'font-bold'}>拍品描述</View>
                     <View>
-                        <RichText nodes={goods.description} />
+                        <RichText nodes={goods.description}/>
                     </View>
                 </View>
                 <View className={'bg-white px-4 divide-y'}>
                     <Collapse title={'拍卖流程'} showArrow={true}>
-                        <RichText nodes={goods.descFlow} />
+                        <RichText nodes={goods.descFlow}/>
                     </Collapse>
                     <Collapse title={'物流运输'} showArrow={true}>
-                        <RichText nodes={goods.descDelivery} />
+                        <RichText nodes={goods.descDelivery}/>
                     </Collapse>
                     <Collapse title={'注意事项'} showArrow={true}>
-                        <RichText nodes={goods.descNotice} />
+                        <RichText nodes={goods.descNotice}/>
                     </Collapse>
                     <Collapse title={'拍卖须知'} showArrow={true}>
-                        <RichText nodes={goods.descRead} />
+                        <RichText nodes={goods.descRead}/>
                     </Collapse>
                     <Collapse title={'保证金说明'} showArrow={true}>
-                        <RichText nodes={goods.descDeposit} />
+                        <RichText nodes={goods.descDeposit}/>
                     </Collapse>
+                </View>
+                <View style={{height: Taro.pxTransform(124)}}/>
+
+                <View className={'bg-white flex items-center justify-between'} style={{paddingBottom: safeBottom}}>
+                    <View className={'flex flex-col items-center space-y-1'} onClick={this.onShareAppMessage}>
+                        <View className={'iconfont icon-fenxiang'}/>
+                        <View>分享</View>
+                    </View>
+                    <View>
+                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center space-y-1'}>
+                            <View className={'iconfont icon-lianxikefu'}/>
+                            <View>客服</View>
+                        </Button>
+                    </View>
+                    <View onClick={this.toggleFollow} className={classNames('flex flex-col items-center space-y-1',goods.followed ? 'text-red-500':'')}>
+                        <View className={classNames('iconfont icon-31guanzhu1')} />
+                        <View>关注</View>
+                    </View>
+                    <View>
+                        <Button className={'btn-primary'}>
+                            <View>交保证金</View>
+                            <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
+                        </Button>
+                    </View>
                 </View>
             </PageLayout>
         );
