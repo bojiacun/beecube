@@ -9,6 +9,7 @@ import Collapse from "../../components/collapse";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
+import LoginView from "../../components/login";
 
 const numeral = require('numeral');
 
@@ -61,19 +62,22 @@ export default class Index extends Component<any, any> {
             }
         });
     }
+
     onShareTimeline() {
         return {
             title: this.state.goods?.title,
         }
     }
+
     onShareAppMessage() {
         return {
             title: this.state.goods?.title,
             path: '/pages/goods/detail?id=' + this.state.id
         }
     }
+
     toggleFollow() {
-        request.put('/paimai/goods/follow/toggle', {id: this.state.id}).then(res=>{
+        request.put('/paimai/goods/follow/toggle', {id: this.state.id}).then(res => {
             let goods = this.state.goods;
             goods.followed = res.data.result;
             this.setState({goods: goods});
@@ -175,28 +179,31 @@ export default class Index extends Component<any, any> {
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>
 
-                <View className={'bg-white flex items-center justify-between'} style={{paddingBottom: safeBottom}}>
-                    <View className={'flex flex-col items-center space-y-1'} onClick={this.onShareAppMessage}>
-                        <View className={'iconfont icon-fenxiang'}/>
-                        <View>分享</View>
+                <LoginView>
+                    <View className={'bg-white flex items-center justify-between fixed bottom-0'} style={{paddingBottom: safeBottom}}>
+                        <View className={'flex flex-col items-center space-y-1'} onClick={this.onShareAppMessage}>
+                            <View className={'iconfont icon-fenxiang'}/>
+                            <View>分享</View>
+                        </View>
+                        <View>
+                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center space-y-1'}>
+                                <View className={'iconfont icon-lianxikefu'}/>
+                                <View>客服</View>
+                            </Button>
+                        </View>
+                        <View onClick={this.toggleFollow}
+                              className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
+                            <View className={classNames('iconfont icon-31guanzhu1')}/>
+                            <View>关注</View>
+                        </View>
+                        <View>
+                            <Button className={'btn-primary'}>
+                                <View>交保证金</View>
+                                <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
+                            </Button>
+                        </View>
                     </View>
-                    <View>
-                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center space-y-1'}>
-                            <View className={'iconfont icon-lianxikefu'}/>
-                            <View>客服</View>
-                        </Button>
-                    </View>
-                    <View onClick={this.toggleFollow} className={classNames('flex flex-col items-center space-y-1',goods.followed ? 'text-red-500':'')}>
-                        <View className={classNames('iconfont icon-31guanzhu1')} />
-                        <View>关注</View>
-                    </View>
-                    <View>
-                        <Button className={'btn-primary'}>
-                            <View>交保证金</View>
-                            <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
-                        </Button>
-                    </View>
-                </View>
+                </LoginView>
             </PageLayout>
         );
     }

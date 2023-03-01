@@ -5,7 +5,7 @@
         select
             g.*,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
-            (select count(*) from paimai_goods_views go where gv.goods_id=g.id) as view_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
             (select count(*) from paimai_goods_follows mgf where mgf.goods_id=g.id and mgf.member_id = #{member_id}) as followed
         from paimai_goods g where id = #{id}

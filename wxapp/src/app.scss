@@ -577,6 +577,12 @@ page {
 navigator, picker {
     display: block;
 }
+button {
+    border: none;
+    &:after {
+        border: none;
+    }
+}
 
 .btn-primary {
     border: none;

@@ -68,7 +68,12 @@ public class WxAppGoodsController {
         if(StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
-        return Result.OK(goodsService.getDetail(id));
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        String memberId = "";
+        if(loginUser != null) {
+            memberId = loginUser.getId();
+        }
+        return Result.OK(goodsService.getDetail(id, memberId));
     }
     @PutMapping("/follow/toggle")
     public Result<Boolean> toggleFollow(@RequestBody JSONObject params) {
