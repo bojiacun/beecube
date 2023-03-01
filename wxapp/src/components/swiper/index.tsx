@@ -47,7 +47,7 @@ const CustomSwiper = (props: CustomSwiperProps) => {
     } = props;
 
     return (
-        <Swiper className={classNames("screen-swiper", dotStyle ? "square-dot" : "round-dot", className)}
+        <Swiper className={classNames("screen-swiper text-center", dotStyle ? "square-dot" : "round-dot", className)}
                 style={{height: Taro.pxTransform(height), zIndex: 0}}
                 indicatorDots={indicatorDots} circular={circular}
                 autoplay={autoplay} interval={interval} duration={duration} indicatorColor={indicatorColor}
