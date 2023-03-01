@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsClass;
 import cn.winkt.modules.paimai.service.IGoodsClassService;
 import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -57,10 +58,10 @@ public class WxAppGoodsController {
     }
 
     @GetMapping("/detail")
-    public Result<Goods> detail(@RequestParam(name="id", defaultValue = "0") String id) {
+    public Result<GoodsVO> detail(@RequestParam(name="id", defaultValue = "0") String id) {
         if(StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
-        return Result.OK(goodsService.getById(id));
+        return Result.OK(goodsService.getDetail(id));
     }
 }
