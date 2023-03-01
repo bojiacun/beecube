@@ -1,13 +1,7 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.entity.GoodsClass;
-import cn.winkt.modules.paimai.entity.GoodsFollow;
-import cn.winkt.modules.paimai.entity.GoodsView;
-import cn.winkt.modules.paimai.service.IGoodsClassService;
-import cn.winkt.modules.paimai.service.IGoodsFollowService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.IGoodsViewService;
+import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -46,6 +40,9 @@ public class WxAppGoodsController {
     @Resource
     IGoodsViewService goodsViewService;
 
+    @Resource
+    IGoodsOfferService goodsOfferService;
+
     @AutoLog(value = "拍品表-分页列表查询")
     @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
     @GetMapping(value = "/list")
@@ -57,6 +54,49 @@ public class WxAppGoodsController {
         queryWrapper.eq("status", 1);
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+
+    @GetMapping("/views")
+    public Result<?> queryMemberViewGoods(
+            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser == null) {
+            return Result.OK(null);
+        }
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+        IPage<Goods> pageList = goodsService.queryMemberViewGoods(loginUser.getId(), page);
+        return Result.OK(pageList);
+    }
+    @GetMapping("/follows")
+    public Result<?> queryMemberFollowGoods(
+            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser == null) {
+            return Result.OK(null);
+        }
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+        IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
+        return Result.OK(pageList);
+    }
+
+    @GetMapping("/offers")
+    public Result<?> goodsOfferList(@RequestParam(name = "id", defaultValue = "0") String id,
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+                                    ) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOffer::getGoodsId, id);
+        queryWrapper.orderByDesc(GoodsOffer::getPrice);
+        Page<GoodsOffer> page = new Page<>(pageNo, pageSize);
+        IPage<GoodsOffer> pageList = goodsOfferService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
 
@@ -75,6 +115,7 @@ public class WxAppGoodsController {
         }
         return Result.OK(goodsService.getDetail(id));
     }
+
 
     @PostMapping("/views")
     public Result<Boolean> viewGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
