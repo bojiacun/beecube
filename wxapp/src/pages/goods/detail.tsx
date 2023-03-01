@@ -4,6 +4,7 @@ import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Text, View} from "@tarojs/components";
+import Clocker from 'clocker-js/Clocker';
 const numeral = require('numeral');
 
 
@@ -14,13 +15,18 @@ export default class Index extends Component<any, any> {
         goods: null
     }
 
+    clocker: any;
+
     onLoad(options) {
         utils.showLoading();
         this.setState({id: options.id});
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res=>{
             this.setState({goods: res.data.result});
+            let endDate = new Date(res.data.result.endTime);
+            this.clocker = new Clocker(endDate);
+            this.clocker.countDown = true;
             utils.hideLoading();
-        })
+        });
     }
     render() {
         const {goods} = this.state;
