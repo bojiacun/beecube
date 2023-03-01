@@ -3,9 +3,11 @@ package cn.winkt.modules.paimai.controller.wxapp;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsClass;
 import cn.winkt.modules.paimai.entity.GoodsFollow;
+import cn.winkt.modules.paimai.entity.GoodsView;
 import cn.winkt.modules.paimai.service.IGoodsClassService;
 import cn.winkt.modules.paimai.service.IGoodsFollowService;
 import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.paimai.service.IGoodsViewService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -41,12 +43,15 @@ public class WxAppGoodsController {
     @Resource
     IGoodsFollowService goodsFollowService;
 
+    @Resource
+    IGoodsViewService goodsViewService;
+
     @AutoLog(value = "拍品表-分页列表查询")
-    @ApiOperation(value="拍品表-分页列表查询", notes="拍品表-分页列表查询")
+    @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(Goods goods,
-                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         queryWrapper.eq("status", 1);
@@ -64,19 +69,40 @@ public class WxAppGoodsController {
     }
 
     @GetMapping("/detail")
-    public Result<GoodsVO> detail(@RequestParam(name="id", defaultValue = "0") String id) {
-        if(StringUtils.isEmpty(id)) {
+    public Result<GoodsVO> detail(@RequestParam(name = "id", defaultValue = "0") String id) {
+        if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
         return Result.OK(goodsService.getDetail(id));
     }
+
+    @PostMapping("/views")
+    public Result<Boolean> viewGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser != null) {
+            LambdaQueryWrapper<GoodsView> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(GoodsView::getGoodsId, id);
+            queryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
+            if(goodsViewService.count(queryWrapper) == 0) {
+                //没有浏览记录，则生成浏览记录
+                GoodsView goodsView = new GoodsView();
+                goodsView.setGoodsId(id);
+                goodsView.setMemberId(loginUser.getId());
+                goodsView.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+                goodsView.setMemberAvatar(loginUser.getAvatar());
+                goodsViewService.save(goodsView);
+            }
+        }
+        return Result.OK(false);
+    }
+
     @GetMapping("/isfollow")
     public Result<Boolean> queryGoodsFollow(@RequestParam(name = "id", defaultValue = "0") String id) {
-        if(StringUtils.isEmpty(id)) {
+        if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser == null) {
+        if (loginUser == null) {
             return Result.OK(false);
         }
         LambdaQueryWrapper<GoodsFollow> queryWrapper = new LambdaQueryWrapper<>();
@@ -84,10 +110,11 @@ public class WxAppGoodsController {
         queryWrapper.eq(GoodsFollow::getGoodsId, id);
         return Result.OK(goodsFollowService.count(queryWrapper) > 0);
     }
+
     @PutMapping("/follow/toggle")
     public Result<Boolean> toggleFollow(@RequestBody JSONObject params) {
         String id = params.getString("id");
-        if(StringUtils.isEmpty(id)) {
+        if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -97,12 +124,11 @@ public class WxAppGoodsController {
 
 
         long count = goodsFollowService.count(queryWrapper);
-        if(count > 0) {
+        if (count > 0) {
             //删除所有关注记录
             goodsFollowService.remove(queryWrapper);
             return Result.OK(false);
-        }
-        else {
+        } else {
             GoodsFollow goodsFollow = new GoodsFollow();
             goodsFollow.setGoodsId(id);
             goodsFollow.setMemberId(loginUser.getId());
