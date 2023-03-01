@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller.api;
 
+import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,12 +12,16 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.vo.DictModel;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.system.vo.SysPermissionDataRuleModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/app/api/members")
@@ -24,8 +29,27 @@ public class AppApiAppMemberController {
 
     @Resource
     IAppMemberService appMemberService;
+    @Resource
+    AppMemberProvider appMemberProvider;
 
-//    获取当前用户信息
+    @GetMapping("/queryUserByName")
+    public LoginUser getUserByName(@RequestParam(name = "username", defaultValue = "") String username) {
+        return appMemberProvider.getUserByName(username);
+    }
+    @GetMapping("/queryDictItemsByCode")
+    public List<DictModel> queryDictItemsByCode(@RequestParam(name = "code", defaultValue = "") String code) {
+        return appMemberProvider.queryDictItemsByCode(code);
+    }
+    @GetMapping("/queryPermissionDataRule")
+    public List<SysPermissionDataRuleModel> queryPermissionDataRule(String component, String requestPath, String username) {
+        return appMemberProvider.queryPermissionDataRule(component, requestPath, username);
+    }
+    @GetMapping("/queryUserRoles")
+    public Set<String> queryUserRoles(String username) {
+        return appMemberProvider.queryUserRoles(username);
+    }
+
+    //    获取当前用户信息
     @GetMapping("/profile")
     public Result<AppMember> memberDetail() {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
