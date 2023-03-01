@@ -23,7 +23,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     GoodsMapper goodsMapper;
 
     @Override
-    public GoodsVO getDetail(String id, String member_id) {
-        return goodsMapper.getDetail(id, member_id);
+    public GoodsVO getDetail(String id) {
+        return goodsMapper.getDetail(id);
     }
 }

@@ -14,5 +14,5 @@ import javax.annotation.Resource;
  * @Version: V1.0
  */
 public interface IGoodsService extends IService<Goods> {
-    GoodsVO getDetail(String id, String member_id);
+    GoodsVO getDetail(String id);
 }

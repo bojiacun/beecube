@@ -68,12 +68,21 @@ public class WxAppGoodsController {
         if(StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        String memberId = "";
-        if(loginUser != null) {
-            memberId = loginUser.getId();
+        return Result.OK(goodsService.getDetail(id));
+    }
+    @GetMapping("/isfollow")
+    public Result<Boolean> queryGoodsFollow(@RequestParam(name = "id", defaultValue = "0") String id) {
+        if(StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
         }
-        return Result.OK(goodsService.getDetail(id, memberId));
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser == null) {
+            return Result.OK(false);
+        }
+        LambdaQueryWrapper<GoodsFollow> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsFollow::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsFollow::getGoodsId, id);
+        return Result.OK(goodsFollowService.count(queryWrapper) > 0);
     }
     @PutMapping("/follow/toggle")
     public Result<Boolean> toggleFollow(@RequestBody JSONObject params) {

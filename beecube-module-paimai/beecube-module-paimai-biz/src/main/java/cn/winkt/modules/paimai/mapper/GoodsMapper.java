@@ -15,5 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface GoodsMapper extends BaseMapper<Goods> {
 
-    GoodsVO getDetail(@Param("id") String id, @Param("member_id") String member_id);
+    GoodsVO getDetail(@Param("id") String id);
 }
