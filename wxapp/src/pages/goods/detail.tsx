@@ -44,7 +44,6 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        console.log('did update');
         if(prevProps.context.userInfo == null || prevState.goods == null) {
             const {context} = this.props;
             const {userInfo} = context;
