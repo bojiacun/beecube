@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.api;
 
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
-@FeignClient(value = "beecube-app")
+@FeignClient(value = AppModuleConstants.SERVICE_APP, contextId = "beecube-app-app-member-provider")
 @ConditionalOnMissingClass("cn.winkt.modules.app.service.impl.AppMemberProviderImpl")
 public interface IAppMemberProviderApi extends AppMemberProvider {
 
