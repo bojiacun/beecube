@@ -67,6 +67,11 @@ export default class Index extends Component<any, any> {
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
                 });
+                request.get('/paimai/api/goods/max', {params: {id: this.state.id}}).then(res=>{
+                    let goods = this.state.goods;
+                    goods.currentPrice = res.data.result;
+                    this.setState({goods: goods});
+                })
             }
         }
     }
