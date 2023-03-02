@@ -22,6 +22,7 @@ import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -151,6 +152,7 @@ public class WxAppMemberController {
 
 
     @PostMapping("/deposits")
+    @Transactional
     public Result<?> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("操作失败找不到拍品");
