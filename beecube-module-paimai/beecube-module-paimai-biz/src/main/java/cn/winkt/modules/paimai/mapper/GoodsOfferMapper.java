@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface GoodsOfferMapper extends BaseMapper<GoodsOffer> {
+
+    Double getMaxOffer(@Param("goods_id") String goodsId);
 }

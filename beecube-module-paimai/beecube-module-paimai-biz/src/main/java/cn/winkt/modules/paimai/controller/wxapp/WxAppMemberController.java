@@ -17,7 +17,9 @@ import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
+import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
@@ -56,6 +58,12 @@ public class WxAppMemberController {
 
     @Resource
     MiniappServices miniappServices;
+
+    @Resource
+    RedissonLockClient redissonLockClient;
+
+    @Resource
+    IGoodsOfferService goodsOfferService;
 
     /**
      * 获取用户的浏览记录
@@ -204,6 +212,46 @@ public class WxAppMemberController {
     }
 
 
+    /**
+     * 出价拍品
+     * @return
+     */
+    @PostMapping("/offers")
+    @Transactional
+    public Result<?> goodsOffer(@RequestBody JSONObject post) {
+        Goods goods = goodsService.getById(post.getString("id"));
+        if(goods == null) {
+            throw new JeecgBootException("操作失败找不到拍品");
+        }
+        if(new Date().compareTo(goods.getEndTime()) <= 0) {
+            throw new JeecgBootException("该拍品已结束拍卖");
+        }
+        String lockKey = "OFFER-LOCKER-"+goods.getId();
+        if(redissonLockClient.tryLock(lockKey, -1, 300)) {
+            BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
+            if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
+                return Result.error("出价不得低于起拍价");
+            }
+            Double max = goodsOfferService.getMaxOffer(goods.getId());
+            if(userOfferPrice.compareTo(BigDecimal.valueOf(max)) <= 0) {
+                return Result.error("他人已出此价格或更高的价格");
+            }
+            LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+            GoodsOffer goodsOffer = new GoodsOffer();
+            goodsOffer.setGoodsId(goods.getId());
+            goodsOffer.setPrice(userOfferPrice.floatValue());
+            goodsOffer.setMemberId(loginUser.getId());
+            goodsOffer.setMemberAvatar(loginUser.getAvatar());
+            goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+            goodsOffer.setOfferTime(new Date());
+            goodsOfferService.save(goodsOffer);
+
+            return Result.OK("出价成功");
+        }
+        else {
+            return Result.error("出价失败");
+        }
+    }
     /**
      * 缴纳保证金，并生成订单
      * @param id

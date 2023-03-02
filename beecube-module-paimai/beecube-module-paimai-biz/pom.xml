@@ -11,6 +11,10 @@
     <dependencies>
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
+            <artifactId>jeecg-boot-starter-lock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jeecgframework.boot</groupId>
             <artifactId>beecube-module-paimai-api</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import javax.annotation.Resource;
+
 /**
  * @Description: 出价记录表
  * @Author: jeecg-boot
@@ -16,4 +18,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class GoodsOfferServiceImpl extends ServiceImpl<GoodsOfferMapper, GoodsOffer> implements IGoodsOfferService {
 
+    @Resource
+    GoodsOfferMapper goodsOfferMapper;
+    @Override
+    public Double getMaxOffer(String goodsId) {
+        return goodsOfferMapper.getMaxOffer(goodsId);
+    }
 }
