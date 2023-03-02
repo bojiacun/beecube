@@ -49,6 +49,7 @@ public class GoodsOfferWebSocket {
                     offerGroup.put(goodsId, new HashSet<>());
                 }
                 offerGroup.get(goodsId).add(userId);
+                redissonLockClient.unlock(lockKey);
             }
             else {
                 log.info("用户 {} 入群 {} 失败", userId, goodsId);
