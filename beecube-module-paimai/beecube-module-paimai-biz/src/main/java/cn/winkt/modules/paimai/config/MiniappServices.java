@@ -38,7 +38,7 @@ public class MiniappServices {
         WxPayConfig config = new WxPayConfig();
         WxAppSetting wxappSetting = new WxAppSetting();
         BeanUtils.populate(wxappSetting, configs);
-        config.setAppId(wxappSetting.getAppId());
+        config.setAppId(wxappSetting.getAppid());
         config.setMchId(wxappSetting.getMerchId());
         config.setMchKey(wxappSetting.getMerchSecret());
         config.setKeyPath(wxappSetting.getApiclientP12());

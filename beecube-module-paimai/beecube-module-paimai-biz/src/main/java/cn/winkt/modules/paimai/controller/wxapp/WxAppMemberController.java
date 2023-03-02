@@ -170,7 +170,9 @@ public class WxAppMemberController {
         if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
             goodsDeposit.setPerformanceId(goods.getPerformanceId());
             Performance performance = performanceService.getById(goods.getPerformanceId());
-            goodsDeposit.setAuctionId(performance.getAuctionId());
+            if(performance != null) {
+                goodsDeposit.setAuctionId(performance.getAuctionId());
+            }
         }
         goodsDeposit.setPrice(goods.getDeposit());
         goodsDeposit.setStatus(0);

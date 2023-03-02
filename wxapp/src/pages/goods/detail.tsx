@@ -35,6 +35,7 @@ export default class Index extends Component<any, any> {
         this.onShareAppMessage = this.onShareAppMessage.bind(this);
         this.onShareTimeline = this.onShareTimeline.bind(this);
         this.toggleFollow = this.toggleFollow.bind(this);
+        this.payDeposit = this.payDeposit.bind(this);
     }
 
 
@@ -58,6 +59,13 @@ export default class Index extends Component<any, any> {
                 });
             }
         }
+    }
+
+    payDeposit() {
+        //支付宝保证金
+        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
+            console.log(res);
+        })
     }
 
     onLoad(options) {
@@ -221,7 +229,7 @@ export default class Index extends Component<any, any> {
                             <View>关注</View>
                         </View>
                         <View>
-                            <Button className={'btn-primary'}>
+                            <Button className={'btn-primary'} onClick={this.payDeposit}>
                                 <View>交保证金</View>
                                 <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
                             </Button>
