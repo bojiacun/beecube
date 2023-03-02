@@ -69,7 +69,18 @@ public class WxAppGoodsController {
         IPage<GoodsOffer> pageList = goodsOfferService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
-
+    @GetMapping("/offers/max")
+    public Result<?> maxGoodsOfferList(@RequestParam(name = "id", defaultValue = "0") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        Double max = goodsOfferService.getMaxOffer(id);
+        if(max == null) {
+            Goods goods = goodsService.getById(id);
+            max = goods.getStartPrice().doubleValue();
+        }
+        return Result.OK(max);
+    }
     @GetMapping("/classes")
     public Result<List<GoodsClass>> classes() {
         LambdaQueryWrapper<GoodsClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
