@@ -246,6 +246,8 @@ public class WxAppMemberController {
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
 
+            //在此通知群消息
+
             return Result.OK("出价成功");
         }
         else {
