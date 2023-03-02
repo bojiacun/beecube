@@ -312,6 +312,8 @@ public class WxAppMemberController {
     }
     @RequestMapping(value = "/deposit_notify/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
     public String depositNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        //这里要设置APPID Context
+        AppContext.setApp(appId);
         WxPayService wxPayService = miniappServices.getService(appId);
         final WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
         notifyResult.checkResult(wxPayService, "MD5", true);
