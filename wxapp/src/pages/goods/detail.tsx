@@ -49,12 +49,20 @@ export default class Index extends Component<any, any> {
             const {context} = this.props;
             const {userInfo} = context;
             if(userInfo != null && this.state.goods) {
+                //记录浏览记录
                 request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
                     console.log(res.data.result);
                 });
+                //查询是否关注
                 request.get('/paimai/api/members/isfollow', {params: {id: this.state.id}}).then(res => {
                     let goods = this.state.goods;
                     goods.followed = res.data.result;
+                    this.setState({goods: goods});
+                });
+                //查询是否需要缴纳保证金
+                request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
+                    let goods = this.state.goods;
+                    goods.deposited = res.data.result;
                     this.setState({goods: goods});
                 });
             }
@@ -121,6 +129,30 @@ export default class Index extends Component<any, any> {
             goods.followed = res.data.result;
             this.setState({goods: goods});
         });
+    }
+
+    renderButton() {
+        const {goods} = this.state;
+        if(!goods.deposit || goods.deposited) {
+            return (
+                <View>
+                    <Button className={'btn-primary bg-red-500'} onClick={this.payDeposit}>
+                        <View>出价</View>
+                        <View>RMB {numeral(goods.startPrice).format('0,0.00')}</View>
+                    </Button>
+                </View>
+            );
+        }
+        else {
+            return (
+                <View>
+                    <Button className={'btn-primary'} onClick={this.payDeposit}>
+                        <View>交保证金</View>
+                        <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
+                    </Button>
+                </View>
+            );
+        }
     }
 
     componentWillUnmount() {
@@ -238,12 +270,7 @@ export default class Index extends Component<any, any> {
                             <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
                             <View>关注</View>
                         </View>
-                        <View>
-                            <Button className={'btn-primary'} onClick={this.payDeposit}>
-                                <View>交保证金</View>
-                                <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
-                            </Button>
-                        </View>
+                        {this.renderButton()}
                     </View>
                 </LoginView>
             </PageLayout>
