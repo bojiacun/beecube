@@ -38,16 +38,16 @@ public class TokenUtils {
     /**
      * 验证Token
      */
-    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonApi, RedisUtil redisUtil, LoginType loginType) {
+    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonApi, RedisUtil redisUtil) {
         log.debug(" -- url --" + request.getRequestURL());
         String token = getTokenByRequest(request);
-        return verifyToken(token, commonApi, redisUtil, loginType);
+        return verifyToken(token, commonApi, redisUtil);
     }
 
     /**
      * 验证Token
      */
-    public static boolean verifyToken(String token, CommonAPI commonApi, RedisUtil redisUtil, LoginType loginType) {
+    public static boolean verifyToken(String token, CommonAPI commonApi, RedisUtil redisUtil) {
         if (StringUtils.isBlank(token)) {
             throw new JeecgBoot401Exception("token不能为空!");
         }

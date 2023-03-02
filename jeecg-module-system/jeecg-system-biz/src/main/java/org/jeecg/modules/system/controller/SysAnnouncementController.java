@@ -493,7 +493,7 @@ public class SysAnnouncementController {
             boolean tokenOk = false;
             try {
                 // 验证Token有效性
-                tokenOk = TokenUtils.verifyToken(request, sysBaseApi, redisUtil, LoginType.Admin);
+                tokenOk = TokenUtils.verifyToken(request, sysBaseApi, redisUtil);
             } catch (Exception ignored) {
             }
             // 判断是否传递了Token，并且Token有效，如果传了就不做查看限制，直接返回

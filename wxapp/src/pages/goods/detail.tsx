@@ -73,7 +73,7 @@ export default class Index extends Component<any, any> {
                     this.nextPrice(goods);
                 });
                 //连接websocket
-                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/pm/websocket/'+goods.id+'/'+userInfo.id}).then(res=>{
+                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/auction/websocket/'+goods.id+'/'+userInfo.id}).then(res=>{
                     this.socket = res;
                 }).catch(e=>{
                     console.log(e);
