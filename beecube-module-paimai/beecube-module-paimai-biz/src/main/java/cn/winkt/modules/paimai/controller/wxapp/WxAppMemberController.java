@@ -234,7 +234,7 @@ public class WxAppMemberController {
                 return Result.error("出价不得低于起拍价");
             }
             Double max = goodsOfferService.getMaxOffer(goods.getId());
-            if(userOfferPrice.compareTo(BigDecimal.valueOf(max)) <= 0) {
+            if(max != null && userOfferPrice.compareTo(BigDecimal.valueOf(max)) <= 0) {
                 return Result.error("他人已出此价格或更高的价格");
             }
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
