@@ -248,7 +248,7 @@ public class WxAppMemberController {
             goodsOfferService.save(goodsOffer);
 
             //在此通知群消息
-
+            redissonLockClient.unlock(lockKey);
             return Result.OK("出价成功");
         }
         else {
