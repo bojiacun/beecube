@@ -74,6 +74,8 @@ export default class Index extends Component<any, any> {
                 });
                 //连接websocket
                 Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/auction/websocket/'+goods.id+'/'+userInfo.id}).then(res=>{
+                    console.log(res);
+                    res.send({data: 'tester'})
                     this.socket = res;
                 }).catch(e=>{
                     console.log(e);
