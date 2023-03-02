@@ -187,7 +187,7 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit());
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl()+"/paimai/api/members/deposit_notify")
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify")
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付拍品保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -202,14 +202,17 @@ public class WxAppMemberController {
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         final WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
         notifyResult.checkResult(wxPayService, "MD5", true);
+
         String outTradeNo = notifyResult.getOutTradeNo();
         PayLog payLog = payLogService.getById(outTradeNo);
         payLog.setPayedAt(new Date());
         payLog.setStatus(true);
+        payLog.setTransactionId(notifyResult.getTransactionId());
         payLogService.save(payLog);
 
         GoodsDeposit goodsDeposit = goodsDepositService.getById(payLog.getOrdersn());
         goodsDeposit.setStatus(1);
+        goodsDeposit.setTransactionId(notifyResult.getTransactionId());
         goodsDepositService.save(goodsDeposit);
         return WxPayNotifyResponse.success("成功");
     }

@@ -53,6 +53,10 @@ public class GoodsDeposit {
 	@Excel(name = "缴纳者Id", width = 15)
     @ApiModelProperty(value = "缴纳者Id")
 	private java.lang.String memberId;
+	/**交易单号*/
+	@Excel(name = "交易单号", width = 15)
+	@ApiModelProperty(value = "交易单号")
+	private java.lang.String transactionId;
 	/**缴纳者*/
 	@Excel(name = "缴纳者", width = 15)
     @ApiModelProperty(value = "缴纳者")
