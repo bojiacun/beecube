@@ -57,6 +57,12 @@ public class WxAppMemberController {
     @Resource
     MiniappServices miniappServices;
 
+    /**
+     * 获取用户的浏览记录
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/views")
     public Result<?> queryMemberViewGoods(
             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -72,6 +78,11 @@ public class WxAppMemberController {
     }
 
 
+    /**
+     * 生成用户的浏览记录
+     * @param id
+     * @return
+     */
     @PostMapping("/views")
     public Result<Boolean> viewGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -93,6 +104,12 @@ public class WxAppMemberController {
         return Result.OK(false);
     }
 
+    /**
+     * 获取用户的关注记录
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/follows")
     public Result<?> queryMemberFollowGoods(
             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -108,8 +125,38 @@ public class WxAppMemberController {
     }
 
 
+    /**
+     * 查询用户是否缴纳了拍品保证金
+     * @param id
+     * @return
+     */
+    @GetMapping("/deposited")
+    public Result<Boolean> queryGoodsDeposit(@RequestParam(value = "id", defaultValue = "") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        Goods goods = goodsService.getById(id);
+        if(goods.getDeposit() == null || goods.getDeposit() <=0) {
+            return Result.OK(true);
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if (loginUser == null) {
+            return Result.OK(false);
+        }
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getGoodsId, id);
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        return Result.OK(goodsDepositService.count(queryWrapper) > 0);
+    }
+
+    /**
+     * 判断用户是否关注了拍品
+     * @param id
+     * @return
+     */
     @GetMapping("/isfollow")
-    public Result<Boolean> queryGoodsFollow(@RequestParam(name = "id", defaultValue = "0") String id) {
+    public Result<Boolean> queryGoodsFollow(@RequestParam(name = "id", defaultValue = "") String id) {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
@@ -123,6 +170,11 @@ public class WxAppMemberController {
         return Result.OK(goodsFollowService.count(queryWrapper) > 0);
     }
 
+    /**
+     * 关注或取消关注商品
+     * @param params
+     * @return
+     */
     @PutMapping("/follow/toggle")
     public Result<Boolean> toggleFollow(@RequestBody JSONObject params) {
         String id = params.getString("id");
@@ -152,6 +204,14 @@ public class WxAppMemberController {
     }
 
 
+    /**
+     * 缴纳保证金，并生成订单
+     * @param id
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws WxPayException
+     */
     @PostMapping("/deposits")
     @Transactional
     public Result<?> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
@@ -161,6 +221,9 @@ public class WxAppMemberController {
         Goods goods = goodsService.getById(id);
         if(goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
+        }
+        if(goods.getDeposit() == null || goods.getDeposit() <= 0) {
+            throw new JeecgBootException("该拍品无需缴纳保证金");
         }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
