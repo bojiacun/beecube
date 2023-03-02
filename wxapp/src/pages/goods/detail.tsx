@@ -37,6 +37,7 @@ export default class Index extends Component<any, any> {
         this.onShareTimeline = this.onShareTimeline.bind(this);
         this.toggleFollow = this.toggleFollow.bind(this);
         this.payDeposit = this.payDeposit.bind(this);
+        this.offer = this.offer.bind(this);
     }
 
 
@@ -85,6 +86,33 @@ export default class Index extends Component<any, any> {
                 });
             });
         })
+    }
+
+    offer() {
+        //出价
+        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.nextPrice}).then(res=>{
+            console.log(res);
+        })
+    }
+    get nextPrice() {
+        let goods = this.state.goods;
+        let upgradeConfig = JSON.parse(goods.uprange);
+        let currentPrice = parseFloat(goods.currentPrice) || parseFloat(goods.startPrice);
+
+        if(currentPrice === parseFloat(goods.startPrice)) {
+            return goods.startPrice;
+        }
+
+        let rangePirce = 0;
+        for (let i = 0; i < upgradeConfig.length; i++) {
+            let config = upgradeConfig[i];
+            let min = parseFloat(config.min);
+            let price = parseFloat(config.price);
+            if(currentPrice >= min) {
+                rangePirce = price;
+            }
+        }
+        return currentPrice + rangePirce;
     }
 
     onLoad(options) {
@@ -137,9 +165,9 @@ export default class Index extends Component<any, any> {
         if(!goods.deposit || goods.deposited) {
             return (
                 <View>
-                    <Button className={'btn-primary bg-none bg-red-500'} onClick={this.payDeposit}>
+                    <Button className={'btn btn-danger w-56'} onClick={this.offer}>
                         <View>出价</View>
-                        <View>RMB {numeral(goods.startPrice).format('0,0.00')}</View>
+                        <View>RMB {numeral(this.nextPrice).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
@@ -147,7 +175,7 @@ export default class Index extends Component<any, any> {
         else {
             return (
                 <View>
-                    <Button className={'btn-primary'} onClick={this.payDeposit}>
+                    <Button className={'btn btn-primary w-56'} onClick={this.payDeposit}>
                         <View>交保证金</View>
                         <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
                     </Button>

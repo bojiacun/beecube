@@ -224,7 +224,7 @@ public class WxAppMemberController {
         if(goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
-        if(new Date().compareTo(goods.getEndTime()) <= 0) {
+        if(new Date().compareTo(goods.getEndTime()) >= 0) {
             throw new JeecgBootException("该拍品已结束拍卖");
         }
         String lockKey = "OFFER-LOCKER-"+goods.getId();
