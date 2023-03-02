@@ -67,10 +67,10 @@ export default class Index extends Component<any, any> {
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
                 });
-                request.get('/paimai/api/goods/max', {params: {id: this.state.id}}).then(res=>{
+                request.get('/paimai/api/goods/offers/max', {params: {id: this.state.id}}).then(res=>{
                     let goods = this.state.goods;
                     goods.currentPrice = res.data.result;
-                    this.setState({goods: goods});
+                    this.setState({goods: {...goods}});
                 })
             }
         }
@@ -104,11 +104,11 @@ export default class Index extends Component<any, any> {
     get nextPrice() {
         let goods = this.state.goods;
         let upgradeConfig = JSON.parse(goods.uprange);
-        let currentPrice = parseFloat(goods.currentPrice) || parseFloat(goods.startPrice);
-
-        if(currentPrice === parseFloat(goods.startPrice)) {
+        if(!goods.currentPrice) {
+            //说明没有人出价，第一次出价可以以起拍价出价
             return goods.startPrice;
         }
+        let currentPrice = parseFloat(goods.currentPrice);
 
         let rangePirce = 0;
         for (let i = 0; i < upgradeConfig.length; i++) {
