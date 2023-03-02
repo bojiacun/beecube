@@ -91,7 +91,9 @@ export default class Index extends Component<any, any> {
     offer() {
         //出价
         request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.nextPrice}).then(res=>{
-            console.log(res);
+            if(res.data.result.success) {
+                utils.showSuccess(false, '出价成功');
+            }
         })
     }
     get nextPrice() {

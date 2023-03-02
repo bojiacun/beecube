@@ -28,6 +28,10 @@ const handleOnResponse = async (response: AxiosResponse) => {
         Taro.showToast({icon: 'none', title: '无权限访问!', duration: 1500}).then();
         return Promise.reject(new Error("无权限访问"));
     }
+    else if(res.code == 500) {
+        Taro.showToast({icon: 'none', title: res.message || '服务器发生错误', duration: 1500}).then();
+        return response;
+    }
     return response;
 }
 
