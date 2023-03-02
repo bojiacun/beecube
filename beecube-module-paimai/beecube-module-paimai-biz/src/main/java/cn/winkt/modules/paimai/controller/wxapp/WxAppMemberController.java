@@ -300,7 +300,7 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit());
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify")
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify/"+AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付拍品保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -310,9 +310,9 @@ public class WxAppMemberController {
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK("",wxPayService.createOrder(request));
     }
-    @RequestMapping(value = "/deposit_notify", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    public String depositNotify(@RequestBody String xmlData) throws InvocationTargetException, IllegalAccessException, WxPayException {
-        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+    @RequestMapping(value = "/deposit_notify/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+    public String depositNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        WxPayService wxPayService = miniappServices.getService(appId);
         final WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
         notifyResult.checkResult(wxPayService, "MD5", true);
 
