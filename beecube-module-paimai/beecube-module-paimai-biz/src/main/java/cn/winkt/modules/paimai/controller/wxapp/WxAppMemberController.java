@@ -10,6 +10,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @RequestMapping("/paimai/api/members")
 @RestController
@@ -179,7 +182,7 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit());
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl()+"/paimai/api/members/deposity_notify")
+                .notifyUrl(jeecgBaseConfig.getDomainUrl()+"/paimai/api/members/deposit_notify")
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付拍品保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -188,6 +191,22 @@ public class WxAppMemberController {
                 .build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK(wxPayService.createOrder(request));
+    }
+    @RequestMapping(value = "/deposit_notify", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+    public String depositNotify(@RequestBody String xmlData) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        final WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
+        notifyResult.checkResult(wxPayService, "MD5", true);
+        String outTradeNo = notifyResult.getOutTradeNo();
+        PayLog payLog = payLogService.getById(outTradeNo);
+        payLog.setPayedAt(new Date());
+        payLog.setStatus(true);
+        payLogService.save(payLog);
+
+        GoodsDeposit goodsDeposit = goodsDepositService.getById(payLog.getOrdersn());
+        goodsDeposit.setStatus(1);
+        goodsDepositService.save(goodsDeposit);
+        return WxPayNotifyResponse.success("成功");
     }
 
     protected PayLog getPayLog(String ordersn) {
@@ -199,4 +218,5 @@ public class WxAppMemberController {
         payLogService.save(payLog);
         return payLog;
     }
+
 }
