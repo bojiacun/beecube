@@ -27,6 +27,7 @@ export default class Index extends Component<any, any> {
         id: 0,
         goods: null,
         counting: false,
+        nextPrice: undefined,
     }
     clocker: any;
     timer: any;
@@ -70,7 +71,7 @@ export default class Index extends Component<any, any> {
                 request.get('/paimai/api/goods/offers/max', {params: {id: this.state.id}}).then(res=>{
                     let goods = this.state.goods;
                     goods.currentPrice = res.data.result;
-                    this.setState({goods: {...goods}});
+                    this.nextPrice(goods);
                 })
             }
         }
@@ -79,7 +80,6 @@ export default class Index extends Component<any, any> {
     payDeposit() {
         //支付宝保证金
         request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
-            console.log(res);
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
@@ -95,14 +95,17 @@ export default class Index extends Component<any, any> {
 
     offer() {
         //出价
-        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.nextPrice}).then(res=>{
+        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.state.nextPrice}).then(res=>{
             if(res.data.success) {
                 utils.showSuccess(false, '出价成功');
+                let goods = this.state.goods;
+                goods.currentPrice = this.state.nextPrice;
+                this.nextPrice(goods);
             }
         })
     }
-    get nextPrice() {
-        let goods = this.state.goods;
+    nextPrice(newGoods) {
+        let goods = newGoods;
         let upgradeConfig = JSON.parse(goods.uprange);
         if(!goods.currentPrice) {
             //说明没有人出价，第一次出价可以以起拍价出价
@@ -119,7 +122,7 @@ export default class Index extends Component<any, any> {
                 rangePirce = price;
             }
         }
-        return currentPrice + rangePirce;
+        this.setState({nextPrice:currentPrice + rangePirce, goods: goods});
     }
 
     onLoad(options) {
@@ -184,7 +187,7 @@ export default class Index extends Component<any, any> {
                 <View>
                     <Button className={'btn btn-danger w-56'} onClick={this.offer}>
                         <View>出价</View>
-                        <View>RMB {numeral(this.nextPrice).format('0,0.00')}</View>
+                        <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
