@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 @FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
-public interface SystemApi extends CommonAPI {
+public interface SystemApi {
 
     @PostMapping("/sys/user/addSysUserRole")
     Result<String> addSysUserRole(@RequestBody SysUserRoleVO data);
@@ -131,7 +131,6 @@ public interface SystemApi extends CommonAPI {
      * @param code
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryDictItemsByCode")
     List<DictModel> queryDictItemsByCode(@RequestParam("code") String code);
 
@@ -140,7 +139,6 @@ public interface SystemApi extends CommonAPI {
      * @param code
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryEnableDictItemsByCode")
     public List<DictModel> queryEnableDictItemsByCode(@RequestParam("code") String code);
 
@@ -164,7 +162,6 @@ public interface SystemApi extends CommonAPI {
      * @param code
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryTableDictItemsByCode")
     List<DictModel> queryTableDictItemsByCode(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code);
 
@@ -353,7 +350,6 @@ public interface SystemApi extends CommonAPI {
      * @param username
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryUserRoles")
     Set<String> queryUserRoles(@RequestParam("username")String username);
 
@@ -362,7 +358,6 @@ public interface SystemApi extends CommonAPI {
      * @param username
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryUserAuths")
     Set<String> queryUserAuths(@RequestParam("username")String username);
 
@@ -372,7 +367,6 @@ public interface SystemApi extends CommonAPI {
      * @param dbSourceId
      * @return
      */
-    @Override
     @GetMapping("/sys/api/getDynamicDbSourceById")
     DynamicDataSourceModel getDynamicDbSourceById(@RequestParam("dbSourceId") String dbSourceId);
 
@@ -382,7 +376,6 @@ public interface SystemApi extends CommonAPI {
      * @param dbSourceCode
      * @return
      */
-    @Override
     @GetMapping("/sys/api/getDynamicDbSourceByCode")
     DynamicDataSourceModel getDynamicDbSourceByCode(@RequestParam("dbSourceCode") String dbSourceCode);
 
@@ -391,7 +384,6 @@ public interface SystemApi extends CommonAPI {
      * @param username
      * @return LoginUser 用户信息
      */
-    @Override
     @GetMapping("/sys/api/getUserByName")
     LoginUser getUserByName(@RequestParam("username") String username);
 
@@ -403,7 +395,6 @@ public interface SystemApi extends CommonAPI {
      * @param key
      * @return
      */
-    @Override
     @GetMapping("/sys/api/translateDictFromTable")
     String translateDictFromTable(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("key") String key);
 
@@ -413,7 +404,6 @@ public interface SystemApi extends CommonAPI {
      * @param key
      * @return
      */
-    @Override
     @GetMapping("/sys/api/translateDict")
     String translateDict(@RequestParam("code") String code, @RequestParam("key") String key);
 
@@ -424,7 +414,6 @@ public interface SystemApi extends CommonAPI {
      * @param username 用户姓名
      * @return
      */
-    @Override
     @GetMapping("/sys/api/queryPermissionDataRule")
     List<SysPermissionDataRuleModel> queryPermissionDataRule(@RequestParam("component") String component, @RequestParam("requestPath")String requestPath, @RequestParam("username") String username);
 
@@ -433,7 +422,6 @@ public interface SystemApi extends CommonAPI {
      * @param username
      * @return
      */
-    @Override
     @GetMapping("/sys/api/getCacheUser")
     SysUserCacheInfo getCacheUser(@RequestParam("username") String username);
 
@@ -548,7 +536,6 @@ public interface SystemApi extends CommonAPI {
      * @param keys
      * @return
      */
-    @Override
     @GetMapping("/sys/api/translateManyDict")
     Map<String, List<DictModel>> translateManyDict(@RequestParam("dictCodes") String dictCodes, @RequestParam("keys") String keys);
 
@@ -560,7 +547,6 @@ public interface SystemApi extends CommonAPI {
      * @param keys 多个用逗号分割
      * @return
      */
-    @Override
     @GetMapping("/sys/api/translateDictFromTableByKeys")
     List<DictModel> translateDictFromTableByKeys(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("keys") String keys);
 
