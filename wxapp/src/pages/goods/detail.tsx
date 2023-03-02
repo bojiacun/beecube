@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request from "../../lib/request";
+import request, {API_URL} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Navigator, RichText, Text, View} from "@tarojs/components";
@@ -31,6 +31,7 @@ export default class Index extends Component<any, any> {
     }
     clocker: any;
     timer: any;
+    socket: any;
 
     constructor(props) {
         super(props);
@@ -51,28 +52,33 @@ export default class Index extends Component<any, any> {
         if(prevProps.context.userInfo == null || prevState.goods == null) {
             const {context} = this.props;
             const {userInfo} = context;
-            if(userInfo != null && this.state.goods) {
+            let {goods} = this.state;
+            if(userInfo != null && goods) {
                 //记录浏览记录
                 request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
                     console.log(res.data.result);
                 });
                 //查询是否关注
                 request.get('/paimai/api/members/isfollow', {params: {id: this.state.id}}).then(res => {
-                    let goods = this.state.goods;
                     goods.followed = res.data.result;
                     this.setState({goods: goods});
                 });
                 //查询是否需要缴纳保证金
                 request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
-                    let goods = this.state.goods;
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
                 });
                 request.get('/paimai/api/goods/offers/max', {params: {id: this.state.id}}).then(res=>{
-                    let goods = this.state.goods;
                     goods.currentPrice = res.data.result;
                     this.nextPrice(goods);
-                })
+                });
+                //连接websocket
+                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/pm/websocket/'+goods.id+'/'+userInfo.id}).then(res=>{
+                    this.socket = res;
+                }).catch(e=>{
+                    console.log(e);
+                    utils.showMessage("消息功能加载失败,无法及时刷新出价信息");
+                });
             }
         }
     }
@@ -206,6 +212,7 @@ export default class Index extends Component<any, any> {
 
     componentWillUnmount() {
         clearInterval(this.timer);
+        this.socket?.close();
     }
 
     render() {
