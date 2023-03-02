@@ -65,6 +65,16 @@ export default class Index extends Component<any, any> {
         //支付宝保证金
         request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
             console.log(res);
+            let data = res.data.result;
+            data.package = data.packageValue;
+            Taro.requestPayment(data).then(() => {
+                //支付已经完成，提醒支付成功并返回上一页面
+                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+                    setTimeout(() => {
+                        Taro.redirectTo({url: 'success'}).then();
+                    }, 2000);
+                });
+            });
         })
     }
 
