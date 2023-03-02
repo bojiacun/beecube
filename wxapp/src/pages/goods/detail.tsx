@@ -10,6 +10,7 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
 import LoginView from "../../components/login";
+import PageLoading from "../../components/pageloading";
 
 const numeral = require('numeral');
 
@@ -136,7 +137,7 @@ export default class Index extends Component<any, any> {
         if(!goods.deposit || goods.deposited) {
             return (
                 <View>
-                    <Button className={'btn-primary bg-red-500'} onClick={this.payDeposit}>
+                    <Button className={'btn-primary bg-none bg-red-500'} onClick={this.payDeposit}>
                         <View>出价</View>
                         <View>RMB {numeral(goods.startPrice).format('0,0.00')}</View>
                     </Button>
@@ -162,7 +163,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {goods} = this.state;
         const {systemInfo} = this.props;
-        if (goods == null) return <></>;
+        if (goods == null) return <PageLoading />;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
             return {id: index, url: '#', image: item};

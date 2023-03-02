@@ -104,7 +104,7 @@ export default class Index extends Component<any, any> {
                             </View>
                         </View>
                         <View className={'container mx-auto mt-4 text-center'}>
-                            <Button className={'btn-primary'} formType={'submit'} disabled={this.state.saving}>确定</Button>
+                            <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
                         </View>
                     </Form>
                 </LoginView>

@@ -586,10 +586,9 @@ button, button[plain] {
         border: none;
     }
 }
-
-.btn-primary {
+.btn {
     border: none;
-    @apply from-indigo-400 to-indigo-600 bg-gradient-to-r w-56 shadow-xl p-3 inline-block text-white rounded-full;
+    @apply p-3 inline-block rounded-full shadow-xl;
     &.button-hover {
         @apply transform scale-90;
     }
@@ -597,7 +596,14 @@ button, button[plain] {
     &[disabled] {
         @apply bg-none bg-gray-400;
     }
+    &.btn-primary {
+        @apply from-indigo-400 to-indigo-600 bg-gradient-to-r text-white;
+    }
+    &.btn-danger {
+        @apply from-red-400 to-red-600 bg-gradient-to-r text-white;
+    }
 }
+
 
 .screen-swiper {
     min-height: auto;
