@@ -31,7 +31,7 @@ public class PayLog {
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
-	private java.lang.Integer id;
+	private java.lang.String id;
 	/**createTime*/
     @ApiModelProperty(value = "createTime")
 	private java.util.Date createTime;
@@ -50,10 +50,6 @@ public class PayLog {
 	/**payedAt*/
     @ApiModelProperty(value = "payedAt")
 	private java.util.Date payedAt;
-	/**paysn*/
-	@Excel(name = "paysn", width = 15)
-    @ApiModelProperty(value = "paysn")
-	private java.lang.String paysn;
 	/**status*/
 	@Excel(name = "status", width = 15)
     @ApiModelProperty(value = "status")

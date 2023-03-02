@@ -54,7 +54,7 @@ public class Performance {
 	/**拍卖会ID*/
 	@Excel(name = "拍卖会ID", width = 15)
     @ApiModelProperty(value = "拍卖会ID")
-	private java.lang.Integer auctionId;
+	private java.lang.String auctionId;
 	/**专场类型（1限时拍、2为同步拍)*/
 	@Excel(name = "专场类型（1限时拍、2为同步拍)", width = 15)
     @ApiModelProperty(value = "专场类型（1限时拍、2为同步拍)")

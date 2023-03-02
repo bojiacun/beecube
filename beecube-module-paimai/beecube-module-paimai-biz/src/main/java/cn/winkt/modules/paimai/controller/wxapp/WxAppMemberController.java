@@ -1,24 +1,30 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
 
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.entity.GoodsFollow;
-import cn.winkt.modules.paimai.entity.GoodsView;
-import cn.winkt.modules.paimai.service.IGoodsFollowService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.IGoodsViewService;
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.paimai.config.MiniappServices;
+import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.config.AppContext;
+import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 
 @RequestMapping("/paimai/api/members")
 @RestController
@@ -28,9 +34,24 @@ public class WxAppMemberController {
     IGoodsService goodsService;
     @Resource
     IGoodsFollowService goodsFollowService;
-
     @Resource
     IGoodsViewService goodsViewService;
+
+    @Resource
+    AppApi appApi;
+    @Resource
+    IPayLogService payLogService;
+    @Resource
+    IGoodsDepositService goodsDepositService;
+    @Resource
+    IPerformanceService performanceService;
+
+    @Resource
+    JeecgBaseConfig jeecgBaseConfig;
+
+    @Resource
+    MiniappServices miniappServices;
+
     @GetMapping("/views")
     public Result<?> queryMemberViewGoods(
             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -123,5 +144,59 @@ public class WxAppMemberController {
             goodsFollowService.save(goodsFollow);
             return Result.OK(true);
         }
+    }
+
+
+    @PostMapping("/deposits")
+    public Result<?> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("操作失败找不到拍品");
+        }
+        Goods goods = goodsService.getById(id);
+        if(goods == null) {
+            throw new JeecgBootException("操作失败找不到拍品");
+        }
+
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+        GoodsDeposit goodsDeposit = new GoodsDeposit();
+        goodsDeposit.setGoodsId(id);
+        goodsDeposit.setMemberId(loginUser.getId());
+        goodsDeposit.setMemberAvatar(loginUser.getAvatar());
+        goodsDeposit.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            goodsDeposit.setPerformanceId(goods.getPerformanceId());
+            Performance performance = performanceService.getById(goods.getPerformanceId());
+            goodsDeposit.setAuctionId(performance.getAuctionId());
+        }
+        goodsDeposit.setPrice(goods.getDeposit());
+        goodsDeposit.setStatus(0);
+        boolean result = goodsDepositService.save(goodsDeposit);
+        if(!result) {
+            throw new JeecgBootException("支付失败");
+        }
+        PayLog payLog = getPayLog(goodsDeposit.getId());
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+        BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit());
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                .notifyUrl(jeecgBaseConfig.getDomainUrl()+"/paimai/api/members/deposity_notify")
+                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                .body("支付拍品保证金:")
+                .spbillCreateIp("127.0.0.1")
+                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                .detail(goods.getTitle())
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        return Result.OK(wxPayService.createOrder(request));
+    }
+
+    protected PayLog getPayLog(String ordersn) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        PayLog payLog = new PayLog();
+        payLog.setOrdersn(ordersn);
+        payLog.setOrderType(1);
+        payLog.setMemberId(loginUser.getId());
+        payLogService.save(payLog);
+        return payLog;
     }
 }

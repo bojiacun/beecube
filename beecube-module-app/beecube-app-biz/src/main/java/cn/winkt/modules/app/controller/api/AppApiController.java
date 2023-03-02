@@ -1,7 +1,12 @@
 package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.entity.AppMember;
+import cn.winkt.modules.app.entity.AppSetting;
+import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppSettingService;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
@@ -22,7 +27,24 @@ public class AppApiController {
     @Resource
     AppMemberProvider appMemberProvider;
 
+    @Resource
+    IAppMemberService appMemberService;
 
+    @Resource
+    IAppSettingService appSettingService;
+
+
+    @GetMapping("/getMemberById")
+    public AppMember queryAppMember(@RequestParam("id") String id) {
+        return appMemberService.getById(id);
+    }
+    @GetMapping("/settings")
+    public List<AppSetting> queryAppSettings(@RequestParam("app_id") String appId, @RequestParam("group") String groupKey) {
+        LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppSetting::getAppId, appId);
+        queryWrapper.eq(AppSetting::getGroupKey, groupKey);
+        return appSettingService.list(queryWrapper);
+    }
 
     /**
      * 根据用户账号查询用户信息
