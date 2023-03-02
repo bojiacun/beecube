@@ -154,7 +154,7 @@ public class WxAppMemberController {
 
     @PostMapping("/deposits")
     @Transactional
-    public Result<WxPayMpOrderResult> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public Result<?> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
@@ -195,7 +195,7 @@ public class WxAppMemberController {
                 .detail(goods.getTitle())
                 .build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        return Result.OK(wxPayService.createOrder(request));
+        return Result.OK("",wxPayService.createOrder(request));
     }
     @RequestMapping(value = "/deposit_notify", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
     public String depositNotify(@RequestBody String xmlData) throws InvocationTargetException, IllegalAccessException, WxPayException {
