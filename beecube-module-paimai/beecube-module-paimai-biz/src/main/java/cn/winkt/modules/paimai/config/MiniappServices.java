@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +24,7 @@ public class MiniappServices {
     @Resource
     AppApi appApi;
 
-    private final static Map<String, WxPayService> wxPayServices = new HashMap<>();
+    private final static ConcurrentHashMap<String, WxPayService> wxPayServices = new ConcurrentHashMap<>();
 
 
     public WxPayService getService(String appId) throws InvocationTargetException, IllegalAccessException {

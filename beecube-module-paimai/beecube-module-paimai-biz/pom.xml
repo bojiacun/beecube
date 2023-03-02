@@ -14,6 +14,10 @@
             <artifactId>jeecg-boot-starter-lock</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jeecgframework.boot</groupId>
             <artifactId>beecube-module-paimai-api</artifactId>
             <version>1.0.0</version>

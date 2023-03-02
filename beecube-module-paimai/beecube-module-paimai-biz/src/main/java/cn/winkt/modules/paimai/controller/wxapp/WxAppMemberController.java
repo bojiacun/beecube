@@ -66,6 +66,8 @@ public class WxAppMemberController {
     @Resource
     IGoodsOfferService goodsOfferService;
 
+
+
     /**
      * 获取用户的浏览记录
      * @param pageNo
