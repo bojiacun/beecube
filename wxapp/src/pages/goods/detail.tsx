@@ -91,7 +91,7 @@ export default class Index extends Component<any, any> {
     offer() {
         //出价
         request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.nextPrice}).then(res=>{
-            if(res.data.result.success) {
+            if(res.data.success) {
                 utils.showSuccess(false, '出价成功');
             }
         })
@@ -164,6 +164,16 @@ export default class Index extends Component<any, any> {
 
     renderButton() {
         const {goods} = this.state;
+        if(!this.clocker.isCounting) {
+            //拍品结束
+            return (
+                <View>
+                    <Button className={'btn w-56'} disabled={true}>
+                        <View>已结束</View>
+                    </Button>
+                </View>
+            );
+        }
         if(!goods.deposit || goods.deposited) {
             return (
                 <View>
