@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @RequestMapping("/paimai/api/members")
@@ -298,7 +299,8 @@ public class WxAppMemberController {
         }
         PayLog payLog = getPayLog(goodsDeposit.getId());
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-        BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit());
+        BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
+
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
                 .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify/"+AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
@@ -323,12 +325,12 @@ public class WxAppMemberController {
         payLog.setPayedAt(new Date());
         payLog.setStatus(true);
         payLog.setTransactionId(notifyResult.getTransactionId());
-        payLogService.save(payLog);
+        payLogService.updateById(payLog);
 
         GoodsDeposit goodsDeposit = goodsDepositService.getById(payLog.getOrdersn());
         goodsDeposit.setStatus(1);
         goodsDeposit.setTransactionId(notifyResult.getTransactionId());
-        goodsDepositService.save(goodsDeposit);
+        goodsDepositService.updateById(goodsDeposit);
         return WxPayNotifyResponse.success("成功");
     }
 
