@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
 @Slf4j
-@ServerEndpoint("/paimai/websocket/{goodsId}/{userId}")
+@ServerEndpoint("/auction/websocket/{goodsId}/{userId}")
 public class GoodsOfferWebSocket {
     private Session session;
     private String goodsId;
