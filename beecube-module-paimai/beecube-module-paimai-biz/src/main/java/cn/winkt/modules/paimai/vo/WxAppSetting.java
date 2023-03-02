@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class WxAppSetting {
-    private String appId;
-    private String appSecret;
+    private String appid;
+    private String appsecret;
     private String merchId;
     private String merchSecret;
     private String apiclientCert;
