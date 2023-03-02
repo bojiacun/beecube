@@ -3,8 +3,11 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.paimai.config.GoodsOfferWebSocket;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.message.MessageConstant;
+import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -16,6 +19,7 @@ import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
@@ -36,6 +40,7 @@ import java.util.Date;
 
 @RequestMapping("/paimai/api/members")
 @RestController
+@Slf4j
 public class WxAppMemberController {
 
     @Resource
@@ -66,7 +71,8 @@ public class WxAppMemberController {
     @Resource
     IGoodsOfferService goodsOfferService;
 
-
+    @Resource
+    GoodsOfferWebSocket goodsOfferWebSocket;
 
     /**
      * 获取用户的浏览记录
@@ -250,7 +256,20 @@ public class WxAppMemberController {
             goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
-
+            try {
+                //发送出价群消息
+                OfferMessage  offerMessage = new OfferMessage();
+                offerMessage.setFromUserAvatar(loginUser.getAvatar());
+                offerMessage.setFromUserId(loginUser.getId());
+                offerMessage.setFromUserName(goodsOffer.getMemberName());
+                offerMessage.setCreateTime(new Date());
+                offerMessage.setType(MessageConstant.MSG_TYPE_OFFER);
+                offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
+                goodsOfferWebSocket.sendGroupMessage(goods.getId(), JSONObject.toJSONString(offerMessage));
+            }
+            catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
             //在此通知群消息
             redissonLockClient.unlock(lockKey);
             return Result.OK("出价成功");
