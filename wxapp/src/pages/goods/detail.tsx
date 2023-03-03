@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request, {API_URL} from "../../lib/request";
+import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Navigator, RichText, Text, View} from "@tarojs/components";
@@ -73,7 +73,13 @@ export default class Index extends Component<any, any> {
                     this.nextPrice(goods);
                 });
                 //连接websocket
-                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/auction/websocket/'+goods.id+'/'+userInfo.id}).then(res=>{
+                const token = Taro.getStorageSync("TOKEN");
+                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/auction/websocket/'+goods.id+'/'+userInfo.id, header: {
+                    "X-App-Id": APP_ID,
+                        "X-Access-Token": token,
+                        "Authorization": token,
+                        "Sec-WebSocket-Protocol": token,
+                    }}).then(res=>{
                     console.log(res);
                     res.send({data: 'tester'})
                     this.socket = res;
