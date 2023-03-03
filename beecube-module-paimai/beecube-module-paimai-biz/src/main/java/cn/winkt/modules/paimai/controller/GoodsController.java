@@ -72,7 +72,21 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 		IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "拍品表-选择拍品")
+	 @ApiOperation(value="拍品表-选择拍品", notes="拍品表-选择拍品")
+	 @GetMapping(value = "/list")
+	 @AutoDict
+	 public Result<?> selectPageList(Goods goods,
+									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									HttpServletRequest req) {
+		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+		 String perfId = req.getParameter("perf_id");
+		 queryWrapper.ne("performanceId", perfId);
+		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *

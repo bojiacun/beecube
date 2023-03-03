@@ -37,13 +37,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 订单售后表
+ * @Description: 拍卖专场表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="订单售后表")
+@Api(tags="拍卖专场表")
 @RestController
 @RequestMapping("/paimai/performances")
 public class PerformanceController extends JeecgController<Performance, IPerformanceService> {
@@ -59,8 +59,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-分页列表查询")
-	@ApiOperation(value="订单售后表-分页列表查询", notes="订单售后表-分页列表查询")
+	@AutoLog(value = "拍卖专场表-分页列表查询")
+	@ApiOperation(value="拍卖专场表-分页列表查询", notes="拍卖专场表-分页列表查询")
 	@GetMapping(value = "/list")
 	@AutoDict
 	public Result<?> queryPageList(Performance performance,
@@ -72,15 +72,29 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 		IPage<Performance> pageList = performanceService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "拍卖专场表-选择专场")
+	 @ApiOperation(value="拍卖专场表-选择专场", notes="拍卖专场表-选择专场")
+	 @GetMapping(value = "/select")
+	 @AutoDict
+	 public Result<?> selectPageList(Performance performance,
+									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									HttpServletRequest req) {
+		 QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
+		 String auctionId = req.getParameter("ac_id");
+		 queryWrapper.ne("auctionId", auctionId);
+		 Page<Performance> page = new Page<Performance>(pageNo, pageSize);
+		 IPage<Performance> pageList = performanceService.page(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *
 	 * @param performance
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-添加")
-	@ApiOperation(value="订单售后表-添加", notes="订单售后表-添加")
+	@AutoLog(value = "拍卖专场表-添加")
+	@ApiOperation(value="拍卖专场表-添加", notes="拍卖专场表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Performance performance) {
 		performanceService.save(performance);
@@ -93,8 +107,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 	 * @param performance
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-编辑")
-	@ApiOperation(value="订单售后表-编辑", notes="订单售后表-编辑")
+	@AutoLog(value = "拍卖专场表-编辑")
+	@ApiOperation(value="拍卖专场表-编辑", notes="拍卖专场表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody Performance performance) {
 		performanceService.updateById(performance);
@@ -107,8 +121,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-通过id删除")
-	@ApiOperation(value="订单售后表-通过id删除", notes="订单售后表-通过id删除")
+	@AutoLog(value = "拍卖专场表-通过id删除")
+	@ApiOperation(value="拍卖专场表-通过id删除", notes="拍卖专场表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		performanceService.removeById(id);
@@ -121,8 +135,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-批量删除")
-	@ApiOperation(value="订单售后表-批量删除", notes="订单售后表-批量删除")
+	@AutoLog(value = "拍卖专场表-批量删除")
+	@ApiOperation(value="拍卖专场表-批量删除", notes="拍卖专场表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.performanceService.removeByIds(Arrays.asList(ids.split(",")));
@@ -135,8 +149,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-通过id查询")
-	@ApiOperation(value="订单售后表-通过id查询", notes="订单售后表-通过id查询")
+	@AutoLog(value = "拍卖专场表-通过id查询")
+	@ApiOperation(value="拍卖专场表-通过id查询", notes="拍卖专场表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		Performance performance = performanceService.getById(id);
@@ -151,7 +165,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
    */
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, Performance performance) {
-      return super.exportXls(request, performance, Performance.class, "订单售后表");
+      return super.exportXls(request, performance, Performance.class, "拍卖专场表");
   }
 
   /**
