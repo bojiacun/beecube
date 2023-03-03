@@ -21,7 +21,7 @@ import java.io.IOException;
 @Slf4j
 public class WebsocketFilter implements Filter {
 
-    private static final String TOKEN_KEY = "Sec-WebSocket-Protocol";
+    private static final String TOKEN_KEY = "X-App-Id";
 
     private static CommonAPI commonApi;
 
