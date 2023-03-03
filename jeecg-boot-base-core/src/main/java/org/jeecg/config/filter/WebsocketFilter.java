@@ -2,6 +2,7 @@ package org.jeecg.config.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.CommonAPI;
+import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.TokenUtils;
@@ -21,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 public class WebsocketFilter implements Filter {
 
-    private static final String TOKEN_KEY = "X-App-Id";
+    private static final String TOKEN_KEY = CommonConstant.X_ACCESS_TOKEN;
 
     private static CommonAPI commonApi;
 
