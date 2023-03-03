@@ -1,8 +1,6 @@
 package cn.winkt.modules.paimai.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -14,6 +12,7 @@ import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -21,8 +20,6 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IPerformanceService;
-
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -131,7 +128,19 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 		goodsService.updateBatchById(goodsList);
         return Result.OK("添加成功！");
     }
-
+    @AutoLog(value = "拍卖专场表-移除拍品")
+    @ApiOperation(value = "拍卖专场表-移除拍品", notes = "拍卖专场表-移除拍品")
+    @PostMapping(value = "/goods/remove")
+    public Result<?> removeGoods(@RequestBody JSONObject jsonObject) {
+        String perfId = jsonObject.getString("perfId");
+        String goodsIds = jsonObject.getString("goodsIds");
+        LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(Goods::getId, goodsIds.split(","));
+        updateWrapper.eq(Goods::getPerformanceId, perfId);
+        updateWrapper.set(Goods::getPerformanceId, null);
+        goodsService.update(updateWrapper);
+        return Result.OK("添加成功！");
+    }
     /**
      * 编辑
      *

@@ -15,6 +15,7 @@ import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -95,10 +96,10 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 		auctionService.save(auction);
 		return Result.OK("添加成功！");
 	}
-	 @AutoLog(value = "拍卖会表-添加")
-	 @ApiOperation(value = "拍卖会表-添加", notes = "拍卖会表-添加")
+	 @AutoLog(value = "拍卖会表-添加专场")
+	 @ApiOperation(value = "拍卖会表-添加专场", notes = "拍卖会表-添加专场")
 	 @PostMapping(value = "/performances/add")
-	 public Result<?> addGoods(@RequestBody JSONObject jsonObject) {
+	 public Result<?> addPerformances(@RequestBody JSONObject jsonObject) {
 		 String auctionId = jsonObject.getString("auctionId");
 		 Auction auction = auctionService.getById(auctionId);
 		 String perfIds = jsonObject.getString("perfIds");
@@ -110,6 +111,19 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 		 }
 		 performanceService.updateBatchById(performances);
 		 return Result.OK("添加成功！");
+	 }
+	 @AutoLog(value = "拍卖会表-移除专场")
+	 @ApiOperation(value = "拍卖会表-移除专场", notes = "拍卖会表-移除专场")
+	 @PostMapping(value = "/performances/remove")
+	 public Result<?> removePerformances(@RequestBody JSONObject jsonObject) {
+		 String auctionId = jsonObject.getString("auctionId");
+		 String perfIds = jsonObject.getString("perfIds");
+		 LambdaUpdateWrapper<Performance> updateWrapper = new LambdaUpdateWrapper<>();
+		 updateWrapper.in(Performance::getId, perfIds.split(","));
+		 updateWrapper.eq(Performance::getAuctionId, auctionId);
+		 updateWrapper.set(Performance::getAuctionId, null);
+		 performanceService.update(updateWrapper);
+		 return Result.OK("移除成功！");
 	 }
 	/**
 	 * 编辑
