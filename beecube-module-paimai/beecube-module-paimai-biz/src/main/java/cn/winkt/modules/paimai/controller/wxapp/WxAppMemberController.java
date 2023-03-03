@@ -232,7 +232,9 @@ public class WxAppMemberController {
         if(goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
-        if(new Date().compareTo(goods.getEndTime()) >= 0) {
+        Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
+
+        if(new Date().compareTo(actualEndTime) >= 0) {
             throw new JeecgBootException("该拍品已结束拍卖");
         }
         String lockKey = "OFFER-LOCKER-"+goods.getId();
@@ -248,6 +250,15 @@ public class WxAppMemberController {
                 return Result.error("他人已出此价格或更高的价格");
             }
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+            //查询用户是否缴纳保证金
+            if(goods.getDeposit() > 0) {
+                LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
+                queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+                if(goodsDepositService.count(queryWrapper) == 0) {
+                    return Result.error("未缴纳保证金");
+                }
+            }
             GoodsOffer goodsOffer = new GoodsOffer();
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPrice(userOfferPrice.floatValue());
