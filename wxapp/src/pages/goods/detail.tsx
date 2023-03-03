@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import classNames from "classnames";
 import LoginView from "../../components/login";
 import PageLoading from "../../components/pageloading";
+import md5 from 'blueimp-md5';
 
 const numeral = require('numeral');
 
@@ -28,6 +29,7 @@ export default class Index extends Component<any, any> {
         goods: null,
         counting: false,
         nextPrice: undefined,
+        offers: [],
     }
     clocker: any;
     timer: any;
@@ -41,6 +43,7 @@ export default class Index extends Component<any, any> {
         this.toggleFollow = this.toggleFollow.bind(this);
         this.payDeposit = this.payDeposit.bind(this);
         this.offer = this.offer.bind(this);
+        this.onMessageReceive = this.onMessageReceive.bind(this);
         this.randomStr = utils.randomString(6);
     }
 
@@ -65,6 +68,10 @@ export default class Index extends Component<any, any> {
                     goods.followed = res.data.result;
                     this.setState({goods: goods});
                 });
+                //查询出价记录
+                request.get('/paimai/api/goods/offers', {params: {id: goods.id, pageSize: 3}}).then(res=>{
+                    this.setState({offers: res.data.result.records});
+                });
                 //查询是否需要缴纳保证金
                 request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
                     goods.deposited = res.data.result;
@@ -73,15 +80,27 @@ export default class Index extends Component<any, any> {
                         //需要出价的时候再连接websocket
                         connectWebSocketServer('/auction/websocket/' + goods.id + '/' + userInfo.id).then(res => {
                             this.socket = res;
+                            this.socket.onMessage(this.onMessageReceive);
                         });
                     }
                 });
-                request.get('/paimai/api/goods/offers/max', {params: {id: this.state.id}}).then(res=>{
-                    goods.currentPrice = res.data.result;
-                    this.nextPrice(goods);
-                });
-
             }
+        }
+    }
+
+    onMessageReceive(message:any) {
+        const {context} = this.props;
+        const {userInfo} = context;
+        const {goods} = this.state;
+        const messageSessionId = md5(goods.id+':'+userInfo.id+':'+this.randomStr);
+        let msg = JSON.parse(message.data);
+
+        //如果是自身产生的消息则忽略
+        if(msg.id === messageSessionId) {
+            return;
+        }
+        if(msg.type === 'MSG_TYPE_OFFER') {
+            //如果是出价消息
         }
     }
 
@@ -103,7 +122,7 @@ export default class Index extends Component<any, any> {
 
     offer() {
         //出价
-        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.state.nextPrice}).then(res=>{
+        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
             if(res.data.success) {
                 utils.showSuccess(false, '出价成功');
                 let goods = this.state.goods;
@@ -139,9 +158,9 @@ export default class Index extends Component<any, any> {
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
             data.fields = JSON.parse(data.fields || '[]');
-
             this.setState({goods: data});
-            let endDate = new Date(data.endTime);
+            this.nextPrice(data);
+            let endDate = new Date(data.actualEndTime || data.endTime);
             this.clocker = new Clocker(endDate);
             this.clocker.countDown = true;
             utils.hideLoading();

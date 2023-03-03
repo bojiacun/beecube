@@ -27,7 +27,7 @@ export default class Index extends Component<any, any> {
     }
     renderTemplate(data: any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-xl', styles.flow)}>
+            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-outer', styles.flow)}>
                 <Navigator url={'detail?id='+data.id}>
                     <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
                     <View className={'px-2 mt-2'}>{data.title}</View>

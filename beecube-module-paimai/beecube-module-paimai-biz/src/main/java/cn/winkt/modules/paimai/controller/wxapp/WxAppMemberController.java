@@ -6,6 +6,7 @@ import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.GoodsOfferWebSocket;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
@@ -269,6 +270,26 @@ public class WxAppMemberController {
             goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
+
+            //判断是不是进入到了延时周期如果是，则进行延时，延时逻辑设置到实际结束时间中去
+            //并发送延时消息
+            long nowTimeMillis = System.currentTimeMillis();
+            long endTimeMillis = actualEndTime.getTime();
+            Integer delayTime = goods.getDelayTime();
+            if(delayTime != null && delayTime > 0) {
+                if((nowTimeMillis + delayTime * 60 * 1000) >= endTimeMillis) {
+                    Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
+                    String messageId = "";
+                    AuctionDelayedMessage message = new AuctionDelayedMessage();
+                    message.setId(messageId);
+                    message.setCreateTime(new Date());
+                    message.setType(MessageConstant.MSG_TYPE_DELAY);
+                    message.setNewTime(newTime);
+                    goodsOfferWebSocket.sendGroupMessage(goods.getId(), JSONObject.toJSONString(message));
+                    goods.setActualEndTime(newTime);
+                    goodsService.updateById(goods);
+                }
+            }
             try {
                 String messageId = DigestUtils.md5Hex(goods.getId()+":"+loginUser.getId()+":"+randomStr);
                 //发送出价群消息
