@@ -18,7 +18,7 @@
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
             (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price
-        from paimai_goods g
+        from paimai_goods g where ${ew.customSqlSegment}
     </select>
 
     <select id="queryMemberViewGoods" resultType="cn.winkt.modules.paimai.entity.Goods">
