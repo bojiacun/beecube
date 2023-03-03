@@ -80,9 +80,10 @@ export default class Index extends Component<any, any> {
                         "Authorization": token,
                         "Sec-WebSocket-Protocol": token,
                     }}).then(res=>{
+                        console.log(res);
                     this.socket = res;
                 }).catch(e=>{
-                    console.log(e);
+                    console.log('websocket连接失败',e);
                     utils.showMessage("消息功能加载失败,无法及时刷新出价信息");
                 });
             }

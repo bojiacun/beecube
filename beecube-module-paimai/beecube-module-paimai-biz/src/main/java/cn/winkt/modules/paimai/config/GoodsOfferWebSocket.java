@@ -42,17 +42,17 @@ public class GoodsOfferWebSocket {
             this.userId = userId;
             webSockets.add(this);
             userSessionPool.put(userId, session);
-            RedissonLockClient redissonLockClient = this.redissonLockClient();
-            if(redissonLockClient.tryLock(lockKey, -1, 300)) {
-                if(!offerGroup.containsKey(goodsId)) {
-                    offerGroup.put(goodsId, new HashSet<>());
-                }
-                offerGroup.get(goodsId).add(userId);
-                redissonLockClient.unlock(lockKey);
-            }
-            else {
-                log.info("用户 {} 入群 {} 失败", userId, goodsId);
-            }
+//            RedissonLockClient redissonLockClient = this.redissonLockClient();
+//            if(redissonLockClient.tryLock(lockKey, -1, 300)) {
+//                if(!offerGroup.containsKey(goodsId)) {
+//                    offerGroup.put(goodsId, new HashSet<>());
+//                }
+//                offerGroup.get(goodsId).add(userId);
+//                redissonLockClient.unlock(lockKey);
+//            }
+//            else {
+//                log.info("用户 {} 入群 {} 失败", userId, goodsId);
+//            }
             log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
