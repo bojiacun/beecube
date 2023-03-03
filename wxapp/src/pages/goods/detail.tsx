@@ -269,7 +269,20 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View>
-                        <View className={'py-4 flex justify-between'}>
+                        <View className={'flex'}>
+                            <View className={'flex-1'}>保证金：￥{numeral(goods.deposit).format('0,0.00')}</View>
+                            <View className={'flex-1'}>加价幅度：<Text>查看详情</Text></View>
+                        </View>
+                        <View className={'flex'}>
+                            <View className={'flex-1'}>起拍价：￥{numeral(goods.startPrice).format('0,0.00')}</View>
+                            <View className={'flex-1'}>加价幅度：<Text>查看详情</Text></View>
+                        </View>
+                        <View className={'flex'}>
+                            <View className={'flex-1'}>拍卖佣金：{goods.commission}%</View>
+                        </View>
+                    </View>
+                    <View>
+                        <View className={'flex justify-between'}>
                             <View className={'font-bold'}>出价记录({goods.offerCount})</View>
                             <Navigator url={`offers?id=${this.state.id}`}>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></Navigator>
                         </View>
