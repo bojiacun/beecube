@@ -10,56 +10,63 @@ import classNames from "classnames";
 
 // @ts-ignore
 @connect((state: any) => (
-  {
-    pageLoading: state.pageLoading,
-    systemInfo: state.context.systemInfo,
-    settings: state.context.settings,
-    context: state.context
-  }
+    {
+        pageLoading: state.pageLoading,
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context
+    }
 ))
-
 class PageLayout extends Component<PayLayoutProps, any> {
-  state = {
-    pageStyle: {}
-  }
+    state:any = {
+        pageStyle: {}
+    }
 
-  componentDidMount() {
-    const {systemInfo, showTabBar = false} = this.props;
-    this.setState({pageStyle: {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))}});
-  }
+    componentDidMount() {
+        const {systemInfo, showTabBar = false, enableReachBottom = false} = this.props;
+        let initPageStyle:any = {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))};
+        if(enableReachBottom) {
+            //如果启用下拉刷新，则需要禁用外层滚动，改用page滚动
+            initPageStyle.height = 'auto';
+            initPageStyle.overflowY = 'visible';
+        }
+        this.setState({pageStyle: initPageStyle});
+    }
 
-  render() {
-    const {
-      pageLoading,
-      children,
-      showStatusBar = true,
-      showTabBar = false,
-      style = {},
-      className,
-      loading,
-      statusBarProps = {}
-    } = this.props;
+    render() {
+        const {
+            pageLoading,
+            children,
+            showStatusBar = true,
+            showTabBar = false,
+            style = {},
+            className,
+            loading,
+            statusBarProps = {},
+        } = this.props;
 
-    if (pageLoading || loading) return <PageLoading/>;
 
-    return (
-      <View className={classNames(styles.page)} style={{...style, ...this.state.pageStyle}}>
-        {showStatusBar && <StatusBar {...statusBarProps} />}
-        <View className={className}>
-          {children}
-          {showTabBar && <TabBar />}
-        </View>
-      </View>
-    );
-  }
+        if (pageLoading || loading) return <PageLoading/>;
+
+        return (
+            <View className={classNames(styles.page)} style={{...style, ...this.state.pageStyle}}>
+                {showStatusBar && <StatusBar {...statusBarProps} />}
+                <View className={className}>
+                    {children}
+                    {showTabBar && <TabBar/>}
+                </View>
+            </View>
+        );
+    }
 
 }
 
 
 export interface PayLayoutProps extends Partial<any> {
-  statusBarProps?: StatusbarProps;
-  showStatusBar?: boolean;
-  showTabBar?: boolean;
+    statusBarProps?: StatusbarProps;
+    showStatusBar?: boolean;
+    showTabBar?: boolean;
+    enableReachBottom?: boolean;
 }
 
 

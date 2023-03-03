@@ -7,6 +7,7 @@ import {View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
+import LoadMore from "../../components/loadmore";
 const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
@@ -14,20 +15,27 @@ export default class Index extends Component<any, any> {
         page: 1,
         offers: [],
         id: '',
+        loadingMore: false,
+        noMore: false,
     }
 
     componentDidMount() {
     }
 
     loadData(id, page, clear = false) {
-        return request.get('/paimai/api/goods/offers', {params: {id: id, page: page}}).then(res=>{
+        return request.get('/paimai/api/goods/offers', {params: {id: id, pageNo: page}}).then(res=>{
             if(clear) {
-                this.setState({offers: res.data.result.records});
+                this.setState({offers: res.data.result.records, loadingMore: false, noMore: false});
             }
             else {
                 let offers = this.state.offers;
-                offers.push(res.data.result.records);
-                this.setState({offers: offers});
+                let newOffers = res.data.result.records;
+                if(!newOffers || newOffers.length == 0) {
+                    this.setState({noMore: true, loadingMore: false});
+                }
+                else {
+                    this.setState({noMore: false, loadingMore:false, offers: [...offers, ...newOffers]});
+                }
             }
         });
     }
@@ -39,8 +47,8 @@ export default class Index extends Component<any, any> {
     }
 
     onReachBottom() {
-        utils.showLoading();
-        this.loadData(this.state.id, this.state.page+1,false).then(()=>utils.hideLoading());
+        this.setState({loadingMore: true, noMore: false});
+        this.loadData(this.state.id, this.state.page+1,false).then(()=>{});
         this.setState({page: this.state.page+1});
     }
 
@@ -51,9 +59,9 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {offers} = this.state;
+        const {offers, noMore, loadingMore} = this.state;
         return (
-            <PageLayout statusBarProps={{title: '出价记录'}}>
+            <PageLayout statusBarProps={{title: '出价记录'}} enableReachBottom={true}>
                 <LoginView>
                     <View className={'space-y-4 p-4'}>
                         {offers.length == 0 && <NoData />}
@@ -76,6 +84,7 @@ export default class Index extends Component<any, any> {
                             );
                         })}
                     </View>
+                    <LoadMore noMore={noMore} loading={loadingMore} />
                 </LoginView>
             </PageLayout>
         );

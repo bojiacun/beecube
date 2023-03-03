@@ -570,8 +570,10 @@ video {
 
 page {
     font-size: 14px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     @apply text-gray-800;
+    background-color: #f8f8f8;
 }
 
 navigator, picker {
