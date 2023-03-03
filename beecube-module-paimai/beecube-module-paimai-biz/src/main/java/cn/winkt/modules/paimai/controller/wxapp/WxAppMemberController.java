@@ -20,6 +20,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
@@ -238,6 +239,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("该拍品已结束拍卖");
         }
         String lockKey = "OFFER-LOCKER-"+goods.getId();
+        String randomStr = StringUtils.getIfEmpty(post.getString("randomStr"), ()->StringUtils.EMPTY);
         if(redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
             if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
@@ -268,8 +270,10 @@ public class WxAppMemberController {
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
             try {
+                String messageId = DigestUtils.md5Hex(goods.getId()+":"+loginUser.getId()+":"+randomStr);
                 //发送出价群消息
                 OfferMessage  offerMessage = new OfferMessage();
+                offerMessage.setId(messageId);
                 offerMessage.setFromUserAvatar(loginUser.getAvatar());
                 offerMessage.setFromUserId(loginUser.getId());
                 offerMessage.setFromUserName(goodsOffer.getMemberName());
