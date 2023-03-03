@@ -13,6 +13,10 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import AuctionEditor from "~/pages/paimai/AuctionEditor";
+import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
+import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
+import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
+import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 
 
 
@@ -22,6 +26,9 @@ const AuctionList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [selectedAuction, setSelectedAuction] = useState<any>();
+    const [performanceListShow, setPerformanceListShow] = useState<boolean>(false);
+    const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -61,6 +68,14 @@ const AuctionList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'selected':
+                setSelectedAuction(row);
+                setSelectedListShow(true);
+                break;
+            case 'select':
+                setSelectedAuction(row);
+                setPerformanceListShow(true);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -120,6 +135,8 @@ const AuctionList = (props: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'select')}>选择专场</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选专场</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -203,7 +220,16 @@ const AuctionList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-
+            <PerformanceListSelector
+                show={performanceListShow}
+                setGoodsListShow={setPerformanceListShow}
+                selectedAuction={selectedAuction}
+            />
+            <PerformancesListSelected
+                show={selectedListShow}
+                selectedAuction={selectedAuction}
+                setSelectedListShow={setSelectedListShow}
+            />
             {editModal && <AuctionEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
