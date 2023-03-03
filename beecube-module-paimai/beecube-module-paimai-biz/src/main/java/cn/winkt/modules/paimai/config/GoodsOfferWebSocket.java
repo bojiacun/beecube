@@ -64,7 +64,9 @@ public class GoodsOfferWebSocket {
             webSockets.remove(this);
             this.session.close();
             userSessionPool.remove(this.userId);
-            offerGroup.get(this.goodsId).remove(this.userId);
+            if(offerGroup.containsKey(this.goodsId)) {
+                offerGroup.get(this.goodsId).remove(this.userId);
+            }
             log.info("【websocket消息】连接断开，总数为:"+webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
