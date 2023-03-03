@@ -377,8 +377,7 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'bg-white px-4 divide-y divide-gray-100'}>
-                    <Collapse showArrow={true} title={'拍卖专场'} description={'111'}
-                              url={goods.performanceId ? `/pages/performance/detail?id=${goods.performanceId}` : ''}/>
+                    {goods.performanceId ? <Collapse showArrow={true} title={'拍卖专场'} description={'111'} url={`/pages/performance/detail?id=${goods.performanceId}`} />: <></>}
                     <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
                     {goods.fields.map(f => {
                         return <Collapse title={f.key} description={f.value}/>
@@ -432,7 +431,7 @@ export default class Index extends Component<any, any> {
                         {this.renderButton()}
                     </View>
                 </LoginView>
-                <Modal show={this.state.uprangeShow} showMask={true}>
+                <Modal show={this.state.uprangeShow} showMask={true} onClose={()=>this.setState({uprangeShow:false})}>
                     <View className={'bg-indigo-200 text-gray-600 font-bold text-center flex py-2'}>
                         <View className={'flex-1'}>区间开始</View>
                         <View className={'flex-1'}>区间结束</View>
