@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request, {API_URL, APP_ID} from "../../lib/request";
+import request, {connectWebSocketServer} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Navigator, RichText, Text, View} from "@tarojs/components";
@@ -32,6 +32,7 @@ export default class Index extends Component<any, any> {
     clocker: any;
     timer: any;
     socket: any;
+    randomStr: string;
 
     constructor(props) {
         super(props);
@@ -40,6 +41,7 @@ export default class Index extends Component<any, any> {
         this.toggleFollow = this.toggleFollow.bind(this);
         this.payDeposit = this.payDeposit.bind(this);
         this.offer = this.offer.bind(this);
+        this.randomStr = utils.randomString(6);
     }
 
 
@@ -73,17 +75,8 @@ export default class Index extends Component<any, any> {
                     this.nextPrice(goods);
                 });
                 //连接websocket
-                const token = Taro.getStorageSync("TOKEN");
-                Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/auction/websocket/'+goods.id+'/'+userInfo.id, header: {
-                    "X-App-Id": APP_ID,
-                        "X-Access-Token": token,
-                        "Authorization": token,
-                    }}).then(res=>{
-                        console.log(res);
+                connectWebSocketServer('/auction/websocket/'+goods.id+'/'+userInfo.id).then(res=>{
                     this.socket = res;
-                }).catch(e=>{
-                    console.log('websocket连接失败',e);
-                    utils.showMessage("消息功能加载失败,无法及时刷新出价信息");
                 });
             }
         }

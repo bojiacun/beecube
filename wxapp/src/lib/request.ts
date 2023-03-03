@@ -1,6 +1,7 @@
 // api.js
 import axios, {AxiosResponse} from "taro-axios";
 import Taro from "@tarojs/taro";
+import utils from "./utils";
 
 const siteinfo = require('../siteinfo');
 export const API_URL = siteinfo.siteroot;
@@ -53,5 +54,22 @@ instance.interceptors.response.use(async (response) => {
     Taro.showToast({icon: 'none', title: '网络错误!', duration: 1500}).then();
     return Promise.reject(error);
 });
+
+export async function connectWebSocketServer(url: string) {
+    const token = Taro.getStorageSync("TOKEN");
+    let res:any;
+    try {
+        res = await Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/'+url, header: {
+                "X-App-Id": APP_ID,
+                "X-Access-Token": token,
+                "Authorization": token,
+            }});
+    }
+    catch (e) {
+        console.log('websocket连接失败',e);
+        utils.showMessage("消息功能加载失败,无法及时刷新出价信息").then();
+    }
+    return res;
+}
 
 export default instance;

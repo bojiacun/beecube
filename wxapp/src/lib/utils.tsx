@@ -92,28 +92,40 @@ export default {
 
         return 0
     },
-    showSuccess: (autoBack = false,msg = '保存成功') => {
+    showSuccess: (autoBack = false, msg = '保存成功') => {
         Taro.showToast({title: msg, icon: 'success'}).then();
-        if(autoBack) {
-            setTimeout(()=>{
+        if (autoBack) {
+            setTimeout(() => {
                 Taro.navigateBack().then();
             }, 1000);
         }
     },
-    showLoading: (msg='加载中') => {
+    showLoading: (msg = '加载中') => {
         Taro.showLoading({title: msg}).then();
     },
-    showMessage: (content:string, callback: Function = ()=>{}, showCancel = false, cancelCallback: Function = ()=>{}, title = '友情提示') => {
-        return Taro.showModal({title: title, content: content, showCancel: showCancel}).then(res=>{
-            if(res.confirm) {
+    showMessage: (content: string, callback: Function = () => {
+    }, showCancel = false, cancelCallback: Function = () => {
+    }, title = '友情提示') => {
+        return Taro.showModal({title: title, content: content, showCancel: showCancel}).then(res => {
+            if (res.confirm) {
                 callback();
-            }
-            else {
+            } else {
                 cancelCallback && cancelCallback();
             }
         });
     },
     hideLoading() {
         Taro.hideLoading();
+    },
+    randomString(len) {
+        len = len || 32;
+        let $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        let maxPos = $chars.length;
+        let pwd = '';
+        for (let i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
     }
 }
