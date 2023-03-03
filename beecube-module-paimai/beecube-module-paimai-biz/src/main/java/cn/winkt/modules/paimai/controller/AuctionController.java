@@ -6,8 +6,15 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IPerformanceService;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -37,19 +44,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 订单售后表
+ * @Description: 拍卖会表
  * @Author: jeecg-boot
  * @Date:   2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="订单售后表")
+@Api(tags="拍卖会表")
 @RestController
 @RequestMapping("/paimai/auctions")
 public class AuctionController extends JeecgController<Auction, IAuctionService> {
 	@Autowired
 	private IAuctionService auctionService;
-	
+
+	@Resource
+	private IPerformanceService performanceService;
 	/**
 	 * 分页列表查询
 	 *
@@ -59,8 +68,8 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-分页列表查询")
-	@ApiOperation(value="订单售后表-分页列表查询", notes="订单售后表-分页列表查询")
+	@AutoLog(value = "拍卖会表-分页列表查询")
+	@ApiOperation(value="拍卖会表-分页列表查询", notes="拍卖会表-分页列表查询")
 	@GetMapping(value = "/list")
 	@AutoDict
 	public Result<?> queryPageList(Auction auction,
@@ -79,22 +88,37 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 * @param auction
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-添加")
-	@ApiOperation(value="订单售后表-添加", notes="订单售后表-添加")
+	@AutoLog(value = "拍卖会表-添加")
+	@ApiOperation(value="拍卖会表-添加", notes="拍卖会表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Auction auction) {
 		auctionService.save(auction);
 		return Result.OK("添加成功！");
 	}
-	
+	 @AutoLog(value = "拍卖会表-添加")
+	 @ApiOperation(value = "拍卖会表-添加", notes = "拍卖会表-添加")
+	 @PostMapping(value = "/performances/add")
+	 public Result<?> addGoods(@RequestBody JSONObject jsonObject) {
+		 String auctionId = jsonObject.getString("auctionId");
+		 Auction auction = auctionService.getById(auctionId);
+		 String perfIds = jsonObject.getString("perfIds");
+		 LambdaQueryWrapper<Performance> queryWrapper = new LambdaQueryWrapper<>();
+		 queryWrapper.in(Performance::getId, perfIds.split(","));
+		 List<Performance> performances = performanceService.list(queryWrapper);
+		 for (Performance p:performances) {
+			 p.setAuctionId(auctionId);
+		 }
+		 performanceService.updateBatchById(performances);
+		 return Result.OK("添加成功！");
+	 }
 	/**
 	 * 编辑
 	 *
 	 * @param auction
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-编辑")
-	@ApiOperation(value="订单售后表-编辑", notes="订单售后表-编辑")
+	@AutoLog(value = "拍卖会表-编辑")
+	@ApiOperation(value="拍卖会表-编辑", notes="拍卖会表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody Auction auction) {
 		auctionService.updateById(auction);
@@ -107,8 +131,8 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-通过id删除")
-	@ApiOperation(value="订单售后表-通过id删除", notes="订单售后表-通过id删除")
+	@AutoLog(value = "拍卖会表-通过id删除")
+	@ApiOperation(value="拍卖会表-通过id删除", notes="拍卖会表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		auctionService.removeById(id);
@@ -121,8 +145,8 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-批量删除")
-	@ApiOperation(value="订单售后表-批量删除", notes="订单售后表-批量删除")
+	@AutoLog(value = "拍卖会表-批量删除")
+	@ApiOperation(value="拍卖会表-批量删除", notes="拍卖会表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.auctionService.removeByIds(Arrays.asList(ids.split(",")));
@@ -135,8 +159,8 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "订单售后表-通过id查询")
-	@ApiOperation(value="订单售后表-通过id查询", notes="订单售后表-通过id查询")
+	@AutoLog(value = "拍卖会表-通过id查询")
+	@ApiOperation(value="拍卖会表-通过id查询", notes="拍卖会表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		Auction auction = auctionService.getById(id);
@@ -151,7 +175,7 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
    */
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, Auction auction) {
-      return super.exportXls(request, auction, Auction.class, "订单售后表");
+      return super.exportXls(request, auction, Auction.class, "拍卖会表");
   }
 
   /**
