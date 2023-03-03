@@ -80,8 +80,6 @@ export default class Index extends Component<any, any> {
                         "Authorization": token,
                         "Sec-WebSocket-Protocol": token,
                     }}).then(res=>{
-                    console.log(res);
-                    res.send({data: 'tester'})
                     this.socket = res;
                 }).catch(e=>{
                     console.log(e);
