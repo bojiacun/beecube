@@ -69,15 +69,18 @@ export default class Index extends Component<any, any> {
                 request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
+                    if(goods.deposited) {
+                        //需要出价的时候再连接websocket
+                        connectWebSocketServer('/auction/websocket/' + goods.id + '/' + userInfo.id).then(res => {
+                            this.socket = res;
+                        });
+                    }
                 });
                 request.get('/paimai/api/goods/offers/max', {params: {id: this.state.id}}).then(res=>{
                     goods.currentPrice = res.data.result;
                     this.nextPrice(goods);
                 });
-                //连接websocket
-                connectWebSocketServer('/auction/websocket/'+goods.id+'/'+userInfo.id).then(res=>{
-                    this.socket = res;
-                });
+
             }
         }
     }
