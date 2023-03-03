@@ -39,7 +39,8 @@ export default class Index extends Component<any, any> {
     }
 
     onReachBottom() {
-        this.loadData(this.state.id, this.state.page+1,false).then(()=>{});
+        utils.showLoading();
+        this.loadData(this.state.id, this.state.page+1,false).then(()=>utils.hideLoading());
         this.setState({page: this.state.page+1});
     }
 

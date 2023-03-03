@@ -108,10 +108,18 @@ export default class Index extends Component<any, any> {
                 this.setState({goods: goods});
                 this.nextPrice(goods);
                 let offers = this.state.offers;
-                offers.pop();
-                offers.unshif(
-                    msg.map(m => ({memberAvatar:m.memberAvatar, memberName: m.memberName, memberId: m.memberId, price:m.price, offerTime: m.createTime}))
-                );
+                if(offers.length >=3 ) {
+                    offers.pop();
+                    offers.unshif(
+                        msg.map(m => ({
+                            memberAvatar: m.memberAvatar,
+                            memberName: m.memberName,
+                            memberId: m.memberId,
+                            price: m.price,
+                            offerTime: m.createTime
+                        }))
+                    );
+                }
                 this.setState({offers: [...offers]});
                 break;
             case 'MSG_TYPE_DELAY':
@@ -153,14 +161,16 @@ export default class Index extends Component<any, any> {
                 utils.showSuccess(false, '出价成功');
                 goods.currentPrice = this.state.nextPrice;
                 let offers = this.state.offers;
-                offers.pop();
-                offers.unshift({
-                    memberAvatar: userInfo.avatar,
-                    memberId: userInfo.id,
-                    memberName: userInfo.phone||userInfo.realname,
-                    price: this.state.nextPrice,
-                    offerTime: moment(new Date()).format('yyyy-MM-dd HH:mm:ss'),
-                });
+                if(offers.length >= 3) {
+                    offers.pop();
+                    offers.unshift({
+                        memberAvatar: userInfo.avatar,
+                        memberId: userInfo.id,
+                        memberName: userInfo.phone || userInfo.realname,
+                        price: this.state.nextPrice,
+                        offerTime: moment(new Date()).format('yyyy-MM-dd HH:mm:ss'),
+                    });
+                }
                 this.setState({offers: [...offers]});
                 this.nextPrice(goods);
                 //出价成功加入队列
