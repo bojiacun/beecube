@@ -12,6 +12,8 @@ import classNames from "classnames";
 import LoginView from "../../components/login";
 import PageLoading from "../../components/pageloading";
 import md5 from 'blueimp-md5';
+import FallbackImage from "../../components/FallbackImage";
+import moment from "moment";
 
 const numeral = require('numeral');
 
@@ -91,7 +93,7 @@ export default class Index extends Component<any, any> {
     onMessageReceive(message:any) {
         const {context} = this.props;
         const {userInfo} = context;
-        const {goods} = this.state;
+        let {goods} = this.state;
         const messageSessionId = md5(goods.id+':'+userInfo.id+':'+this.randomStr);
         let msg = JSON.parse(message.data);
 
@@ -99,8 +101,25 @@ export default class Index extends Component<any, any> {
         if(msg.id === messageSessionId) {
             return;
         }
-        if(msg.type === 'MSG_TYPE_OFFER') {
-            //如果是出价消息
+        switch (msg.type) {
+            case 'MSG_TYPE_OFFER':
+                goods.currentPrice = parseFloat(msg.price).toFixed(2);
+                this.setState({goods: goods});
+                this.nextPrice(goods);
+                let offers = this.state.offers;
+                let newOffers = [
+                    msg.map(m => ({memberAvatar:m.memberAvatar, memberName: m.memberName, memberId: m.memberId, price:m.price, offerTime: m.createTime})),
+                    offers[0],
+                    offers[1]
+                ];
+                this.setState({offers: newOffers});
+                break;
+            case 'MSG_TYPE_DELAY':
+                goods.actualEndTime = msg.newTime;
+                this.setState({goods: goods});
+                //更新计时器
+                this.clocker.targetDate = msg.newTime;
+                break;
         }
     }
 
@@ -121,13 +140,25 @@ export default class Index extends Component<any, any> {
     }
 
     offer() {
+        const {context} = this.props;
+        const {userInfo} = context;
+        const {goods} = this.state;
         //出价
-        request.post('/paimai/api/members/offers', {id: this.state.goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
+        request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
             if(res.data.success) {
                 utils.showSuccess(false, '出价成功');
-                let goods = this.state.goods;
                 goods.currentPrice = this.state.nextPrice;
+                let offers = this.state.offers;
+                let newOffers = [{
+                    memberAvatar: userInfo.avatar,
+                    memberId: userInfo.id,
+                    memberName: userInfo.phone||userInfo.realname,
+                    price: this.state.nextPrice,
+                    offerTime: moment(new Date()).format('yyyy-MM-dd HH:mm:ss'),
+                }, offers[0], offers[1]];
+                this.setState({offers: newOffers});
                 this.nextPrice(goods);
+                //出价成功加入队列
             }
         })
     }
@@ -304,6 +335,26 @@ export default class Index extends Component<any, any> {
                         <View className={'flex justify-between'}>
                             <View className={'font-bold'}>出价记录({goods.offerCount})</View>
                             <Navigator url={`offers?id=${this.state.id}`}>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></Navigator>
+                        </View>
+                        <View className={'space-y-4 mt-4'}>
+                            {this.state.offers.map((o,index)=>{
+                                return (
+                                    <View className={'flex justify-between items-center bg-white rounded-full overflow-hidden p-1 shadow-outer'}>
+                                        <View className={'flex items-center space-x-2'}>
+                                            <FallbackImage src={o.memberAvatar} className={'rounded-full'} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}} />
+                                            <View>
+                                                <View>{o.memberName}</View>
+                                                <View className={'font-bold'}>￥{numeral(o.price).format('0,0.00')}</View>
+                                            </View>
+                                        </View>
+                                        <View className={'text-right pr-4'}>
+                                            {index == 0 && <View className={'text-indigo-600 font-bold'}>领先</View>}
+                                            {index != 0 && <View className={'font-bold text-gray-400'}>出局</View>}
+                                            <View className={'text-sm text-gray-400'}>{o.offerTime}</View>
+                                        </View>
+                                    </View>
+                                );
+                            })}
                         </View>
                     </View>
                 </View>

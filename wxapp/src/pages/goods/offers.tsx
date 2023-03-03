@@ -3,7 +3,10 @@ import PageLayout from "../../layouts/PageLayout";
 import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-
+import {View} from "@tarojs/components";
+import FallbackImage from "../../components/FallbackImage";
+import Taro from "@tarojs/taro";
+const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
     state:any = {
@@ -47,7 +50,26 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '出价记录'}}>
                 <LoginView>
-
+                    <View className={'space-y-4 p-4'}>
+                        {this.state.offers.map((o,index)=>{
+                            return (
+                                <View className={'flex justify-between items-center bg-white rounded-full overflow-hidden p-1 shadow-outer'}>
+                                    <View className={'flex items-center space-x-2'}>
+                                        <FallbackImage src={o.memberAvatar} className={'rounded-full'} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}} />
+                                        <View>
+                                            <View>{o.memberName}</View>
+                                            <View className={'font-bold'}>￥{numeral(o.price).format('0,0.00')}</View>
+                                        </View>
+                                    </View>
+                                    <View className={'text-right pr-4'}>
+                                        {index == 0 && <View className={'text-indigo-600 font-bold'}>领先</View>}
+                                        {index != 0 && <View className={'font-bold text-gray-400'}>出局</View>}
+                                        <View className={'text-sm text-gray-400'}>{o.offerTime}</View>
+                                    </View>
+                                </View>
+                            );
+                        })}
+                    </View>
                 </LoginView>
             </PageLayout>
         );
