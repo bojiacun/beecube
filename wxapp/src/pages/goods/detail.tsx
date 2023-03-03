@@ -78,7 +78,6 @@ export default class Index extends Component<any, any> {
                     "X-App-Id": APP_ID,
                         "X-Access-Token": token,
                         "Authorization": token,
-                        "Sec-WebSocket-Protocol": token,
                     }}).then(res=>{
                         console.log(res);
                     this.socket = res;
