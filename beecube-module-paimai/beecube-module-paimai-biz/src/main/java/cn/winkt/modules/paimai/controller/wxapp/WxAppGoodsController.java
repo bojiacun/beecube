@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -46,8 +48,25 @@ public class WxAppGoodsController {
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
-        QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
-        queryWrapper.eq("status", 1);
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(goods.getClassId())) {
+            queryWrapper.eq("g.class_id", goods.getClassId());
+        }
+        if(goods.getType() != null) {
+            queryWrapper.eq("g.type", goods.getType());
+        }
+        queryWrapper.eq("g.status", 1);
+        //排序
+        String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
+        orderField = "g."+orderField;
+        String orderBy = StringUtils.getIfEmpty(req.getParameter("orderBy"), () -> "desc");
+        if(orderBy.equals("desc")) {
+            queryWrapper.orderByDesc(orderField);
+        }
+        else {
+            queryWrapper.orderByAsc(orderField);
+        }
+
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<GoodsVO> pageList = goodsService.selectPage(page, queryWrapper);
         return Result.OK(pageList);
