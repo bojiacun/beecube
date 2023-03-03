@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.config;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.util.SpringContextUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -27,9 +28,6 @@ public class GoodsOfferWebSocket {
     private String goodsId;
     private String userId;
 
-    @Resource
-    private RedissonLockClient redissonLockClient;
-
     private static CopyOnWriteArraySet<GoodsOfferWebSocket> webSockets =new CopyOnWriteArraySet<>();
     private static Map<String,Session> userSessionPool = new HashMap<String,Session>();
     private static ConcurrentHashMap<String, Set<String>> offerGroup = new ConcurrentHashMap<>();
@@ -44,6 +42,7 @@ public class GoodsOfferWebSocket {
             this.userId = userId;
             webSockets.add(this);
             userSessionPool.put(userId, session);
+            RedissonLockClient redissonLockClient = this.redissonLockClient();
             if(redissonLockClient == null) {
                 throw new JeecgBootException("加锁失败");
             }
@@ -114,5 +113,10 @@ public class GoodsOfferWebSocket {
             }
         }
 
+    }
+
+
+    private RedissonLockClient redissonLockClient() {
+        return SpringContextUtils.getBean(RedissonLockClient.class);
     }
 }
