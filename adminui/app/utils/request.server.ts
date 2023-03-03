@@ -151,6 +151,7 @@ export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execu
 
 export const API_PAIMAI_GOODS_LIST = `${BASE_URL}/paimai/goods/list`;
 export const API_PAIMAI_GOODS_SELCT_LIST = `${BASE_URL}/paimai/goods/select`;
+export const API_PAIMAI_GOODS_SELCTED_LIST = `${BASE_URL}/paimai/goods/selected`;
 export const API_PAIMAI_GOODS_ADD = `${BASE_URL}/paimai/goods/add`;
 export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
@@ -158,13 +159,17 @@ export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 
 export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;
 export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performances/add`;
+export const API_PAIMAI_PERFORMANCE_ADDGOODS = `${BASE_URL}/paimai/performances/goods/add`;
 export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performances/edit`;
 export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performances/delete`;
+export const API_PAIMAI_PERFORMANCE_DELETEGOODS = `${BASE_URL}/paimai/performances/goods/remove`;
 
 export const API_PAIMAI_AUCTION_LIST = `${BASE_URL}/paimai/auctions/list`;
 export const API_PAIMAI_AUCTION_ADD = `${BASE_URL}/paimai/auctions/add`;
+export const API_PAIMAI_AUCTION_ADDPERFORMANCES = `${BASE_URL}/paimai/auctions/goods/add`;
 export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auctions/edit`;
 export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
+export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/goods/delete`;
 
 
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;

@@ -8,17 +8,17 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import {AwesomeButton} from "react-awesome-button";
 
 
-const GoodsListSelector = (props: any) => {
-    const {show, setGoodsListShow, selectedPerformance} = props;
+const GoodsListSelected = (props: any) => {
+    const {show, setSelectedListShow, selectedPerformance} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
-    const editFetcher = useFetcher();
+    const removeFetcher = useFetcher();
 
     useEffect(()=>{
         if(show) {
-            searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
+            searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
         }
     }, [show]);
     useEffect(() => {
@@ -28,14 +28,14 @@ const GoodsListSelector = (props: any) => {
     }, [searchFetcher.state]);
 
     useEffect(() => {
-        if (editFetcher.data && editFetcher.type === 'done') {
-            if (editFetcher.data.success) {
-                setGoodsListShow(false);
+        if (removeFetcher.data && removeFetcher.type === 'done') {
+            if (removeFetcher.data.success) {
+                setSelectedListShow(false);
             } else {
-                showToastError(editFetcher.data.message);
+                showToastError(removeFetcher.data.message);
             }
         }
-    }, [editFetcher.state]);
+    }, [removeFetcher.state]);
 
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
@@ -86,14 +86,14 @@ const GoodsListSelector = (props: any) => {
             setSelectedRows([]);
         }
     }
-    const handleOnAddGoods = () => {
+    const handleOnRemoveGoods = () => {
         if(selectedRows.length > 0) {
             //添加
             let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.map(item=>item.id).join(',')};
-            editFetcher.submit(data, {method: 'post', action: '/paimai/performances/goods/add'})
+            removeFetcher.submit(data, {method: 'post', action: '/paimai/performances/goods/remove'})
         }
         else{
-            setGoodsListShow(false);
+            setSelectedListShow(false);
         }
     }
 
@@ -107,15 +107,14 @@ const GoodsListSelector = (props: any) => {
         <Modal
             show={show}
             size={'lg'}
-            onHide={()=>setGoodsListShow(false)}
+            onHide={()=>setSelectedListShow(false)}
             centered
             backdrop={'static'}
             aria-labelledby={'edit-modal'}
         >
             <Modal.Header closeButton>
                 <Modal.Title id={'edit-modal'}>
-                    <p>选择专场拍品</p>
-                    <p>拍品选择后，拍品的结束时间将统一修改为专场结束时间</p>
+                    <p>已选拍品</p>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -185,10 +184,10 @@ const GoodsListSelector = (props: any) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton type={'primary'} onPress={handleOnAddGoods} disabled={editFetcher.state === 'submitting'}>确认选择</AwesomeButton>
+                <AwesomeButton type={'danger'} onPress={handleOnRemoveGoods} disabled={removeFetcher.state === 'submitting'}>确认移除</AwesomeButton>
             </Modal.Footer>
         </Modal>
     );
 }
 
-export default GoodsListSelector;
+export default GoodsListSelected;
