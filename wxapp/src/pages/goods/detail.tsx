@@ -14,6 +14,7 @@ import PageLoading from "../../components/pageloading";
 import md5 from 'blueimp-md5';
 import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
+import Modal from "../../components/modal";
 
 const numeral = require('numeral');
 
@@ -33,6 +34,7 @@ export default class Index extends Component<any, any> {
         nextPrice: undefined,
         offers: [],
         posting: false,
+        uprangeShow: false,
     }
     clocker: any;
     timer: any;
@@ -179,7 +181,7 @@ export default class Index extends Component<any, any> {
     }
     nextPrice(newGoods) {
         let goods = newGoods;
-        let upgradeConfig = JSON.parse(goods.uprange);
+        let upgradeConfig = goods.uprange;
         if(!goods.currentPrice) {
             //说明没有人出价，第一次出价可以以起拍价出价
             this.setState({nextPrice:goods.startPrice, goods: goods});
@@ -205,6 +207,7 @@ export default class Index extends Component<any, any> {
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
             data.fields = JSON.parse(data.fields || '[]');
+            data.uprange = JSON.parse(data.uprange);
             this.nextPrice(data);
             let endDate = new Date(data.actualEndTime || data.endTime);
             this.clocker = new Clocker(endDate);
@@ -336,7 +339,7 @@ export default class Index extends Component<any, any> {
                     <View className={'py-4 space-y-4'}>
                         <View className={'flex'}>
                             <View className={'flex-1'}>保证金：￥{numeral(goods.deposit).format('0,0.00')}</View>
-                            <View className={'flex-1'}>加价幅度：<Text>查看详情</Text></View>
+                            <View className={'flex-1'}>加价幅度：<Text className={'text-indigo-400'} onClick={()=>this.setState({uprangeShow: true})}>查看详情</Text></View>
                         </View>
                         <View className={'flex'}>
                             <View className={'flex-1'}>起拍价：￥{numeral(goods.startPrice).format('0,0.00')}</View>
@@ -429,6 +432,22 @@ export default class Index extends Component<any, any> {
                         {this.renderButton()}
                     </View>
                 </LoginView>
+                <Modal show={this.state.uprangeShow} showMask={true}>
+                    <View className={'bg-indigo-200 text-gray-600 font-bold text-center flex py-2'}>
+                        <View className={'flex-1'}>区间开始</View>
+                        <View className={'flex-1'}>区间结束</View>
+                        <View className={'flex-1'}>加价幅度</View>
+                    </View>
+                    {goods.uprange.map(item=>{
+                        return (
+                            <View className={'text-gray-600 text-center flex py-2'}>
+                                <View className={'flex-1'}>{parseFloat(item.min)!=0?numeral(item.min).format('0,0.00'):'-'}</View>
+                                <View className={'flex-1'}>{parseFloat(item.max)!=0?numeral(item.max).format('0,0.00'):'-'}</View>
+                                <View className={'flex-1'}>{numeral(item.price).format('0,0.00')}</View>
+                            </View>
+                        );
+                    })}
+                </Modal>
             </PageLayout>
         );
     }
