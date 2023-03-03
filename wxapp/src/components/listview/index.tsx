@@ -4,6 +4,7 @@ import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import NoData from "../nodata";
 
 export interface ListViewTabItem {
     label: string;
@@ -65,12 +66,7 @@ const ListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>
-            {data.length === 0 &&
-                <View className={'text-center mt-20 text-gray-300'}>
-                    <View className={'iconfont icon-zanwushuju text-9xl'} />
-                    <View>暂无数据</View>
-                </View>
-            }
+            {data.length === 0 && <NoData />}
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return (
