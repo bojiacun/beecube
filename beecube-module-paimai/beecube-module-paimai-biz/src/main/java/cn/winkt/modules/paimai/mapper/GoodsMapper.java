@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.mapper;
 import java.util.List;
 
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +19,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface GoodsMapper extends BaseMapper<Goods> {
 
     GoodsVO getDetail(@Param("id") String id);
+
+    IPage<GoodsVO> selectPage(Page<Goods> page, QueryWrapper<Goods> queryWrapper);
 
     IPage<Goods> queryMemberViewGoods(@Param("member_id") String member_id, Page<Goods> page);
 

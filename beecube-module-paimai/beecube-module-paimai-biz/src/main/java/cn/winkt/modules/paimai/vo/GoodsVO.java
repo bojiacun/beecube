@@ -68,4 +68,5 @@ public class GoodsVO {
     private Integer followCount;
 
     private Boolean followed;
+    private Float currentPrice;
 }

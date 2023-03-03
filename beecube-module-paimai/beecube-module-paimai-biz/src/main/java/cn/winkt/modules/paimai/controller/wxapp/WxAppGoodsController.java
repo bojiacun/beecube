@@ -49,7 +49,7 @@ public class WxAppGoodsController {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         queryWrapper.eq("status", 1);
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-        IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+        IPage<GoodsVO> pageList = goodsService.selectPage(page, queryWrapper);
         return Result.OK(pageList);
     }
 

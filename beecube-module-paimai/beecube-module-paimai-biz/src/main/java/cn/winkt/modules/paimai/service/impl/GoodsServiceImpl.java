@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public GoodsVO getDetail(String id) {
         return goodsMapper.getDetail(id);
+    }
+
+    @Override
+    public IPage<GoodsVO> selectPage(Page<Goods> page, QueryWrapper<Goods> queryWrapper) {
+        return goodsMapper.selectPage(page, queryWrapper);
     }
 
     @Override
