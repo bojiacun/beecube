@@ -232,7 +232,7 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '拍品详情'}}>
                 <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'}/>
                 <View className={'grid grid-cols-1 px-4 divide-y'}>
-                    <View className={'space-y-3 py-4'}>
+                    <View className={'space-y-4 py-4'}>
                         <View className={'flex justify-between items-center'}>
                             <View>
                                 <View className={'font-bold text-xl'}>

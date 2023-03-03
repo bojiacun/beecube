@@ -59,7 +59,7 @@ export async function connectWebSocketServer(url: string) {
     const token = Taro.getStorageSync("TOKEN");
     let res:any;
     try {
-        res = await Taro.connectSocket({url: API_URL.replace('https', 'wss')+'/'+url, header: {
+        res = await Taro.connectSocket({url: API_URL.replace('https', 'wss')+url, header: {
                 "X-App-Id": APP_ID,
                 "X-Access-Token": token,
                 "Authorization": token,
