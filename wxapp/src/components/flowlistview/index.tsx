@@ -26,17 +26,15 @@ const FlowListView: FC<ListViewProps> = (props) => {
         tabs, onTabChanged = () => {}, dataFetcher,
         tabJustify = 'justify-start'
     } = props;
-    const initDatas = tabs.map(() => []);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [datas, setDatas] = useState<any[]>(initDatas);
+    const [data, setData] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
 
     useEffect(()=>{
         if(tabs && tabs.length > 0) {
             utils.showLoading();
             dataFetcher(1, tabs[0], 0).then(res => {
-                datas[selectedIndex] = res.data.result.records;
-                setDatas([...datas]);
+                setData([...res.data.result.records]);
                 utils.hideLoading();
             }).catch(() => utils.hideLoading());
         }
@@ -45,8 +43,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
     //下拉刷新
     usePullDownRefresh(() => {
         dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex] = res.data.result.records;
-            setDatas([...datas]);
+            setData([...res.data.result.records]);
         });
         setPage(1);
     });
@@ -54,8 +51,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
     //下拉加载
     useReachBottom(() => {
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex].pushAll(res.data.result.records);
-            setDatas([...datas]);
+            data.push(res.data.result.records);
+            setData([...data]);
         })
         setPage(page + 1);
     });
@@ -71,8 +68,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                             utils.showLoading();
                             onTabChanged(tab, index);
                             dataFetcher(1, tab, index).then(res => {
-                                datas[index] = res.data.result.records;
-                                setDatas([...datas]);
+                                setData([...res.data.result.records]);
                                 setSelectedIndex(index);
                                 setPage(1);
                                 utils.hideLoading();
@@ -83,22 +79,19 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>}
-            {tabs.map((tab, index) => {
-                let data = datas[index] || [];
-                if (data.length == 0) {
-                    return (
-                        <View style={{display: selectedIndex === index ? 'block': 'none'}} className={'text-center mt-20 text-gray-300'}>
-                            <View className={'iconfont icon-zanwushuju text-9xl'} />
-                            <View>暂无数据</View>
-                        </View>
-                    );
-                }
-                return (
-                    <View className={classNames('p-4', stylesFlow.flowWrapper)} style={{display: selectedIndex === index ? '': 'none'}}>
-                        {data.map((item:any)=>tab.template(item))}
-                    </View>
-                );
+            {data.length === 0 &&
+                <View className={'text-center mt-20 text-gray-300'}>
+                    <View className={'iconfont icon-zanwushuju text-9xl'} />
+                    <View>暂无数据</View>
+                </View>
+            }
+            {data.length > 0 &&
+                <View className={classNames('p-4', stylesFlow.flowWrapper)}>
+            {data.map((item) => {
+                let tab = tabs[selectedIndex];
+                return tab.template(item);
             })}
+            </View>}
         </>
     );
 }

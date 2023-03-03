@@ -32,6 +32,7 @@ export default class Index extends Component<any, any> {
         counting: false,
         nextPrice: undefined,
         offers: [],
+        posting: false,
     }
     clocker: any;
     timer: any;
@@ -124,6 +125,7 @@ export default class Index extends Component<any, any> {
     }
 
     payDeposit() {
+        this.setState({posting: true});
         //支付宝保证金
         request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
             let data = res.data.result;
@@ -135,7 +137,8 @@ export default class Index extends Component<any, any> {
                     goods.deposited = true;
                     this.setState({goods: goods});
                 });
-            });
+                this.setState({posting: false});
+            }).catch(()=>this.setState({posting: false}));
         })
     }
 
@@ -143,9 +146,11 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
         const {goods} = this.state;
+        this.setState({posting: true});
         //出价
         request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
             if(res.data.success) {
+                this.setState({posting: false});
                 utils.showSuccess(false, '出价成功');
                 goods.currentPrice = this.state.nextPrice;
                 let offers = this.state.offers;
@@ -167,7 +172,8 @@ export default class Index extends Component<any, any> {
         let upgradeConfig = JSON.parse(goods.uprange);
         if(!goods.currentPrice) {
             //说明没有人出价，第一次出价可以以起拍价出价
-            return goods.startPrice;
+            this.setState({nextPrice:goods.startPrice, goods: goods});
+            return;
         }
         let currentPrice = parseFloat(goods.currentPrice);
 
@@ -189,7 +195,6 @@ export default class Index extends Component<any, any> {
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
             data.fields = JSON.parse(data.fields || '[]');
-            this.setState({goods: data});
             this.nextPrice(data);
             let endDate = new Date(data.actualEndTime || data.endTime);
             this.clocker = new Clocker(endDate);
@@ -243,7 +248,7 @@ export default class Index extends Component<any, any> {
         if(!goods.deposit || goods.deposited) {
             return (
                 <View>
-                    <Button className={'btn btn-danger w-56'} onClick={this.offer}>
+                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
                         <View>出价</View>
                         <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
                     </Button>
@@ -253,7 +258,7 @@ export default class Index extends Component<any, any> {
         else {
             return (
                 <View>
-                    <Button className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                    <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
                         <View>交保证金</View>
                         <View>RMB {numeral(goods.deposit).format('0,0.00')}</View>
                     </Button>

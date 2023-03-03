@@ -23,17 +23,15 @@ const ListView: FC<ListViewProps> = (props) => {
         tabs, onTabChanged = () => {
         }, dataFetcher
     } = props;
-    const initDatas = tabs.map(() => []);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [datas, setDatas] = useState<any[]>(initDatas);
+    const [data, setData] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
 
 
     //下拉刷新
     usePullDownRefresh(() => {
         dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex] = res.data.result;
-            setDatas([...datas]);
+            setData([...res.data.result.records]);
         });
         setPage(1);
     });
@@ -41,8 +39,8 @@ const ListView: FC<ListViewProps> = (props) => {
     //下拉加载
     useReachBottom(() => {
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
-            datas[selectedIndex].pushAll(res.data.result);
-            setDatas([...datas]);
+            data.push(res.data.result.records);
+            setData([...data]);
         })
         setPage(page + 1);
     });
@@ -59,8 +57,7 @@ const ListView: FC<ListViewProps> = (props) => {
                             onTabChanged(tab, index);
                             setPage(1);
                             dataFetcher(1, tab, index).then(res => {
-                                datas[index] = res.data.result;
-                                setDatas([...datas]);
+                                setData(res.data.result.records);
                             });
                         }}>
                             {tab.label}
@@ -68,19 +65,17 @@ const ListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>
-            {tabs.map((tab, index) => {
-                let data = datas[index];
-                if (data.length == 0) {
-                    return (
-                        <View style={{display: selectedIndex === index ? 'block': 'none'}} className={'text-center mt-20 text-gray-300'}>
-                            <View className={'iconfont icon-zanwushuju text-9xl'} />
-                            <View>暂无数据</View>
-                        </View>
-                    );
-                }
+            {data.length === 0 &&
+                <View className={'text-center mt-20 text-gray-300'}>
+                    <View className={'iconfont icon-zanwushuju text-9xl'} />
+                    <View>暂无数据</View>
+                </View>
+            }
+            {data.map((item) => {
+                let tab = tabs[selectedIndex];
                 return (
-                    <View style={{display: selectedIndex === index ? 'block': 'none'}}>
-                        {tab.template(data)}
+                    <View>
+                        {tab.template(item)}
                     </View>
                 );
             })}

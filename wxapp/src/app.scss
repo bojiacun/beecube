@@ -594,6 +594,7 @@ button, button[plain] {
     }
 
     &[disabled] {
+        background-image: none !important;
         @apply bg-none bg-gray-400;
     }
     &.btn-primary {
