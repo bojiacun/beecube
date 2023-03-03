@@ -19,7 +19,7 @@ export default class Index extends Component<any, any> {
         this.loadData = this.loadData.bind(this);
     }
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 1, column: 'createTime', orderBy: 'desc', page: pageIndex};
+        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', page: pageIndex};
         if (tab.id) {
             params.classId = tab.id;
         }
