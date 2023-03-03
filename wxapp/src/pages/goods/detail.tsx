@@ -231,16 +231,16 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
                 <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'}/>
-                <View className={'p-4 space-y-4 divide-y'}>
-                    <View className={'space-y-2'}>
+                <View className={'grid grid-cols-1 px-4 divide-y'}>
+                    <View className={'space-y-3 py-4'}>
                         <View className={'flex justify-between items-center'}>
                             <View>
                                 <View className={'font-bold text-xl'}>
                                     {goods.title}
                                 </View>
                                 <View className={'text-gray-600 mt-2'}>
-                                    起拍价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
-                                    className={'text-lg text-red-500 font-bold'}>{numeral(goods.startPrice).format('0,0.00')}</Text>
+                                    当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                    className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
                                 </View>
                             </View>
                             <View className={'flex flex-col items-center text-gray-600'}>
@@ -268,20 +268,20 @@ export default class Index extends Component<any, any> {
                             <Text>出价{goods.offerCount}次</Text>
                         </View>
                     </View>
-                    <View>
+                    <View className={'py-4 space-y-4'}>
                         <View className={'flex'}>
                             <View className={'flex-1'}>保证金：￥{numeral(goods.deposit).format('0,0.00')}</View>
                             <View className={'flex-1'}>加价幅度：<Text>查看详情</Text></View>
                         </View>
                         <View className={'flex'}>
                             <View className={'flex-1'}>起拍价：￥{numeral(goods.startPrice).format('0,0.00')}</View>
-                            <View className={'flex-1'}>加价幅度：<Text>查看详情</Text></View>
+                            <View className={'flex-1'}>延时周期：<Text>{goods.delayTime}分钟</Text></View>
                         </View>
                         <View className={'flex'}>
                             <View className={'flex-1'}>拍卖佣金：{goods.commission}%</View>
                         </View>
                     </View>
-                    <View>
+                    <View className={'py-4'}>
                         <View className={'flex justify-between'}>
                             <View className={'font-bold'}>出价记录({goods.offerCount})</View>
                             <Navigator url={`offers?id=${this.state.id}`}>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></Navigator>
