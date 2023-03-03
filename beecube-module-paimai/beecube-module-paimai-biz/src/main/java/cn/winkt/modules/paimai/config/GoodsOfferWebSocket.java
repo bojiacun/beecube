@@ -43,9 +43,6 @@ public class GoodsOfferWebSocket {
             webSockets.add(this);
             userSessionPool.put(userId, session);
             RedissonLockClient redissonLockClient = this.redissonLockClient();
-            if(redissonLockClient == null) {
-                throw new JeecgBootException("加锁失败");
-            }
             if(redissonLockClient.tryLock(lockKey, -1, 300)) {
                 if(!offerGroup.containsKey(goodsId)) {
                     offerGroup.put(goodsId, new HashSet<>());
