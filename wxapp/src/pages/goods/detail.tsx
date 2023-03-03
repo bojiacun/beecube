@@ -296,7 +296,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
                 <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'}/>
-                <View className={'grid grid-cols-1 px-4 divide-y'}>
+                <View className={'grid grid-cols-1 px-4 divide-y divide-gray-200'}>
                     <View className={'space-y-4 py-4'}>
                         <View className={'flex justify-between items-center'}>
                             <View>
@@ -373,7 +373,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                 </View>
-                <View className={'bg-white px-4 divide-y'}>
+                <View className={'bg-white px-4 divide-y divide-gray-100'}>
                     <Collapse showArrow={true} title={'拍卖专场'} description={'111'}
                               url={goods.performanceId ? `/pages/performance/detail?id=${goods.performanceId}` : ''}/>
                     <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
@@ -387,7 +387,7 @@ export default class Index extends Component<any, any> {
                         <RichText nodes={goods.description}/>
                     </View>
                 </View>
-                <View className={'bg-white px-4 divide-y'}>
+                <View className={'bg-white px-4 divide-y divide-gray-100'}>
                     <Collapse title={'拍卖流程'} showArrow={true}>
                         <RichText nodes={goods.descFlow}/>
                     </Collapse>

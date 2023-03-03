@@ -24,7 +24,10 @@ class PageLayout extends Component<PayLayoutProps, any> {
 
     componentDidMount() {
         const {systemInfo, showTabBar = false, enableReachBottom = false} = this.props;
-        let initPageStyle:any = {paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0))};
+        let initPageStyle:any = {
+            paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0)),
+        };
+
         if(enableReachBottom) {
             //如果启用下拉刷新，则需要禁用外层滚动，改用page滚动
             initPageStyle.height = 'auto';

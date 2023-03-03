@@ -18,7 +18,6 @@ export declare interface StatusbarProps {
 
 const StatusBar = (props: StatusbarProps): any => {
     const {
-        isFixed = false,
         title = '',
         titleCenter = true,
         button = null,
@@ -40,10 +39,9 @@ const StatusBar = (props: StatusbarProps): any => {
     if (titleCenter) {
         navigatorBarStyle.textAlign = 'center';
     }
-    if(isFixed) {
-        navigatorBarStyle.position = 'fixed';
-        navigatorBarStyle.top = 0;
-    }
+    navigatorBarStyle.position = 'sticky';
+    navigatorBarStyle.top = 0;
+    navigatorBarStyle.zIndex = 9999;
 
     const goBack = () => {
         Taro.navigateBack().then();
