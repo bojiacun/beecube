@@ -1,0 +1,67 @@
+package cn.winkt.modules.paimai.controller.wxapp;
+
+import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoLog;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+
+@RestController
+@RequestMapping("/paimai/api/performances")
+public class WxAppPerformanceController {
+
+
+    @Resource
+    IPerformanceService performanceService;
+
+
+    @AutoLog(value = "专场表-分页列表查询")
+    @ApiOperation(value = "专场表-分页列表查询", notes = "专场表-分页列表查询")
+    @GetMapping(value = "/list")
+    public Result<?> queryPageList(Performance performance,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                   HttpServletRequest req) {
+        QueryWrapper<Performance> queryWrapper = new QueryWrapper<>();
+        if(performance.getType() != null) {
+            queryWrapper.eq("type", performance.getType());
+        }
+        queryWrapper.eq("status", 1);
+        String source = req.getParameter("source");
+        Date nowDate = new Date();
+        if("1".equals(source)) {
+            //进行中拍品,并且尚未结束的哦
+            queryWrapper.gt("end_time", nowDate);
+        }
+        else if("2".equals(source)) {
+            queryWrapper.lt("end_time", nowDate);
+        }
+        //排序
+        String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
+        String orderBy = StringUtils.getIfEmpty(req.getParameter("orderBy"), () -> "desc");
+        if(orderBy.equals("desc")) {
+            queryWrapper.orderByDesc(orderField);
+        }
+        else {
+            queryWrapper.orderByAsc(orderField);
+        }
+
+        Page<Performance> page = new Page<>(pageNo, pageSize);
+        IPage<Performance> pageList = performanceService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+}
