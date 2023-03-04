@@ -8,6 +8,7 @@ import ImageText from "./components/diy/modules/ImageText";
 import GoodsListModule from "./components/diy/modules/GoodsList";
 import BuyoutGoodsListModule from "./components/diy/modules/BuyoutGoodsList";
 import PerformanceListModule from "./components/diy/modules/PerformanceList";
+import AsyncPerformanceListModule from "./components/diy/modules/AsyncPerformanceList";
 
 
 const modules = {
@@ -21,6 +22,7 @@ const modules = {
     'GOODS_LIST_MODULE': GoodsListModule,
     'BUYOUT_GOODS_LIST_MODULE': BuyoutGoodsListModule,
     'PERFORMANCE_LIST_MODULE': PerformanceListModule,
+    'ASYNC_PERFORMANCE_LIST_MODULE': AsyncPerformanceListModule
 };
 
 
