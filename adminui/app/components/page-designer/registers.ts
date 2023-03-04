@@ -8,6 +8,9 @@ import registerModuleSingleImage from './modules/common/SingleImage';
 import registerModuleSwiper from './modules/common/Swiper';
 import registerModuleGoodsList from './modules/paimai/GoodsList';
 import registerModuleBuyoutGoodsList from './modules/paimai/BuyoutGoodsList';
+import registerModulePerformanceList from './modules/paimai/PerformanceList';
+import registerModuleAsyncPerformanceList from './modules/paimai/AsyncPerformanceList';
+import registerModuleAuctionList from './modules/paimai/AuctionList';
 
 
 
@@ -31,4 +34,7 @@ export default function register(module='') {
     //@ts-ignore
     registerModuleGoodsList(module);
     registerModuleBuyoutGoodsList(module);
+    registerModulePerformanceList(module);
+    registerModuleAuctionList(module);
+    registerModuleAsyncPerformanceList(module);
 }
