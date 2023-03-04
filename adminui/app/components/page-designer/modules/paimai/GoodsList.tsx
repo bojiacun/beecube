@@ -30,8 +30,8 @@ export const defaultData = {
 
 const GoodsListModuleAttribute = (props: any) => {
     const { onUpdate, data } = props;
-
     let _data = { ...defaultData, ...data };
+
     const handleOnSubmit1 = (values:any) => {
         _data.basic = values;
         onUpdate({..._data});
@@ -103,6 +103,8 @@ const GoodsListModule = (props: any) => {
         }
     }, [data.basic.dataSource]);
 
+    console.log(_data.basic);
+
     return (
         <div {...rest} style={_data.style}>
             {_data.basic.style == 1 &&
@@ -110,7 +112,7 @@ const GoodsListModule = (props: any) => {
                     {goodsList.slice(0, _data.basic.count).map((item: any) => {
                         let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
                         return (
-                            <div key={item.id} style={{ width: itemWidth, background: 'white', padding: 10, marginBottom: _data.basic.space, borderRadius: _data.basic.itemBorderRadius, position: 'relative' }}>
+                            <div key={item.id} style={{ width: itemWidth, background: 'white', padding: 10, marginBottom: _data.basic.space, borderRadius: parseInt(_data.basic.itemBorderRadius), position: 'relative' }}>
                                 <div style={{paddingTop: '100%', width: '100%', position: 'relative'}}>
                                     <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{ position: 'absolute', left: 0, top: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover', zIndex: 99 }} />
                                 </div>
