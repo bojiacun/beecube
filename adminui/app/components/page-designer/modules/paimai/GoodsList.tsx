@@ -1,6 +1,6 @@
 import { AttributeTabs, registerModule } from "../../component"
-import image from '@/assets/designer/s4_2.png';
-import biaoqian from '@/assets/designer/biaoqian.png';
+import image from 'assets/designer/s4_2.png';
+import biaoqian from 'assets/designer/biaoqian.png';
 import { useEffect, useState } from "react";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
 import { getPagedGoods, getShopClasses } from "./service";
