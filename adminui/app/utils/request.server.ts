@@ -168,10 +168,10 @@ export const API_PAIMAI_PERFORMANCE_DELETEGOODS = `${BASE_URL}/paimai/performanc
 
 export const API_PAIMAI_AUCTION_LIST = `${BASE_URL}/paimai/auctions/list`;
 export const API_PAIMAI_AUCTION_ADD = `${BASE_URL}/paimai/auctions/add`;
-export const API_PAIMAI_AUCTION_ADDPERFORMANCES = `${BASE_URL}/paimai/auctions/goods/add`;
+export const API_PAIMAI_AUCTION_ADDPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/add`;
 export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auctions/edit`;
 export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
-export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/goods/delete`;
+export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/remove`;
 
 
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;

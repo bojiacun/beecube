@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -11,14 +11,14 @@ import {AwesomeButton} from "react-awesome-button";
 const PerformancesListSelected = (props: any) => {
     const {show, setSelectedListShow, selectedAuction} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, ac_id: selectedAuction.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, ac_id: selectedAuction?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const removeFetcher = useFetcher();
 
     useEffect(()=>{
         if(show && selectedAuction) {
-            searchState.perf_id = selectedAuction?.id;
+            searchState.ac_id = selectedAuction?.id;
             setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/performances/selected'});
         }
@@ -33,6 +33,7 @@ const PerformancesListSelected = (props: any) => {
     useEffect(() => {
         if (removeFetcher.data && removeFetcher.type === 'done') {
             if (removeFetcher.data.success) {
+                showToastSuccess('移除成功');
                 setSelectedListShow(false);
             } else {
                 showToastError(removeFetcher.data.message);
@@ -61,6 +62,10 @@ const PerformancesListSelected = (props: any) => {
         {
             text: '专场名称',
             dataField: 'title',
+        },
+        {
+            text: '专场类型',
+            dataField: 'type_dictText',
         },
         {
             text: '开拍时间',
@@ -92,7 +97,7 @@ const PerformancesListSelected = (props: any) => {
     const handleOnRemovePerformances = () => {
         if(selectedRows.length > 0) {
             //添加
-            let data:any = {auctionId: selectedAuction.id, perfIds: selectedRows.map(item=>item.id).join(',')};
+            let data:any = {auctionId: selectedAuction.id, perfIds: selectedRows.join(',')};
             removeFetcher.submit(data, {method: 'post', action: '/paimai/auctions/performances/remove'})
         }
         else{

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, handleSaveResult, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -11,14 +11,14 @@ import {AwesomeButton} from "react-awesome-button";
 const PerformanceListSelector = (props: any) => {
     const {show, setPerformanceListShow, selectedAuction} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedAuction?.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, ac_id: selectedAuction?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
     useEffect(()=>{
         if(show && selectedAuction) {
-            searchState.perf_id = selectedAuction?.id;
+            searchState.ac_id = selectedAuction?.id;
             setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/performances/select'});
         }
@@ -33,6 +33,7 @@ const PerformanceListSelector = (props: any) => {
     useEffect(() => {
         if (editFetcher.data && editFetcher.type === 'done') {
             if (editFetcher.data.success) {
+                showToastSuccess("保存成功");
                 setPerformanceListShow(false);
             } else {
                 showToastError(editFetcher.data.message);
@@ -61,6 +62,10 @@ const PerformanceListSelector = (props: any) => {
         {
             text: '专场名称',
             dataField: 'title',
+        },
+        {
+            text: '专场类型',
+            dataField: 'type_dictText',
         },
         {
             text: '开拍时间',
@@ -134,7 +139,7 @@ const PerformanceListSelector = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/paimai/goods/auction'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/paimai/performances/select'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>

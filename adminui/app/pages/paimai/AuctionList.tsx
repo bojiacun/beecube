@@ -130,7 +130,7 @@ const AuctionList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 230},
+            headerStyle: {width: 300},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -222,7 +222,7 @@ const AuctionList = (props: any) => {
             </Card>
             <PerformanceListSelector
                 show={performanceListShow}
-                setGoodsListShow={setPerformanceListShow}
+                setPerformanceListShow={setPerformanceListShow}
                 selectedAuction={selectedAuction}
             />
             <PerformancesListSelected

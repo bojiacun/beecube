@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -34,6 +34,7 @@ const GoodsListSelected = (props: any) => {
     useEffect(() => {
         if (removeFetcher.data && removeFetcher.type === 'done') {
             if (removeFetcher.data.success) {
+                showToastSuccess('移除成功');
                 setSelectedListShow(false);
             } else {
                 showToastError(removeFetcher.data.message);

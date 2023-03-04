@@ -9,6 +9,7 @@ export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
     url.searchParams.set('type', '1');
+    url.searchParams.set('status', '1');
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
