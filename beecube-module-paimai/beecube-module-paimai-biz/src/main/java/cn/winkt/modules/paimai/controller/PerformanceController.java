@@ -194,6 +194,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
         performanceService.removeById(id);
+        LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Goods::getPerformanceId, id);
+        updateWrapper.set(Goods::getPerformanceId, null);
+        goodsService.update(updateWrapper);
         return Result.OK("删除成功!");
     }
 
@@ -208,6 +212,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
         this.performanceService.removeByIds(Arrays.asList(ids.split(",")));
+        LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Goods::getPerformanceId, Arrays.asList(ids.split(",")));
+        updateWrapper.set(Goods::getPerformanceId, null);
+        goodsService.update(updateWrapper);
         return Result.OK("批量删除成功！");
     }
 

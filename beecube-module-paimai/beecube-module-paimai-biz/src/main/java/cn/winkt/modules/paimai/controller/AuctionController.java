@@ -166,6 +166,10 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		auctionService.removeById(id);
+		LambdaUpdateWrapper<Performance> updateWrapper = new LambdaUpdateWrapper<>();
+		updateWrapper.eq(Performance::getAuctionId, id);
+		updateWrapper.set(Performance::getAuctionId, null);
+		performanceService.update(updateWrapper);
 		return Result.OK("删除成功!");
 	}
 	
@@ -180,6 +184,10 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.auctionService.removeByIds(Arrays.asList(ids.split(",")));
+		LambdaUpdateWrapper<Performance> updateWrapper = new LambdaUpdateWrapper<>();
+		updateWrapper.in(Performance::getAuctionId, Arrays.asList(ids.split(",")));
+		updateWrapper.set(Performance::getAuctionId, null);
+		performanceService.update(updateWrapper);
 		return Result.OK("批量删除成功！");
 	}
 	
