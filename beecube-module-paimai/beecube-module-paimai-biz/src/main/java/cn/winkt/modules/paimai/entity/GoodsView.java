@@ -36,6 +36,11 @@ public class GoodsView {
 	@Excel(name = "拍品ID", width = 15)
     @ApiModelProperty(value = "拍品ID")
 	private java.lang.String goodsId;
+	@ApiModelProperty(value = "专场ID")
+	private java.lang.String performanceId;
+	@Excel(name = "拍卖会ID", width = 15)
+	@ApiModelProperty(value = "拍卖会ID")
+	private java.lang.String auctionId;
 	/**围观者名称*/
 	@Excel(name = "围观者名称", width = 15)
     @ApiModelProperty(value = "围观者名称")

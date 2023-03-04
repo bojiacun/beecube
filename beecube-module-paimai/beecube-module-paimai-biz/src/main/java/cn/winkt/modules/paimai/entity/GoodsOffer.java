@@ -55,6 +55,12 @@ public class GoodsOffer {
 	@Excel(name = "拍品ID", width = 15)
     @ApiModelProperty(value = "拍品ID")
 	private java.lang.String goodsId;
+	@Excel(name = "专场ID", width = 15)
+	@ApiModelProperty(value = "专场ID")
+	private java.lang.String performanceId;
+	@Excel(name = "拍卖会ID", width = 15)
+	@ApiModelProperty(value = "拍卖会ID")
+	private java.lang.String auctionId;
 	@Excel(name = "应用ID", width = 15)
 	@ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;

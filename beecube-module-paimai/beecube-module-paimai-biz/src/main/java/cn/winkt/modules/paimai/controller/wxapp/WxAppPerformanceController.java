@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import cn.winkt.modules.paimai.vo.PerformanceVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,23 +37,25 @@ public class WxAppPerformanceController {
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
-        QueryWrapper<Performance> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<PerformanceVO> queryWrapper = new QueryWrapper<>();
         if(performance.getType() != null) {
-            queryWrapper.eq("type", performance.getType());
+            queryWrapper.eq("p.type", performance.getType());
         }
-        queryWrapper.eq("status", 1);
+        queryWrapper.eq("p.status", 1);
         String source = req.getParameter("source");
         Date nowDate = new Date();
         if("1".equals(source)) {
             //进行中拍品,并且尚未结束的哦
-            queryWrapper.gt("end_time", nowDate);
+            queryWrapper.gt("p.end_time", nowDate);
         }
         else if("2".equals(source)) {
-            queryWrapper.lt("end_time", nowDate);
+            queryWrapper.lt("p.end_time", nowDate);
         }
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
+        orderField = "p."+orderField;
         String orderBy = StringUtils.getIfEmpty(req.getParameter("orderBy"), () -> "desc");
+
         if(orderBy.equals("desc")) {
             queryWrapper.orderByDesc(orderField);
         }
@@ -60,8 +63,8 @@ public class WxAppPerformanceController {
             queryWrapper.orderByAsc(orderField);
         }
 
-        Page<Performance> page = new Page<>(pageNo, pageSize);
-        IPage<Performance> pageList = performanceService.page(page, queryWrapper);
+        Page<PerformanceVO> page = new Page<>(pageNo, pageSize);
+        IPage<PerformanceVO> pageList = performanceService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
 }

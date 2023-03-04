@@ -50,13 +50,13 @@ const PerformanceItemView: FC<GoodsItemViewProps> = (props) => {
                 </View>
                 <View className={'pt-2 px-4 text-xl font-bold'}>{item.title}</View>
                 <View className={'flex justify-between pt-2 pb-4 px-4'}>
-                    <View className={'text-left'}>
+                    <View className={'flex text-left'}>
                         {startText}
                         {clocker?.isCounting && <View>
-                            <Text className={'text-red-600'}>{numeral(clocker.date).format('00')}</Text>天<Text
-                            className={'text-red-600'}>{numeral(clocker.hours).format('00')}</Text>小时<Text
-                            className={'text-red-600'}>{numeral(clocker.minutes).format('00')}</Text>分<Text
-                            className={'text-red-600'}>{numeral(clocker.seconds).format('00')}</Text>秒
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>天<Text
+                            className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>小时<Text
+                            className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>分<Text
+                            className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>秒
                         </View>}
                     </View>
                     <View className={'text-right'}>出价{item.offerCount}次</View>

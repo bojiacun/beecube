@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.paimai.mapper.PerformanceMapper">
+    <select id="getDetail" resultType="cn.winkt.modules.paimai.vo.PerformanceVO">
+        select
+            p.*,
+            (select count(*) from paimai_goods_offers go where go.performance_id=p.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.performance_id=p.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=p.id) as follow_count
+        from paimai_performances p where id = #{id}
+    </select>
 
+    <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.PerformanceVO">
+        select
+            p.*,
+            (select count(*) from paimai_goods_offers go where go.goods_id=p.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=p.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=p.id) as follow_count
+        from paimai_performances p ${ew.customSqlSegment}
+    </select>
 </mapper>

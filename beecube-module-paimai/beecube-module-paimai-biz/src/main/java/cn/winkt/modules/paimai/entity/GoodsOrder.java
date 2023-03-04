@@ -43,6 +43,11 @@ public class GoodsOrder {
 	@Excel(name = "出价记录ID", width = 15)
 	@ApiModelProperty(value = "出价记录ID")
 	private java.lang.String goodsOfferId;
+	@ApiModelProperty(value = "专场ID")
+	private java.lang.String performanceId;
+	@Excel(name = "拍卖会ID", width = 15)
+	@ApiModelProperty(value = "拍卖会ID")
+	private java.lang.String auctionId;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)
     @ApiModelProperty(value = "会员ID")
