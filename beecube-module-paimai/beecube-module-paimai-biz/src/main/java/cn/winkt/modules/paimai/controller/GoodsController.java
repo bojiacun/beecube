@@ -81,8 +81,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 									HttpServletRequest req) {
 		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
-		 String perfId = req.getParameter("perf_id");
-		 queryWrapper.ne("performance_id", perfId);
+		 queryWrapper.isNotNull("performance_id");
 		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		 return Result.OK(pageList);

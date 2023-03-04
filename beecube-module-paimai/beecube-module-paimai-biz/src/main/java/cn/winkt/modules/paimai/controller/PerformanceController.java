@@ -93,8 +93,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                     HttpServletRequest req) {
         QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
-        String auctionId = req.getParameter("ac_id");
-        queryWrapper.ne("auction_id", auctionId);
+        queryWrapper.isNull("auction_id");
         Page<Performance> page = new Page<Performance>(pageNo, pageSize);
         IPage<Performance> pageList = performanceService.page(page, queryWrapper);
         return Result.OK(pageList);
