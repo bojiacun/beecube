@@ -11,7 +11,7 @@
         from paimai_goods g where id = #{id}
     </select>
 
-    <select id="selectPage" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
+    <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
         select
             g.*,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,

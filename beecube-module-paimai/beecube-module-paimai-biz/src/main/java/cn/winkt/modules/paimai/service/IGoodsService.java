@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  */
 public interface IGoodsService extends IService<Goods> {
     GoodsVO getDetail(String id);
-    IPage<GoodsVO> selectPage(Page<Goods> page, QueryWrapper<Goods> queryWrapper);
+    IPage<GoodsVO> selectPageVO(Page<Goods> page, QueryWrapper<Goods> queryWrapper);
     IPage<Goods> queryMemberViewGoods(String member_id, Page<Goods> page);
     IPage<Goods> queryMemberFollowGoods(String member_id, Page<Goods> page);
 }

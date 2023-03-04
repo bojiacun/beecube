@@ -31,8 +31,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    public IPage<GoodsVO> selectPage(Page<Goods> page, QueryWrapper<Goods> queryWrapper) {
-        return goodsMapper.selectPage(page, queryWrapper);
+    public IPage<GoodsVO> selectPageVO(Page<Goods> page, QueryWrapper<Goods> queryWrapper) {
+        return goodsMapper.selectPageVO(page, queryWrapper);
     }
 
     @Override

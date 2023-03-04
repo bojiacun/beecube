@@ -68,7 +68,7 @@ public class WxAppGoodsController {
         }
 
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-        IPage<GoodsVO> pageList = goodsService.selectPage(page, queryWrapper);
+        IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
 
