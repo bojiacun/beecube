@@ -96,7 +96,21 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         IPage<Performance> pageList = performanceService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
-
+    @AutoLog(value = "拍卖专场表-已选专场")
+    @ApiOperation(value = "拍卖专场表-已选专场", notes = "拍卖专场表-已选专场")
+    @GetMapping(value = "/selected")
+    @AutoDict
+    public Result<?> selectedPageList(Performance performance,
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                    HttpServletRequest req) {
+        QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
+        String auctionId = req.getParameter("ac_id");
+        queryWrapper.eq("auctionId", auctionId);
+        Page<Performance> page = new Page<Performance>(pageNo, pageSize);
+        IPage<Performance> pageList = performanceService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
     /**
      * 添加
      *

@@ -74,7 +74,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	}
 	 @AutoLog(value = "拍品表-选择拍品")
 	 @ApiOperation(value="拍品表-选择拍品", notes="拍品表-选择拍品")
-	 @GetMapping(value = "/list")
+	 @GetMapping(value = "/select")
 	 @AutoDict
 	 public Result<?> selectPageList(Goods goods,
 									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -83,6 +83,21 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
 		 String perfId = req.getParameter("perf_id");
 		 queryWrapper.ne("performanceId", perfId);
+		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
+	 @AutoLog(value = "拍品表-已选拍品")
+	 @ApiOperation(value="拍品表-已选拍品", notes="拍品表-已选拍品")
+	 @GetMapping(value = "/selected")
+	 @AutoDict
+	 public Result<?> selectedPageList(Goods goods,
+									 @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									 @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									 HttpServletRequest req) {
+		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+		 String perfId = req.getParameter("perf_id");
+		 queryWrapper.eq("performanceId", perfId);
 		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		 return Result.OK(pageList);

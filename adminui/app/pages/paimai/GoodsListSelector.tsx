@@ -11,7 +11,7 @@ import {AwesomeButton} from "react-awesome-button";
 const GoodsListSelector = (props: any) => {
     const {show, setGoodsListShow, selectedPerformance} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
