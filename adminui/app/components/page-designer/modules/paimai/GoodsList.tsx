@@ -101,14 +101,29 @@ const GoodsListModule = (props: any) => {
         else {
             setGoodsList([]);
         }
-    }, [data.basic.dataSource]);
-
-    console.log(_data.basic);
+    }, [data.basic.dataSource, data.basic.count]);
 
     return (
         <div {...rest} style={_data.style}>
             {_data.basic.style == 1 &&
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                    {goodsList.slice(0, _data.basic.count).map((item: any) => {
+                        let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
+                        return (
+                            <div key={item.id} style={{ width: itemWidth, background: 'white', padding: 10, marginBottom: 10, borderRadius: parseInt(_data.basic.itemBorderRadius), position: 'relative' }}>
+                                <div style={{paddingTop: '100%', width: '100%', position: 'relative'}}>
+                                    <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{ position: 'absolute', left: 0, top: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover', zIndex: 99 }} />
+                                </div>
+                                <h6 style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0, lineHeight: 2 }}>{item.title}</h6>
+                                <div style={{ fontSize: 12, display: 'flex' }}></div>
+                                <div style={{ color: 'gray', fontSize: 12, marginTop: 3 }}>{}</div>
+                            </div>
+                        );
+                    })}
+                </div>
+            }
+            {_data.basic.style == 2 &&
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', overflowY: 'hidden', overflowX: 'auto' }}>
                     {goodsList.slice(0, _data.basic.count).map((item: any) => {
                         let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
                         return (
@@ -123,29 +138,6 @@ const GoodsListModule = (props: any) => {
                         );
                     })}
                 </div>
-            }
-            {_data.basic.style == 2 &&
-                goodsList.slice(0, _data.basic.count).map((item: any, index: number) => {
-                    return (
-                        <div key={item.id} style={{ display: 'flex', alignItems: 'center', background: 'white', padding: '10px 15px', marginBottom: index == goodsList.length - 1 ?0:_data.basic.space, borderRadius: _data.basic.itemBorderRadius, position: 'relative' }}>
-                            <div style={{width: 80, marginRight: 15}}>
-                                <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{ display: 'block', width: '100%', height: 80, objectFit: 'cover' }} />
-                            </div>
-                            <div style={{flex: 1}}>
-                                <h3 style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0, lineHeight: 2 }}>{item.shortName}</h3>
-                                <div style={{ color: 'gray', fontSize: 12, marginTop: 3 }}>{item.soled}人借阅 作者：{item.author}</div>
-                                <div>
-                                    {item.tags?.split(',').map((tag:string, index: number)=>{
-                                        return <span style={{backgroundColor: tagColors[index], padding: '3px 5px', color: 'white', marginRight: 5}}>{tag}</span>
-                                    })}
-                                </div>
-                                <div>会员价：<span style={{color: '#ff5454', fontWeight: 'bold', fontSize: 18}}>{item.price}</span></div>
-                                <div style={{color: 'gray'}}>原价：<span style={{textDecoration: 'line-through'}}>{item.price}</span></div>
-                            </div>
-                            <button style={{backgroundColor: '#ffba16', borderRadius: 15, position: 'absolute', right: 15, bottom: 15, border: 'none', padding: '5px 20px'}}>加入购物车</button>
-                        </div>
-                    );
-                })
             }
 
         </div>
