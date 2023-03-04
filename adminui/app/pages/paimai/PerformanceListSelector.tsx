@@ -11,16 +11,19 @@ import {AwesomeButton} from "react-awesome-button";
 const PerformanceListSelector = (props: any) => {
     const {show, setPerformanceListShow, selectedAuction} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedAuction.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedAuction?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
     useEffect(()=>{
-        if(show) {
+        if(show && selectedAuction) {
+            searchState.perf_id = selectedAuction?.id;
+            setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/performances/select'});
         }
-    }, [show]);
+    }, [show, selectedAuction]);
+
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);

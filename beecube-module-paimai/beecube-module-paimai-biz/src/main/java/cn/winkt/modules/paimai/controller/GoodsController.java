@@ -82,7 +82,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 									HttpServletRequest req) {
 		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
 		 String perfId = req.getParameter("perf_id");
-		 queryWrapper.ne("performanceId", perfId);
+		 queryWrapper.ne("performance_id", perfId);
 		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		 return Result.OK(pageList);
@@ -97,7 +97,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 									 HttpServletRequest req) {
 		 QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
 		 String perfId = req.getParameter("perf_id");
-		 queryWrapper.eq("performanceId", perfId);
+		 queryWrapper.eq("performance_id", perfId);
 		 Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		 IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		 return Result.OK(pageList);

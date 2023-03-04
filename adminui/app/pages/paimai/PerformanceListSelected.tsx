@@ -17,10 +17,13 @@ const PerformancesListSelected = (props: any) => {
     const removeFetcher = useFetcher();
 
     useEffect(()=>{
-        if(show) {
+        if(show && selectedAuction) {
+            searchState.perf_id = selectedAuction?.id;
+            setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/performances/selected'});
         }
-    }, [show]);
+    }, [show, selectedAuction]);
+
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);

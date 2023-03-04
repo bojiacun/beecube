@@ -17,10 +17,13 @@ const GoodsListSelector = (props: any) => {
     const editFetcher = useFetcher();
 
     useEffect(()=>{
-        if(show) {
+        if(show && selectedPerformance) {
+            searchState.perf_id = selectedPerformance?.id;
+            setSearchState({...searchState});
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
         }
-    }, [show]);
+    }, [show, selectedPerformance]);
+
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);
@@ -114,8 +117,8 @@ const GoodsListSelector = (props: any) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id={'edit-modal'}>
-                    <p>选择专场拍品</p>
-                    <p>拍品选择后，拍品的结束时间将统一修改为专场结束时间</p>
+                    <span>选择专场拍品</span>
+                    <span style={{color: 'red', fontSize: 12}}>拍品选择后，拍品的结束时间将统一修改为专场结束时间</span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

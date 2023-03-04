@@ -91,7 +91,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                                     HttpServletRequest req) {
         QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
         String auctionId = req.getParameter("ac_id");
-        queryWrapper.ne("auctionId", auctionId);
+        queryWrapper.ne("auction_id", auctionId);
         Page<Performance> page = new Page<Performance>(pageNo, pageSize);
         IPage<Performance> pageList = performanceService.page(page, queryWrapper);
         return Result.OK(pageList);
@@ -106,7 +106,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                                     HttpServletRequest req) {
         QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
         String auctionId = req.getParameter("ac_id");
-        queryWrapper.eq("auctionId", auctionId);
+        queryWrapper.eq("auction_id", auctionId);
         Page<Performance> page = new Page<Performance>(pageNo, pageSize);
         IPage<Performance> pageList = performanceService.page(page, queryWrapper);
         return Result.OK(pageList);
