@@ -39,11 +39,10 @@ export const loader: LoaderFunction = async ({request}) => {
         userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
         const appModuleResult = await requestWithToken(request)(API_APP_MODULE_DETAIL+'?id='+app.moduleId);
         const appModule = appModuleResult.result;
-
         const session = await sessionStorage.getSession(request.headers.get('Cookie'));
         session.set("APPID", appId);
         session.set("APP", JSON.stringify(app));
-        session.set("MODULE", appModule.identifier);
+        session.set("MODULE", appModule.identify);
         session.set("FROM", "login");
         session.set("APP_MENUS", userInfo.perms);
         await sessionStorage.commitSession(session);

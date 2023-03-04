@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({request}) => {
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
     session.set("APPID", appId);
     session.set("APP", JSON.stringify(app));
-    session.set("MODULE", appModule.identifier);
+    session.set("MODULE", appModule.identify);
     session.set("FROM", "platform");
     session.set("APP_MENUS", userInfo.perms);
     await sessionStorage.commitSession(session);

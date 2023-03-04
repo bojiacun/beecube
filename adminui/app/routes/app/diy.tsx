@@ -46,7 +46,7 @@ export const loader: LoaderFunction = async ({request}) => {
         p.controls = JSON.parse(p.controls);
         p.modules = JSON.parse(p.modules);
         p.style = JSON.parse(p.styles);
-    })
+    });
     return json({module: session.get("MODULE"), pages});
 }
 
