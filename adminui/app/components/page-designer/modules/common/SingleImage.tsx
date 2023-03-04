@@ -16,8 +16,6 @@ import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 export const SINGLE_IMAGE_MODULE = "SINGLE_IMAGE_MODULE";
 export const defaultData = {
     basic: {
-        showTitle: 0,
-        titleImage: '',
         image: '',
         url: '',
     },
@@ -47,11 +45,6 @@ const SingleImageModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
-                                    <BootstrapSwitch  label={'显示标题'} name={'showTitle'} />
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'titleImage'}>标题图片</FormLabel>
-                                        <FileBrowserInput name={'titleImage'} type={1} multi={false} onChange={()=>formik.submitForm()} />
-                                    </FormGroup>
                                     <FormGroup>
                                         <FormLabel htmlFor={'image'}>广告图</FormLabel>
                                         <FileBrowserInput name={'image'} type={1} multi={false} onChange={()=>formik.submitForm()} />
@@ -90,10 +83,6 @@ const SingleImageModule = (props: any) => {
 
     return (
         <div {...rest} style={_data.style}>
-            {_data.basic.showTitle === 1&&
-                <img src={_data.basic.titleImage} alt={''} style={{ display: 'block', width: '100%'}} />
-            }
-
             <FallbackImage src={resolveUrl(_data.basic.image)} style={{ width: '100%', objectFit: 'cover' }} width={'100%'}  />
         </div>
     );
