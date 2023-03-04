@@ -83,4 +83,7 @@ public class Performance {
 	@Excel(name = "应用ID", width = 15)
 	@ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;
+
+	@TableField(exist = false)
+	private Integer goodsCount;
 }

@@ -84,6 +84,12 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 		QueryWrapper<Auction> queryWrapper = QueryGenerator.initQueryWrapper(auction, req.getParameterMap());
 		Page<Auction> page = new Page<Auction>(pageNo, pageSize);
 		IPage<Auction> pageList = auctionService.page(page, queryWrapper);
+		pageList.getRecords().forEach(r -> {
+			LambdaQueryWrapper<Performance> performanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+			performanceLambdaQueryWrapper.eq(Performance::getAuctionId, r.getId());
+			int count = (int) performanceService.count(performanceLambdaQueryWrapper);
+			r.setPerformanceCount(count);
+		});
 		return Result.OK(pageList);
 	}
 	

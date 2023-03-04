@@ -81,6 +81,12 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         QueryWrapper<Performance> queryWrapper = QueryGenerator.initQueryWrapper(performance, req.getParameterMap());
         Page<Performance> page = new Page<Performance>(pageNo, pageSize);
         IPage<Performance> pageList = performanceService.page(page, queryWrapper);
+        pageList.getRecords().forEach(r -> {
+            LambdaQueryWrapper<Goods> goodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            goodsLambdaQueryWrapper.eq(Goods::getPerformanceId, r.getId());
+            int count = (int) goodsService.count(goodsLambdaQueryWrapper);
+            r.setGoodsCount(count);
+        });
         return Result.OK(pageList);
     }
 
