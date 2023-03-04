@@ -6,6 +6,8 @@ import PopAdvertise from "./components/diy/controls/PopAdvertise";
 import SwiperModule from "./components/diy/modules/Swiper";
 import ImageText from "./components/diy/modules/ImageText";
 import GoodsListModule from "./components/diy/modules/GoodsList";
+import BuyoutGoodsListModule from "./components/diy/modules/BuyoutGoodsList";
+import PerformanceListModule from "./components/diy/modules/PerformanceList";
 
 
 const modules = {
@@ -16,7 +18,9 @@ const modules = {
     'DIVIDER_MODULE': DividerModule,
     'POP_ADVERTISE': PopAdvertise,
     'SWIPER_MODULE': SwiperModule,
-    'GOODS_LIST_MODULE': GoodsListModule
+    'GOODS_LIST_MODULE': GoodsListModule,
+    'BUYOUT_GOODS_LIST_MODULE': BuyoutGoodsListModule,
+    'PERFORMANCE_LIST_MODULE': PerformanceListModule,
 };
 
 
