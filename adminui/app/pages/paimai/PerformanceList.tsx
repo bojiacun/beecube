@@ -23,7 +23,7 @@ import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 const PerformanceList = (props: any) => {
     const {startPageLoading, stopPageLoading, type} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
     const [editModal, setEditModal] = useState<any>();
     const [selectedPerformance, setSelectedPerformance] = useState<any>();
     const [goodsListShow, setGoodsListShow] = useState<boolean>(false);
@@ -128,10 +128,12 @@ const PerformanceList = (props: any) => {
         {
             text: '开拍时间',
             dataField: 'startTime',
+            hidden: type == 2
         },
         {
             text: '结束时间',
             dataField: 'endTime',
+            hidden: type == 2
         },
         {
             text: '状态',
