@@ -122,6 +122,10 @@ const PerformanceList = (props: any) => {
             dataField: 'deposit',
         },
         {
+            text: '拍品数',
+            dataField: 'goodsCount',
+        },
+        {
             text: '开拍时间',
             dataField: 'startTime',
         },

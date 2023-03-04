@@ -124,6 +124,10 @@ const AuctionList = (props: any) => {
             dataField: 'timeRange',
         },
         {
+            text: '专场数',
+            dataField: 'performanceCount',
+        },
+        {
             text: '状态',
             dataField: 'status_dictText',
         },
