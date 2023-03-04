@@ -51,7 +51,7 @@ const GoodsListSelector = (props: any) => {
         searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
     }
     const handleOnSearchNameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
+        setSearchState({...searchState, title: e.target.value});
     }
     const handleOnSearchSubmit = () => {
         //设置分页为1
@@ -135,7 +135,7 @@ const GoodsListSelector = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/paimai/goods/auction'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/paimai/goods/select'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
