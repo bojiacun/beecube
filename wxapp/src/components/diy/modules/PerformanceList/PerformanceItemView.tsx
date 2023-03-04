@@ -38,6 +38,9 @@ const PerformanceItemView: FC<GoodsItemViewProps> = (props) => {
                 setStartText('已结束');
             }
         }
+        return () => {
+            _clocker.close();
+        }
     }, []);
 
 
