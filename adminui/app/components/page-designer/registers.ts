@@ -7,6 +7,7 @@ import registerModuleMultipleImages from './modules/common/MultipleImages';
 import registerModuleSingleImage from './modules/common/SingleImage';
 import registerModuleSwiper from './modules/common/Swiper';
 import registerModuleGoodsList from './modules/paimai/GoodsList';
+import registerModuleBuyoutGoodsList from './modules/paimai/BuyoutGoodsList';
 
 
 
@@ -29,4 +30,5 @@ export default function register(module='') {
     registerModuleSingleImage(module);
     //@ts-ignore
     registerModuleGoodsList(module);
+    registerModuleBuyoutGoodsList(module);
 }
