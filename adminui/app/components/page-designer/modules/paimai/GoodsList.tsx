@@ -21,7 +21,6 @@ export const defaultData = {
         style: 1,
         count: 2,
         dataSource: 1,
-        searchTag: '',
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -89,13 +88,14 @@ const GoodsListModule = (props: any) => {
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
             //最新商品
-            getPagedGoods(1, 1).then(res => {
-                setGoodsList(res.data.content);
+            getPagedGoods(1, 1, _data.basic.count).then(res => {
+                console.log(res);
+                setGoodsList(res.data.records);
             });
         }
         else if (_data.basic.dataSource == 2) {
-            getPagedGoods(1,2).then(res => {
-                setGoodsList(res.data.content);
+            getPagedGoods(1,2, _data.basic.count).then(res => {
+                setGoodsList(res.data.records);
             });
         }
         else {
@@ -108,20 +108,15 @@ const GoodsListModule = (props: any) => {
             {_data.basic.style == 1 &&
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                     {goodsList.slice(0, _data.basic.count).map((item: any) => {
-                        let itemWidth = _data.basic.space;
-                        itemWidth = 'calc((100% - ' + itemWidth + 'px) / 2)';
+                        let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
                         return (
                             <div key={item.id} style={{ width: itemWidth, background: 'white', padding: 10, marginBottom: _data.basic.space, borderRadius: _data.basic.itemBorderRadius, position: 'relative' }}>
-                                {item.isMemberPrivate && <div style={{ backgroundColor: '#ff5454', padding: '0 5px', color: 'white', position: 'absolute', left: 10, top: 20, zIndex: 1, borderTopRightRadius: 8, borderBottomRightRadius: 8 }}>会员专享</div>}
                                 <div style={{paddingTop: '100%', width: '100%', position: 'relative'}}>
                                     <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{ position: 'absolute', left: 0, top: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover', zIndex: 99 }} />
                                 </div>
-                                <h3 style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0, lineHeight: 2 }}>{item.shortName}</h3>
-                                <div style={{ fontSize: 12, display: 'flex' }}>
-                                    {item.site.enableDelivery && <div style={{ backgroundColor: '#faead5', color: '#fb9d0f', marginRight: 10, padding: '0 3px', borderBottomRightRadius: 5 }}>#快递配送</div>}
-                                    {item.site.enableSelfPickUp && <div style={{ backgroundColor: '#dbece4', color: '#2c9940', marginRight: 10, padding: '0 3px', borderBottomRightRadius: 5 }}>#到店自提</div>}
-                                </div>
-                                <div style={{ color: 'gray', fontSize: 12, marginTop: 3 }}>{item.soled}人借阅</div>
+                                <h6 style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0, lineHeight: 2 }}>{item.title}</h6>
+                                <div style={{ fontSize: 12, display: 'flex' }}></div>
+                                <div style={{ color: 'gray', fontSize: 12, marginTop: 3 }}>{}</div>
                             </div>
                         );
                     })}
