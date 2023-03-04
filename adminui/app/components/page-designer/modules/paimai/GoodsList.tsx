@@ -89,12 +89,12 @@ const GoodsListModule = (props: any) => {
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
             //最新商品
-            getPagedGoods(1).then(res => {
+            getPagedGoods(1, 1).then(res => {
                 setGoodsList(res.data.content);
             });
         }
         else if (_data.basic.dataSource == 2) {
-            getPagedGoods(2).then(res => {
+            getPagedGoods(1,2).then(res => {
                 setGoodsList(res.data.content);
             });
         }

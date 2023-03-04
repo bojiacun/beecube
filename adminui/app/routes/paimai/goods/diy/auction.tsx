@@ -2,13 +2,12 @@ import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
-import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
-import {API_PAIMAI_GOODS_LIST, requestWithToken} from "~/utils/request.server";
+import {DefaultListSearchParams} from "~/utils/utils";
+import {API_PAIMAI_APIGOODS_LIST, requestWithToken} from "~/utils/request.server";
 
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
-    url.searchParams.set('type', '1');
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
@@ -16,6 +15,6 @@ export const loader: LoaderFunction = async ({request}) => {
     else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_PAIMAI_GOODS_LIST+ queryString);
+    const result = await requestWithToken(request)(API_PAIMAI_APIGOODS_LIST+ queryString);
     return json(result.result);
 }
