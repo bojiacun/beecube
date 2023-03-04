@@ -2,11 +2,8 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
-import {View, Navigator} from "@tarojs/components";
 import FlowListView from "../../components/flowlistview";
-import FallbackImage from "../../components/FallbackImage";
-import styles from '../../flow.module.scss';
-import classNames from "classnames";
+import AuctionGoodsItem from "../../components/goods/AuctionGoodsItem";
 
 
 export default class Index extends Component<any, any> {
@@ -26,15 +23,7 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/goods/list', {params: params});
     }
     renderTemplate(data: any) {
-        return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-outer', styles.flow)}>
-                <Navigator url={'detail?id='+data.id}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
-                    <View className={'px-2 mt-2'}>{data.title}</View>
-                    <View className={'px-2 mb-2'}>RMB {data.startPrice}</View>
-                </Navigator>
-            </View>
-        );
+        return (<AuctionGoodsItem data={data} />);
     }
 
     componentDidMount() {

@@ -9,7 +9,7 @@ export interface GoodsItemViewProps extends Partial<any> {
     data: any;
 }
 
-const GoodsItemView : FC<GoodsItemViewProps> = (props) => {
+const AuctionGoodsItem : FC<GoodsItemViewProps> = (props) => {
     const {data} = props;
     return (
         <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-outer', styles.flow)}>
@@ -22,4 +22,4 @@ const GoodsItemView : FC<GoodsItemViewProps> = (props) => {
     );
 }
 
-export default GoodsItemView;
+export default AuctionGoodsItem;
