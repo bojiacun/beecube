@@ -1,7 +1,7 @@
 import {Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useMemo, useState} from "react";
 import moment from "moment";
 import Clocker from "clocker-js/Clocker";
 
@@ -14,32 +14,33 @@ export interface GoodsItemViewProps extends Partial<any> {
 
 const PerformanceItemView: FC<GoodsItemViewProps> = (props) => {
     const {radius = 0, item} = props;
-    const [clocker, setClocker] = useState<any>();
-    const [startText, setStartText] = useState<string>('');
+    //@ts-ignore
+    const [counting, setCounting] = useState<number>(0);
     const started = moment(item.startTime).isBefore(moment());
-    useEffect(() => {
-        let _clocker;
-        if (!started) {
-            _clocker = new Clocker(new Date(item.startTime));
-            _clocker.countDown = true;
-            setClocker(_clocker);
-            if (_clocker.isCounting) {
-                setStartText('距开始：');
-            } else {
-                setStartText('距结束：');
+    const ended = moment(item.endTime).isBefore(moment());
+
+    const startText = useMemo(()=>{
+        if(ended) return '已结束';
+        if(started) return '距结束：';
+        if(!started) return '距开始：';
+        return '';
+    }, [started, ended]);
+
+    const clocker = useMemo(()=>{
+        let _clocker = new Clocker(started ? new Date(item.endTime): new Date(item.startTime));
+        _clocker.countDown = true;
+        return _clocker;
+    }, [started]);
+
+    useEffect(()=>{
+        let _timer = setInterval(()=>{
+            if(clocker.isCounting) {
+
             }
-        } else {
-            _clocker = new Clocker(new Date(item.endTime));
-            _clocker.countDown = true;
-            setClocker(_clocker);
-            if (_clocker.isCounting) {
-                setStartText('距结束：');
-            } else {
-                setStartText('已结束');
-            }
-        }
-        return () => {
-            _clocker.close();
+            setCounting(v=>v+1);
+        }, 1000);
+        return ()=>{
+            clearInterval(_timer);
         }
     }, []);
 
