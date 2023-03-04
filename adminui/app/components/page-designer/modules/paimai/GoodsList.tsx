@@ -11,12 +11,6 @@ export const GOODS_LIST_MODULE = "GOODS_LIST_MODULE";
 
 export const defaultData = {
     basic: {
-        title: '没大没小商城',
-        titleType: 1,
-        titleimg: '',
-        titleimgWidth: 100,
-        titleTopMargin: 0,
-        titleBottomMargin: 0,
         propType: 1,
         space: 15,
         fontSize: 16,
@@ -88,79 +82,6 @@ const GoodsListModule = (props: any) => {
     }, [data.basic.titleType]);
     return (
         <div {...rest} style={_data.style}>
-            {_data.basic.titleType == 1&&
-                <div style={{
-                    position: 'relative',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <img src={biaoqian} alt={''} style={{ display: 'block', width: '50%', position: 'absolute', zIndex: 0 }} />
-                    <h1 style={{ zIndex: 1, fontSize: _data.basic.fontSize, marginBottom: 20 }}>{_data.basic.title}</h1>
-                </div>
-            }
-            {_data.basic.titleType == 5 &&
-                <div style={{
-                    position: 'relative',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                    <img src={resolveUrl(_data.basic.titleimg)} alt={''} style={{display: 'block', width: _data.basic.titleimgWidth+'%', marginBottom: _data.basic.titleBottomMargin, marginTop: _data.basic.titleTopMargin}} />
-                </div>
-            }
-            {_data.basic.titleType == 2 &&
-            <div className={"noscroll"} style={{textAlign: 'center', overflowY: 'auto'}}>
-                <div style={{ display: 'inline-flex', marginBottom: 10, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: 8, backgroundColor: "#eaeaea" }}>
-                    {classes.map((item: any, index: number) => {
-                        if (index == currentClassIndex) {
-                            return (
-                                <div key={'shop_classes_' + index} style={{ color: '#333', background: '#fdc019', padding: 10, fontSize: 14, fontWeight: 'bold' }}>
-                                <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                                    {item.title}
-                                    </div>
-                                </div>
-                            );
-                        }
-                        return (
-                            <div key={'shop_classes_' + index} onClick={() => setCurrentClassIndex(index)} style={{color: '#999999', padding: 10, position: 'relative'}}>
-                                {index < classes.length - 1&& <div style={{width: 1, height: '50%', position: 'absolute', right: 0, top: '25%', backgroundColor: '#ccc'}}></div>}
-                                <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                                    {item.title}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-            }
-            {_data.basic.titleType == 3 &&
-                <div className={"noscroll"} style={{textAlign: 'center', overflowY: 'auto'}}>
-                    <div style={{ display: 'flex', marginBottom: 10, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: 8, backgroundColor: "#eaeaea" }}>
-                        {types.map((item: any, index: number) => {
-                            if (index == currentClassIndex) {
-                                return (
-                                    <div key={'subscribe_types_' + index} style={{ flex: 1, color: '#333', background: '#fdc019', padding: 10, fontSize: 14, fontWeight: 'bold' }}>
-                                        <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                                            {item.title}
-                                        </div>
-                                    </div>
-                                );
-                            }
-                            return (
-                                <div key={'subscribe_types_' + index} onClick={() => setCurrentClassIndex(index)} style={{flex: 1,color: '#999999', padding: 10, position: 'relative'}}>
-                                    {index < types.length - 1&& <div style={{width: 1, height: '50%', position: 'absolute', right: 0, top: '25%', backgroundColor: '#ccc'}}></div>}
-                                    <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                                        {item.title}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            }
             {_data.basic.style == 1 &&
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                     {goodsList.slice(0, _data.basic.count).map((item: any) => {
