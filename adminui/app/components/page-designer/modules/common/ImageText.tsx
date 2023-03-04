@@ -57,7 +57,6 @@ const ImageTextModuleAttribute = (props: any) => {
                             );
                         }
                     }
-
                 </Formik>
             </div>
             <div style={{ padding: 15 }}>
@@ -71,7 +70,6 @@ const ImageTextModuleAttribute = (props: any) => {
                             );
                         }
                     }
-
                 </Formik>
             </div>
         </AttributeTabs>
