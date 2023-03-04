@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +14,10 @@ import cn.winkt.modules.paimai.service.IGoodsService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -132,8 +135,11 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         String perfId = jsonObject.getString("perfId");
         Performance performance = performanceService.getById(perfId);
         String goodsIds = jsonObject.getString("goodsIds");
+        if(StringUtils.isEmpty(goodsIds)) {
+            throw new JeecgBootException("请选择拍品");
+        }
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(Goods::getId, goodsIds.split(","));
+        queryWrapper.in(Goods::getId, Arrays.stream(goodsIds.split(",")).collect(Collectors.toList()));
 		List<Goods> goodsList = goodsService.list(queryWrapper);
 		for (Goods g:goodsList) {
 			g.setPerformanceId(perfId);

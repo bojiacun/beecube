@@ -92,7 +92,7 @@ const GoodsListSelector = (props: any) => {
     const handleOnAddGoods = () => {
         if(selectedRows.length > 0) {
             //添加
-            let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.map(item=>item.id).join(',')};
+            let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.join(',')};
             editFetcher.submit(data, {method: 'post', action: '/paimai/performances/goods/add'})
         }
         else{

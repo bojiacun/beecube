@@ -92,7 +92,7 @@ const PerformanceListSelector = (props: any) => {
     const handleOnAddPerformances = () => {
         if(selectedRows.length > 0) {
             //添加
-            let data:any = {auctionId: selectedAuction.id, perfIds: selectedRows.map(item=>item.id).join(',')};
+            let data:any = {auctionId: selectedAuction.id, perfIds: selectedRows.join(',')};
             editFetcher.submit(data, {method: 'post', action: '/paimai/auctions/performances/add'})
         }
         else{

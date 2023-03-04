@@ -16,14 +16,18 @@ import cn.winkt.modules.paimai.service.IPerformanceService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.Auction;
 import cn.winkt.modules.paimai.service.IAuctionService;
 import java.util.Date;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -103,8 +107,11 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 		 String auctionId = jsonObject.getString("auctionId");
 		 Auction auction = auctionService.getById(auctionId);
 		 String perfIds = jsonObject.getString("perfIds");
+		 if(StringUtils.isEmpty(perfIds)) {
+			 throw new JeecgBootException("请选择专场");
+		 }
 		 LambdaQueryWrapper<Performance> queryWrapper = new LambdaQueryWrapper<>();
-		 queryWrapper.in(Performance::getId, perfIds.split(","));
+		 queryWrapper.in(Performance::getId, Arrays.stream(perfIds.split(",")).collect(Collectors.toList()));
 		 List<Performance> performances = performanceService.list(queryWrapper);
 		 for (Performance p:performances) {
 			 p.setAuctionId(auctionId);
