@@ -5,6 +5,7 @@ import DividerModule from "./components/diy/modules/Divider";
 import PopAdvertise from "./components/diy/controls/PopAdvertise";
 import SwiperModule from "./components/diy/modules/Swiper";
 import ImageText from "./components/diy/modules/ImageText";
+import GoodsListModule from "./components/diy/modules/GoodsList";
 
 
 const modules = {
@@ -15,6 +16,7 @@ const modules = {
     'DIVIDER_MODULE': DividerModule,
     'POP_ADVERTISE': PopAdvertise,
     'SWIPER_MODULE': SwiperModule,
+    'GOODS_LIST_MODULE': GoodsListModule
 };
 
 
