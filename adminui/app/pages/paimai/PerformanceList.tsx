@@ -232,13 +232,19 @@ const PerformanceList = (props: any) => {
             </Card>
             <GoodsListSelector
                 show={goodsListShow}
-                setGoodsListShow={setGoodsListShow}
+                setGoodsListShow={()=>{
+                    loadData();
+                    setGoodsListShow(false);
+                }}
                 selectedPerformance={selectedPerformance}
             />
             <GoodsListSelected
                 show={selectedListShow}
                 selectedPerformance={selectedPerformance}
-                setSelectedListShow={setSelectedListShow}
+                setSelectedListShow={()=>{
+                    loadData();
+                    setSelectedListShow(false);
+                }}
             />
             {editModal && <PerformanceEditor type={type} model={editModal} onHide={()=>{
                 setEditModal(null);

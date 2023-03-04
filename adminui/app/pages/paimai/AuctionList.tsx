@@ -226,13 +226,19 @@ const AuctionList = (props: any) => {
             </Card>
             <PerformanceListSelector
                 show={performanceListShow}
-                setPerformanceListShow={setPerformanceListShow}
+                setPerformanceListShow={()=>{
+                    loadData();
+                    setPerformanceListShow(false);
+                }}
                 selectedAuction={selectedAuction}
             />
             <PerformancesListSelected
                 show={selectedListShow}
                 selectedAuction={selectedAuction}
-                setSelectedListShow={setSelectedListShow}
+                setSelectedListShow={()=>{
+                    loadData();
+                    setSelectedListShow(false);
+                }}
             />
             {editModal && <AuctionEditor model={editModal} onHide={()=>{
                 setEditModal(null);
