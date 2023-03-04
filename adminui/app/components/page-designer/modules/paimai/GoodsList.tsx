@@ -84,7 +84,6 @@ const GoodsListModule = (props: any) => {
     const { index, data, isPreview, ...rest } = props;
     const [goodsList, setGoodsList] = useState<any[]>([]);
     let _data = { ...defaultData, ...data };
-    let tagColors = ['#ff5454', '#2c9940', '#fb9d0f'];
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
             //最新商品

@@ -3,7 +3,7 @@ import image from 'assets/designer/s4_2.png';
 import biaoqian from 'assets/designer/biaoqian.png';
 import React, { useEffect, useState } from "react";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
-import { getPagedGoods, getShopClasses } from "./service";
+import {getPagedGoods, getPagedPerformance, getShopClasses} from "./service";
 import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
 import {FormGroup, FormLabel} from "react-bootstrap";
@@ -13,13 +13,14 @@ import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
-export const BUYOUT_GOODS_LIST_MODULE = "BUYOUT_GOODS_LIST_MODULE";
+export const PERFORMANCE_LIST_MODULE = "PERFORMANCE_LIST_MODULE";
 
 export const defaultData = {
     basic: {
         itemBorderRadius: 15,
         style: 1,
         count: 2,
+        dataSource: 1,
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -27,7 +28,7 @@ export const defaultData = {
     }
 };
 
-const BuyoutGoodsListModuleAttribute = (props: any) => {
+const PerformanceListModuleAttribute = (props: any) => {
     const { onUpdate, data } = props;
     let _data = { ...defaultData, ...data };
 
@@ -48,6 +49,11 @@ const BuyoutGoodsListModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
+                                    <BootstrapRadioGroup
+                                        options={[{ label: '进行中专场', value: '1' }, { label: '往期专场', value: '2' }]}
+                                        name={'dataSource'}
+                                        label={'数据类型'}
+                                    />
                                     <BootstrapRadioGroup options={[{ label: '样式一', value: '1' }, { label: '样式二', value: '2' }]} name={'style'} label={'列表样式'} />
                                     <BootstrapInput label={'数据条数'} name={'count'} />
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'} />
@@ -74,15 +80,26 @@ const BuyoutGoodsListModuleAttribute = (props: any) => {
     );
 }
 
-const BuyoutGoodsListModule = (props: any) => {
+const PerformanceListModule = (props: any) => {
     const { index, data, isPreview, ...rest } = props;
-    const [goodsList, setGoodsList] = useState<any[]>([]);
+    const [goodsList, setPerformanceList] = useState<any[]>([]);
     let _data = { ...defaultData, ...data };
     useEffect(() => {
-        getPagedGoods(2,'', _data.basic.count).then(res => {
-            setGoodsList(res.data.records);
-        });
-    }, [data.basic.count]);
+        if (_data.basic.dataSource == 1) {
+            //最新商品
+            getPagedPerformance(1, 1, _data.basic.count).then(res => {
+                setPerformanceList(res.data.records);
+            });
+        }
+        else if (_data.basic.dataSource == 2) {
+            getPagedPerformance(1,2, _data.basic.count).then(res => {
+                setPerformanceList(res.data.records);
+            });
+        }
+        else {
+            setPerformanceList([]);
+        }
+    }, [data.basic.dataSource, data.basic.count]);
 
     return (
         <div {...rest} style={_data.style}>
@@ -129,6 +146,6 @@ const BuyoutGoodsListModule = (props: any) => {
 
 export default function (module='') {
     if(module === 'paimai') {
-        registerModule(BUYOUT_GOODS_LIST_MODULE, "一口价列表", image, '拍卖模块', BuyoutGoodsListModule, BuyoutGoodsListModuleAttribute, defaultData);
+        registerModule(PERFORMANCE_LIST_MODULE, "限时拍专场", image, '拍卖模块', PerformanceListModule, PerformanceListModuleAttribute, defaultData);
     }
 }

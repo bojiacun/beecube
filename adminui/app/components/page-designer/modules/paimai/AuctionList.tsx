@@ -3,7 +3,7 @@ import image from 'assets/designer/s4_2.png';
 import biaoqian from 'assets/designer/biaoqian.png';
 import React, { useEffect, useState } from "react";
 import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
-import { getPagedGoods, getShopClasses } from "./service";
+import {getPagedGoods, getPagedAuction, getShopClasses} from "./service";
 import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
 import {FormGroup, FormLabel} from "react-bootstrap";
@@ -13,7 +13,7 @@ import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
-export const BUYOUT_GOODS_LIST_MODULE = "BUYOUT_GOODS_LIST_MODULE";
+export const AUCTION_LIST_MODULE = "AUCTION_LIST_MODULE";
 
 export const defaultData = {
     basic: {
@@ -27,7 +27,7 @@ export const defaultData = {
     }
 };
 
-const BuyoutGoodsListModuleAttribute = (props: any) => {
+const AuctionListModuleAttribute = (props: any) => {
     const { onUpdate, data } = props;
     let _data = { ...defaultData, ...data };
 
@@ -74,13 +74,13 @@ const BuyoutGoodsListModuleAttribute = (props: any) => {
     );
 }
 
-const BuyoutGoodsListModule = (props: any) => {
+const AuctionListModule = (props: any) => {
     const { index, data, isPreview, ...rest } = props;
-    const [goodsList, setGoodsList] = useState<any[]>([]);
+    const [goodsList, setAuctionList] = useState<any[]>([]);
     let _data = { ...defaultData, ...data };
     useEffect(() => {
-        getPagedGoods(2,'', _data.basic.count).then(res => {
-            setGoodsList(res.data.records);
+        getPagedAuction( _data.basic.count).then(res => {
+            setAuctionList(res.data.records);
         });
     }, [data.basic.count]);
 
@@ -129,6 +129,6 @@ const BuyoutGoodsListModule = (props: any) => {
 
 export default function (module='') {
     if(module === 'paimai') {
-        registerModule(BUYOUT_GOODS_LIST_MODULE, "一口价列表", image, '拍卖模块', BuyoutGoodsListModule, BuyoutGoodsListModuleAttribute, defaultData);
+        registerModule(AUCTION_LIST_MODULE, "拍卖会列表", image, '拍卖模块', AuctionListModule, AuctionListModuleAttribute, defaultData);
     }
 }
