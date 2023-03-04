@@ -1,7 +1,5 @@
 import {Navigator, View} from "@tarojs/components";
 import FallbackImage from "../FallbackImage";
-import classNames from "classnames";
-import styles from "../../flow.module.scss";
 import {FC} from "react";
 
 
@@ -10,9 +8,9 @@ export interface AuctionGoodsItemProps extends Partial<any> {
 }
 
 const AuctionGoodsItem : FC<AuctionGoodsItemProps> = (props) => {
-    const {data} = props;
+    const {data, ...rest} = props;
     return (
-        <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-outer', styles.flow)}>
+        <View {...rest}>
             <Navigator url={'/pages/goods/detail?id='+data.id}>
                 <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
                 <View className={'px-2 mt-2'}>{data.title}</View>

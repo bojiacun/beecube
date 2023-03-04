@@ -4,6 +4,8 @@ import {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import AuctionGoodsItem from "../../components/goods/AuctionGoodsItem";
+import classNames from "classnames";
+import styles from "../../flow.module.scss";
 
 
 export default class Index extends Component<any, any> {
@@ -23,7 +25,7 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/goods/list', {params: params});
     }
     renderTemplate(data: any) {
-        return (<AuctionGoodsItem data={data} />);
+        return (<AuctionGoodsItem className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)} data={data} />);
     }
 
     componentDidMount() {
