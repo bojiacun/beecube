@@ -14,8 +14,16 @@
       "url": "/pages/index/index"
     },
     {
-      "label": "往期拍卖",
-      "url": "/pages/performance/list"
+      "label": "限时拍专场列表",
+      "url": "/pages/performance/deadline"
+    },
+    {
+      "label": "同步拍专场列表",
+      "url": "/pages/performance/sync"
+    },
+    {
+      "label": "拍卖会列表",
+      "url": "/pages/auction/list"
     },
     {
       "label": "参拍记录",
