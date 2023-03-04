@@ -154,8 +154,11 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     public Result<?> removeGoods(@RequestBody JSONObject jsonObject) {
         String perfId = jsonObject.getString("perfId");
         String goodsIds = jsonObject.getString("goodsIds");
+        if(StringUtils.isEmpty(goodsIds)) {
+            throw new JeecgBootException("请选择拍品");
+        }
         LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(Goods::getId, goodsIds.split(","));
+        updateWrapper.in(Goods::getId, Arrays.stream(goodsIds.split(",")).collect(Collectors.toList()));
         updateWrapper.eq(Goods::getPerformanceId, perfId);
         updateWrapper.set(Goods::getPerformanceId, null);
         goodsService.update(updateWrapper);

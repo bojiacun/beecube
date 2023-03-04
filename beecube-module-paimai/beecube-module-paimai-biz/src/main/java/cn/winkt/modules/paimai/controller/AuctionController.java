@@ -125,8 +125,11 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 public Result<?> removePerformances(@RequestBody JSONObject jsonObject) {
 		 String auctionId = jsonObject.getString("auctionId");
 		 String perfIds = jsonObject.getString("perfIds");
+		 if(StringUtils.isEmpty(perfIds)) {
+			 throw new JeecgBootException("请选择专场");
+		 }
 		 LambdaUpdateWrapper<Performance> updateWrapper = new LambdaUpdateWrapper<>();
-		 updateWrapper.in(Performance::getId, perfIds.split(","));
+		 updateWrapper.in(Performance::getId, Arrays.stream(perfIds.split(",")).collect(Collectors.toList()));
 		 updateWrapper.eq(Performance::getAuctionId, auctionId);
 		 updateWrapper.set(Performance::getAuctionId, null);
 		 performanceService.update(updateWrapper);

@@ -44,12 +44,12 @@ const GoodsListSelected = (props: any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
     }
     const handleOnSearchNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
@@ -93,7 +93,7 @@ const GoodsListSelected = (props: any) => {
     const handleOnRemoveGoods = () => {
         if(selectedRows.length > 0) {
             //添加
-            let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.map(item=>item.id).join(',')};
+            let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.join(',')};
             removeFetcher.submit(data, {method: 'post', action: '/paimai/performances/goods/remove'})
         }
         else{
