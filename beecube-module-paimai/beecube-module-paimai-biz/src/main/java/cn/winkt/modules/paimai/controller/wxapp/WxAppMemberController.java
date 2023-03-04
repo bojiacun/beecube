@@ -251,10 +251,25 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-
         if(new Date().compareTo(actualEndTime) >= 0) {
             throw new JeecgBootException("该拍品已结束拍卖");
         }
+
+
+
+        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            Performance performance = performanceService.getById(goods.getPerformanceId());
+            if(performance != null) {
+                if(new Date().compareTo(performance.getEndTime()) >= 0) {
+                    throw new JeecgBootException("拍品所在专场已结束");
+                }
+                if(new Date().compareTo(performance.getStartTime()) < 0) {
+                    throw new JeecgBootException("拍品所在专场未开始");
+                }
+            }
+        }
+
+
         String lockKey = "OFFER-LOCKER-"+goods.getId();
         String randomStr = StringUtils.getIfEmpty(post.getString("randomStr"), ()->StringUtils.EMPTY);
         if(redissonLockClient.tryLock(lockKey, -1, 300)) {
