@@ -150,7 +150,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     }
     @AutoLog(value = "拍卖专场表-移除拍品")
     @ApiOperation(value = "拍卖专场表-移除拍品", notes = "拍卖专场表-移除拍品")
-    @PostMapping(value = "/goods/remove")
+    @DeleteMapping(value = "/goods/remove")
     public Result<?> removeGoods(@RequestBody JSONObject jsonObject) {
         String perfId = jsonObject.getString("perfId");
         String goodsIds = jsonObject.getString("goodsIds");

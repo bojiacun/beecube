@@ -121,7 +121,7 @@ public class AuctionController extends JeecgController<Auction, IAuctionService>
 	 }
 	 @AutoLog(value = "拍卖会表-移除专场")
 	 @ApiOperation(value = "拍卖会表-移除专场", notes = "拍卖会表-移除专场")
-	 @PostMapping(value = "/performances/remove")
+	 @DeleteMapping(value = "/performances/remove")
 	 public Result<?> removePerformances(@RequestBody JSONObject jsonObject) {
 		 String auctionId = jsonObject.getString("auctionId");
 		 String perfIds = jsonObject.getString("perfIds");
