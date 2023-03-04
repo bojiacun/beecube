@@ -50,6 +50,9 @@ public class WxAppGoodsController {
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            queryWrapper.eq("g.performance_id", goods.getPerformanceId());
+        }
         if(StringUtils.isNotEmpty(goods.getClassId())) {
             queryWrapper.eq("g.class_id", goods.getClassId());
         }

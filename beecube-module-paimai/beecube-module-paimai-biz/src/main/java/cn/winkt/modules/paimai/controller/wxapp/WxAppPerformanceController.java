@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.exception.JeecgBootException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,9 @@ public class WxAppPerformanceController {
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<PerformanceVO> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(performance.getAuctionId())) {
+            queryWrapper.eq("p.auction_id", performance.getAuctionId());
+        }
         if(performance.getType() != null) {
             queryWrapper.eq("p.type", performance.getType());
         }
@@ -67,4 +71,13 @@ public class WxAppPerformanceController {
         IPage<PerformanceVO> pageList = performanceService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
+
+    @GetMapping("/detail")
+    public Result<PerformanceVO> detail(@RequestParam(name = "id", defaultValue = "0") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到专场");
+        }
+        return Result.OK(performanceService.getDetail(id));
+    }
+
 }
