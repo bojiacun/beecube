@@ -5,11 +5,11 @@ import styles from "../../flow.module.scss";
 import {FC} from "react";
 
 
-export interface GoodsItemViewProps extends Partial<any> {
+export interface AuctionGoodsItemProps extends Partial<any> {
     data: any;
 }
 
-const AuctionGoodsItem : FC<GoodsItemViewProps> = (props) => {
+const AuctionGoodsItem : FC<AuctionGoodsItemProps> = (props) => {
     const {data} = props;
     return (
         <View className={classNames('bg-white rounded-lg overflow-hidden rounded shadow-outer', styles.flow)}>
