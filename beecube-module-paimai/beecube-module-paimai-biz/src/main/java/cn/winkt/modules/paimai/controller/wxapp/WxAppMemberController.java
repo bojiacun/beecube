@@ -111,8 +111,16 @@ public class WxAppMemberController {
             queryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
             if(goodsViewService.count(queryWrapper) == 0) {
                 //没有浏览记录，则生成浏览记录
+                Goods goods = goodsService.getById(id);
                 GoodsView goodsView = new GoodsView();
                 goodsView.setGoodsId(id);
+                goodsView.setPerformanceId(goods.getPerformanceId());
+                if(goods.getPerformanceId() != null) {
+                    Performance performance = performanceService.getById(goods.getPerformanceId());
+                    if(performance != null) {
+                        goodsView.setAuctionId(performance.getAuctionId());
+                    }
+                }
                 goodsView.setMemberId(loginUser.getId());
                 goodsView.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
                 goodsView.setMemberAvatar(loginUser.getAvatar());
@@ -212,8 +220,16 @@ public class WxAppMemberController {
             goodsFollowService.remove(queryWrapper);
             return Result.OK(false);
         } else {
+            Goods goods = goodsService.getById(id);
             GoodsFollow goodsFollow = new GoodsFollow();
             goodsFollow.setGoodsId(id);
+            goodsFollow.setPerformanceId(goods.getPerformanceId());
+            if(goods.getPerformanceId() != null) {
+                Performance performance = performanceService.getById(goods.getPerformanceId());
+                if(performance != null) {
+                    goodsFollow.setAuctionId(performance.getAuctionId());
+                }
+            }
             goodsFollow.setMemberId(loginUser.getId());
             goodsFollow.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
             goodsFollow.setMemberAvatar(loginUser.getAvatar());
@@ -264,6 +280,13 @@ public class WxAppMemberController {
             }
             GoodsOffer goodsOffer = new GoodsOffer();
             goodsOffer.setGoodsId(goods.getId());
+            goodsOffer.setPerformanceId(goods.getPerformanceId());
+            if(goods.getPerformanceId() != null) {
+                Performance performance = performanceService.getById(goods.getPerformanceId());
+                if(performance != null) {
+                    goodsOffer.setAuctionId(performance.getAuctionId());
+                }
+            }
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
