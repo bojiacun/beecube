@@ -84,9 +84,7 @@ const GoodsListModuleAttribute = (props: any) => {
 const GoodsListModule = (props: any) => {
     const { index, data, isPreview, ...rest } = props;
     const [goodsList, setGoodsList] = useState<any[]>([]);
-    const [classes, setClasses] = useState<any[]>([]);
     let _data = { ...defaultData, ...data };
-    const types = [{title: '最新', value: 1}, {title: '推荐', value: 2}, {title: '热销', value: 3}];
     let tagColors = ['#ff5454', '#2c9940', '#fb9d0f'];
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
@@ -100,22 +98,11 @@ const GoodsListModule = (props: any) => {
                 setGoodsList(res.data.content);
             });
         }
-        else if (_data.basic.dataSource == 3) {
-            getPagedGoods(2, _data.basic.searchTag).then(res => {
-                setGoodsList(res.data.content);
-            });
-        }
         else {
             setGoodsList([]);
         }
-    }, [data.basic.dataSource, data.basic.items]);
-    useEffect(() => {
-        if (_data.basic.titleType == 2) {
-            getShopClasses().then(res => {
-                setClasses(res.data);
-            })
-        }
-    }, [data.basic.titleType]);
+    }, [data.basic.dataSource]);
+
     return (
         <div {...rest} style={_data.style}>
             {_data.basic.style == 1 &&

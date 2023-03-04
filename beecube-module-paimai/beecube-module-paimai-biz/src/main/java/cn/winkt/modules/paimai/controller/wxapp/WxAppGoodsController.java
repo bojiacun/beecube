@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -56,6 +57,15 @@ public class WxAppGoodsController {
             queryWrapper.eq("g.type", goods.getType());
         }
         queryWrapper.eq("g.status", 1);
+        String source = req.getParameter("source");
+        Date nowDate = new Date();
+        if("1".equals(source)) {
+            //进行中拍品,并且尚未结束的哦
+            queryWrapper.gt("end_time", nowDate).or().gt("actual_end_time", nowDate);
+        }
+        else if("2".equals(source)) {
+            queryWrapper.lt("end_time", nowDate).or().lt("actual_end_time", nowDate);
+        }
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
         orderField = "g."+orderField;
