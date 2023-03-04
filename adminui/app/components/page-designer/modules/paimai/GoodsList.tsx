@@ -123,11 +123,11 @@ const GoodsListModule = (props: any) => {
                 </div>
             }
             {_data.basic.style == 2 &&
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', overflowY: 'hidden', overflowX: 'auto' }}>
+                <div style={{ overflowY: 'hidden', overflowX: 'auto', width: '100%', whiteSpace: 'nowrap' }}>
                     {goodsList.slice(0, _data.basic.count).map((item: any) => {
-                        let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
+                        let itemWidth = 'calc((100% - ' + 30 + 'px) / 4)';
                         return (
-                            <div key={item.id} style={{ width: itemWidth, background: 'white', padding: 10, marginBottom: _data.basic.space, borderRadius: parseInt(_data.basic.itemBorderRadius), position: 'relative' }}>
+                            <div key={item.id} style={{ width: itemWidth, background: 'white', marginRight: 10, padding: 10, marginBottom: _data.basic.space, borderRadius: parseInt(_data.basic.itemBorderRadius), position: 'relative', display: 'inline-block' }}>
                                 <div style={{paddingTop: '100%', width: '100%', position: 'relative'}}>
                                     <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{ position: 'absolute', left: 0, top: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover', zIndex: 99 }} />
                                 </div>
