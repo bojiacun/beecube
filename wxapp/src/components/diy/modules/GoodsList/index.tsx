@@ -10,7 +10,7 @@ const GoodsListModule = (props: any) => {
     const [goodsList, setGoodsList] = useState<any[]>([]);
 
     useEffect(() => {
-        request.get('/paimai/api/goods/list', {params: {type: 1, source: dataSource}}).then(res => {
+        request.get('/paimai/api/goods/list', {params: {type: 1, source: dataSource, pageSize: basic.count}}).then(res => {
             setGoodsList(res.data.result.records);
         })
     }, [dataSource]);

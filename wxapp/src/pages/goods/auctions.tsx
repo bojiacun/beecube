@@ -3,20 +3,23 @@ import PageLayout from "../../layouts/PageLayout";
 import {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
-import AuctionGoodsItem from "../../components/goods/AuctionGoodsItem";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
-
+import {Navigator, Text, View} from "@tarojs/components";
+import FallbackImage from "../../components/FallbackImage";
+const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
     }
+
     constructor(props) {
         super(props);
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
     }
+
     loadData(pageIndex: number, tab: ListViewTabItem) {
         let params: any = {type: 1, column: 'create_time', orderBy: 'desc', page: pageIndex};
         if (tab.id) {
@@ -24,8 +27,19 @@ export default class Index extends Component<any, any> {
         }
         return request.get('/paimai/api/goods/list', {params: params});
     }
+
     renderTemplate(data: any) {
-        return (<AuctionGoodsItem className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)} data={data} />);
+        return (
+            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
+                <Navigator url={'/pages/goods/detail?id=' + data.id}>
+                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
+                    <View className={'px-2 mt-2'}>{data.title}</View>
+                    <View className={'px-2 mb-2 text-sm'}>
+                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                    </View>
+                </Navigator>
+            </View>
+        );
     }
 
     componentDidMount() {
