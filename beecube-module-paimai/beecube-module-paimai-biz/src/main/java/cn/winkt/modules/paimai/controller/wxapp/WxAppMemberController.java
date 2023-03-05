@@ -150,7 +150,30 @@ public class WxAppMemberController {
         IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
         return Result.OK(pageList);
     }
-
+    /**
+     * 查询用户是否缴纳了本场保证金
+     * @param id
+     * @return
+     */
+    @GetMapping("/deposited/performance")
+    public Result<Boolean> queryPerformanceDeposit(@RequestParam(value = "id", defaultValue = "") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        Performance performance = performanceService.getById(id);
+        if(performance.getDeposit() == null || performance.getDeposit() <=0) {
+            return Result.OK(true);
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if (loginUser == null) {
+            return Result.OK(false);
+        }
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getPerformanceId, id);
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        return Result.OK(goodsDepositService.count(queryWrapper) > 0);
+    }
 
     /**
      * 查询用户是否缴纳了拍品保证金
@@ -375,6 +398,16 @@ public class WxAppMemberController {
         }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //查询用户是否已经缴纳保证金
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getPerformanceId, id);
+
+        if(goodsDepositService.count(queryWrapper) > 0) {
+            throw new JeecgBootException("您已经缴纳本场保证金");
+        }
+
 
         GoodsDeposit goodsDeposit = new GoodsDeposit();
         goodsDeposit.setPerformanceId(id);
@@ -426,6 +459,18 @@ public class WxAppMemberController {
         }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+        //查询用户是否已经缴纳保证金
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
+        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            queryWrapper.or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+        }
+        if(goodsDepositService.count(queryWrapper) > 0) {
+            throw new JeecgBootException("您已经缴纳本拍品或本场保证金");
+        }
 
         GoodsDeposit goodsDeposit = new GoodsDeposit();
         goodsDeposit.setGoodsId(id);
