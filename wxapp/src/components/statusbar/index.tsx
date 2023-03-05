@@ -41,6 +41,7 @@ const StatusBar = (props: StatusbarProps): any => {
     }
     navigatorBarStyle.position = 'sticky';
     navigatorBarStyle.top = 0;
+    navigatorBarStyle.width = '100%';
     navigatorBarStyle.zIndex = 9999;
 
     const goBack = () => {

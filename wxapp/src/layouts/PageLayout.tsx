@@ -18,17 +18,17 @@ import classNames from "classnames";
     }
 ))
 class PageLayout extends Component<PayLayoutProps, any> {
-    state:any = {
+    state: any = {
         pageStyle: {}
     }
 
     componentDidMount() {
         const {systemInfo, showTabBar = false, enableReachBottom = false} = this.props;
-        let initPageStyle:any = {
+        let initPageStyle: any = {
             paddingBottom: Taro.pxTransform((systemInfo.safeArea.bottom - systemInfo.safeArea.height) + (showTabBar ? 80 : 0)),
         };
 
-        if(enableReachBottom) {
+        if (enableReachBottom) {
             //如果启用下拉刷新，则需要禁用外层滚动，改用page滚动
             initPageStyle.height = 'auto';
             initPageStyle.overflowY = 'visible';
@@ -46,10 +46,19 @@ class PageLayout extends Component<PayLayoutProps, any> {
             className,
             loading,
             statusBarProps = {},
+            enableReachBottom = false
         } = this.props;
 
-
         if (pageLoading || loading) return <PageLoading/>;
+        if (enableReachBottom) {
+            return (
+                <>
+                    {showStatusBar && <StatusBar {...statusBarProps} />}
+                    {children}
+                    {showTabBar && <TabBar/>}
+                </>
+            );
+        }
 
         return (
             <View className={classNames(styles.page)} style={{...style, ...this.state.pageStyle}}>

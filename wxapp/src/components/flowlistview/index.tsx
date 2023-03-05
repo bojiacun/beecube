@@ -84,8 +84,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            {tabs.length > 0 && <View className={classNames('bg-white px-4 py-3 flex items-center space-x-4 text-gray-700', tabJustify)}
-                  style={{overflowY: 'hidden', overflowX: 'auto'}}>
+            {tabs.length > 0 && <View className={classNames('bg-white sticky px-4 py-3 flex items-center space-x-4 text-gray-700', tabJustify)}
+                  style={{overflowY: 'hidden', overflowX: 'auto', top: 0}}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(index === selectedIndex ? styles.active : '')} onClick={() => {
