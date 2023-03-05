@@ -7,6 +7,7 @@ export default defineAppConfig({
         'pages/goods/offers',
         'pages/performance/detail',
         'pages/performance/deadline',
+        'pages/performance/public',
         'pages/performance/sync',
         'pages/auction/detail',
         'pages/my/index',
