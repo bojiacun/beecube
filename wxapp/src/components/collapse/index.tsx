@@ -18,33 +18,32 @@ const Collapse: FC<CollapseProps> = (props) => {
 
     if (url != '') {
         return (
-            <>
-                <View className={'py-4'}>
-                    <Navigator className={'flex'}>
-                        <View className={'text-gray-400'} style={{width: Taro.pxTransform(icon ? 100 : 80)}}>
-                            {icon}
-                            <Text className={classNames(description == '' ? 'font-bold text-gray-800':'')}>{title}</Text>
-                        </View>
-                        <View className={'flex-1 flex items-center justify-between'}>
-                            <View>{description}</View>
-                            {showArrow && <Text className={classNames('iconfont icon-youjiantou_huaban text-gray-400')}/>}
-                        </View>
-                    </Navigator>
-                </View>
-            </>
+            <View className={''}>
+                <Navigator className={'flex py-4'} url={url}>
+                    <View className={'text-gray-400'} style={{width: Taro.pxTransform(icon ? 100 : 80)}}>
+                        {icon}
+                        <Text className={classNames(description == '' ? 'font-bold text-gray-800' : '')}>{title}</Text>
+                    </View>
+                    <View className={'flex-1 flex items-center justify-between'}>
+                        <View>{description}</View>
+                        {showArrow && <Text className={classNames('iconfont icon-youjiantou_huaban text-gray-400')}/>}
+                    </View>
+                </Navigator>
+            </View>
         );
     }
 
     return (
         <>
-            <View className={'py-4 flex'} onClick={()=>setChildrenShow(!childrenShow)}>
+            <View className={'py-4 flex'} onClick={() => setChildrenShow(!childrenShow)}>
                 <View className={'text-gray-400'} style={{width: Taro.pxTransform(icon ? 120 : 90)}}>
                     {icon}
-                    <Text className={classNames(description == '' ? 'font-bold text-gray-800':'')}>{title}</Text>
+                    <Text className={classNames(description == '' ? 'font-bold text-gray-800' : '')}>{title}</Text>
                 </View>
                 <View className={'flex-1 flex items-center justify-between'}>
                     <View>{description}</View>
-                    {showArrow && <Text className={classNames('transition-transform iconfont icon-youjiantou_huaban text-gray-400 transform', childrenShow? 'rotate-90':'rotate-0')}/>}
+                    {showArrow && <Text
+                        className={classNames('transition-transform iconfont icon-youjiantou_huaban text-gray-400 transform', childrenShow ? 'rotate-90' : 'rotate-0')}/>}
                 </View>
             </View>
             {childrenShow && <View className={'py-4'} style={{border: 'none'}}>

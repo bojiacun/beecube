@@ -28,6 +28,7 @@ export default class Index extends Component<any, any> {
         loadingMore: false,
         noMore: false,
         page: 1,
+        posting: false,
     }
 
     constructor(props) {
