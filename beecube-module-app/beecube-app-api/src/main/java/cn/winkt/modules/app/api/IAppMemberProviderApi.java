@@ -513,7 +513,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/translateManyDict")
+    @GetMapping("/app/api/translateManyDict")
     Map<String, List<DictModel>> translateManyDict(@RequestParam("dictCodes") String dictCodes, @RequestParam("keys") String keys);
 
     /**
@@ -525,7 +525,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/translateDictFromTableByKeys")
+    @GetMapping("/app/api/translateDictFromTableByKeys")
     List<DictModel> translateDictFromTableByKeys(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("keys") String keys);
 
     /**
