@@ -11,6 +11,7 @@ public class AppManifest {
     private String upgradeUrl;
     private String homeUrl;
     private AppResource resources;
+    private AppLink[] links;
     private AppRole role;
     private String name;
     private String identify;
