@@ -1,7 +1,9 @@
 import axios from '~/utils/request.client';
 
 
-
+export async function getGoodsClasses() {
+    return axios.get('/paimai/goods/classes/all', { params: {}});
+}
 export async function getPagedGoods(type: number, source: any, count:number) {
     return axios.get('/paimai/goods/diy/list', { params: {type: type, source: source, pageSize: count}});
 }

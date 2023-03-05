@@ -3,7 +3,7 @@ import image from 'assets/designer/s4_2.png';
 import biaoqian from 'assets/designer/biaoqian.png';
 import React, {useEffect, useState} from "react";
 import BoxSettings, {DEFAULT_BOX_STYLES} from "../BoxSettings";
-import {getPagedGoods, getShopClasses} from "./service";
+import {getGoodsClasses, getPagedGoods, getShopClasses} from "./service";
 import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
@@ -74,15 +74,29 @@ const BuyoutGoodsListModuleAttribute = (props: any) => {
 const BuyoutGoodsListModule = (props: any) => {
     const {index, data, isPreview, ...rest} = props;
     const [goodsList, setGoodsList] = useState<any[]>([]);
+    const [classList, setClassList] = useState<any[]>([]);
     let _data = {...defaultData, ...data};
+
     useEffect(() => {
         getPagedGoods(2, '', _data.basic.count).then(res => {
             setGoodsList(res.data.records);
         });
     }, [data.basic.count]);
+    useEffect(()=>{
+        getGoodsClasses().then(res=>{
+            setClassList(res.data);
+        })
+    },[]);
 
     return (
         <div {...rest} style={_data.style}>
+            {_data.basic.showClass &&
+                <div style={{display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', overflowY: 'hidden'}}>
+                    {classList.map(cls=>{
+                        return <span>{cls.name} | </span>;
+                    })}
+                </div>
+            }
             <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
                 {goodsList.slice(0, _data.basic.count).map((item: any) => {
                     let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';

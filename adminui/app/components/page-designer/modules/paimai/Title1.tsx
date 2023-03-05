@@ -99,7 +99,7 @@ const Title1Module = (props: any) => {
             }
             {_data.basic.style == 2 &&
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <span style={{fontWeight: 'bold', lineHeight: 1, marginLeft: 10, fontSize: 18}}>{_data.basic.text}</span>
+                    <span style={{fontWeight: 'bold', lineHeight: 1, fontSize: 18}}>{_data.basic.text}</span>
                     <span style={{}}>{_data.basic.moreText}</span>
                 </div>
             }
