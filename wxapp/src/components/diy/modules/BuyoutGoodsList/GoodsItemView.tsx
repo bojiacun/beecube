@@ -14,13 +14,13 @@ const GoodsItemView:FC<GoodsItemViewProps> = (props) => {
     const {radius = 0, item} = props;
     return (
         <View className={'bg-white overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-            <Navigator url={'/pages/goods/detail?id='+item.id}>
+            <Navigator url={'/pages/goods/detail2?id='+item.id}>
                 <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
                     <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}} className={'absolute z-0 inset-0 block w-full h-full'} src={utils.resolveUrl(item.images.split(',')[0])}/>
                 </View>
                 <View className={'px-2 mt-2'}>{item.title}</View>
                 <View className={'px-2 mb-2 text-sm'}>
-                    一口价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(item.startPrice).format('0,0.00')}</Text>
+                    <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-lg'}>{numeral(item.startPrice).format('0,0.00')}</Text>
                 </View>
             </Navigator>
         </View>

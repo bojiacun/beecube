@@ -1,28 +1,56 @@
-import {View} from "@tarojs/components";
+import {View, Text} from "@tarojs/components";
 import {useEffect, useState} from "react";
 import request from "../../../../lib/request";
 import GoodsItemView from "./GoodsItemView";
+import classNames from "classnames";
 
 
 const BuyoutGoodsListModule = (props: any) => {
     const {index, basic, style, ...rest} = props;
-    const dataSource = parseInt(basic.dataSource);
     const [goodsList, setGoodsList] = useState<any[]>([]);
+    const [classList, setClassList] = useState<any[]>([]);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+
+    const loadData = (classIndex) => {
+        request.get('/paimai/api/goods/list', {params: {type: 2, pageSize: basic.count, classId: classList[classIndex].id}}).then(res => {
+            setGoodsList(res.data.result.records);
+        });
+    }
 
     useEffect(() => {
-        request.get('/paimai/api/goods/list', {params: {type: 1, source: dataSource, pageSize: basic.count}}).then(res => {
-            setGoodsList(res.data.result.records);
-        })
-    }, [dataSource]);
+        if (classList.length > 0) {
+            loadData(0);
+        }
+    }, [classList]);
+
+
+    useEffect(() => {
+        if (basic.showClass) {
+            request.get('/paimai/api/goods/classes', {params: {}}).then(res => {
+                setClassList(res.data.result);
+            })
+        }
+    }, [basic.showClass]);
 
     return (
-        <View style={style} className={'grid grid-cols-2 gap-4'} {...rest}>
-            {goodsList.map((item: any) => {
-                return (
-                    <GoodsItemView item={item} radius={basic.itemBorderRadius}/>
-                );
-            })}
-        </View>
+        <>
+            <View className={'py-4 flex items-center flex-nowrap overflow-auto w-full divide-x'}>
+                {classList.map((item, index) => {
+                    return (
+                        <Text onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4')} >
+                            {item.name}
+                        </Text>
+                    );
+                })}
+            </View>
+            <View style={style} className={'grid grid-cols-2 gap-4'} {...rest}>
+                {goodsList.map((item: any) => {
+                    return (
+                        <GoodsItemView item={item} radius={basic.itemBorderRadius}/>
+                    );
+                })}
+            </View>
+        </>
     );
 
 }
