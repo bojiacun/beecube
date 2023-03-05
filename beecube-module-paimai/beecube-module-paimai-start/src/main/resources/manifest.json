@@ -14,6 +14,24 @@
       "url": "/pages/index/index"
     },
     {
+      "label": "公益拍专场列表",
+      "url": "/pages/performance/public",
+      "urlSuffix": {
+        "label": "选择时间",
+        "value": "source"
+      },
+      "suffixOptions": [
+        {
+          "label": "进行中的",
+          "value": "1"
+        },
+        {
+          "label": "往期专场",
+          "value": "2"
+        }
+      ]
+    },
+    {
       "label": "限时拍专场列表",
       "url": "/pages/performance/deadline",
       "urlSuffix": {
