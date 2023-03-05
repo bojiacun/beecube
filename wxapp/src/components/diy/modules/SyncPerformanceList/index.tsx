@@ -4,7 +4,7 @@ import request from "../../../../lib/request";
 import PerformanceItemView from "./PerformanceItemView";
 
 
-const AsyncPerformanceListModule = (props: any) => {
+const SyncPerformanceListModule = (props: any) => {
     const {index, basic, style, ...rest} = props;
     const dataSource = parseInt(basic.dataSource);
     const [goodsList, setGoodsList] = useState<any[]>([]);
@@ -27,4 +27,4 @@ const AsyncPerformanceListModule = (props: any) => {
 
 }
 
-export default AsyncPerformanceListModule;
+export default SyncPerformanceListModule;

@@ -1,0 +1,85 @@
+import {Component} from "react";
+import PageLayout from "../../layouts/PageLayout";
+import ListView, {ListViewTabItem} from "../../components/listview";
+import {Navigator, Text, View} from "@tarojs/components";
+import Taro from "@tarojs/taro";
+import FallbackImage from "../../components/FallbackImage";
+import utils from "../../lib/utils";
+import TimeCountDowner from "../../components/TimeCountDowner";
+import request from "../../lib/request";
+
+const tabs: ListViewTabItem[] = [
+    {
+        label: '竞拍中',
+        id: 1,
+        template: data => {
+            let radius = 0;
+            return (
+                <View className={'bg-white overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                    <Navigator url={'/pages/performance/detail?id=' + data.id}>
+                        <View className={'relative'} style={{width: '100%'}}>
+                            <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
+                                           className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
+                        </View>
+                        <View className={'p-4 divide-y divide-gray-100'}>
+                            <View className={'space-y-1'}>
+                                <View className={'font-bold text-lg'}>
+                                    {data.title}
+                                </View>
+                                <TimeCountDowner className={'flex text-sm'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                            </View>
+                            <View className={'flex space-x-4'}>
+                                <Text>报名{data.depositCount}人</Text>
+                                <Text>围观{data.viewCount}人</Text>
+                                <Text>出价{data.offerCount}次</Text>
+                            </View>
+                        </View>
+                    </Navigator>
+                </View>
+            );
+        }
+    },
+    {
+        label: '已结束',
+        id: 1,
+        template: data => {
+            let radius = 0;
+            return (
+                <View className={'bg-white overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                    <Navigator url={'/pages/performance/detail?id=' + data.id}>
+                        <View className={'relative'} style={{width: '100%'}}>
+                            <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
+                                           className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
+                        </View>
+                        <View className={'p-4 divide-y divide-gray-100'}>
+                            <View className={'space-y-1'}>
+                                <View className={'font-bold text-lg'}>
+                                    {data.title}
+                                </View>
+                                <TimeCountDowner className={'flex text-sm'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                            </View>
+                            <View className={'flex space-x-4'}>
+                                <Text>报名{data.depositCount}人</Text>
+                                <Text>围观{data.viewCount}人</Text>
+                                <Text>出价{data.offerCount}次</Text>
+                            </View>
+                        </View>
+                    </Navigator>
+                </View>
+            );
+        }
+    },
+];
+
+export default class Index extends Component<any, any> {
+    loadData(page: number, tab: ListViewTabItem) {
+        return request.get('/paimai/api/performances/list', {params: {type: tab.id, pageNo: page}}).then(res=>res.data.result.records);
+    }
+    render() {
+        return (
+            <PageLayout statusBarProps={{title: '限时拍'}}>
+                <ListView tabs={tabs} dataFetcher={this.loadData}/>
+            </PageLayout>
+        );
+    }
+}

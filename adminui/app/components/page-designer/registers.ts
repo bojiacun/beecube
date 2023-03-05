@@ -9,7 +9,7 @@ import registerModuleSwiper from './modules/common/Swiper';
 import registerModuleGoodsList from './modules/paimai/GoodsList';
 import registerModuleBuyoutGoodsList from './modules/paimai/BuyoutGoodsList';
 import registerModulePerformanceList from './modules/paimai/PerformanceList';
-import registerModuleAsyncPerformanceList from './modules/paimai/AsyncPerformanceList';
+import registerModuleSyncPerformanceList from './modules/paimai/SyncPerformanceList';
 import registerModuleAuctionList from './modules/paimai/AuctionList';
 
 
@@ -36,5 +36,5 @@ export default function register(module='') {
     registerModuleBuyoutGoodsList(module);
     registerModulePerformanceList(module);
     registerModuleAuctionList(module);
-    registerModuleAsyncPerformanceList(module);
+    registerModuleSyncPerformanceList(module);
 }

@@ -13,7 +13,7 @@ import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
-export const ASYNC_PERFORMANCE_LIST_MODULE = "ASYNC_PERFORMANCE_LIST_MODULE";
+export const SYNC_PERFORMANCE_LIST_MODULE = "SYNC_PERFORMANCE_LIST_MODULE";
 
 export const defaultData = {
     basic: {
@@ -27,7 +27,7 @@ export const defaultData = {
     }
 };
 
-const AsyncPerformanceListModuleAttribute = (props: any) => {
+const SyncPerformanceListModuleAttribute = (props: any) => {
     const {onUpdate, data} = props;
     let _data = {...defaultData, ...data};
 
@@ -78,7 +78,7 @@ const AsyncPerformanceListModuleAttribute = (props: any) => {
     );
 }
 
-const AsyncPerformanceListModule = (props: any) => {
+const SyncPerformanceListModule = (props: any) => {
     const {index, data, isPreview, ...rest} = props;
     const [goodsList, setAsyncPerformanceList] = useState<any[]>([]);
     let _data = {...defaultData, ...data};
@@ -139,6 +139,6 @@ const AsyncPerformanceListModule = (props: any) => {
 
 export default function (module = '') {
     if (module === 'paimai') {
-        registerModule(ASYNC_PERFORMANCE_LIST_MODULE, "同步拍专场", image, '拍卖模块', AsyncPerformanceListModule, AsyncPerformanceListModuleAttribute, defaultData);
+        registerModule(SYNC_PERFORMANCE_LIST_MODULE, "同步拍专场", image, '拍卖模块', SyncPerformanceListModule, SyncPerformanceListModuleAttribute, defaultData);
     }
 }
