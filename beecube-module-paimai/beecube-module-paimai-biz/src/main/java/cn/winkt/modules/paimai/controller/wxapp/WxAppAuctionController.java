@@ -47,7 +47,7 @@ public class WxAppAuctionController {
         Date nowDate = new Date();
         if("1".equals(source)) {
             //进行中拍品,并且尚未结束的哦
-            queryWrapper.gt("end_time", nowDate);
+            queryWrapper.isNull("end_time");
         }
         else if("2".equals(source)) {
             queryWrapper.lt("end_time", nowDate);
