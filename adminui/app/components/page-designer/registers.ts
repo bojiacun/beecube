@@ -11,6 +11,7 @@ import registerModuleBuyoutGoodsList from './modules/paimai/BuyoutGoodsList';
 import registerModulePerformanceList from './modules/paimai/PerformanceList';
 import registerModuleSyncPerformanceList from './modules/paimai/SyncPerformanceList';
 import registerModuleAuctionList from './modules/paimai/AuctionList';
+import registerModuleTitle1 from './modules/paimai/Title1';
 
 
 
@@ -37,4 +38,5 @@ export default function register(module='') {
     registerModulePerformanceList(module);
     registerModuleAuctionList(module);
     registerModuleSyncPerformanceList(module);
+    registerModuleTitle1(module);
 }
