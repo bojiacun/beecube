@@ -173,6 +173,9 @@ public class WxAppMemberController {
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsDeposit::getGoodsId, id);
+        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            queryWrapper.or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+        }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
     }
@@ -284,8 +287,21 @@ public class WxAppMemberController {
                 return Result.error("他人已出此价格或更高的价格");
             }
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-            //查询用户是否缴纳保证金
-            if(goods.getDeposit() > 0) {
+            //查询用户是否缴纳保证金,如果拍品上了某个专场则以专场保证金为主
+            String auctionId = null;
+            if(goods.getPerformanceId() != null) {
+                Performance performance = performanceService.getById(goods.getPerformanceId());
+                if(performance != null) {
+                    auctionId = performance.getAuctionId();
+                    LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+                    queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
+                    queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+                    if(goodsDepositService.count(queryWrapper) == 0) {
+                        return Result.error("未缴纳专场保证金");
+                    }
+                }
+            }
+            else if(goods.getDeposit() > 0) {
                 LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
                 queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
@@ -296,12 +312,7 @@ public class WxAppMemberController {
             GoodsOffer goodsOffer = new GoodsOffer();
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPerformanceId(goods.getPerformanceId());
-            if(goods.getPerformanceId() != null) {
-                Performance performance = performanceService.getById(goods.getPerformanceId());
-                if(performance != null) {
-                    goodsOffer.setAuctionId(performance.getAuctionId());
-                }
-            }
+            goodsOffer.setAuctionId(auctionId);
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
