@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @Slf4j
@@ -85,7 +86,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
         appModule.setSupportH5(NumberUtils.toInt(appManifest.getSupportH5(), 0));
         appModule.setSupportDouyin(NumberUtils.toInt(appManifest.getSupportDouyin(), 0));
         appModule.setVersion(appManifest.getVersion());
-        appModule.setManifest(JSONObject.toJSONString(appManifest));
+        appModule.setManifest(IOUtils.toString(manifestInputStream, StandardCharsets.UTF_8));
         return appModule;
     };
 }
