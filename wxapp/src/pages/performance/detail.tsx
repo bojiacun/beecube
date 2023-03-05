@@ -11,6 +11,7 @@ import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import './detail.scss';
+import NoData from "../../components/nodata";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -65,9 +66,9 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/performances/detail', {params: {id: options.id}}).then(res => {
             let detail = res.data.result;
             this.setState({detail: detail});
-            return this.loadData(detail.id, 1, true);
+            this.loadData(detail.id, 1, true);
             //查询是否需要缴纳保证金
-            request.get('/paimai/api/members/deposited/performance', {params: {id: detail.id}}).then(res => {
+            return request.get('/paimai/api/members/deposited/performance', {params: {id: detail.id}}).then(res => {
                 detail.deposited = res.data.result;
                 this.setState({detail: detail});
             });
@@ -171,6 +172,7 @@ export default class Index extends Component<any, any> {
                         );
                     })}
                 </View>
+                {goodsList.length == 0 && <NoData /> }
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!detail.deposited &&

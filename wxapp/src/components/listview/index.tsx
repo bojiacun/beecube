@@ -19,7 +19,7 @@ export interface ListViewProps extends Partial<any> {
     tabs: ListViewTabItem[];
     onTabChanged?: Function;
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
-    tabJustify?: 'justify-between'|'justify-start';
+    tabStyle?: number;
     defaultActiveKey?: string|number|null;
 }
 
@@ -28,7 +28,7 @@ const ListView: FC<ListViewProps> = (props) => {
         tabs,
         onTabChanged = () => { },
         dataFetcher,
-        tabJustify = 'justify-start',
+        tabStyle = 1,
         defaultActiveKey = null
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -86,11 +86,11 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700', tabJustify)}
-                  style={{overflowY: 'hidden', overflowX: 'auto', paddingTop: Taro.pxTransform(120)}}>
+            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700')}
+                  style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
                 {tabs.map((tab, index) => {
                     return (
-                        <Text className={classNames(index === selectedIndex ? styles.active : '')} onClick={() => {
+                        <Text className={classNames(tabStyle == 1? '':'flex-1','text-center',index === selectedIndex ? styles.active : '')} onClick={() => {
                             setSelectedIndex(index);
                             onTabChanged(tab, index);
                             setPage(1);
@@ -104,7 +104,7 @@ const ListView: FC<ListViewProps> = (props) => {
                 })}
             </View>
             {data.length === 0 && <NoData />}
-            <View style={{paddingTop: Taro.pxTransform(70)}}>
+            <View className={'p-4 space-y-4'} style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);

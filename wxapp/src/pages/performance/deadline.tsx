@@ -21,14 +21,14 @@ const tabs: ListViewTabItem[] = [
                             <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
                         </View>
-                        <View className={'p-4 divide-y divide-gray-100'}>
+                        <View className={'p-4 space-y-2 divide-y divide-gray-100'}>
                             <View className={'space-y-1'}>
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
                             </View>
-                            <View className={'flex space-x-4'}>
+                            <View className={'flex pt-2 space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
                                 <Text>围观{data.viewCount}人</Text>
                                 <Text>出价{data.offerCount}次</Text>
@@ -78,7 +78,7 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '限时拍'}} enableReachBottom={true}>
-                <ListView tabs={tabs} dataFetcher={this.loadData} tabJustify={"justify-between"} />
+                <ListView tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
             </PageLayout>
         );
     }
