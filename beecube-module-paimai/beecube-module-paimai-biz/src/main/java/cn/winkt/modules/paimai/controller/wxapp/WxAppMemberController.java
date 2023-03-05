@@ -197,7 +197,7 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
             queryWrapper.and(wq->{
-                queryWrapper.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+                wq.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
             });
         }
         else {
