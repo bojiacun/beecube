@@ -19,14 +19,26 @@ const PerformanceEditor = (props: any) => {
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
+    let GoodsSchema;
 
-    const GoodsSchema = Yup.object().shape({
-        title: Yup.string().required('必填字段'),
-        startTime: Yup.string().required('必填字段'),
-        deposit: Yup.string().required('必填字段'),
-        endTime: Yup.string().required('必填字段'),
-        preview: Yup.string().required('必填字段'),
-    });
+    if(type == 2) {
+        GoodsSchema = Yup.object().shape({
+            title: Yup.string().required('必填字段'),
+            deposit: Yup.string().required('必填字段'),
+            preview: Yup.string().required('必填字段'),
+        });
+    }
+    else {
+        GoodsSchema = Yup.object().shape({
+            title: Yup.string().required('必填字段'),
+            startTime: Yup.string().required('必填字段'),
+            deposit: Yup.string().required('必填字段'),
+            endTime: Yup.string().required('必填字段'),
+            preview: Yup.string().required('必填字段'),
+        });
+    }
+
+
 
     const handleOnSubmit = (values: any) => {
         values.type = type;
