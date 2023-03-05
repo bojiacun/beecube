@@ -1,4 +1,4 @@
-import {Navigator, View} from "@tarojs/components";
+import {Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
 import {FC} from "react";
@@ -18,14 +18,21 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
         <View className={'bg-white overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
             <Navigator url={'/pages/performance/detail?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
-                    <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                   className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
+                    <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
+                    <View className={'flex justify-between items-center py-1 text-sm text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
+                        <TimeCountDowner
+                            notStartTip={<View className={'space-x-1'}><Text className={'bg-indigo-600 text-base p-2'}>预展中</Text><Text>距开始：</Text></View>}
+                            startedTip={<View className={'space-x-1'}><Text className={'bg-red-600 text-base p-2'}>进行中</Text><Text>距结束：</Text></View>}
+                            endTip={<View className={'space-x-1'}><Text className={'bg-gray-600 text-base p-2'}>已结束</Text></View>}
+                            className={'flex items-center'} endTime={new Date(item.endTime)} startTime={new Date(item.startTime)}
+                        />
+                    </View>
                 </View>
-                <View className={'pt-2 px-4 text-xl font-bold'}>{item.title}</View>
-                <View className={'flex justify-between pt-2 pb-4 px-4'}>
-                    <TimeCountDowner className={'flex text-left'} endTime={new Date(item.endTime)} startTime={new Date(item.startTime)} />
-                    <View className={'text-right'}>出价{item.offerCount}次</View>
+                <View className={'py-3 px-4'}>
+                    <View className={'text-xl font-medium'}>{item.title}</View>
+                    <View className={'text-gray-400'}>拍卖时间：{item.startTime} 开始</View>
                 </View>
+
             </Navigator>
         </View>
     );

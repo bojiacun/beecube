@@ -12,6 +12,7 @@ import SyncPerformanceListModule  from "./components/diy/modules/SyncPerformance
 import AuctionListModule from "./components/diy/modules/AuctionList";
 import Title1Module from "./components/diy/modules/Title1";
 import ViewMoreModule from "./components/diy/modules/ViewMore";
+import PublicPerformanceListModule from "./components/diy/modules/PublicPerformanceList";
 
 
 const modules = {
@@ -26,6 +27,7 @@ const modules = {
     'BUYOUT_GOODS_LIST_MODULE': BuyoutGoodsListModule,
     'PERFORMANCE_LIST_MODULE': PerformanceListModule,
     'SYNC_PERFORMANCE_LIST_MODULE': SyncPerformanceListModule,
+    'PUBLIC_PERFORMANCE_LIST_MODULE': PublicPerformanceListModule,
     'AUCTION_LIST_MODULE': AuctionListModule,
     'TITLE1_MODULE': Title1Module,
     'VIEWMORE_MODULE': ViewMoreModule,

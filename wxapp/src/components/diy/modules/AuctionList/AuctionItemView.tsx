@@ -18,8 +18,7 @@ const AuctionItemView: FC<AuctionItemViewProps> = (props) => {
         <View className={'bg-white overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
             <Navigator url={'/pages/auction/detail?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
-                    <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                   className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
+                    <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                 </View>
                 <View className={'p-4 text-xl font-bold'}>{item.title}</View>
             </Navigator>
