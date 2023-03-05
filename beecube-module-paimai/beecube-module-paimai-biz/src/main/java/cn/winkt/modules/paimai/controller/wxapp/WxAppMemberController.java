@@ -472,6 +472,8 @@ public class WxAppMemberController {
             throw new JeecgBootException("您已经缴纳本拍品或本场保证金");
         }
 
+        Float deposit = goods.getDeposit();
+
         GoodsDeposit goodsDeposit = new GoodsDeposit();
         goodsDeposit.setGoodsId(id);
         goodsDeposit.setMemberId(loginUser.getId());
@@ -482,6 +484,7 @@ public class WxAppMemberController {
             Performance performance = performanceService.getById(goods.getPerformanceId());
             if(performance != null) {
                 goodsDeposit.setAuctionId(performance.getAuctionId());
+                deposit = performance.getDeposit();
             }
         }
         goodsDeposit.setPrice(goods.getDeposit());
@@ -492,7 +495,7 @@ public class WxAppMemberController {
         }
         PayLog payLog = getPayLog(goodsDeposit.getId());
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-        BigDecimal payAmount = BigDecimal.valueOf(goods.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
+        BigDecimal payAmount = BigDecimal.valueOf(deposit).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
                 .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify/"+AppContext.getApp())
