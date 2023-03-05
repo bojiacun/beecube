@@ -15,9 +15,10 @@ export const TITLE1_MODULE = "TITLE1_MODULE";
 
 export const defaultData = {
     basic: {
+        style: 1,
         text: '标题标题',
         moreText: '查看更多',
-        link: '',
+        links: '',
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -46,6 +47,11 @@ const Title1ModuleAttribute = (props:any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e) => formik.submitForm()}>
+                                    <BootstrapRadioGroup
+                                        options={[{label: '样式1', value: '1'}, {label: '样式2', value: '2'}]}
+                                        name={'style'}
+                                        label={'数据类型'}
+                                    />
                                     <BootstrapInput label={'标题名称'} name={'text'}/>
                                     <BootstrapInput label={'更多名称'} name={'moreText'}/>
                                     <FormGroup>
@@ -81,14 +87,22 @@ const Title1Module = (props: any) => {
 
     return (
         <div {...rest} style={_data.style}>
-            <div style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                borderLeft: '5px solid red',
-                backgroundImage: 'linear-gradient(to right, #FDEAEB, #FFFFFF)'
-            }}>
-                <span style={{color: 'red', fontWeight: 'bold', lineHeight: 1, marginLeft: 10, fontSize: 16}}>{_data.basic.text}</span>
-                <span style={{color: 'red'}}>{_data.basic.moreText}</span>
-            </div>
+            {_data.basic.style == 1 &&
+                <div style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    borderLeft: '5px solid red',
+                    backgroundImage: 'linear-gradient(to right, #FDEAEB, #FFFFFF)'
+                }}>
+                    <span style={{color: 'red', fontWeight: 'bold', lineHeight: 1, marginLeft: 10, fontSize: 16}}>{_data.basic.text}</span>
+                    <span style={{color: 'red'}}>{_data.basic.moreText}</span>
+                </div>
+            }
+            {_data.basic.style == 2 &&
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <span style={{fontWeight: 'bold', lineHeight: 1, marginLeft: 10, fontSize: 18}}>{_data.basic.text}</span>
+                    <span style={{}}>{_data.basic.moreText}</span>
+                </div>
+            }
         </div>
     );
 }
