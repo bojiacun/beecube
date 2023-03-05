@@ -84,7 +84,7 @@ export default class Index extends Component<any, any> {
                             );
                         })}
                     </View>
-                    <LoadMore noMore={noMore} loading={loadingMore} />
+                    {offers.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
                 </LoginView>
             </PageLayout>
         );

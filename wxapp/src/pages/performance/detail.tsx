@@ -40,7 +40,13 @@ export default class Index extends Component<any, any> {
     loadData(id, page: number, clear = false) {
         return request.get('/paimai/api/goods/list', {params: {performanceId: id, pageNo: page}}).then(res => {
             if (clear) {
-                this.setState({goodsList: res.data.result.records, loadingMore: false, noMore: false});
+                let newGoodsList = res.data.result.records;
+                if(!newGoodsList || newGoodsList.length == 0) {
+                    this.setState({noMore: true, loadingMore: false});
+                }
+                else {
+                    this.setState({goodsList: newGoodsList, loadingMore: false, noMore: false});
+                }
             } else {
                 let goodsList = this.state.goodsList;
                 let newGoodsList = res.data.result.records;
@@ -111,7 +117,7 @@ export default class Index extends Component<any, any> {
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         return (
-            <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
                 <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
                     <TimeCountDowner className={'flex'} endTime={new Date(detail.endTime)} startTime={new Date(detail.startTime)}/>
@@ -164,7 +170,7 @@ export default class Index extends Component<any, any> {
                         );
                     })}
                 </View>
-                <LoadMore noMore={noMore} loading={loadingMore}/>
+                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!detail.deposited &&
                 <LoginView>

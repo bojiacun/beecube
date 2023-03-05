@@ -1,3 +1,3 @@
 export default definePageConfig({
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
 });

@@ -574,6 +574,9 @@ page {
     overflow-y: auto;
     @apply text-gray-800;
     background-color: #f8f8f8;
+    display: block;
+    position: relative;
+    min-height: 100%;
 }
 
 navigator, picker {
