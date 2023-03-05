@@ -86,7 +86,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
         appModule.setSupportH5(NumberUtils.toInt(appManifest.getSupportH5(), 0));
         appModule.setSupportDouyin(NumberUtils.toInt(appManifest.getSupportDouyin(), 0));
         appModule.setVersion(appManifest.getVersion());
-        appModule.setManifest(IOUtils.toString(manifestInputStream, StandardCharsets.UTF_8));
+        appModule.setManifest(IOUtils.toString(manifestResource.getInputStream(), StandardCharsets.UTF_8));
         return appModule;
     };
 }
