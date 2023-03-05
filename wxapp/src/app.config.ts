@@ -10,6 +10,7 @@ export default defineAppConfig({
         'pages/performance/public',
         'pages/performance/sync',
         'pages/auction/detail',
+        'pages/auction/list',
         'pages/my/index',
         'pages/my/wallet',
         'pages/my/views',

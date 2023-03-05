@@ -103,7 +103,7 @@ const ListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>
-            {data.length === 0 && <NoData />}
+            {data.length === 0 && <NoData style={{marginTop: 200}} />}
             <View className={'p-4 space-y-4'} style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];

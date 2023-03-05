@@ -103,7 +103,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>}
-            {data.length === 0 && <NoData />}
+            {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
                 <View className={classNames('p-4', stylesFlow.flowWrapper)} style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {

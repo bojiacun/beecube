@@ -18,7 +18,7 @@ const tabs: ListViewTabItem[] = [
                 <View className={'bg-white overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
                     <Navigator url={'/pages/performance/detail?id=' + data.id}>
                         <View className={'relative'} style={{width: '100%'}}>
-                            <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
+                            <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
                         </View>
                         <View className={'p-4 space-y-2 divide-y divide-gray-100'}>
@@ -48,7 +48,7 @@ const tabs: ListViewTabItem[] = [
                 <View className={'bg-white overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
                     <Navigator url={'/pages/performance/detail?id=' + data.id}>
                         <View className={'relative'} style={{width: '100%'}}>
-                            <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
+                            <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
                         </View>
                         <View className={'p-4 divide-y divide-gray-100'}>
