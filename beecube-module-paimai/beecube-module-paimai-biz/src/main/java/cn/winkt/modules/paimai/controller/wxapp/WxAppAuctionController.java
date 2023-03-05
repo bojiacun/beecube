@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.exception.JeecgBootException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +67,10 @@ public class WxAppAuctionController {
         IPage<Auction> pageList = auctionService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
-
+    @GetMapping("/detail")
+    public Result<Auction> detail(@RequestParam(name = "id", defaultValue = "0") String id) {
+        return Result.OK(auctionService.getById(id));
+    }
     /**
      * 获取该场拍卖会下的所有专场
      * @param id
