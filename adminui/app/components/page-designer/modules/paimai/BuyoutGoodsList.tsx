@@ -6,11 +6,8 @@ import BoxSettings, {DEFAULT_BOX_STYLES} from "../BoxSettings";
 import {getPagedGoods, getShopClasses} from "./service";
 import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
-import {FormGroup, FormLabel} from "react-bootstrap";
-import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
-import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 export const BUYOUT_GOODS_LIST_MODULE = "BUYOUT_GOODS_LIST_MODULE";
@@ -18,8 +15,8 @@ export const BUYOUT_GOODS_LIST_MODULE = "BUYOUT_GOODS_LIST_MODULE";
 export const defaultData = {
     basic: {
         itemBorderRadius: 15,
-        style: 1,
-        count: 2,
+        count: 4,
+        showClass: 0
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -48,6 +45,7 @@ const BuyoutGoodsListModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e) => formik.submitForm()}>
+                                    <BootstrapSwitch label={'显示分类'} name={'showClass'} />
                                     <BootstrapInput label={'数据条数'} name={'count'}/>
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'}/>
                                 </Form>
