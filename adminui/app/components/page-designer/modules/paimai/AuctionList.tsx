@@ -83,16 +83,16 @@ const AuctionListModule = (props: any) => {
     const [goodsList, setAuctionList] = useState<any[]>([]);
     let _data = {...defaultData, ...data};
     useEffect(() => {
-        getPagedAuction(_data.basic.count).then(res => {
+        getPagedAuction(_data.basic.dataSource, _data.basic.count).then(res => {
             setAuctionList(res.data.records);
         });
-    }, [data.basic.count]);
+    }, [data.basic.dataSource,data.basic.count]);
 
     return (
         <div {...rest} style={_data.style}>
             <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
                 {goodsList.slice(0, _data.basic.count).map((item: any) => {
-                    let itemWidth = 'calc((100% - ' + 10 + 'px) / 2)';
+                    let itemWidth = '100%';
                     return (
                         <div key={item.id} style={{
                             width: itemWidth,
