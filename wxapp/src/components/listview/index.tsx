@@ -19,12 +19,17 @@ export interface ListViewProps extends Partial<any> {
     tabs: ListViewTabItem[];
     onTabChanged?: Function;
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
+    tabJustify?: 'justify-between'|'justify-start';
+    defaultActiveKey?: string|number|null;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
     const {
-        tabs, onTabChanged = () => {
-        }, dataFetcher
+        tabs,
+        onTabChanged = () => { },
+        dataFetcher,
+        tabJustify = 'justify-start',
+        defaultActiveKey = null
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -36,7 +41,18 @@ const ListView: FC<ListViewProps> = (props) => {
     useEffect(()=>{
         if(tabs && tabs.length > 0) {
             utils.showLoading();
-            dataFetcher(1, tabs[0], 0).then(res => {
+            let defaultTab = tabs[0];
+            let initIndex = 0;
+            if(defaultActiveKey != null) {
+                tabs.forEach((t,index) => {
+                    if(t.id === defaultActiveKey) {
+                        initIndex = index;
+                        setSelectedIndex(initIndex);
+                        defaultTab = t;
+                    }
+                })
+            }
+            dataFetcher(1, defaultTab, initIndex).then(res => {
                 setData([...res.data.result.records]);
                 utils.hideLoading();
             }).catch(() => utils.hideLoading());
@@ -70,7 +86,7 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <View className={'bg-white px-4 py-3 flex items-center justify-between space-x-2 text-gray-700'}
+            <View className={classNames('bg-white px-4 py-3 flex items-center space-x-4 text-gray-700', tabJustify)}
                   style={{overflowY: 'hidden', overflowX: 'auto'}}>
                 {tabs.map((tab, index) => {
                     return (

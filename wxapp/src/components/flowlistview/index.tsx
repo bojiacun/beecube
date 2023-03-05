@@ -20,13 +20,15 @@ export interface ListViewProps extends Partial<any> {
     tabs: ListViewTabItem[];
     onTabChanged?: Function;
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
-    tabJustify?: 'justify-between'|'justify-start'
+    tabJustify?: 'justify-between'|'justify-start';
+    defaultActiveKey?: string|number|null;
 }
 
 const FlowListView: FC<ListViewProps> = (props) => {
     const {
         tabs, onTabChanged = () => {}, dataFetcher,
-        tabJustify = 'justify-start'
+        tabJustify = 'justify-start',
+        defaultActiveKey = null
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -37,7 +39,18 @@ const FlowListView: FC<ListViewProps> = (props) => {
     useEffect(()=>{
         if(tabs && tabs.length > 0) {
             utils.showLoading();
-            dataFetcher(1, tabs[0], 0).then(res => {
+            let defaultTab = tabs[0];
+            let initIndex = 0;
+            if(defaultActiveKey != null) {
+                tabs.forEach((t,index) => {
+                    if(t.id === defaultActiveKey) {
+                        initIndex = index;
+                        setSelectedIndex(initIndex);
+                        defaultTab = t;
+                    }
+                })
+            }
+            dataFetcher(1, defaultTab, initIndex).then(res => {
                 setData([...res.data.result.records]);
                 utils.hideLoading();
             }).catch(() => utils.hideLoading());

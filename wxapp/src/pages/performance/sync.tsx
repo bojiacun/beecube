@@ -78,7 +78,7 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '同步拍'}} enableReachBottom={true}>
-                <ListView tabs={tabs} dataFetcher={this.loadData}/>
+                <ListView tabs={tabs} dataFetcher={this.loadData} tabJustify={"justify-between"} />
             </PageLayout>
         );
     }

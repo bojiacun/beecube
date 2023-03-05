@@ -21,7 +21,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', page: pageIndex};
+        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id) {
             params.classId = tab.id;
         }
@@ -59,7 +59,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         return (
-            <PageLayout statusBarProps={{title: '所有拍品'}}>
+            <PageLayout statusBarProps={{title: '所有拍品'}} enableReachBottom={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
             </PageLayout>
         );
