@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.Auction;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IAuctionService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.vo.PerformanceVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/paimai/api/auctions")
@@ -27,6 +29,9 @@ public class WxAppAuctionController {
 
     @Resource
     IAuctionService auctionService;
+
+    @Resource
+    IPerformanceService performanceService;
 
 
     @AutoLog(value = "拍卖会表-分页列表查询")
@@ -60,5 +65,18 @@ public class WxAppAuctionController {
         Page<Auction> page = new Page<>(pageNo, pageSize);
         IPage<Auction> pageList = auctionService.page(page, queryWrapper);
         return Result.OK(pageList);
+    }
+
+    /**
+     * 获取该场拍卖会下的所有专场
+     * @param id
+     * @return
+     */
+    @GetMapping("/performances")
+    public Result<List<PerformanceVO>> performanceList(@RequestParam("id") String id) {
+        QueryWrapper<PerformanceVO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("p.status", 1);
+        queryWrapper.eq("p.auction_id", id);
+        return Result.OK(performanceService.selectListVO(queryWrapper));
     }
 }

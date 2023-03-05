@@ -23,4 +23,5 @@ public interface PerformanceMapper extends BaseMapper<Performance> {
     PerformanceVO getDetail(@Param("id") String id);
 
     IPage<PerformanceVO> selectPageVO(Page<PerformanceVO> page, @Param(Constants.WRAPPER) QueryWrapper<PerformanceVO> queryWrapper);
+    List<PerformanceVO> selectListVO(@Param(Constants.WRAPPER) QueryWrapper<PerformanceVO> queryWrapper);
 }

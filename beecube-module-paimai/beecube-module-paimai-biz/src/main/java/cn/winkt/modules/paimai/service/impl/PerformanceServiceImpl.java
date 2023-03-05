@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 订单售后表
@@ -32,5 +33,10 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     @Override
     public IPage<PerformanceVO> selectPageVO(Page<PerformanceVO> page, QueryWrapper<PerformanceVO> queryWrapper) {
         return performanceMapper.selectPageVO(page, queryWrapper);
+    }
+
+    @Override
+    public List<PerformanceVO> selectListVO(QueryWrapper<PerformanceVO> queryWrapper) {
+        return performanceMapper.selectListVO(queryWrapper);
     }
 }

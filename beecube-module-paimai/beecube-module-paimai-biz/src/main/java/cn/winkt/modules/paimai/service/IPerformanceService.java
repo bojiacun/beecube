@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 订单售后表
  * @Author: jeecg-boot
@@ -18,4 +20,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IPerformanceService extends IService<Performance> {
     PerformanceVO getDetail(String id);
     IPage<PerformanceVO> selectPageVO(Page<PerformanceVO> page, QueryWrapper<PerformanceVO> queryWrapper);
+    List<PerformanceVO> selectListVO(QueryWrapper<PerformanceVO> queryWrapper);
 }

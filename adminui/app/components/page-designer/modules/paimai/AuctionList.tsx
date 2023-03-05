@@ -103,7 +103,7 @@ const AuctionListModule = (props: any) => {
                             position: 'relative'
                         }}>
                             <div style={{paddingTop: '100%', width: '100%', position: 'relative'}}>
-                                <img src={resolveUrl(item.images.split(',')[0])} alt={item.name} style={{
+                                <img src={resolveUrl(item.preview)} alt={item.name} style={{
                                     position: 'absolute',
                                     left: 0,
                                     top: 0,
