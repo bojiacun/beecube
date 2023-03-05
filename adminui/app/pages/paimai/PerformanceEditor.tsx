@@ -49,7 +49,18 @@ const PerformanceEditor = (props: any) => {
     if (!model) return <></>
 
     const newModel = {status: 0, type: 1, endTime: '', images: '', ...model};
-
+    let titleText;
+    switch (type) {
+        case 1:
+            titleText = '限时拍';
+            break;
+        case 2:
+            titleText = '同步拍';
+            break;
+        case 3:
+            titleText = '公益拍';
+            break;
+    }
     return (
         <>
             <Modal
@@ -60,7 +71,7 @@ const PerformanceEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}{type == 1 ? '限时拍':'同步拍'}专场</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}{titleText}专场</Modal.Title>
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
                         onSubmit={handleOnSubmit}>
@@ -73,8 +84,8 @@ const PerformanceEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
-                                    {type == 1 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
-                                    {type == 1 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
+                                    {type != 2 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
+                                    {type != 2 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
 
 

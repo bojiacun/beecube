@@ -169,13 +169,25 @@ const PerformanceList = (props: any) => {
     const handleOnAdd = () => {
         setEditModal({});
     }
+    let titleText;
+    switch (type) {
+        case 1:
+            titleText = '限时拍';
+            break;
+        case 2:
+            titleText = '同步拍';
+            break;
+        case 3:
+            titleText = '公益拍';
+            break;
+    }
     return (
         <>
             <Card>
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">{type == 1 ? '限时拍':'同步拍'}专场管理</h4>
+                            <h4 className="mb-0">{titleText}专场管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -185,7 +197,7 @@ const PerformanceList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建{type == 1 ? '限时拍':'同步拍'}专场</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建{titleText}专场</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
