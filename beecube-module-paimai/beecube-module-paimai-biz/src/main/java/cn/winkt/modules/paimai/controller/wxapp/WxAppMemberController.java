@@ -254,12 +254,6 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-        if(new Date().compareTo(actualEndTime) >= 0) {
-            throw new JeecgBootException("该拍品已结束拍卖");
-        }
-
-
-
         if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
             Performance performance = performanceService.getById(goods.getPerformanceId());
             if(performance != null) {
@@ -270,6 +264,9 @@ public class WxAppMemberController {
                     throw new JeecgBootException("拍品所在专场未开始");
                 }
             }
+        }
+        else if(new Date().compareTo(actualEndTime) >= 0) {
+            throw new JeecgBootException("该拍品已结束拍卖");
         }
 
 
