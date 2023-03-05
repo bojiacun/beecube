@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import Taro, {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
@@ -86,8 +86,8 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <View className={classNames('bg-white px-4 py-3 flex items-center space-x-4 text-gray-700', tabJustify)}
-                  style={{overflowY: 'hidden', overflowX: 'auto'}}>
+            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700', tabJustify)}
+                  style={{overflowY: 'hidden', overflowX: 'auto', paddingTop: Taro.pxTransform(120)}}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(index === selectedIndex ? styles.active : '')} onClick={() => {
@@ -104,10 +104,12 @@ const ListView: FC<ListViewProps> = (props) => {
                 })}
             </View>
             {data.length === 0 && <NoData />}
+            <View style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);
             })}
+            </View>
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
         </>
     );
