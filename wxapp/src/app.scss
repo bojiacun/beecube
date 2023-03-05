@@ -593,7 +593,7 @@ button, button[plain] {
 }
 .btn {
     border: none;
-    @apply py-2 px-4 inline-block rounded-full shadow-xl;
+    @apply py-2 px-4 inline-block rounded-full;
     &.button-hover {
         @apply transform scale-90;
     }
@@ -607,6 +607,9 @@ button, button[plain] {
     }
     &.btn-danger {
         @apply from-red-400 to-red-600 bg-gradient-to-r text-white;
+    }
+    &.btn-outline {
+        @apply text-gray-600 border-solid border-1 border-gray-400;
     }
 }
 

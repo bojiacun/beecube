@@ -11,6 +11,7 @@ import PerformanceListModule from "./components/diy/modules/PerformanceList";
 import SyncPerformanceListModule  from "./components/diy/modules/SyncPerformanceList";
 import AuctionListModule from "./components/diy/modules/AuctionList";
 import Title1Module from "./components/diy/modules/Title1";
+import ViewMoreModule from "./components/diy/modules/ViewMore";
 
 
 const modules = {
@@ -27,6 +28,7 @@ const modules = {
     'SYNC_PERFORMANCE_LIST_MODULE': SyncPerformanceListModule,
     'AUCTION_LIST_MODULE': AuctionListModule,
     'TITLE1_MODULE': Title1Module,
+    'VIEWMORE_MODULE': ViewMoreModule,
 };
 
 
