@@ -352,8 +352,51 @@ public class WxAppMemberController {
             return Result.error("出价失败");
         }
     }
+    @PostMapping("/deposits/performance")
+    @Transactional
+    public Result<?> payPerformanceDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("操作失败找不到专场");
+        }
+        Performance performance = performanceService.getById(id);
+        if(performance == null) {
+            throw new JeecgBootException("操作失败找不到专场");
+        }
+        if(performance.getDeposit() == null || performance.getDeposit() <= 0) {
+            throw new JeecgBootException("该拍品无需缴纳保证金");
+        }
+
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+        GoodsDeposit goodsDeposit = new GoodsDeposit();
+        goodsDeposit.setPerformanceId(id);
+        goodsDeposit.setMemberId(loginUser.getId());
+        goodsDeposit.setMemberAvatar(loginUser.getAvatar());
+        goodsDeposit.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+        goodsDeposit.setAuctionId(performance.getAuctionId());
+        goodsDeposit.setPrice(performance.getDeposit());
+        goodsDeposit.setStatus(0);
+        boolean result = goodsDepositService.save(goodsDeposit);
+        if(!result) {
+            throw new JeecgBootException("支付失败");
+        }
+        PayLog payLog = getPayLog(goodsDeposit.getId());
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+        BigDecimal payAmount = BigDecimal.valueOf(performance.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
+
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/deposit_notify/"+AppContext.getApp())
+                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                .body("支付专场保证金:")
+                .spbillCreateIp("127.0.0.1")
+                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                .detail(performance.getTitle())
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        return Result.OK("",wxPayService.createOrder(request));
+    }
     /**
-     * 缴纳保证金，并生成订单
+     * 缴纳拍品保证金，并生成订单
      * @param id
      * @return
      * @throws InvocationTargetException
