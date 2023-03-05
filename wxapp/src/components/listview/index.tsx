@@ -1,10 +1,12 @@
-import {FC, ReactElement, useState} from "react";
+import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
+import LoadMore from "../loadmore";
+import utils from "../../lib/utils";
 
 export interface ListViewTabItem {
     label: string;
@@ -27,7 +29,19 @@ const ListView: FC<ListViewProps> = (props) => {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
+    const [noMore, setNoMore] = useState<boolean>(false);
+    const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
+
+    useEffect(()=>{
+        if(tabs && tabs.length > 0) {
+            utils.showLoading();
+            dataFetcher(1, tabs[0], 0).then(res => {
+                setData([...res.data.result.records]);
+                utils.hideLoading();
+            }).catch(() => utils.hideLoading());
+        }
+    }, [tabs]);
 
     //下拉刷新
     usePullDownRefresh(() => {
@@ -39,9 +53,16 @@ const ListView: FC<ListViewProps> = (props) => {
 
     //下拉加载
     useReachBottom(() => {
+        setLoadingMore(true);
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
-            data.push(res.data.result.records);
-            setData([...data]);
+            let records = res.data.result.records;
+            if(records.length == 0) {
+                setNoMore(true);
+            }
+            else {
+                setData([...data, ...records]);
+            }
+            setLoadingMore(false);
         })
         setPage(page + 1);
     });
@@ -69,12 +90,9 @@ const ListView: FC<ListViewProps> = (props) => {
             {data.length === 0 && <NoData />}
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
-                return (
-                    <View>
-                        {tab.template(item)}
-                    </View>
-                );
+                return tab.template(item);
             })}
+            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
         </>
     );
 }

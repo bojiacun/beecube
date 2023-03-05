@@ -6,6 +6,8 @@ import classNames from "classnames";
 import {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
 import stylesFlow from '../../flow.module.scss';
+import LoadMore from "../loadmore";
+import NoData from "../nodata";
 
 export interface ListViewTabItem {
     label: string;
@@ -29,6 +31,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
+    const [noMore, setNoMore] = useState<boolean>(false);
+    const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
     useEffect(()=>{
         if(tabs && tabs.length > 0) {
@@ -50,9 +54,16 @@ const FlowListView: FC<ListViewProps> = (props) => {
 
     //下拉加载
     useReachBottom(() => {
+        setLoadingMore(true);
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
-            data.push(res.data.result.records);
-            setData([...data]);
+            let records = res.data.result.records;
+            if(records.length == 0) {
+                setNoMore(true);
+            }
+            else {
+                setData([...data, ...records]);
+            }
+            setLoadingMore(false);
         })
         setPage(page + 1);
     });
@@ -79,12 +90,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </View>}
-            {data.length === 0 &&
-                <View className={'text-center mt-20 text-gray-300'}>
-                    <View className={'iconfont icon-zanwushuju text-9xl'} />
-                    <View>暂无数据</View>
-                </View>
-            }
+            {data.length === 0 && <NoData />}
             {data.length > 0 &&
                 <View className={classNames('p-4', stylesFlow.flowWrapper)}>
             {data.map((item) => {
@@ -92,6 +98,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 return tab.template(item);
             })}
             </View>}
+            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
         </>
     );
 }
