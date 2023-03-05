@@ -3,7 +3,7 @@
 <mapper namespace="cn.winkt.modules.paimai.mapper.GoodsMapper">
     <select id="getDetail" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
         select
-            g.*,p.title as performance_title,
+            g.*,p.title as performance_title,p.deposit as performance_deposit,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,

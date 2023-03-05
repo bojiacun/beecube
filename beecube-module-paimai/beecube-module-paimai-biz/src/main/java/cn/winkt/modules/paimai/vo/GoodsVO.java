@@ -21,6 +21,7 @@ public class GoodsVO {
     private java.lang.Object commission;
     private java.lang.String performanceId;
     private String performanceTitle;
+    private java.lang.Float performanceDeposit;
     private java.util.Date endTime;
     private java.lang.Object fields;
 

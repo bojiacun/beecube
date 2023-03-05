@@ -59,6 +59,11 @@ export default class Index extends Component<any, any> {
             let detail = res.data.result;
             this.setState({detail: detail});
             return this.loadData(detail.id, 1, true);
+            //查询是否需要缴纳保证金
+            request.get('/paimai/api/members/deposited/performance', {params: {id: detail.id}}).then(res => {
+                detail.deposited = res.data.result;
+                this.setState({detail: detail});
+            });
         })
     }
 
@@ -77,7 +82,7 @@ export default class Index extends Component<any, any> {
     payDeposit() {
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
+        request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res=>{
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
@@ -161,7 +166,7 @@ export default class Index extends Component<any, any> {
                 </View>
                 <LoadMore noMore={noMore} loading={loadingMore}/>
                 <View style={{height: Taro.pxTransform(124)}}/>
-                {detail.deposit > 0 &&
+                {!detail.deposited &&
                 <LoginView>
                     <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>
