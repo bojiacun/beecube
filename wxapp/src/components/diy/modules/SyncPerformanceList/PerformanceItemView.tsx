@@ -15,7 +15,7 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
     const {radius = 0, item} = props;
 
     return (
-        <View className={'bg-white overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
+        <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
             <Navigator url={'/pages/performance/detail?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
