@@ -2,6 +2,7 @@ import {Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
 import {FC} from "react";
+import utils from "../../../../lib/utils";
 const numeral = require('numeral');
 
 export interface GoodsItemViewProps extends Partial<any> {
@@ -15,7 +16,7 @@ const GoodsItemView:FC<GoodsItemViewProps> = (props) => {
         <View className={'bg-white overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
             <Navigator url={'/pages/goods/detail?id='+item.id}>
                 <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
-                    <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}} className={'absolute z-0 inset-0 block w-full h-full'} src={item.images.split(',')[0]}/>
+                    <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}} className={'absolute z-0 inset-0 block w-full h-full'} src={utils.resolveUrl(item.images.split(',')[0])}/>
                 </View>
                 <View className={'px-2 mt-2'}>{item.title}</View>
                 <View className={'px-2 mb-2 text-sm'}>

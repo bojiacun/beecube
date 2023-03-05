@@ -4,6 +4,7 @@ import FallbackImage from "../../../FallbackImage";
 import {FC, useEffect, useMemo, useState} from "react";
 import moment from "moment";
 import Clocker from "clocker-js/Clocker";
+import utils from "../../../../lib/utils";
 
 const numeral = require('numeral');
 
@@ -50,7 +51,7 @@ const PerformanceItemView: FC<GoodsItemViewProps> = (props) => {
             <Navigator url={'/pages/performance/detail?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                   className={'block w-full'} src={item.preview}/>
+                                   className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                 </View>
                 <View className={'pt-2 px-4 text-xl font-bold'}>{item.title}</View>
                 <View className={'flex justify-between pt-2 pb-4 px-4'}>
