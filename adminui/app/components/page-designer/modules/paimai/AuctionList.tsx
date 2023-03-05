@@ -19,6 +19,7 @@ export const defaultData = {
     basic: {
         itemBorderRadius: 15,
         count: 2,
+        dataSource: 1,
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -47,6 +48,11 @@ const AuctionListModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e) => formik.submitForm()}>
+                                    <BootstrapRadioGroup
+                                        options={[{label: '进行中拍卖会', value: '1'}, {label: '往期拍卖会', value: '2'}]}
+                                        name={'dataSource'}
+                                        label={'数据类型'}
+                                    />
                                     <BootstrapInput label={'数据条数'} name={'count'}/>
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'}/>
                                 </Form>
