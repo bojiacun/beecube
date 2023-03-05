@@ -10,6 +10,7 @@ import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
 import {connect} from "react-redux";
+import './detail.scss';
 
 const numeral = require('numeral');
 // @ts-ignore
