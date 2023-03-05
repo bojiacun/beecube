@@ -195,9 +195,13 @@ public class WxAppMemberController {
         }
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        queryWrapper.eq(GoodsDeposit::getGoodsId, id);
         if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            queryWrapper.or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+            queryWrapper.and(wq->{
+                queryWrapper.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+            });
+        }
+        else {
+            queryWrapper.eq(GoodsDeposit::getGoodsId, id);
         }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
@@ -464,9 +468,13 @@ public class WxAppMemberController {
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
         if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            queryWrapper.or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+            queryWrapper.and(wq -> {
+                wq.eq(GoodsDeposit::getGoodsId, goods.getId()).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
+            });
+        }
+        else {
+            queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
         }
         if(goodsDepositService.count(queryWrapper) > 0) {
             throw new JeecgBootException("您已经缴纳本拍品或本场保证金");
