@@ -55,7 +55,6 @@ const TimeCountDowner : FC<TimeCountDownerProps> = (props) => {
             setCounter(v=>v+1);
         }, 1000);
         return () => {
-            clocker?.close();
             clearInterval(timer);
         }
     }, [])
