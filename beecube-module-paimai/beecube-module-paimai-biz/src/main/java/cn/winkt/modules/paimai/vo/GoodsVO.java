@@ -66,7 +66,7 @@ public class GoodsVO {
     private Integer viewCount;
     private Integer offerCount;
     private Integer followCount;
-
     private Boolean followed;
     private Float currentPrice;
+    private Integer depositCount;
 }

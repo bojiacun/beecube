@@ -7,7 +7,8 @@
             (select count(*) from paimai_goods_offers go where go.performance_id=p.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.performance_id=p.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=p.id) as follow_count,
-            (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count
+            (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count,
+            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id) as deposit_count
         from paimai_performances p where id = #{id}
     </select>
 
@@ -17,7 +18,8 @@
             (select count(*) from paimai_goods_offers go where go.goods_id=p.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=p.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=p.id) as follow_count,
-            (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count
+            (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count,
+            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id) as deposit_count
         from paimai_performances p ${ew.customSqlSegment}
     </select>
 </mapper>

@@ -7,7 +7,8 @@
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
-            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id) as deposit_count
         from paimai_goods g where id = #{id}
     </select>
 
@@ -17,7 +18,8 @@
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
-            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id) as deposit_count
         from paimai_goods g ${ew.customSqlSegment}
     </select>
 

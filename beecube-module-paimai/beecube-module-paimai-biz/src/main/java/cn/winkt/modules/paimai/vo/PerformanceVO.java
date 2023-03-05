@@ -34,4 +34,5 @@ public class PerformanceVO {
     private Integer viewCount;
     private Integer offerCount;
     private Integer followCount;
+    private Integer depositCount;
 }
