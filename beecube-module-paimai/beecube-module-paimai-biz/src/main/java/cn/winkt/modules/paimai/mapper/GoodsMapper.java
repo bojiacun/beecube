@@ -22,6 +22,7 @@ public interface GoodsMapper extends BaseMapper<Goods> {
     GoodsVO getDetail(@Param("id") String id);
 
     IPage<GoodsVO> selectPageVO(Page<Goods> page, @Param(Constants.WRAPPER) QueryWrapper<Goods> queryWrapper);
+    List<GoodsVO> selectListVO(@Param(Constants.WRAPPER) QueryWrapper<Goods> queryWrapper);
 
     IPage<Goods> queryMemberViewGoods(@Param("member_id") String member_id, Page<Goods> page);
 

@@ -22,7 +22,16 @@
             (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id) as deposit_count
         from paimai_goods g ${ew.customSqlSegment}
     </select>
-
+    <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
+        select
+            g.*,
+            (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id) as deposit_count
+        from paimai_goods g ${ew.customSqlSegment}
+    </select>
     <select id="queryMemberViewGoods" resultType="cn.winkt.modules.paimai.entity.Goods">
         select g.* from paimai_goods_views gv left join paimai_goods g on g.id=gv.goods_id
         where g.status = 1 and gv.member_id = #{member_id} order by gv.create_time desc

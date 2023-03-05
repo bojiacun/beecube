@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 拍品表
@@ -33,6 +34,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public IPage<GoodsVO> selectPageVO(Page<Goods> page, QueryWrapper<Goods> queryWrapper) {
         return goodsMapper.selectPageVO(page, queryWrapper);
+    }
+
+    @Override
+    public List<GoodsVO> selectListVO(QueryWrapper<Goods> queryWrapper) {
+        return goodsMapper.selectListVO(queryWrapper);
     }
 
     @Override

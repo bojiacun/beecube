@@ -2,9 +2,11 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/paimai/api/performances")
@@ -29,6 +32,9 @@ public class WxAppPerformanceController {
 
     @Resource
     IPerformanceService performanceService;
+
+    @Resource
+    IGoodsService goodsService;
 
 
     @AutoLog(value = "专场表-分页列表查询")
@@ -80,4 +86,20 @@ public class WxAppPerformanceController {
         return Result.OK(performanceService.getDetail(id));
     }
 
+    /**
+     * 获取该场下所有拍品
+     * @param id
+     * @return
+     */
+    @GetMapping("/goods")
+    public Result<List<GoodsVO>> detailGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到专场");
+        }
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("g.status", 1);
+        queryWrapper.eq("g.peformance_id", id);
+
+        return Result.OK(goodsService.selectListVO(queryWrapper));
+    }
 }
