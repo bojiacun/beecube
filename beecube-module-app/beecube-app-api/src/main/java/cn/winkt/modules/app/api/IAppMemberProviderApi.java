@@ -26,28 +26,28 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * 1发送系统消息
      * @param message 使用构造器赋值参数 如果不设置category(消息类型)则默认为2 发送系统消息
      */
-    @PostMapping("/sys/api/sendSysAnnouncement")
+    @PostMapping("/app/api/sendSysAnnouncement")
     void sendSysAnnouncement(@RequestBody MessageDTO message);
 
     /**
      * 2发送消息 附带业务参数
      * @param message 使用构造器赋值参数
      */
-    @PostMapping("/sys/api/sendBusAnnouncement")
+    @PostMapping("/app/api/sendBusAnnouncement")
     void sendBusAnnouncement(@RequestBody BusMessageDTO message);
 
     /**
      * 3通过模板发送消息
      * @param message 使用构造器赋值参数
      */
-    @PostMapping("/sys/api/sendTemplateAnnouncement")
+    @PostMapping("/app/api/sendTemplateAnnouncement")
     void sendTemplateAnnouncement(@RequestBody TemplateMessageDTO message);
 
     /**
      * 4通过模板发送消息 附带业务参数
      * @param message 使用构造器赋值参数
      */
-    @PostMapping("/sys/api/sendBusTemplateAnnouncement")
+    @PostMapping("/app/api/sendBusTemplateAnnouncement")
     void sendBusTemplateAnnouncement(@RequestBody BusTemplateMessageDTO message);
 
     /**
@@ -55,7 +55,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param templateDTO 使用构造器赋值参数
      * @return
      */
-    @PostMapping("/sys/api/parseTemplateByCode")
+    @PostMapping("/app/api/parseTemplateByCode")
     String parseTemplateByCode(@RequestBody TemplateDTO templateDTO);
 
     /**
@@ -63,7 +63,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param id
      * @return
      */
-    @GetMapping("/sys/api/getUserById")
+    @GetMapping("/app/api/getUserById")
     LoginUser getUserById(@RequestParam("id") String id);
 
     /**
@@ -71,7 +71,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return
      */
-    @GetMapping("/sys/api/getRolesByUsername")
+    @GetMapping("/app/api/getRolesByUsername")
     List<String> getRolesByUsername(@RequestParam("username") String username);
 
     /**
@@ -79,7 +79,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return 部门 id
      */
-    @GetMapping("/sys/api/getDepartIdsByUsername")
+    @GetMapping("/app/api/getDepartIdsByUsername")
     List<String> getDepartIdsByUsername(@RequestParam("username") String username);
 
     /**
@@ -87,7 +87,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return 部门 name
      */
-    @GetMapping("/sys/api/getDepartNamesByUsername")
+    @GetMapping("/app/api/getDepartNamesByUsername")
     List<String> getDepartNamesByUsername(@RequestParam("username") String username);
 
     /**
@@ -96,7 +96,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryDictItemsByCode")
+    @GetMapping("/app/api/queryDictItemsByCode")
     List<DictModel> queryDictItemsByCode(@RequestParam("code") String code);
 
     /**
@@ -105,20 +105,20 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryEnableDictItemsByCode")
+    @GetMapping("/app/api/queryEnableDictItemsByCode")
     public List<DictModel> queryEnableDictItemsByCode(@RequestParam("code") String code);
 
     /** 11查询所有的父级字典，按照create_time排序
      * @return List<DictModel> 字典值集合
      */
-    @GetMapping("/sys/api/queryAllDict")
+    @GetMapping("/app/api/queryAllDict")
     List<DictModel> queryAllDict();
 
     /**
      * 12查询所有分类字典
      * @return
      */
-    @GetMapping("/sys/api/queryAllSysCategory")
+    @GetMapping("/app/api/queryAllSysCategory")
     List<SysCategoryModel> queryAllSysCategory();
 
     /**
@@ -129,14 +129,14 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryTableDictItemsByCode")
+    @GetMapping("/app/api/queryTableDictItemsByCode")
     List<DictModel> queryTableDictItemsByCode(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code);
 
     /**
      * 14查询所有部门 作为字典信息 id -->value,departName -->text
      * @return
      */
-    @GetMapping("/sys/api/queryAllDepartBackDictModel")
+    @GetMapping("/app/api/queryAllDepartBackDictModel")
     List<DictModel> queryAllDepartBackDictModel();
 
     /**
@@ -144,7 +144,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param busType 业务类型
      * @param busId 业务id
      */
-    @GetMapping("/sys/api/updateSysAnnounReadFlag")
+    @GetMapping("/app/api/updateSysAnnounReadFlag")
     public void updateSysAnnounReadFlag(@RequestParam("busType") String busType, @RequestParam("busId")String busId);
 
     /**
@@ -155,7 +155,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param filterSql
      * @return
      */
-    @GetMapping("/sys/api/queryFilterTableDictInfo")
+    @GetMapping("/app/api/queryFilterTableDictInfo")
     List<DictModel> queryFilterTableDictInfo(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("filterSql") String filterSql);
 
     /**
@@ -167,14 +167,14 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Deprecated
-    @GetMapping("/sys/api/queryTableDictByKeys")
+    @GetMapping("/app/api/queryTableDictByKeys")
     public List<String> queryTableDictByKeys(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("keyArray") String[] keyArray);
 
     /**
      * 18查询所有用户 返回ComboModel
      * @return
      */
-    @GetMapping("/sys/api/queryAllUserBackCombo")
+    @GetMapping("/app/api/queryAllUserBackCombo")
     public List<ComboModel> queryAllUserBackCombo();
 
     /**
@@ -184,7 +184,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param pageSize 每页条数
      * @return
      */
-    @GetMapping("/sys/api/queryAllUser")
+    @GetMapping("/app/api/queryAllUser")
     public JSONObject queryAllUser(@RequestParam(name="userIds",required=false)String userIds, @RequestParam(name="pageNo",required=false) Integer pageNo, @RequestParam(name="pageSize",required=false) int pageSize);
 
 
@@ -193,7 +193,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param roleIds 默认选中角色
      * @return
      */
-    @GetMapping("/sys/api/queryAllRole")
+    @GetMapping("/app/api/queryAllRole")
     public List<ComboModel> queryAllRole(@RequestParam(name = "roleIds",required = false)String[] roleIds);
 
     /**
@@ -201,7 +201,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return
      */
-    @GetMapping("/sys/api/getRoleIdsByUsername")
+    @GetMapping("/app/api/getRoleIdsByUsername")
     public List<String> getRoleIdsByUsername(@RequestParam("username")String username);
 
     /**
@@ -209,14 +209,14 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param orgCode
      * @return
      */
-    @GetMapping("/sys/api/getDepartIdsByOrgCode")
+    @GetMapping("/app/api/getDepartIdsByOrgCode")
     public String getDepartIdsByOrgCode(@RequestParam("orgCode")String orgCode);
 
     /**
      * 23查询所有部门
      * @return
      */
-    @GetMapping("/sys/api/getAllSysDepart")
+    @GetMapping("/app/api/getAllSysDepart")
     public List<SysDepartModel> getAllSysDepart();
 
     /**
@@ -224,7 +224,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param departId
      * @return
      */
-    @GetMapping("/sys/api/getParentDepartId")
+    @GetMapping("/app/api/getParentDepartId")
     DictModel getParentDepartId(@RequestParam("departId")String departId);
 
     /**
@@ -232,7 +232,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param deptId
      * @return
      */
-    @GetMapping("/sys/api/getDeptHeadByDepId")
+    @GetMapping("/app/api/getDeptHeadByDepId")
     public List<String> getDeptHeadByDepId(@RequestParam("deptId") String deptId);
 
     /**
@@ -240,7 +240,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param userIds
      * @param cmd
      */
-    @GetMapping("/sys/api/sendWebSocketMsg")
+    @GetMapping("/app/api/sendWebSocketMsg")
     public void sendWebSocketMsg(@RequestParam("userIds")String[] userIds, @RequestParam("cmd") String cmd);
 
     /**
@@ -248,7 +248,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param userIds 多个用户id
      * @return
      */
-    @GetMapping("/sys/api/queryAllUserByIds")
+    @GetMapping("/app/api/queryAllUserByIds")
     public List<LoginUser> queryAllUserByIds(@RequestParam("userIds") String[] userIds);
 
     /**
@@ -257,7 +257,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      * @param userId
      */
-    @GetMapping("/sys/api/meetingSignWebsocket")
+    @GetMapping("/app/api/meetingSignWebsocket")
     void meetingSignWebsocket(@RequestParam("userId")String userId);
 
     /**
@@ -265,7 +265,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param userNames 多个用户账号
      * @return
      */
-    @GetMapping("/sys/api/queryUserByNames")
+    @GetMapping("/app/api/queryUserByNames")
     List<LoginUser> queryUserByNames(@RequestParam("userNames")String[] userNames);
 
 
@@ -274,7 +274,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return
      */
-    @GetMapping("/sys/api/getUserRoleSet")
+    @GetMapping("/app/api/getUserRoleSet")
     Set<String> getUserRoleSet(@RequestParam("username")String username);
 
     /**
@@ -282,7 +282,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param username
      * @return
      */
-    @GetMapping("/sys/api/getUserPermissionSet")
+    @GetMapping("/app/api/getUserPermissionSet")
     Set<String> getUserPermissionSet(@RequestParam("username") String username);
 
     /**
@@ -290,7 +290,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param onlineAuthDTO
      * @return
      */
-    @PostMapping("/sys/api/hasOnlineAuth")
+    @PostMapping("/app/api/hasOnlineAuth")
     boolean hasOnlineAuth(@RequestBody OnlineAuthDTO onlineAuthDTO);
 
     /**
@@ -298,7 +298,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param id 部门id
      * @return SysDepartModel 部门信息
      */
-    @GetMapping("/sys/api/selectAllById")
+    @GetMapping("/app/api/selectAllById")
     SysDepartModel selectAllById(@RequestParam("id") String id);
 
     /**
@@ -306,7 +306,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param userId
      * @return
      */
-    @GetMapping("/sys/api/queryDeptUsersByUserId")
+    @GetMapping("/app/api/queryDeptUsersByUserId")
     List<String> queryDeptUsersByUserId(@RequestParam("userId") String userId);
 
 
@@ -318,7 +318,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryUserRoles")
+    @GetMapping("/app/api/queryUserRoles")
     Set<String> queryUserRoles(@RequestParam("username")String username);
 
     /**
@@ -327,7 +327,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryUserAuths")
+    @GetMapping("/app/api/queryUserAuths")
     Set<String> queryUserAuths(@RequestParam("username")String username);
 
     /**
@@ -337,7 +337,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/getDynamicDbSourceById")
+    @GetMapping("/app/api/getDynamicDbSourceById")
     DynamicDataSourceModel getDynamicDbSourceById(@RequestParam("dbSourceId") String dbSourceId);
 
     /**
@@ -347,7 +347,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/getDynamicDbSourceByCode")
+    @GetMapping("/app/api/getDynamicDbSourceByCode")
     DynamicDataSourceModel getDynamicDbSourceByCode(@RequestParam("dbSourceCode") String dbSourceCode);
 
     /**
@@ -368,7 +368,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/translateDictFromTable")
+    @GetMapping("/app/api/translateDictFromTable")
     String translateDictFromTable(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("key") String key);
 
     /**
@@ -378,7 +378,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/translateDict")
+    @GetMapping("/app/api/translateDict")
     String translateDict(@RequestParam("code") String code, @RequestParam("key") String key);
 
     /**
@@ -389,7 +389,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/queryPermissionDataRule")
+    @GetMapping("/app/api/queryPermissionDataRule")
     List<SysPermissionDataRuleModel> queryPermissionDataRule(@RequestParam("component") String component, @RequestParam("requestPath")String requestPath, @RequestParam("username") String username);
 
     /**
@@ -398,7 +398,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return
      */
     @Override
-    @GetMapping("/sys/api/getCacheUser")
+    @GetMapping("/app/api/getCacheUser")
     SysUserCacheInfo getCacheUser(@RequestParam("username") String username);
 
     /**
@@ -406,7 +406,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param usernames
      * @return
      */
-    @GetMapping("/sys/api/queryUsersByUsernames")
+    @GetMapping("/app/api/queryUsersByUsernames")
     List<JSONObject> queryUsersByUsernames(@RequestParam("usernames") String usernames);
 
     /**
@@ -414,7 +414,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param ids
      * @return
      */
-    @RequestMapping("/sys/api/queryUsersByIds")
+    @RequestMapping("/app/api/queryUsersByIds")
     List<JSONObject> queryUsersByIds(@RequestParam("ids") String ids);
 
     /**
@@ -422,7 +422,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param orgCodes
      * @return
      */
-    @RequestMapping("/sys/api/queryDepartsByOrgcodes")
+    @RequestMapping("/app/api/queryDepartsByOrgcodes")
     List<JSONObject> queryDepartsByOrgcodes(@RequestParam("orgCodes") String orgCodes);
 
     /**
@@ -430,7 +430,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param ids
      * @return
      */
-    @GetMapping("/sys/api/queryDepartsByOrgIds")
+    @GetMapping("/app/api/queryDepartsByOrgIds")
     List<JSONObject> queryDepartsByOrgIds(@RequestParam("ids") String ids);
 
     /**
@@ -439,14 +439,14 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param title
      * @param content
      */
-    @GetMapping("/sys/api/sendEmailMsg")
+    @GetMapping("/app/api/sendEmailMsg")
     void sendEmailMsg(@RequestParam("email")String email,@RequestParam("title")String title,@RequestParam("content")String content);
     /**
      * 41 获取公司下级部门和公司下所有用户id
      * @param orgCode 部门编号
      * @return List<Map>
      */
-    @GetMapping("/sys/api/getDeptUserByOrgCode")
+    @GetMapping("/app/api/getDeptUserByOrgCode")
     List<Map> getDeptUserByOrgCode(@RequestParam("orgCode")String orgCode);
 
     /**
@@ -454,7 +454,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param ids 多个分类字典id
      * @return List<String>
      */
-    @GetMapping("/sys/api/loadCategoryDictItem")
+    @GetMapping("/app/api/loadCategoryDictItem")
     List<String> loadCategoryDictItem(@RequestParam("ids") String ids);
 
     /**
@@ -464,7 +464,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param keys     要查询的key
      * @return
      */
-    @GetMapping("/sys/api/loadDictItem")
+    @GetMapping("/app/api/loadDictItem")
     List<String> loadDictItem(@RequestParam("dictCode") String dictCode, @RequestParam("keys") String keys);
 
     /**
@@ -474,7 +474,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param dictCode 要查询的key
      * @return
      */
-    @GetMapping("/sys/api/getDictItems")
+    @GetMapping("/app/api/getDictItems")
     List<DictModel> getDictItems(@RequestParam("dictCode") String dictCode);
 
     /**
@@ -483,7 +483,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param dictCodeList
      * @return key = dictCode ； value=对应的字典项
      */
-    @RequestMapping("/sys/api/getManyDictItems")
+    @RequestMapping("/app/api/getManyDictItems")
     Map<String, List<DictModel>> getManyDictItems(@RequestParam("dictCodeList") List<String> dictCodeList);
 
     /**
@@ -495,7 +495,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param pageSize 每页条数
      * @return
      */
-    @GetMapping("/sys/api/loadDictItemByKeyword")
+    @GetMapping("/app/api/loadDictItemByKeyword")
     List<DictModel> loadDictItemByKeyword(@RequestParam("dictCode") String dictCode, @RequestParam("keyword") String keyword, @RequestParam(value = "pageSize", required = false) Integer pageSize);
 
     /**
@@ -503,7 +503,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param ids
      * @return
      */
-    @GetMapping("/sys/api/queryDepartsByIds")
+    @GetMapping("/app/api/queryDepartsByIds")
     List<JSONObject> queryDepartsByIds(@RequestParam("ids") String ids);
 
     /**
@@ -531,7 +531,7 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
     /**
      * 发送模板消息
      */
-    @PostMapping("/sys/api/sendTemplateMessage")
+    @PostMapping("/app/api/sendTemplateMessage")
     void sendTemplateMessage(@RequestBody MessageDTO message);
 
     /**
@@ -539,28 +539,28 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @param code
      * @return
      */
-    @GetMapping("/sys/api/getTemplateContent")
+    @GetMapping("/app/api/getTemplateContent")
     String getTemplateContent(@RequestParam("code") String code);
 
     /**
      * 新增数据日志
      * @param dataLogDto
      */
-    @PostMapping("/sys/api/saveDataLog")
+    @PostMapping("/app/api/saveDataLog")
     void saveDataLog(DataLogDTO dataLogDto);
 
     /**
      * 添加文件到知识库
      * @param sysFilesModel
      */
-    @PostMapping("/sys/api/addSysFiles")
+    @PostMapping("/app/api/addSysFiles")
     void addSysFiles(SysFilesModel sysFilesModel);
 
     /**
      * 通过文件路径获取文件id
      * @param fileId
      */
-    @GetMapping("/sys/api/getFileUrl")
+    @GetMapping("/app/api/getFileUrl")
     String getFileUrl(@RequestParam(name="fileId") String fileId);
 
     /**

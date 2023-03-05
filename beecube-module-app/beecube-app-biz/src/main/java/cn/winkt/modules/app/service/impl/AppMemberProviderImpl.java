@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.service.impl;
 
+import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
@@ -21,6 +22,9 @@ public class AppMemberProviderImpl implements AppMemberProvider {
 
     @Resource
     private IAppMemberService appMemberService;
+
+    @Resource
+    private SystemApi systemApi;
 
     @Override
     public Set<String> queryUserRoles(String username) {
@@ -60,12 +64,12 @@ public class AppMemberProviderImpl implements AppMemberProvider {
 
     @Override
     public String translateDictFromTable(String table, String text, String code, String key) {
-        return null;
+        return systemApi.translateDictFromTable(table, text, code, key);
     }
 
     @Override
     public String translateDict(String code, String key) {
-        return null;
+        return systemApi.translateDict(code, key);
     }
 
     @Override
@@ -80,26 +84,26 @@ public class AppMemberProviderImpl implements AppMemberProvider {
 
     @Override
     public List<DictModel> queryDictItemsByCode(String code) {
-        return null;
+        return systemApi.queryDictItemsByCode(code);
     }
 
     @Override
     public List<DictModel> queryEnableDictItemsByCode(String code) {
-        return null;
+        return systemApi.queryEnableDictItemsByCode(code);
     }
 
     @Override
     public List<DictModel> queryTableDictItemsByCode(String table, String text, String code) {
-        return null;
+        return systemApi.queryTableDictItemsByCode(table, text, code);
     }
 
     @Override
     public Map<String, List<DictModel>> translateManyDict(String dictCodes, String keys) {
-        return null;
+        return systemApi.translateManyDict(dictCodes, keys);
     }
 
     @Override
     public List<DictModel> translateDictFromTableByKeys(String table, String text, String code, String keys) {
-        return null;
+        return systemApi.translateDictFromTableByKeys(table, text, code, keys);
     }
 }
