@@ -104,6 +104,14 @@ const AppMemberList = (props: any) => {
             dataField: 'phone',
         },
         {
+            text: '余额',
+            dataField: 'money',
+        },
+        {
+            text: '积分',
+            dataField: 'score',
+        },
+        {
             text: '创建时间',
             dataField: 'createTime',
             headerStyle: {width: 200},
