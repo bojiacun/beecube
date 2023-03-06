@@ -33,6 +33,7 @@ export default class Index extends Component<any, any> {
         this.onShareTimeline = this.onShareTimeline.bind(this);
         this.toggleFollow = this.toggleFollow.bind(this);
         this.buy = this.buy.bind(this);
+        this.addInCart = this.addInCart.bind(this);
     }
 
 
@@ -42,11 +43,11 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        if(prevProps.context.userInfo == null || prevState.goods == null) {
+        if (prevProps.context.userInfo == null || prevState.goods == null) {
             const {context} = this.props;
             const {userInfo} = context;
             let {goods} = this.state;
-            if(userInfo != null && goods) {
+            if (userInfo != null && goods) {
                 //记录浏览记录
                 request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
                     console.log(res.data.result);
@@ -92,13 +93,39 @@ export default class Index extends Component<any, any> {
         Taro.setStorageSync("BUY_GOODS", JSON.stringify({...this.state.goods, count: 1}));
         Taro.navigateTo({url: '/pages/goods/confirm'}).then();
     }
+    addInCart() {
+        let cartGoods = JSON.parse(Taro.getStorageSync('CART') || '[]');
+        let goods = this.state.goods;
+        goods.selected = true;
+        goods.count = 1;
+        let existsIndex = -1;
+        cartGoods.forEach((item,index)=>{
+            if(goods.id == item.id) {
+                existsIndex = index;
+            }
+        });
+        if(existsIndex > -1) {
+            cartGoods[existsIndex].count++;
+        }
+        else {
+            cartGoods.push(goods);
+        }
+
+        Taro.setStorageSync('CART', JSON.stringify(cartGoods));
+        utils.showSuccess(false, '加入成功');
+    }
 
 
     renderButton() {
         return (
-                <Button disabled={this.state.posting} className={'btn btn-primary w-42'} onClick={this.buy}>
+            <View className={'flex items-center space-x-2'}>
+                <Button disabled={this.state.posting} className={'btn btn-warning'} onClick={this.addInCart}>
+                    <View>加入购物车</View>
+                </Button>
+                <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.buy}>
                     <View>立即购买</View>
                 </Button>
+            </View>
         );
     }
 
@@ -109,7 +136,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {goods} = this.state;
         const {systemInfo} = this.props;
-        if (goods == null) return <PageLoading />;
+        if (goods == null) return <PageLoading/>;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
             return {id: index, url: '#', image: item};
@@ -142,7 +169,7 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white p-4 mt-4'}>
                     <View className={'font-bold text-center text-lg'}>商品详情</View>
                     <View>
-                        <RichText nodes={goods.description}/>
+                        <RichText nodes={utils.resolveHtmlImageWidth(goods.description)} space={'nbsp'} />
                     </View>
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>

@@ -127,5 +127,8 @@ export default {
             pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
+    },
+    resolveHtmlImageWidth(html:string) {
+        return html?.replace(/<img /ig, '<img style="max-width:100%;height:auto;display:block;margin:10px 0;" ');
     }
 }
