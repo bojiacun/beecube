@@ -106,6 +106,7 @@ export default class Index extends Component<any, any> {
                         {cart.map((item: any, index) => {
                             return (
                                 <View className={'bg-white py-4 px-4 relative overflow-hidden flex items-center'}>
+                                    <View><Checkbox value={item.id} checked={item.selected} /></View>
                                     <View className={'flex-1 flex space-x-2'}>
                                         <FallbackImage mode={'aspectFit'} src={utils.resolveUrl(item.images.split(',')[0])}
                                                        style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>

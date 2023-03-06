@@ -36,10 +36,10 @@ export default class Index extends Component<any, any> {
         else {
             //从购物车获取商品信息
             let cart = JSON.parse(Taro.getStorageSync("CART")||'[]');
-            this.setState({goodsList: cart});
+            this.setState({goodsList: cart.filter(item=>item.selected)});
         }
         //获取用户默认地址
-        request.get('/app/api/members/addresses/default').then(res=>{
+        request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res=>{
             this.setState({address: res.data.result});
         })
     }
@@ -62,7 +62,7 @@ export default class Index extends Component<any, any> {
                 <View className={'grid grid-cols-1 divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4'}>
                         <View className={'font-bold text-lg'}>选择收货地址</View>
-                        <View className={'flex items-center justify-between m-4 p-4 bg-white'}>
+                        <View className={'flex items-center justify-between'}>
                             <View className={'flex-1 space-y-2'}>
                                 <View className={'font-bold space-x-2'}>
                                     <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
@@ -78,8 +78,7 @@ export default class Index extends Component<any, any> {
                         <View className={'font-bold text-lg'}>商品信息</View>
                         {goodsList.map((item)=>{
                             return (
-                                <View className={'bg-white py-4 px-4 relative overflow-hidden flex items-center'}>
-                                    <View><Checkbox value={item.id} checked={item.selected} /></View>
+                                <View className={'bg-white relative py-4 overflow-hidden flex items-center'}>
                                     <View className={'flex-1 flex space-x-2'}>
                                         <FallbackImage mode={'aspectFit'} src={utils.resolveUrl(item.images.split(',')[0])}
                                                        style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>
