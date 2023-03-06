@@ -38,7 +38,6 @@ export default class LoginView extends Component<LoginViewProps, any> {
     }
 
     onShow() {
-        console.log('child component on show');
         const token = Taro.getStorageSync("TOKEN");
         if (token && this.props.refreshUserInfo) {
             request.get('/app/api/members/profile').then(res => {

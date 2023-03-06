@@ -59,5 +59,6 @@ export default defineAppConfig({
         "onLocationChange",
         "startLocationUpdate",
         "getLocation",
+        "chooseLocation"
     ]
 })

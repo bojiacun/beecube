@@ -6,6 +6,7 @@ import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import {setUserInfo} from "../../store/actions";
 import request from "../../lib/request";
+import './newaddress.scss';
 
 // @ts-ignore
 @connect((state: any) => (
@@ -63,14 +64,10 @@ export default class Index extends Component<any, any> {
     }
 
     handleRegionChange(e) {
-        const index = e.detail.value;
-        let userInfo = this.props.context.userInfo;
-        userInfo.sex = index + 1;
-        this.props.updateUserInfo(userInfo);
+        this.setState({region: e.detail.value});
     }
 
     render() {
-        const {address} = this.state;
 
         return (
             <PageLayout statusBarProps={{title: (this.state.id == '' ? '新建':'编辑') + '收货地址'}}>
@@ -81,16 +78,16 @@ export default class Index extends Component<any, any> {
                                 <View className={'flex items-center space-x-2'}>
                                     <View>收货人</View>
                                 </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <Input name={'username'}  value={address?.username} className={'text-right'}/>
+                                <View className={'flex flex-1 items-center justify-end space-x-2'}>
+                                    <Input name={'username'} className={'text-right'}/>
                                 </View>
                             </View>
                             <View className={'flex items-center justify-between p-4'}>
                                 <View className={'flex items-center space-x-2'}>
                                     <View>联系电话</View>
                                 </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <Input name={'phone'} value={address?.phone} className={'text-right'}/>
+                                <View className={'flex flex-1 justify-end items-center space-x-2'}>
+                                    <Input name={'phone'} className={'text-right'}/>
                                 </View>
                             </View>
                             <View className={'p-4'}>
@@ -99,8 +96,9 @@ export default class Index extends Component<any, any> {
                                         <View className={'flex items-center space-x-2'}>
                                             <View>地区选择</View>
                                         </View>
-                                        <View className={'flex items-center space-x-2'}>
+                                        <View className={'flex flex-1 justify-end items-center space-x-2'}>
                                             <View>{this.state.region[0]} {this.state.region[1]} {this.state.region[2]}</View>
+                                            <View className={'iconfont text-xl iconfont font-bold icon-youjiantou_huaban'} />
                                         </View>
                                     </View>
                                 </Picker>
@@ -109,9 +107,9 @@ export default class Index extends Component<any, any> {
                                 <View className={'flex items-center space-x-2'}>
                                     <View>详细地址</View>
                                 </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <Input name={'address'} value={address?.address} className={'text-right'} ref={this.addressRef} />
-                                    <View onClick={this.chooseAddress} className={'iconfont iconfont icon-youjiantou_huaban'}/>
+                                <View className={'flex flex-1 items-center space-x-2 justify-end'}>
+                                    <Input name={'address'} className={'text-right'} ref={this.addressRef} />
+                                    <View onClick={this.chooseAddress} className={'iconfont text-xl iconfont font-bold icon-dizhiguanli'}/>
                                 </View>
                             </View>
                         </View>
