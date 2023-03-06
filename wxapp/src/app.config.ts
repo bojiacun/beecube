@@ -42,6 +42,10 @@ export default defineAppConfig({
                 text: '首页',
             },
             {
+                pagePath: 'pages/shop/cart',
+                text: '购物车',
+            },
+            {
                 pagePath: 'pages/my/index',
                 text: '我的',
             },

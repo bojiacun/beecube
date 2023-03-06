@@ -48,8 +48,8 @@ const TabBar = (props: TabBarProps) => {
   if(safeBottom > 10) safeBottom -= 10;
 
   return (
-    <View className={classNames('flex py-2 bottom-0 fixed w-screen box-content', tabStyles.tabbar)}
-          style={{backgroundColor: backgroundColor, paddingBottom: safeBottom > 0 ? Taro.pxTransform(safeBottom) : ''}}>
+    <View className={classNames('flex py-2 bottom-0 fixed w-screen box-border', tabStyles.tabbar)}
+          style={{backgroundColor: backgroundColor, paddingBottom: safeBottom > 0 ? Taro.pxTransform(safeBottom) : '', height: Taro.pxTransform(56+safeBottom)}}>
       {
         tabs.map((item: TabBarItem) => {
           return (
@@ -57,7 +57,7 @@ const TabBar = (props: TabBarProps) => {
               url={item.url}
               openType={'switchTab'}
               hoverClass="none"
-              className={'flex-1 flex flex-col items-center relative justify-around space-y-1.5'}
+              className={'flex-1 flex flex-col items-center relative justify-center space-y-1.5'}
               style={{color: (item.selected ? item.textColorActive: item.textColor)}}>
               <Image style={{display: 'block', width: Taro.pxTransform(28), height: Taro.pxTransform(28)}} mode={'aspectFit'} src={item.selected ? utils.resolveUrl(item.iconActive) : utils.resolveUrl(item.icon)}/>
               {cartNum > 0 && <view className={tabStyles.cartNum}>{cartNum}</view>}
