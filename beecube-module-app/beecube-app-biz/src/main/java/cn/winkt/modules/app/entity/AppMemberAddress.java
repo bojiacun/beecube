@@ -64,4 +64,6 @@ public class AppMemberAddress {
 	@Excel(name = "用户ID", width = 15)
     @ApiModelProperty(value = "用户ID")
 	private java.lang.String memberId;
+	private String username;
+	private String phone;
 }
