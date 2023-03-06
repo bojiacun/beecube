@@ -29,7 +29,11 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
                         />
                     </View>
                 </View>
-                <View className={'py-3 px-4'}>
+                <View className={'py-3 px-4 space-y-1'}>
+                    <View className={'space-x-2 flex text-sm'}>
+                        <View className={'border rounded px-1 border-red-500 border-solid text-red-500'}>公益拍</View>
+                        <View className={'border rounded px-1 border-red-500 border-solid text-red-500'}>保证金1:5</View>
+                    </View>
                     <View className={'text-xl font-medium'}>{item.title}</View>
                     <View className={'text-gray-400'}>拍卖时间：{item.startTime} 开始</View>
                 </View>

@@ -33,8 +33,8 @@ const BuyoutGoodsListModule = (props: any) => {
     }, [basic.showClass]);
 
     return (
-        <>
-            <View className={'py-4 flex items-center flex-nowrap overflow-auto w-full divide-x'}>
+        <View style={style}>
+            <View className={'py-4 -mx-4 flex items-center flex-nowrap overflow-auto w-full divide-x'}>
                 {classList.map((item, index) => {
                     return (
                         <Text onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4')} >
@@ -43,14 +43,14 @@ const BuyoutGoodsListModule = (props: any) => {
                     );
                 })}
             </View>
-            <View style={style} className={'grid grid-cols-2 gap-4'} {...rest}>
+            <View className={'grid grid-cols-2 gap-4'} {...rest}>
                 {goodsList.map((item: any) => {
                     return (
                         <GoodsItemView item={item} radius={basic.itemBorderRadius}/>
                     );
                 })}
             </View>
-        </>
+        </View>
     );
 
 }
