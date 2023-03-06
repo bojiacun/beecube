@@ -153,26 +153,7 @@ public class AppMemberAddressController extends JeecgController<AppMemberAddress
 		AppMemberAddress appMemberAddress = appMemberAddressService.getById(id);
 		return Result.OK(appMemberAddress);
 	}
-	 @AutoLog(value = "应用会员地址信息表-默认地址查询")
-	 @ApiOperation(value="应用会员地址信息表-默认地址查询", notes="应用会员地址信息表-默认地址查询")
-	 @GetMapping(value = "/default")
-	 public Result<?> queryByDefault(@RequestParam(name="id",required=true) String id) {
-		 LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		 LambdaQueryWrapper<AppMemberAddress> queryWrapper = new LambdaQueryWrapper<>();
-		 queryWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
-		 AppMemberAddress appMemberAddress = null;
-		 //如果为空则查询第一个
-		 List<AppMemberAddress> appMemberAddresses = appMemberAddressService.list(queryWrapper);
-		 if(appMemberAddresses.size() > 0) {
-			 appMemberAddress = appMemberAddresses.get(0);
-		 }
-		 for (AppMemberAddress adr : appMemberAddresses) {
-			 if (adr.getIsDefault() != null && adr.getIsDefault() == 1) {
-				 appMemberAddress = adr;
-			 }
-		 }
-		 return Result.OK(appMemberAddress);
-	 }
+
   /**
    * 导出excel
    *
