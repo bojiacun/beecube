@@ -569,7 +569,7 @@ page {
     font-size: 14px;
     overflow-x: hidden;
     overflow-y: auto;
-    @apply text-gray-800;
+    @apply text-gray-800 subpixel-antialiased;
     background-color: #f8f8f8;
     display: block;
     position: relative;

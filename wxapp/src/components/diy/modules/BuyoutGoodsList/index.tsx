@@ -34,10 +34,10 @@ const BuyoutGoodsListModule = (props: any) => {
 
     return (
         <View style={style}>
-            <View className={'py-4 -mx-4 flex items-center flex-nowrap overflow-auto w-full divide-x'}>
+            <View className={'py-4 -mx-4 flex items-center  flex-nowrap overflow-auto divide-x'}>
                 {classList.map((item, index) => {
                     return (
-                        <Text onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4')} >
+                        <Text onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4 whitespace-nowrap')} >
                             {item.name}
                         </Text>
                     );
