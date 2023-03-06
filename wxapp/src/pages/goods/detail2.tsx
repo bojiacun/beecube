@@ -93,14 +93,10 @@ export default class Index extends Component<any, any> {
 
 
     renderButton() {
-        const {goods} = this.state;
         return (
-            <View>
-                <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.buy}>
+                <Button disabled={this.state.posting} className={'btn btn-primary w-42'} onClick={this.buy}>
                     <View>立即购买</View>
-                    <View>RMB {numeral(goods.performanceDeposit || goods.deposit).format('0,0.00')}</View>
                 </Button>
-            </View>
         );
     }
 
@@ -142,7 +138,7 @@ export default class Index extends Component<any, any> {
                 </View>
 
                 <View className={'bg-white p-4 mt-4'}>
-                    <View className={'font-bold py-4'}>商品详情</View>
+                    <View className={'font-bold text-center text-lg'}>商品详情</View>
                     <View>
                         <RichText nodes={goods.description}/>
                     </View>
