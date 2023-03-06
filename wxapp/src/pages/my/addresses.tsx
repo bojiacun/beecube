@@ -4,6 +4,7 @@ import request from "../../lib/request";
 import {connect} from "react-redux";
 import PageLoading from "../../components/pageloading";
 import {Button, View, Text} from "@tarojs/components";
+import Taro from "@tarojs/taro";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -41,13 +42,13 @@ export default class Index extends Component<any, any> {
                                 <View className={'font-bold space-x-2'}><Text className={'text-lg'}>{item.username}</Text><Text>{item.phone}</Text></View>
                                 <View className={'text-gray-400'}>{item.address}</View>
                             </View>
-                            <View><Text className={'iconfont icon-edit'} /></View>
+                            <View><Text onClick={()=>Taro.navigateTo({url: 'newaddress?id='+item.id})} className={'iconfont icon-edit'} /></View>
                         </View>
                     );
                 })}
 
                 <View className={'px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'} style={{paddingBottom: safeBottom}}>
-                    <Button className={'btn btn-primary text-lg shadow-outer'}><Text className={'iconfont icon-plus'} />新建一个地址</Button>
+                    <Button onClick={()=>Taro.navigateTo({url: 'newaddress'})} className={'btn btn-primary text-lg shadow-outer'}><Text className={'iconfont icon-plus'} />新建一个地址</Button>
                 </View>
             </PageLayout>
         );
