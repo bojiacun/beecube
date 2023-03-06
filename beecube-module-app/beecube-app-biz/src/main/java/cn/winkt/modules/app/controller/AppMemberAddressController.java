@@ -8,9 +8,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.app.entity.AppMemberAddress;
 import cn.winkt.modules.app.service.IAppMemberAddressService;
@@ -44,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用会员地址信息表")
 @RestController
-@RequestMapping("/app/appMemberAddress")
+@RequestMapping("/app/members/addresses")
 public class AppMemberAddressController extends JeecgController<AppMemberAddress, IAppMemberAddressService> {
 	@Autowired
 	private IAppMemberAddressService appMemberAddressService;
@@ -95,6 +100,14 @@ public class AppMemberAddressController extends JeecgController<AppMemberAddress
 	@ApiOperation(value="应用会员地址信息表-编辑", notes="应用会员地址信息表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody AppMemberAddress appMemberAddress) {
+		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+		if(appMemberAddress.getIsDefault() != null && appMemberAddress.getIsDefault() == 1) {
+			//将其他的地址设置不默认
+			LambdaUpdateWrapper<AppMemberAddress> updateWrapper = new LambdaUpdateWrapper<>();
+			updateWrapper.set(AppMemberAddress::getIsDefault, 0);
+			updateWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
+			appMemberAddressService.update(updateWrapper);
+		}
 		appMemberAddressService.updateById(appMemberAddress);
 		return Result.OK("编辑成功!");
 	}
@@ -140,7 +153,26 @@ public class AppMemberAddressController extends JeecgController<AppMemberAddress
 		AppMemberAddress appMemberAddress = appMemberAddressService.getById(id);
 		return Result.OK(appMemberAddress);
 	}
-
+	 @AutoLog(value = "应用会员地址信息表-默认地址查询")
+	 @ApiOperation(value="应用会员地址信息表-默认地址查询", notes="应用会员地址信息表-默认地址查询")
+	 @GetMapping(value = "/default")
+	 public Result<?> queryByDefault(@RequestParam(name="id",required=true) String id) {
+		 LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+		 LambdaQueryWrapper<AppMemberAddress> queryWrapper = new LambdaQueryWrapper<>();
+		 queryWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
+		 AppMemberAddress appMemberAddress = null;
+		 //如果为空则查询第一个
+		 List<AppMemberAddress> appMemberAddresses = appMemberAddressService.list(queryWrapper);
+		 if(appMemberAddresses.size() > 0) {
+			 appMemberAddress = appMemberAddresses.get(0);
+		 }
+		 for (AppMemberAddress adr : appMemberAddresses) {
+			 if (adr.getIsDefault() != null && adr.getIsDefault() == 1) {
+				 appMemberAddress = adr;
+			 }
+		 }
+		 return Result.OK(appMemberAddress);
+	 }
   /**
    * 导出excel
    *
