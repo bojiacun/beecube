@@ -15,12 +15,15 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AppEdit from "~/pages/app/AppEdit";
 import {Delete, Edit, MoreVertical, User} from "react-feather";
+import AppNavEdit from "~/pages/app/AppNavEdit";
+import AppMemberEdit from "~/pages/app/AppMemberEdit";
 
 
 const AppMemberList = (props: any) => {
     const {startPageLoading, stopPageLoading, setSelectedApp} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const disableFetcher = useFetcher();
@@ -76,6 +79,9 @@ const AppMemberList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'edit':
+                setEditModal(row);
+                break;
             case 'delete':
                 //删除按钮
                 showDeleteAlert(function () {
@@ -120,8 +126,12 @@ const AppMemberList = (props: any) => {
             dataField: 'username',
         },
         {
+            text: '真实姓名',
+            dataField: 'realname',
+        },
+        {
             text: '手机号',
-            dataField: 'mobile',
+            dataField: 'phone',
         },
         {
             text: '创建时间',
@@ -131,6 +141,14 @@ const AppMemberList = (props: any) => {
             onSort: handleSort,
             headerSortingClasses,
             sortFunc: emptySortFunc
+        },
+        {
+            text: '认证状态',
+            dataField: 'authStatus_dictText',
+            headerStyle: {width: 130},
+            formatter: (cell:any, row:any) => {
+                return row.authStatus == 1 ? <Badge variant={'success'}>{row.authStatus_dictText}</Badge> : <Badge variant={'danger'}>{row.authStatus_dictText}</Badge>
+            }
         },
         {
             text: '状态',
@@ -161,7 +179,7 @@ const AppMemberList = (props: any) => {
         setSearchState({...searchState, pageNo: 1});
     }
     const handleOnUsernameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
+        setSearchState({...searchState, nickname: e.target.value});
     }
 
     return (
@@ -226,6 +244,11 @@ const AppMemberList = (props: any) => {
                     </Row>
                 </div>
             </Card>
+
+            {editModal && <AppMemberEdit model={editModal} onHide={()=>{
+                setEditModal(null);
+                loadData();
+            }} />}
         </>
     );
 }
