@@ -21,8 +21,15 @@ export default class Index extends Component<any, any> {
     state: any = {
         id: null,
         goodsList: [],
-        address: null
+        address: null,
+        posting: false,
     }
+
+    constructor(props) {
+        super(props);
+        this.pay = this.pay.bind(this);
+    }
+
 
     onLoad(options) {
         if (options.id) {
@@ -53,7 +60,36 @@ export default class Index extends Component<any, any> {
             })
         }
     }
-
+    pay() {
+        this.setState({posting: true});
+        utils.showLoading('发起支付中');
+        let data = {goodsList: this.state.goodsList, address: this.state.address};
+        //支付宝保证金
+        request.post('/paimai/api/members/goods/buy', data).then(res=>{
+            let data = res.data.result;
+            data.package = data.packageValue;
+            Taro.requestPayment(data).then(() => {
+                //支付已经完成，提醒支付成功并返回上一页面
+                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+                    //清空购物车
+                    let cart = JSON.parse(Taro.getStorageSync("CART"));
+                    let newCart:any[] = [];
+                    cart.forEach((item:any)=>{
+                        this.state.goodsList.forEach(g => {
+                            if(item.id != g.id){
+                                newCart.push(item);
+                            }
+                        });
+                    });
+                    Taro.setStorageSync("CART", JSON.stringify(newCart));
+                    setTimeout(()=>{
+                        Taro.navigateBack().then();
+                    }, 2000);
+                });
+                this.setState({posting: false});
+            }).catch(()=>this.setState({posting: false}));
+        })
+    }
     get calcCartPrice() {
         if (this.state.goodsList.length == 0) {
             return 0;
@@ -115,7 +151,7 @@ export default class Index extends Component<any, any> {
                         <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
-                        <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}>立即支付</Button>
+                        <Button disabled={this.calcCartPrice <= 0||this.state.posting} className={'btn btn-danger'} onClick={this.pay}>立即支付</Button>
                     </View>
                 </View>
             </PageLayout>
