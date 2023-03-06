@@ -130,6 +130,10 @@ const GoodsEditor = (props: any) => {
                                         </Row>
                                     </FormGroup>
                                     <FormGroup>
+                                        <FormLabel htmlFor={'description'}>拍品描述</FormLabel>
+                                        <TinymceEditor name={'description'}/>
+                                    </FormGroup>
+                                    <FormGroup>
                                         <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                                         <TinymceEditor name={'descFlow'}/>
                                     </FormGroup>

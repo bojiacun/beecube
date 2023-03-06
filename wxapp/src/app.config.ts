@@ -4,6 +4,7 @@ export default defineAppConfig({
         'pages/goods/buyouts',
         'pages/goods/auctions',
         'pages/goods/detail',
+        'pages/goods/detail2',
         'pages/goods/offers',
         'pages/performance/detail',
         'pages/performance/deadline',

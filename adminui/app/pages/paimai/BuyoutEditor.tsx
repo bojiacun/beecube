@@ -1,11 +1,9 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
+import {handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
@@ -26,7 +24,6 @@ const BuyoutEditor = (props: any) => {
     const {model, onHide} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
     const goodsClassFetcher = useFetcher();
-    const settingsFetcher = useFetcher();
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
@@ -49,7 +46,6 @@ const BuyoutEditor = (props: any) => {
     useEffect(() => {
         if (model) {
             goodsClassFetcher.load('/paimai/goods/classes/all');
-            settingsFetcher.load('/paimai/goods/settings');
         }
     }, [model]);
 
@@ -59,15 +55,7 @@ const BuyoutEditor = (props: any) => {
             setGoodsClassOptions(goodsClassFetcher.data.map((item: any) => ({label: item.name, value: item.id})));
         }
     }, [goodsClassFetcher.state]);
-    useEffect(() => {
-        if (settingsFetcher.type === 'done' && settingsFetcher.data) {
-            if(!model?.id) {
-                settingsFetcher.data?.forEach((s: any) => {
-                    formikRef.current.setFieldValue(s.descKey, s.descValue);
-                });
-            }
-        }
-    }, [settingsFetcher.state]);
+
 
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
@@ -78,6 +66,8 @@ const BuyoutEditor = (props: any) => {
             }
         }
     }, [postFetcher.state]);
+
+
     if (!model) return <></>
 
     const newModel = {status: 0, type: 1, endTime: '', images: '', ...model};
@@ -109,32 +99,8 @@ const BuyoutEditor = (props: any) => {
                                     </FormGroup>
                                     <BootstrapInput label={'一口价'} name={'startPrice'}/>
                                     <FormGroup>
-                                        <FormLabel htmlFor={'fields'}>其他字段</FormLabel>
-                                        <Row>
-                                            <Col sm={12}>
-                                                <DescListConfiger label={'点击配置'} name={'fields'} />
-                                            </Col>
-                                        </Row>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
-                                        <TinymceEditor name={'descFlow'}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'descDelivery'}>物流运输</FormLabel>
-                                        <TinymceEditor name={'descDelivery'}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'descNotice'}>注意事项</FormLabel>
-                                        <TinymceEditor name={'descNotice'}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'descRead'}>拍卖须知</FormLabel>
-                                        <TinymceEditor name={'descRead'}/>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'descDeposit'}>保证金说明</FormLabel>
-                                        <TinymceEditor name={'descDeposit'}/>
+                                        <FormLabel htmlFor={'description'}>拍品详情</FormLabel>
+                                        <TinymceEditor name={'description'}/>
                                     </FormGroup>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
