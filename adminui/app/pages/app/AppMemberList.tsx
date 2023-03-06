@@ -80,7 +80,7 @@ const AppMemberList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/app/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/app/members/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
