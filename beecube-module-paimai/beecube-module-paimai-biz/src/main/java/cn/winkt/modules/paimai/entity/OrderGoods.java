@@ -55,4 +55,5 @@ public class OrderGoods {
 	@Excel(name = "商品价格", width = 15)
     @ApiModelProperty(value = "商品价格")
 	private java.lang.Float goodsPrice;
+	private Integer goodsCount;
 }

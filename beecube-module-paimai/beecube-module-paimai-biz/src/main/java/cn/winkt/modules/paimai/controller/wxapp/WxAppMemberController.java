@@ -10,6 +10,8 @@ import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
+import cn.winkt.modules.paimai.vo.GoodsVO;
+import cn.winkt.modules.paimai.vo.PostOrderVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -38,7 +40,9 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @RequestMapping("/paimai/api/members")
 @RestController
@@ -75,6 +79,12 @@ public class WxAppMemberController {
 
     @Resource
     GoodsOfferWebSocket goodsOfferWebSocket;
+
+    @Resource
+    IGoodsOrderService goodsOrderService;
+
+    @Resource
+    IOrderGoodsService orderGoodsService;
 
     /**
      * 获取用户的浏览记录
@@ -269,6 +279,64 @@ public class WxAppMemberController {
     }
 
 
+    /**
+     * 一口价购买
+     * @param postOrderVO
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws WxPayException
+     */
+    @PostMapping("/goods/buy")
+    @Transactional
+    public Result<?> payGoodsDeposit(@RequestBody PostOrderVO postOrderVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        if(postOrderVO.getAddress() == null) {
+            throw new JeecgBootException("请选择有效的收货地址");
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+        BigDecimal payAmount = BigDecimal.valueOf(Arrays.stream(postOrderVO.getGoodsList()).map(goodsVO -> {
+            return BigDecimal.valueOf(goodsVO.getStartPrice()).multiply(BigDecimal.valueOf(goodsVO.getCount()));
+        }).mapToDouble(BigDecimal::doubleValue).count()).setScale(2, RoundingMode.HALF_DOWN);
+        //创建订单
+        GoodsOrder goodsOrder = new GoodsOrder();
+        goodsOrder.setType(2);
+        goodsOrder.setMemberId(loginUser.getId());
+        goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
+        goodsOrder.setMemberAvatar(loginUser.getAvatar());
+        goodsOrder.setDeliveryInfo(String.format("%s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getAddress()));
+        goodsOrder.setPayedPrice(payAmount.floatValue());
+        goodsOrder.setTotalPrice(payAmount.floatValue());
+        goodsOrder.setStatus(0);
+
+        goodsOrderService.save(goodsOrder);
+
+        //增加订单商品
+        Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
+            OrderGoods orderGoods = new OrderGoods();
+            orderGoods.setGoodsCount(goodsVO.getCount());
+            orderGoods.setGoodsPrice(goodsVO.getStartPrice());
+            orderGoods.setGoodsId(goodsVO.getId());
+            orderGoods.setGoodsName(goodsVO.getTitle());
+            orderGoods.setOrderId(goodsOrder.getId());
+            orderGoodsService.save(orderGoods);
+        });
+
+
+        PayLog payLog = getPayLog(goodsOrder.getId());
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/notify/"+AppContext.getApp())
+                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                .body("支付一口价订单")
+                .spbillCreateIp("127.0.0.1")
+                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                .detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";")))
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        return Result.OK("",wxPayService.createOrder(request));
+    }
     /**
      * 出价拍品
      * @return

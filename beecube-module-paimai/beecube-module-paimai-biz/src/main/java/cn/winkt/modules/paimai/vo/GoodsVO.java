@@ -65,6 +65,8 @@ public class GoodsVO {
     /**状态（0下架1上架）*/
     private java.lang.Integer status;
 
+    private Integer count;
+
     private Integer viewCount;
     private Integer offerCount;
     private Integer followCount;
