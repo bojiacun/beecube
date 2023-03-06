@@ -25,6 +25,11 @@ export default class Index extends Component<any, any> {
         });
     }
 
+    selectAddress(item:any) {
+        Taro.setStorageSync("ADDRESS", JSON.stringify(item));
+        Taro.navigateBack().then();
+    }
+
 
     render() {
         const {systemInfo} = this.props;
@@ -37,10 +42,11 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '地址管理'}}>
                 {list.map((item:any)=>{
                     return (
-                        <View className={'flex items-center justify-between m-4 p-4 bg-white'}>
+                        <View onClick={()=>this.selectAddress(item)} className={'flex items-center justify-between m-4 p-4 bg-white'}>
                             <View className={'space-y-2'}>
                                 <View className={'font-bold space-x-2'}><Text className={'text-lg'}>{item.username}</Text><Text>{item.phone}</Text></View>
                                 <View className={'text-gray-400'}>{item.address}</View>
+                                {item.isDefault == 1 && <Text className={'text-red-500 font-bold text-sm border border-solid border-1 rounded p-1'}>默认</Text>}
                             </View>
                             <View><Text onClick={()=>Taro.navigateTo({url: 'newaddress?id='+item.id})} className={'iconfont icon-edit'} /></View>
                         </View>

@@ -50,7 +50,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                                style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                 <View className={'space-y-1 flex flex-col'}>
                                     <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
-                                    <Text>{userInfo?.username}</Text>
+                                    <Text>{userInfo?.phone}</Text>
                                 </View>
                             </View>
                             <Navigator url={'profile'} openType={'navigate'}><Text className={'iconfont icon-31shezhi'}
@@ -128,7 +128,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
 
                         <View>
-                            <Navigator className={'flex items-center justify-between p-4'}>
+                            <Navigator url={'addresses'} className={'flex items-center justify-between p-4'}>
                                 <View className={'flex items-center space-x-2'}>
                                     <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}}/>
                                     <View>地址管理</View>

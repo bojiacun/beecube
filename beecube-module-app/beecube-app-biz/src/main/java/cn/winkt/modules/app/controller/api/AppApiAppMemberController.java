@@ -83,6 +83,15 @@ public class AppApiAppMemberController {
         appMemberService.update(lambdaUpdateWrapper);
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
+
+    @AutoLog(value = "应用会员地址信息表-通过id查询")
+    @ApiOperation(value="应用会员地址信息表-通过id查询", notes="应用会员地址信息表-通过id查询")
+    @GetMapping(value = "/addresses/detail")
+    public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
+        AppMemberAddress appMemberAddress = appMemberAddressService.getById(id);
+        return Result.OK(appMemberAddress);
+    }
+
     @AutoLog(value = "应用会员地址信息表-列表查询")
     @ApiOperation(value="应用会员地址信息表-列表查询", notes="应用会员地址信息表-列表查询")
     @GetMapping(value = "/addresses")
@@ -133,6 +142,7 @@ public class AppApiAppMemberController {
             updateWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
             appMemberAddressService.update(updateWrapper);
         }
+        appMemberAddress.setMemberId(loginUser.getId());
         appMemberAddressService.updateById(appMemberAddress);
         return Result.OK("编辑成功!");
     }
@@ -146,6 +156,8 @@ public class AppApiAppMemberController {
     @ApiOperation(value="应用会员地址信息表-添加", notes="应用会员地址信息表-添加")
     @PostMapping(value = "/addresses/add")
     public Result<?> add(@RequestBody AppMemberAddress appMemberAddress) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        appMemberAddress.setMemberId(loginUser.getId());
         appMemberAddressService.save(appMemberAddress);
         return Result.OK("添加成功！");
     }

@@ -593,7 +593,7 @@ button, button[plain] {
 }
 .btn {
     border: none;
-    @apply py-3 px-4 inline-block rounded-full;
+    @apply py-3 px-6 inline-block rounded-full;
 
     &.button-hover {
         @apply transform scale-90;
