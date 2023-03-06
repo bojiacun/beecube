@@ -32,7 +32,7 @@ const PopAdvertise = (props: any) => {
             <View style={{width: '50%', position: 'relative', opacity: 1}}>
                 <Image mode={'widthFix'} src={utils.resolveUrl(basic.image)} style={{width: '100%', display: 'block'}} onClick={navigateToCouponDetail} />
                 <View style={{marginTop: Taro.pxTransform(20), textAlign: 'center', color: 'white', fontSize: Taro.pxTransform(24), cursor: 'pointer'}}>
-                    <Text className="far fa-regular fa-circle-xmark" onClick={closeAdv} />
+                    <Text className="text-white" onClick={closeAdv}>关闭</Text>
                 </View>
             </View>
         </View>
