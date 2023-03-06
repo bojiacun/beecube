@@ -95,7 +95,7 @@
     },
     {
       "label": "购物车",
-      "url": "/pages/cart"
+      "url": "/pages/shop/cart"
     },
     {
       "label": "个人中心",

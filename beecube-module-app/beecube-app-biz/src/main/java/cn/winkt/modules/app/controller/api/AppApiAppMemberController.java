@@ -106,7 +106,7 @@ public class AppApiAppMemberController {
     @AutoLog(value = "应用会员地址信息表-默认地址查询")
     @ApiOperation(value="应用会员地址信息表-默认地址查询", notes="应用会员地址信息表-默认地址查询")
     @GetMapping(value = "/addresses/default")
-    public Result<?> queryByDefault(@RequestParam(name="id",required=true) String id) {
+    public Result<?> queryByDefault() {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<AppMemberAddress> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
