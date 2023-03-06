@@ -2,10 +2,11 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
-import {Button, Checkbox, Text, View} from "@tarojs/components";
+import {Button, Text, View, Navigator} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
+import LoginView from "../../components/login";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -17,38 +18,47 @@ const numeral = require('numeral');
     }
 ))
 export default class Index extends Component<any, any> {
-    state:any = {
+    state: any = {
         id: null,
         goodsList: [],
         address: null
     }
 
     onLoad(options) {
-        if(options.id) {
+        if (options.id) {
             //如果是有ID的情况说明是立即购买则从远程服务器获取商品信息
             this.setState({id: options.id});
-            request.get('/app/api/goods/detail', {params: {id: options.id}}).then(res=>{
+            request.get('/app/api/goods/detail', {params: {id: options.id}}).then(res => {
                 res.data.result.count = 1;
                 this.state.goodsList.push(res.data.result);
                 this.setState({goodsList: this.state.goodsList});
             });
+        } else {
+            //从购物车获取商品信息
+            let cart = JSON.parse(Taro.getStorageSync("CART") || '[]');
+            this.setState({goodsList: cart.filter(item => item.selected)});
+        }
+
+    }
+
+    componentDidShow() {
+        //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
+        const address = Taro.getStorageSync('ADDRESS');
+        if(address) {
+            this.setState({address: JSON.parse(address)});
         }
         else {
-            //从购物车获取商品信息
-            let cart = JSON.parse(Taro.getStorageSync("CART")||'[]');
-            this.setState({goodsList: cart.filter(item=>item.selected)});
+            request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
+                this.setState({address: res.data.result});
+            })
         }
-        //获取用户默认地址
-        request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res=>{
-            this.setState({address: res.data.result});
-        })
     }
 
     get calcCartPrice() {
-        if(this.state.goodsList.length == 0) {
+        if (this.state.goodsList.length == 0) {
             return 0;
         }
-        return this.state.goodsList.map(item=>item.startPrice*item.count).reduce((n,m)=>n+m);
+        return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
     }
 
     render() {
@@ -62,21 +72,23 @@ export default class Index extends Component<any, any> {
                 <View className={'grid grid-cols-1 divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4'}>
                         <View className={'font-bold text-lg'}>选择收货地址</View>
-                        <View className={'flex items-center justify-between'}>
-                            <View className={'flex-1 space-y-2'}>
-                                <View className={'font-bold space-x-2'}>
-                                    <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
+                        <LoginView>
+                            <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
+                                <View className={'flex-1 space-y-2'}>
+                                    <View className={'font-bold space-x-2'}>
+                                        <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
+                                    </View>
+                                    <View className={'text-gray-400'}>{address?.address}</View>
                                 </View>
-                                <View className={'text-gray-400'}>{address?.address}</View>
-                            </View>
-                            <View className={'px-2'}>
-                                <Text className={'fa fa-chevron-right'} />
-                            </View>
-                        </View>
+                                <View className={'px-2'}>
+                                    <Text className={'fa fa-chevron-right'}/>
+                                </View>
+                            </Navigator>
+                        </LoginView>
                     </View>
                     <View className={'p-4'}>
                         <View className={'font-bold text-lg'}>商品信息</View>
-                        {goodsList.map((item)=>{
+                        {goodsList.map((item) => {
                             return (
                                 <View className={'bg-white relative py-4 overflow-hidden flex items-center'}>
                                     <View className={'flex-1 flex space-x-2'}>

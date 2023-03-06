@@ -37,6 +37,7 @@ export default class Index extends Component<any, any> {
     handleAdd(item) {
         item.count++;
         this.setState({cart: this.state.cart});
+        Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
     }
 
     handleRemove(item, index) {
@@ -50,6 +51,7 @@ export default class Index extends Component<any, any> {
         else {
             this.setState({cart: this.state.cart});
         }
+        Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
     }
     handleCheckChanged(e) {
         let values = e.detail.value;
@@ -63,6 +65,7 @@ export default class Index extends Component<any, any> {
             item.selected = selected;
         });
         this.setState({cart: this.state.cart});
+        Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
     }
     toggleCheckAll() {
         if(this.isCheckedAll) {
@@ -77,6 +80,7 @@ export default class Index extends Component<any, any> {
             });
             this.setState({cart: this.state.cart});
         }
+        Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
     }
 
     get isCheckedAll() {
