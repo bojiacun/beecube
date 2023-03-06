@@ -46,13 +46,15 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     >
                         <View className={classNames('flex items-center justify-between space-x-2')}>
                             <View className={'flex items-center space-x-2'}>
-                                <FallbackImage className={'rounded-full'} src={userInfo?.avatar} errorImage={avatar} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
+                                <FallbackImage className={'rounded-full'} src={userInfo?.avatar} errorImage={avatar}
+                                               style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                 <View className={'space-y-1 flex flex-col'}>
                                     <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
                                     <Text>{userInfo?.username}</Text>
                                 </View>
                             </View>
-                            <Navigator url={'profile'} openType={'navigate'}><Text className={'iconfont icon-31shezhi'} style={{fontSize: 24}}/></Navigator>
+                            <Navigator url={'profile'} openType={'navigate'}><Text className={'iconfont icon-31shezhi'}
+                                                                                   style={{fontSize: 24}}/></Navigator>
                         </View>
                         <View className={'grid grid-cols-4 gap-4 text-center mt-4'}>
                             <View>
@@ -99,103 +101,107 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
                     </View>
                     <View className={'mt-6 bg-white divide-y divide-gray-100 text-gray-600'}>
-                        <Navigator url={'wallet'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
-                                <View>我的余额</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>
-                                    RMB 0
+                        <View>
+                            <Navigator url={'wallet'} className={'flex items-center justify-between p-4'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
+                                    <View>我的余额</View>
                                 </View>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-zhuanzhang'} style={{fontSize: 24}}/>
-                                <View>转账记录</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>
+                                        RMB 0
+                                    </View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
                         </View>
 
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-zhuanzhang'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>转账记录</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}}/>
-                                <View>地址管理</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+
+                        <View>
+                            <Navigator className={'flex items-center justify-between p-4'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}}/>
+                                    <View>地址管理</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
                         </View>
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
-                                <View>我的二维码</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>我的二维码</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-shangchuan'} style={{fontSize: 24}}/>
-                                <View>我的送拍</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-shangchuan'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>我的送拍</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-kaipiaoxinxi'} style={{fontSize: 24}}/>
-                                <View>开具发票</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
-
-
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-zhanghu'} style={{fontSize: 24}}/>
-                                <View>公司账户</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-kaipiaoxinxi'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>开具发票</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>
-                                <View>帮助中心</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-zhanghu'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>公司账户</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
 
-                        <View className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>
-                                <View>联系客服</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </View>
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>帮助中心</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
+
+
+                        {/*<View className={'flex items-center justify-between p-4'}>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>*/}
+                        {/*        <View>联系客服</View>*/}
+                        {/*    </View>*/}
+                        {/*    <View className={'flex items-center space-x-2'}>*/}
+                        {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
 
                     </View>
                 </LoginView>

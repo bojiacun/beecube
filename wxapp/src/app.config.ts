@@ -15,6 +15,7 @@ export default defineAppConfig({
         'pages/auction/list',
         'pages/my/index',
         'pages/my/wallet',
+        'pages/my/addresses',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
