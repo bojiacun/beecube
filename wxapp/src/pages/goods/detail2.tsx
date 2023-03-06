@@ -88,7 +88,9 @@ export default class Index extends Component<any, any> {
     }
 
     buy() {
-
+        //当前商品数据保存到本地缓存
+        Taro.setStorageSync("BUY_GOODS", JSON.stringify({...this.state.goods, count: 1}));
+        Taro.navigateTo({url: '/pages/goods/confirm'}).then();
     }
 
 
