@@ -6,29 +6,22 @@ import {
     headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
-    showToastError,
-    showToastSuccess
 } from "~/utils/utils";
 import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import AppEdit from "~/pages/app/AppEdit";
 import {Delete, Edit, MoreVertical, User} from "react-feather";
-import AppNavEdit from "~/pages/app/AppNavEdit";
 import AppMemberEdit from "~/pages/app/AppMemberEdit";
 
 
 const AppMemberList = (props: any) => {
-    const {startPageLoading, stopPageLoading, setSelectedApp} = props;
+    const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-    const disableFetcher = useFetcher();
-    const enableFetcher = useFetcher();
-    const entryFetcher = useFetcher();
 
 
 
@@ -52,29 +45,6 @@ const AppMemberList = (props: any) => {
     }, [deleteFetcher.state]);
 
 
-    useEffect(() => {
-        if (disableFetcher.data && disableFetcher.type === 'done') {
-            stopPageLoading();
-            handleResult(disableFetcher.data, '冻结成功');
-            loadData();
-        }
-    }, [disableFetcher.state]);
-
-    useEffect(() => {
-        if (enableFetcher.data && enableFetcher.type === 'done') {
-            stopPageLoading();
-            handleResult(enableFetcher.data, '解冻成功');
-            loadData();
-        }
-    }, [enableFetcher.state]);
-
-
-    useEffect(() => {
-        if (entryFetcher.data && entryFetcher.type === 'done') {
-            //重新进入
-
-        }
-    }, [enableFetcher.state]);
 
 
     const handleOnAction = (row: any, e: any) => {

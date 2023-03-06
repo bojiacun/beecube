@@ -120,6 +120,7 @@ export const API_APP_SETTING_LIST = `${BASE_URL}/beecube-app/app/settings/all`;
 export const API_APP_SETTINGS_UPDATE = `${BASE_URL}/beecube-app/app/settings/updateAll`;
 export const API_APP_MEMBER_LIST = `${BASE_URL}/beecube-app/app/members/list`;
 export const API_APP_MEMBER_DELETE = `${BASE_URL}/beecube-app/app/members/delete`;
+export const API_APP_MEMBER_EDIT = `${BASE_URL}/beecube-app/app/members/edit`;
 export const API_APP_NAV_LIST = `${BASE_URL}/beecube-app/app/navs/list`;
 export const API_APP_NAV_ADD = `${BASE_URL}/beecube-app/app/navs/add`;
 export const API_APP_NAV_EDIT = `${BASE_URL}/beecube-app/app/navs/edit`;
