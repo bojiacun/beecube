@@ -83,11 +83,15 @@ export default class Index extends Component<any, any> {
                     });
                     Taro.setStorageSync("CART", JSON.stringify(newCart));
                     setTimeout(()=>{
+                        utils.hideLoading();
                         Taro.navigateBack().then();
                     }, 2000);
                 });
                 this.setState({posting: false});
-            }).catch(()=>this.setState({posting: false}));
+            }).catch(()=>{
+                this.setState({posting: false})
+                utils.hideLoading()
+            });
         })
     }
     get calcCartPrice() {
