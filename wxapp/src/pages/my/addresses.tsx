@@ -30,6 +30,13 @@ export default class Index extends Component<any, any> {
         Taro.navigateBack().then();
     }
 
+    handleRemove(id) {
+        request.delete('/app/api/members/addresses/delete',{params: {id: id}}).then(()=>{
+            request.get('/app/api/members/addresses').then(res=>{
+                this.setState({list: res.data.result});
+            });
+        })
+    }
 
     render() {
         const {systemInfo} = this.props;
@@ -42,13 +49,26 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '地址管理'}}>
                 {list.map((item:any)=>{
                     return (
-                        <View onClick={()=>this.selectAddress(item)} className={'flex items-center justify-between m-4 p-4 bg-white'}>
-                            <View className={'space-y-2'}>
-                                <View className={'font-bold space-x-2'}><Text className={'text-lg'}>{item.username}</Text><Text>{item.phone}</Text></View>
+                        <View onClick={()=>this.selectAddress(item)} className={'flex shadow-outer items-center justify-between m-4 p-4 bg-white'}>
+                            <View className={'flex-1 space-y-2'}>
+                                <View className={'font-bold space-x-2'}>
+                                    <Text className={'text-lg'}>{item.username}</Text><Text>{item.phone}</Text>
+                                    {item.isDefault == 1 && <Text className={'text-red-500 font-bold text-sm border border-solid border-1 rounded p-1'}>默认</Text>}
+                                </View>
                                 <View className={'text-gray-400'}>{item.address}</View>
-                                {item.isDefault == 1 && <Text className={'text-red-500 font-bold text-sm border border-solid border-1 rounded p-1'}>默认</Text>}
                             </View>
-                            <View><Text onClick={()=>Taro.navigateTo({url: 'newaddress?id='+item.id})} className={'iconfont icon-edit'} /></View>
+                            <View className={'px-2 text-2xl space-x-2 text-gray-400'}>
+                                <Text onClick={(e)=>{
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    Taro.navigateTo({url: 'newaddress?id='+item.id}).then();
+                                }} className={'fa fa-pencil'} />
+                                <Text onClick={(e)=>{
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    this.handleRemove(item.id);
+                                }} className={'fa fa-remove'} />
+                            </View>
                         </View>
                     );
                 })}
