@@ -56,4 +56,7 @@ public class OrderGoods {
     @ApiModelProperty(value = "商品价格")
 	private java.lang.Float goodsPrice;
 	private Integer goodsCount;
+	@Excel(name = "应用ID", width = 15)
+	@ApiModelProperty(value = "应用ID")
+	private java.lang.String appId;
 }

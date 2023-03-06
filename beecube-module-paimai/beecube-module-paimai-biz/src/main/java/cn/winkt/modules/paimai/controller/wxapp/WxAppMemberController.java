@@ -341,6 +341,7 @@ public class WxAppMemberController {
             orderGoods.setGoodsId(goodsVO.getId());
             orderGoods.setGoodsName(goodsVO.getTitle());
             orderGoods.setOrderId(goodsOrder.getId());
+            orderGoods.setGoodsImage(goodsVO.getImages().split(",")[0]);
             orderGoodsService.save(orderGoods);
         });
 
