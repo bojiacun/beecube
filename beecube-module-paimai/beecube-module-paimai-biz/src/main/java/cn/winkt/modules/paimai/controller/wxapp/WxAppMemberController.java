@@ -278,7 +278,29 @@ public class WxAppMemberController {
         }
     }
 
+    @RequestMapping(value = "/notify/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+    @Transactional
+    public String notifyGoodsOrder(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        //这里要设置APPID Context
+        AppContext.setApp(appId);
+        WxPayService wxPayService = miniappServices.getService(appId);
+        final WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
+        notifyResult.checkResult(wxPayService, "MD5", true);
 
+        String outTradeNo = notifyResult.getOutTradeNo();
+        PayLog payLog = payLogService.getById(outTradeNo);
+        payLog.setPayedAt(new Date());
+        payLog.setStatus(true);
+        payLog.setTransactionId(notifyResult.getTransactionId());
+        payLogService.updateById(payLog);
+
+        GoodsOrder goodsOrder = goodsOrderService.getById(payLog.getOrdersn());
+        goodsOrder.setStatus(1);
+        goodsOrder.setPayTime(new Date());
+        goodsOrder.setTransactionId(notifyResult.getTransactionId());
+        goodsOrderService.updateById(goodsOrder);
+        return WxPayNotifyResponse.success("成功");
+    }
     /**
      * 一口价购买
      * @param postOrderVO
@@ -585,6 +607,7 @@ public class WxAppMemberController {
         return Result.OK("",wxPayService.createOrder(request));
     }
     @RequestMapping(value = "/deposit_notify/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+    @Transactional
     public String depositNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);

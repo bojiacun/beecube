@@ -49,6 +49,7 @@ public class GoodsOrder {
 	@ApiModelProperty(value = "拍卖会ID")
 	private java.lang.String auctionId;
 	private Integer type;
+	private String transactionId;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)
     @ApiModelProperty(value = "会员ID")
