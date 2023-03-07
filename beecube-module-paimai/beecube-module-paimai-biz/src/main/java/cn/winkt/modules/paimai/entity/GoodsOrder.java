@@ -50,7 +50,12 @@ public class GoodsOrder {
 	@Excel(name = "拍卖会ID", width = 15)
 	@ApiModelProperty(value = "拍卖会ID")
 	private java.lang.String auctionId;
+
+	@Excel(name = "订单类型（1拍卖订单、2一口价订单）", width = 15)
+	@ApiModelProperty(value = "订单类型（1拍卖订单、2一口价订单")
+	@Dict(dicCode = "paimai_order_type")
 	private Integer type;
+
 	private String transactionId;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)

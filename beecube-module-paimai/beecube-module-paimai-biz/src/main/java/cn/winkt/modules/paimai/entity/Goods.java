@@ -50,6 +50,8 @@ public class Goods {
     @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
+
+	private java.lang.Integer stock;
 	/**单品保证金*/
 	@Excel(name = "单品保证金", width = 15)
     @ApiModelProperty(value = "单品保证金")
