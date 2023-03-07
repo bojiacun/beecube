@@ -94,7 +94,43 @@ public class WxAppMemberController {
     @Resource
     IOrderGoodsService orderGoodsService;
 
+    @Resource
+    IGoodsOrderAfterService goodsOrderAfterService;
 
+    @AutoLog(value = "订单售后表-分页列表查询")
+    @ApiOperation(value="订单售后表-分页列表查询", notes="订单售后表-分页列表查询")
+    @GetMapping(value = "/orders/afters")
+    @AutoDict
+    public Result<?> queryPageOrderAfterList(GoodsOrderAfter goodsOrderAfter,
+                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                   HttpServletRequest req) {
+        QueryWrapper<GoodsOrderAfter> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrderAfter, req.getParameterMap());
+        Page<GoodsOrderAfter> page = new Page<GoodsOrderAfter>(pageNo, pageSize);
+        IPage<GoodsOrderAfter> pageList = goodsOrderAfterService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+
+    @AutoLog(value = "订单表-分页列表查询")
+    @ApiOperation(value="订单表-分页列表查询", notes="订单表-分页列表查询")
+    @GetMapping(value = "/orders")
+    @AutoDict
+    public Result<?> queryPageOrderList(GoodsOrder goodsOrder,
+                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                   HttpServletRequest req) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
+        queryWrapper.eq("member_id", loginUser.getId());
+        Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
+        IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
+        pageList.getRecords().forEach(r -> {
+            LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
+            qw.eq(OrderGoods::getOrderId, r.getId());
+            r.setOrderGoods(orderGoodsService.list(qw));
+        });
+        return Result.OK(pageList);
+    }
 
     @AutoLog(value = "用户保证金列表-分页列表查询")
     @ApiOperation(value="用户保证金列表-分页列表查询", notes="用户保证金列表-分页列表查询")
