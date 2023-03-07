@@ -37,7 +37,8 @@ public class WxAppGoodsController {
     @Resource
     IGoodsClassService goodsClassService;
 
-
+    @Resource
+    IBuyoutGoodsClassService buyoutGoodsClassService;
 
     @Resource
     IGoodsOfferService goodsOfferService;
@@ -122,10 +123,16 @@ public class WxAppGoodsController {
     public Result<List<GoodsClass>> classes() {
         LambdaQueryWrapper<GoodsClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(GoodsClass::getStatus, 1);
-        lambdaQueryWrapper.orderByDesc(GoodsClass::getCreateTime);
+        lambdaQueryWrapper.orderByAsc(GoodsClass::getSortNum);
         return Result.OK(goodsClassService.list(lambdaQueryWrapper));
     }
-
+    @GetMapping("/buyout/classes")
+    public Result<List<BuyoutGoodsClass>> buyoutClasses() {
+        LambdaQueryWrapper<BuyoutGoodsClass> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(BuyoutGoodsClass::getStatus, 1);
+        lambdaQueryWrapper.orderByAsc(BuyoutGoodsClass::getSortNum);
+        return Result.OK(buyoutGoodsClassService.list(lambdaQueryWrapper));
+    }
     @GetMapping("/detail")
     public Result<GoodsVO> detail(@RequestParam(name = "id", defaultValue = "0") String id) {
         if (StringUtils.isEmpty(id)) {
