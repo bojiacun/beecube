@@ -21,6 +21,8 @@ export default defineAppConfig({
         'pages/my/newaddress',
         'pages/my/deposits',
         'pages/my/offers',
+        'pages/my/orders',
+        'pages/my/orders/detail',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
