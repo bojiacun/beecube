@@ -41,7 +41,7 @@ const tabs: ListViewTabItem[] = [
     },
     {
         label: '已结束',
-        id: 1,
+        id: 2,
         template: data => {
             let radius = 0;
             return (

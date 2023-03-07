@@ -41,7 +41,7 @@ const tabs: ListViewTabItem[] = [
     },
     {
         label: '已结束',
-        id: 1,
+        id: 2,
         template: data => {
             let radius = 0;
             return (
@@ -72,12 +72,28 @@ const tabs: ListViewTabItem[] = [
 ];
 
 export default class Index extends Component<any, any> {
-    loadData(page: number, tab: ListViewTabItem) {
-        return request.get('/paimai/api/performances/list', {params: {type:3, source: tab.id, pageNo: page}});
+    state:any = {
+        source: 1,
+        tag: '专场列表'
     }
+
+    constructor(props) {
+        super(props);
+        this.loadData = this.loadData.bind(this);
+    }
+
+
+    loadData(page: number, tab: ListViewTabItem) {
+        return request.get('/paimai/api/performances/list', {params: {tag: this.state.tag, source: tab.id, pageNo: page}});
+    }
+
+    onLoad(options) {
+        this.setState({tag: decodeURIComponent(options.tag), source: options.source});
+    }
+
     render() {
         return (
-            <PageLayout statusBarProps={{title: '公益拍'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: this.state.tag}} enableReachBottom={true}>
                 <ListView tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
             </PageLayout>
         );
