@@ -16,6 +16,7 @@ export const defaultData = {
         itemBorderRadius: 15,
         count: 2,
         dataSource: 1,
+        tag: '',
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -49,6 +50,7 @@ const GoodsListModuleAttribute = (props: any) => {
                                         name={'dataSource'}
                                         label={'数据类型'}
                                     />
+                                    <BootstrapInput label={'标签'} name={'tag'} placeholder={'将会根据输入的TAG进行搜索'} />
                                     <BootstrapInput label={'数据条数'} name={'count'}/>
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'}/>
                                 </Form>
@@ -81,18 +83,18 @@ const GoodsListModule = (props: any) => {
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
             //最新商品
-            getPagedGoods(1, 1, _data.basic.count).then(res => {
+            getPagedGoods(1, 1, _data.basic.count, _data.basic.tag).then(res => {
                 console.log(res);
                 setGoodsList(res.data.records);
             });
         } else if (_data.basic.dataSource == 2) {
-            getPagedGoods(1, 2, _data.basic.count).then(res => {
+            getPagedGoods(1, 2, _data.basic.count, _data.basic.tag).then(res => {
                 setGoodsList(res.data.records);
             });
         } else {
             setGoodsList([]);
         }
-    }, [data.basic.dataSource, data.basic.count]);
+    }, [data.basic.dataSource, data.basic.count, data.basic.tag]);
 
     return (
         <div {...rest} style={_data.style}>

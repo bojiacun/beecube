@@ -3,7 +3,7 @@ import image from 'assets/designer/s4_2.png';
 import biaoqian from 'assets/designer/biaoqian.png';
 import React, {useEffect, useState} from "react";
 import BoxSettings, {DEFAULT_BOX_STYLES} from "../BoxSettings";
-import {getPagedGoods, getPagedPerformance, getShopClasses} from "./service";
+import {getPagedGoods, getPagedPerformance, getPagedTagedPerformance, getShopClasses} from "./service";
 import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
 import {FormGroup, FormLabel} from "react-bootstrap";
@@ -20,6 +20,7 @@ export const defaultData = {
         itemBorderRadius: 15,
         count: 2,
         dataSource: 1,
+        tag: '',
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -53,6 +54,7 @@ const PublicPerformanceListModuleAttribute = (props: any) => {
                                         name={'dataSource'}
                                         label={'数据类型'}
                                     />
+                                    <BootstrapInput label={'标签'} name={'tag'} placeholder={'将会根据输入的TAG进行搜索'} />
                                     <BootstrapInput label={'数据条数'} name={'count'}/>
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'}/>
                                 </Form>
@@ -85,17 +87,17 @@ const PublicPerformanceListModule = (props: any) => {
     useEffect(() => {
         if (_data.basic.dataSource == 1) {
             //最新商品
-            getPagedPerformance(3, 1, _data.basic.count).then(res => {
+            getPagedTagedPerformance(_data.basic.tag, 1, _data.basic.count).then(res => {
                 setPerformanceList(res.data.records);
             });
         } else if (_data.basic.dataSource == 2) {
-            getPagedPerformance(3, 2, _data.basic.count).then(res => {
+            getPagedTagedPerformance(_data.basic.tag, 2, _data.basic.count).then(res => {
                 setPerformanceList(res.data.records);
             });
         } else {
             setPerformanceList([]);
         }
-    }, [data.basic.dataSource, data.basic.count]);
+    }, [data.basic.dataSource, data.basic.count, data.basic.tag]);
 
     return (
         <div {...rest} style={_data.style}>
@@ -139,6 +141,6 @@ const PublicPerformanceListModule = (props: any) => {
 
 export default function (module = '') {
     if (module === 'paimai') {
-        registerModule(PUBLIC_PERFORMANCE_LIST_MODULE, "公益拍专场", image, '拍卖模块', PublicPerformanceListModule, PublicPerformanceListModuleAttribute, defaultData);
+        registerModule(PUBLIC_PERFORMANCE_LIST_MODULE, "专场列表", image, '拍卖模块', PublicPerformanceListModule, PublicPerformanceListModuleAttribute, defaultData);
     }
 }
