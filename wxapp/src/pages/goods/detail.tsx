@@ -86,6 +86,7 @@ export default class Index extends Component<any, any> {
                         connectWebSocketServer('/auction/websocket/' + goods.id + '/' + userInfo.id).then(res => {
                             this.socket = res;
                             this.socket.onMessage(this.onMessageReceive);
+                            console.log('websocket linked', '/auction/websocket/' + goods.id + '/' + userInfo.id);
                         });
                     }
                 });
@@ -113,13 +114,13 @@ export default class Index extends Component<any, any> {
                 if(offers.length >=3 ) {
                     offers.pop();
                     offers.unshif(
-                        msg.map(m => ({
-                            memberAvatar: m.memberAvatar,
-                            memberName: m.memberName,
-                            memberId: m.memberId,
-                            price: m.price,
-                            offerTime: m.createTime
-                        }))
+                        {
+                            memberAvatar: msg.memberAvatar,
+                            memberName: msg.memberName,
+                            memberId: msg.memberId,
+                            price: msg.price,
+                            offerTime: msg.createTime
+                        }
                     );
                 }
                 else {
