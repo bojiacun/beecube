@@ -4,10 +4,11 @@ import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import classNames from "classnames";
 import {Navigator, View} from "@tarojs/components";
+import PageLoading from "../../components/pageloading";
 const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
-    state = {
+    state:any = {
         tabs: [
             {label: '全部', id: '', template: this.renderTemplate},
             {label: '待支付', id: '0', template: this.renderTemplate},
@@ -16,7 +17,7 @@ export default class Index extends Component<any, any> {
             {label: '已完成', id: '3', template: this.renderTemplate},
             {label: '售后', id: '4', template: this.renderTemplate},
         ],
-        status: '',
+        status: false,
     }
 
     constructor(props) {
@@ -59,9 +60,11 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
+        const {status} = this.state;
+        if(status === false) return <PageLoading />;
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
-                <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} />
+                <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} tabStyle={2} />
             </PageLayout>
         );
     }

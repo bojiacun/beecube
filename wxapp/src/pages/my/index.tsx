@@ -92,7 +92,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                     <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>已完成</View>
                                 </Navigator>
-                                <Navigator url={'orders'} className={'border-l-1 border-gray-100'}>
+                                <Navigator url={'orders?status='} className={'border-l-1 border-gray-100'}>
                                     <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>全部</View>
                                 </Navigator>

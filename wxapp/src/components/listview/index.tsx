@@ -86,11 +86,11 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700')}
+            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
                   style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
                 {tabs.map((tab, index) => {
                     return (
-                        <Text className={classNames(tabStyle == 1? '':'flex-1','text-center',index === selectedIndex ? styles.active : '')} onClick={() => {
+                        <Text className={classNames(tabStyle == 1? '':'flex-1','text-center whitespace-nowrap',index === selectedIndex ? styles.active : '')} onClick={() => {
                             setSelectedIndex(index);
                             onTabChanged(tab, index);
                             setPage(1);
