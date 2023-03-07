@@ -65,6 +65,7 @@ public class WxAppPerformanceController {
         if(StringUtils.isNotEmpty(tag)) {
             queryWrapper.like("q.tags", tag);
         }
+        queryWrapper.orderByAsc("p.sortNum");
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
         orderField = "p."+orderField;
