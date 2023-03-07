@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {ListViewTabItem} from "../../components/listview";
+import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import classNames from "classnames";
 import {Navigator, View} from "@tarojs/components";
@@ -16,12 +16,20 @@ export default class Index extends Component<any, any> {
             {label: '已完成', id: '3', template: this.renderTemplate},
             {label: '售后', id: '4', template: this.renderTemplate},
         ],
+        status: '',
     }
 
     constructor(props) {
         super(props);
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
+
+
+    onLoad(options) {
+        if(options.status) {
+            this.setState({status: options.status});
+        }
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -53,7 +61,7 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
-
+                <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} />
             </PageLayout>
         );
     }
