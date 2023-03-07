@@ -76,26 +76,26 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </View>
                         <View className={'rounded-md bg-white mt-2 text-blue-600 py-4 shadow-lg'}>
                             <View className={'grid grid-cols-5 gap-1 text-center'}>
-                                <View>
+                                <Navigator url={'orders?status=0'}>
                                     <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1 text-sm'}>待结算</View>
-                                </View>
-                                <View>
+                                </Navigator>
+                                <Navigator url={'orders?status=1'}>
                                     <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>待发货</View>
-                                </View>
-                                <View>
+                                </Navigator>
+                                <Navigator url={'orders?status=2'}>
                                     <View className={'iconfont icon-daishouhuo'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>待收货</View>
-                                </View>
-                                <View>
+                                </Navigator>
+                                <Navigator url={'orders?status=3'}>
                                     <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>已完成</View>
-                                </View>
-                                <View className={'border-l-1 border-gray-100'}>
+                                </Navigator>
+                                <Navigator url={'orders'} className={'border-l-1 border-gray-100'}>
                                     <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
                                     <View className={'text-gray-500 mt-1'}>全部</View>
-                                </View>
+                                </Navigator>
                             </View>
                         </View>
 
