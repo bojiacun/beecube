@@ -63,7 +63,7 @@ public class WxAppPerformanceController {
         }
         String tag = req.getParameter("tag");
         if(StringUtils.isNotEmpty(tag)) {
-            queryWrapper.like("q.tags", tag);
+            queryWrapper.like("p.tags", tag);
         }
         queryWrapper.orderByAsc("p.sort_num");
         //排序

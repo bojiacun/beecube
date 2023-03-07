@@ -61,7 +61,7 @@ public class WxAppGoodsController {
         }
         String tag = req.getParameter("tag");
         if(StringUtils.isNotEmpty(tag)) {
-            queryWrapper.like("q.tags", tag);
+            queryWrapper.like("g.tags", tag);
         }
         queryWrapper.eq("g.status", 1);
         String source = req.getParameter("source");
