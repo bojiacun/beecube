@@ -14,8 +14,6 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 
 
-
-
 const OrderList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
@@ -86,22 +84,29 @@ const OrderList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
-            text: '订单号',
-            dataField: 'id',
-        },
-        {
             text: '商品信息',
             dataField: '',
             isDummyField: true,
-            formatter: (cell:any, row:any) => {
-                let previewUrl = row.images.split(',')[0];
+            headerStyle: {width: 300},
+            formatter: (cell: any, row: any) => {
                 return (
-                    <Row>
-                        <Col>
-                            <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
-                        </Col>
-                        <Col>{row.goodsName} X {row.goodsCount}</Col>
-                    </Row>
+                    <>
+                        <Row><Col>订单号：{row.id}</Col></Row>
+                        {row.orderGoods.map((item:any)=>{
+                            return (
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <div style={{width: 60, marginRight: 10}}>
+                                        <FigureImage src={item.goodsImage} style={{width: 60, height: 60}}/>
+                                    </div>
+                                    <div style={{flex:1, display: 'flex', justifyContent: 'space-around', flexDirection: 'column'}}>
+                                        <div> {item.goodsName} </div>
+                                        <div> ￥{item.goodsPrice} X {item.goodsCount} </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                    </>
                 );
             }
         },
@@ -109,12 +114,13 @@ const OrderList = (props: any) => {
             text: '购买人',
             dataField: '',
             isDummyField: true,
-            formatter: (cell:any, row:any) => {
+            headerStyle: {width: 200},
+            formatter: (cell: any, row: any) => {
                 let previewUrl = row.memberAvatar;
                 return (
                     <Row>
                         <Col>
-                            <FigureImage src={previewUrl} roundedCircle style={{width: 60, height: 60}} />
+                            <FigureImage src={previewUrl} roundedCircle style={{width: 40, height: 40}}/>
                         </Col>
                         <Col>{row.memberName}</Col>
                     </Row>
@@ -123,6 +129,7 @@ const OrderList = (props: any) => {
         },
         {
             text: '收货地址',
+            headerStyle: {width: 200},
             dataField: 'deliveryInfo',
         },
         {
@@ -142,14 +149,17 @@ const OrderList = (props: any) => {
             dataField: 'status_dictText',
         },
         {
+            text: '订单类型',
+            dataField: 'type_dictText',
+        },
+        {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
-                        <span className={'divider'}/>
+
                     </div>
                 );
             }

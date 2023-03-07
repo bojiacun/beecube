@@ -21,6 +21,7 @@ export const loader: LoaderFunction = async ({request}) => {
         queryString = '?' + url.searchParams.toString();
     }
     const result = await requestWithToken(request)(API_PAIMAI_ORDER_LIST+ queryString);
+    console.log(result);
     return json(result.result);
 }
 

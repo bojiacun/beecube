@@ -317,9 +317,11 @@ public class WxAppMemberController {
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
-        BigDecimal payAmount = BigDecimal.valueOf(Arrays.stream(postOrderVO.getGoodsList()).map(goodsVO -> {
-            return BigDecimal.valueOf(goodsVO.getStartPrice()).multiply(BigDecimal.valueOf(goodsVO.getCount()));
-        }).mapToDouble(BigDecimal::doubleValue).count()).setScale(2, RoundingMode.HALF_DOWN);
+        BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
+        for (GoodsVO vo : postOrderVO.getGoodsList()) {
+            BigDecimal totalPrice = BigDecimal.valueOf(vo.getStartPrice()).multiply(BigDecimal.valueOf(vo.getCount()));
+            payAmount = payAmount.add(totalPrice);
+        }
         //创建订单
         GoodsOrder goodsOrder = new GoodsOrder();
         goodsOrder.setType(2);
