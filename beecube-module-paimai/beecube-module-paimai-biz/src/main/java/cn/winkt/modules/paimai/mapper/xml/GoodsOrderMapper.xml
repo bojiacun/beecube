@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.paimai.mapper.GoodsOrderMapper">
     <select id="queryOrderPage" resultType="cn.winkt.modules.paimai.vo.OrderVo">
-        select o.*, g.name as goods_name,g.id as goods_id,g.images as goods_images,g.type as goods_type
+        select o.*, g.title as goods_name,g.id as goods_id,g.images as goods_images,g.type as goods_type
         from paimai_orders o left join paimai_goods g on g.id = o.goods_id
     </select>
 </mapper>
