@@ -75,6 +75,10 @@ const PerformanceListSelector = (props: any) => {
             text: '结束时间',
             dataField: 'endTime',
         },
+        {
+            text: '排序',
+            dataField: 'sortNum',
+        },
     ]
 
     const handleOnRowSelect = (row:any, isSelect:boolean) => {

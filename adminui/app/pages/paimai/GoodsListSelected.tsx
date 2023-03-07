@@ -72,6 +72,10 @@ const GoodsListSelected = (props: any) => {
             text: '起拍价',
             dataField: 'startPrice',
         },
+        {
+            text: '排序',
+            dataField: 'sortNum',
+        },
     ]
 
     const handleOnRowSelect = (row:any, isSelect:boolean) => {

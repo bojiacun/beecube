@@ -59,6 +59,10 @@ public class WxAppGoodsController {
         if(goods.getType() != null) {
             queryWrapper.eq("g.type", goods.getType());
         }
+        String tag = req.getParameter("tag");
+        if(StringUtils.isNotEmpty(tag)) {
+            queryWrapper.like("q.tags", tag);
+        }
         queryWrapper.eq("g.status", 1);
         String source = req.getParameter("source");
         Date nowDate = new Date();

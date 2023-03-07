@@ -60,7 +60,7 @@ const PerformanceEditor = (props: any) => {
     }, [postFetcher.state]);
     if (!model) return <></>
 
-    const newModel = {status: 0, type: 1, endTime: '', images: '', ...model};
+    const newModel = {status: 0, type: 1, sortNum: 0, endTime: '', images: '', ...model};
     let titleText;
     switch (type) {
         case 1:
@@ -100,6 +100,7 @@ const PerformanceEditor = (props: any) => {
                                     {type != 2 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
+                                    <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>

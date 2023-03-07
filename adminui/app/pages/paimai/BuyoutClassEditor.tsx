@@ -54,12 +54,13 @@ const BuyoutClassEditor = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}一口价分类</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{status: 1,...model}} validationSchema={BuyoutClassSchema} onSubmit={handleOnSubmit}>
+                    <Formik innerRef={formikRef} initialValues={{status: 1, sortNum: 0,...model}} validationSchema={BuyoutClassSchema} onSubmit={handleOnSubmit}>
                         {(formik)=>{
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapInput label={'分类名称'} name={'name'}/>
+                                        <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                         <BootstrapRadioGroup  options={[{label: '不显示', value: '0'},{label: '显示', value: '1'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>

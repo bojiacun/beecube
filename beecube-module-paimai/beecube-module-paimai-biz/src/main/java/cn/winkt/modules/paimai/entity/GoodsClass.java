@@ -33,6 +33,7 @@ public class GoodsClass {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
 	private java.lang.String id;
+	private Integer sortNum;
 	/**分类名称*/
 	@Excel(name = "分类名称", width = 15)
     @ApiModelProperty(value = "分类名称")

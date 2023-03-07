@@ -70,7 +70,7 @@ const BuyoutEditor = (props: any) => {
 
     if (!model) return <></>
 
-    const newModel = {status: 0, type: 1, endTime: '', images: '', ...model};
+    const newModel = {status: 0, type: 1, sortNum: 0, endTime: '', images: '', ...model};
 
     return (
         <>
@@ -104,6 +104,7 @@ const BuyoutEditor = (props: any) => {
                                         <FormLabel htmlFor={'description'}>拍品详情</FormLabel>
                                         <TinymceEditor name={'description'}/>
                                     </FormGroup>
+                                    <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>

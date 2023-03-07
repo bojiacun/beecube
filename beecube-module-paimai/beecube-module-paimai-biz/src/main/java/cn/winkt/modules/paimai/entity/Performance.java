@@ -40,7 +40,7 @@ public class Performance {
 	/**开拍时间*/
     @ApiModelProperty(value = "开拍时间")
 	private java.util.Date startTime;
-
+	private Integer sortNum;
 	private String tags;
 	/**结束时间*/
     @ApiModelProperty(value = "结束时间")

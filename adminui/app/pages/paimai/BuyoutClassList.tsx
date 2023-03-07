@@ -109,6 +109,10 @@ const BuyoutClassList = (props: any) => {
             dataField: 'status_dictText',
         },
         {
+            text: '排序',
+            dataField: 'sortNum',
+        },
+        {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 180},

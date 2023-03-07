@@ -61,6 +61,10 @@ public class WxAppPerformanceController {
         else if("2".equals(source)) {
             queryWrapper.lt("p.end_time", nowDate);
         }
+        String tag = req.getParameter("tag");
+        if(StringUtils.isNotEmpty(tag)) {
+            queryWrapper.like("q.tags", tag);
+        }
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
         orderField = "p."+orderField;

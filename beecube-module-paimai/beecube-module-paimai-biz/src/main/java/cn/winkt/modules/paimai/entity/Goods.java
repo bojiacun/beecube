@@ -51,6 +51,7 @@ public class Goods {
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
 
+	private Integer sortNum;
 	private String tags;
 	private java.lang.Integer stock;
 	/**单品保证金*/

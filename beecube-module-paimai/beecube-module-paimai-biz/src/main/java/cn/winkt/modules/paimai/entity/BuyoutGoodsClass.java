@@ -36,6 +36,7 @@ public class BuyoutGoodsClass {
 	@Excel(name = "分类名称", width = 15)
     @ApiModelProperty(value = "分类名称")
 	private java.lang.String name;
+	private Integer sortNum;
 	/**父分类ID*/
 	@Excel(name = "父分类ID", width = 15)
     @ApiModelProperty(value = "父分类ID")
