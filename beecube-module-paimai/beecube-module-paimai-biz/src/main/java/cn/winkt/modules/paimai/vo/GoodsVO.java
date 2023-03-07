@@ -24,7 +24,9 @@ public class GoodsVO {
     private java.lang.Float performanceDeposit;
     private java.util.Date endTime;
     private java.lang.Object fields;
-
+    private String tags;
+    private Integer sortNum;
+    private Integer stock;
     private java.lang.String description;
     /**拍品流程*/
 

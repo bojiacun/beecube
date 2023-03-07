@@ -13,6 +13,8 @@ public class PerformanceVO {
     /**结束时间*/
     private java.util.Date endTime;
     /**固定保证金*/
+    private String tags;
+    private Integer sortNum;
     private java.lang.Float deposit;
     /**预览图片*/
     private java.lang.String preview;
