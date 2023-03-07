@@ -70,8 +70,8 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
-		Page<GoodsOrder> page = new Page<GoodsOrder>(pageNo, pageSize);
-		IPage<OrderVo> pageList = goodsOrderService.queryOrderPage(page, queryWrapper);
+		Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
+		IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
