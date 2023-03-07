@@ -96,9 +96,9 @@ export default class Index extends Component<any, any> {
             Taro.requestPayment(data).then(() => {
                 //支付已经完成，提醒支付成功并返回上一页面
                 Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-                    let goods = this.state.goods;
-                    goods.deposited = true;
-                    this.setState({goods: goods});
+                    let detail = this.state.detail;
+                    detail.deposited = true;
+                    this.setState({detail: detail});
                 });
                 this.setState({posting: false});
             }).catch(()=>this.setState({posting: false}));

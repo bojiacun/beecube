@@ -100,6 +100,9 @@ export default {
             }, 1000);
         }
     },
+    showError: (msg = '保存失败') => {
+        Taro.showToast({title: msg, icon: 'none', duration: 1500}).then();
+    },
     showLoading: (msg = '加载中') => {
         Taro.showLoading({title: msg}).then();
     },

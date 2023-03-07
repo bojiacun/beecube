@@ -170,8 +170,8 @@ export default class Index extends Component<any, any> {
         this.setState({posting: true});
         //出价
         request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
+            this.setState({posting: false});
             if(res.data.success) {
-                this.setState({posting: false});
                 utils.showSuccess(false, '出价成功');
                 goods.currentPrice = this.state.nextPrice;
                 let offers = this.state.offers;
@@ -200,7 +200,10 @@ export default class Index extends Component<any, any> {
                 this.nextPrice(goods);
                 //出价成功加入队列
             }
-        })
+            else {
+                utils.showError(res.data.message||'出价失败');
+            }
+        }).catch(()=>this.setState({posting: false}));
     }
     nextPrice(newGoods) {
         let goods = newGoods;
