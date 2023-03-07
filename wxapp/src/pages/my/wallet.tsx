@@ -81,6 +81,7 @@ export default class Index extends Component<any, any> {
                     <ListView
                         tabs={this.tabs}
                         dataFetcher={this.loadData}
+                        tabStyle={2}
                     />
                 </LoginView>
             </PageLayout>
