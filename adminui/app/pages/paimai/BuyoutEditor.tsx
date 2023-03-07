@@ -45,7 +45,7 @@ const BuyoutEditor = (props: any) => {
     }
     useEffect(() => {
         if (model) {
-            goodsClassFetcher.load('/paimai/goods/classes/all');
+            goodsClassFetcher.load('/paimai/buyout/classes/all');
         }
     }, [model]);
 
@@ -93,6 +93,8 @@ const BuyoutEditor = (props: any) => {
                                     <BootstrapSelect name={'classId'} label={'分类'} options={goodsClassOptions}/>
                                     <BootstrapInput label={'标题'} name={'title'}/>
                                     <BootstrapInput label={'副标题'} name={'subTitle'}/>
+                                    <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
+                                    <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <FormGroup>
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>

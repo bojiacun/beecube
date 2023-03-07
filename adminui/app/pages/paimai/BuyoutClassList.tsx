@@ -2,34 +2,36 @@ import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
+    emptySortFunc,
+    headerSortingClasses,
     PageSizeOptions,
     showDeleteAlert,
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
 import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
+import {Field, Formik, Form as FormikForm} from "formik";
+import classNames from "classnames";
+import {AwesomeButton} from "react-awesome-button";
+import * as Yup from "yup";
+import TreePermissionList from "~/pages/system/roles/TreePermissionList";
+import BootstrapSelect from "~/components/form/BootstrapSelect";
+import FallbackImage from "~/components/fallback-image";
+import UserEdit from "~/pages/system/roles/UserEdit";
 import GoodsEditor from "~/pages/paimai/GoodsEditor";
-import FigureImage from "react-bootstrap/FigureImage";
-import {Delete, Edit, Eye, MoreVertical} from "react-feather";
-import OfferList from "~/pages/paimai/OfferList";
-import DepositList from "~/pages/paimai/DepositList";
-import ViewList from "~/pages/paimai/ViewList";
-import FollowList from "~/pages/paimai/FollowList";
+import GoodsClassEditor from "~/pages/paimai/GoodsClassEditor";
+import BuyoutClassEditor from "~/pages/paimai/BuyoutClassEditor";
 
 
-const GoodsList = (props: any) => {
+const BuyoutClassList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
-    const [selectedRow, setSelectedRow] = useState<any>();
-    const [viewsShow, setViewsShow] = useState<boolean>(false);
-    const [followsShow, setFollowsShow] = useState<boolean>(false);
-    const [depositsShow, setDepositsShow] = useState<boolean>(false);
-    const [offersShow, setOffersShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -69,22 +71,6 @@ const GoodsList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'offers':
-                setSelectedRow(row);
-                setOffersShow(true);
-                break;
-            case 'deposits':
-                setSelectedRow(row);
-                setDepositsShow(true);
-                break;
-            case 'views':
-                setSelectedRow(row);
-                setViewsShow(true);
-                break;
-            case 'follows':
-                setSelectedRow(row);
-                setFollowsShow(true);
-                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -93,7 +79,7 @@ const GoodsList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/buyout/classes/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
@@ -111,76 +97,27 @@ const GoodsList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
-            text: '拍品名称',
-            dataField: 'title',
+            text: '分类ID',
+            dataField: 'id',
         },
         {
-            text: '预览图',
-            dataField: '',
-            isDummyField: true,
-            formatter: (cell: any, row: any) => {
-                let previewUrl = row.images?.split(',')[0];
-                return <FigureImage src={previewUrl} style={{width: 60, height: 60}}/>
-            }
+            text: '分类名称',
+            dataField: 'name',
         },
         {
-            text: '拍品类型',
-            dataField: 'type_dictText',
-        },
-        {
-            text: '起拍价',
-            dataField: 'startPrice',
-        },
-        {
-            text: '保证金',
-            dataField: 'deposit',
-        },
-        {
-            text: '库存',
-            dataField: 'stock',
-        },
-        {
-            text: '标签',
-            dataField: 'tags',
-        },
-        {
-            text: '结束时间',
-            dataField: 'endTime',
-        },
-        {
-            text: '状态',
+            text: '分类状态',
             dataField: 'status_dictText',
         },
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 230},
+            headerStyle: {width: 180},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>出价记录</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
-                        <span className={'divider'}/>
-                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
-                            <Dropdown.Toggle as={'span'} className={'noafter'}>
-                                <MoreVertical size={16} style={{marginTop: -2}}/>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item eventKey={'views'}>
-                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>围观记录</div>
-                                </Dropdown.Item>
-                                <Dropdown.Item eventKey={'follows'}>
-                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>关注记录</div>
-                                </Dropdown.Item>
-                                <Dropdown.Item eventKey={'edit'}>
-                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
-                                </Dropdown.Item>
-                                <Dropdown.Item eventKey={'delete'}>
-                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
                 );
             }
@@ -193,7 +130,6 @@ const GoodsList = (props: any) => {
     const handleOnNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
-
     const handleOnAdd = () => {
         setEditModal({});
     }
@@ -203,7 +139,7 @@ const GoodsList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">拍品管理</h4>
+                            <h4 className="mb-0">一口价分类</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -213,7 +149,7 @@ const GoodsList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建拍品</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建分类</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -223,7 +159,7 @@ const GoodsList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>拍品名称</FormLabel>
+                                    <FormLabel htmlFor={'name'}>分类名称</FormLabel>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
@@ -261,29 +197,12 @@ const GoodsList = (props: any) => {
                 </div>
             </Card>
 
-            {editModal && <GoodsEditor model={editModal} onHide={() => {
+            {editModal && <BuyoutClassEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
-            }}/>}
-
-            {selectedRow && <OfferList show={offersShow} onHide={()=>{
-                setSelectedRow(null);
-                setOffersShow(false);
-            }} selectedRow={selectedRow} />}
-            {selectedRow && <DepositList show={depositsShow} onHide={()=>{
-                setSelectedRow(null)
-                setDepositsShow(false);
-            }}  selectedRow={selectedRow} />}
-            {selectedRow && <ViewList show={viewsShow} onHide={()=>{
-                setSelectedRow(null)
-                setViewsShow(false);
-            }}  selectedRow={selectedRow} />}
-            {selectedRow && <FollowList show={followsShow} onHide={()=>{
-                setSelectedRow(null)
-                setFollowsShow(false);
-            }}  selectedRow={selectedRow} />}
+            }} />}
         </>
     );
 }
 
-export default GoodsList;
+export default BuyoutClassList;

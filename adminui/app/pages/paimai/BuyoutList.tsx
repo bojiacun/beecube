@@ -123,6 +123,14 @@ const BuyoutList = (props: any) => {
             dataField: 'startPrice',
         },
         {
+            text: '库存',
+            dataField: 'stock',
+        },
+        {
+            text: '标签',
+            dataField: 'tags',
+        },
+        {
             text: '状态',
             dataField: 'status_dictText',
         },

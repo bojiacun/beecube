@@ -51,6 +51,7 @@ public class Goods {
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
 
+	private String tags;
 	private java.lang.Integer stock;
 	/**单品保证金*/
 	@Excel(name = "单品保证金", width = 15)
