@@ -51,10 +51,6 @@ export default defineAppConfig({
                 pagePath: 'pages/my/index',
                 text: '我的',
             },
-            {
-                pagePath: 'pages/my/offers',
-                text: '参拍记录',
-            },
         ],
         custom: true,
     },

@@ -122,7 +122,7 @@ public class WxAppMemberController {
                                             HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOffer> queryWrapper = QueryGenerator.initQueryWrapper(goodsOffer, req.getParameterMap());
-        queryWrapper.eq("gd.member_id", loginUser.getId());
+        queryWrapper.eq("gof.member_id", loginUser.getId());
         Page<GoodsOffer> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOfferVO> pageList = goodsOfferService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
