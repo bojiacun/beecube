@@ -17,5 +17,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface GoodsOrderMapper extends BaseMapper<GoodsOrder> {
-    IPage<OrderVo> queryOrderPage(Page page, Wrapper<GoodsOrder> queryWrapper);
 }
