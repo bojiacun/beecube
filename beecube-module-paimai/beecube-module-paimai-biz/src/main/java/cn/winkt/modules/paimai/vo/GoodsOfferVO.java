@@ -27,4 +27,5 @@ public class GoodsOfferVO {
     private java.lang.String appId;
     private String performanceName;
     private String goodsName;
+    private Float goodsMaxOfferPrice;
 }

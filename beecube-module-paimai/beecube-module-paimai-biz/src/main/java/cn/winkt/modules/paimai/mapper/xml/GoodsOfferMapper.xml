@@ -6,7 +6,9 @@
     </select>
 
     <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsOfferVO">
-        select gof.*,g.title as goods_name,p.title as performanceName from paimai_goods_offers gof
+        select gof.*,g.title as goods_name,p.title as performanceName,
+               (select max(price) from paimai_goods_offers mgof where mgof.goods_id=gof.goods_id) as goods_max_offer_price
+        from paimai_goods_offers gof
         left join paimai_goods g on g.id=gof.goods_id
         left join paimai_performances p on p.id = gof.performance_id ${ew.customSqlSegment}
     </select>
