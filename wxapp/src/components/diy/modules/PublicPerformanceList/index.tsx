@@ -10,7 +10,7 @@ const PublicPerformanceListModule = (props: any) => {
     const [goodsList, setGoodsList] = useState<any[]>([]);
 
     useEffect(() => {
-        request.get('/paimai/api/performances/list', {params: {type: 3, source: dataSource, pageSize: basic.count}}).then(res => {
+        request.get('/paimai/api/performances/list', {params: {tag: basic.tag, source: dataSource, pageSize: basic.count}}).then(res => {
             setGoodsList(res.data.result.records);
         })
     }, []);

@@ -5,7 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
 import {API_PAIMAI_BUYOUT_CLASS_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
-import GoodsClassList from "~/pages/paimai/GoodsClassList";
+import BuyoutClassList from "~/pages/paimai/BuyoutClassList";
 export const ErrorBoundary = defaultRouteErrorBoundary;
 
 export const CatchBoundary = defaultRouteCatchBoundary;
@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const BuyoutGoodsClassesPage = (props:any) => {
     return (
-        <GoodsClassList {...props} />
+        <BuyoutClassList {...props} />
     );
 }
 

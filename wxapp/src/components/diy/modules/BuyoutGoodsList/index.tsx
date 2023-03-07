@@ -26,7 +26,7 @@ const BuyoutGoodsListModule = (props: any) => {
 
     useEffect(() => {
         if (basic.showClass) {
-            request.get('/paimai/api/goods/classes', {params: {}}).then(res => {
+            request.get('/paimai/api/goods/buyout/classes', {params: {}}).then(res => {
                 setClassList(res.data.result);
             })
         }
