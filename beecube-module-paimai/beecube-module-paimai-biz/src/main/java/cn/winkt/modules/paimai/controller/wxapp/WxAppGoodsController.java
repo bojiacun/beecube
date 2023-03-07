@@ -73,7 +73,7 @@ public class WxAppGoodsController {
         else if("2".equals(source)) {
             queryWrapper.lt("g.end_time", nowDate).or().lt("g.actual_end_time", nowDate);
         }
-        queryWrapper.orderByAsc("g.sortNum");
+        queryWrapper.orderByAsc("g.sort_num");
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
         orderField = "g."+orderField;
