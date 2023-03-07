@@ -14,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IGoodsOrderService extends IService<GoodsOrder> {
-    IPage<GoodsOrder> queryOrderPage(Page page, Wrapper<GoodsOrder> queryWrapper);
+
 }

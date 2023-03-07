@@ -22,10 +22,4 @@ import javax.annotation.Resource;
 @Service
 public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderMapper, GoodsOrder> implements IGoodsOrderService {
 
-    @Resource
-    GoodsOrderMapper goodsOrderMapper;
-    @Override
-    public IPage<OrderVo> queryOrderPage(Page page, Wrapper<GoodsOrder> queryWrapper) {
-        return goodsOrderMapper.queryOrderPage(page, queryWrapper);
-    }
 }
