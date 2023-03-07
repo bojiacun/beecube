@@ -20,6 +20,7 @@ export default defineAppConfig({
         'pages/my/addresses',
         'pages/my/newaddress',
         'pages/my/deposits',
+        'pages/my/offers',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
@@ -49,6 +50,10 @@ export default defineAppConfig({
             {
                 pagePath: 'pages/my/index',
                 text: '我的',
+            },
+            {
+                pagePath: 'pages/my/offers',
+                text: '参拍记录',
             },
         ],
         custom: true,

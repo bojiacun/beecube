@@ -11,6 +11,7 @@ import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsDepositVO;
+import cn.winkt.modules.paimai.vo.GoodsOfferVO;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.PostOrderVO;
 import com.alibaba.fastjson.JSONObject;
@@ -111,7 +112,21 @@ public class WxAppMemberController {
         IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
-
+    @AutoLog(value = "用户参拍记录列表-分页列表查询")
+    @ApiOperation(value="用户参拍记录列表-分页列表查询", notes="用户参拍记录列表-分页列表查询")
+    @GetMapping(value = "/offers")
+    @AutoDict
+    public Result<?> memberOfferList(GoodsOffer goodsOffer,
+                                            @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                            @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                            HttpServletRequest req) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        QueryWrapper<GoodsOffer> queryWrapper = QueryGenerator.initQueryWrapper(goodsOffer, req.getParameterMap());
+        queryWrapper.eq("gd.member_id", loginUser.getId());
+        Page<GoodsOffer> page = new Page<>(pageNo, pageSize);
+        IPage<GoodsOfferVO> pageList = goodsOfferService.selectPageVO(page, queryWrapper);
+        return Result.OK(pageList);
+    }
     /**
      * 获取用户的浏览记录
      * @param pageNo

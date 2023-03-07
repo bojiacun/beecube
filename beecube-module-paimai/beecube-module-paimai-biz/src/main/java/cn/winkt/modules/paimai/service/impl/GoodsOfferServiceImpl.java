@@ -3,6 +3,10 @@ package cn.winkt.modules.paimai.service.impl;
 import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.mapper.GoodsOfferMapper;
 import cn.winkt.modules.paimai.service.IGoodsOfferService;
+import cn.winkt.modules.paimai.vo.GoodsOfferVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,5 +27,10 @@ public class GoodsOfferServiceImpl extends ServiceImpl<GoodsOfferMapper, GoodsOf
     @Override
     public Double getMaxOffer(String goodsId) {
         return goodsOfferMapper.getMaxOffer(goodsId);
+    }
+
+    @Override
+    public IPage<GoodsOfferVO> selectPageVO(Page<GoodsOffer> page, QueryWrapper<GoodsOffer> queryWrapper) {
+        return goodsOfferMapper.selectPageVO(page, queryWrapper);
     }
 }

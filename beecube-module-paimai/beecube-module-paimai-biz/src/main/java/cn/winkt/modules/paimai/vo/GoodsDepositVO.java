@@ -3,9 +3,11 @@ package cn.winkt.modules.paimai.vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
+@Data
 public class GoodsDepositVO {
     /**id*/
     private java.lang.String id;
