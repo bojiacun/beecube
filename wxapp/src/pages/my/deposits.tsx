@@ -3,8 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {Navigator, Text, View} from "@tarojs/components";
-import FallbackImage from "../../components/FallbackImage";
+import {View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
@@ -14,7 +13,6 @@ export default class Index extends Component<any, any> {
     state:any = {
         page: 1,
         list: [],
-        id: '',
         loadingMore: false,
         noMore: false,
     }
@@ -22,8 +20,8 @@ export default class Index extends Component<any, any> {
     componentDidMount() {
     }
 
-    loadData(id, page, clear = false) {
-        return request.get('/paimai/api/members/views', {params: {id: id, pageNo: page}}).then(res=>{
+    loadData(page, clear = false) {
+        return request.get('/paimai/api/members/deposits', {params: {pageNo: page}}).then(res=>{
             if(clear) {
                 this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
             }
@@ -40,21 +38,20 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    onLoad(options) {
+    onLoad() {
         utils.showLoading();
-        this.setState({id: options.id});
-        this.loadData(options.id, 1,true).then(()=>utils.hideLoading());
+        this.loadData(1,true).then(()=>utils.hideLoading());
     }
 
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.id, this.state.page+1,false).then(()=>{});
+        this.loadData(this.state.page+1,false).then(()=>{});
         this.setState({page: this.state.page+1});
     }
 
     onPullDownRefresh() {
         utils.showLoading();
-        this.loadData(this.state.id, 1,true).then(()=>utils.hideLoading());
+        this.loadData(1,true).then(()=>utils.hideLoading());
         this.setState({page: 1});
     }
 
@@ -66,10 +63,19 @@ export default class Index extends Component<any, any> {
                     {list.length == 0 && <NoData />}
                     <View className={'grid grid-cols-1 gap-4 p-4'}>
                         {list.map((item)=>{
-                            let radius = 8;
+                            let radius = 0;
                             return (
-                                <View>
-
+                                <View className={'bg-white shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                    <View className={'flex items-center'}>
+                                        <View className={'text-lg font-bold flex-1'}>{item.performanceName||item.goodsName}</View>
+                                        <View className={'w-20 font-bold'}>
+                                            ￥${numeral(item.price).format('0,0.00')}
+                                        </View>
+                                    </View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        交易单号:{item.transactionId}
+                                        交易时间：{item.createTime}
+                                    </View>
                                 </View>
                             );
                         })}

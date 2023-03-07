@@ -10,10 +10,12 @@ import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
+import cn.winkt.modules.paimai.vo.GoodsDepositVO;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.PostOrderVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
@@ -22,6 +24,7 @@ import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +32,10 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
@@ -37,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -85,6 +92,25 @@ public class WxAppMemberController {
 
     @Resource
     IOrderGoodsService orderGoodsService;
+
+
+
+    @AutoLog(value = "用户保证金列表-分页列表查询")
+    @ApiOperation(value="用户保证金列表-分页列表查询", notes="用户保证金列表-分页列表查询")
+    @GetMapping(value = "/deposits")
+    @AutoDict
+    public Result<?> memberGoodsDepositList(GoodsDeposit goodsDeposit,
+                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                   HttpServletRequest req) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        QueryWrapper<GoodsDeposit> queryWrapper = QueryGenerator.initQueryWrapper(goodsDeposit, req.getParameterMap());
+        queryWrapper.eq("gd.status", 1);
+        queryWrapper.eq("gd.member_id", loginUser.getId());
+        Page<GoodsDeposit> page = new Page<GoodsDeposit>(pageNo, pageSize);
+        IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
+        return Result.OK(pageList);
+    }
 
     /**
      * 获取用户的浏览记录
