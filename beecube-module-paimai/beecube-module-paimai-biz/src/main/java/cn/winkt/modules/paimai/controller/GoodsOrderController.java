@@ -6,10 +6,14 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.entity.OrderGoods;
+import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.OrderVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -51,6 +55,9 @@ import io.swagger.annotations.ApiOperation;
 public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrderService> {
 	@Autowired
 	private IGoodsOrderService goodsOrderService;
+
+	@Resource
+	private IOrderGoodsService orderGoodsService;
 	
 	/**
 	 * 分页列表查询
@@ -72,6 +79,11 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 		QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
 		Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
 		IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
+		pageList.getRecords().forEach(r -> {
+			LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
+			qw.eq(OrderGoods::getOrderId, r.getId());
+			r.setOrderGoods(orderGoodsService.list(qw));
+		});
 		return Result.OK(pageList);
 	}
 	
