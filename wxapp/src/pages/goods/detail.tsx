@@ -3,9 +3,8 @@ import PageLayout from "../../layouts/PageLayout";
 import request, {connectWebSocketServer} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, Navigator, RichText, Text, View} from "@tarojs/components";
+import {Button, Navigator, Text, View} from "@tarojs/components";
 import Clocker from 'clocker-js/Clocker';
-import Collapse from "../../components/collapse";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -14,7 +13,8 @@ import PageLoading from "../../components/pageloading";
 import md5 from 'blueimp-md5';
 import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
-import Modal from "../../components/modal";
+import Uprange from "./components/uprange";
+import Descs from "./components/descs";
 
 const numeral = require('numeral');
 
@@ -122,6 +122,17 @@ export default class Index extends Component<any, any> {
                         }))
                     );
                 }
+                else {
+                    offers.unshift(
+                        {
+                            memberAvatar: userInfo.avatar,
+                            memberId: userInfo.id,
+                            memberName: userInfo.phone || userInfo.realname,
+                            price: this.state.nextPrice,
+                            offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                        }
+                    );
+                }
                 this.setState({offers: [...offers]});
                 break;
             case 'MSG_TYPE_DELAY':
@@ -170,8 +181,19 @@ export default class Index extends Component<any, any> {
                         memberId: userInfo.id,
                         memberName: userInfo.phone || userInfo.realname,
                         price: this.state.nextPrice,
-                        offerTime: moment(new Date()).format('yyyy-MM-dd HH:mm:ss'),
+                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
                     });
+                }
+                else {
+                    offers.unshift(
+                        {
+                            memberAvatar: userInfo.avatar,
+                            memberId: userInfo.id,
+                            memberName: userInfo.phone || userInfo.realname,
+                            price: this.state.nextPrice,
+                            offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                        }
+                    );
                 }
                 this.setState({offers: [...offers]});
                 this.nextPrice(goods);
@@ -376,36 +398,8 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                 </View>
-                <View className={'bg-white px-4 divide-y divide-gray-100'}>
-                    {goods.performanceId ? <Collapse showArrow={true} title={'拍卖专场'} description={goods.performanceTitle} url={`/pages/performance/detail?id=${goods.performanceId}`} />: <></>}
-                    <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
-                    {goods.fields.map(f => {
-                        return <Collapse title={f.key} description={f.value}/>
-                    })}
-                </View>
-                <View className={'p-4'}>
-                    <View className={'font-bold'}>拍品描述</View>
-                    <View>
-                        <RichText nodes={goods.description}/>
-                    </View>
-                </View>
-                <View className={'bg-white px-4 divide-y divide-gray-100'}>
-                    <Collapse title={'拍卖流程'} showArrow={true}>
-                        <RichText nodes={goods.descFlow}/>
-                    </Collapse>
-                    <Collapse title={'物流运输'} showArrow={true}>
-                        <RichText nodes={goods.descDelivery}/>
-                    </Collapse>
-                    <Collapse title={'注意事项'} showArrow={true}>
-                        <RichText nodes={goods.descNotice}/>
-                    </Collapse>
-                    <Collapse title={'拍卖须知'} showArrow={true}>
-                        <RichText nodes={goods.descRead}/>
-                    </Collapse>
-                    <Collapse title={'保证金说明'} showArrow={true}>
-                        <RichText nodes={goods.descDeposit}/>
-                    </Collapse>
-                </View>
+                <Descs goods={goods} />
+
                 <View style={{height: Taro.pxTransform(124)}}/>
 
                 <LoginView>
@@ -431,22 +425,7 @@ export default class Index extends Component<any, any> {
                         {this.renderButton()}
                     </View>
                 </LoginView>
-                <Modal show={this.state.uprangeShow} showMask={true} onClose={()=>this.setState({uprangeShow:false})}>
-                    <View className={'bg-indigo-200 text-gray-600 font-bold text-center flex py-2'}>
-                        <View className={'flex-1'}>区间开始</View>
-                        <View className={'flex-1'}>区间结束</View>
-                        <View className={'flex-1'}>加价幅度</View>
-                    </View>
-                    {goods.uprange.map(item=>{
-                        return (
-                            <View className={'text-gray-600 text-center flex py-2'}>
-                                <View className={'flex-1'}>{parseFloat(item.min)!=0?numeral(item.min).format('0,0.00'):'-'}</View>
-                                <View className={'flex-1'}>{parseFloat(item.max)!=0?numeral(item.max).format('0,0.00'):'-'}</View>
-                                <View className={'flex-1'}>{numeral(item.price).format('0,0.00')}</View>
-                            </View>
-                        );
-                    })}
-                </Modal>
+                <Uprange uprangeShow={this.state.uprangeShow} onClose={()=>this.setState({uprangeShow: false})} goods={goods} />
             </PageLayout>
         );
     }
