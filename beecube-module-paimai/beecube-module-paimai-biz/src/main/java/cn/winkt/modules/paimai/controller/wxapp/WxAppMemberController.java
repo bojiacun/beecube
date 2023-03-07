@@ -10,10 +10,7 @@ import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.*;
-import cn.winkt.modules.paimai.vo.GoodsDepositVO;
-import cn.winkt.modules.paimai.vo.GoodsOfferVO;
-import cn.winkt.modules.paimai.vo.GoodsVO;
-import cn.winkt.modules.paimai.vo.PostOrderVO;
+import cn.winkt.modules.paimai.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -107,7 +104,7 @@ public class WxAppMemberController {
                                    HttpServletRequest req) {
         QueryWrapper<GoodsOrderAfter> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrderAfter, req.getParameterMap());
         Page<GoodsOrderAfter> page = new Page<GoodsOrderAfter>(pageNo, pageSize);
-        IPage<GoodsOrderAfter> pageList = goodsOrderAfterService.page(page, queryWrapper);
+        IPage<GoodsOrderAfterVO> pageList = goodsOrderAfterService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
 
