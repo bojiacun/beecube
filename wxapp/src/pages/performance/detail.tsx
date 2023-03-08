@@ -165,7 +165,7 @@ export default class Index extends Component<any, any> {
                                             当前价 <Text className={'text-red-500'}>RMB</Text> <Text
                                             className={'text-base'}>{numeral(item.currentPrice||item.startPrice).format('0,0.00')}</Text>
                                         </View>
-                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} endTime={new Date(detail.endTime)}/>
+                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(detail.performanceStartTime)} endTime={new Date(detail.endTime)}/>
                                     </View>
                                 </Navigator>
                             </View>
