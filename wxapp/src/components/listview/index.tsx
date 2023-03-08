@@ -29,7 +29,8 @@ const ListView: FC<ListViewProps> = (props) => {
         onTabChanged = () => { },
         dataFetcher,
         tabStyle = 1,
-        defaultActiveKey = null
+        defaultActiveKey = null,
+        className
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -106,7 +107,7 @@ const ListView: FC<ListViewProps> = (props) => {
                 })}
             </View>
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
-            <View className={'p-4 space-y-4'} style={{paddingTop: Taro.pxTransform(70)}}>
+            <View className={classNames('p-4 space-y-4', className)} style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);

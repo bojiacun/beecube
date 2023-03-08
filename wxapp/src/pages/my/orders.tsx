@@ -50,7 +50,7 @@ export default class Index extends Component<any, any> {
                     {data.orderGoods.map((item:any)=>{
                         return (
                             <View className={'flex'}>
-                                <View className={'w-12'}><FallbackImage className={'rounded'} src={utils.resolveUrl(item.goodsImage)} /></View>
+                                <View className={'w-12 relative'}><FallbackImage className={'rounded block w-full h-full'} src={utils.resolveUrl(item.goodsImage)} /></View>
                                 <View className={'flex-1'}>
                                     <View>{item.goodsName}</View>
                                     <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>

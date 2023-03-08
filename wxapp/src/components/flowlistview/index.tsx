@@ -28,7 +28,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
     const {
         tabs, onTabChanged = () => {}, dataFetcher,
         tabStyle = 1,
-        defaultActiveKey = null
+        defaultActiveKey = null,
+        className
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -107,7 +108,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <View className={classNames('p-4', stylesFlow.flowWrapper)} style={{paddingTop: Taro.pxTransform(70)}}>
+                <View className={classNames('p-4', stylesFlow.flowWrapper, className)} style={{paddingTop: Taro.pxTransform(70)}}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);
