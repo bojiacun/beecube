@@ -43,7 +43,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        request.get('/paimai/api/goods/classes').then(res => {
+        request.get('/paimai/api/goods/buyout/classes').then(res => {
             let classes = res.data.result;
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
@@ -59,7 +59,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         return (
-            <PageLayout statusBarProps={{title: '所有拍品'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: '一口价拍品'}} enableReachBottom={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
             </PageLayout>
         );

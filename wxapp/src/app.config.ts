@@ -46,6 +46,10 @@ export default defineAppConfig({
                 text: '首页',
             },
             {
+                pagePath: 'pages/goods/buyouts',
+                text: '一口价列表',
+            },
+            {
                 pagePath: 'pages/shop/cart',
                 text: '购物车',
             },
