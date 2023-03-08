@@ -7,8 +7,21 @@ import PageLoading from "../../../components/pageloading";
 import utils from "../../../lib/utils";
 import request from "../../../lib/request";
 import FallbackImage from "../../../components/FallbackImage";
+import Taro from "@tarojs/taro";
 
 const numeral = require('numeral');
+
+const ORDER_TYPES = {
+    '1': '拍卖订单',
+    '2': '一口价订单'
+}
+const ORDER_STATUS = {
+    '0': '待支付',
+    '1': '待发货',
+    '2': '待收货',
+    '3': '已完成',
+    '4': '申请售后',
+}
 
 // @ts-ignore
 @connect((state: any) => (
@@ -23,6 +36,7 @@ export default class Index extends Component<any, any> {
         id: 0,
         detail: null,
         posting: false,
+        address: null
     }
 
     constructor(props) {
@@ -46,16 +60,46 @@ export default class Index extends Component<any, any> {
         this.setState({id: options.id});
         request.get("/paimai/api/members/orders/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
+            let address = {id: data.deliveryId, username: data.deliveryUsername, phone: data.deliveryPhone, address: data.deliveryAddress, city: data.deliveryCity, district: data.deliveryDistrict, province: data.deliveryProvince};
+            if(address.id) {
+                Taro.setStorageSync('ADDRESS', JSON.stringify(address));
+            }
             utils.hideLoading();
             this.setState({detail: data});
         });
     }
 
 
-
+    componentDidShow() {
+        //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
+        const address = Taro.getStorageSync('ADDRESS');
+        if(address) {
+            this.setState({address: JSON.parse(address)});
+        }
+        else {
+            request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
+                this.setState({address: res.data.result});
+            })
+        }
+    }
 
 
     pay() {
+        if(!this.state.address) {
+            return utils.showError("请选择收货地址");
+        }
+
+        this.setState({posting: true});
+        //支付宝保证金
+        request.post('/paimai/api/members/orders/pay', null, {params: {id: this.state.detail.id}}).then(res => {
+            let data = res.data.result;
+            data.package = data.packageValue;
+            Taro.requestPayment(data).then(() => {
+                //支付已经完成，提醒支付成功并返回上一页面
+                this.setState({posting: false});
+                utils.showSuccess(true, '支付成功');
+            }).catch(() => this.setState({posting: false}));
+        });
     }
 
 
@@ -74,7 +118,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {detail} = this.state;
+        const {detail, address} = this.state;
         const {systemInfo} = this.props;
         if (detail == null) return <PageLoading/>;
 
@@ -111,9 +155,9 @@ export default class Index extends Component<any, any> {
                             <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                                 <View className={'flex-1 space-y-2'}>
                                     <View className={'font-bold space-x-2'}>
-                                        <Text className={'text-lg'}>{detail?.username}</Text><Text>{detail?.phone}</Text>
+                                        <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
                                     </View>
-                                    <View className={'text-gray-400'}>{detail?.province} {detail?.city} {detail?.district} {detail?.address}</View>
+                                    <View className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
                                 </View>
                                 <View className={'px-2'}>
                                     <Text className={'fa fa-chevron-right'}/>
@@ -127,7 +171,7 @@ export default class Index extends Component<any, any> {
                         <View className={'space-y-4'}>
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>订单类型</View>
-                                <View>{detail.type_dictText}</View>
+                                <View>{ORDER_TYPES[detail.type]}</View>
                             </View>
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>订单号</View>
@@ -147,7 +191,7 @@ export default class Index extends Component<any, any> {
                             </View>
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>订单状态</View>
-                                <View>{detail.status_dictText}</View>
+                                <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>
                             </View>
                         </View>
                     </View>

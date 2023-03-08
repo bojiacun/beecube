@@ -48,7 +48,7 @@ export default class Index extends Component<any, any> {
 
     //@ts-ignore
     renderOrderButtons(data) {
-        return <></>;
+        return <View className={'text-gray-400'}>{data.type_dictText}</View>;
     }
 
     renderTemplate(data: any) {
@@ -74,8 +74,8 @@ export default class Index extends Component<any, any> {
                             </View>
                         );
                     })}
-                    <View className={'flex justify-between space-x-4'}>
-                        <View className={'text-gray-400 text-sm'}>下单时间：{data.createTime}</View>
+                    <View className={'flex justify-between space-x-4 text-sm'}>
+                        <View className={'text-gray-400'}>下单时间：{data.createTime}</View>
                         {this.renderOrderButtons(data)}
                     </View>
                 </Navigator>
