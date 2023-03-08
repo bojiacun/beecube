@@ -1,7 +1,17 @@
 .active {
     font-size: 16px;
     line-height: 2;
-    font-weight: 400;
-    border-bottom: 2px solid #3B82F6;
+    font-weight: bold;
     color: #3B82F6;
+    position: relative;
+}
+
+.active:before {
+    content: ' ';
+    width: 20px;
+    height: 3px;
+    background-color: #3B82F6;
+    position: absolute;
+    bottom: 0;
+    left: calc((100% - 20px) / 2);
 }
