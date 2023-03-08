@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import Taro, {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
@@ -84,6 +84,10 @@ const ListView: FC<ListViewProps> = (props) => {
         setPage(page + 1);
     });
 
+    useDidShow(()=>{
+        //列表显示的时候主动刷新
+
+    });
 
     return (
         <>

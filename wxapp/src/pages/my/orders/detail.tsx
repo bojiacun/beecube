@@ -42,6 +42,8 @@ export default class Index extends Component<any, any> {
     constructor(props) {
         super(props);
         this.pay = this.pay.bind(this);
+        this.requestAfter = this.requestAfter.bind(this);
+        this.cancel = this.cancel.bind(this);
     }
 
 
