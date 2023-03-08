@@ -3,22 +3,16 @@ import PageLayout from "../../layouts/PageLayout";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import classNames from "classnames";
-import {Navigator, View} from "@tarojs/components";
+import {Button, Navigator, View} from "@tarojs/components";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
+
 const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
-    state:any = {
-        tabs: [
-            {label: '全部', id: '', template: this.renderTemplate},
-            {label: '待支付', id: '0', template: this.renderTemplate},
-            {label: '待发货', id: '1', template: this.renderTemplate},
-            {label: '待收货', id: '2', template: this.renderTemplate},
-            {label: '已完成', id: '3', template: this.renderTemplate},
-            {label: '售后', id: '4', template: this.renderTemplate},
-        ],
+    state: any = {
+        tabs: [],
         status: false,
     }
 
@@ -26,11 +20,20 @@ export default class Index extends Component<any, any> {
         super(props);
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.renderOrderButtons = this.renderOrderButtons.bind(this);
+        this.state.tabs = [
+            {label: '全部', id: '', template: this.renderTemplate},
+            {label: '待支付', id: '0', template: this.renderTemplate},
+            {label: '待发货', id: '1', template: this.renderTemplate},
+            {label: '待收货', id: '2', template: this.renderTemplate},
+            {label: '已完成', id: '3', template: this.renderTemplate},
+            {label: '售后', id: '4', template: this.renderTemplate},
+        ]
     }
 
 
     onLoad(options) {
-        if(options.status) {
+        if (options.status) {
             this.setState({status: options.status});
         }
     }
@@ -43,22 +46,37 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/members/orders', {params: params});
     }
 
+    renderOrderButtons(data) {
+        return <></>;
+    }
+
     renderTemplate(data: any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer p-4')}>
-                <Navigator url={'/pages/my/orders/detail?id=' + data.id}>
-                    {data.orderGoods.map((item:any)=>{
+            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer p-4 relative')}>
+                <Navigator url={'/pages/my/orders/detail?id=' + data.id} className={'space-y-4'}>
+                    <View className={'text-sm flex items-center justify-between'}>
+                        <View className={'text-gray-400'}>
+                            单号：{data.id}
+                        </View>
+                        <View className={'text-red-400 font-bold text-lg'}>{data.status_dictText}</View>
+                    </View>
+                    {data.orderGoods.map((item: any) => {
                         return (
-                            <View className={'flex'}>
-                                <View className={'w-12 relative'}><FallbackImage className={'rounded block w-full h-full'} src={utils.resolveUrl(item.goodsImage)} /></View>
+                            <View className={'flex space-x-2 items-center'}>
+                                <View className={'flex-none'}><FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
+                                                                             src={utils.resolveUrl(item.goodsImage)}/></View>
                                 <View className={'flex-1'}>
                                     <View>{item.goodsName}</View>
                                     <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
                                 </View>
-                                <View className={'font-bold'}>￥{numeral(item.goodsPrice*item.goodsCount).format('0,0.00')}</View>
+                                <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
                             </View>
                         );
                     })}
+                    <View className={'flex justify-between space-x-4'}>
+                        <View className={'text-gray-400 text-sm'}>下单时间：{data.createTime}</View>
+                        {this.renderOrderButtons(data)}
+                    </View>
                 </Navigator>
             </View>
         );
@@ -74,10 +92,10 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {status} = this.state;
-        if(status === false) return <PageLoading />;
+        if (status === false) return <PageLoading/>;
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
-                <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} tabStyle={2} />
+                <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} tabStyle={2}/>
             </PageLayout>
         );
     }

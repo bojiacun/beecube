@@ -130,7 +130,22 @@ public class WxAppMemberController {
         });
         return Result.OK(pageList);
     }
+    @AutoLog(value = "订单表-订单详情")
+    @ApiOperation(value="订单表-订单详情", notes="订单表-订单详情")
+    @GetMapping(value = "/orders/detail")
+    @AutoDict
+    public Result<?> queryOrderDetail(@RequestParam(name="id", defaultValue="") String id) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsOrder::getId, id);
+        GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+        LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
+        qw.eq(OrderGoods::getOrderId, order.getId());
+        order.setOrderGoods(orderGoodsService.list(qw));
 
+        return Result.OK(order);
+    }
     @AutoLog(value = "用户保证金列表-分页列表查询")
     @ApiOperation(value="用户保证金列表-分页列表查询", notes="用户保证金列表-分页列表查询")
     @GetMapping(value = "/deposits")
