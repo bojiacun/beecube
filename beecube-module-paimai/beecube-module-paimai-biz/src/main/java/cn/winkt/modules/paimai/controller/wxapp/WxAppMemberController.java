@@ -59,6 +59,8 @@ public class WxAppMemberController {
     @Resource
     IGoodsFollowService goodsFollowService;
     @Resource
+    IMessagePoolService messagePoolService;
+    @Resource
     IGoodsViewService goodsViewService;
 
     @Resource
@@ -289,6 +291,92 @@ public class WxAppMemberController {
         }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
+    }
+
+    /**
+     * 判断用户是否设置了消息提醒
+     * @return
+     */
+    @GetMapping("/messaged")
+    public Result<Boolean> queryMemberMessage(
+            @RequestParam(name = "type", defaultValue = "0") Integer type,
+            @RequestParam(name="performanceId", defaultValue = "") String performanceId,
+            @RequestParam(name="goodsId", defaultValue = "") String goodsId
+            ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if (loginUser == null) {
+            return Result.OK(false);
+        }
+
+        LambdaQueryWrapper<MessagePool> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MessagePool::getMemberId, loginUser.getId());
+        queryWrapper.eq(MessagePool::getType, type);
+        if(StringUtils.isNotEmpty(performanceId)) {
+            queryWrapper.eq(MessagePool::getPerformanceId, performanceId);
+        }
+        if(StringUtils.isNotEmpty(goodsId)) {
+            queryWrapper.eq(MessagePool::getGoodsId, goodsId);
+        }
+        return Result.OK(messagePoolService.count(queryWrapper) > 0);
+    }
+
+    /**
+     * 设置或者取消消息提醒
+     * @param params
+     * @return
+     */
+    @PutMapping("/messages/toggle")
+    public Result<Boolean> toggleMessages(@RequestBody JSONObject params) {
+        String performanceId = params.getString("performanceId");
+        String goodsId = params.getString("goodsId");
+        Integer type = params.getInteger("type");
+
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<MessagePool> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MessagePool::getMemberId, loginUser.getId());
+        queryWrapper.eq(MessagePool::getType, type);
+        if(StringUtils.isNotEmpty(performanceId)) {
+            queryWrapper.eq(MessagePool::getPerformanceId,performanceId);
+        }
+        if(StringUtils.isNotEmpty(goodsId)) {
+            queryWrapper.eq(MessagePool::getGoodsId,goodsId);
+        }
+        long count = messagePoolService.count(queryWrapper);
+        if (count > 0) {
+            //删除所有关注记录
+            messagePoolService.remove(queryWrapper);
+            return Result.OK(false);
+        } else {
+            MessagePool messagePool = new MessagePool();
+            messagePool.setGoodsId(goodsId);
+            messagePool.setPerformanceId(performanceId);
+            messagePool.setType(type);
+            messagePool.setMemberId(loginUser.getId());
+            //这里计算好发送时间和内容
+            if(StringUtils.isNotEmpty(performanceId)) {
+                Performance performance = performanceService.getById(performanceId);
+                if(type == 1) {
+                    messagePool.setMessage(String.format("%s快开始了", performance.getTitle()));
+                    messagePool.setSendTime(DateUtils.addHours(performance.getStartTime(), -2));
+                }
+                else if(type == 2) {
+                    messagePool.setMessage(String.format("%s即将结束", performance.getTitle()));
+                    messagePool.setSendTime(DateUtils.addHours(performance.getEndTime(), -2));
+                }
+            }
+            if(StringUtils.isNotEmpty(performanceId)) {
+                Goods goods = goodsService.getById(goodsId);
+                if(type == 1) {
+
+                }
+                else if(type == 2) {
+                    messagePool.setMessage(String.format("%s即将结束", goods.getTitle()));
+                    messagePool.setSendTime(DateUtils.addHours(goods.getActualEndTime() == null ? goods.getEndTime():goods.getActualEndTime(), -2));
+                }
+            }
+            messagePoolService.save(messagePool);
+            return Result.OK(true);
+        }
     }
 
     /**
