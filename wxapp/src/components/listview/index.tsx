@@ -96,6 +96,8 @@ const ListView: FC<ListViewProps> = (props) => {
                             setPage(1);
                             dataFetcher(1, tab, index).then(res => {
                                 setData(res.data.result.records);
+                                setNoMore(false);
+                                setLoadingMore(false);
                             });
                         }}>
                             {tab.label}
@@ -111,6 +113,7 @@ const ListView: FC<ListViewProps> = (props) => {
             })}
             </View>
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
+            <View style={{height: 100}} />
         </>
     );
 }

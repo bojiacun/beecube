@@ -95,6 +95,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
                                 setData([...res.data.result.records]);
                                 setSelectedIndex(index);
                                 setPage(1);
+                                setNoMore(false);
+                                setLoadingMore(false);
                                 utils.hideLoading();
                             });
                         }}>
@@ -112,6 +114,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
             })}
             </View>}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
+            <View style={{height: 100}} />
         </>
     );
 }

@@ -5,6 +5,8 @@ import request from "../../lib/request";
 import classNames from "classnames";
 import {Navigator, View} from "@tarojs/components";
 import PageLoading from "../../components/pageloading";
+import FallbackImage from "../../components/FallbackImage";
+import utils from "../../lib/utils";
 const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
@@ -34,18 +36,29 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        let params: any = {column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id != '') {
             params.status = tab.id;
         }
-        return request.get('/paimai/api/goods/orders', {params: params});
+        return request.get('/paimai/api/members/orders', {params: params});
     }
 
     renderTemplate(data: any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer')}>
+            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer p-4')}>
                 <Navigator url={'/pages/my/orders/detail?id=' + data.id}>
-
+                    {data.orderGoods.map((item:any)=>{
+                        return (
+                            <View className={'flex'}>
+                                <View className={'w-12'}><FallbackImage className={'rounded'} src={utils.resolveUrl(item.goodsImage)} /></View>
+                                <View className={'flex-1'}>
+                                    <View>{item.goodsName}</View>
+                                    <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
+                                </View>
+                                <View className={'font-bold'}>￥{numeral(item.goodsPrice*item.goodsCount).format('0,0.00')}</View>
+                            </View>
+                        );
+                    })}
                 </Navigator>
             </View>
         );
