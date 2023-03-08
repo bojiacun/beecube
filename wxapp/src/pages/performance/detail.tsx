@@ -31,11 +31,14 @@ export default class Index extends Component<any, any> {
         noMore: false,
         page: 1,
         posting: false,
+        status: '',
+        message: null,
     }
 
     constructor(props) {
         super(props);
         this.payDeposit = this.payDeposit.bind(this);
+        this.noticeMe = this.noticeMe.bind(this);
     }
 
 
@@ -43,10 +46,9 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/goods/list', {params: {performanceId: id, pageNo: page}}).then(res => {
             if (clear) {
                 let newGoodsList = res.data.result.records;
-                if(!newGoodsList || newGoodsList.length == 0) {
+                if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
-                }
-                else {
+                } else {
                     this.setState({goodsList: newGoodsList, loadingMore: false, noMore: false});
                 }
             } else {
@@ -87,10 +89,11 @@ export default class Index extends Component<any, any> {
         this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
+
     payDeposit() {
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res=>{
+        request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
@@ -101,8 +104,28 @@ export default class Index extends Component<any, any> {
                     this.setState({detail: detail});
                 });
                 this.setState({posting: false});
-            }).catch(()=>this.setState({posting: false}));
+            }).catch(() => this.setState({posting: false}));
         })
+    }
+
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+        let type = 0;
+        if(prevState.status == '') {
+            if (this.state.status == 'notstart') {
+                type = 1;
+            } else if (this.state.status == 'started') {
+                type = 2;
+            }
+            if (type > 0 && this.state.detail) {
+                request.get('/paimai/api/members/messaged', {params: {type: type, performanceId: this.state.detail.id}}).then(res => {
+                    this.setState({message: res.data.result});
+                })
+            }
+        }
+    }
+
+    noticeMe() {
+
     }
 
     componentWillUnmount() {
@@ -111,7 +134,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore} = this.state;
+        const {detail, goodsList, noMore, loadingMore, message} = this.state;
         const {systemInfo} = this.props;
 
 
@@ -122,7 +145,8 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
                 <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
-                    <TimeCountDowner className={'flex'} endTime={new Date(detail.endTime)} startTime={new Date(detail.startTime)}/>
+                    <TimeCountDowner onStatusChanged={(status) => this.setState({status: status})} className={'flex'}
+                                     endTime={new Date(detail.endTime)} startTime={new Date(detail.startTime)}/>
                 </View>
                 <View className={'divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4 flex items-center justify-between'}>
@@ -134,10 +158,20 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
                         </View>
                         <View className={'w-20'}>
-                            <View className={'flex flex-col items-center text-gray-600'}>
-                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                <View className={'text-sm'}>结束提醒</View>
-                            </View>
+                            <LoginView>
+                                {message == null &&
+                                    <View className={'flex flex-col items-center text-gray-600'}>
+                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                        <View className={'text-sm'}>{this.state.status == 'notstart' ? '开始' : '结束'}提醒</View>
+                                    </View>
+                                }
+                                {message != null &&
+                                    <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
+                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                        <View className={'text-sm'}>取消提醒</View>
+                                    </View>
+                                }
+                            </LoginView>
                         </View>
                     </View>
                     <View className={'space-x-4 px-4 py-2 text-gray-400'}>
@@ -163,30 +197,31 @@ export default class Index extends Component<any, any> {
                                         <View className={'text-gray-600'}>{item.title}</View>
                                         <View className={'text-sm'}>
                                             当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.currentPrice||item.startPrice).format('0,0.00')}</Text>
+                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                         </View>
-                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(item.performanceStartTime)} endTime={new Date(item.endTime)}/>
+                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(item.performanceStartTime)}
+                                                         endTime={new Date(item.endTime)}/>
                                     </View>
                                 </Navigator>
                             </View>
                         );
                     })}
                 </View>
-                {goodsList.length == 0 && <NoData /> }
+                {goodsList.length == 0 && <NoData/>}
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!detail.deposited &&
-                <LoginView>
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
-                        <View>
-                            <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
-                                <View>交保证金</View>
-                                <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
-                            </Button>
+                    <LoginView>
+                        <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
+                              style={{paddingBottom: safeBottom}}>
+                            <View>
+                                <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                                    <View>交保证金</View>
+                                    <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
+                                </Button>
+                            </View>
                         </View>
-                    </View>
-                </LoginView>
+                    </LoginView>
                 }
             </PageLayout>
         );

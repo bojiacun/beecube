@@ -62,4 +62,6 @@ public class MessagePool {
 	@Excel(name = "消息是否已经发送，0为未发送、1为已发送", width = 15)
     @ApiModelProperty(value = "消息是否已经发送，0为未发送、1为已发送")
 	private java.lang.Integer status;
+
+	private String appId;
 }
