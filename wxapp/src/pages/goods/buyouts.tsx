@@ -21,7 +21,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        let params: any = {type: 2, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id) {
             params.classId = tab.id;
         }
@@ -31,11 +31,11 @@ export default class Index extends Component<any, any> {
     renderTemplate(data: any) {
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
-                <Navigator url={'/pages/goods/detail?id=' + data.id}>
+                <Navigator url={'/pages/goods/detail2?id=' + data.id}>
                     <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
                     <View className={'px-2 mt-2'}>{data.title}</View>
                     <View className={'px-2 mb-2 text-sm'}>
-                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                        一口价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
                     </View>
                 </Navigator>
             </View>
