@@ -33,6 +33,7 @@ export default class Index extends Component<any, any> {
         posting: false,
         status: '',
         message: false,
+        deposited: true,
     }
 
     constructor(props) {
@@ -69,12 +70,12 @@ export default class Index extends Component<any, any> {
             let detail = res.data.result;
             this.setState({detail: detail});
             this.loadData(detail.id, 1, true);
-            //查询是否需要缴纳保证金
-            return request.get('/paimai/api/members/deposited/performance', {params: {id: detail.id}}).then(res => {
-                detail.deposited = res.data.result;
-                this.setState({detail: detail});
-            });
-        })
+
+        });
+        //查询是否需要缴纳保证金
+        return request.get('/paimai/api/members/deposited/performance', {params: {id: options.id}}).then(res => {
+            this.setState({deposited: res.data.result});
+        });
     }
 
     onReachBottom() {
@@ -144,13 +145,15 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, message} = this.state;
+        const {detail, goodsList, noMore, loadingMore, message, deposited} = this.state;
         const {systemInfo} = this.props;
 
 
         if (!detail) return <PageLoading/>
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
+
+
         return (
             <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
@@ -222,7 +225,7 @@ export default class Index extends Component<any, any> {
                 {goodsList.length == 0 && <NoData/>}
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
-                {!detail.deposited &&
+                {!deposited &&
                     <LoginView>
                         <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
                               style={{paddingBottom: safeBottom}}>

@@ -7,6 +7,7 @@ import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import TimeCountDowner from "../../components/TimeCountDowner";
 import request from "../../lib/request";
+import PageLoading from "../../components/pageloading";
 
 const tabs: ListViewTabItem[] = [
     {
@@ -73,8 +74,7 @@ const tabs: ListViewTabItem[] = [
 
 export default class Index extends Component<any, any> {
     state:any = {
-        source: 1,
-        tag: '专场列表'
+        options: null
     }
 
     constructor(props) {
@@ -88,13 +88,15 @@ export default class Index extends Component<any, any> {
     }
 
     onLoad(options) {
-        this.setState({tag: decodeURIComponent(options.tag), source: options.source});
+        this.setState({options: options});
     }
 
     render() {
+        if(!this.state.options) return <PageLoading />;
+
         return (
-            <PageLayout statusBarProps={{title: this.state.tag}} enableReachBottom={true}>
-                <ListView tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
+            <PageLayout statusBarProps={{title: decodeURIComponent(this.state.options.tag)}} enableReachBottom={true}>
+                <ListView tabs={tabs} dataFetcher={this.loadData}  defaultActiveKey={this.state.options.source} tabStyle={2} />
             </PageLayout>
         );
     }
