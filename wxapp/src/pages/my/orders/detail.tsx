@@ -151,9 +151,8 @@ export default class Index extends Component<any, any> {
                             </View>
                         </View>
                     </View>
-
-
                 </View>
+                <View style={{height: 100}}></View>
                 <LoginView>
                     <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>

@@ -1,5 +1,6 @@
 @import "assets/fonts/iconfont.css";
 @import "assets/fonts/fontawesome/font-awesome";
+@import "assets/fonts/montserrat";
 
 /*! tailwindcss v2.2.19 | MIT License | https://tailwindcss.com */
 
@@ -50,6 +51,7 @@ Remove the margin in all browsers.
 
 body {
     margin: 0;
+    font-family: Montserrat,Helvetica,Arial,sans-serif;
 }
 
 /**
@@ -57,7 +59,7 @@ Improve consistency of default fonts in all browsers. (https://github.com/sindre
 */
 
 body {
-    font-family: system-ui,
+    font-family: Montserrat, system-ui,
     -apple-system, /* Firefox supports this but not yet `system-ui` */
     'Segoe UI',
     Roboto,
@@ -574,6 +576,15 @@ page {
     display: block;
     position: relative;
     min-height: 100%;
+    font-family: Montserrat, system-ui,
+    -apple-system, /* Firefox supports this but not yet `system-ui` */
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji';
 }
 
 navigator, picker {
