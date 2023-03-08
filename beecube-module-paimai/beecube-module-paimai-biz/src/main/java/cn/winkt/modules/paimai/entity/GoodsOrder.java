@@ -73,6 +73,13 @@ public class GoodsOrder {
 	@Excel(name = "发货信息", width = 15)
     @ApiModelProperty(value = "发货信息")
 	private java.lang.String deliveryInfo;
+	private java.lang.String deliveryUsername;
+	private java.lang.String deliveryPhone;
+	private java.lang.String deliveryProvince;
+	private java.lang.String deliveryCity;
+	private java.lang.String deliveryDistrict;
+	private java.lang.String deliveryAddress;
+	private java.lang.String deliveryId;
 	/**订单创建时间*/
     @ApiModelProperty(value = "订单创建时间")
 	private java.util.Date createTime;
