@@ -143,7 +143,6 @@ public class WxAppMemberController {
         LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
         qw.eq(OrderGoods::getOrderId, order.getId());
         order.setOrderGoods(orderGoodsService.list(qw));
-
         return Result.OK(order);
     }
     @AutoLog(value = "用户保证金列表-分页列表查询")
