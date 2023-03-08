@@ -15,6 +15,7 @@ import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
 import Uprange from "./components/uprange";
 import Descs from "./components/descs";
+import TimeCountDowner from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 
@@ -274,6 +275,7 @@ export default class Index extends Component<any, any> {
 
     renderButton() {
         const {goods} = this.state;
+        //拍品如果挂载在某个专场上，则有开始时间一说，开始时间按照专场来计算
         if(!this.clocker.isCounting) {
             //拍品结束
             return (
@@ -342,21 +344,7 @@ export default class Index extends Component<any, any> {
                                 <View className={'text-sm'}>结束提醒</View>
                             </View>
                         </View>
-                        {this.clocker.isCounting &&
-                            <View className={'flex items-center text-sm space-x-1'}>
-                                <View className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View>
-                                <View>距结束: <Text className={'text-red-600'}>{numeral(this.clocker.date).format('00')}</Text>天<Text
-                                    className={'text-red-600'}>{numeral(this.clocker.hours).format('00')}</Text>小时<Text
-                                    className={'text-red-600'}>{numeral(this.clocker.minutes).format('00')}</Text>分<Text
-                                    className={'text-red-600'}>{numeral(this.clocker.seconds).format('00')}</Text>秒</View>
-                            </View>
-                        }
-                        {!this.clocker.isCounting &&
-                            <View className={'flex items-center text-sm space-x-1'}>
-                                <View className={'border rounded-r-full px-1 border-gray-500 border-solid text-gray-500'}>已结束</View>
-                                <View>结束时间: {goods.actualEndTime}</View>
-                            </View>
-                        }
+                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={goods.actualEndTime||goods.endTime} startTime={goods.performanceId&&goods.performanceStartTime} />
                         <View className={'text-sm text-gray-400 space-x-4'}>
                             <Text>围观{goods.viewCount}人</Text>
                             <Text>出价{goods.offerCount}次</Text>

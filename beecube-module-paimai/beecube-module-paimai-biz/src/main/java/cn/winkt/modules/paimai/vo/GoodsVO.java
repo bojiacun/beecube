@@ -22,6 +22,7 @@ public class GoodsVO {
     private java.lang.String performanceId;
     private String performanceTitle;
     private java.lang.Float performanceDeposit;
+    private java.util.Date performanceStartTime;
     private java.util.Date endTime;
     private java.lang.Object fields;
     private String tags;
