@@ -9,6 +9,7 @@ export default defineAppConfig({
         'pages/goods/confirm',
         'pages/shop/cart',
         'pages/shop/confirm',
+        'pages/shop/list',
         'pages/performance/detail',
         'pages/performance/deadline',
         'pages/performance/public',

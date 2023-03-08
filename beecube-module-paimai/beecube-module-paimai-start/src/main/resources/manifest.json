@@ -63,26 +63,8 @@
       "url": "/pages/auction/list"
     },
     {
-      "label": "拍品列表",
-      "url": "/pages/goods/list",
-      "urlSuffix": {
-        "label": "选择时间",
-        "value": "source"
-      },
-      "suffixOptions": [
-        {
-          "label": "进行中的",
-          "value": "1"
-        },
-        {
-          "label": "往期拍卖",
-          "value": "2"
-        }
-      ]
-    },
-    {
       "label": "参拍记录",
-      "url": "/pages/offers"
+      "url": "/pages/my/offers"
     },
     {
       "label": "购物车",
@@ -111,7 +93,7 @@
       "suffixOptions": "请输入拍品的ID"
     },
     {
-      "label": "一口价拍品分类列表",
+      "label": "一口价分类列表",
       "url": "/pages/goods/buyouts",
       "urlSuffix": {
         "label": "标签",
