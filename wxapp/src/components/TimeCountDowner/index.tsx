@@ -10,10 +10,11 @@ export interface TimeCountDownerProps extends Partial<any> {
     notStartTip?: ReactElement;
     startedTip?: ReactElement;
     endTip?: ReactElement;
+    onStatusChanged?: Function;
 }
 
 const TimeCountDowner : FC<TimeCountDownerProps> = (props) => {
-    const {startTime = null, endTime, notStartTip = '距开始:', endTip='已结束', startedTip = '距结束:', ...rest} = props;
+    const {onStatusChanged = ()=>{}, startTime = null, endTime, notStartTip = '距开始:', endTip='已结束', startedTip = '距结束:', ...rest} = props;
     //@ts-ignore
     const [counter, setCounter] = useState<number>(0);
     const nowDate = moment();
@@ -28,12 +29,15 @@ const TimeCountDowner : FC<TimeCountDownerProps> = (props) => {
     ended = moment(endTime).isBefore(nowDate);
     const tip = useMemo(()=>{
         if(ended) {
+            onStatusChanged('ended');
             return endTip;
         }
         else if(started) {
+            onStatusChanged('started');
             return startedTip;
         }
         else {
+            onStatusChanged('notstart');
             return notStartTip;
         }
     }, [started, ended]);

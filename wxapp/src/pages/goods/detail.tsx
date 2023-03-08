@@ -4,7 +4,6 @@ import request, {connectWebSocketServer} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import Clocker from 'clocker-js/Clocker';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -36,11 +35,11 @@ export default class Index extends Component<any, any> {
         offers: [],
         posting: false,
         uprangeShow: false,
+        status: '',
     }
-    clocker: any;
-    timer: any;
     socket: any;
     randomStr: string;
+
 
     constructor(props) {
         super(props);
@@ -140,8 +139,6 @@ export default class Index extends Component<any, any> {
             case 'MSG_TYPE_DELAY':
                 goods.actualEndTime = msg.newTime;
                 this.setState({goods: goods});
-                //更新计时器
-                this.clocker.targetDate = msg.newTime;
                 break;
         }
     }
@@ -236,19 +233,7 @@ export default class Index extends Component<any, any> {
             data.fields = JSON.parse(data.fields || '[]');
             data.uprange = JSON.parse(data.uprange);
             this.nextPrice(data);
-            let endDate = new Date(data.actualEndTime || data.endTime);
-            this.clocker = new Clocker(endDate);
-            this.clocker.countDown = true;
             utils.hideLoading();
-            if (this.clocker.isCounting) {
-                this.timer = setInterval(() => {
-                    if (this.clocker.isCounting) {
-                        this.setState({counting: this.clocker.isCounting});
-                    } else {
-                        clearInterval(this.timer);
-                    }
-                }, 1000);
-            }
         });
     }
 
@@ -274,27 +259,39 @@ export default class Index extends Component<any, any> {
     }
 
     renderButton() {
-        const {goods} = this.state;
-        //拍品如果挂载在某个专场上，则有开始时间一说，开始时间按照专场来计算
-        if(!this.clocker.isCounting) {
-            //拍品结束
-            return (
-                <View>
-                    <Button className={'btn w-56'} disabled={true}>
-                        <View>已结束</View>
-                    </Button>
-                </View>
-            );
-        }
+        const {goods, status} = this.state;
+
         if(!goods.deposit || goods.deposited) {
-            return (
-                <View>
-                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
-                        <View>出价</View>
-                        <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
-                    </Button>
-                </View>
-            );
+            //拍品如果挂载在某个专场上，则有开始时间一说，开始时间按照专场来计算
+            if(status == 'ended') {
+                //拍品结束
+                return (
+                    <View>
+                        <Button className={'btn w-56'} disabled={true}>
+                            <View>已结束</View>
+                        </Button>
+                    </View>
+                );
+            }
+            else if(status == 'notstart') {
+                return (
+                    <View>
+                        <Button className={'btn w-56'} disabled={true}>
+                            <View>未开始</View>
+                        </Button>
+                    </View>
+                );
+            }
+            else {
+                return (
+                    <View>
+                        <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
+                            <View>出价</View>
+                            <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
+                        </Button>
+                    </View>
+                );
+            }
         }
         else {
             return (
@@ -309,7 +306,6 @@ export default class Index extends Component<any, any> {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer);
         this.socket?.close();
     }
 
@@ -344,7 +340,7 @@ export default class Index extends Component<any, any> {
                                 <View className={'text-sm'}>结束提醒</View>
                             </View>
                         </View>
-                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={goods.actualEndTime||goods.endTime} startTime={goods.performanceId&&goods.performanceStartTime} />
+                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={goods.actualEndTime||goods.endTime} startTime={goods.performanceId?goods.performanceStartTime:null} />
                         <View className={'text-sm text-gray-400 space-x-4'}>
                             <Text>围观{goods.viewCount}人</Text>
                             <Text>出价{goods.offerCount}次</Text>
