@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import classNames from "classnames";
-import {Button, Navigator, View} from "@tarojs/components";
+import {Navigator, View} from "@tarojs/components";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
@@ -46,6 +46,7 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/members/orders', {params: params});
     }
 
+    //@ts-ignore
     renderOrderButtons(data) {
         return <></>;
     }
