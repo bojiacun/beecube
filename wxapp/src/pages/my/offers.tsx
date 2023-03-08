@@ -65,19 +65,19 @@ export default class Index extends Component<any, any> {
                         {list.map((item) => {
                             let radius = 0;
                             return (
-                                <Navigator className={'flex bg-white shadow-outer p-4'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white shadow-outer p-4'} style={{borderRadius: Taro.pxTransform(radius)}}>
                                     <View className={'flex-1'}>
                                         <View className={'text-lg font-bold flex-1'}>{item.goodsName}</View>
                                         <View className={'text-gray-400 text-sm'}>
                                             出价时间：{item.offerTime}
                                         </View>
                                     </View>
-                                    <View className={'w-20'}>
+                                    <View className={'flex flex-col items-center justify-center space-y-1'}>
                                         <View className={'font-bold text-lg'}>
                                             {item.price == item.goodsMaxOfferPrice && <View className={'text-indigo-500'}>领先</View>}
                                             {item.price < item.goodsMaxOfferPrice && <View className={'text-gray-400'}>出局</View>}
                                         </View>
-                                        <View>￥${numeral(item.price).format('0,0.00')} </View>
+                                        <View>￥{numeral(item.price).format('0,0.00')} </View>
                                     </View>
                                 </Navigator>
                             );

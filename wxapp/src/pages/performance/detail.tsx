@@ -32,7 +32,7 @@ export default class Index extends Component<any, any> {
         page: 1,
         posting: false,
         status: '',
-        message: null,
+        message: false,
     }
 
     constructor(props) {
@@ -108,7 +108,7 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
         let type = 0;
         if(prevState.status == '') {
             if (this.state.status == 'notstart') {
@@ -125,7 +125,17 @@ export default class Index extends Component<any, any> {
     }
 
     noticeMe() {
-
+        let type = 0;
+        if (this.state.status == 'notstart') {
+            type = 1;
+        } else if (this.state.status == 'started') {
+            type = 2;
+        }
+        if(type > 0) {
+            request.put('/paimai/api/members/messages/toggle', {type: type, performanceId: this.state.detail.id}).then(res => {
+                this.setState({message: res.data.result});
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -158,20 +168,22 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
                         </View>
                         <View className={'w-20'}>
-                            <LoginView>
-                                {message == null &&
-                                    <View className={'flex flex-col items-center text-gray-600'}>
-                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                        <View className={'text-sm'}>{this.state.status == 'notstart' ? '开始' : '结束'}提醒</View>
-                                    </View>
-                                }
-                                {message != null &&
-                                    <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
-                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                        <View className={'text-sm'}>取消提醒</View>
-                                    </View>
-                                }
-                            </LoginView>
+                            {this.state.status != 'ended' && this.state.status != '' &&
+                                <LoginView>
+                                    {!message &&
+                                        <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
+                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                            <View className={'text-sm'}>{this.state.status == 'notstart' ? '开始' : '结束'}提醒</View>
+                                        </View>
+                                    }
+                                    {message &&
+                                        <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
+                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                            <View className={'text-sm'}>取消提醒</View>
+                                        </View>
+                                    }
+                                </LoginView>
+                            }
                         </View>
                     </View>
                     <View className={'space-x-4 px-4 py-2 text-gray-400'}>

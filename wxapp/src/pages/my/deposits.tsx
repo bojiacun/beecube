@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View} from "@tarojs/components";
+import {View, Navigator} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
@@ -65,18 +65,20 @@ export default class Index extends Component<any, any> {
                         {list.map((item)=>{
                             let radius = 0;
                             return (
-                                <View className={'bg-white shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                    <View className={'flex items-center'}>
+                                <Navigator url={item.performanceId ? ('/pages/performance/detail?id='+item.performanceId):('/pages/goods/detail?id='+item.goodsId)} className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                    <View className={'space-y-1 flex-1'}>
                                         <View className={'text-lg font-bold flex-1'}>{item.performanceName||item.goodsName}</View>
-                                        <View className={'w-20 font-bold'}>
-                                            ￥${numeral(item.price).format('0,0.00')}
+                                        <View className={'text-gray-400 text-sm'}>
+                                            交易单号:{item.transactionId}
+                                        </View>
+                                        <View className={'text-gray-400 text-sm'}>
+                                            交易时间：{item.createTime}
                                         </View>
                                     </View>
-                                    <View className={'text-gray-400 text-sm'}>
-                                        交易单号:{item.transactionId}
-                                        交易时间：{item.createTime}
+                                    <View className={'font-bold flex items-center justify-center'}>
+                                        ￥{numeral(item.price).format('0,0.00')}
                                     </View>
-                                </View>
+                                </Navigator>
                             );
                         })}
                     </View>
