@@ -340,7 +340,16 @@ export default class Index extends Component<any, any> {
                                 <View className={'text-sm'}>结束提醒</View>
                             </View>
                         </View>
-                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={new Date(goods.actualEndTime||goods.endTime)} startTime={goods.performanceId?new Date(goods.performanceStartTime):undefined} />
+                        <TimeCountDowner
+                            onStatusChanged={status => {
+                                this.setState({status: status});
+                            }}
+                            className={'flex items-center text-sm space-x-1'}
+                            endTime={new Date(goods.actualEndTime||goods.endTime)}
+                            startTime={goods.performanceId?new Date(goods.performanceStartTime):undefined}
+                            startedTip={<><View className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View><Text>距结束：</Text></>}
+                            notStartTip={<><View className={'border rounded-r-full px-1 border-indigo-500 border-solid text-indigo-500'}>预展中</View><Text>距开始：</Text></>}
+                        />
                         <View className={'text-sm text-gray-400 space-x-4'}>
                             <Text>围观{goods.viewCount}人</Text>
                             <Text>出价{goods.offerCount}次</Text>
