@@ -126,14 +126,14 @@ export default class Index extends Component<any, any> {
                 </View>
                 <View className={'divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4 flex items-center justify-between'}>
-                        <View className={'space-y-1'}>
+                        <View className={'flex-1 space-y-1'}>
                             <View className={'text-xl font-bold'}>{detail.title}</View>
                             <View className={'text-gray-600'}>{detail.subTitle}</View>
                             <View className={'text-gray-600'}>开拍时间: {detail.startTime}</View>
                             <View className={'text-gray-600'}>结束时间: {detail.endTime}</View>
                             <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
                         </View>
-                        <View>
+                        <View className={'w-20'}>
                             <View className={'flex flex-col items-center text-gray-600'}>
                                 <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
                                 <View className={'text-sm'}>结束提醒</View>
@@ -165,7 +165,7 @@ export default class Index extends Component<any, any> {
                                             当前价 <Text className={'text-red-500'}>RMB</Text> <Text
                                             className={'text-base'}>{numeral(item.currentPrice||item.startPrice).format('0,0.00')}</Text>
                                         </View>
-                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(detail.performanceStartTime)} endTime={new Date(detail.endTime)}/>
+                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(item.performanceStartTime)} endTime={new Date(item.endTime)}/>
                                     </View>
                                 </Navigator>
                             </View>

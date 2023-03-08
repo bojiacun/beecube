@@ -340,7 +340,7 @@ export default class Index extends Component<any, any> {
                                 <View className={'text-sm'}>结束提醒</View>
                             </View>
                         </View>
-                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={goods.actualEndTime||goods.endTime} startTime={goods.performanceId?goods.performanceStartTime:null} />
+                        <TimeCountDowner className={'flex items-center text-sm space-x-1'} endTime={new Date(goods.actualEndTime||goods.endTime)} startTime={goods.performanceId?new Date(goods.performanceStartTime):undefined} />
                         <View className={'text-sm text-gray-400 space-x-4'}>
                             <Text>围观{goods.viewCount}人</Text>
                             <Text>出价{goods.offerCount}次</Text>
