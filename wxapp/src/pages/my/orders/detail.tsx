@@ -122,6 +122,37 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
 
+                    <View className={'bg-white p-4 rounded space-y-4'}>
+                        <View className={'font-bold'}>订单信息</View>
+                        <View className={'space-y-4'}>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>订单类型</View>
+                                <View>{detail.type_dictText}</View>
+                            </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>订单号</View>
+                                <View>{detail.id}</View>
+                            </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>下单时间</View>
+                                <View>{detail.createTime}</View>
+                            </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>支付时间</View>
+                                <View>{detail.payTime}</View>
+                            </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>交易单号</View>
+                                <View>{detail.transactionId}</View>
+                            </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>订单状态</View>
+                                <View>{detail.status_dictText}</View>
+                            </View>
+                        </View>
+                    </View>
+
+
                 </View>
                 <LoginView>
                     <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
