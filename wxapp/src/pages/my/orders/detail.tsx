@@ -41,7 +41,7 @@ export default class Index extends Component<any, any> {
 
     constructor(props) {
         super(props);
-        this.pay= this.pay.bind(this);
+        this.pay = this.pay.bind(this);
     }
 
 
@@ -60,8 +60,16 @@ export default class Index extends Component<any, any> {
         this.setState({id: options.id});
         request.get("/paimai/api/members/orders/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
-            let address = {id: data.deliveryId, username: data.deliveryUsername, phone: data.deliveryPhone, address: data.deliveryAddress, city: data.deliveryCity, district: data.deliveryDistrict, province: data.deliveryProvince};
-            if(address.id) {
+            let address = {
+                id: data.deliveryId,
+                username: data.deliveryUsername,
+                phone: data.deliveryPhone,
+                address: data.deliveryAddress,
+                city: data.deliveryCity,
+                district: data.deliveryDistrict,
+                province: data.deliveryProvince
+            };
+            if (address.id) {
                 Taro.setStorageSync('ADDRESS', JSON.stringify(address));
             }
             utils.hideLoading();
@@ -73,10 +81,9 @@ export default class Index extends Component<any, any> {
     componentDidShow() {
         //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
         const address = Taro.getStorageSync('ADDRESS');
-        if(address) {
+        if (address) {
             this.setState({address: JSON.parse(address)});
-        }
-        else {
+        } else {
             request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
                 this.setState({address: res.data.result});
             })
@@ -85,7 +92,7 @@ export default class Index extends Component<any, any> {
 
 
     pay() {
-        if(!this.state.address) {
+        if (!this.state.address) {
             return utils.showError("请选择收货地址");
         }
 
@@ -101,16 +108,54 @@ export default class Index extends Component<any, any> {
             }).catch(() => this.setState({posting: false}));
         });
     }
+    cancel() {
+        request.post('/paimai/api/members/orders/cancel', null, {params: {id: this.state.detail.id}}).then(res => {
+            let result = res.data.result;
+            if(result) {
+                utils.showSuccess(true, "取消成功");
+            }
+            else {
+                utils.showMessage("取消失败");
+            }
+        });
+    }
+    requestAfter() {
+        Taro.navigateTo({url: 'after'}).then();
+    }
 
 
     renderButton() {
-        return (
-            <View className={'flex items-center space-x-2'}>
-                <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
-                    <View>立即支付</View>
-                </Button>
-            </View>
-        );
+        const {detail} = this.state;
+        switch (detail.status) {
+            case 0:
+                return (
+                    <View className={'flex items-center space-x-2'}>
+                        <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
+                            <View>立即支付</View>
+                        </Button>
+                    </View>
+                );
+                break;
+            case 1:
+                return (
+                    <View className={'flex items-center space-x-2'}>
+                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                            <View>取消订单</View>
+                        </Button>
+                    </View>
+                );
+                break;
+            case 3:
+                return (
+                    <View className={'flex items-center space-x-2'}>
+                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.requestAfter}>
+                            <View>申请售后</View>
+                        </Button>
+                    </View>
+                );
+                break;
+        }
+        return <></>
     }
 
     componentWillUnmount() {
@@ -131,20 +176,21 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>商品信息</View>
                         <View className={'space-y-4'}>
-                        {detail.orderGoods.map((item:any)=>{
-                            return (
-                                <View className={'flex space-x-2 items-center'}>
-                                    <View className={'flex-none'}>
-                                        <FallbackImage style={{width: 50, height: 50}} className={'rounded block'} src={utils.resolveUrl(item.goodsImage)}/>
+                            {detail.orderGoods.map((item: any) => {
+                                return (
+                                    <View className={'flex space-x-2 items-center'}>
+                                        <View className={'flex-none'}>
+                                            <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
+                                                           src={utils.resolveUrl(item.goodsImage)}/>
+                                        </View>
+                                        <View className={'flex-1'}>
+                                            <View>{item.goodsName}</View>
+                                            <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
+                                        </View>
+                                        <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
                                     </View>
-                                    <View className={'flex-1'}>
-                                        <View>{item.goodsName}</View>
-                                        <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
-                                    </View>
-                                    <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
-                                </View>
-                            );
-                        })}
+                                );
+                            })}
                         </View>
                         <View className={'text-right font-bold text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
                     </View>
@@ -157,7 +203,8 @@ export default class Index extends Component<any, any> {
                                     <View className={'font-bold space-x-2'}>
                                         <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
                                     </View>
-                                    <View className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
+                                    <View
+                                        className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
                                 </View>
                                 <View className={'px-2'}>
                                     <Text className={'fa fa-chevron-right'}/>
