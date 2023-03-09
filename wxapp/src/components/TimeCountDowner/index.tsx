@@ -96,11 +96,15 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
                 <View {...rest}>
                     {tip}
                     {clocker.isCounting &&
-                        <View>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>天<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>小时<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>分<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>秒
+                        <View className={'flex items-center'}>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
+                            <Text>天</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
+                            <Text>小时</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
+                            <Text>分</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
+                            <Text>秒</Text>
                         </View>
                     }
                 </View>
@@ -118,11 +122,15 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
                 <View {...rest}>
                     {tip}
                     {clocker.isCounting &&
-                        <View>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>天<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>小时<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>分<Text
-                            className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>秒
+                        <View className={'flex items-center'}>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
+                            <Text>天</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
+                            <Text>小时</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
+                            <Text>分</Text>
+                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
+                            <Text>秒</Text>
                         </View>
                     }
                 </View>
