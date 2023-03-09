@@ -1,7 +1,7 @@
 import {View} from "@tarojs/components";
 import {useEffect, useState} from "react";
 import request from "../../../../lib/request";
-import SyncPerformanceItemView from "./PerformanceItemView";
+import SyncPerformanceItemView from "./SyncPerformanceItemView";
 
 
 const SyncPerformanceListModule = (props: any) => {

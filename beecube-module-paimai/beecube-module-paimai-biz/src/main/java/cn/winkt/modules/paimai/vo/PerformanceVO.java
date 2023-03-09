@@ -20,6 +20,10 @@ public class PerformanceVO {
     private java.lang.String preview;
     /**拍卖会ID*/
     private java.lang.String auctionId;
+    private String auctionTitle;
+    private String auctionAddress;
+    private String auctionTimeRange;
+
     /**专场类型（1限时拍、2为同步拍)*/
     private java.lang.Integer type;
     /**创建时间*/
