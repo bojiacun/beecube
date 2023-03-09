@@ -23,7 +23,7 @@ export interface TimeCountDownerProps extends Partial<any> {
     notStartTip?: ReactElement;
     startedTip?: ReactElement;
     endTip?: ReactElement;
-    onStatusChanged?: (status: TimeCountDownerStatus)=>void;
+    onStatusChanged?: (status: TimeCountDownerStatus) => void;
     mode?: TimeCountDownerMode;
     started?: boolean;
     ended?: boolean;
@@ -39,8 +39,8 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
         endTip = '已结束',
         startedTip = '距结束：',
         mode = TimeCountDownerMode.TimeBase,
-        started = false,
-        ended = false,
+        started = undefined,
+        ended = undefined,
         ...rest
     } = props;
     //@ts-ignore
@@ -85,60 +85,53 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
         }
     }, []);
 
-    if(ended) {
+
+    if (ended) {
         return (
             <View {...rest}>{tip}</View>
         );
-    }
-    else if(started) {
-        if(endTime != null) {
+    } else if (started) {
+        if (endTime != null && clocker.isCounting) {
             return (
                 <View {...rest}>
                     {tip}
-                    {clocker.isCounting &&
-                        <View className={'flex items-center'}>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
-                            <Text>天</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
-                            <Text>小时</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
-                            <Text>分</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
-                            <Text>秒</Text>
-                        </View>
-                    }
+                    <View className={'flex items-center'}>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
+                        <Text>天</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
+                        <Text>小时</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
+                        <Text>分</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
+                        <Text>秒</Text>
+                    </View>
                 </View>
             );
-        }
-        else {
+        } else {
             return (
-                <View {...rest}></View>
+                <View {...rest}>进行中</View>
             );
         }
-    }
-    else {
-        if(startTime != null) {
+    } else {
+        if (startTime != null && clocker.isCounting) {
             return (
                 <View {...rest}>
                     {tip}
-                    {clocker.isCounting &&
-                        <View className={'flex items-center'}>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
-                            <Text>天</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
-                            <Text>小时</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
-                            <Text>分</Text>
-                            <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
-                            <Text>秒</Text>
-                        </View>
-                    }
+                    <View className={'flex items-center'}>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.date).format('00')}</Text>
+                        <Text>天</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.hours).format('00')}</Text>
+                        <Text>小时</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.minutes).format('00')}</Text>
+                        <Text>分</Text>
+                        <Text className={'text-red-600 font-medium'}>{numeral(clocker.seconds).format('00')}</Text>
+                        <Text>秒</Text>
+                    </View>
                 </View>
             );
-        }
-        else {
+        } else {
             return (
-                <View {...rest}></View>
+                <View {...rest}>进行中</View>
             );
         }
     }

@@ -61,10 +61,11 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+        const {context} = this.props;
+        const {userInfo} = context;
+        let {goods} = this.state;
+
         if (prevProps.context.userInfo == null || prevState.goods == null) {
-            const {context} = this.props;
-            const {userInfo} = context;
-            let {goods} = this.state;
             if (userInfo != null && goods) {
                 //记录浏览记录
                 request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
@@ -92,6 +93,11 @@ export default class Index extends Component<any, any> {
                         });
                     }
                 });
+            }
+
+        }
+        if(goods != null) {
+            if (prevState.status == undefined && this.state.status != undefined) {
                 if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && goods) {
                     request.get('/paimai/api/members/messaged', {
                         params: {

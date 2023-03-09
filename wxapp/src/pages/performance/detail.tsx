@@ -5,7 +5,7 @@ import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerStatus} from "../../components/TimeCountDowner";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
@@ -125,17 +125,9 @@ export default class Index extends Component<any, any> {
     }
 
     noticeMe() {
-        let type = 0;
-        if (this.state.status == 'notstart') {
-            type = 1;
-        } else if (this.state.status == 'started') {
-            type = 2;
-        }
-        if (type > 0) {
-            request.put('/paimai/api/members/messages/toggle', {type: type, performanceId: this.state.detail.id}).then(res => {
-                this.setState({message: res.data.result});
-            });
-        }
+        request.put('/paimai/api/members/messages/toggle', {type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 :2, performanceId: this.state.detail.id}).then(res => {
+            this.setState({message: res.data.result});
+        });
     }
 
     componentWillUnmount() {

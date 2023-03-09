@@ -5,7 +5,7 @@ import {Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import TimeCountDowner from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 import request from "../../lib/request";
 
 const tabs: ListViewTabItem[] = [
@@ -26,7 +26,15 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                                {data.started == 0 && data.startTime != null &&
+                                    <TimeCountDowner
+                                        mode={TimeCountDownerMode.Manual}
+                                        started={data.started == 1}
+                                        ended={data.ended == 1}
+                                        className={'flex items-center'}
+                                        startTime={new Date(data.startTime)}
+                                    />
+                                }
                             </View>
                             <View className={'flex pt-2 space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
@@ -56,7 +64,15 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                                {data.started == 0 && data.startTime != null &&
+                                    <TimeCountDowner
+                                        mode={TimeCountDownerMode.Manual}
+                                        started={data.started == 1}
+                                        ended={data.ended == 1}
+                                        className={'flex items-center'}
+                                        startTime={new Date(data.startTime)}
+                                    />
+                                }
                             </View>
                             <View className={'flex space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
