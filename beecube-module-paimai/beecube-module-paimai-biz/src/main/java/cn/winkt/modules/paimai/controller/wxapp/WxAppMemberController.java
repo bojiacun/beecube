@@ -19,7 +19,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +49,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequestMapping("/paimai/api/members")
@@ -109,6 +112,63 @@ public class WxAppMemberController {
         IPage<GoodsOrderAfterVO> pageList = goodsOrderAfterService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
+
+
+
+    @AutoLog(value = "订单表-支付订单")
+    @ApiOperation(value="订单表-支付订单", notes="订单表-支付订单")
+    @PostMapping(value = "/orders/pay")
+    public Result<?> payOrder(@RequestParam(name="id", defaultValue="") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsOrder::getId, id);
+        GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+
+        LambdaQueryWrapper<OrderGoods> orderGoodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderGoodsLambdaQueryWrapper.eq(OrderGoods::getOrderId, id);
+        List<OrderGoods> orderGoods = orderGoodsService.list(orderGoodsLambdaQueryWrapper);
+
+        BigDecimal payAmount = BigDecimal.valueOf(order.getPayedPrice()).setScale(2, RoundingMode.HALF_DOWN);
+        PayLog payLog = getPayLog(order.getId());
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/members/orders/notify/"+AppContext.getApp())
+                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                .body("订单支付:")
+                .spbillCreateIp("127.0.0.1")
+                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                .detail(orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining(",")))
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        return Result.OK("",wxPayService.createOrder(request));
+    }
+    @AutoLog(value = "订单表-取消订单")
+    @ApiOperation(value="订单表-取消订单", notes="订单表-取消订单")
+    @PostMapping(value = "/orders/cancel")
+    public Result<?> cancelOrder(@RequestParam(name="id", defaultValue="") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsOrder::getId, id);
+        GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+
+        Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).multiply(BigDecimal.valueOf(100)).intValue();
+        log.info("原路返回支付金额 {}", refundAmount);
+        WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
+                .transactionId(order.getTransactionId())
+                .outRefundNo(order.getId())
+                .totalFee(refundAmount)
+                .refundFee(refundAmount)
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        WxPayRefundResult result = wxPayService.refund(refundRequest);
+        if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
+            throw new JeecgBootException("退款失败");
+        }
+        return Result.OK("退款成功", order);
+    }
+
 
     @AutoLog(value = "订单表-分页列表查询")
     @ApiOperation(value="订单表-分页列表查询", notes="订单表-分页列表查询")
