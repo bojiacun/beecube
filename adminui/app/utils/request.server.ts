@@ -171,6 +171,10 @@ export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performances/add`;
 export const API_PAIMAI_PERFORMANCE_ADDGOODS = `${BASE_URL}/paimai/performances/goods/add`;
 export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performances/edit`;
 export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performances/delete`;
+
+export const API_PAIMAI_PERFORMANCE_GOODS_START = `${BASE_URL}/paimai/performances/goods/start`;
+export const API_PAIMAI_PERFORMANCE_GOODS_END = `${BASE_URL}/paimai/performances/goods/end`;
+
 export const API_PAIMAI_PERFORMANCE_DELETEGOODS = `${BASE_URL}/paimai/performances/goods/remove`;
 
 export const API_PAIMAI_AUCTION_LIST = `${BASE_URL}/paimai/auctions/list`;
