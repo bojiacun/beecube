@@ -1,7 +1,7 @@
 import {View} from "@tarojs/components";
 import {useEffect, useState} from "react";
 import request from "../../../../lib/request";
-import PerformanceItemView from "./PerformanceItemView";
+import SyncPerformanceItemView from "./PerformanceItemView";
 
 
 const SyncPerformanceListModule = (props: any) => {
@@ -19,7 +19,7 @@ const SyncPerformanceListModule = (props: any) => {
         <View style={style} className={'grid grid-cols-1 gap-4'} {...rest}>
             {goodsList.map((item: any) => {
                 return (
-                    <PerformanceItemView item={item} radius={basic.itemBorderRadius}/>
+                    <SyncPerformanceItemView item={item} radius={basic.itemBorderRadius}/>
                 );
             })}
         </View>

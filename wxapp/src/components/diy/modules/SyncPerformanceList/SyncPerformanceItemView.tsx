@@ -11,14 +11,14 @@ export interface PerformanceItemViewProps extends Partial<any> {
     item: any;
 }
 
-const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
+const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
     const {radius = 0, item} = props;
     const [status, setStatus] = useState<TimeCountDownerStatus>();
     const tags = item.tags?.split(',') || [];
 
     return (
         <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-            <Navigator url={'/pages/performance/detail?id=' + item.id}>
+            <Navigator url={'/pages/performance/detail2?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                     {item.started == 0 && item.startTime != null &&
@@ -52,4 +52,4 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
         </View>
     );
 }
-export default PerformanceItemView;
+export default SyncPerformanceItemView;

@@ -1,7 +1,8 @@
 import {View} from "@tarojs/components";
 import {useEffect, useState} from "react";
 import request from "../../../../lib/request";
-import PerformanceItemView from "./PerformanceItemView";
+import SyncPerformanceItemView from "../SyncPerformanceList/SyncPerformanceItemView";
+import PerformanceItemView from "../PerformanceList/PerformanceItemView";
 
 
 const PublicPerformanceListModule = (props: any) => {
@@ -18,6 +19,9 @@ const PublicPerformanceListModule = (props: any) => {
     return (
         <View style={style} className={'grid grid-cols-1 gap-4'} {...rest}>
             {goodsList.map((item: any) => {
+                if(item.type == 2) {
+                    return <SyncPerformanceItemView item={item} radius={basic.itemBorderRadius} />
+                }
                 return (
                     <PerformanceItemView item={item} radius={basic.itemBorderRadius}/>
                 );

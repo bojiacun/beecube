@@ -111,7 +111,7 @@ export default class Index extends Component<any, any> {
 
     componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
         let type = 0;
-        if (prevState.status == '') {
+        if(prevState.status == '') {
             if (this.state.status == 'notstart') {
                 type = 1;
             } else if (this.state.status == 'started') {
@@ -132,7 +132,7 @@ export default class Index extends Component<any, any> {
         } else if (this.state.status == 'started') {
             type = 2;
         }
-        if (type > 0) {
+        if(type > 0) {
             request.put('/paimai/api/members/messages/toggle', {type: type, performanceId: this.state.detail.id}).then(res => {
                 this.setState({message: res.data.result});
             });
@@ -155,18 +155,22 @@ export default class Index extends Component<any, any> {
 
 
         return (
-            <PageLayout statusBarProps={{title: '限时拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: '同步拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
-                <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
-                    <TimeCountDowner
-                        onStatusChanged={(status) => {
-                            this.setState({status: status});
-                        }}
-                        className={'flex'}
-                        startTime={new Date(detail.startTime)}
-                        endTime={new Date(detail.endTime)}
-                    />
-                </View>
+                {detail.started == 0 && detail.startTime != null &&
+                    <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
+                        <TimeCountDowner
+                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
+                            onStatusChanged={(status) => {
+                                this.setState({status: status});
+                            }}
+                            className={'flex'}
+                            startTime={new Date(detail.startTime)}
+                            started={detail.started == 1}
+                            ended={detail.ended == 1}
+                        />
+                    </View>
+                }
                 <View className={'divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4 flex items-center justify-between'}>
                         <View className={'flex-1 space-y-1'}>
@@ -182,8 +186,7 @@ export default class Index extends Component<any, any> {
                                     {!message &&
                                         <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
                                             <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View
-                                                className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
+                                            <View className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
                                         </View>
                                     }
                                     {message &&
