@@ -13,6 +13,6 @@ public class OfferMessage {
     private String fromUserAvatar;
     private String fromUserName;
     private BigDecimal price;
-    private Date createTime;
-    private String type;
+    private Date createTime = new Date();
+    private String type = MessageConstant.MSG_TYPE_OFFER;
 }

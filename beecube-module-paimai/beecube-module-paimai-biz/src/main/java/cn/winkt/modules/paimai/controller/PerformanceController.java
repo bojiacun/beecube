@@ -9,7 +9,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.message.MessageConstant;
+import cn.winkt.modules.paimai.message.PerformanceUpdateMessage;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -60,6 +63,9 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 
     @Resource
     private IGoodsService goodsService;
+
+    @Resource
+    PaimaiWebSocket paimaiWebSocket;
 
     /**
      * 分页列表查询
@@ -143,6 +149,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         Performance performance = performanceService.getById(id);
         performance.setStarted(1);
         performanceService.updateById(performance);
+        PerformanceUpdateMessage message = new PerformanceUpdateMessage();
+        message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTED);
+        message.setStarted(1);
+        paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
     }
 
@@ -156,6 +166,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         Performance performance = performanceService.getById(id);
         performance.setEnded(1);
         performanceService.updateById(performance);
+        PerformanceUpdateMessage message = new PerformanceUpdateMessage();
+        message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_ENDED);
+        message.setEnded(1);
+        paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
     }
 
@@ -247,6 +261,13 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @ApiOperation(value = "拍卖专场表-编辑", notes = "拍卖专场表-编辑")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Performance performance) {
+        Performance old = performanceService.getById(performance.getId());
+        if(!old.getStartTime().equals(performance.getStartTime())) {
+            PerformanceUpdateMessage message = new PerformanceUpdateMessage();
+            message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED);
+            message.setStartTime(performance.getStartTime());
+            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
+        }
         performanceService.updateById(performance);
         return Result.OK("编辑成功!");
     }

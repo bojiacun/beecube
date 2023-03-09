@@ -10,6 +10,6 @@ import java.util.Date;
 public class AuctionDelayedMessage {
     private String id;
     private Date createTime;
-    private String type;
+    private String type = MessageConstant.MSG_TYPE_DELAY;
     private Date newTime;
 }

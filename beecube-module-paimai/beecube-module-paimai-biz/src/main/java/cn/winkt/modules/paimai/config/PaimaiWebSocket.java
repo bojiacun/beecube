@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.config;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.WebSocket;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.util.SpringContextUtils;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 @ServerEndpoint("/auction/websocket/{userId}")
 public class PaimaiWebSocket {
+    private Session session;
     private static CopyOnWriteArraySet<PaimaiWebSocket> webSockets =new CopyOnWriteArraySet<>();
     private static Map<String,Session> userSessionPool = new HashMap<String,Session>();
 
@@ -29,6 +31,7 @@ public class PaimaiWebSocket {
     @OnOpen
     public void onOpen(Session session, @PathParam(value="userId") String userId) {
         try {
+            this.session = session;
             webSockets.add(this);
             userSessionPool.put(userId, session);
             log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
@@ -54,7 +57,19 @@ public class PaimaiWebSocket {
     public void sendGroupMessage(String goodsId, String message) {
 
     }
-
+    // 此为广播消息
+    public void sendAllMessage(String message) {
+        log.info("【websocket消息】广播消息:"+message);
+        for(PaimaiWebSocket webSocket : webSockets) {
+            try {
+                if(webSocket.session.isOpen()) {
+                    webSocket.session.getAsyncRemote().sendText(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     // 此为单点消息
     public void sendOneMessage(String userId, String message) {
         Session session = userSessionPool.get(userId);
