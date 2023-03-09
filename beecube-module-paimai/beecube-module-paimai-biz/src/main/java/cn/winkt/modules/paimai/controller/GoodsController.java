@@ -83,10 +83,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 		if(StringUtils.isNotEmpty(req.getParameter("column"))) {
 			String orderBy = req.getParameter("order");
 			if(orderBy.equals("desc")) {
-				queryWrapper.orderByDesc(req.getParameter("column"));
+				queryWrapper.orderByDesc("g."+req.getParameter("column"));
 			}
 			else {
-				queryWrapper.orderByAsc(req.getParameter("column"));
+				queryWrapper.orderByAsc("g."+req.getParameter("column"));
 			}
 		}
 		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
