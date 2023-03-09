@@ -133,6 +133,38 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         return Result.OK("添加成功！");
     }
 
+    /**
+     * 手动设置拍品开始,设置拍品开始时间为当前时间
+     * @param jsonObject
+     * @return
+     */
+    @PutMapping("/goods/start")
+    public Result<?> startGoods(@RequestBody JSONObject jsonObject) {
+        String perfId = jsonObject.getString("perfId");
+        Performance performance = performanceService.getById(perfId);
+        String goodsId = jsonObject.getString("goodsId");
+        Goods goods = goodsService.getById(goodsId);
+        goods.setStartTime(new Date());
+        goodsService.save(goods);
+        return Result.OK(goods);
+    }
+
+    /**
+     * 手动设置拍品结束时间
+     * @param jsonObject
+     * @return
+     */
+    @PutMapping("/goods/end")
+    public Result<?> endGoods(@RequestBody JSONObject jsonObject) {
+        String perfId = jsonObject.getString("perfId");
+        Performance performance = performanceService.getById(perfId);
+        String goodsId = jsonObject.getString("goodsId");
+        Goods goods = goodsService.getById(goodsId);
+        goods.setEndTime(new Date());
+        goods.setActualEndTime(new Date());
+        goodsService.save(goods);
+        return Result.OK(goods);
+    }
     @AutoLog(value = "拍卖专场表-添加")
     @ApiOperation(value = "拍卖专场表-添加", notes = "拍卖专场表-添加")
     @PostMapping(value = "/goods/add")
