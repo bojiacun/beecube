@@ -145,7 +145,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         String goodsId = jsonObject.getString("goodsId");
         Goods goods = goodsService.getById(goodsId);
         goods.setStartTime(new Date());
-        goodsService.save(goods);
+        goodsService.updateById(goods);
         return Result.OK(goods);
     }
 
@@ -162,7 +162,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         Goods goods = goodsService.getById(goodsId);
         goods.setEndTime(new Date());
         goods.setActualEndTime(new Date());
-        goodsService.save(goods);
+        goodsService.updateById(goods);
         return Result.OK(goods);
     }
     @AutoLog(value = "拍卖专场表-添加")
