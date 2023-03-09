@@ -26,6 +26,7 @@ const PerformanceEditor = (props: any) => {
             title: Yup.string().required('必填字段'),
             deposit: Yup.string().required('必填字段'),
             preview: Yup.string().required('必填字段'),
+            startTime: Yup.string().required('必填字段'),
         });
     }
     else {
@@ -96,7 +97,7 @@ const PerformanceEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
-                                    {type != 2 && <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />}
+                                    <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />
                                     {type != 2 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>

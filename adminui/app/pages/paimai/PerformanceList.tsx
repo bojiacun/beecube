@@ -16,6 +16,7 @@ import PerformanceEditor from "~/pages/paimai/PerformanceEditor";
 import UserListSelector from "~/pages/system/roles/UserListSelector";
 import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
 import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
+import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 
 
 
@@ -31,6 +32,7 @@ const PerformanceList = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+    const controlFetcher = useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
@@ -65,8 +67,31 @@ const PerformanceList = (props: any) => {
         }
     }, [deleteFetcher.state]);
 
+
+    useEffect(() => {
+        if (controlFetcher.data && controlFetcher.type === 'done') {
+            if (controlFetcher.data.success) {
+                stopPageLoading();
+                showToastSuccess('设置成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+            } else {
+                showToastError(controlFetcher.data.message);
+            }
+        }
+    }, [controlFetcher.state]);
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'start':
+                //编辑
+                showDeleteAlert(function () {
+                    controlFetcher.submit({}, {method: 'put', action: `/paimai/performances/start?id=${row.id}`, replace: true});
+                }, '确定要开始本场拍卖吗？', '确认开始');
+                break;
+            case 'end':
+                showDeleteAlert(function () {
+                    controlFetcher.submit({}, {method: 'put', action: `/paimai/performances/end?id=${row.id}`, replace: true});
+                }, '确定要结束本场拍卖吗？', '确认结束');
+                break;
             case 'selected':
                 setSelectedPerformance(row);
                 setSelectedListShow(true);
@@ -158,9 +183,23 @@ const PerformanceList = (props: any) => {
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选拍品</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        {row.started == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                        {(row.started == 1&& row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                        {row.ended == 1 && <a>已结束</a>}
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                 );
             }

@@ -76,12 +76,12 @@ const GoodsListSelected = (props: any) => {
             case 'start':
                 //编辑
                 showDeleteAlert(function () {
-                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/start`, replace: true});
+                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/goods/start`, replace: true});
                 }, '确定要开始本拍品吗？', '确认开始');
                 break;
             case 'end':
                 showDeleteAlert(function () {
-                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/end`, replace: true});
+                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/goods/end`, replace: true});
                 }, '确定要结束本拍品吗？', '确认结束');
                 break;
         }
