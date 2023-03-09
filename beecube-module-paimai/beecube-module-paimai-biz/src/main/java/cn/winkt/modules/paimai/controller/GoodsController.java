@@ -6,9 +6,12 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -51,6 +54,9 @@ import io.swagger.annotations.ApiOperation;
 public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	@Autowired
 	private IGoodsService goodsService;
+
+	@Resource
+	private IPerformanceService performanceService;
 	
 	/**
 	 * 分页列表查询
