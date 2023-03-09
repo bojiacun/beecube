@@ -72,7 +72,7 @@ const GoodsListSelector = (props: any) => {
             dataField: 'startPrice',
         },
         {
-            text: '排序',
+            text: '标的号',
             dataField: 'sortNum',
         },
     ]

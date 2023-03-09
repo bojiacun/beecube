@@ -124,10 +124,6 @@ const GoodsList = (props: any) => {
             }
         },
         {
-            text: '拍品类型',
-            dataField: 'type_dictText',
-        },
-        {
             text: '起拍价',
             dataField: 'startPrice',
         },
@@ -152,7 +148,7 @@ const GoodsList = (props: any) => {
             dataField: 'status_dictText',
         },
         {
-            text: '排序',
+            text: '标的号',
             dataField: 'sortNum',
         },
         {
