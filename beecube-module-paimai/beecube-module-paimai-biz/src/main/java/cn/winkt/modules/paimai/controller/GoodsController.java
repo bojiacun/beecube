@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -76,21 +77,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
-		if(goods.getType() != null) {
-			queryWrapper.eq("g.type", goods.getType());
-		}
-		if(StringUtils.isNotEmpty(req.getParameter("column"))) {
-			String orderBy = req.getParameter("order");
-			if(orderBy.equals("desc")) {
-				queryWrapper.orderByDesc("g."+req.getParameter("column"));
-			}
-			else {
-				queryWrapper.orderByAsc("g."+req.getParameter("column"));
-			}
-		}
+		QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
 		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-		IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
+		IPage<Goods> pageList = goodsService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	 @AutoLog(value = "拍品表-选择拍品")
