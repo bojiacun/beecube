@@ -14,6 +14,8 @@ let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
 
+    socket: any;
+
     componentDidMount() {
         store.dispatch(setPageLoading(true));
         const siteInfo = require('./siteinfo');
@@ -31,11 +33,11 @@ class App extends Component<PropsWithChildren> {
             context.settings = dist;
             context.tabs = reses[1].data.result;
             let position = Taro.getStorageSync("POSITION");
-            if(position) {
+            if (position) {
                 context.position = position;
             }
             let geo = Taro.getStorageSync("GEO");
-            if(geo) {
+            if (geo) {
                 context.province = geo.address_component.province;
                 context.city = geo.address_component.city;
                 context.district = geo.address_component.district;
@@ -63,9 +65,7 @@ class App extends Component<PropsWithChildren> {
                         console.error('reverse geocoder fail', err);
                     }
                 });
-
             });
-
             Taro.startLocationUpdate({
                 success(res) {
                     console.log('start location change listening', res);
