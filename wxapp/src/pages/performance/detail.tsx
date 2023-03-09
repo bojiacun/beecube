@@ -157,19 +157,20 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
-                <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
-                    <TimeCountDowner
-                        mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
-                        onStatusChanged={(status) => {
-                            this.setState({status: status});
-                        }}
-                        className={'flex'}
-                        endTime={new Date(detail.endTime)}
-                        startTime={new Date(detail.startTime)}
-                        started={detail.started == 1}
-                        ended={detail.ended == 1}
-                    />
-                </View>
+                {detail.started == 0 && detail.startTime != null &&
+                    <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
+                        <TimeCountDowner
+                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
+                            onStatusChanged={(status) => {
+                                this.setState({status: status});
+                            }}
+                            className={'flex'}
+                            startTime={new Date(detail.startTime)}
+                            started={detail.started == 1}
+                            ended={detail.ended == 1}
+                        />
+                    </View>
+                }
                 <View className={'divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4 flex items-center justify-between'}>
                         <View className={'flex-1 space-y-1'}>

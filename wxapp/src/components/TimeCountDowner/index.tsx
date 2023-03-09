@@ -112,7 +112,7 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
         }
         else {
             return (
-                <View {...rest}>{tip}</View>
+                <View {...rest}></View>
             );
         }
     }
@@ -138,7 +138,7 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
         }
         else {
             return (
-                <View {...rest}>{tip}</View>
+                <View {...rest}></View>
             );
         }
     }
