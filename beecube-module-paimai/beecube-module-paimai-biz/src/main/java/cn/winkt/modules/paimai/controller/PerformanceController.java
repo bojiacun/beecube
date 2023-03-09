@@ -146,10 +146,20 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(Goods::getId, Arrays.stream(goodsIds.split(",")).collect(Collectors.toList()));
 		List<Goods> goodsList = goodsService.list(queryWrapper);
-		for (Goods g:goodsList) {
-			g.setPerformanceId(perfId);
-			g.setEndTime(performance.getEndTime());
-		}
+
+        //如果是限时拍专场则设置拍品结束时间为专场结束时间,如果是同步拍专场则去除拍品的结束时间及开始时间
+        if(performance.getType() == 1) {
+            for (Goods g : goodsList) {
+                g.setPerformanceId(perfId);
+                g.setEndTime(performance.getEndTime());
+            }
+        }
+        else if(performance.getType() == 2){
+            for (Goods g : goodsList) {
+                g.setPerformanceId(perfId);
+                g.setEndTime(null);
+            }
+        }
 		goodsService.updateBatchById(goodsList);
         return Result.OK("添加成功！");
     }
