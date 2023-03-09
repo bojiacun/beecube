@@ -1,11 +1,11 @@
 import {Context, LatLng} from "../../context";
 import {
-  SET_CONTEXT, SET_GEO,
-  SET_PAGELOADING, SET_POSITION,
-  SET_REFERER,
-  SET_SETTINGS,
-  SET_SIETINFO, SET_SITE, SET_SYSTEMINFO,
-  SET_USERINFO
+    SET_CONTEXT, SET_GEO, SET_MESSAGE,
+    SET_PAGELOADING, SET_POSITION,
+    SET_REFERER,
+    SET_SETTINGS,
+    SET_SIETINFO, SET_SITE, SET_SYSTEMINFO,
+    SET_USERINFO
 } from "../constants"
 
 
@@ -78,5 +78,11 @@ export const setSite = (site: any) => {
     return {
         type: SET_SITE,
         payload: site
+    }
+}
+export const setMessage = (message: any) => {
+    return {
+        type: SET_MESSAGE,
+        payload: message
     }
 }

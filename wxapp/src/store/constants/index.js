@@ -9,3 +9,4 @@ export const SET_CONTEXT = 'SET_CONTEXT';
 export const SET_POSITION = 'SET_POSITION';
 export const SET_GEO = 'SET_GEO';
 export const SET_SITE = 'SET_SITE';
+export const SET_MESSAGE = 'SET_MESSAGE';

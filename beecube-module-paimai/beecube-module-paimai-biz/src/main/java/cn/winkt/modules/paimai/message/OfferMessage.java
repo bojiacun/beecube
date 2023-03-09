@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.message;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class OfferMessage {
     private String fromUserAvatar;
     private String fromUserName;
     private BigDecimal price;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime = new Date();
     private String type = MessageConstant.MSG_TYPE_OFFER;
 }

@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import context, { Context } from '../../context';
 import {
-  SET_CONTEXT, SET_GEO,
-  SET_PAGELOADING, SET_POSITION,
-  SET_REFERER,
-  SET_SETTINGS,
-  SET_SIETINFO, SET_SITE,
-  SET_SYSTEMINFO, SET_TABS,
-  SET_USERINFO
+    SET_CONTEXT, SET_GEO, SET_MESSAGE,
+    SET_PAGELOADING, SET_POSITION,
+    SET_REFERER,
+    SET_SETTINGS,
+    SET_SIETINFO, SET_SITE,
+    SET_SYSTEMINFO, SET_TABS,
+    SET_USERINFO
 } from '../constants';
 
 export default combineReducers({
@@ -62,6 +62,14 @@ export default combineReducers({
     pageLoading: (state: boolean = true, action: any) => {
         switch (action.type) {
             case SET_PAGELOADING:
+                return action.payload;
+            default:
+                return state;
+        }
+    },
+    message: (state = {}, action: any) => {
+        switch (action.type) {
+            case SET_MESSAGE:
                 return action.payload;
             default:
                 return state;

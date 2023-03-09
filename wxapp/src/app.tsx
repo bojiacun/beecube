@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import "windi.css";
 import './app.scss';
 import configStore from "./store";
-import {setContext, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
+import {setContext, setMessage, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
 import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
@@ -37,6 +37,7 @@ class App extends Component<PropsWithChildren> {
 
     onMessageReceive(message:any) {
         console.log('received a message', message);
+        store.dispatch(setMessage(JSON.parse(message.data)));
     }
 
     componentDidMount() {
