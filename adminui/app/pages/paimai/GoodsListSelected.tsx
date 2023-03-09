@@ -111,9 +111,9 @@ const GoodsListSelected = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {!row.startTime && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
-                        {row.startTime && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                        {row.endTime && <a>已结束</a>}
+                        {(!row.startTime && row.endTime) && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                        {(row.startTime && !row.endTime) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                        {(row.startTime && row.endTime) && <a>已结束</a>}
                     </div>
                 );
             }

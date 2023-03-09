@@ -108,6 +108,7 @@ const GoodsEditor = (props: any) => {
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>
                                     </FormGroup>
 
+                                    <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
                                     <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'起拍价'} name={'startPrice'}/>
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
