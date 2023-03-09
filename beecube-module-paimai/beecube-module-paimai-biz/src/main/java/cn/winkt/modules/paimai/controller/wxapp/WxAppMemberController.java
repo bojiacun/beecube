@@ -565,6 +565,14 @@ public class WxAppMemberController {
         goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
         goodsOrder.setMemberAvatar(loginUser.getAvatar());
         goodsOrder.setDeliveryInfo(String.format("%s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getAddress()));
+        goodsOrder.setDeliveryId(postOrderVO.getAddress().getId());
+        goodsOrder.setDeliveryAddress(postOrderVO.getAddress().getAddress());
+        goodsOrder.setDeliveryPhone(postOrderVO.getAddress().getPhone());
+        goodsOrder.setDeliveryUsername(postOrderVO.getAddress().getUsername());
+        goodsOrder.setDeliveryCity(postOrderVO.getAddress().getCity());
+        goodsOrder.setDeliveryDistrict(postOrderVO.getAddress().getDistrict());
+        goodsOrder.setDeliveryProvince(postOrderVO.getAddress().getProvince());
+
         goodsOrder.setPayedPrice(payAmount.floatValue());
         goodsOrder.setTotalPrice(payAmount.floatValue());
         goodsOrder.setStatus(0);
