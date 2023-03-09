@@ -32,6 +32,7 @@ import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
+import org.parboiled.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,7 +76,19 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+		QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+		if(goods.getType() != null) {
+			queryWrapper.eq("g.type", goods.getType());
+		}
+		if(StringUtils.isNotEmpty(req.getParameter("column"))) {
+			String orderBy = req.getParameter("order");
+			if(orderBy.equals("desc")) {
+				queryWrapper.orderByDesc(req.getParameter("column"));
+			}
+			else {
+				queryWrapper.orderByAsc(req.getParameter("column"));
+			}
+		}
 		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
 		return Result.OK(pageList);
