@@ -182,9 +182,10 @@ const GoodsListSelected = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/paimai/goods/auction'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/paimai/goods/selected'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                <FormControl name={'perf_id'} value={selectedPerformance?.id} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>

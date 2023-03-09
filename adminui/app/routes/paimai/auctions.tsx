@@ -13,6 +13,12 @@ export const CatchBoundary = defaultRouteCatchBoundary;
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
+    if(!url.searchParams.has('column')) {
+        url.searchParams.set('column', 'createTime');
+    }
+    if(!url.searchParams.has('order')) {
+        url.searchParams.set('order', 'desc');
+    }
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
