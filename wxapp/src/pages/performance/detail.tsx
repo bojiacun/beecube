@@ -221,11 +221,9 @@ export default class Index extends Component<any, any> {
                                             className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                         </View>
                                         <TimeCountDowner
-                                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
                                             className={'text-gray-400 text-xs flex'}
-                                            startTime={new Date(detail.startTime)}
-                                            started={detail.started}
-                                            ended={detail.ended}
+                                            startTime={new Date(item.startTime)}
+                                            endTime={new Date(item.endTime)}
                                         />
                                     </View>
                                 </Navigator>

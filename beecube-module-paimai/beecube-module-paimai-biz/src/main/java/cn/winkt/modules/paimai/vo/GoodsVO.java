@@ -28,7 +28,7 @@ public class GoodsVO {
     private Integer performanceType;
     private Integer performanceStarted;
     private Integer performanceEnded;
-
+    private java.util.Date startTime;
     private java.util.Date endTime;
     private java.lang.Object fields;
     private String tags;
