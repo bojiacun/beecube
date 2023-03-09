@@ -132,12 +132,8 @@ const GoodsList = (props: any) => {
             dataField: 'deposit',
         },
         {
-            text: '库存',
-            dataField: 'stock',
-        },
-        {
-            text: '标签',
-            dataField: 'tags',
+            text: '开始时间',
+            dataField: 'startTime',
         },
         {
             text: '结束时间',
@@ -150,6 +146,10 @@ const GoodsList = (props: any) => {
         {
             text: '标的号',
             dataField: 'sortNum',
+        },
+        {
+            text: '所在专场',
+            dataField: 'performanceTitle',
         },
         {
             text: '操作',
