@@ -438,7 +438,7 @@ public class WxAppMemberController {
                     messagePool.setSendTime(DateUtils.addHours(performance.getEndTime(), -2));
                 }
             }
-            if(StringUtils.isNotEmpty(performanceId)) {
+            if(StringUtils.isNotEmpty(goodsId)) {
                 Goods goods = goodsService.getById(goodsId);
                 if(type == 1) {
 
