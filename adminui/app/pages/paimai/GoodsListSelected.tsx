@@ -15,6 +15,7 @@ const GoodsListSelected = (props: any) => {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const removeFetcher = useFetcher();
+    const controlFetcher = useFetcher();
 
     useEffect(()=>{
         if(show && selectedPerformance) {
@@ -42,6 +43,17 @@ const GoodsListSelected = (props: any) => {
         }
     }, [removeFetcher.state]);
 
+    useEffect(() => {
+        if (controlFetcher.data && controlFetcher.type === 'done') {
+            if (controlFetcher.data.success) {
+                showToastSuccess('设置成功');
+                searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
+            } else {
+                showToastError(removeFetcher.data.message);
+            }
+        }
+    }, [controlFetcher.state]);
+
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
@@ -64,12 +76,12 @@ const GoodsListSelected = (props: any) => {
             case 'start':
                 //编辑
                 showDeleteAlert(function () {
-                    removeFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/start`, replace: true});
+                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/start`, replace: true});
                 }, '确定要开始本拍品吗？', '确认开始');
                 break;
             case 'end':
                 showDeleteAlert(function () {
-                    removeFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/end`, replace: true});
+                    controlFetcher.submit({goodsId: row.id, perfId: selectedPerformance?.id}, {method: 'put', action: `/paimai/performances/end`, replace: true});
                 }, '确定要结束本拍品吗？', '确认结束');
                 break;
         }
