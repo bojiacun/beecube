@@ -14,7 +14,7 @@ import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
 import Uprange from "./components/uprange";
 import Descs from "./components/descs";
-import TimeCountDowner from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 
@@ -35,7 +35,7 @@ export default class Index extends Component<any, any> {
         offers: [],
         posting: false,
         uprangeShow: false,
-        status: '',
+        status: undefined,
     }
     socket: any;
     randomStr: string;
@@ -341,12 +341,15 @@ export default class Index extends Component<any, any> {
                             </View>
                         </View>
                         <TimeCountDowner
+                            mode={goods.performanceType == 1 ? TimeCountDownerMode.TimeBase: TimeCountDownerMode.Manual}
                             onStatusChanged={status => {
                                 this.setState({status: status});
                             }}
+                            started={goods.started == 1}
+                            ended={goods.ended == 1}
                             className={'flex items-center text-sm space-x-1'}
                             endTime={new Date(goods.actualEndTime||goods.endTime)}
-                            startTime={goods.performanceId?new Date(goods.performanceStartTime):undefined}
+                            startTime={goods.startTime}
                             startedTip={<><View className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View><Text>距结束：</Text></>}
                             notStartTip={<><View className={'border rounded-r-full px-1 border-indigo-500 border-solid text-indigo-500'}>预展中</View><Text>距开始：</Text></>}
                         />
