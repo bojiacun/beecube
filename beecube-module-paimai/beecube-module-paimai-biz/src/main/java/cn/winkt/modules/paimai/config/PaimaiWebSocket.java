@@ -2,11 +2,9 @@ package cn.winkt.modules.paimai.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
-import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.util.SpringContextUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -22,37 +20,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
 @Slf4j
-@ServerEndpoint("/auction/websocket/{goodsId}/{userId}")
-public class GoodsOfferWebSocket {
-    private Session session;
-    private String goodsId;
-    private String userId;
-
-    private static CopyOnWriteArraySet<GoodsOfferWebSocket> webSockets =new CopyOnWriteArraySet<>();
+@ServerEndpoint("/auction/websocket/{userId}")
+public class PaimaiWebSocket {
+    private static CopyOnWriteArraySet<PaimaiWebSocket> webSockets =new CopyOnWriteArraySet<>();
     private static Map<String,Session> userSessionPool = new HashMap<String,Session>();
-    private static ConcurrentHashMap<String, Set<String>> offerGroup = new ConcurrentHashMap<>();
 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value="goodsId") String goodsId, @PathParam(value="userId") String userId) {
-        String lockKey = "OFFER-GROUP-"+goodsId;
+    public void onOpen(Session session, @PathParam(value="userId") String userId) {
         try {
-            this.session = session;
-            this.goodsId = goodsId;
-            this.userId = userId;
             webSockets.add(this);
             userSessionPool.put(userId, session);
-            RedissonLockClient redissonLockClient = this.redissonLockClient();
-            if(redissonLockClient.tryLock(lockKey, -1, 300)) {
-                if(!offerGroup.containsKey(goodsId)) {
-                    offerGroup.put(goodsId, new HashSet<>());
-                }
-                offerGroup.get(goodsId).add(userId);
-                redissonLockClient.unlock(lockKey);
-            }
-            else {
-                log.info("用户 {} 入群 {} 失败", userId, goodsId);
-            }
             log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -62,11 +40,6 @@ public class GoodsOfferWebSocket {
     public void onClose() {
         try {
             webSockets.remove(this);
-            this.session.close();
-            userSessionPool.remove(this.userId);
-            if(offerGroup.containsKey(this.goodsId)) {
-                offerGroup.get(this.goodsId).remove(this.userId);
-            }
             log.info("【websocket消息】连接断开，总数为:"+webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -79,8 +52,7 @@ public class GoodsOfferWebSocket {
     }
     // 此为群组消息
     public void sendGroupMessage(String goodsId, String message) {
-        Set<String> userIds = offerGroup.get(goodsId);
-        sendMoreMessage(userIds.toArray(new String[0]), message);
+
     }
 
     // 此为单点消息
@@ -112,8 +84,4 @@ public class GoodsOfferWebSocket {
 
     }
 
-
-    private RedissonLockClient redissonLockClient() {
-        return SpringContextUtils.getBean(RedissonLockClient.class);
-    }
 }

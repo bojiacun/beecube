@@ -3,7 +3,7 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
-import cn.winkt.modules.paimai.config.GoodsOfferWebSocket;
+import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
@@ -18,7 +18,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
@@ -88,7 +87,7 @@ public class WxAppMemberController {
     IGoodsOfferService goodsOfferService;
 
     @Resource
-    GoodsOfferWebSocket goodsOfferWebSocket;
+    PaimaiWebSocket goodsOfferWebSocket;
 
     @Resource
     IGoodsOrderService goodsOrderService;
