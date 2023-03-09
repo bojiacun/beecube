@@ -13,7 +13,7 @@ export const CatchBoundary = defaultRouteCatchBoundary;
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
-    url.searchParams.set('g.type', '1');
+    url.searchParams.set('type', '1');
     if(!url.searchParams.has('column')) {
         url.searchParams.set('column', 'createTime');
     }
