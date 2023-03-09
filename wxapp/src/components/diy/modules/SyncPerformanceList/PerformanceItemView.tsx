@@ -3,7 +3,7 @@ import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
 import {FC} from "react";
 import utils from "../../../../lib/utils";
-import TimeCountDowner from "../../../TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode} from "../../../TimeCountDowner";
 
 
 export interface PerformanceItemViewProps extends Partial<any> {
@@ -20,15 +20,16 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
             <Navigator url={'/pages/performance/detail?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
-                    <View className={'flex justify-between items-center py-1 text-sm text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
-                        {(item.started == 0 && item.startTime) != null &&
+                    <View className={'py-1 text-sm text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
                         <TimeCountDowner
+                            mode={TimeCountDownerMode.Manual}
+                            started={item.started==1}
+                            ended={item.ended == 1}
                             notStartTip={<View className={'space-x-1'}><Text className={'bg-indigo-600 text-base p-2'}>预展中</Text><Text>距开始：</Text></View>}
                             startedTip={<View className={'space-x-1'}><Text className={'bg-red-600 text-base p-2'}>进行中</Text><Text>距结束：</Text></View>}
                             endTip={<View className={'space-x-1'}><Text className={'bg-gray-600 text-base p-2'}>已结束</Text></View>}
                             className={'flex items-center'} endTime={new Date(item.endTime)} startTime={new Date(item.startTime)}
                         />
-                        }
                     </View>
                 </View>
                 <View className={'py-3 px-4 space-y-1'}>
