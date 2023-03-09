@@ -6,7 +6,6 @@ import {Button, Text, View, Navigator} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import LoginView from "../../components/login";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -51,21 +50,21 @@ export default class Index extends Component<any, any> {
     componentDidShow() {
         //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
         const address = Taro.getStorageSync('ADDRESS');
-        if(address) {
+        if (address) {
             this.setState({address: JSON.parse(address)});
-        }
-        else {
+        } else {
             request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
                 this.setState({address: res.data.result});
             })
         }
     }
+
     pay() {
         this.setState({posting: true});
         utils.showLoading('发起支付中');
         let data = {goodsList: this.state.goodsList, address: this.state.address};
         //支付宝保证金
-        request.post('/paimai/api/members/goods/buy', data).then(res=>{
+        request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
@@ -73,27 +72,28 @@ export default class Index extends Component<any, any> {
                 Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
                     //清空购物车
                     let cart = JSON.parse(Taro.getStorageSync("CART"));
-                    let newCart:any[] = [];
-                    cart.forEach((item:any)=>{
+                    let newCart: any[] = [];
+                    cart.forEach((item: any) => {
                         this.state.goodsList.forEach(g => {
-                            if(item.id != g.id){
+                            if (item.id != g.id) {
                                 newCart.push(item);
                             }
                         });
                     });
                     Taro.setStorageSync("CART", JSON.stringify(newCart));
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         utils.hideLoading();
                         Taro.navigateBack().then();
                     }, 2000);
                 });
                 this.setState({posting: false});
-            }).catch(()=>{
+            }).catch(() => {
                 this.setState({posting: false})
                 utils.hideLoading()
             });
         })
     }
+
     get calcCartPrice() {
         if (this.state.goodsList.length == 0) {
             return 0;
@@ -112,19 +112,17 @@ export default class Index extends Component<any, any> {
                 <View className={'grid grid-cols-1 divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4'}>
                         <View className={'font-bold text-lg'}>选择收货地址</View>
-                        <LoginView>
-                            <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
-                                <View className={'flex-1 space-y-2'}>
-                                    <View className={'font-bold space-x-2'}>
-                                        <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
-                                    </View>
-                                    <View className={'text-gray-400'}>{address?.address}</View>
+                        <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
+                            <View className={'flex-1 space-y-2'}>
+                                <View className={'font-bold space-x-2'}>
+                                    <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
                                 </View>
-                                <View className={'px-2'}>
-                                    <Text className={'fa fa-chevron-right'}/>
-                                </View>
-                            </Navigator>
-                        </LoginView>
+                                <View className={'text-gray-400'}>{address?.address}</View>
+                            </View>
+                            <View className={'px-2'}>
+                                <Text className={'fa fa-chevron-right'}/>
+                            </View>
+                        </Navigator>
                     </View>
                     <View className={'p-4'}>
                         <View className={'font-bold text-lg'}>商品信息</View>
@@ -155,7 +153,8 @@ export default class Index extends Component<any, any> {
                         <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
-                        <Button disabled={this.calcCartPrice <= 0||this.state.posting} className={'btn btn-danger'} onClick={this.pay}>立即支付</Button>
+                        <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'}
+                                onClick={this.pay}>立即支付</Button>
                     </View>
                 </View>
             </PageLayout>

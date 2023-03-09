@@ -26,7 +26,8 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={new Date(data.endTime)}
+                                                 startTime={new Date(data.startTime)}/>
                             </View>
                             <View className={'flex pt-2 space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
@@ -73,12 +74,13 @@ const tabs: ListViewTabItem[] = [
 
 export default class Index extends Component<any, any> {
     loadData(page: number, tab: ListViewTabItem) {
-        return request.get('/paimai/api/performances/list', {params: {type:1, source: tab.id, pageNo: page}});
+        return request.get('/paimai/api/performances/list', {params: {type: 1, source: tab.id, pageNo: page}});
     }
+
     render() {
         return (
             <PageLayout statusBarProps={{title: '限时拍'}} enableReachBottom={true}>
-                <ListView tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
+                <ListView tabs={tabs} dataFetcher={this.loadData} tabStyle={2}/>
             </PageLayout>
         );
     }

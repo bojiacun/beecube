@@ -8,7 +8,6 @@ import {Button, Navigator, Text, View} from "@tarojs/components";
 import TimeCountDowner, {TimeCountDownerStatus} from "../../components/TimeCountDowner";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
-import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
@@ -169,7 +168,6 @@ export default class Index extends Component<any, any> {
                         </View>
                         {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
                             <View className={'w-20'}>
-                                <LoginView>
                                     {!message &&
                                         <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
                                             <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
@@ -183,7 +181,6 @@ export default class Index extends Component<any, any> {
                                             <View className={'text-sm'}>取消提醒</View>
                                         </View>
                                     }
-                                </LoginView>
                             </View>
                         }
                     </View>
@@ -227,7 +224,6 @@ export default class Index extends Component<any, any> {
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!deposited &&
-                    <LoginView>
                         <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
                               style={{paddingBottom: safeBottom}}>
                             <View>
@@ -237,7 +233,6 @@ export default class Index extends Component<any, any> {
                                 </Button>
                             </View>
                         </View>
-                    </LoginView>
                 }
             </PageLayout>
         );

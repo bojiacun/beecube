@@ -2,7 +2,6 @@ import {Component} from "react";
 import {Button, Navigator, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import PageLayout from "../../../layouts/PageLayout";
-import LoginView from "../../../components/login";
 import PageLoading from "../../../components/pageloading";
 import utils from "../../../lib/utils";
 import request from "../../../lib/request";
@@ -110,17 +109,18 @@ export default class Index extends Component<any, any> {
             }).catch(() => this.setState({posting: false}));
         });
     }
+
     cancel() {
         request.post('/paimai/api/members/orders/cancel', null, {params: {id: this.state.detail.id}}).then(res => {
             let result = res.data.result;
-            if(result) {
+            if (result) {
                 utils.showSuccess(true, "取消成功");
-            }
-            else {
+            } else {
                 utils.showMessage("取消失败");
             }
         });
     }
+
     requestAfter() {
         Taro.navigateTo({url: 'after'}).then();
     }
@@ -246,12 +246,10 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View style={{height: 100}}></View>
-                <LoginView>
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
-                        {this.renderButton()}
-                    </View>
-                </LoginView>
+                <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                      style={{paddingBottom: safeBottom}}>
+                    {this.renderButton()}
+                </View>
             </PageLayout>
         );
     }

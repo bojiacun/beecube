@@ -7,7 +7,6 @@ import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
-import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
@@ -182,7 +181,8 @@ export default class Index extends Component<any, any> {
                 <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
                     {goodsList.map((item: any) => {
                         return (
-                            <Navigator url={'/pages/goods/detail?id=' + item.id} className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
+                            <Navigator url={'/pages/goods/detail?id=' + item.id}
+                                       className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
                                 <View className={'relative w-28 h-28'}>
                                     <FallbackImage
                                         mode={'aspectFill'}
@@ -210,17 +210,15 @@ export default class Index extends Component<any, any> {
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!deposited &&
-                    <LoginView>
-                        <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                              style={{paddingBottom: safeBottom}}>
-                            <View>
-                                <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
-                                    <View>交保证金</View>
-                                    <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
-                                </Button>
-                            </View>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View>
+                            <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                                <View>交保证金</View>
+                                <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
+                            </Button>
                         </View>
-                    </LoginView>
+                    </View>
                 }
             </PageLayout>
         );
