@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError, showToastSuccess} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
@@ -59,6 +59,17 @@ const GoodsListSelected = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
+    const handleOnAction = (row: any, e: any) => {
+        switch (e) {
+            case 'start':
+                //编辑
+                break;
+            case 'end':
+                showDeleteAlert(function () {
+                });
+                break;
+        }
+    }
     const columns: any[] = [
         {
             text: '拍品名称',
@@ -75,6 +86,20 @@ const GoodsListSelected = (props: any) => {
         {
             text: '排序',
             dataField: 'sortNum',
+        },
+        {
+            text: '操作',
+            dataField: 'operation',
+            headerStyle: {width: 180},
+            hidden: selectedPerformance?.type != 2,
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {!row.startTime && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                        {row.startTime && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                    </div>
+                );
+            }
         },
     ]
 

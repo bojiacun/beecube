@@ -81,6 +81,8 @@ public class Goods {
 	/**预计结束时间*/
     @ApiModelProperty(value = "预计结束时间")
 	private java.util.Date endTime;
+	@ApiModelProperty(value = "开始时间")
+	private java.util.Date startTime;
 	/**其他字段描述*/
 	@Excel(name = "其他字段描述", width = 15)
     @ApiModelProperty(value = "其他字段描述")

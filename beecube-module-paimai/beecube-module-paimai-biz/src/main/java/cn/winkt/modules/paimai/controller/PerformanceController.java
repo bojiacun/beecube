@@ -151,12 +151,14 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         if(performance.getType() == 1) {
             for (Goods g : goodsList) {
                 g.setPerformanceId(perfId);
+                g.setStartTime(performance.getStartTime());
                 g.setEndTime(performance.getEndTime());
             }
         }
         else if(performance.getType() == 2){
             for (Goods g : goodsList) {
                 g.setPerformanceId(perfId);
+                g.setStartTime(null);
                 g.setEndTime(null);
             }
         }
