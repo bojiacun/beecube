@@ -50,7 +50,10 @@ public class Goods {
     @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
-
+	@ApiModelProperty(value = "手动控制开始标志")
+	private Integer started;
+	@ApiModelProperty(value = "手动控制结束标志")
+	private Integer ended;
 	private Integer sortNum;
 	private String tags;
 	private java.lang.Integer stock;

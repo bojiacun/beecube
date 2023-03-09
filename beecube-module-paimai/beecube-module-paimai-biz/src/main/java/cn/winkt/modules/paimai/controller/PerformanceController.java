@@ -133,6 +133,11 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         return Result.OK("添加成功！");
     }
 
+    /***
+     * 手动控制专场开始
+     * @param id
+     * @return
+     */
     @PutMapping("/start")
     public Result<?> manualStart(@RequestParam String id) {
         Performance performance = performanceService.getById(id);
@@ -140,6 +145,12 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         performanceService.updateById(performance);
         return Result.OK(performance);
     }
+
+    /**
+     * 手动控制专场结束
+     * @param id
+     * @return
+     */
     @PutMapping("/end")
     public Result<?> manualEnd(@RequestParam String id) {
         Performance performance = performanceService.getById(id);
@@ -150,33 +161,24 @@ public class PerformanceController extends JeecgController<Performance, IPerform
 
     /**
      * 手动设置拍品开始,设置拍品开始时间为当前时间
-     * @param jsonObject
      * @return
      */
     @PutMapping("/goods/start")
-    public Result<?> startGoods(@RequestBody JSONObject jsonObject) {
-        String perfId = jsonObject.getString("perfId");
-        Performance performance = performanceService.getById(perfId);
-        String goodsId = jsonObject.getString("goodsId");
-        Goods goods = goodsService.getById(goodsId);
-        goods.setStartTime(new Date());
+    public Result<?> startGoods(@RequestParam String id) {
+        Goods goods = goodsService.getById(id);
+        goods.setStarted(1);
         goodsService.updateById(goods);
         return Result.OK(goods);
     }
 
     /**
      * 手动设置拍品结束时间
-     * @param jsonObject
      * @return
      */
     @PutMapping("/goods/end")
-    public Result<?> endGoods(@RequestBody JSONObject jsonObject) {
-        String perfId = jsonObject.getString("perfId");
-        Performance performance = performanceService.getById(perfId);
-        String goodsId = jsonObject.getString("goodsId");
-        Goods goods = goodsService.getById(goodsId);
-        goods.setEndTime(new Date());
-        goods.setActualEndTime(new Date());
+    public Result<?> endGoods(@RequestParam String id) {
+        Goods goods = goodsService.getById(id);
+        goods.setEnded(1);
         goodsService.updateById(goods);
         return Result.OK(goods);
     }

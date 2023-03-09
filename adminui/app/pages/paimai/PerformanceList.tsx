@@ -139,10 +139,6 @@ const PerformanceList = (props: any) => {
             }
         },
         {
-            text: '专场类型',
-            dataField: 'type_dictText',
-        },
-        {
             text: '保证金',
             dataField: 'deposit',
         },
@@ -157,7 +153,6 @@ const PerformanceList = (props: any) => {
         {
             text: '开拍时间',
             dataField: 'startTime',
-            hidden: type == 2
         },
         {
             text: '结束时间',
@@ -183,10 +178,12 @@ const PerformanceList = (props: any) => {
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选拍品</a>
                         <span className={'divider'}/>
-                        {row.started == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
-                        {(row.started == 1&& row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                        {row.ended == 1 && <a>已结束</a>}
-                        <span className={'divider'}/>
+                        {type == 2 && <>
+                            {row.started == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                            {(row.started == 1&& row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                            {row.ended == 1 && <a>已结束</a>}
+                            <span className={'divider'}/>
+                        </>}
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>
                                 <MoreVertical size={16} style={{marginTop: -2}}/>

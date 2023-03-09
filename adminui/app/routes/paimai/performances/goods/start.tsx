@@ -11,6 +11,7 @@ import {formData2Json} from "~/utils/utils";
 
 export const action: ActionFunction = async ({request, params}) => {
     await requireAuthenticated(request);
+    const url = new URL(request.url);
     const formData = await request.formData();
-    return await requestWithToken(request)(API_PAIMAI_PERFORMANCE_GOODS_START, putFormInit(formData2Json(formData)));
+    return await requestWithToken(request)(API_PAIMAI_PERFORMANCE_GOODS_START+'?id='+url.searchParams.get('id'), putFormInit(formData2Json(formData)));
 }
