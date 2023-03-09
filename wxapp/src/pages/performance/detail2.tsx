@@ -5,7 +5,6 @@ import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
@@ -111,7 +110,7 @@ export default class Index extends Component<any, any> {
 
     componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
         let type = 0;
-        if(prevState.status == '') {
+        if (prevState.status == '') {
             if (this.state.status == 'notstart') {
                 type = 1;
             } else if (this.state.status == 'started') {
@@ -132,7 +131,7 @@ export default class Index extends Component<any, any> {
         } else if (this.state.status == 'started') {
             type = 2;
         }
-        if(type > 0) {
+        if (type > 0) {
             request.put('/paimai/api/members/messages/toggle', {type: type, performanceId: this.state.detail.id}).then(res => {
                 this.setState({message: res.data.result});
             });
@@ -145,7 +144,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, message, deposited} = this.state;
+        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
         const {systemInfo} = this.props;
 
 
@@ -155,85 +154,50 @@ export default class Index extends Component<any, any> {
 
 
         return (
-            <PageLayout statusBarProps={{title: '同步拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
-                <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
-                {detail.started == 0 && detail.startTime != null &&
-                    <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
-                        <TimeCountDowner
-                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
-                            onStatusChanged={(status) => {
-                                this.setState({status: status});
-                            }}
-                            className={'flex'}
-                            startTime={new Date(detail.startTime)}
-                            started={detail.started == 1}
-                            ended={detail.ended == 1}
-                        />
+            <PageLayout statusBarProps={{title: '同步拍专场详情'}} enableReachBottom={true}>
+                <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
+                    <View className={'text-sm text-indigo-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
+                        className={'py-1 px-2 border border-1 border-solid border-indigo-500'}>{item}</Text>)}</View>
+                    <View className={'font-bold text-lg'}>{detail.title}</View>
+                    <View className={'space-x-4'}>
+                        <Text className={'font-bold'}>拍卖地点</Text>
+                        <Text>{detail.performanceAddress}</Text>
                     </View>
-                }
-                <View className={'divide-y divide-gray-100 bg-white'}>
-                    <View className={'p-4 flex items-center justify-between'}>
-                        <View className={'flex-1 space-y-1'}>
-                            <View className={'text-xl font-bold'}>{detail.title}</View>
-                            <View className={'text-gray-600'}>{detail.subTitle}</View>
-                            <View className={'text-gray-600'}>开拍时间: {detail.startTime}</View>
-                            <View className={'text-gray-600'}>结束时间: {detail.endTime}</View>
-                            <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
-                        </View>
-                        <View className={'w-20'}>
-                            {this.state.status != 'ended' && this.state.status != '' &&
-                                <LoginView>
-                                    {!message &&
-                                        <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
-                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
-                                        </View>
-                                    }
-                                    {message &&
-                                        <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
-                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View className={'text-sm'}>取消提醒</View>
-                                        </View>
-                                    }
-                                </LoginView>
-                            }
-                        </View>
+                    <View className={'space-x-4'}>
+                        <Text className={'font-bold'}>拍卖时间</Text>
+                        <Text>{detail.startTime}</Text>
                     </View>
-                    <View className={'space-x-4 px-4 py-2 text-gray-400'}>
+                    <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
                         <Text>报名{detail.depositCount}人</Text>
-                        <Text>出价{detail.offerCount}件</Text>
+                        <Text>出价{detail.offerCount}次</Text>
                     </View>
-                    <View></View>
                 </View>
-                <View className={'p-4 mt-4 grid grid-cols-2 gap-4 bg-white'}>
+                <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
                     {goodsList.map((item: any) => {
-                        let radius = 0;
                         return (
-                            <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <Navigator url={'/pages/goods/detail?id=' + item.id}>
-                                    <View className={'relative'} style={{width: '100%', paddingTop: '130%'}}>
-                                        <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                                       className={'absolute z-0 inset-0 block w-full h-full'}
-                                                       src={utils.resolveUrl(item.images.split(',')[0])}/>
+                            <Navigator url={'/pages/goods/detail?id=' + item.id} className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
+                                <View className={'relative w-28 h-28'}>
+                                    <FallbackImage
+                                        mode={'aspectFill'}
+                                        className={'block w-full h-full'}
+                                        src={utils.resolveUrl(item.images.split(',')[0])}
+                                    />
+                                </View>
+                                <View className={'p-2 space-y-4 flex-1'}>
+                                    <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
+                                    <View className={'text-sm'}>
+                                        当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                        className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                     </View>
-                                    <View className={'p-2 space-y-0.5'}>
-                                        <View className={'text-gray-600'}>{item.title}</View>
-                                        <View className={'text-sm'}>
-                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
-                                        </View>
-                                        <TimeCountDowner
-                                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
-                                            className={'text-gray-400 text-xs flex'}
-                                            startTime={new Date(detail.startTime)}
-                                            started={detail.started}
-                                            ended={detail.ended}
-                                        />
-                                    </View>
-                                </Navigator>
-                            </View>
+                                </View>
+                                <View className={'flex items-center justify-center pr-4'}>
+                                    {item.started == 1 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
+                                    {item.started == 0 && <Text className={'text-gray-600'}>未开始</Text>}
+                                    {item.ended == 1 && <Text className={'text-gray-600'}>已结束</Text>}
+                                </View>
+                            </Navigator>
                         );
                     })}
                 </View>
