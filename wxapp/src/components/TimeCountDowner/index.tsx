@@ -75,7 +75,7 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
             onStatusChanged(TimeCountDownerStatus.NOT_START);
             return notStartTip;
         }
-    }, [started, ended]);
+    }, [started, ended, startTime, endTime]);
     useEffect(() => {
         let timer = setInterval(() => {
             setCounter(v => v + 1);
