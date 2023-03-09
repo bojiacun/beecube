@@ -2,10 +2,8 @@ package cn.winkt.modules.paimai.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
+
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -84,8 +82,10 @@ public class Goods {
 	private java.lang.String performanceTitle;
 	/**预计结束时间*/
     @ApiModelProperty(value = "预计结束时间")
+	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private java.util.Date endTime;
 	@ApiModelProperty(value = "开始时间")
+	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private java.util.Date startTime;
 	/**其他字段描述*/
 	@Excel(name = "其他字段描述", width = 15)
@@ -135,6 +135,7 @@ public class Goods {
 	private java.lang.String appId;
 	/**实际结束时间*/
     @ApiModelProperty(value = "实际结束时间")
+	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private java.util.Date actualEndTime;
 	/**图片*/
 	@Excel(name = "图片", width = 15)
