@@ -294,6 +294,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
             PerformanceUpdateMessage message = new PerformanceUpdateMessage();
             message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED);
             message.setStartTime(performance.getStartTime());
+            message.setId(performance.getId());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         }
         performanceService.updateById(performance);
