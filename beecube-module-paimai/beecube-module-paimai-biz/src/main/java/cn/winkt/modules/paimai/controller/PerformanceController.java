@@ -203,6 +203,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 g.setPerformanceTitle(performance.getTitle());
                 g.setStartTime(performance.getStartTime());
                 g.setEndTime(performance.getEndTime());
+                g.setActualEndTime(null);
             }
         }
         else if(performance.getType() == 2){
