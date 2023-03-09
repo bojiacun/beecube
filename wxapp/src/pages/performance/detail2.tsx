@@ -193,7 +193,7 @@ export default class Index extends Component<any, any> {
                                     </View>
                                 </View>
                                 <View className={'flex items-center justify-center pr-4'}>
-                                    {item.started == 1 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
+                                    {item.started == 1 && item.ended == 0 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
                                     {item.started == 0 && <Text className={'text-gray-600'}>未开始</Text>}
                                     {item.ended == 1 && <Text className={'text-gray-600'}>已结束</Text>}
                                 </View>
