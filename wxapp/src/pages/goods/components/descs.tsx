@@ -8,8 +8,10 @@ const Descs = (props: any) => {
     return (
         <>
             <View className={'bg-white px-4 divide-y divide-gray-100'}>
-                {goods.performanceId ? <Collapse showArrow={true} title={'拍卖专场'} description={goods.performanceTitle}
+                {goods.performanceType == 1? <Collapse showArrow={true} title={'拍卖专场'} description={goods.performanceTitle}
                                                  url={`/pages/performance/detail?id=${goods.performanceId}`}/> : <></>}
+                {goods.performanceType == 2? <Collapse showArrow={true} title={'拍卖专场'} description={goods.performanceTitle}
+                                                       url={`/pages/performance/detail2?id=${goods.performanceId}`}/> : <></>}
                 <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
                 {goods.fields.map(f => {
                     return <Collapse title={f.key} description={f.value}/>
