@@ -25,7 +25,7 @@ public class GoodsVO {
     private java.lang.Float performanceDeposit;
     private java.util.Date performanceStartTime;
     private java.util.Date performanceEndTime;
-    private java.util.Date performanceType;
+    private Integer performanceType;
     private Integer performanceStarted;
     private Integer performanceEnded;
 
