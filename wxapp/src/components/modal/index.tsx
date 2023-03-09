@@ -24,7 +24,9 @@ const Modal : FC<ModalProps> = (props) => {
     return (
         <View className={classNames('flex flex-col items-center jusitify-center absolute bg-black w-screen h-screen', isShow? 'block': 'hidden', showMask ? 'bg-opacity-10':'bg-opacity-0')} style={{zIndex: 999999, left:0, top:0}}>
             <View className={'p-4 bg-white rounded-xl shadow-outer m-auto relative'} style={{width: '80%', maxHeight: '60%', overflow: 'visible'}}>
-                <Text className="fa fa-close text-xl absolute cursor-pointer text-gray-500" style={{right: -10, top: -10}} onClick={hideModal} />
+                <View className={'text-2xl absolute cursor-pointer text-gray-500'}  style={{right: -10, top: -10}}>
+                    <Text className="fa fa-close" onClick={hideModal} />
+                </View>
                 {children}
             </View>
         </View>

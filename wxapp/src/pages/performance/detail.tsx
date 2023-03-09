@@ -110,15 +110,14 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
-        let type = 0;
-        if (prevState.status == '') {
-            if (this.state.status == 'notstart') {
-                type = 1;
-            } else if (this.state.status == 'started') {
-                type = 2;
-            }
-            if (type > 0 && this.state.detail) {
-                request.get('/paimai/api/members/messaged', {params: {type: type, performanceId: this.state.detail.id}}).then(res => {
+        if (prevState.status == undefined) {
+            if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && this.state.detail) {
+                request.get('/paimai/api/members/messaged', {
+                    params: {
+                        type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+                        performanceId: this.state.detail.id
+                    }
+                }).then(res => {
                     this.setState({message: res.data.result});
                 })
             }
@@ -176,8 +175,8 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-600'}>结束时间: {detail.endTime}</View>
                             <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
                         </View>
-                        <View className={'w-20'}>
-                            {this.state.status != 'ended' && this.state.status != '' &&
+                        {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
+                            <View className={'w-20'}>
                                 <LoginView>
                                     {!message &&
                                         <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
@@ -193,8 +192,8 @@ export default class Index extends Component<any, any> {
                                         </View>
                                     }
                                 </LoginView>
-                            }
-                        </View>
+                            </View>
+                        }
                     </View>
                     <View className={'space-x-4 px-4 py-2 text-gray-400'}>
                         <Text>拍品{detail.goodsCount}件</Text>

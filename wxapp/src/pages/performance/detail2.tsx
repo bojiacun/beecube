@@ -156,8 +156,13 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '同步拍专场详情'}} enableReachBottom={true}>
                 <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
-                    <View className={'text-sm text-indigo-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
-                        className={'py-1 px-2 border border-1 border-solid border-indigo-500'}>{item}</Text>)}</View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'text-sm text-indigo-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
+                            className={'py-1 px-2 border border-1 border-solid border-indigo-500'}>{item}</Text>)}</View>
+                        {detail.started == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
+                        {detail.started == 1 && detail.ended == 0 && <View className={'text-indigo-600 font-bold'}>进行中</View>}
+                        {detail.ended == 1 && <View className={'text-gray-400 font-bold'}>已结束</View>}
+                    </View>
                     <View className={'font-bold text-lg'}>{detail.title}</View>
                     <View className={'space-x-4'}>
                         <Text className={'font-bold'}>拍卖地点</Text>

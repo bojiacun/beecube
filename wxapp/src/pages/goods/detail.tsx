@@ -14,7 +14,7 @@ import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
 import Uprange from "./components/uprange";
 import Descs from "./components/descs";
-import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 
@@ -36,6 +36,7 @@ export default class Index extends Component<any, any> {
         posting: false,
         uprangeShow: false,
         status: undefined,
+        message: false,
     }
     socket: any;
     randomStr: string;
@@ -49,6 +50,7 @@ export default class Index extends Component<any, any> {
         this.payDeposit = this.payDeposit.bind(this);
         this.offer = this.offer.bind(this);
         this.onMessageReceive = this.onMessageReceive.bind(this);
+        this.noticeMe = this.noticeMe.bind(this);
         this.randomStr = utils.randomString(6);
     }
 
@@ -59,11 +61,11 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        if(prevProps.context.userInfo == null || prevState.goods == null) {
+        if (prevProps.context.userInfo == null || prevState.goods == null) {
             const {context} = this.props;
             const {userInfo} = context;
             let {goods} = this.state;
-            if(userInfo != null && goods) {
+            if (userInfo != null && goods) {
                 //记录浏览记录
                 request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
                     console.log(res.data.result);
@@ -74,14 +76,14 @@ export default class Index extends Component<any, any> {
                     this.setState({goods: goods});
                 });
                 //查询出价记录
-                request.get('/paimai/api/goods/offers', {params: {id: goods.id, pageSize: 3}}).then(res=>{
+                request.get('/paimai/api/goods/offers', {params: {id: goods.id, pageSize: 3}}).then(res => {
                     this.setState({offers: res.data.result.records});
                 });
                 //查询是否需要缴纳保证金
                 request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
-                    if(goods.deposited) {
+                    if (goods.deposited) {
                         //需要出价的时候再连接websocket
                         connectWebSocketServer('/auction/websocket/' + goods.id + '/' + userInfo.id).then(res => {
                             this.socket = res;
@@ -90,19 +92,29 @@ export default class Index extends Component<any, any> {
                         });
                     }
                 });
+                if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && goods) {
+                    request.get('/paimai/api/members/messaged', {
+                        params: {
+                            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+                            goodsId: goods.id
+                        }
+                    }).then(res => {
+                        this.setState({message: res.data.result});
+                    })
+                }
             }
         }
     }
 
-    onMessageReceive(message:any) {
+    onMessageReceive(message: any) {
         const {context} = this.props;
         const {userInfo} = context;
         let {goods} = this.state;
-        const messageSessionId = md5(goods.id+':'+userInfo.id+':'+this.randomStr);
+        const messageSessionId = md5(goods.id + ':' + userInfo.id + ':' + this.randomStr);
         let msg = JSON.parse(message.data);
 
         //如果是自身产生的消息则忽略
-        if(msg.id === messageSessionId) {
+        if (msg.id === messageSessionId) {
             return;
         }
         switch (msg.type) {
@@ -111,7 +123,7 @@ export default class Index extends Component<any, any> {
                 this.setState({goods: goods});
                 this.nextPrice(goods);
                 let offers = this.state.offers;
-                if(offers.length >=3 ) {
+                if (offers.length >= 3) {
                     offers.pop();
                     offers.unshif(
                         {
@@ -122,8 +134,7 @@ export default class Index extends Component<any, any> {
                             offerTime: msg.createTime
                         }
                     );
-                }
-                else {
+                } else {
                     offers.unshift(
                         {
                             memberAvatar: userInfo.avatar,
@@ -146,7 +157,7 @@ export default class Index extends Component<any, any> {
     payDeposit() {
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res=>{
+        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
@@ -157,7 +168,7 @@ export default class Index extends Component<any, any> {
                     this.setState({goods: goods});
                 });
                 this.setState({posting: false});
-            }).catch(()=>this.setState({posting: false}));
+            }).catch(() => this.setState({posting: false}));
         })
     }
 
@@ -167,13 +178,13 @@ export default class Index extends Component<any, any> {
         const {goods} = this.state;
         this.setState({posting: true});
         //出价
-        request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res=>{
+        request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res => {
             this.setState({posting: false});
-            if(res.data.success) {
+            if (res.data.success) {
                 utils.showSuccess(false, '出价成功');
                 goods.currentPrice = this.state.nextPrice;
                 let offers = this.state.offers;
-                if(offers.length >= 3) {
+                if (offers.length >= 3) {
                     offers.pop();
                     offers.unshift({
                         memberAvatar: userInfo.avatar,
@@ -182,8 +193,7 @@ export default class Index extends Component<any, any> {
                         price: this.state.nextPrice,
                         offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
                     });
-                }
-                else {
+                } else {
                     offers.unshift(
                         {
                             memberAvatar: userInfo.avatar,
@@ -197,18 +207,18 @@ export default class Index extends Component<any, any> {
                 this.setState({offers: [...offers]});
                 this.nextPrice(goods);
                 //出价成功加入队列
+            } else {
+                utils.showError(res.data.message || '出价失败');
             }
-            else {
-                utils.showError(res.data.message||'出价失败');
-            }
-        }).catch(()=>this.setState({posting: false}));
+        }).catch(() => this.setState({posting: false}));
     }
+
     nextPrice(newGoods) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
-        if(!goods.currentPrice) {
+        if (!goods.currentPrice) {
             //说明没有人出价，第一次出价可以以起拍价出价
-            this.setState({nextPrice:goods.startPrice, goods: goods});
+            this.setState({nextPrice: goods.startPrice, goods: goods});
             return;
         }
         let currentPrice = parseFloat(goods.currentPrice);
@@ -218,11 +228,11 @@ export default class Index extends Component<any, any> {
             let config = upgradeConfig[i];
             let min = parseFloat(config.min);
             let price = parseFloat(config.price);
-            if(currentPrice >= min) {
+            if (currentPrice >= min) {
                 rangePirce = price;
             }
         }
-        this.setState({nextPrice:currentPrice + rangePirce, goods: goods});
+        this.setState({nextPrice: currentPrice + rangePirce, goods: goods});
     }
 
     onLoad(options) {
@@ -261,48 +271,85 @@ export default class Index extends Component<any, any> {
     renderButton() {
         const {goods, status} = this.state;
 
-        if(!goods.deposit || goods.deposited) {
-            //拍品如果挂载在某个专场上，则有开始时间一说，开始时间按照专场来计算
-            if(status == 'ended') {
-                //拍品结束
-                return (
-                    <View>
-                        <Button className={'btn w-56'} disabled={true}>
-                            <View>已结束</View>
-                        </Button>
-                    </View>
-                );
-            }
-            else if(status == 'notstart') {
-                return (
-                    <View>
-                        <Button className={'btn w-56'} disabled={true}>
-                            <View>未开始</View>
-                        </Button>
-                    </View>
-                );
+        if (!goods.deposit || goods.deposited) {
+            if(goods.performanceType == 1) {
+                if (status == TimeCountDownerStatus.ENDED) {
+                    //拍品结束
+                    return (
+                        <View>
+                            <Button className={'btn w-56'} disabled={true}>
+                                <View>已结束</View>
+                            </Button>
+                        </View>
+                    );
+                } else if (status == TimeCountDownerStatus.NOT_START) {
+                    return (
+                        <View>
+                            <Button className={'btn w-56'} disabled={true}>
+                                <View>未开始</View>
+                            </Button>
+                        </View>
+                    );
+                } else {
+                    return (
+                        <View>
+                            <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
+                                <View>出价</View>
+                                <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
+                            </Button>
+                        </View>
+                    );
+                }
             }
             else {
-                return (
-                    <View>
-                        <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
-                            <View>出价</View>
-                            <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
-                        </Button>
-                    </View>
-                );
+                if(goods.performanceStarted == 1 && goods.started == 1 && goods.ended  == 0) {
+                    return (
+                        <View>
+                            <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
+                                <View>出价</View>
+                                <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
+                            </Button>
+                        </View>
+                    );
+                }
+                else if(goods.started == 0 || goods.performanceStarted == 0){
+                    return (
+                        <View>
+                            <Button className={'btn w-56'} disabled={true}>
+                                <View>未开始</View>
+                            </Button>
+                        </View>
+                    );
+                }
+                else if(goods.ended == 1 || goods.performanceEnded == 1) {
+                    return (
+                        <View>
+                            <Button className={'btn w-56'} disabled={true}>
+                                <View>已结束</View>
+                            </Button>
+                        </View>
+                    );
+                }
             }
-        }
-        else {
+        } else {
             return (
                 <View>
                     <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
                         <View>交保证金</View>
-                        <View>RMB {numeral(goods.performanceDeposit||goods.deposit).format('0,0.00')}</View>
+                        <View>RMB {numeral(goods.performanceDeposit || goods.deposit).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
         }
+    }
+
+    noticeMe() {
+        request.put('/paimai/api/members/messages/toggle', {
+            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+            goodsId: this.state.goods.id
+        }).then(res => {
+            this.setState({message: res.data.result});
+        });
     }
 
     componentWillUnmount() {
@@ -310,9 +357,9 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {goods} = this.state;
+        const {goods, message} = this.state;
         const {systemInfo} = this.props;
-        if (goods == null) return <PageLoading />;
+        if (goods == null) return <PageLoading/>;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
             return {id: index, url: '#', image: item};
@@ -335,24 +382,41 @@ export default class Index extends Component<any, any> {
                                     className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
                                 </View>
                             </View>
-                            <View className={'flex flex-col items-center text-gray-600'}>
-                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                <View className={'text-sm'}>结束提醒</View>
-                            </View>
+                            {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
+                                <View className={'w-20'}>
+                                    <LoginView>
+                                        {!message &&
+                                            <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
+                                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                                <View
+                                                    className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
+                                            </View>
+                                        }
+                                        {message &&
+                                            <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
+                                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                                <View className={'text-sm'}>取消提醒</View>
+                                            </View>
+                                        }
+                                    </LoginView>
+                                </View>
+                            }
                         </View>
-                        <TimeCountDowner
-                            mode={goods.performanceType == 1 ? TimeCountDownerMode.TimeBase: TimeCountDownerMode.Manual}
-                            onStatusChanged={status => {
-                                this.setState({status: status});
-                            }}
-                            started={goods.started == 1}
-                            ended={goods.ended == 1}
-                            className={'flex items-center text-sm space-x-1'}
-                            endTime={new Date(goods.actualEndTime||goods.endTime)}
-                            startTime={goods.startTime}
-                            startedTip={<><View className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View><Text>距结束：</Text></>}
-                            notStartTip={<><View className={'border rounded-r-full px-1 border-indigo-500 border-solid text-indigo-500'}>预展中</View><Text>距开始：</Text></>}
-                        />
+                        {goods.performanceType == 1 &&
+                            <TimeCountDowner
+                                mode={TimeCountDownerMode.TimeBase}
+                                onStatusChanged={status => {
+                                    this.setState({status: status});
+                                }}
+                                className={'flex items-center text-sm space-x-1'}
+                                endTime={new Date(goods.actualEndTime || goods.endTime)}
+                                startTime={goods.startTime}
+                                startedTip={<><View
+                                    className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View><Text>距结束：</Text></>}
+                                notStartTip={<><View
+                                    className={'border rounded-r-full px-1 border-indigo-500 border-solid text-indigo-500'}>预展中</View><Text>距开始：</Text></>}
+                            />
+                        }
                         <View className={'text-sm text-gray-400 space-x-4'}>
                             <Text>围观{goods.viewCount}人</Text>
                             <Text>出价{goods.offerCount}次</Text>
@@ -361,7 +425,8 @@ export default class Index extends Component<any, any> {
                     <View className={'py-4 space-y-4'}>
                         <View className={'flex'}>
                             <View className={'flex-1'}>保证金：￥{numeral(goods.deposit).format('0,0.00')}</View>
-                            <View className={'flex-1'}>加价幅度：<Text className={'text-indigo-400'} onClick={()=>this.setState({uprangeShow: true})}>查看详情</Text></View>
+                            <View className={'flex-1'}>加价幅度：<Text className={'text-indigo-400'}
+                                                                      onClick={() => this.setState({uprangeShow: true})}>查看详情</Text></View>
                         </View>
                         <View className={'flex'}>
                             <View className={'flex-1'}>起拍价：￥{numeral(goods.startPrice).format('0,0.00')}</View>
@@ -377,11 +442,12 @@ export default class Index extends Component<any, any> {
                             <Navigator url={`offers?id=${this.state.id}`}>查看全部<Text className={'iconfont icon-youjiantou_huaban'}/></Navigator>
                         </View>
                         <View className={'space-y-4 mt-4'}>
-                            {this.state.offers.map((o,index)=>{
+                            {this.state.offers.map((o, index) => {
                                 return (
                                     <View className={'flex justify-between items-center bg-white rounded-full overflow-hidden p-1 shadow-outer'}>
                                         <View className={'flex items-center space-x-2'}>
-                                            <FallbackImage src={o.memberAvatar} className={'rounded-full'} style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}} />
+                                            <FallbackImage src={o.memberAvatar} className={'rounded-full'}
+                                                           style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                                             <View>
                                                 <View>{o.memberName}</View>
                                                 <View className={'font-bold'}>￥{numeral(o.price).format('0,0.00')}</View>
@@ -398,7 +464,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                 </View>
-                <Descs goods={goods} />
+                <Descs goods={goods}/>
 
                 <View style={{height: Taro.pxTransform(124)}}/>
 
@@ -425,7 +491,7 @@ export default class Index extends Component<any, any> {
                         {this.renderButton()}
                     </View>
                 </LoginView>
-                <Uprange uprangeShow={this.state.uprangeShow} onClose={()=>this.setState({uprangeShow: false})} goods={goods} />
+                <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
             </PageLayout>
         );
     }
