@@ -5,7 +5,7 @@ import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import TimeCountDowner from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
@@ -31,7 +31,7 @@ export default class Index extends Component<any, any> {
         noMore: false,
         page: 1,
         posting: false,
-        status: '',
+        status: undefined,
         message: false,
         deposited: true,
     }
@@ -158,8 +158,17 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
                 <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
-                    <TimeCountDowner onStatusChanged={(status) => this.setState({status: status})} className={'flex'}
-                                     endTime={new Date(detail.endTime)} startTime={new Date(detail.startTime)}/>
+                    <TimeCountDowner
+                        mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
+                        onStatusChanged={(status) => {
+                            this.setState({status: status});
+                        }}
+                        className={'flex'}
+                        endTime={new Date(detail.endTime)}
+                        startTime={new Date(detail.startTime)}
+                        started={detail.started == 1}
+                        ended={detail.ended == 1}
+                    />
                 </View>
                 <View className={'divide-y divide-gray-100 bg-white'}>
                     <View className={'p-4 flex items-center justify-between'}>

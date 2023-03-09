@@ -23,7 +23,7 @@ export interface TimeCountDownerProps extends Partial<any> {
     notStartTip?: ReactElement;
     startedTip?: ReactElement;
     endTip?: ReactElement;
-    onStatusChanged?: (status: TimeCountDownerStatus) => {};
+    onStatusChanged?: (status: TimeCountDownerStatus)=>void;
     mode?: TimeCountDownerMode;
     started?: boolean;
     ended?: boolean;
