@@ -5,7 +5,7 @@ import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
 import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import LoginView from "../../components/login";
@@ -185,7 +185,7 @@ export default class Index extends Component<any, any> {
                                     {!message &&
                                         <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
                                             <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View className={'text-sm'}>{this.state.status == 'notstart' ? '开始' : '结束'}提醒</View>
+                                            <View className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
                                         </View>
                                     }
                                     {message &&
@@ -223,8 +223,13 @@ export default class Index extends Component<any, any> {
                                             当前价 <Text className={'text-red-500'}>RMB</Text> <Text
                                             className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                         </View>
-                                        <TimeCountDowner className={'text-gray-400 text-xs flex'} startTime={new Date(item.performanceStartTime)}
-                                                         endTime={new Date(item.endTime)}/>
+                                        <TimeCountDowner
+                                            mode={detail.type == 1 ? TimeCountDownerMode.TimeBase : TimeCountDownerMode.Manual}
+                                            className={'text-gray-400 text-xs flex'}
+                                            startTime={new Date(detail.startTime)}
+                                            started={detail.started}
+                                            ended={detail.ended}
+                                        />
                                     </View>
                                 </Navigator>
                             </View>
