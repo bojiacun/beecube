@@ -1,6 +1,5 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import {View, Navigator} from "@tarojs/components";
@@ -59,32 +58,31 @@ export default class Index extends Component<any, any> {
         const {list, noMore, loadingMore} = this.state;
         return (
             <PageLayout statusBarProps={{title: '参拍记录'}} enableReachBottom={true}>
-                <LoginView>
-                    {list.length == 0 && <NoData/>}
-                    <View className={'grid grid-cols-1 gap-4 p-4'}>
-                        {list.map((item) => {
-                            let radius = 0;
-                            return (
-                                <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white shadow-outer p-4'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                    <View className={'flex-1'}>
-                                        <View className={'text-lg font-bold flex-1'}>{item.goodsName}</View>
-                                        <View className={'text-gray-400 text-sm'}>
-                                            出价时间：{item.offerTime}
-                                        </View>
+                {list.length == 0 && <NoData/>}
+                <View className={'grid grid-cols-1 gap-4 p-4'}>
+                    {list.map((item) => {
+                        let radius = 0;
+                        return (
+                            <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white shadow-outer p-4'}
+                                       style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <View className={'flex-1'}>
+                                    <View className={'text-lg font-bold flex-1'}>{item.goodsName}</View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        出价时间：{item.offerTime}
                                     </View>
-                                    <View className={'flex flex-col items-center justify-center space-y-1'}>
-                                        <View className={'font-bold text-lg'}>
-                                            {item.price == item.goodsMaxOfferPrice && <View className={'text-indigo-500'}>领先</View>}
-                                            {item.price < item.goodsMaxOfferPrice && <View className={'text-gray-400'}>出局</View>}
-                                        </View>
-                                        <View>￥{numeral(item.price).format('0,0.00')} </View>
+                                </View>
+                                <View className={'flex flex-col items-center justify-center space-y-1'}>
+                                    <View className={'font-bold text-lg'}>
+                                        {item.price == item.goodsMaxOfferPrice && <View className={'text-indigo-500'}>领先</View>}
+                                        {item.price < item.goodsMaxOfferPrice && <View className={'text-gray-400'}>出局</View>}
                                     </View>
-                                </Navigator>
-                            );
-                        })}
-                    </View>
-                    {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
-                </LoginView>
+                                    <View>￥{numeral(item.price).format('0,0.00')} </View>
+                                </View>
+                            </Navigator>
+                        );
+                    })}
+                </View>
+                {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
             </PageLayout>
         );
     }

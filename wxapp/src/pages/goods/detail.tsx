@@ -1,13 +1,12 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request, {connectWebSocketServer} from "../../lib/request";
+import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
-import LoginView from "../../components/login";
 import PageLoading from "../../components/pageloading";
 import md5 from 'blueimp-md5';
 import FallbackImage from "../../components/FallbackImage";
@@ -96,7 +95,7 @@ export default class Index extends Component<any, any> {
             }
 
         }
-        if(goods != null) {
+        if (goods != null) {
             if (prevState.status == undefined && this.state.status != undefined) {
                 if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && goods) {
                     request.get('/paimai/api/members/messaged', {
@@ -278,7 +277,7 @@ export default class Index extends Component<any, any> {
         const {goods, status} = this.state;
 
         if (!goods.deposit || goods.deposited) {
-            if(goods.performanceType == 1) {
+            if (goods.performanceType == 1) {
                 if (status == TimeCountDownerStatus.ENDED) {
                     //拍品结束
                     return (
@@ -306,9 +305,8 @@ export default class Index extends Component<any, any> {
                         </View>
                     );
                 }
-            }
-            else {
-                if(goods.performanceStarted == 1 && goods.started == 1 && goods.ended  == 0) {
+            } else {
+                if (goods.performanceStarted == 1 && goods.started == 1 && goods.ended == 0) {
                     return (
                         <View>
                             <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
@@ -317,8 +315,7 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </View>
                     );
-                }
-                else if(goods.started == 0 || goods.performanceStarted == 0){
+                } else if (goods.started == 0 || goods.performanceStarted == 0) {
                     return (
                         <View>
                             <Button className={'btn w-56'} disabled={true}>
@@ -326,8 +323,7 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </View>
                     );
-                }
-                else if(goods.ended == 1 || goods.performanceEnded == 1) {
+                } else if (goods.ended == 1 || goods.performanceEnded == 1) {
                     return (
                         <View>
                             <Button className={'btn w-56'} disabled={true}>
@@ -390,21 +386,19 @@ export default class Index extends Component<any, any> {
                             </View>
                             {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
                                 <View className={'w-20'}>
-                                    <LoginView>
-                                        {!message &&
-                                            <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
-                                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                                <View
-                                                    className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
-                                            </View>
-                                        }
-                                        {message &&
-                                            <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
-                                                <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                                <View className={'text-sm'}>取消提醒</View>
-                                            </View>
-                                        }
-                                    </LoginView>
+                                    {!message &&
+                                        <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
+                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                            <View
+                                                className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
+                                        </View>
+                                    }
+                                    {message &&
+                                        <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
+                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                            <View className={'text-sm'}>取消提醒</View>
+                                        </View>
+                                    }
                                 </View>
                             }
                         </View>
@@ -474,29 +468,27 @@ export default class Index extends Component<any, any> {
 
                 <View style={{height: Taro.pxTransform(124)}}/>
 
-                <LoginView>
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
-                        <View>
-                            <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
-                                <View className={'iconfont icon-fenxiang text-lg'}/>
-                                <View>分享</View>
-                            </Button>
-                        </View>
-                        <View>
-                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
-                                <View className={'iconfont icon-lianxikefu text-xl'}/>
-                                <View>客服</View>
-                            </Button>
-                        </View>
-                        <View onClick={this.toggleFollow}
-                              className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
-                            <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
-                            <View>关注</View>
-                        </View>
-                        {this.renderButton()}
+                <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
+                      style={{paddingBottom: safeBottom}}>
+                    <View>
+                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
+                            <View className={'iconfont icon-fenxiang text-lg'}/>
+                            <View>分享</View>
+                        </Button>
                     </View>
-                </LoginView>
+                    <View>
+                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
+                            <View className={'iconfont icon-lianxikefu text-xl'}/>
+                            <View>客服</View>
+                        </Button>
+                    </View>
+                    <View onClick={this.toggleFollow}
+                          className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
+                        <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
+                        <View>关注</View>
+                    </View>
+                    {this.renderButton()}
+                </View>
                 <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
             </PageLayout>
         );

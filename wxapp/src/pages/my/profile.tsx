@@ -3,7 +3,6 @@ import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
 import {View, Navigator, Picker, Input, Form, Button} from "@tarojs/components";
-import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
@@ -186,62 +185,60 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>
-                <LoginView>
-                    <Form onSubmit={this.handleSubmit}>
-                        <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
-                            {this.renderNicknameAvatar()}
-                            <View className={'p-4'}>
-                                <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'name'}>
-                                    <View className={'flex items-center justify-between'}>
-                                        <View className={'flex items-center space-x-2'}>
-                                            <View>性别</View>
-                                        </View>
-                                        <View className={'flex items-center space-x-2'}>
-                                            <View>{userSex}</View>
-                                            <View className={'iconfont icon-youjiantou_huaban'}/>
-                                        </View>
-                                    </View>
-                                </Picker>
-                            </View>
-                            <View className={''}>
-                                <Navigator className={'flex items-center justify-between p-4'} url={'profile/phone'}>
+                <Form onSubmit={this.handleSubmit}>
+                    <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
+                        {this.renderNicknameAvatar()}
+                        <View className={'p-4'}>
+                            <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'name'}>
+                                <View className={'flex items-center justify-between'}>
                                     <View className={'flex items-center space-x-2'}>
-                                        <View>手机号</View>
+                                        <View>性别</View>
                                     </View>
                                     <View className={'flex items-center space-x-2'}>
-                                        <View>{userInfo?.phone}</View>
+                                        <View>{userSex}</View>
                                         <View className={'iconfont icon-youjiantou_huaban'}/>
                                     </View>
-                                </Navigator>
-                            </View>
-                            <View className={''}>
-                                <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>邮箱</View>
-                                    </View>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>{userInfo?.email}</View>
-                                        <View className={'iconfont icon-youjiantou_huaban'}/>
-                                    </View>
-                                </Navigator>
-                            </View>
-                            <View className={''}>
-                                <Navigator className={'flex items-center justify-between p-4'} url={'profile/auth'}>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>实名认证</View>
-                                    </View>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
-                                        <View className={'iconfont icon-youjiantou_huaban'}/>
-                                    </View>
-                                </Navigator>
-                            </View>
+                                </View>
+                            </Picker>
                         </View>
-                        <View className={'container mx-auto mt-4 text-center'}>
-                            <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>
+                        <View className={''}>
+                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/phone'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>手机号</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo?.phone}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
                         </View>
-                    </Form>
-                </LoginView>
+                        <View className={''}>
+                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>邮箱</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo?.email}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
+                        </View>
+                        <View className={''}>
+                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/auth'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>实名认证</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
+                        </View>
+                    </View>
+                    <View className={'container mx-auto mt-4 text-center'}>
+                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>
+                    </View>
+                </Form>
             </PageLayout>
         );
     }

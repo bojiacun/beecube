@@ -5,7 +5,7 @@ import './app.scss';
 import configStore from "./store";
 import {setContext, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
-import request from './lib/request';
+import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
@@ -15,6 +15,29 @@ let qqmapSdk;
 class App extends Component<PropsWithChildren> {
 
     socket: any;
+
+    constructor(props) {
+        super(props);
+        this.initUser = this.initUser.bind(this);
+        this.onMessageReceive = this.onMessageReceive.bind(this);
+    }
+
+    initUser(context) {
+        request.get('/app/api/members/profile').then(res => {
+            context.userInfo = res.data.result;
+            store.dispatch(setContext(context));
+            store.dispatch(setPageLoading(false));
+            connectWebSocketServer('/auction/websocket/' + context.userInfo.id).then(res => {
+                this.socket = res;
+                this.socket.onMessage(this.onMessageReceive);
+                console.log('websocket linked', '/auction/websocket/' + context.userInfo.id);
+            });
+        });
+    }
+
+    onMessageReceive(message:any) {
+        console.log('received a message', message);
+    }
 
     componentDidMount() {
         store.dispatch(setPageLoading(true));
@@ -42,8 +65,19 @@ class App extends Component<PropsWithChildren> {
                 context.city = geo.address_component.city;
                 context.district = geo.address_component.district;
             }
-            store.dispatch(setContext(context));
-            store.dispatch(setPageLoading(false));
+
+            const token = Taro.getStorageSync("TOKEN");
+            //本地未存储token则执行登录操作
+            if (!token) {
+                Taro.login().then(res => {
+                    request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
+                        Taro.setStorageSync("TOKEN", res.data.result);
+                        this.initUser(context);
+                    });
+                })
+            } else {
+                this.initUser(context);
+            }
 
 
             const mapKey = context.settings.tencentMapKey;
@@ -66,6 +100,8 @@ class App extends Component<PropsWithChildren> {
                     }
                 });
             });
+
+
             Taro.startLocationUpdate({
                 success(res) {
                     console.log('start location change listening', res);

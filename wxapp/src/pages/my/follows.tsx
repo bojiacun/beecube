@@ -1,6 +1,5 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import {Navigator, Text, View} from "@tarojs/components";
@@ -62,7 +61,6 @@ export default class Index extends Component<any, any> {
         const {list, noMore, loadingMore} = this.state;
         return (
             <PageLayout statusBarProps={{title: '我的关注'}} enableReachBottom={true}>
-                <LoginView>
                     {list.length == 0 && <NoData />}
                     <View className={'grid grid-cols-2 gap-4 p-4'}>
                         {list.map((item)=>{
@@ -83,7 +81,6 @@ export default class Index extends Component<any, any> {
                         })}
                     </View>
                     {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
-                </LoginView>
             </PageLayout>
         );
     }

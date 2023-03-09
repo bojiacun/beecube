@@ -7,7 +7,6 @@ import {Button, RichText, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
-import LoginView from "../../components/login";
 import PageLoading from "../../components/pageloading";
 
 const numeral = require('numeral');
@@ -90,23 +89,23 @@ export default class Index extends Component<any, any> {
 
     buy() {
         //当前商品数据保存到本地缓存
-        Taro.navigateTo({url: '/pages/shop/confirm?id='+this.state.goods.id}).then();
+        Taro.navigateTo({url: '/pages/shop/confirm?id=' + this.state.goods.id}).then();
     }
+
     addInCart() {
         let cartGoods = JSON.parse(Taro.getStorageSync('CART') || '[]');
         let goods = this.state.goods;
         goods.selected = true;
         goods.count = 1;
         let existsIndex = -1;
-        cartGoods.forEach((item,index)=>{
-            if(goods.id == item.id) {
+        cartGoods.forEach((item, index) => {
+            if (goods.id == item.id) {
                 existsIndex = index;
             }
         });
-        if(existsIndex > -1) {
+        if (existsIndex > -1) {
             cartGoods[existsIndex].count++;
-        }
-        else {
+        } else {
             cartGoods.push(goods);
         }
 
@@ -168,34 +167,32 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white p-4 mt-4'}>
                     <View className={'font-bold text-center text-lg'}>商品详情</View>
                     <View>
-                        <RichText nodes={utils.resolveHtmlImageWidth(goods.description)} space={'nbsp'} />
+                        <RichText nodes={utils.resolveHtmlImageWidth(goods.description)} space={'nbsp'}/>
                     </View>
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>
 
-                <LoginView>
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
-                        <View>
-                            <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
-                                <View className={'iconfont icon-fenxiang text-lg'}/>
-                                <View>分享</View>
-                            </Button>
-                        </View>
-                        <View>
-                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
-                                <View className={'iconfont icon-lianxikefu text-xl'}/>
-                                <View>客服</View>
-                            </Button>
-                        </View>
-                        <View onClick={this.toggleFollow}
-                              className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
-                            <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
-                            <View>关注</View>
-                        </View>
-                        {this.renderButton()}
+                <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
+                      style={{paddingBottom: safeBottom}}>
+                    <View>
+                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
+                            <View className={'iconfont icon-fenxiang text-lg'}/>
+                            <View>分享</View>
+                        </Button>
                     </View>
-                </LoginView>
+                    <View>
+                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
+                            <View className={'iconfont icon-lianxikefu text-xl'}/>
+                            <View>客服</View>
+                        </Button>
+                    </View>
+                    <View onClick={this.toggleFollow}
+                          className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
+                        <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
+                        <View>关注</View>
+                    </View>
+                    {this.renderButton()}
+                </View>
             </PageLayout>
         );
     }

@@ -1,7 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import {Navigator, Text, View} from "@tarojs/components";
-import LoginView from "../../components/login";
 import {connect} from "react-redux";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
@@ -36,11 +35,11 @@ export default class Index extends Component<any, any> {
             )
         };
         this.tabs = [
-            { label: '全部', id: '', template: this.template },
-            { label: '支出', id: '1', template: this.template },
-            { label: '收入', id: '2', template: this.template },
-            { label: '充值', id: '3', template: this.template },
-            { label: '提现', id: '4', template: this.template }
+            {label: '全部', id: '', template: this.template},
+            {label: '支出', id: '1', template: this.template},
+            {label: '收入', id: '2', template: this.template},
+            {label: '充值', id: '3', template: this.template},
+            {label: '提现', id: '4', template: this.template}
         ];
     }
 
@@ -67,23 +66,21 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '我的余额'}}>
-                <LoginView refreshUserInfo={true}>
-                    <View className={'p-4 my-2 mx-4 text-white bg-gradient-to-r from-indigo-300 to-indigo-500 rounded space-y-2'}>
-                        <View>余额（元）</View>
-                        <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[0]}</Text></View>
-                        <View className={'flex space-x-2'}>
-                            <Navigator className={'bg-white text-indigo rounded-full text-indigo-500 py-1 px-4'}>充值</Navigator>
-                            <Text onClick={this.handleWithdraw}
-                                  className={'text-white border-solid border-1 border-white bg-indigo-400 py-1 px-4 rounded-full'}>提现</Text>
-                        </View>
+                <View className={'p-4 my-2 mx-4 text-white bg-gradient-to-r from-indigo-300 to-indigo-500 rounded space-y-2'}>
+                    <View>余额（元）</View>
+                    <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[0]}</Text></View>
+                    <View className={'flex space-x-2'}>
+                        <Navigator className={'bg-white text-indigo rounded-full text-indigo-500 py-1 px-4'}>充值</Navigator>
+                        <Text onClick={this.handleWithdraw}
+                              className={'text-white border-solid border-1 border-white bg-indigo-400 py-1 px-4 rounded-full'}>提现</Text>
                     </View>
+                </View>
 
-                    <ListView
-                        tabs={this.tabs}
-                        dataFetcher={this.loadData}
-                        tabStyle={2}
-                    />
-                </LoginView>
+                <ListView
+                    tabs={this.tabs}
+                    dataFetcher={this.loadData}
+                    tabStyle={2}
+                />
             </PageLayout>
         );
     }

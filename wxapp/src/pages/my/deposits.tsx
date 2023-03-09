@@ -1,16 +1,16 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import LoginView from "../../components/login";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import {View, Navigator} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
+
 const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
-    state:any = {
+    state: any = {
         page: 1,
         list: [],
         loadingMore: false,
@@ -21,18 +21,16 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(page, clear = false) {
-        return request.get('/paimai/api/members/deposits', {params: {pageNo: page}}).then(res=>{
-            if(clear) {
+        return request.get('/paimai/api/members/deposits', {params: {pageNo: page}}).then(res => {
+            if (clear) {
                 this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
-            }
-            else {
+            } else {
                 let list = this.state.list;
                 let newList = res.data.result.records;
-                if(!newList || newList.length == 0) {
+                if (!newList || newList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
-                }
-                else {
-                    this.setState({noMore: false, loadingMore:false, list: [...list, ...newList]});
+                } else {
+                    this.setState({noMore: false, loadingMore: false, list: [...list, ...newList]});
                 }
             }
         });
@@ -40,18 +38,19 @@ export default class Index extends Component<any, any> {
 
     onLoad() {
         utils.showLoading();
-        this.loadData(1,true).then(()=>utils.hideLoading());
+        this.loadData(1, true).then(() => utils.hideLoading());
     }
 
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.page+1,false).then(()=>{});
-        this.setState({page: this.state.page+1});
+        this.loadData(this.state.page + 1, false).then(() => {
+        });
+        this.setState({page: this.state.page + 1});
     }
 
     onPullDownRefresh() {
         utils.showLoading();
-        this.loadData(1,true).then(()=>utils.hideLoading());
+        this.loadData(1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
 
@@ -59,31 +58,31 @@ export default class Index extends Component<any, any> {
         const {list, noMore, loadingMore} = this.state;
         return (
             <PageLayout statusBarProps={{title: '保证金记录'}} enableReachBottom={true}>
-                <LoginView>
-                    {list.length == 0 && <NoData />}
-                    <View className={'grid grid-cols-1 gap-4 p-4'}>
-                        {list.map((item)=>{
-                            let radius = 0;
-                            return (
-                                <Navigator url={item.performanceId ? ('/pages/performance/detail?id='+item.performanceId):('/pages/goods/detail?id='+item.goodsId)} className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                    <View className={'space-y-1 flex-1'}>
-                                        <View className={'text-lg font-bold flex-1'}>{item.performanceName||item.goodsName}</View>
-                                        <View className={'text-gray-400 text-sm'}>
-                                            交易单号:{item.transactionId}
-                                        </View>
-                                        <View className={'text-gray-400 text-sm'}>
-                                            交易时间：{item.createTime}
-                                        </View>
+                {list.length == 0 && <NoData/>}
+                <View className={'grid grid-cols-1 gap-4 p-4'}>
+                    {list.map((item) => {
+                        let radius = 0;
+                        return (
+                            <Navigator
+                                url={item.performanceId ? ('/pages/performance/detail?id=' + item.performanceId) : ('/pages/goods/detail?id=' + item.goodsId)}
+                                className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <View className={'space-y-1 flex-1'}>
+                                    <View className={'text-lg font-bold flex-1'}>{item.performanceName || item.goodsName}</View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        交易单号:{item.transactionId}
                                     </View>
-                                    <View className={'font-bold flex items-center justify-center'}>
-                                        ￥{numeral(item.price).format('0,0.00')}
+                                    <View className={'text-gray-400 text-sm'}>
+                                        交易时间：{item.createTime}
                                     </View>
-                                </Navigator>
-                            );
-                        })}
-                    </View>
-                    {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
-                </LoginView>
+                                </View>
+                                <View className={'font-bold flex items-center justify-center'}>
+                                    ￥{numeral(item.price).format('0,0.00')}
+                                </View>
+                            </Navigator>
+                        );
+                    })}
+                </View>
+                {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
             </PageLayout>
         );
     }
