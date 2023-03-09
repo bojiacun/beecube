@@ -75,7 +75,8 @@ public class GoodsVO {
     private java.lang.Integer status;
 
     private Integer count;
-
+    private Integer started;
+    private Integer ended;
     private Integer viewCount;
     private Integer offerCount;
     private Integer followCount;
