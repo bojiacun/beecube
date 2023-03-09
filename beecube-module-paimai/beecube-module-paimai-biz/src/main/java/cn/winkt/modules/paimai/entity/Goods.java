@@ -81,6 +81,7 @@ public class Goods {
 	@Excel(name = "专场ID", width = 15)
     @ApiModelProperty(value = "专场ID")
 	private java.lang.String performanceId;
+	private java.lang.String performanceTitle;
 	/**预计结束时间*/
     @ApiModelProperty(value = "预计结束时间")
 	private java.util.Date endTime;
