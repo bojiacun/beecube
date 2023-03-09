@@ -133,6 +133,21 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         return Result.OK("添加成功！");
     }
 
+    @PutMapping("/start")
+    public Result<?> manualStart(@RequestParam String id) {
+        Performance performance = performanceService.getById(id);
+        performance.setStarted(1);
+        performanceService.updateById(performance);
+        return Result.OK(performance);
+    }
+    @PutMapping("/end")
+    public Result<?> manualEnd(@RequestParam String id) {
+        Performance performance = performanceService.getById(id);
+        performance.setEnded(1);
+        performanceService.updateById(performance);
+        return Result.OK(performance);
+    }
+
     /**
      * 手动设置拍品开始,设置拍品开始时间为当前时间
      * @param jsonObject
