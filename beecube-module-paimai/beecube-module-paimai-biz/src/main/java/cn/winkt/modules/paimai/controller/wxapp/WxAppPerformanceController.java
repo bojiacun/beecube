@@ -56,11 +56,27 @@ public class WxAppPerformanceController {
         Date nowDate = new Date();
         if("1".equals(source)) {
             //进行中拍品,并且尚未结束的哦
-            queryWrapper.gt("p.end_time", nowDate);
+            if(performance.getType() != null) {
+                if(performance.getType() == 1) {
+                    queryWrapper.gt("p.end_time", nowDate);
+                }
+                else if(performance.getType() == 2) {
+                    queryWrapper.eq("p.ended", 0);
+                }
+            }
         }
         else if("2".equals(source)) {
-            queryWrapper.lt("p.end_time", nowDate);
+            if(performance.getType() != null) {
+                if(performance.getType() == 1) {
+                    queryWrapper.lt("p.end_time", nowDate);
+                }
+                else if(performance.getType() == 2) {
+                    queryWrapper.eq("p.ended", 1);
+                }
+            }
         }
+
+
         String tag = req.getParameter("tag");
         if(StringUtils.isNotEmpty(tag)) {
             queryWrapper.like("p.tags", tag);
