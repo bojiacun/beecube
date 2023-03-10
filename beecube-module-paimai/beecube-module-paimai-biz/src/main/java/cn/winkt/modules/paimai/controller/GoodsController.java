@@ -59,6 +59,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	@Autowired
 	private IGoodsService goodsService;
 
+	@Resource
+	private IPerformanceService performanceService;
+
 	/**
 	 * 分页列表查询
 	 *
@@ -121,6 +124,21 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	@ApiOperation(value="拍品表-添加", notes="拍品表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Goods goods) {
+		if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+			Performance performance = performanceService.getById(goods.getPerformanceId());
+			if(performance.getType() == 1) {
+				//限时拍，同步限时拍时间
+				goods.setStartTime(performance.getStartTime());
+				goods.setEndTime(performance.getEndTime());
+			}
+			else if(performance.getType() == 2) {
+				goods.setStarted(0);
+				goods.setEnded(0);
+				goods.setStartTime(performance.getStartTime());
+				goods.setEndTime(null);
+				goods.setActualEndTime(null);
+			}
+		}
 		goodsService.save(goods);
 		return Result.OK("添加成功！");
 	}
