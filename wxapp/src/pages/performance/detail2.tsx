@@ -18,7 +18,8 @@ const numeral = require('numeral');
     {
         systemInfo: state.context.systemInfo,
         settings: state.context.settings,
-        context: state.context
+        context: state.context,
+        message: state.message,
     }
 ))
 export default class Index extends Component<any, any> {

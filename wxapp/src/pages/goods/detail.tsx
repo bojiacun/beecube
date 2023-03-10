@@ -22,7 +22,8 @@ const numeral = require('numeral');
     {
         systemInfo: state.context.systemInfo,
         settings: state.context.settings,
-        context: state.context
+        context: state.context,
+        message: state.message
     }
 ))
 export default class Index extends Component<any, any> {
@@ -83,14 +84,6 @@ export default class Index extends Component<any, any> {
                 request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
                     goods.deposited = res.data.result;
                     this.setState({goods: goods});
-                    // if (goods.deposited) {
-                    //     //需要出价的时候再连接websocket
-                    //     connectWebSocketServer('/auction/websocket/' + goods.id + '/' + userInfo.id).then(res => {
-                    //         this.socket = res;
-                    //         this.socket.onMessage(this.onMessageReceive);
-                    //         console.log('websocket linked', '/auction/websocket/' + goods.id + '/' + userInfo.id);
-                    //     });
-                    // }
                 });
             }
 
@@ -115,17 +108,25 @@ export default class Index extends Component<any, any> {
                 switch (message.type) {
                     case 'MSG_TYPE_AUCTION_STARTED':
                         goods.started = message.started;
+                        this.setState({goods: goods});
                         break;
                     case 'MSG_TYPE_AUCTION_ENDED':
                         goods.ended = message.ended;
+                        this.setState({goods: goods});
                         break;
                     case 'MSG_TYPE_AUCTION_CHANGED':
                         goods.startTime = message.startTime;
                         goods.endTime = message.endTime;
                         goods.actualEndTime = message.actualEndTime;
+                        this.setState({goods: goods});
+                        break;
+                    case 'MSG_TYPE_OFFER':
+                        this.onMessageReceive(message);
+                        break;
+                    case 'MSG_TYPE_DELAY':
+                        this.onMessageReceive(message);
                         break;
                 }
-                this.setState({goods: goods});
             }
         }
     }
