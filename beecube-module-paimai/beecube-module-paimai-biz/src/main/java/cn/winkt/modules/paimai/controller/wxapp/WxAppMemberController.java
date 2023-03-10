@@ -709,7 +709,6 @@ public class WxAppMemberController {
                 if (delayTime != null && delayTime > 0) {
                     if ((nowTimeMillis + delayTime * 60 * 1000) >= endTimeMillis) {
                         Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
-                        String messageId = "";
                         AuctionDelayedMessage message = new AuctionDelayedMessage();
                         message.setType(MessageConstant.MSG_TYPE_DELAY);
                         message.setNewTime(newTime);
@@ -720,10 +719,8 @@ public class WxAppMemberController {
                 }
             }
             try {
-                String messageId = DigestUtils.md5Hex(goods.getId()+":"+loginUser.getId()+":"+randomStr);
                 //发送出价群消息
                 OfferMessage  offerMessage = new OfferMessage();
-                offerMessage.setId(messageId);
                 offerMessage.setFromUserAvatar(loginUser.getAvatar());
                 offerMessage.setFromUserId(loginUser.getId());
                 offerMessage.setFromUserName(goodsOffer.getMemberName());
