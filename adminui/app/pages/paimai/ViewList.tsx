@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Button, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
+import {User} from "react-feather";
 
 
 const ViewList = (props: any) => {
@@ -53,12 +54,10 @@ const ViewList = (props: any) => {
             isDummyField: true,
             formatter: (cell:any, row:any) => {
                 return (
-                    <Row>
-                        <Col>
-                            <FigureImage src={row.memberAvatar} roundedCircle style={{width: 60, height: 60}} />
-                        </Col>
-                        <Col>{row.memberName}</Col>
-                    </Row>
+                    <div className={'d-flex align-items-center'}>
+                        {!row.memberAvatar ? <User size={40} /> : <Image src={row.memberAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        <span className={'ml-1'}>{row.memberName}</span>
+                    </div>
                 );
             }
         },
@@ -67,10 +66,6 @@ const ViewList = (props: any) => {
             dataField: 'createTime',
         },
     ]
-
-    const selectRowConfig = {
-        ...defaultSelectRowConfig,
-    }
 
     return (
         <Modal
@@ -129,7 +124,6 @@ const ViewList = (props: any) => {
                     columns={columns}
                     bootstrap4
                     data={list?.records}
-                    selectRow={selectRowConfig}
                     keyField={'id'}
                 />
 

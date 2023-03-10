@@ -13,8 +13,6 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import PerformanceEditor from "~/pages/paimai/PerformanceEditor";
-import UserListSelector from "~/pages/system/roles/UserListSelector";
-import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
 import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 
@@ -27,7 +25,6 @@ const PerformanceList = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
     const [editModal, setEditModal] = useState<any>();
     const [selectedPerformance, setSelectedPerformance] = useState<any>();
-    const [goodsListShow, setGoodsListShow] = useState<boolean>(false);
     const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
@@ -96,10 +93,7 @@ const PerformanceList = (props: any) => {
                 setSelectedPerformance(row);
                 setSelectedListShow(true);
                 break;
-            case 'select':
-                setSelectedPerformance(row);
-                setGoodsListShow(true);
-                break;
+
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -174,9 +168,7 @@ const PerformanceList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'select')}>选择拍品</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选拍品</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>拍品管理</a>
                         <span className={'divider'}/>
                         {type == 2 && <>
                             {row.started == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
@@ -288,22 +280,18 @@ const PerformanceList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <GoodsListSelector
-                show={goodsListShow}
-                setGoodsListShow={()=>{
-                    loadData();
-                    setGoodsListShow(false);
-                }}
-                selectedPerformance={selectedPerformance}
-            />
-            <GoodsListSelected
-                show={selectedListShow}
-                selectedPerformance={selectedPerformance}
-                setSelectedListShow={()=>{
-                    loadData();
-                    setSelectedListShow(false);
-                }}
-            />
+            {selectedPerformance &&
+                <GoodsListSelected
+                    show={true}
+                    startPageLoading={startPageLoading}
+                    stopPageLoading={stopPageLoading}
+                    selectedPerformance={selectedPerformance}
+                    setSelectedListShow={() => {
+                        loadData();
+                        setSelectedPerformance(null);
+                    }}
+                />
+            }
             {editModal && <PerformanceEditor type={type} model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();

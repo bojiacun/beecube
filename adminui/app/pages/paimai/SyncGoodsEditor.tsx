@@ -20,8 +20,8 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
-const GoodsEditor = (props: any) => {
-    const {model, onHide} = props;
+const SyncGoodsEditor = (props: any) => {
+    const {model, onHide, selectedPerformance} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
     const goodsClassFetcher = useFetcher();
     const settingsFetcher = useFetcher();
@@ -33,14 +33,13 @@ const GoodsEditor = (props: any) => {
         title: Yup.string().required('必填字段'),
         startPrice: Yup.number().required('必填字段'),
         uprange: Yup.string().required('必填字段'),
-        startTime: Yup.string().required('必填字段'),
-        endTime: Yup.string().required('必填字段'),
         images: Yup.string().required('必填字段'),
         classId: Yup.number().required('必填字段'),
     });
 
     const handleOnSubmit = (values: any) => {
         values.type = 1;
+        values.performanceId = selectedPerformance.id;
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/paimai/goods/edit'});
         } else {
@@ -81,7 +80,7 @@ const GoodsEditor = (props: any) => {
     }, [postFetcher.state]);
     if (!model) return <></>
 
-    const newModel = {status: 0, type: 1, endTime: '', sortNum: 0, images: '', ...model};
+    const newModel = {status: 0, type: 1,  sortNum: 0, images: '', ...model};
 
     return (
         <>
@@ -108,9 +107,6 @@ const GoodsEditor = (props: any) => {
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>
                                     </FormGroup>
-
-                                    <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
-                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'起拍价'} name={'startPrice'}/>
                                     <BootstrapInput label={'预估价'} name={'evaluatePrice'} />
                                     <BootstrapInput label={'保底价'} name={'minPrice'} />
@@ -119,7 +115,7 @@ const GoodsEditor = (props: any) => {
                                     <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
                                     <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
-                                    <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
+                                    <BootstrapInput label={'标的号'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                         <Row>
@@ -181,4 +177,4 @@ const GoodsEditor = (props: any) => {
     );
 }
 
-export default GoodsEditor;
+export default SyncGoodsEditor;
