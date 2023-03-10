@@ -45,30 +45,29 @@ public class WxAppPerformanceController {
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<PerformanceVO> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(performance.getAuctionId())) {
+        if (StringUtils.isNotEmpty(performance.getAuctionId())) {
             queryWrapper.eq("p.auction_id", performance.getAuctionId());
         }
-        if(performance.getType() != null) {
+        if (performance.getType() != null) {
             queryWrapper.eq("p.type", performance.getType());
         }
         queryWrapper.eq("p.status", 1);
         String source = req.getParameter("source");
         Date nowDate = new Date();
-        if("1".equals(source)) {
+        if ("1".equals(source)) {
             //进行中拍品,并且尚未结束的哦
             queryWrapper.and(qw -> {
-               qw.and(qw1 -> {
-                   qw1.eq("p.type", 1).gt("p.end_time", nowDate);
-               }).or().and(qw2 -> {
-                   qw2.eq("p.type", 2).gt("p.ended", 0);
-               });
+                qw.and(qw1 -> {
+                    qw1.eq("p.type", 1).gt("p.end_time", nowDate);
+                }).or(qw2 -> {
+                    qw2.eq("p.type", 2).gt("p.ended", 0);
+                });
             });
-        }
-        else if("2".equals(source)) {
+        } else if ("2".equals(source)) {
             queryWrapper.and(qw -> {
                 qw.and(qw1 -> {
                     qw1.eq("p.type", 1).lt("p.end_time", nowDate);
-                }).or().and(qw2 -> {
+                }).or(qw2 -> {
                     qw2.eq("p.type", 2).gt("p.ended", 1);
                 });
             });
@@ -76,19 +75,18 @@ public class WxAppPerformanceController {
 
 
         String tag = req.getParameter("tag");
-        if(StringUtils.isNotEmpty(tag)) {
+        if (StringUtils.isNotEmpty(tag)) {
             queryWrapper.like("p.tags", tag);
         }
         queryWrapper.orderByAsc("p.sort_num");
         //排序
         String orderField = StringUtils.getIfEmpty(req.getParameter("column"), () -> "create_time");
-        orderField = "p."+orderField;
+        orderField = "p." + orderField;
         String orderBy = StringUtils.getIfEmpty(req.getParameter("orderBy"), () -> "desc");
 
-        if(orderBy.equals("desc")) {
+        if (orderBy.equals("desc")) {
             queryWrapper.orderByDesc(orderField);
-        }
-        else {
+        } else {
             queryWrapper.orderByAsc(orderField);
         }
 
@@ -107,6 +105,7 @@ public class WxAppPerformanceController {
 
     /**
      * 获取该场下所有拍品
+     *
      * @param id
      * @return
      */
