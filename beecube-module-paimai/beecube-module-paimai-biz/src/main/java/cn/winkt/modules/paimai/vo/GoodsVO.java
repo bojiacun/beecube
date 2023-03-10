@@ -19,7 +19,8 @@ public class GoodsVO {
     private java.lang.Object uprange;
     private java.lang.Integer delayTime;
     private java.lang.Object commission;
-
+    private String evaluatePrice;
+    private Float minPrice;
     private java.lang.String performanceId;
     private String performanceTitle;
     private java.lang.Float performanceDeposit;

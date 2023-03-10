@@ -63,6 +63,9 @@ public class Goods {
 	@Excel(name = "起拍价", width = 15)
     @ApiModelProperty(value = "起拍价")
 	private java.lang.Float startPrice;
+
+	private String evaluatePrice;
+	private Float minPrice;
 	/**加价幅度配置*/
 	@Excel(name = "加价幅度配置", width = 15)
     @ApiModelProperty(value = "加价幅度配置")
