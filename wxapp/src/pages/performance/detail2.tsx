@@ -114,7 +114,7 @@ export default class Index extends Component<any, any> {
         if (!detail) return;
 
         if (prevState.status != status) {
-            request.get('/paimai/api/members/messaged', {params: {type: 1, performanceId: this.state.detail.id}}).then(res => {
+            request.get('/paimai/api/members/messaged', {params: {type: 2, performanceId: detail.id}}).then(res => {
                 this.setState({message: res.data.result});
             });
         }

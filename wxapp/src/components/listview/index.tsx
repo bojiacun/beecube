@@ -21,13 +21,14 @@ export interface ListViewProps extends Partial<any> {
     onTabChanged?: Function;
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
     tabStyle?: number;
-    defaultActiveKey?: string|number|null;
+    defaultActiveKey?: string | number | null;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
     const {
         tabs,
-        onTabChanged = () => { },
+        onTabChanged = () => {
+        },
         dataFetcher,
         tabStyle = 1,
         defaultActiveKey = null,
@@ -38,27 +39,39 @@ const ListView: FC<ListViewProps> = (props) => {
     const [page, setPage] = useState<number>(1);
     const [noMore, setNoMore] = useState<boolean>(false);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
-    const message = useSelector((state:any) => state.message);
-    useEffect(()=>{
-        if(message) {
+    const message = useSelector((state: any) => state.message);
+    useEffect(() => {
+        if (message) {
             data.forEach(g => {
-                if(g.id == message.id) {
+                if (g.id == message.performanceId) {
                     switch (message.type) {
                         case 'MSG_TYPE_PEFORMANCE_STARTED':
                             g.started = message.started;
+                            g.ended = 0;
+                            g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
+                            g.started = 1;
+                            g.endTime = message.endTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_CHANGED':
                             g.startTime = message.startTime;
                             g.endTime = message.endTime;
                             break;
+                    }
+                }
+                if (g.id == message.goodsId) {
+                    switch (message.type) {
                         case 'MSG_TYPE_AUCTION_STARTED':
                             g.started = message.started;
+                            g.ended = 0;
+                            g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_AUCTION_ENDED':
                             g.ended = message.ended;
+                            g.started = 1;
+                            g.endTime = message.endTime;
                             break;
                         case 'MSG_TYPE_AUCTION_CHANGED':
                             g.startTime = message.startTime;
@@ -72,14 +85,14 @@ const ListView: FC<ListViewProps> = (props) => {
         }
     }, [message]);
 
-    useEffect(()=>{
-        if(tabs && tabs.length > 0) {
+    useEffect(() => {
+        if (tabs && tabs.length > 0) {
             utils.showLoading();
             let defaultTab = tabs[0];
             let initIndex = 0;
-            if(defaultActiveKey != null) {
-                tabs.forEach((t,index) => {
-                    if(t.id === defaultActiveKey) {
+            if (defaultActiveKey != null) {
+                tabs.forEach((t, index) => {
+                    if (t.id === defaultActiveKey) {
                         initIndex = index;
                         setSelectedIndex(initIndex);
                         defaultTab = t;
@@ -106,10 +119,9 @@ const ListView: FC<ListViewProps> = (props) => {
         setLoadingMore(true);
         dataFetcher(page + 1, tabs[selectedIndex], selectedIndex).then(res => {
             let records = res.data.result.records;
-            if(records.length == 0) {
+            if (records.length == 0) {
                 setNoMore(true);
-            }
-            else {
+            } else {
                 setData([...data, ...records]);
             }
             setLoadingMore(false);
@@ -117,41 +129,44 @@ const ListView: FC<ListViewProps> = (props) => {
         setPage(page + 1);
     });
 
-    useDidShow(()=>{
+    useDidShow(() => {
         //列表显示的时候主动刷新
 
     });
 
     return (
         <>
-            <View className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
-                  style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
+            <View
+                className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
+                style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
                 {tabs.map((tab, index) => {
                     return (
-                        <Text className={classNames(tabStyle == 1? '':'flex-1','text-center whitespace-nowrap',index === selectedIndex ? styles.active : '')} onClick={() => {
-                            setSelectedIndex(index);
-                            onTabChanged(tab, index);
-                            setPage(1);
-                            dataFetcher(1, tab, index).then(res => {
-                                setData(res.data.result.records);
-                                setNoMore(false);
-                                setLoadingMore(false);
-                            });
-                        }}>
+                        <Text
+                            className={classNames(tabStyle == 1 ? '' : 'flex-1', 'text-center whitespace-nowrap', index === selectedIndex ? styles.active : '')}
+                            onClick={() => {
+                                setSelectedIndex(index);
+                                onTabChanged(tab, index);
+                                setPage(1);
+                                dataFetcher(1, tab, index).then(res => {
+                                    setData(res.data.result.records);
+                                    setNoMore(false);
+                                    setLoadingMore(false);
+                                });
+                            }}>
                             {tab.label}
                         </Text>
                     );
                 })}
             </View>
-            {data.length === 0 && <NoData style={{marginTop: 200}} />}
+            {data.length === 0 && <NoData style={{marginTop: 200}}/>}
             <View className={classNames('p-4 space-y-4', className)} style={{paddingTop: Taro.pxTransform(70)}}>
-            {data.map((item) => {
-                let tab = tabs[selectedIndex];
-                return tab.template(item);
-            })}
+                {data.map((item) => {
+                    let tab = tabs[selectedIndex];
+                    return tab.template(item);
+                })}
             </View>
-            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
-            <View style={{height: 100}} />
+            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
+            <View style={{height: 100}}/>
         </>
     );
 }
