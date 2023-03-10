@@ -119,7 +119,7 @@ export default class Index extends Component<any, any> {
         }
         if (prevProps.message?.id != this.props.message?.id && this.state.detail) {
             let {detail,message} = this.props;
-            if (this.state.detail.id == this.props.message.id) {
+            if (this.state.detail.id == message.id) {
                 switch (message.type) {
                     case 'MSG_TYPE_PEFORMANCE_STARTED':
                         detail.started = message.started;
@@ -134,7 +134,7 @@ export default class Index extends Component<any, any> {
                 }
                 this.setState({detail: detail});
             }
-            this.state.goodsList?.forEacht(g => {
+            this.state.goodsList?.forEach(g => {
                 if(g.id == message.id) {
                     switch (message.type) {
                         case 'MSG_TYPE_AUCTION_STARTED':
@@ -149,6 +149,7 @@ export default class Index extends Component<any, any> {
                             g.actualEndTime = message.actualEndTime;
                             break;
                     }
+                    this.setState({goodsList: this.state.goodsList});
                 }
             });
         }

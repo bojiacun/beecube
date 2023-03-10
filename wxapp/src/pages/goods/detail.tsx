@@ -61,7 +61,7 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        const {context} = this.props;
+        const {context, message} = this.props;
         const {userInfo} = context;
         let {goods} = this.state;
 
@@ -101,34 +101,35 @@ export default class Index extends Component<any, any> {
                     })
                 }
             }
-        }
-        if (prevProps.message?.id != this.props.message?.id && this.state.goods) {
-            let {goods,message} = this.props;
-            if (this.state.goods.id == this.props.message.id) {
-                switch (message.type) {
-                    case 'MSG_TYPE_AUCTION_STARTED':
-                        goods.started = message.started;
-                        this.setState({goods: goods});
-                        break;
-                    case 'MSG_TYPE_AUCTION_ENDED':
-                        goods.ended = message.ended;
-                        this.setState({goods: goods});
-                        break;
-                    case 'MSG_TYPE_AUCTION_CHANGED':
-                        goods.startTime = message.startTime;
-                        goods.endTime = message.endTime;
-                        goods.actualEndTime = message.actualEndTime;
-                        this.setState({goods: goods});
-                        break;
-                    case 'MSG_TYPE_OFFER':
-                        this.onMessageReceive(message);
-                        break;
-                    case 'MSG_TYPE_DELAY':
-                        this.onMessageReceive(message);
-                        break;
+            if (prevProps.message?.id != this.props.message?.id) {
+                console.log(message);
+                if (goods.id == message.id) {
+                    switch (message.type) {
+                        case 'MSG_TYPE_AUCTION_STARTED':
+                            goods.started = message.started;
+                            this.setState({goods: goods});
+                            break;
+                        case 'MSG_TYPE_AUCTION_ENDED':
+                            goods.ended = message.ended;
+                            this.setState({goods: goods});
+                            break;
+                        case 'MSG_TYPE_AUCTION_CHANGED':
+                            goods.startTime = message.startTime;
+                            goods.endTime = message.endTime;
+                            goods.actualEndTime = message.actualEndTime;
+                            this.setState({goods: goods});
+                            break;
+                        case 'MSG_TYPE_OFFER':
+                            this.onMessageReceive(message);
+                            break;
+                        case 'MSG_TYPE_DELAY':
+                            this.onMessageReceive(message);
+                            break;
+                    }
                 }
             }
         }
+
     }
 
     onMessageReceive(message: any) {

@@ -139,7 +139,7 @@ export default class Index extends Component<any, any> {
                 }
                 this.setState({detail: detail});
             }
-            this.state.goodsList?.forEacht(g => {
+            this.state.goodsList?.forEach(g => {
                 if(g.id == message.id) {
                     switch (message.type) {
                         case 'MSG_TYPE_AUCTION_STARTED':
@@ -154,6 +154,7 @@ export default class Index extends Component<any, any> {
                             g.actualEndTime = message.actualEndTime;
                             break;
                     }
+                    this.setState({goodsList: this.state.goodsList});
                 }
             });
         }
