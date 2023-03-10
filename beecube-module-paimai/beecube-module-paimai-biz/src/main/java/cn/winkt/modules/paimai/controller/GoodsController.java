@@ -59,9 +59,6 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	@Autowired
 	private IGoodsService goodsService;
 
-	@Resource
-	private IPerformanceService performanceService;
-	
 	/**
 	 * 分页列表查询
 	 *
@@ -141,7 +138,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 		if( old.getStartTime().equals(goods.getStartTime()) || old.getEndTime().equals(goods.getEndTime()))
 		{
 			GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-			goodsUpdateMessage.setId(goods.getId());
+			goodsUpdateMessage.setGoodsId(goods.getId());
 			goodsUpdateMessage.setStartTime(goods.getStartTime());
 			goodsUpdateMessage.setEndTime(goods.getEndTime());
 			goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);

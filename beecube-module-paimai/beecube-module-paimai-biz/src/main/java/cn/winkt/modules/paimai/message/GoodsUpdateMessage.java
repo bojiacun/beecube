@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class GoodsUpdateMessage extends Message{
+    private String goodsId;
     private String type;
     private Integer started;
     private Integer ended;

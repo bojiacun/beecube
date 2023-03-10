@@ -711,8 +711,6 @@ public class WxAppMemberController {
                         Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
                         String messageId = "";
                         AuctionDelayedMessage message = new AuctionDelayedMessage();
-                        message.setId(messageId);
-                        message.setCreateTime(new Date());
                         message.setType(MessageConstant.MSG_TYPE_DELAY);
                         message.setNewTime(newTime);
                         goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));

@@ -156,7 +156,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTED);
         message.setStarted(1);
         message.setStartTime(performance.getStartTime());
-        message.setId(id);
+        message.setPerformanceId(id);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
     }
@@ -176,7 +176,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_ENDED);
         message.setEnded(1);
         message.setEndTime(performance.getEndTime());
-        message.setId(id);
+        message.setPerformanceId(id);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
     }
@@ -192,7 +192,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         goods.setStarted(1);
         goodsService.updateById(goods);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-        goodsUpdateMessage.setId(id);
+        goodsUpdateMessage.setGoodsId(id);
         goodsUpdateMessage.setStarted(1);
         goodsUpdateMessage.setStartTime(goods.getStartTime());
         goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_STARTED);
@@ -212,7 +212,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         goods.setEnded(1);
         goodsService.updateById(goods);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-        goodsUpdateMessage.setId(id);
+        goodsUpdateMessage.setGoodsId(id);
         goodsUpdateMessage.setEnded(1);
         goodsUpdateMessage.setEndTime(goods.getEndTime());
         goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_ENDED);
@@ -243,7 +243,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 g.setActualEndTime(null);
 
                 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-                goodsUpdateMessage.setId(g.getId());
+                goodsUpdateMessage.setGoodsId(g.getId());
                 goodsUpdateMessage.setStartTime(performance.getStartTime());
                 goodsUpdateMessage.setEndTime(performance.getEndTime());
                 goodsUpdateMessage.setActualEndTime(null);
@@ -261,7 +261,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 g.setActualEndTime(null);
                 g.setEndTime(null);
                 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-                goodsUpdateMessage.setId(g.getId());
+                goodsUpdateMessage.setGoodsId(g.getId());
                 goodsUpdateMessage.setStartTime(null);
                 goodsUpdateMessage.setEndTime(null);
                 goodsUpdateMessage.setActualEndTime(null);
@@ -305,7 +305,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
             message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
             message.setStartTime(performance.getStartTime());
             message.setEndTime(performance.getEndTime());
-            message.setId(performance.getId());
+            message.setPerformanceId(performance.getId());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         }
         performanceService.updateById(performance);

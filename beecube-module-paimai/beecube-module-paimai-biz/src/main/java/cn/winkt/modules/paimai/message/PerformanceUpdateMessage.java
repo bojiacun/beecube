@@ -10,6 +10,7 @@ import java.util.Date;
 
 @Data
 public class PerformanceUpdateMessage {
+    private String performanceId;
     private String type;
     private Integer started;
     private Integer ended;
