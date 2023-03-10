@@ -60,7 +60,7 @@ public class WxAppPerformanceController {
                 qw.and(qw1 -> {
                     qw1.eq("p.type", 1).gt("p.end_time", nowDate);
                 }).or(qw2 -> {
-                    qw2.eq("p.type", 2).gt("p.ended", 0);
+                    qw2.eq("p.type", 2).eq("p.ended", 0);
                 });
             });
         } else if ("2".equals(source)) {
@@ -68,7 +68,7 @@ public class WxAppPerformanceController {
                 qw.and(qw1 -> {
                     qw1.eq("p.type", 1).lt("p.end_time", nowDate);
                 }).or(qw2 -> {
-                    qw2.eq("p.type", 2).gt("p.ended", 1);
+                    qw2.eq("p.type", 2).eq("p.ended", 1);
                 });
             });
         }
