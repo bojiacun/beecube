@@ -149,4 +149,10 @@ public class Goods {
     @ApiModelProperty(value = "状态（0下架1上架）")
 	@Dict(dicCode = "paimai_goods_status")
 	private java.lang.Integer status;
+
+	@Dict(dicCode = "paimai_goods_state")
+	private java.lang.Integer state;
+
+	//成交价
+	private Float dealPrice;
 }

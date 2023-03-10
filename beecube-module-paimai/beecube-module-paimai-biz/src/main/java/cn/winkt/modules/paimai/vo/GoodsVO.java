@@ -21,6 +21,10 @@ public class GoodsVO {
     private java.lang.Object commission;
     private String evaluatePrice;
     private Float minPrice;
+    private java.lang.Integer state;
+
+    //成交价
+    private Float dealPrice;
     private java.lang.String performanceId;
     private String performanceTitle;
     private java.lang.Float performanceDeposit;
