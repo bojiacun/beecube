@@ -10,7 +10,6 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
-import {TimeCountDownerStatus} from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -110,49 +109,56 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
-        if (prevState.status == undefined) {
-            if (this.state.status == TimeCountDownerStatus.NOT_START && this.state.detail) {
-                request.get('/paimai/api/members/messaged', {params: {type: 1, performanceId: this.state.detail.id}}).then(res => {
-                    this.setState({message: res.data.result});
-                })
-            }
-        }
-        if (prevProps.message?.id != this.props.message?.id && this.state.detail) {
-            let {detail,message} = this.props;
-            if (this.state.detail.id == message.id) {
-                switch (message.type) {
-                    case 'MSG_TYPE_PEFORMANCE_STARTED':
-                        detail.started = message.started;
-                        break;
-                    case 'MSG_TYPE_PEFORMANCE_ENDED':
-                        detail.ended = message.ended;
-                        break;
-                    case 'MSG_TYPE_PEFORMANCE_CHANGED':
-                        detail.startTime = message.startTime;
-                        detail.endTime = message.endTime;
-                        break;
-                }
-                this.setState({detail: detail});
-            }
-            this.state.goodsList?.forEach(g => {
-                if(g.id == message.id) {
-                    switch (message.type) {
-                        case 'MSG_TYPE_AUCTION_STARTED':
-                            g.started = message.started;
-                            break;
-                        case 'MSG_TYPE_AUCTION_ENDED':
-                            g.ended = message.ended;
-                            break;
-                        case 'MSG_TYPE_AUCTION_CHANGED':
-                            g.startTime = message.startTime;
-                            g.endTime = message.endTime;
-                            g.actualEndTime = message.actualEndTime;
-                            break;
-                    }
-                    this.setState({goodsList: this.state.goodsList});
-                }
+        const {detail, status, goodsList} = this.state;
+        const {message} = this.props;
+        if (!detail) return;
+
+        if (prevState.status != status) {
+            request.get('/paimai/api/members/messaged', {params: {type: 1, performanceId: this.state.detail.id}}).then(res => {
+                this.setState({message: res.data.result});
             });
         }
+        if (!prevProps.message || prevProps.message.id == message.id) return;
+
+        if (detail.id == message.performanceId) {
+            switch (message.type) {
+                case 'MSG_TYPE_PEFORMANCE_STARTED':
+                    detail.started = message.started;
+                    break;
+                case 'MSG_TYPE_PEFORMANCE_ENDED':
+                    detail.ended = message.ended;
+                    break;
+                case 'MSG_TYPE_PEFORMANCE_CHANGED':
+                    detail.startTime = message.startTime;
+                    detail.endTime = message.endTime;
+                    break;
+            }
+            this.setState({detail: detail});
+        }
+
+        if (!goodsList) return;
+        goodsList?.forEach(g => {
+            if (g.id == message.goodsId) {
+                switch (message.type) {
+                    case 'MSG_TYPE_AUCTION_STARTED':
+                        g.started = message.started;
+                        g.ended = 0;
+                        g.startTime = message.startTime;
+                        break;
+                    case 'MSG_TYPE_AUCTION_ENDED':
+                        g.started = 1;
+                        g.ended = message.ended;
+                        g.endTime = message.endTime;
+                        break;
+                    case 'MSG_TYPE_AUCTION_CHANGED':
+                        g.startTime = message.startTime;
+                        g.endTime = message.endTime;
+                        g.actualEndTime = message.actualEndTime;
+                        break;
+                }
+                this.setState({goodsList: goodsList});
+            }
+        });
     }
 
     noticeMe() {

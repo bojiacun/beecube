@@ -13,14 +13,16 @@ const SyncPerformanceListModule = (props: any) => {
     useEffect(()=>{
         if(message) {
             goodsList.forEach(g => {
-                if(g.id == message.id) {
+                if(g.id == message.performanceId) {
                     switch (message.type) {
                         case 'MSG_TYPE_PEFORMANCE_STARTED':
                             g.startTime = message.startTime;
                             g.started = message.started;
+                            g.ended = 0;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
+                            g.started = 1;
                             g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_CHANGED':
