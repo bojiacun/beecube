@@ -154,6 +154,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         PerformanceUpdateMessage message = new PerformanceUpdateMessage();
         message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTED);
         message.setStarted(1);
+        message.setStartTime(performance.getStartTime());
         message.setId(id);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
@@ -173,6 +174,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         PerformanceUpdateMessage message = new PerformanceUpdateMessage();
         message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_ENDED);
         message.setEnded(1);
+        message.setEndTime(performance.getEndTime());
         message.setId(id);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         return Result.OK(performance);
@@ -191,6 +193,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
         goodsUpdateMessage.setId(id);
         goodsUpdateMessage.setStarted(1);
+        goodsUpdateMessage.setStartTime(goods.getStartTime());
         goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_STARTED);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
         return Result.OK(goods);
@@ -204,12 +207,13 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     public Result<?> endGoods(@RequestParam String id) {
         Goods goods = goodsService.getById(id);
         goods.setEndTime(new Date());
-        goods.setActualEndTime(new Date());
+        goods.setActualEndTime(goods.getEndTime());
         goods.setEnded(1);
         goodsService.updateById(goods);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
         goodsUpdateMessage.setId(id);
         goodsUpdateMessage.setEnded(1);
+        goodsUpdateMessage.setEndTime(goods.getEndTime());
         goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_ENDED);
         paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
         return Result.OK(goods);
