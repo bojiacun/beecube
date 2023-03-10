@@ -1,9 +1,9 @@
 import {Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
-import {FC, useState} from "react";
+import {FC} from "react";
 import utils from "../../../../lib/utils";
-import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../../TimeCountDowner";
+import TimeCountDowner, {TimeCountDownerMode} from "../../../TimeCountDowner";
 
 
 export interface PerformanceItemViewProps extends Partial<any> {
@@ -13,7 +13,6 @@ export interface PerformanceItemViewProps extends Partial<any> {
 
 const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
     const {radius = 0, item} = props;
-    const [status, setStatus] = useState<TimeCountDownerStatus>();
     const tags = item.tags?.split(',') || [];
 
     return (
@@ -24,17 +23,26 @@ const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
                     {item.started == 0 && item.startTime != null &&
                         <View
                             className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
-                            {status == TimeCountDownerStatus.NOT_START && <Text className={'bg-indigo-600 text-base py-1 px-2'}>预展中</Text>}
-                            {status == TimeCountDownerStatus.STARTED && <Text className={'bg-red-600 text-base py-1 px-2'}>进行中</Text>}
-                            {status == TimeCountDownerStatus.ENDED && <Text className={'bg-gray-600 text-base py-1 px-2'}>已结束</Text>}
+                            <Text className={'bg-indigo-600 text-base py-1 px-2'}>预展中</Text>
                             <TimeCountDowner
-                                onStatusChanged={status => setStatus(status)}
                                 mode={TimeCountDownerMode.Manual}
                                 started={item.started == 1}
                                 ended={item.ended == 1}
                                 className={'flex items-center'}
                                 startTime={new Date(item.startTime)}
                             />
+                        </View>
+                    }
+                    {item.started == 1 && item.ended == 0 &&
+                        <View className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
+                            <Text className={'bg-red-600 text-base py-1 px-2'}>进行中</Text>
+                        </View>
+                    }
+                    {item.ended == 1 &&
+                        <View
+                            className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
+                            <Text className={'bg-gray-600 text-base py-1 px-2'}>已结束于</Text>
+                            <View>{item.endTime}</View>
                         </View>
                     }
                 </View>

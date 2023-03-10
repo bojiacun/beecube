@@ -149,6 +149,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     public Result<?> manualStart(@RequestParam String id) {
         Performance performance = performanceService.getById(id);
         performance.setStarted(1);
+        performance.setStartTime(new Date());
         performanceService.updateById(performance);
         PerformanceUpdateMessage message = new PerformanceUpdateMessage();
         message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTED);
@@ -166,6 +167,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @PutMapping("/end")
     public Result<?> manualEnd(@RequestParam String id) {
         Performance performance = performanceService.getById(id);
+        performance.setEndTime(new Date());
         performance.setEnded(1);
         performanceService.updateById(performance);
         PerformanceUpdateMessage message = new PerformanceUpdateMessage();
@@ -183,6 +185,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @PutMapping("/goods/start")
     public Result<?> startGoods(@RequestParam String id) {
         Goods goods = goodsService.getById(id);
+        goods.setStartTime(new Date());
         goods.setStarted(1);
         goodsService.updateById(goods);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
@@ -200,6 +203,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @PutMapping("/goods/end")
     public Result<?> endGoods(@RequestParam String id) {
         Goods goods = goodsService.getById(id);
+        goods.setEndTime(new Date());
+        goods.setActualEndTime(new Date());
         goods.setEnded(1);
         goodsService.updateById(goods);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
