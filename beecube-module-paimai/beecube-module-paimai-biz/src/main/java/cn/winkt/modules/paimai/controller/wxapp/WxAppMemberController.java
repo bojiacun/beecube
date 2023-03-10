@@ -702,21 +702,23 @@ public class WxAppMemberController {
 
             //判断是不是进入到了延时周期如果是，则进行延时，延时逻辑设置到实际结束时间中去
             //并发送延时消息
-            long nowTimeMillis = System.currentTimeMillis();
-            long endTimeMillis = actualEndTime.getTime();
-            Integer delayTime = goods.getDelayTime();
-            if(delayTime != null && delayTime > 0) {
-                if((nowTimeMillis + delayTime * 60 * 1000) >= endTimeMillis) {
-                    Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
-                    String messageId = "";
-                    AuctionDelayedMessage message = new AuctionDelayedMessage();
-                    message.setId(messageId);
-                    message.setCreateTime(new Date());
-                    message.setType(MessageConstant.MSG_TYPE_DELAY);
-                    message.setNewTime(newTime);
-                    goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));
-                    goods.setActualEndTime(newTime);
-                    goodsService.updateById(goods);
+            if(actualEndTime != null) {
+                long nowTimeMillis = System.currentTimeMillis();
+                long endTimeMillis = actualEndTime.getTime();
+                Integer delayTime = goods.getDelayTime();
+                if (delayTime != null && delayTime > 0) {
+                    if ((nowTimeMillis + delayTime * 60 * 1000) >= endTimeMillis) {
+                        Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
+                        String messageId = "";
+                        AuctionDelayedMessage message = new AuctionDelayedMessage();
+                        message.setId(messageId);
+                        message.setCreateTime(new Date());
+                        message.setType(MessageConstant.MSG_TYPE_DELAY);
+                        message.setNewTime(newTime);
+                        goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));
+                        goods.setActualEndTime(newTime);
+                        goodsService.updateById(goods);
+                    }
                 }
             }
             try {
