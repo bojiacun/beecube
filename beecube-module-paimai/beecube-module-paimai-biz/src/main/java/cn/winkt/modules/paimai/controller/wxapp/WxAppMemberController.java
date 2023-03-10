@@ -714,7 +714,7 @@ public class WxAppMemberController {
                     message.setCreateTime(new Date());
                     message.setType(MessageConstant.MSG_TYPE_DELAY);
                     message.setNewTime(newTime);
-                    goodsOfferWebSocket.sendGroupMessage(goods.getId(), JSONObject.toJSONString(message));
+                    goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));
                     goods.setActualEndTime(newTime);
                     goodsService.updateById(goods);
                 }
@@ -730,7 +730,7 @@ public class WxAppMemberController {
                 offerMessage.setCreateTime(new Date());
                 offerMessage.setType(MessageConstant.MSG_TYPE_OFFER);
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
-                goodsOfferWebSocket.sendGroupMessage(goods.getId(), JSONObject.toJSONString(offerMessage));
+                goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(offerMessage));
             }
             catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
