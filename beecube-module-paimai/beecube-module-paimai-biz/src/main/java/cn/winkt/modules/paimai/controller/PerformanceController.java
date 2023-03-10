@@ -237,7 +237,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsUpdateMessage.setStartTime(performance.getStartTime());
                 goodsUpdateMessage.setEndTime(performance.getEndTime());
                 goodsUpdateMessage.setActualEndTime(null);
-                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_TIME_CHANGED);
+                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
             }
         }
@@ -255,7 +255,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsUpdateMessage.setStartTime(null);
                 goodsUpdateMessage.setEndTime(null);
                 goodsUpdateMessage.setActualEndTime(null);
-                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_TIME_CHANGED);
+                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
             }
         }
@@ -290,10 +290,11 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
-        if(!old.getStartTime().equals(performance.getStartTime())) {
+        if(!old.getStartTime().equals(performance.getStartTime())||!old.getEndTime().equals(performance.getEndTime())) {
             PerformanceUpdateMessage message = new PerformanceUpdateMessage();
-            message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED);
+            message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
             message.setStartTime(performance.getStartTime());
+            message.setEndTime(performance.getEndTime());
             message.setId(performance.getId());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
         }

@@ -10,6 +10,7 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
+import {TimeCountDownerStatus} from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -107,18 +108,30 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
-        let type = 0;
-        if (prevState.status == '') {
-            if (this.state.status == 'notstart') {
-                type = 1;
-            } else if (this.state.status == 'started') {
-                type = 2;
-            }
-            if (type > 0 && this.state.detail) {
-                request.get('/paimai/api/members/messaged', {params: {type: type, performanceId: this.state.detail.id}}).then(res => {
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
+        if (prevState.status == undefined) {
+            if (this.state.status == TimeCountDownerStatus.NOT_START && this.state.detail) {
+                request.get('/paimai/api/members/messaged', {params: {type: 1, performanceId: this.state.detail.id}}).then(res => {
                     this.setState({message: res.data.result});
                 })
+            }
+        }
+        if (prevProps.message?.id != this.props.message?.id && this.state.detail) {
+            let {detail,message} = this.props;
+            if (this.state.detail.id == this.props.message.id) {
+                switch (message.type) {
+                    case 'MSG_TYPE_PEFORMANCE_STARTED':
+                        detail.started = message.started;
+                        break;
+                    case 'MSG_TYPE_PEFORMANCE_ENDED':
+                        detail.ended = message.ended;
+                        break;
+                    case 'MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED':
+                        detail.startTime = message.startTime;
+                        detail.endTime = message.endTime;
+                        break;
+                }
+                this.setState({detail: detail});
             }
         }
     }

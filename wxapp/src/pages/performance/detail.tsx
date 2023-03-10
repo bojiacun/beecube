@@ -18,7 +18,8 @@ const numeral = require('numeral');
     {
         systemInfo: state.context.systemInfo,
         settings: state.context.settings,
-        context: state.context
+        context: state.context,
+        message: state.message
     }
 ))
 export default class Index extends Component<any, any> {
@@ -108,7 +109,7 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
         if (prevState.status == undefined) {
             if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && this.state.detail) {
                 request.get('/paimai/api/members/messaged', {
@@ -121,10 +122,32 @@ export default class Index extends Component<any, any> {
                 })
             }
         }
+        if (prevProps.message?.id != this.props.message?.id && this.state.detail) {
+            let {detail,message} = this.props;
+            if (this.state.detail.id == this.props.message.id) {
+                switch (message.type) {
+                    case 'MSG_TYPE_PEFORMANCE_STARTED':
+                        detail.started = message.started;
+                        break;
+                    case 'MSG_TYPE_PEFORMANCE_ENDED':
+                        detail.ended = message.ended;
+                        break;
+                    case 'MSG_TYPE_AUCTION_TIME_CHANGED':
+                        detail.startTime = message.startTime;
+                        detail.endTime = message.endTime;
+                        detail.actualEndTime = message.actualEndTime;
+                        break;
+                }
+                this.setState({detail: detail});
+            }
+        }
     }
 
     noticeMe() {
-        request.put('/paimai/api/members/messages/toggle', {type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 :2, performanceId: this.state.detail.id}).then(res => {
+        request.put('/paimai/api/members/messages/toggle', {
+            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+            performanceId: this.state.detail.id
+        }).then(res => {
             this.setState({message: res.data.result});
         });
     }
@@ -168,19 +191,19 @@ export default class Index extends Component<any, any> {
                         </View>
                         {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
                             <View className={'w-20'}>
-                                    {!message &&
-                                        <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
-                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View
-                                                className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
-                                        </View>
-                                    }
-                                    {message &&
-                                        <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
-                                            <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                            <View className={'text-sm'}>取消提醒</View>
-                                        </View>
-                                    }
+                                {!message &&
+                                    <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
+                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                        <View
+                                            className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
+                                    </View>
+                                }
+                                {message &&
+                                    <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
+                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                        <View className={'text-sm'}>取消提醒</View>
+                                    </View>
+                                }
                             </View>
                         }
                     </View>
@@ -224,15 +247,15 @@ export default class Index extends Component<any, any> {
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {!deposited &&
-                        <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                              style={{paddingBottom: safeBottom}}>
-                            <View>
-                                <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
-                                    <View>交保证金</View>
-                                    <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
-                                </Button>
-                            </View>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View>
+                            <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                                <View>交保证金</View>
+                                <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
+                            </Button>
                         </View>
+                    </View>
                 }
             </PageLayout>
         );

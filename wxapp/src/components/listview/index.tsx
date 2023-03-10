@@ -7,6 +7,7 @@ import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
+import {useSelector} from "react-redux";
 
 export interface ListViewTabItem {
     label: string;
@@ -37,7 +38,27 @@ const ListView: FC<ListViewProps> = (props) => {
     const [page, setPage] = useState<number>(1);
     const [noMore, setNoMore] = useState<boolean>(false);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
-
+    const message = useSelector((state:any) => state.message);
+    useEffect(()=>{
+        if(message) {
+            data.forEach(g => {
+                if(g.id == message.id) {
+                    switch (message.type) {
+                        case 'MSG_TYPE_PEFORMANCE_STARTED':
+                            g.started = message.started;
+                            break;
+                        case 'MSG_TYPE_PEFORMANCE_ENDED':
+                            g.ended = message.ended;
+                            break;
+                        case 'MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED':
+                            g.startTime = message.startTime;
+                            break;
+                    }
+                }
+            });
+            setData([...data]);
+        }
+    }, [message]);
 
     useEffect(()=>{
         if(tabs && tabs.length > 0) {

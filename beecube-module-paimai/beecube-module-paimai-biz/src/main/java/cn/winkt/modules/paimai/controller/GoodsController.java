@@ -144,7 +144,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 			goodsUpdateMessage.setId(goods.getId());
 			goodsUpdateMessage.setStartTime(goods.getStartTime());
 			goodsUpdateMessage.setEndTime(goods.getEndTime());
-			goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_TIME_CHANGED);
+			goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
 		}
 		goodsService.updateById(goods);
 		return Result.OK("编辑成功!");
