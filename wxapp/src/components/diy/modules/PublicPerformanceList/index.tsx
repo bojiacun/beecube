@@ -20,9 +20,11 @@ const PublicPerformanceListModule = (props: any) => {
                     switch (message.type) {
                         case 'MSG_TYPE_PEFORMANCE_STARTED':
                             g.started = message.started;
+                            g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
+                            g.endTime = message.endTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_CHANGED':
                             g.startTime = message.startTime;

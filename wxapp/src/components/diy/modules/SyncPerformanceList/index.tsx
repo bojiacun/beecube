@@ -16,10 +16,12 @@ const SyncPerformanceListModule = (props: any) => {
                 if(g.id == message.id) {
                     switch (message.type) {
                         case 'MSG_TYPE_PEFORMANCE_STARTED':
+                            g.startTime = message.startTime;
                             g.started = message.started;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
+                            g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_CHANGED':
                             g.startTime = message.startTime;

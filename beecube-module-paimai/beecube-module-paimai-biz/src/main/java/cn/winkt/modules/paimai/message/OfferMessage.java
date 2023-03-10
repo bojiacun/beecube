@@ -8,13 +8,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class OfferMessage {
-    private String id;
+public class OfferMessage extends Message{
     private String fromUserId;
     private String fromUserAvatar;
     private String fromUserName;
     private BigDecimal price;
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime = new Date();
     private String type = MessageConstant.MSG_TYPE_OFFER;
 }

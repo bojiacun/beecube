@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.message;
 
 
+import cn.hutool.core.lang.Snowflake;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
@@ -9,9 +10,6 @@ import java.util.Date;
 
 @Data
 public class PerformanceUpdateMessage {
-    private String id;
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime = new Date();
     private String type;
     private Integer started;
     private Integer ended;

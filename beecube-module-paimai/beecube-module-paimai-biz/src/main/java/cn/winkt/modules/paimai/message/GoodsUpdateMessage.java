@@ -7,10 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class GoodsUpdateMessage {
-    private String id;
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime = new Date();
+public class GoodsUpdateMessage extends Message{
     private String type;
     private Integer started;
     private Integer ended;
