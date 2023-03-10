@@ -53,6 +53,25 @@ export default class Index extends Component<any, any> {
                 });
             }
         }
+        if (prevProps.message?.id != this.props.message?.id && this.state.goods) {
+            let {goods,message} = this.props;
+            if (this.state.goods.id == this.props.message.id) {
+                switch (message.type) {
+                    case 'MSG_TYPE_AUCTION_STARTED':
+                        goods.started = message.started;
+                        break;
+                    case 'MSG_TYPE_AUCTION_ENDED':
+                        goods.ended = message.ended;
+                        break;
+                    case 'MSG_TYPE_AUCTION_CHANGED':
+                        goods.startTime = message.startTime;
+                        goods.endTime = message.endTime;
+                        goods.actualEndTime = message.actualEndTime;
+                        break;
+                }
+                this.setState({goods: goods});
+            }
+        }
     }
 
 

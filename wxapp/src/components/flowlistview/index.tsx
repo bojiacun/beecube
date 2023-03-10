@@ -49,8 +49,20 @@ const FlowListView: FC<ListViewProps> = (props) => {
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
                             break;
-                        case 'MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED':
+                        case 'MSG_TYPE_PEFORMANCE_CHANGED':
                             g.startTime = message.startTime;
+                            g.endTime = message.endTime;
+                            break;
+                        case 'MSG_TYPE_AUCTION_STARTED':
+                            g.started = message.started;
+                            break;
+                        case 'MSG_TYPE_AUCTION_ENDED':
+                            g.ended = message.ended;
+                            break;
+                        case 'MSG_TYPE_AUCTION_CHANGED':
+                            g.startTime = message.startTime;
+                            g.endTime = message.endTime;
+                            g.actualEndTime = message.actualEndTime;
                             break;
                     }
                 }

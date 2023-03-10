@@ -126,13 +126,30 @@ export default class Index extends Component<any, any> {
                     case 'MSG_TYPE_PEFORMANCE_ENDED':
                         detail.ended = message.ended;
                         break;
-                    case 'MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED':
+                    case 'MSG_TYPE_PEFORMANCE_CHANGED':
                         detail.startTime = message.startTime;
                         detail.endTime = message.endTime;
                         break;
                 }
                 this.setState({detail: detail});
             }
+            this.state.goodsList?.forEacht(g => {
+                if(g.id == message.id) {
+                    switch (message.type) {
+                        case 'MSG_TYPE_AUCTION_STARTED':
+                            g.started = message.started;
+                            break;
+                        case 'MSG_TYPE_AUCTION_ENDED':
+                            g.ended = message.ended;
+                            break;
+                        case 'MSG_TYPE_AUCTION_CHANGED':
+                            g.startTime = message.startTime;
+                            g.endTime = message.endTime;
+                            g.actualEndTime = message.actualEndTime;
+                            break;
+                    }
+                }
+            });
         }
     }
 

@@ -21,8 +21,9 @@ const PerformanceListModule = (props: any) => {
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
                             g.ended = message.ended;
                             break;
-                        case 'MSG_TYPE_PEFORMANCE_STARTTIME_CHANGED':
+                        case 'MSG_TYPE_PEFORMANCE_CHANGED':
                             g.startTime = message.startTime;
+                            g.endTime = message.endTime;
                             break;
                     }
                 }
