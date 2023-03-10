@@ -108,18 +108,10 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
-        const {detail, status, goodsList} = this.state;
+    componentDidUpdate(prevProps: Readonly<any>) {
+        const {detail, goodsList} = this.state;
         const {message} = this.props;
-        if (!detail) return;
-
-        if (prevState.status != status) {
-            request.get('/paimai/api/members/messaged', {params: {type: 2, performanceId: detail.id}}).then(res => {
-                this.setState({message: res.data.result});
-            });
-        }
-        if (!prevProps.message || prevProps.message.id == message.id) return;
-
+        if (!detail || !prevProps.message || prevProps.message.id == message.id) return;
         if (detail.id == message.performanceId) {
             switch (message.type) {
                 case 'MSG_TYPE_PEFORMANCE_STARTED':
@@ -135,7 +127,6 @@ export default class Index extends Component<any, any> {
             }
             this.setState({detail: detail});
         }
-
         if (!goodsList) return;
         goodsList?.forEach(g => {
             if (g.id == message.goodsId) {

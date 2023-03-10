@@ -63,73 +63,64 @@ export default class Index extends Component<any, any> {
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
         const {context, message} = this.props;
         const {userInfo} = context;
-        let {goods} = this.state;
-
-        if (prevProps.context.userInfo == null || prevState.goods == null) {
-            if (userInfo != null && goods) {
-                //记录浏览记录
-                request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
-                    console.log(res.data.result);
-                });
-                //查询是否关注
-                request.get('/paimai/api/members/isfollow', {params: {id: this.state.id}}).then(res => {
-                    goods.followed = res.data.result;
-                    this.setState({goods: goods});
-                });
-                //查询出价记录
-                request.get('/paimai/api/goods/offers', {params: {id: goods.id, pageSize: 3}}).then(res => {
-                    this.setState({offers: res.data.result.records});
-                });
-                //查询是否需要缴纳保证金
-                request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
-                    goods.deposited = res.data.result;
-                    this.setState({goods: goods});
-                });
-            }
-
+        let {goods, status} = this.state;
+        if (!userInfo || !goods) return;
+        if (prevState.goods == null) {
+            //记录浏览记录
+            request.post('/paimai/api/members/views', null, {params: {id: this.state.id}}).then(res => {
+                console.log(res.data.result);
+            });
+            //查询是否关注
+            request.get('/paimai/api/members/isfollow', {params: {id: this.state.id}}).then(res => {
+                goods.followed = res.data.result;
+                this.setState({goods: goods});
+            });
+            //查询是否需要缴纳保证金
+            request.get('/paimai/api/members/deposited', {params: {id: this.state.id}}).then(res => {
+                goods.deposited = res.data.result;
+                this.setState({goods: goods});
+            });
         }
-        if (goods != null) {
-            if (prevState.status == undefined && this.state.status != undefined) {
-                if ((this.state.status == TimeCountDownerStatus.STARTED || this.state.status == TimeCountDownerStatus.NOT_START) && goods) {
-                    request.get('/paimai/api/members/messaged', {
-                        params: {
-                            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
-                            goodsId: goods.id
-                        }
-                    }).then(res => {
-                        this.setState({message: res.data.result});
-                    })
+        if (prevState.status != status && status != TimeCountDownerStatus.ENDED) {
+            request.get('/paimai/api/members/messaged', {
+                params: {
+                    type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+                    goodsId: goods.id
                 }
-            }
-            if (prevProps.message?.id != this.props.message?.id) {
-                console.log(message);
-                if (goods.id == message.id) {
-                    switch (message.type) {
-                        case 'MSG_TYPE_AUCTION_STARTED':
-                            goods.started = message.started;
-                            this.setState({goods: goods});
-                            break;
-                        case 'MSG_TYPE_AUCTION_ENDED':
-                            goods.ended = message.ended;
-                            this.setState({goods: goods});
-                            break;
-                        case 'MSG_TYPE_AUCTION_CHANGED':
-                            goods.startTime = message.startTime;
-                            goods.endTime = message.endTime;
-                            goods.actualEndTime = message.actualEndTime;
-                            this.setState({goods: goods});
-                            break;
-                        case 'MSG_TYPE_OFFER':
-                            this.onMessageReceive(message);
-                            break;
-                        case 'MSG_TYPE_DELAY':
-                            this.onMessageReceive(message);
-                            break;
-                    }
-                }
+            }).then(res => {
+                this.setState({message: res.data.result});
+            })
+        }
+        if (!prevProps.message || prevProps.message.id == message.id) return;
+
+        if (goods.id == message.goodsId) {
+            switch (message.type) {
+                case 'MSG_TYPE_AUCTION_STARTED':
+                    goods.started = message.started;
+                    goods.startTime = message.startTime;
+                    goods.ended = 0;
+                    this.setState({goods: goods});
+                    break;
+                case 'MSG_TYPE_AUCTION_ENDED':
+                    goods.ended = message.ended;
+                    goods.endTime = message.endTime;
+                    goods.started = 1;
+                    this.setState({goods: goods});
+                    break;
+                case 'MSG_TYPE_AUCTION_CHANGED':
+                    goods.startTime = message.startTime;
+                    goods.endTime = message.endTime;
+                    goods.actualEndTime = message.actualEndTime;
+                    this.setState({goods: goods});
+                    break;
+                case 'MSG_TYPE_OFFER':
+                    this.onMessageReceive(message);
+                    break;
+                case 'MSG_TYPE_DELAY':
+                    this.onMessageReceive(message);
+                    break;
             }
         }
-
     }
 
     onMessageReceive(message: any) {
@@ -270,6 +261,10 @@ export default class Index extends Component<any, any> {
             data.uprange = JSON.parse(data.uprange);
             this.nextPrice(data);
             utils.hideLoading();
+        });
+        //查询出价记录
+        request.get('/paimai/api/goods/offers', {params: {id: options.id, pageSize: 3}}).then(res => {
+            this.setState({offers: res.data.result.records});
         });
     }
 

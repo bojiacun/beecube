@@ -113,8 +113,8 @@ export default class Index extends Component<any, any> {
         const {detail, status, goodsList} = this.state;
         const {message} = this.props;
         if (!detail) return;
-        if (prevState.status != status) {
-            request.get('/paimai/api/members/messaged', {params: {type: 1, performanceId: detail.id}}).then(res => {
+        if (prevState.status != status && status != TimeCountDownerStatus.ENDED) {
+            request.get('/paimai/api/members/messaged', {params: {type: status == TimeCountDownerStatus.NOT_START ? 1 : 2, performanceId: detail.id}}).then(res => {
                 this.setState({message: res.data.result});
             });
         }
