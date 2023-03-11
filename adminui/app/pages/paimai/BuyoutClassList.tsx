@@ -9,7 +9,7 @@ import {
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
-import {Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import {Delete, Edit, MoreVertical, Plus, Shield} from "react-feather";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
@@ -105,8 +105,17 @@ const BuyoutClassList = (props: any) => {
             dataField: 'name',
         },
         {
-            text: '分类状态',
+            text: '显示状态',
             dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.status == 0) {
+                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                }
+                else if(row.status == 1) {
+                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
         {
             text: '排序',

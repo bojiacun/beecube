@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -48,6 +49,7 @@ public class BuyoutGoodsClass {
 	/**状态（0不显示、1显示）*/
 	@Excel(name = "状态（0不显示、1显示）", width = 15)
     @ApiModelProperty(value = "状态（0不显示、1显示）")
+	@Dict(dicCode = "paimai_goods_class_status")
 	private java.lang.Integer status;
 	/**createTime*/
     @ApiModelProperty(value = "createTime")
