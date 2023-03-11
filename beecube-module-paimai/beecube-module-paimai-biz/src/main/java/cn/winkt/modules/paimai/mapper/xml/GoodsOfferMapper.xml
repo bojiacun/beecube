@@ -6,7 +6,7 @@
     </select>
 
     <select id="getMaxOfferRow" resultType="cn.winkt.modules.paimai.entity.GoodsOffer">
-        select * from paimai_goods_offers where goods_id=#{goods_id}
+        select * from paimai_goods_offers where goods_id=#{goods_id} order by price desc limit 1
     </select>
 
 
