@@ -118,6 +118,7 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             });
         }
+
         if (prevProps.message && prevProps.message.id == message.id) return;
 
         if (detail.id == message.performanceId) {
@@ -196,8 +197,8 @@ export default class Index extends Component<any, any> {
                             this.setState({status: status});
                         }}
                         className={'flex'}
-                        startTime={new Date(detail.startTime)}
-                        endTime={new Date(detail.endTime)}
+                        startTime={detail.startTime}
+                        endTime={detail.endTime}
                     />
                 </View>
                 <View className={'divide-y divide-gray-100 bg-white'}>
@@ -268,8 +269,8 @@ export default class Index extends Component<any, any> {
                                         }
                                         <TimeCountDowner
                                             className={'text-gray-400 text-xs flex'}
-                                            startTime={new Date(item.startTime)}
-                                            endTime={new Date(item.endTime)}
+                                            startTime={item.startTime}
+                                            endTime={item.endTime}
                                         />
                                     </View>
                                 </Navigator>

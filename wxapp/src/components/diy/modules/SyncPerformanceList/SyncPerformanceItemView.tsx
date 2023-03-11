@@ -29,7 +29,7 @@ const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
                                 started={item.state == 1}
                                 ended={item.state == 2}
                                 className={'flex items-center'}
-                                startTime={new Date(item.startTime)}
+                                startTime={item.startTime}
                             />
                         </View>
                     }

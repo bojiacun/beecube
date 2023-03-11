@@ -436,7 +436,7 @@ export default class Index extends Component<any, any> {
                                     this.setState({status: status});
                                 }}
                                 className={'flex items-center text-sm space-x-1'}
-                                endTime={new Date(goods.actualEndTime || goods.endTime)}
+                                endTime={goods.actualEndTime || goods.endTime}
                                 startTime={goods.startTime}
                                 startedTip={<><View
                                     className={'border rounded-r-full px-1 border-red-500 border-solid text-red-500'}>竞拍中</View><Text>距结束：</Text></>}

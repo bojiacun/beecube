@@ -26,7 +26,7 @@ const PerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
                             notStartTip={<View className={'space-x-1'}><Text className={'bg-indigo-600 text-base p-2'}>预展中</Text><Text>距开始：</Text></View>}
                             startedTip={<View className={'space-x-1'}><Text className={'bg-red-600 text-base p-2'}>进行中</Text><Text>距结束：</Text></View>}
                             endTip={<View className={'space-x-1'}><Text className={'bg-gray-600 text-base p-2'}>已结束</Text></View>}
-                            className={'flex items-center'} endTime={new Date(item.endTime)} startTime={new Date(item.startTime)}
+                            className={'flex items-center'} endTime={item.endTime} startTime={item.startTime}
                         />
                     </View>
                 </View>

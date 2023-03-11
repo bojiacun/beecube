@@ -67,15 +67,17 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
             onStatusChanged(TimeCountDownerStatus.ENDED);
             return endTip;
         } else if (started) {
-            clocker.targetDate = endTime;
+            clocker.targetDate = moment(endTime).toDate();
             onStatusChanged(TimeCountDownerStatus.STARTED);
             return startedTip;
         } else {
-            clocker.targetDate = startTime;
+            clocker.targetDate = moment(startTime).toDate();
             onStatusChanged(TimeCountDownerStatus.NOT_START);
             return notStartTip;
         }
     }, [started, ended, startTime, endTime]);
+
+
     useEffect(() => {
         let timer = setInterval(() => {
             setCounter(v => v + 1);
