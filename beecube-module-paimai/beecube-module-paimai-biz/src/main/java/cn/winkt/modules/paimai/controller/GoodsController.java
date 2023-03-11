@@ -250,7 +250,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @Transactional
     public Result<?> confirmDeal(@RequestParam String id, @RequestParam Integer status) {
         Goods goods = goodsService.getById(id);
-        if(goods.getState() > 0) {
+        if(goods.getState() > 2) {
             throw new JeecgBootException("请不要重复确认成交或流拍");
         }
         GoodsOffer goodsOffer = goodsOfferService.getMaxOfferRow(id);
