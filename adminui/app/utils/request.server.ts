@@ -163,7 +163,7 @@ export const API_PAIMAI_GOODS_ADD = `${BASE_URL}/paimai/goods/add`;
 export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 
-export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/offers/deal`;
+export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/goods/deal`;
 
 
 export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;

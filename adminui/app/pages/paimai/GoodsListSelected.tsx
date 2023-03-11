@@ -121,6 +121,20 @@ const GoodsListSelected = (props: any) => {
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/delete?id=${row.id}`, replace: true});
                 });
                 break;
+            case 'confirm_deal':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=1`, replace: true});
+                });
+                break;
+            case 'confirm_deal_fail':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=2`, replace: true});
+                });
+                break;
         }
     }
     const columns: any[] = [
