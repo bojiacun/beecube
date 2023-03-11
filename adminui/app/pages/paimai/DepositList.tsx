@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Badge, Button, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
-import {User} from "react-feather";
+import {Delete, Edit, Eye, MoreVertical, User} from "react-feather";
 
 
 const DepositList = (props: any) => {
@@ -14,6 +14,7 @@ const DepositList = (props: any) => {
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, goodsId: selectedRow.id});
     const searchFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     useEffect(()=>{
         if(show) {
@@ -21,7 +22,16 @@ const DepositList = (props: any) => {
         }
     }, [show]);
 
-
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            if (deleteFetcher.data.success) {
+                showToastSuccess('操作成功');
+                searchFetcher.submit(searchState, {method: 'get', action: '/paimai/deposits'});
+            } else {
+                showToastError(deleteFetcher.data.message);
+            }
+        }
+    }, [deleteFetcher.state]);
 
     useEffect(() => {
         if (searchFetcher.type == 'done' && searchFetcher.data) {
@@ -47,11 +57,22 @@ const DepositList = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
+    const handleOnAction = (row: any, e: any) => {
+        switch (e) {
+            case 'refund':
+                //删除按钮
+                showDeleteAlert(function () {
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/deposits/refund?id=${row.id}`, replace: true});
+                });
+                break;
+        }
+    }
     const columns: any[] = [
         {
             text: '缴纳人',
             dataField: '',
             isDummyField: true,
+            headerStyle: {width: 200},
             formatter: (cell:any, row:any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -68,6 +89,7 @@ const DepositList = (props: any) => {
         {
             text: '交易单号',
             dataField: 'transactionId',
+            style: {wordBreak: 'break-all', wordWrap: 'break-word'}
         },
         {
             text: '创建时间',
@@ -88,6 +110,20 @@ const DepositList = (props: any) => {
                 }
                 return <Badge variant={'dark'}>未知</Badge>
             }
+        },
+        {
+            text: '操作',
+            dataField: 'operation',
+            formatter: (cell: any, row: any) => {
+                if(row.status == 1) {
+                    return (
+                        <div className={'d-flex align-items-center'}>
+                            <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>退款</a>
+                        </div>
+                    );
+                }
+                return <></>;
+            },
         },
     ]
     return (
