@@ -118,15 +118,17 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             });
         }
-        if (!prevProps.message || prevProps.message.id == message.id) return;
+        if (prevProps.message && prevProps.message.id == message.id) return;
 
         if (detail.id == message.performanceId) {
             switch (message.type) {
                 case 'MSG_TYPE_PEFORMANCE_STARTED':
+                    detail.startTime = message.startTime;
                     detail.state = message.state;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_ENDED':
                     detail.state = message.state;
+                    detail.endTime = message.endTime;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_CHANGED':
                     detail.startTime = message.startTime;
@@ -152,6 +154,8 @@ export default class Index extends Component<any, any> {
                         g.startTime = message.startTime;
                         g.endTime = message.endTime;
                         g.actualEndTime = message.actualEndTime;
+                        g.state = message.state;
+                        g.dealPrice = message.dealPrice;
                         break;
                 }
                 this.setState({goodsList: goodsList});
@@ -244,10 +248,24 @@ export default class Index extends Component<any, any> {
                                     </View>
                                     <View className={'p-2 space-y-0.5'}>
                                         <View className={'text-gray-600'}>{item.title}</View>
-                                        <View className={'text-sm'}>
-                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
-                                        </View>
+                                        {item.state < 3 &&
+                                            <View className={'text-sm'}>
+                                                当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                                className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                            </View>
+                                        }
+                                        {item.state == 3 &&
+                                            <View className={'text-sm'}>
+                                                落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                                className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                            </View>
+                                        }
+                                        {item.state == 4 &&
+                                            <View className={'text-sm'}>
+                                                当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                                className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                            </View>
+                                        }
                                         <TimeCountDowner
                                             className={'text-gray-400 text-xs flex'}
                                             startTime={new Date(item.startTime)}
