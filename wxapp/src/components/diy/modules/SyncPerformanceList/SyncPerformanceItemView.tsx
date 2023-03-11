@@ -20,25 +20,25 @@ const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
             <Navigator url={'/pages/performance/detail2?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
-                    {item.started == 0 && item.startTime != null &&
+                    {item.state == 0 && item.startTime != null &&
                         <View
                             className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
                             <Text className={'bg-indigo-600 text-base py-1 px-2'}>预展中</Text>
                             <TimeCountDowner
                                 mode={TimeCountDownerMode.Manual}
-                                started={item.started == 1}
-                                ended={item.ended == 1}
+                                started={item.state == 1}
+                                ended={item.state == 2}
                                 className={'flex items-center'}
                                 startTime={new Date(item.startTime)}
                             />
                         </View>
                     }
-                    {item.started == 1 && item.ended == 0 &&
+                    {item.state == 1 &&
                         <View className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
                             <Text className={'bg-red-600 text-base py-1 px-2'}>进行中</Text>
                         </View>
                     }
-                    {item.ended == 1 &&
+                    {item.state == 2 &&
                         <View
                             className={'flex items-center text-sm space-x-2 text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
                             <Text className={'bg-gray-600 text-base py-1 px-2'}>已结束于</Text>

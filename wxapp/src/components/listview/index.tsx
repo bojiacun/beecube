@@ -46,13 +46,11 @@ const ListView: FC<ListViewProps> = (props) => {
                 if (g.id == message.performanceId) {
                     switch (message.type) {
                         case 'MSG_TYPE_PEFORMANCE_STARTED':
-                            g.started = message.started;
-                            g.ended = 0;
+                            g.state = message.state;
                             g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_ENDED':
-                            g.ended = message.ended;
-                            g.started = 1;
+                            g.state = message.state;
                             g.endTime = message.endTime;
                             break;
                         case 'MSG_TYPE_PEFORMANCE_CHANGED':
@@ -64,13 +62,11 @@ const ListView: FC<ListViewProps> = (props) => {
                 if (g.id == message.goodsId) {
                     switch (message.type) {
                         case 'MSG_TYPE_AUCTION_STARTED':
-                            g.started = message.started;
-                            g.ended = 0;
+                            g.state = message.state;
                             g.startTime = message.startTime;
                             break;
                         case 'MSG_TYPE_AUCTION_ENDED':
-                            g.ended = message.ended;
-                            g.started = 1;
+                            g.state = message.state;
                             g.endTime = message.endTime;
                             break;
                         case 'MSG_TYPE_AUCTION_CHANGED':
