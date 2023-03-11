@@ -116,8 +116,8 @@ const GoodsListSelected = (props: any) => {
                 break;
             case 'delete':
                 //删除按钮
-                startPageLoading();
                 showDeleteAlert(function () {
+                    startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/delete?id=${row.id}`, replace: true});
                 });
                 break;
@@ -285,7 +285,7 @@ const GoodsListSelected = (props: any) => {
                     </div>
                 </Modal.Body>
             </Modal>
-            {editModal && <SyncGoodsEditor model={editModal} onHide={()=>{
+            {editModal && <SyncGoodsEditor model={editModal} selectedPerformance={selectedPerformance} onHide={()=>{
                 setEditModal(null);
                 searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
             }} />}
