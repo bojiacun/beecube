@@ -127,11 +127,10 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
         let {goods} = this.state;
-        const messageSessionId = md5(goods.id + ':' + userInfo.id + ':' + this.randomStr);
         let msg = JSON.parse(message.data);
 
         //如果是自身产生的消息则忽略
-        if (msg.id === messageSessionId) {
+        if (msg.fromUserId === userInfo.id) {
             return;
         }
         switch (msg.type) {
