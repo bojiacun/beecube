@@ -250,16 +250,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             Performance performance = performanceService.getById(goodsOffer.getPerformanceId());
             if (performance.getType() == 1) {
                 //未到时间不能成交
-                if (new Date().after(performance.getEndTime())) {
-                    throw new JeecgBootException("拍品所在专场未结束不能成交");
-                }
                 if (new Date().after(goods.getEndTime())) {
                     throw new JeecgBootException("拍品未结束不能成交");
                 }
             } else if (performance.getType() == 2) {
-                if (performance.getEnded() == 0) {
-                    throw new JeecgBootException("拍品所在专场未结束不能成交");
-                }
                 if (goods.getEnded() == 0) {
                     throw new JeecgBootException("拍品未结束不能成交");
                 }
