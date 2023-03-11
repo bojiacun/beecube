@@ -123,7 +123,6 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         String perfId = req.getParameter("perf_id");
         queryWrapper.eq("performance_id", perfId);
-        queryWrapper.orderByDesc("create_time");
         queryWrapper.orderByAsc("sort_num");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.page(page, queryWrapper);
