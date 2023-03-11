@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -49,6 +50,7 @@ public class GoodsOffer {
     @ApiModelProperty(value = "出价")
 	private java.lang.Float price;
 
+	@Dict(dicCode = "paimai_offer_status")
 	private Integer status;
 	/**出价时间*/
     @ApiModelProperty(value = "出价时间")
