@@ -18,6 +18,7 @@ import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -176,6 +177,27 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 	@ApiOperation(value="拍品表-通过id删除", notes="拍品表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
+		Goods goods = goodsService.getById(id);
+		Date nowDate = new Date();
+		if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+			Performance performance = performanceService.getById(goods.getPerformanceId());
+			if(performance.getType() == 1) {
+				if(nowDate.after(performance.getStartTime()) && nowDate.before(performance.getEndTime())) {
+					throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
+				}
+			}
+			else if(performance.getType() == 2) {
+				if(performance.getStarted() == 1 && performance.getEnded() == 0) {
+					throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
+				}
+			}
+		}
+		else {
+			Date endTime = goods.getActualEndTime() == null ? goods.getEndTime():goods.getActualEndTime();
+			if(nowDate.after(goods.getStartTime()) && nowDate.before(endTime)) {
+				throw new JeecgBootException("拍品正在拍卖中，无法删除");
+			}
+		}
 		goodsService.removeById(id);
 		return Result.OK("删除成功!");
 	}
