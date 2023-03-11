@@ -192,6 +192,7 @@ export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auction
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;
 export const API_PAIMAI_OFFER_LIST = `${BASE_URL}/paimai/offers/list`;
 export const API_PAIMAI_DEPOSIT_LIST = `${BASE_URL}/paimai/deposits/list`;
+export const API_PAIMAI_DEPOSIT_REFUND = `${BASE_URL}/paimai/deposits/refund`;
 export const API_PAIMAI_FOLLOW_LIST = `${BASE_URL}/paimai/follows/list`;
 
 export const API_PAIMAI_ORDER_LIST = `${BASE_URL}/paimai/orders/list`;

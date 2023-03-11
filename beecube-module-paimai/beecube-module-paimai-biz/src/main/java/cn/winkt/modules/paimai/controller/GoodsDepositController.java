@@ -120,7 +120,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
 
     @AutoLog(value = "订单售后表-编辑")
     @ApiOperation(value = "订单售后表-编辑", notes = "订单售后表-编辑")
-    @RequestMapping(value = "/refund", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = "/refund", method = {RequestMethod.DELETE})
     @Transactional
     public Result<?> refund(@RequestParam String id) throws WxPayException, InvocationTargetException, IllegalAccessException {
         GoodsDeposit deposit = goodsDepositService.getById(id);
