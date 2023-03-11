@@ -5,6 +5,11 @@
         select max(price) as price from paimai_goods_offers where goods_id=#{goods_id}
     </select>
 
+    <select id="getMaxOfferRow" resultType="cn.winkt.modules.paimai.entity.GoodsOffer">
+        select * from paimai_goods_offers where goods_id=#{goods_id}
+    </select>
+
+
     <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsOfferVO">
         select gof.*,g.title as goods_name,p.title as performanceName,
                (select max(price) from paimai_goods_offers mgof where mgof.goods_id=gof.goods_id) as goods_max_offer_price

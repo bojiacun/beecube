@@ -18,5 +18,7 @@ import org.apache.ibatis.annotations.Param;
 public interface IGoodsOfferService extends IService<GoodsOffer> {
     Double getMaxOffer(@Param("goods_id") String goodsId);
 
+    GoodsOffer getMaxOfferRow(String goodsId);
+
     IPage<GoodsOfferVO> selectPageVO(Page<GoodsOffer> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsOffer> queryWrapper);
 }

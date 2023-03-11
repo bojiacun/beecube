@@ -95,18 +95,6 @@ const OfferList = (props: any) => {
             text: '成交状态',
             dataField: 'status_dictText',
         },
-        {
-            text: '操作',
-            dataField: 'operation',
-            headerStyle: {width: 100},
-            formatter: (cell: any, row: any) => {
-                return (
-                    <div className={'d-flex align-items-center'}>
-                        {row.status == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'deal')}>确认成交</a>}
-                    </div>
-                );
-            }
-        },
     ]
 
     return (

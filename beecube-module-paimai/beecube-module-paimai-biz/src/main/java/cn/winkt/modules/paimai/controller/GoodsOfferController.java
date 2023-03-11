@@ -118,48 +118,7 @@ public class GoodsOfferController extends JeecgController<GoodsOffer, IGoodsOffe
         return Result.OK("编辑成功!");
     }
 
-    @AutoLog(value = "出价记录表-确认成交")
-    @ApiOperation(value = "出价记录表-确认成交", notes = "出价记录表-确认成交")
-    @RequestMapping(value = "/deal", method = {RequestMethod.PUT, RequestMethod.POST})
-    @Transactional
-    public Result<?> confirmDeal(@RequestParam String id) {
-        GoodsOffer goodsOffer = goodsOfferService.getById(id);
-        Goods goods = goodsService.getById(goodsOffer.getGoodsId());
-        if(StringUtils.isNotEmpty(goodsOffer.getPerformanceId())) {
-            Performance performance = performanceService.getById(goodsOffer.getPerformanceId());
-            if(performance.getType() == 1) {
-                //未到时间不能成交
-                if(new Date().after(performance.getEndTime())) {
-                    throw new JeecgBootException("拍品所在专场未结束不能成交");
-                }
-                if(new Date().after(goods.getEndTime())) {
-                    throw new JeecgBootException("拍品未结束不能成交");
-                }
-            }
-            else if(performance.getType() == 2) {
-                if(performance.getEnded() == 0) {
-                    throw new JeecgBootException("拍品所在专场未结束不能成交");
-                }
-                if(goods.getEnded() == 0) {
-                    throw new JeecgBootException("拍品未结束不能成交");
-                }
-            }
-        }
-        else {
-            if(new Date().after(goods.getEndTime())) {
-                throw new JeecgBootException("拍品未结束不能成交");
-            }
-        }
 
-        goodsOffer.setStatus(1);
-        goods.setState(1);
-        goods.setDealPrice(goodsOffer.getPrice());
-
-        goodsService.updateById(goods);
-        goodsOfferService.updateById(goodsOffer);
-
-        return Result.OK("编辑成功!");
-    }
 
     /**
      * 通过id删除

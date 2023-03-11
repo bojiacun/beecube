@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface GoodsOfferMapper extends BaseMapper<GoodsOffer> {
 
     Double getMaxOffer(@Param("goods_id") String goodsId);
+    GoodsOffer getMaxOfferRow(@Param("goods_id") String goodsId);
 
     IPage<GoodsOfferVO> selectPageVO(Page<GoodsOffer> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsOffer> queryWrapper);
 }

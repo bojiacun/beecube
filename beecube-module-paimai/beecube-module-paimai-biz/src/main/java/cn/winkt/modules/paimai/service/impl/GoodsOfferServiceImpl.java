@@ -30,6 +30,11 @@ public class GoodsOfferServiceImpl extends ServiceImpl<GoodsOfferMapper, GoodsOf
     }
 
     @Override
+    public GoodsOffer getMaxOfferRow(String goodsId) {
+        return goodsOfferMapper.getMaxOfferRow(goodsId);
+    }
+
+    @Override
     public IPage<GoodsOfferVO> selectPageVO(Page<GoodsOffer> page, QueryWrapper<GoodsOffer> queryWrapper) {
         return goodsOfferMapper.selectPageVO(page, queryWrapper);
     }

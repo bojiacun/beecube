@@ -10,9 +10,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.message.GoodsUpdateMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
+import cn.winkt.modules.paimai.service.IGoodsOfferService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
@@ -38,6 +40,7 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.parboiled.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -62,6 +65,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
 	@Resource
 	private IPerformanceService performanceService;
+
+	@Resource
+	private IGoodsOfferService goodsOfferService;
 
 	/**
 	 * 分页列表查询
@@ -229,7 +235,50 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 		Goods goods = goodsService.getById(id);
 		return Result.OK(goods);
 	}
+	 @AutoLog(value = "出价记录表-确认成交")
+	 @ApiOperation(value = "出价记录表-确认成交", notes = "出价记录表-确认成交")
+	 @RequestMapping(value = "/deal", method = {RequestMethod.PUT, RequestMethod.POST})
+	 @Transactional
+	 public Result<?> confirmDeal(@RequestParam String id, @RequestParam Integer status) {
+		 Goods goods = goodsService.getById(id);
+		 GoodsOffer goodsOffer = goodsOfferService.getMaxOfferRow(id);
+		 if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+			 Performance performance = performanceService.getById(goodsOffer.getPerformanceId());
+			 if(performance.getType() == 1) {
+				 //未到时间不能成交
+				 if(new Date().after(performance.getEndTime())) {
+					 throw new JeecgBootException("拍品所在专场未结束不能成交");
+				 }
+				 if(new Date().after(goods.getEndTime())) {
+					 throw new JeecgBootException("拍品未结束不能成交");
+				 }
+			 }
+			 else if(performance.getType() == 2) {
+				 if(performance.getEnded() == 0) {
+					 throw new JeecgBootException("拍品所在专场未结束不能成交");
+				 }
+				 if(goods.getEnded() == 0) {
+					 throw new JeecgBootException("拍品未结束不能成交");
+				 }
+			 }
+		 }
+		 else {
+			 if(new Date().after(goods.getEndTime())) {
+				 throw new JeecgBootException("拍品未结束不能成交");
+			 }
+		 }
 
+		 goodsOffer.setStatus(status);
+		 goods.setState(status);
+		 if(status == 1) {
+			 goods.setDealPrice(goodsOffer.getPrice());
+		 }
+
+		 goodsService.updateById(goods);
+		 goodsOfferService.updateById(goodsOffer);
+
+		 return Result.OK("编辑成功!");
+	 }
   /**
    * 导出excel
    *

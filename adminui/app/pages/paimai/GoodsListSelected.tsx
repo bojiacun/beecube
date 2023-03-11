@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -44,12 +44,12 @@ const GoodsListSelected = (props: any) => {
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
-                stopPageLoading();
                 showToastSuccess('删除成功');
-                searchFetcher.submit(searchState, {method: 'get'});
+                searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
             } else {
                 showToastError(deleteFetcher.data.message);
             }
+            stopPageLoading();
         }
     }, [deleteFetcher.state]);
 
@@ -141,33 +141,76 @@ const GoodsListSelected = (props: any) => {
             dataField: 'dealPrice',
         },
         {
+            text: '同步状态',
+            isDummyField: true,
+            formatter(cell:number, row: any) {
+                if(row.started == 0) {
+                    return <Badge variant={'light'}>未开始</Badge>
+                }
+                else if(row.started == 1 && row.ended == 0) {
+                    return <Badge variant={'success'}>进行中</Badge>
+                }
+                else if(row.started == 1 && row.ended == 1) {
+                    return <Badge variant={'danger'}>已结束</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
+        },
+        {
             text: '成交状态',
             dataField: 'state_dictText',
+            formatter(cell:number, row: any) {
+                if(row.state == 0) {
+                    return <Badge variant={'light'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 1) {
+                    return <Badge variant={'success'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 2) {
+                    return <Badge variant={'danger'}>{row.state_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
         {
             text: '显示状态',
             dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.status == 0) {
+                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                }
+                else if(row.status == 1) {
+                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 270},
+            headerStyle: {width: 300},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         {row.started == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
                         {(row.started == 1 && row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                        {row.ended == 1 && <a>已结束</a>}
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>出价记录</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
+                        {row.ended == 1 && <>
+                            <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal')}>确认成交</a>
+                            <span className={'divider'}/>
+                            <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal_fail')}>确认流拍</a>
+                        </>}
                         <span className={'divider'}/>
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>
                                 <MoreVertical size={16} style={{marginTop: -2}}/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'offers'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>出价记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'deposits'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>保证金记录</div>
+                                </Dropdown.Item>
                                 <Dropdown.Item eventKey={'views'}>
                                     <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>围观记录</div>
                                 </Dropdown.Item>
