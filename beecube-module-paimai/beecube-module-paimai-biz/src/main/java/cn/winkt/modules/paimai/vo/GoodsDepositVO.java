@@ -34,5 +34,7 @@ public class GoodsDepositVO {
     /**创建人*/
     private java.lang.String createBy;
     private java.lang.String appId;
+
+    @Dict(dicCode = "paimai_deposit_status")
     private java.lang.Integer status;
 }
