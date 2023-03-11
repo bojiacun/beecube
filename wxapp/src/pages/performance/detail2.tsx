@@ -244,7 +244,7 @@ export default class Index extends Component<any, any> {
                                     {item.state == 1  && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
                                     {item.state == 0 && <Text className={'text-gray-600'}>未开始</Text>}
                                     {item.state == 2 && <Text className={'text-gray-600'}>已结束</Text>}
-                                    {item.state == 3 && <Text className={'text-green-600'}>已成交</Text>}
+                                    {item.state == 3 && <Text className={'text-green-600 font-bold'}>已成交</Text>}
                                     {item.state == 4 && <Text className={'text-gray-600'}>已流拍</Text>}
                                 </View>
                             </Navigator>

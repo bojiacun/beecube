@@ -90,7 +90,7 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             })
         }
-        if (!prevProps.message || prevProps.message.id == message.id) return;
+        if (prevProps.message && prevProps.message.id == message.id) return;
 
         if (goods.id == message.goodsId) {
             switch (message.type) {
@@ -107,6 +107,8 @@ export default class Index extends Component<any, any> {
                     goods.startTime = message.startTime;
                     goods.endTime = message.endTime;
                     goods.actualEndTime = message.actualEndTime;
+                    goods.state = message.state;
+                    goods.dealPrice = message.dealPrice;
                     this.setState({goods: goods});
                     break;
                 case 'MSG_TYPE_OFFER':
@@ -316,7 +318,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     );
                 }
-            } else {
+            } else if(goods.performanceType == 2){
                 if (goods.performanceState == 1 && goods.state == 1) {
                     return (
                         <View>
@@ -334,7 +336,7 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </View>
                     );
-                } else if (goods.state == 2 || goods.performanceState == 2) {
+                } else if (goods.state >= 2 || goods.performanceState == 2) {
                     return (
                         <View>
                             <Button className={'btn w-56'} disabled={true}>
@@ -390,10 +392,24 @@ export default class Index extends Component<any, any> {
                                 <View className={'font-bold text-xl'}>
                                     {goods.title}
                                 </View>
-                                <View className={'text-gray-600 mt-2'}>
-                                    当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
-                                    className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
-                                </View>
+                                {goods.state < 3 &&
+                                    <View className={'text-gray-600 mt-2'}>
+                                        当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                        className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
+                                    </View>
+                                }
+                                {goods.state == 3 &&
+                                    <View className={'text-gray-600 mt-2'}>
+                                        落槌价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                        className={'text-lg text-red-500 font-bold'}>{numeral(goods.dealPrice).format('0,0.00')}</Text>
+                                    </View>
+                                }
+                                {goods.state == 4 &&
+                                    <View className={'text-gray-600 mt-2'}>
+                                        当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                        className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
+                                    </View>
+                                }
                             </View>
                             {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
                                 <View className={'w-20'}>
