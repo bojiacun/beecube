@@ -48,6 +48,8 @@ public class GoodsOffer {
 	@Excel(name = "出价", width = 15)
     @ApiModelProperty(value = "出价")
 	private java.lang.Float price;
+
+	private Integer status;
 	/**出价时间*/
     @ApiModelProperty(value = "出价时间")
 	private java.util.Date offerTime;
