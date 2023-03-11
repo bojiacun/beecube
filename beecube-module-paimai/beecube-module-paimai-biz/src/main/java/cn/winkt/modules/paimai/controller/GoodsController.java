@@ -253,9 +253,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         if(goods.getState() > 2) {
             throw new JeecgBootException("请不要重复确认成交或流拍");
         }
-        GoodsOffer goodsOffer = goodsOfferService.getMaxOfferRow(id);
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            Performance performance = performanceService.getById(goodsOffer.getPerformanceId());
+            Performance performance = performanceService.getById(goods.getPerformanceId());
             if (performance.getType() == 1) {
                 //未到时间不能成交
                 if (new Date().after(goods.getEndTime())) {
@@ -272,8 +271,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             }
         }
 
+        GoodsOffer goodsOffer = goodsOfferService.getMaxOfferRow(id);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-        goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
         goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
         goodsUpdateMessage.setEndTime(goods.getEndTime());
         goodsUpdateMessage.setActualEndTime(goods.getActualEndTime());
@@ -288,6 +287,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsOffer.setStatus(1);
             goods.setState(3);
             goodsUpdateMessage.setState(3);
+            goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
 
         } else if (status == 4) {
