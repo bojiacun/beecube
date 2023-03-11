@@ -1,19 +1,20 @@
 import {useEffect, useState} from "react";
-import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showToastError} from "~/utils/utils";
+import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
-import {User} from "react-feather";
+import {Delete, Edit, Eye, MoreVertical, User} from "react-feather";
 
 
 const OfferList = (props: any) => {
-    const {show, onHide, selectedRow} = props;
+    const {show, onHide, selectedRow, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, goodsId: selectedRow.id});
     const searchFetcher = useFetcher();
+    const deleteFetcher = useFetcher();
 
     useEffect(()=>{
         if(show) {
@@ -21,7 +22,17 @@ const OfferList = (props: any) => {
         }
     }, [show]);
 
-
+    useEffect(() => {
+        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+            if (deleteFetcher.data.success) {
+                stopPageLoading();
+                showToastSuccess('确认成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+            } else {
+                showToastError(deleteFetcher.data.message);
+            }
+        }
+    }, [deleteFetcher.state]);
 
     useEffect(() => {
         if (searchFetcher.type == 'done' && searchFetcher.data) {
@@ -47,6 +58,17 @@ const OfferList = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
+    const handleOnAction = (row: any, e: any) => {
+        switch (e) {
+            case 'deal':
+                //删除按钮
+                startPageLoading();
+                showDeleteAlert(function () {
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}`, replace: true});
+                });
+                break;
+        }
+    }
     const columns: any[] = [
         {
             text: '出价人',
@@ -68,6 +90,22 @@ const OfferList = (props: any) => {
         {
             text: '出价时间',
             dataField: 'offerTime',
+        },
+        {
+            text: '成交状态',
+            dataField: 'status_dictText',
+        },
+        {
+            text: '操作',
+            dataField: 'operation',
+            headerStyle: {width: 100},
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {row.status == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'deal')}>确认成交</a>}
+                    </div>
+                );
+            }
         },
     ]
 

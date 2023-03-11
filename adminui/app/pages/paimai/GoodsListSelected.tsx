@@ -289,7 +289,7 @@ const GoodsListSelected = (props: any) => {
                 setEditModal(null);
                 searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
             }} />}
-            {selectedRow && <OfferList show={offersShow} onHide={()=>{
+            {selectedRow && <OfferList startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={offersShow} onHide={()=>{
                 setSelectedRow(null);
                 setOffersShow(false);
             }} selectedRow={selectedRow} />}
