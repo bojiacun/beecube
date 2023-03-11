@@ -62,6 +62,7 @@ const GoodsListSelected = (props: any) => {
             } else {
                 showToastError(controlFetcher.data.message);
             }
+            stopPageLoading();
         }
     }, [controlFetcher.state]);
 
@@ -245,7 +246,7 @@ const GoodsListSelected = (props: any) => {
                     <div className={'d-flex align-items-center'}>
                         {row.started == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
                         {(row.started == 1 && row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                        {row.ended == 1 && <>
+                        {row.ended == 1 && row.state == 0 && <>
                             <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal')}>确认成交</a>
                             <span className={'divider'}/>
                             <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal_fail')}>确认流拍</a>
