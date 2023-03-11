@@ -17,6 +17,8 @@ import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.service.IGoodsOfferService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -268,10 +270,17 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 			 }
 		 }
 
-		 goodsOffer.setStatus(status);
-		 goods.setState(status);
 		 if(status == 1) {
 			 goods.setDealPrice(goodsOffer.getPrice());
+			 goodsOffer.setStatus(1);
+			 goods.setState(1);
+		 }
+		 else if(status ==2 ) {
+			 LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
+			 updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
+			 updateWrapper.set(GoodsOffer::getStatus, 2);
+			 goodsOfferService.update(updateWrapper);
+			 goods.setState(2);
 		 }
 
 		 goodsService.updateById(goods);
