@@ -123,6 +123,7 @@ export default class Index extends Component<any, any> {
                 case 'MSG_TYPE_PEFORMANCE_CHANGED':
                     detail.startTime = message.startTime;
                     detail.endTime = message.endTime;
+                    detail.dealPrice = message.dealPrice;
                     break;
             }
             this.setState({detail: detail});
@@ -219,15 +220,29 @@ export default class Index extends Component<any, any> {
                                 </View>
                                 <View className={'p-2 space-y-4 flex-1'}>
                                     <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
-                                    <View className={'text-sm'}>
-                                        当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                        className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
-                                    </View>
+                                    {item.state < 3 &&
+                                        <View className={'text-sm'}>
+                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                        </View>
+                                    }
+                                    {item.state == 3 &&
+                                        <View className={'text-sm'}>
+                                            落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                            className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                        </View>
+                                    }
+                                    {item.state == 4 &&
+                                        <View className={'text-sm'}>
+                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                        </View>
+                                    }
                                 </View>
                                 <View className={'flex items-center justify-center pr-4'}>
                                     {item.state == 1  && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
                                     {item.state == 0 && <Text className={'text-gray-600'}>未开始</Text>}
-                                    {item.state == 2 && <Text className={'text-gray-600'}>已结束</Text>}
+                                    {item.state >= 2 && <Text className={'text-gray-600'}>已结束</Text>}
                                 </View>
                             </Navigator>
                         );

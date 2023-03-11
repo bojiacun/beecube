@@ -17,5 +17,4 @@ public class PerformanceUpdateMessage extends Message{
     private Date startTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-
 }

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.message.GoodsUpdateMessage;
@@ -17,6 +18,7 @@ import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.service.IGoodsOfferService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
@@ -72,6 +74,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
     @Resource
     private IGoodsOfferService goodsOfferService;
+
+    @Resource
+    PaimaiWebSocket paimaiWebSocket;
 
     /**
      * 分页列表查询
@@ -267,6 +272,14 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             }
         }
 
+        GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
+        goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
+        goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
+        goodsUpdateMessage.setEndTime(goods.getEndTime());
+        goodsUpdateMessage.setActualEndTime(goods.getActualEndTime());
+        goodsUpdateMessage.setGoodsId(goods.getId());
+        goodsUpdateMessage.setStartTime(goods.getStartTime());
+
         if (status == 3) {
             if(goodsOffer == null) {
                 throw new JeecgBootException("没有人出价，无法确认成交");
@@ -274,12 +287,17 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goods.setDealPrice(goodsOffer.getPrice());
             goodsOffer.setStatus(1);
             goods.setState(3);
+            goodsUpdateMessage.setState(3);
+            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
+
         } else if (status == 4) {
             LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
             updateWrapper.set(GoodsOffer::getStatus, 2);
             goodsOfferService.update(updateWrapper);
             goods.setState(4);
+            goodsUpdateMessage.setState(4);
+            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
         }
 
         goodsService.updateById(goods);
