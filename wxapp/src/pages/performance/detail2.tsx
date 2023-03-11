@@ -111,7 +111,7 @@ export default class Index extends Component<any, any> {
     componentDidUpdate(prevProps: Readonly<any>) {
         const {detail, goodsList} = this.state;
         const {message} = this.props;
-        if (!detail || !prevProps.message || prevProps.message.id == message.id) return;
+        if (!detail || (prevProps.message && prevProps.message.id == message.id)) return;
         if (detail.id == message.performanceId) {
             switch (message.type) {
                 case 'MSG_TYPE_PEFORMANCE_STARTED':
@@ -132,11 +132,11 @@ export default class Index extends Component<any, any> {
             if (g.id == message.goodsId) {
                 switch (message.type) {
                     case 'MSG_TYPE_AUCTION_STARTED':
-                        detail.state = message.state;
+                        g.state = message.state;
                         g.startTime = message.startTime;
                         break;
                     case 'MSG_TYPE_AUCTION_ENDED':
-                        detail.state = message.state;
+                        g.state = message.state;
                         g.endTime = message.endTime;
                         break;
                     case 'MSG_TYPE_AUCTION_CHANGED':

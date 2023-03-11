@@ -10,9 +10,9 @@ import java.util.Date;
 @Data
 public class Message implements Serializable {
     private static final Snowflake snowflake = new Snowflake(10, 10);
-    private String id;
+    protected String id;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime = new Date();
+    protected Date createTime = new Date();
 
     public Message() {
         this.id = snowflake.nextIdStr();

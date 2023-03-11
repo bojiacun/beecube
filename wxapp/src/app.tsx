@@ -36,8 +36,9 @@ class App extends Component<PropsWithChildren> {
     }
 
     onMessageReceive(message:any) {
+        message = JSON.parse(message.data);
         console.log('received a message', message);
-        store.dispatch(setMessage(JSON.parse(message.data)));
+        store.dispatch(setMessage(message));
     }
 
     componentDidMount() {
