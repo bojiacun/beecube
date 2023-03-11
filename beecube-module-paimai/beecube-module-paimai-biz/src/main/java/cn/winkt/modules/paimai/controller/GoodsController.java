@@ -289,7 +289,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsUpdateMessage.setState(3);
             goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
-
+            goodsOfferService.updateById(goodsOffer);
         } else if (status == 4) {
             LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
@@ -301,7 +301,6 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         }
 
         goodsService.updateById(goods);
-        goodsOfferService.updateById(goodsOffer);
 
         return Result.OK("确认成功!");
     }
