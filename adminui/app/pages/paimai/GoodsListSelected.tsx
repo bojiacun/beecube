@@ -157,6 +157,7 @@ const GoodsListSelected = (props: any) => {
         {
             text: '同步状态',
             isDummyField: true,
+            hidden: selectedPerformance.type !=2,
             formatter(cell:number, row: any) {
                 if(row.started == 0) {
                     return <Badge variant={'light'}>未开始</Badge>
@@ -202,6 +203,42 @@ const GoodsListSelected = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
+            hidden: selectedPerformance.type != 1,
+            headerStyle: {width: 300},
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>出价记录</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
+                        <span className={'divider'}/>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'views'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>围观记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'follows'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>关注记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
+                );
+            },
+        },
+        {
+            text: '操作',
+            dataField: 'operation',
+            hidden: selectedPerformance.type !=2,
             headerStyle: {width: 300},
             formatter: (cell: any, row: any) => {
                 return (
@@ -241,7 +278,8 @@ const GoodsListSelected = (props: any) => {
                         </Dropdown>
                     </div>
                 );
-            }
+            },
+
         },
     ]
 

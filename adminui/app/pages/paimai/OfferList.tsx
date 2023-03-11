@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -94,6 +94,18 @@ const OfferList = (props: any) => {
         {
             text: '成交状态',
             dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.state == 0) {
+                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                }
+                else if(row.state == 1) {
+                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                }
+                else if(row.state == 2) {
+                    return <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
     ]
 

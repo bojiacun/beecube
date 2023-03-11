@@ -80,6 +80,7 @@ public class GoodsOfferController extends JeecgController<GoodsOffer, IGoodsOffe
     @AutoLog(value = "出价记录表-分页列表查询")
     @ApiOperation(value = "出价记录表-分页列表查询", notes = "出价记录表-分页列表查询")
     @GetMapping(value = "/list")
+    @AutoDict
     public Result<?> queryPageList(GoodsOffer goodsOffer,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
