@@ -95,13 +95,13 @@ const OfferList = (props: any) => {
             text: '成交状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
-                if(row.state == 0) {
+                if(row.status == 0) {
                     return <Badge variant={'light'}>{row.status_dictText}</Badge>
                 }
-                else if(row.state == 1) {
+                else if(row.status == 1) {
                     return <Badge variant={'success'}>{row.status_dictText}</Badge>
                 }
-                else if(row.state == 2) {
+                else if(row.status == 2) {
                     return <Badge variant={'danger'}>{row.status_dictText}</Badge>
                 }
                 return <Badge variant={'dark'}>未知</Badge>

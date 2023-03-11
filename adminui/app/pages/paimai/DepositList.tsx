@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {DefaultListSearchParams, defaultSelectRowConfig, PageSizeOptions} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
-import {Button, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -66,8 +66,28 @@ const DepositList = (props: any) => {
             dataField: 'price',
         },
         {
+            text: '交易单号',
+            dataField: 'transactionId',
+        },
+        {
             text: '创建时间',
             dataField: 'createTime',
+        },
+        {
+            text: '资金状态',
+            dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.status == 0) {
+                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                }
+                else if(row.status == 1) {
+                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                }
+                else if(row.status == 2) {
+                    return <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
     ]
     return (
