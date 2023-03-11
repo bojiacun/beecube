@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class PerformanceUpdateMessage {
+public class PerformanceUpdateMessage extends Message{
     private String performanceId;
     private String type;
     private Integer state;
@@ -17,4 +17,5 @@ public class PerformanceUpdateMessage {
     private Date startTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+
 }
