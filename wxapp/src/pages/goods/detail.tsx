@@ -8,7 +8,6 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
 import PageLoading from "../../components/pageloading";
-import md5 from 'blueimp-md5';
 import FallbackImage from "../../components/FallbackImage";
 import moment from "moment";
 import Uprange from "./components/uprange";
@@ -96,15 +95,12 @@ export default class Index extends Component<any, any> {
         if (goods.id == message.goodsId) {
             switch (message.type) {
                 case 'MSG_TYPE_AUCTION_STARTED':
-                    goods.started = message.started;
-                    goods.startTime = message.startTime;
-                    goods.ended = 0;
+                    goods.state = message.state;
                     this.setState({goods: goods});
                     break;
                 case 'MSG_TYPE_AUCTION_ENDED':
-                    goods.ended = message.ended;
+                    goods.state = message.state;
                     goods.endTime = message.endTime;
-                    goods.started = 1;
                     this.setState({goods: goods});
                     break;
                 case 'MSG_TYPE_AUCTION_CHANGED':
@@ -321,7 +317,7 @@ export default class Index extends Component<any, any> {
                     );
                 }
             } else {
-                if (goods.performanceStarted == 1 && goods.started == 1 && goods.ended == 0) {
+                if (goods.performanceState == 1 && goods.state == 1) {
                     return (
                         <View>
                             <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
@@ -330,7 +326,7 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </View>
                     );
-                } else if (goods.started == 0 || goods.performanceStarted == 0) {
+                } else if (goods.state == 0 || goods.performanceState == 0) {
                     return (
                         <View>
                             <Button className={'btn w-56'} disabled={true}>
@@ -338,7 +334,7 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </View>
                     );
-                } else if (goods.ended == 1 || goods.performanceEnded == 1) {
+                } else if (goods.state == 2 || goods.performanceState == 2) {
                     return (
                         <View>
                             <Button className={'btn w-56'} disabled={true}>

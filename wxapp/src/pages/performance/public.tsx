@@ -83,13 +83,13 @@ export default class Index extends Component<any, any> {
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                {data.started == 0 && data.startTime != null &&
+                                {data.state == 0 && data.startTime != null &&
                                     <TimeCountDowner
                                         mode={TimeCountDownerMode.Manual}
                                         className={'flex text-sm'}
                                         startTime={new Date(data.startTime)}
-                                        started={data.started}
-                                        ended={data.ended}
+                                        started={data.state == 1}
+                                        ended={data.state == 2}
                                     />
                                 }
                             </View>

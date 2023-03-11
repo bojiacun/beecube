@@ -123,10 +123,10 @@ export default class Index extends Component<any, any> {
         if (detail.id == message.performanceId) {
             switch (message.type) {
                 case 'MSG_TYPE_PEFORMANCE_STARTED':
-                    detail.started = message.started;
+                    detail.state = message.state;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_ENDED':
-                    detail.ended = message.ended;
+                    detail.state = message.state;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_CHANGED':
                     detail.startTime = message.startTime;
@@ -141,13 +141,11 @@ export default class Index extends Component<any, any> {
             if (g.id == message.goodsId) {
                 switch (message.type) {
                     case 'MSG_TYPE_AUCTION_STARTED':
-                        g.started = message.started;
-                        g.ended = 0;
+                        g.state = message.state;
                         g.startTime = message.startTime;
                         break;
                     case 'MSG_TYPE_AUCTION_ENDED':
-                        g.started = 1;
-                        g.ended = message.ended;
+                        g.state = message.state;
                         g.endTime = message.endTime;
                         break;
                     case 'MSG_TYPE_AUCTION_CHANGED':

@@ -115,10 +115,10 @@ export default class Index extends Component<any, any> {
         if (detail.id == message.performanceId) {
             switch (message.type) {
                 case 'MSG_TYPE_PEFORMANCE_STARTED':
-                    detail.started = message.started;
+                    detail.state = message.state;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_ENDED':
-                    detail.ended = message.ended;
+                    detail.state = message.state;
                     break;
                 case 'MSG_TYPE_PEFORMANCE_CHANGED':
                     detail.startTime = message.startTime;
@@ -132,13 +132,11 @@ export default class Index extends Component<any, any> {
             if (g.id == message.goodsId) {
                 switch (message.type) {
                     case 'MSG_TYPE_AUCTION_STARTED':
-                        g.started = message.started;
-                        g.ended = 0;
+                        detail.state = message.state;
                         g.startTime = message.startTime;
                         break;
                     case 'MSG_TYPE_AUCTION_ENDED':
-                        g.started = 1;
-                        g.ended = message.ended;
+                        detail.state = message.state;
                         g.endTime = message.endTime;
                         break;
                     case 'MSG_TYPE_AUCTION_CHANGED':
@@ -187,9 +185,9 @@ export default class Index extends Component<any, any> {
                     <View className={'flex items-center justify-between'}>
                         <View className={'text-sm text-indigo-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
                             className={'py-1 px-2 border border-1 border-solid border-indigo-500'}>{item}</Text>)}</View>
-                        {detail.started == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
-                        {detail.started == 1 && detail.ended == 0 && <View className={'text-indigo-600 font-bold'}>进行中</View>}
-                        {detail.ended == 1 && <View className={'text-gray-400 font-bold'}>已结束</View>}
+                        {detail.state == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
+                        {detail.state == 1 && <View className={'text-indigo-600 font-bold'}>进行中</View>}
+                        {detail.state == 2 && <View className={'text-gray-400 font-bold'}>已结束</View>}
                     </View>
                     <View className={'font-bold text-lg'}>{detail.title}</View>
                     <View className={'space-x-4'}>
@@ -227,9 +225,9 @@ export default class Index extends Component<any, any> {
                                     </View>
                                 </View>
                                 <View className={'flex items-center justify-center pr-4'}>
-                                    {item.started == 1 && item.ended == 0 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
-                                    {item.started == 0 && <Text className={'text-gray-600'}>未开始</Text>}
-                                    {item.ended == 1 && <Text className={'text-gray-600'}>已结束</Text>}
+                                    {item.state == 1  && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
+                                    {item.state == 0 && <Text className={'text-gray-600'}>未开始</Text>}
+                                    {item.state == 2 && <Text className={'text-gray-600'}>已结束</Text>}
                                 </View>
                             </Navigator>
                         );

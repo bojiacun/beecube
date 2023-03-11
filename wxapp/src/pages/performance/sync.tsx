@@ -26,11 +26,11 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                {data.started == 0 && data.startTime != null &&
+                                {data.state == 0 && data.startTime != null &&
                                     <TimeCountDowner
                                         mode={TimeCountDownerMode.Manual}
-                                        started={data.started == 1}
-                                        ended={data.ended == 1}
+                                        started={data.state == 1}
+                                        ended={data.state == 2}
                                         className={'flex items-center'}
                                         startTime={new Date(data.startTime)}
                                     />
@@ -64,11 +64,11 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                {data.started == 0 && data.startTime != null &&
+                                {data.state == 0 && data.startTime != null &&
                                     <TimeCountDowner
                                         mode={TimeCountDownerMode.Manual}
-                                        started={data.started == 1}
-                                        ended={data.ended == 1}
+                                        started={data.state == 1}
+                                        ended={data.state == 2}
                                         className={'flex items-center'}
                                         startTime={new Date(data.startTime)}
                                     />
