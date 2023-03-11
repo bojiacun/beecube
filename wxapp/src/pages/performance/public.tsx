@@ -56,8 +56,8 @@ export default class Index extends Component<any, any> {
                                 </View>
                                 <TimeCountDowner
                                     className={'flex text-sm'}
-                                    endTime={new Date(data.endTime)}
-                                    startTime={new Date(data.startTime)}
+                                    endTime={data.endTime}
+                                    startTime={data.startTime}
                                 />
                             </View>
                             <View className={'flex space-x-4 pt-2'}>
@@ -87,7 +87,7 @@ export default class Index extends Component<any, any> {
                                     <TimeCountDowner
                                         mode={TimeCountDownerMode.Manual}
                                         className={'flex text-sm'}
-                                        startTime={new Date(data.startTime)}
+                                        startTime={data.startTime}
                                         started={data.state == 1}
                                         ended={data.state == 2}
                                     />

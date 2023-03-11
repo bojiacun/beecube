@@ -32,7 +32,7 @@ const tabs: ListViewTabItem[] = [
                                         started={data.state == 1}
                                         ended={data.state == 2}
                                         className={'flex items-center'}
-                                        startTime={new Date(data.startTime)}
+                                        startTime={data.startTime}
                                     />
                                 }
                             </View>
@@ -70,7 +70,7 @@ const tabs: ListViewTabItem[] = [
                                         started={data.state == 1}
                                         ended={data.state == 2}
                                         className={'flex items-center'}
-                                        startTime={new Date(data.startTime)}
+                                        startTime={data.startTime}
                                     />
                                 }
                             </View>

@@ -26,8 +26,8 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={new Date(data.endTime)}
-                                                 startTime={new Date(data.startTime)}/>
+                                <TimeCountDowner className={'flex text-sm text-gray-400'} endTime={data.endTime}
+                                                 startTime={data.startTime}/>
                             </View>
                             <View className={'flex pt-2 space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
@@ -57,7 +57,7 @@ const tabs: ListViewTabItem[] = [
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
-                                <TimeCountDowner className={'flex text-sm'} endTime={new Date(data.endTime)} startTime={new Date(data.startTime)}/>
+                                <TimeCountDowner className={'flex text-sm'} endTime={data.endTime} startTime={data.startTime}/>
                             </View>
                             <View className={'flex space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
