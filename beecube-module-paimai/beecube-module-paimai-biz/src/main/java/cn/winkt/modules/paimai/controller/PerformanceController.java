@@ -41,6 +41,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -298,6 +299,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @AutoLog(value = "拍卖专场表-编辑")
     @ApiOperation(value = "拍卖专场表-编辑", notes = "拍卖专场表-编辑")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
+    @Transactional
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
         if(!old.getStartTime().equals(performance.getStartTime())||!old.getEndTime().equals(performance.getEndTime())) {
@@ -307,6 +309,12 @@ public class PerformanceController extends JeecgController<Performance, IPerform
             message.setEndTime(performance.getEndTime());
             message.setPerformanceId(performance.getId());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
+            //批量更新专场下的所有拍品开始及结束时间
+            LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.set(Goods::getStartTime, performance.getStartTime());
+            updateWrapper.set(Goods::getEndTime, performance.getEndTime());
+            updateWrapper.eq(Goods::getPerformanceId, performance.getId());
+            goodsService.update(updateWrapper);
         }
         performanceService.updateById(performance);
         return Result.OK("编辑成功!");
