@@ -17,7 +17,7 @@ import FollowList from "~/pages/paimai/FollowList";
 const GoodsListSelected = (props: any) => {
     const {show, setSelectedListShow, selectedPerformance, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance?.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance?.id, column: 'sortNum', order: 'asc'});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [editModal, setEditModal] = useState<any>();
     const [selectedRow, setSelectedRow] = useState<any>();
