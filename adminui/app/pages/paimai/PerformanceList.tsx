@@ -15,6 +15,7 @@ import FigureImage from "react-bootstrap/FigureImage";
 import PerformanceEditor from "~/pages/paimai/PerformanceEditor";
 import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
+import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
 
 
 
@@ -25,6 +26,8 @@ const PerformanceList = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: type});
     const [editModal, setEditModal] = useState<any>();
     const [selectedPerformance, setSelectedPerformance] = useState<any>();
+    const [selectedRow, setSelectedRow] = useState<any>();
+    const [depositsShow, setDepositsShow] = useState<boolean>(false);
     const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
@@ -93,7 +96,10 @@ const PerformanceList = (props: any) => {
                 setSelectedPerformance(row);
                 setSelectedListShow(true);
                 break;
-
+            case 'deposits':
+                setSelectedRow(row);
+                setDepositsShow(true);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -181,6 +187,9 @@ const PerformanceList = (props: any) => {
                                 <MoreVertical size={16} style={{marginTop: -2}}/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'deposits'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>保证金记录</div>
+                                </Dropdown.Item>
                                 <Dropdown.Item eventKey={'edit'}>
                                     <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
                                 </Dropdown.Item>
@@ -296,6 +305,10 @@ const PerformanceList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }} />}
+            {selectedRow && <PerformanceDepositList show={depositsShow} onHide={()=>{
+                setSelectedRow(null)
+                setDepositsShow(false);
+            }}  selectedRow={selectedRow} />}
         </>
     );
 }

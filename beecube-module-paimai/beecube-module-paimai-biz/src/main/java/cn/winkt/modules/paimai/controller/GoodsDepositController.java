@@ -18,6 +18,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
@@ -84,7 +85,15 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
-        QueryWrapper<GoodsDeposit> queryWrapper = QueryGenerator.initQueryWrapper(goodsDeposit, req.getParameterMap());
+        QueryWrapper<GoodsDeposit> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(goodsDeposit.getGoodsId())) {
+            queryWrapper.eq("gd.goods_id", goodsDeposit.getGoodsId());
+        }
+        if(StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
+            queryWrapper.eq("gd.performance_id", goodsDeposit.getPerformanceId());
+        }
+        queryWrapper.orderByDesc("gd.price");
+
         Page<GoodsDeposit> page = new Page<GoodsDeposit>(pageNo, pageSize);
         IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
