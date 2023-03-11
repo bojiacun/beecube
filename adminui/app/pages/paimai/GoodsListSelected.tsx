@@ -126,14 +126,14 @@ const GoodsListSelected = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=1`, replace: true});
+                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=3`, replace: true});
                 });
                 break;
             case 'confirm_deal_fail':
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=2`, replace: true});
+                    controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=4`, replace: true});
                 });
                 break;
         }
@@ -160,22 +160,6 @@ const GoodsListSelected = (props: any) => {
             isDummyField: true,
             hidden: selectedPerformance.type !=2,
             formatter(cell:number, row: any) {
-                if(row.started == 0) {
-                    return <Badge variant={'light'}>未开始</Badge>
-                }
-                else if(row.started == 1 && row.ended == 0) {
-                    return <Badge variant={'success'}>进行中</Badge>
-                }
-                else if(row.started == 1 && row.ended == 1) {
-                    return <Badge variant={'danger'}>已结束</Badge>
-                }
-                return <Badge variant={'dark'}>未知</Badge>
-            }
-        },
-        {
-            text: '成交状态',
-            dataField: 'state_dictText',
-            formatter(cell:number, row: any) {
                 if(row.state == 0) {
                     return <Badge variant={'light'}>{row.state_dictText}</Badge>
                 }
@@ -183,11 +167,18 @@ const GoodsListSelected = (props: any) => {
                     return <Badge variant={'success'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 2) {
-                    return <Badge variant={'danger'}>{row.state_dictText}</Badge>
+                    return <Badge variant={'warning'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 3) {
+                    return <Badge variant={'info'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 4) {
+                    return <Badge variant={'dark'}>{row.state_dictText}</Badge>
                 }
                 return <Badge variant={'dark'}>未知</Badge>
             }
         },
+
         {
             text: '显示状态',
             dataField: 'status_dictText',
@@ -244,9 +235,9 @@ const GoodsListSelected = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {row.started == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
-                        {(row.started == 1 && row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                        {row.ended == 1 && row.state == 0 && <>
+                        {row.state == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                        {row.state == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                        {row.state == 2 && <>
                             <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal')}>确认成交</a>
                             <span className={'divider'}/>
                             <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal_fail')}>确认流拍</a>

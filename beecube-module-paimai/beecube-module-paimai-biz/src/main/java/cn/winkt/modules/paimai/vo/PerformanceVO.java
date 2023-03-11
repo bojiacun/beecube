@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.vo;
 
 import lombok.Data;
+import org.jeecg.common.aspect.annotation.Dict;
 
 @Data
 public class PerformanceVO {
@@ -25,6 +26,7 @@ public class PerformanceVO {
     private String auctionTimeRange;
 
     /**专场类型（1限时拍、2为同步拍)*/
+    @Dict(dicCode = "paimai_performance_type")
     private java.lang.Integer type;
     /**创建时间*/
     private java.util.Date createTime;
@@ -41,6 +43,7 @@ public class PerformanceVO {
     private Integer offerCount;
     private Integer followCount;
     private Integer depositCount;
+    @Dict(dicCode = "paimai_performance_state")
     private Integer state;
 
 }

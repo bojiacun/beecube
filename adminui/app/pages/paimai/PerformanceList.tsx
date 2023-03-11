@@ -164,6 +164,24 @@ const PerformanceList = (props: any) => {
             hidden: type == 2
         },
         {
+            text: '同步状态',
+            dataField: '',
+            isDummyField: true,
+            hidden: type == 1,
+            formatter(cell:number, row: any) {
+                if(row.state == 0) {
+                    return <Badge variant={'light'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 1) {
+                    return <Badge variant={'success'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 2) {
+                    return <Badge variant={'dark'}>{row.state_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
+        },
+        {
             text: '显示状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
@@ -187,9 +205,8 @@ const PerformanceList = (props: any) => {
                         <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>拍品管理</a>
                         <span className={'divider'}/>
                         {type == 2 && <>
-                            {row.started == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
-                            {(row.started == 1&& row.ended == 0) && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
-                            {row.ended == 1 && <a>已结束</a>}
+                            {row.state == 0&&<a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
+                            {row.state == 1 && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
                             <span className={'divider'}/>
                         </>}
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>

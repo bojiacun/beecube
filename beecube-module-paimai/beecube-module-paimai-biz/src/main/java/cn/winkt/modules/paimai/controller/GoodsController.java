@@ -267,25 +267,25 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             }
         }
 
-        if (status == 1) {
+        if (status == 3) {
             if(goodsOffer == null) {
                 throw new JeecgBootException("没有人出价，无法确认成交");
             }
             goods.setDealPrice(goodsOffer.getPrice());
             goodsOffer.setStatus(1);
-            goods.setState(1);
-        } else if (status == 2) {
+            goods.setState(3);
+        } else if (status == 4) {
             LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
             updateWrapper.set(GoodsOffer::getStatus, 2);
             goodsOfferService.update(updateWrapper);
-            goods.setState(2);
+            goods.setState(4);
         }
 
         goodsService.updateById(goods);
         goodsOfferService.updateById(goodsOffer);
 
-        return Result.OK("去人成功!");
+        return Result.OK("确认成功!");
     }
 
     /**

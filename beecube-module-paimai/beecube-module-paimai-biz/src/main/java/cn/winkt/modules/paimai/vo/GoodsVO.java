@@ -21,6 +21,7 @@ public class GoodsVO {
     private java.lang.Object commission;
     private String evaluatePrice;
     private Float minPrice;
+    @Dict(dicCode = "paimai_goods_state")
     private java.lang.Integer state;
 
     //成交价
@@ -76,6 +77,7 @@ public class GoodsVO {
 
     private java.lang.String images;
     /**状态（0下架1上架）*/
+    @Dict(dicCode = "paimai_goods_status")
     private java.lang.Integer status;
 
     private Integer count;
