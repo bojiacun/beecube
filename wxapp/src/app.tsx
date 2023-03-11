@@ -20,6 +20,9 @@ class App extends Component<PropsWithChildren> {
         super(props);
         this.initUser = this.initUser.bind(this);
         this.onMessageReceive = this.onMessageReceive.bind(this);
+        this.onSocketError = this.onSocketError.bind(this);
+        this.onSocketClose = this.onSocketClose.bind(this);
+        this.connectToServer = this.connectToServer.bind(this);
     }
 
     initUser(context) {
@@ -27,12 +30,26 @@ class App extends Component<PropsWithChildren> {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
             store.dispatch(setPageLoading(false));
-            connectWebSocketServer('/auction/websocket/' + context.userInfo.id).then(res => {
-                this.socket = res;
-                this.socket.onMessage(this.onMessageReceive);
-                console.log('websocket linked', '/auction/websocket/' + context.userInfo.id);
-            });
+            this.connectToServer(context);
         });
+    }
+    connectToServer(context) {
+        connectWebSocketServer('/auction/websocket/' + context.userInfo.id).then(res => {
+            this.socket = res;
+            this.socket.onMessage(this.onMessageReceive);
+        });
+    }
+    onSocketError(error) {
+        let {context} = store.getState();
+        console.log('服务器连接断开,5秒后尝试重连', error);
+        setTimeout(()=>{
+            this.connectToServer(context);
+        }, 5000);
+    }
+    onSocketClose() {
+        console.log('服务器连接断开,立即尝试重连');
+        let {context} = store.getState();
+        this.connectToServer(context);
     }
 
     onMessageReceive(message:any) {
@@ -86,24 +103,15 @@ class App extends Component<PropsWithChildren> {
             qqmapSdk = new QQMapWX({key: mapKey});
             Taro.onLocationChange(res => {
                 console.log('location changed', res);
+                Taro.stopLocationUpdate();
                 Taro.setStorageSync("POSITION", {lat: res.latitude, lng: res.longitude});
                 qqmapSdk.reverseGeocoder({
                     location: res,
                     success(res) {
-                        Taro.stopLocationUpdate({
-                            success(res) {
-                                console.log('stop location update', res);
-                            }
-                        });
                         Taro.setStorageSync("GEO", res.result);
-                    },
-                    fail(err) {
-                        console.error('reverse geocoder fail', err);
                     }
                 });
             });
-
-
             Taro.startLocationUpdate({
                 success(res) {
                     console.log('start location change listening', res);
@@ -115,21 +123,11 @@ class App extends Component<PropsWithChildren> {
     }
 
     componentDidShow() {
-        if (qqmapSdk) {
-            Taro.startLocationUpdate({
-                success(res) {
-                    console.log('start location change listening', res);
-                }
-            });
-        }
+
     }
 
     componentDidHide() {
-        Taro.stopLocationUpdate({
-            success(res) {
-                console.log('stop location update', res);
-            }
-        });
+
     }
 
     render() {
