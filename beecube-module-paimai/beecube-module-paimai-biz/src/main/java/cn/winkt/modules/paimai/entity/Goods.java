@@ -44,14 +44,10 @@ public class Goods {
     @ApiModelProperty(value = "副标题")
 	private java.lang.String subTitle;
 	/**拍品类型（1普通拍品、2一口价）*/
-	@Excel(name = "拍品类型（1普通拍品、2一口价）", width = 15)
-    @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
+	@Excel(name = "拍品类型（1普通拍品、2一口价、3同步拍品）", width = 15)
+    @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价、3同步拍品）")
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
-	@ApiModelProperty(value = "手动控制开始标志")
-	private Integer started;
-	@ApiModelProperty(value = "手动控制结束标志")
-	private Integer ended;
 	private Integer sortNum;
 	private String tags;
 	private java.lang.Integer stock;
@@ -150,6 +146,9 @@ public class Goods {
 	@Dict(dicCode = "paimai_goods_status")
 	private java.lang.Integer status;
 
+	/**
+	 * 拍品控制状态，0为未开始、1为已经开始、2为已结束、3为已成交、4为已流拍
+	 */
 	@Dict(dicCode = "paimai_goods_state")
 	private java.lang.Integer state;
 

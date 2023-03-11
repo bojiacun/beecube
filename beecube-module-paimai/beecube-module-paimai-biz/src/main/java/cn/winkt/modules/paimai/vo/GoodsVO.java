@@ -31,8 +31,7 @@ public class GoodsVO {
     private java.util.Date performanceStartTime;
     private java.util.Date performanceEndTime;
     private Integer performanceType;
-    private Integer performanceStarted;
-    private Integer performanceEnded;
+    private Integer performanceState;
     private java.util.Date startTime;
     private java.util.Date endTime;
     private java.lang.Object fields;
@@ -80,8 +79,6 @@ public class GoodsVO {
     private java.lang.Integer status;
 
     private Integer count;
-    private Integer started;
-    private Integer ended;
     private Integer viewCount;
     private Integer offerCount;
     private Integer followCount;

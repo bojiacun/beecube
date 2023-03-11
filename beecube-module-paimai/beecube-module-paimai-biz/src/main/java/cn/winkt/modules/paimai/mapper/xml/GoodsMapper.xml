@@ -4,7 +4,7 @@
     <select id="getDetail" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
-            p.end_time as performance_end_time,p.started as performance_started, p.ended as performance_ended,p.type as performance_type,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
@@ -16,7 +16,7 @@
     <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
-            p.end_time as performance_end_time,p.started as performance_started, p.ended as performance_ended,p.type as performance_type,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
@@ -27,7 +27,7 @@
     <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
-            p.end_time as performance_end_time,p.started as performance_started, p.ended as performance_ended,p.type as performance_type,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,

@@ -41,6 +41,6 @@ public class PerformanceVO {
     private Integer offerCount;
     private Integer followCount;
     private Integer depositCount;
-    private Integer started;
-    private Integer ended;
+    private Integer state;
+
 }

@@ -146,8 +146,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 goods.setStartTime(performance.getStartTime());
                 goods.setEndTime(performance.getEndTime());
             } else if (performance.getType() == 2) {
-                goods.setStarted(0);
-                goods.setEnded(0);
+                goods.setState(0);
                 goods.setStartTime(performance.getStartTime());
                 goods.setEndTime(null);
                 goods.setActualEndTime(null);
@@ -198,7 +197,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             } else if (performance.getType() == 2) {
-                if (performance.getStarted() == 1 && performance.getEnded() == 0) {
+                if (performance.getState() == 1) {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             }
@@ -258,7 +257,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                     throw new JeecgBootException("拍品未结束不能成交");
                 }
             } else if (performance.getType() == 2) {
-                if (goods.getEnded() == 0) {
+                if (goods.getState() != 2) {
                     throw new JeecgBootException("拍品未结束不能成交");
                 }
             }

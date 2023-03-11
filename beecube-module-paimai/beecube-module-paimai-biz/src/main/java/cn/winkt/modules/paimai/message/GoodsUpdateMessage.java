@@ -10,8 +10,7 @@ import java.util.Date;
 public class GoodsUpdateMessage extends Message{
     private String goodsId;
     private String type;
-    private Integer started;
-    private Integer ended;
+    private Integer state;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")

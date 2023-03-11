@@ -630,16 +630,16 @@ public class WxAppMemberController {
                     }
                 }
                 else if(performance.getType() == 2){
-                    if(performance.getStarted() == 0) {
+                    if(performance.getState() == 0) {
                         throw new JeecgBootException("拍品所在专场未开始");
                     }
-                    else if(performance.getEnded() == 1) {
+                    else if(performance.getState() == 2) {
                         throw new JeecgBootException("拍品所在专场已结束");
                     }
-                    if(goods.getStarted() == 0) {
+                    if(goods.getState() == 0) {
                         throw new JeecgBootException("该拍品尚未开始");
                     }
-                    else if(goods.getEnded() == 1) {
+                    else if(goods.getState() == 2) {
                         throw new JeecgBootException("该拍品已结束拍卖");
                     }
                 }
@@ -654,7 +654,6 @@ public class WxAppMemberController {
 
 
         String lockKey = "OFFER-LOCKER-"+goods.getId();
-        String randomStr = StringUtils.getIfEmpty(post.getString("randomStr"), ()->StringUtils.EMPTY);
         if(redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
             if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {

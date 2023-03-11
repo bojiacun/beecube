@@ -37,10 +37,6 @@ public class Performance {
 	@Excel(name = "标题", width = 15)
     @ApiModelProperty(value = "标题")
 	private java.lang.String title;
-	@ApiModelProperty(value = "手动控制开始标志")
-	private Integer started;
-	@ApiModelProperty(value = "手动控制结束标志")
-	private Integer ended;
 	/**开拍时间*/
     @ApiModelProperty(value = "开拍时间")
 	private java.util.Date startTime;
@@ -92,4 +88,8 @@ public class Performance {
 
 	@TableField(exist = false)
 	private Integer goodsCount;
+
+
+	@Dict(dicCode = "paimai_performance_state")
+	private java.lang.Integer state;
 }
