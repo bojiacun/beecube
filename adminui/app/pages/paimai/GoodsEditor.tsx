@@ -117,7 +117,6 @@ const GoodsEditor = (props: any) => {
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比'}/>
                                     <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
-                                    <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                     <FormGroup>
