@@ -647,7 +647,6 @@ public class WxAppMemberController {
             throw new JeecgBootException("该拍品尚未开始");
         }
 
-
         String lockKey = "OFFER-LOCKER-"+goods.getId();
         if(redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
