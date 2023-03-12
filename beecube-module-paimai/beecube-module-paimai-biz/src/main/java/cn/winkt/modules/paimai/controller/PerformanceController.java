@@ -314,19 +314,22 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @Transactional
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
-        if(!old.getStartTime().equals(performance.getStartTime())||!old.getEndTime().equals(performance.getEndTime())) {
-            PerformanceUpdateMessage message = new PerformanceUpdateMessage();
-            message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
-            message.setStartTime(performance.getStartTime());
-            message.setEndTime(performance.getEndTime());
-            message.setPerformanceId(performance.getId());
-            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
-            //批量更新专场下的所有拍品开始及结束时间
-            LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
-            updateWrapper.set(Goods::getStartTime, performance.getStartTime());
-            updateWrapper.set(Goods::getEndTime, performance.getEndTime());
-            updateWrapper.eq(Goods::getPerformanceId, performance.getId());
-            goodsService.update(updateWrapper);
+        //限时拍修改专场时间也同步更新所有拍品时间
+        if(old.getType() == 1) {
+            if (!old.getStartTime().equals(performance.getStartTime()) || !old.getEndTime().equals(performance.getEndTime())) {
+                PerformanceUpdateMessage message = new PerformanceUpdateMessage();
+                message.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
+                message.setStartTime(performance.getStartTime());
+                message.setEndTime(performance.getEndTime());
+                message.setPerformanceId(performance.getId());
+                paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(message));
+                //批量更新专场下的所有拍品开始及结束时间
+                LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+                updateWrapper.set(Goods::getStartTime, performance.getStartTime());
+                updateWrapper.set(Goods::getEndTime, performance.getEndTime());
+                updateWrapper.eq(Goods::getPerformanceId, performance.getId());
+                goodsService.update(updateWrapper);
+            }
         }
         performanceService.updateById(performance);
         return Result.OK("编辑成功!");
