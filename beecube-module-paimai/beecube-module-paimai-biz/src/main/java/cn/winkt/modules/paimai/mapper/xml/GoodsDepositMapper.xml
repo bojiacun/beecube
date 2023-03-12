@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.paimai.mapper.GoodsDepositMapper">
     <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsDepositVO">
-        select gd.*,g.title as goods_name,p.title as performanceName from paimai_goods_deposits gd left join paimai_goods g on g.id=gd.goods_id
+        select gd.*,g.title as goods_name,p.title as performanceName,p.type as performance_type from paimai_goods_deposits gd left join paimai_goods g on g.id=gd.goods_id
         left join paimai_performances p on p.id = gd.performance_id ${ew.customSqlSegment}
     </select>
 </mapper>

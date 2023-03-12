@@ -17,6 +17,7 @@ public class GoodsDepositVO {
     /**专场ID*/
     private java.lang.String performanceId;
     private String performanceName;
+    private String performanceType;
     /**拍卖会ID*/
     private java.lang.String auctionId;
     /**保证金金额*/
