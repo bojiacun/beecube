@@ -148,6 +148,8 @@ export const API_HTTPTRACE_LIST = `${BASE_URL}/jeecg-system/actuator/httptrace`;
 export const API_CRONJOB_LIST = `${BASE_URL}/jeecg-system/sys/quartzJob/list`;
 export const API_CRONJOB_RESUME = `${BASE_URL}/jeecg-system/sys/quartzJob/resume`;
 export const API_CRONJOB_PAUSE = `${BASE_URL}/jeecg-system/sys/quartzJob/pause`;
+export const API_CRONJOB_ADD = `${BASE_URL}/jeecg-system/sys/quartzJob/add`;
+export const API_CRONJOB_EDIT = `${BASE_URL}/jeecg-system/sys/quartzJob/edit`;
 export const API_CRONJOB_DELETE = `${BASE_URL}/jeecg-system/sys/quartzJob/delete`;
 export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execute`;
 
