@@ -101,6 +101,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         queryWrapper.isNull("performance_id");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+        pageList.getRecords().forEach(goods1 -> {
+            if(goods1.getType() == 1) {
+                goods1.setSales(goodsService.calcGoodsSales(goods1.getId()));
+            }
+        });
         return Result.OK(pageList);
     }
 

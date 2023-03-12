@@ -21,6 +21,7 @@ import java.util.List;
  */
 public interface IGoodsService extends IService<Goods> {
     GoodsVO getDetail(String id);
+    Integer calcGoodsSales(String goodsId);
     IPage<GoodsVO> selectPageVO(Page<Goods> page, QueryWrapper<Goods> queryWrapper);
     List<GoodsVO> selectListVO(QueryWrapper<Goods> queryWrapper);
     IPage<Goods> queryMemberViewGoods(String member_id, Page<Goods> page);

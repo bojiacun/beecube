@@ -32,6 +32,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
+    public Integer calcGoodsSales(String goodsId) {
+        return goodsMapper.calcGoodsSales(goodsId);
+    }
+
+    @Override
     public IPage<GoodsVO> selectPageVO(Page<Goods> page, QueryWrapper<Goods> queryWrapper) {
         return goodsMapper.selectPageVO(page, queryWrapper);
     }
