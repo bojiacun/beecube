@@ -13,7 +13,7 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state: any = {
         tabs: [],
-        status: false,
+        status: null,
     }
 
     constructor(props) {
@@ -33,9 +33,7 @@ export default class Index extends Component<any, any> {
 
 
     onLoad(options) {
-        if (options.status) {
-            this.setState({status: options.status});
-        }
+        this.setState({status: options.status});
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -93,7 +91,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {status} = this.state;
-        if (status === false) return <PageLoading/>;
+        if (status === null) return <PageLoading/>;
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
                 <ListView tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} tabStyle={2}/>

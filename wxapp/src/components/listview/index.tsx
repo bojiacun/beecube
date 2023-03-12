@@ -86,9 +86,9 @@ const ListView: FC<ListViewProps> = (props) => {
             utils.showLoading();
             let defaultTab = tabs[0];
             let initIndex = 0;
-            if (defaultActiveKey != null) {
+            if (defaultActiveKey !== null) {
                 tabs.forEach((t, index) => {
-                    if (t.id === defaultActiveKey) {
+                    if (t.id == defaultActiveKey) {
                         initIndex = index;
                         setSelectedIndex(initIndex);
                         defaultTab = t;
