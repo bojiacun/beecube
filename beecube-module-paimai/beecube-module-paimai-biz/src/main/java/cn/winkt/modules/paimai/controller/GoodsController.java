@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
-import cn.winkt.modules.paimai.entity.GoodsOffer;
-import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.message.GoodsUpdateMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
-import cn.winkt.modules.paimai.service.IGoodsOfferService;
-import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -28,8 +26,6 @@ import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.service.IGoodsService;
 
 import java.util.Date;
 
@@ -77,6 +73,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
     @Resource
     PaimaiWebSocket paimaiWebSocket;
+
+    @Resource
+    private IGoodsOrderService goodsOrderService;
+
+    @Resource
+    private IOrderGoodsService orderGoodsService;
 
     /**
      * 分页列表查询
@@ -290,6 +292,29 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
             goodsOfferService.updateById(goodsOffer);
+
+            //生成成交订单
+            GoodsOrder goodsOrder = new GoodsOrder();
+            goodsOrder.setMemberId(goodsOffer.getMemberId());
+            goodsOrder.setMemberName(goodsOrder.getMemberName());
+            goodsOrder.setMemberAvatar(goodsOffer.getMemberAvatar());
+            goodsOrder.setStatus(0);
+            goodsOrder.setPayedPrice(goodsOffer.getPrice());
+            goodsOrder.setTotalPrice(goodsOffer.getPrice());
+            goodsOrder.setGoodsCount(1);
+            goodsOrder.setGoodsOfferId(goodsOffer.getId());
+            goodsOrder.setPerformanceId(goodsOffer.getPerformanceId());
+            goodsOrderService.save(goodsOrder);
+
+            OrderGoods orderGoods = new OrderGoods();
+            orderGoods.setGoodsImage(goods.getImages().split(",")[0]);
+            orderGoods.setGoodsName(goods.getTitle());
+            orderGoods.setGoodsId(goods.getId());
+            orderGoods.setGoodsPrice(goodsOffer.getPrice());
+            orderGoods.setGoodsCount(1);
+            orderGoods.setOrderId(goodsOrder.getId());
+            orderGoodsService.save(orderGoods);
+
         } else if (status == 4) {
             LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
