@@ -37,7 +37,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        let params: any = {column: 'createTime', order: 'desc', pageNo: pageIndex};
         if (tab.id != '') {
             params.status = tab.id;
         }

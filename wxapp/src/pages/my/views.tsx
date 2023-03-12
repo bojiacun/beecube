@@ -23,7 +23,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(id, page, clear = false) {
-        return request.get('/paimai/api/members/views', {params: {id: id, pageNo: page}}).then(res => {
+        return request.get('/paimai/api/members/views', {params: {id: id, pageNo: page, column: 'createTime', order: 'desc'}}).then(res => {
             if (clear) {
                 this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
             } else {

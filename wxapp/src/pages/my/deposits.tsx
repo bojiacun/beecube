@@ -21,7 +21,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(page, clear = false) {
-        return request.get('/paimai/api/members/deposits', {params: {pageNo: page}}).then(res => {
+        return request.get('/paimai/api/members/deposits', {params: {pageNo: page, column: 'createTime', order: 'desc'}}).then(res => {
             if (clear) {
                 this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
             } else {
