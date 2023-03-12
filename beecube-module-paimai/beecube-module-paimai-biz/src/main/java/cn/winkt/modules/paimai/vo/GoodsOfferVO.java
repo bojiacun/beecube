@@ -28,4 +28,5 @@ public class GoodsOfferVO {
     private String performanceName;
     private String goodsName;
     private Float goodsMaxOfferPrice;
+    private Integer status;
 }

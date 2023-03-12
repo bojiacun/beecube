@@ -62,9 +62,19 @@ export default class Index extends Component<any, any> {
                 <View className={'grid grid-cols-1 gap-4 p-4'}>
                     {list.map((item) => {
                         let radius = 0;
+                        let link;
+                        if(item.performanceType == 1) {
+                            link = `/pages/performance/detail?id=${item.performanceId}`;
+                        }
+                        else if(item.performanceType == 2) {
+                            link = `/pages/performance/detail2?id=${item.performanceId}`;
+                        }
+                        else {
+                            link = `/pages/goods/detail?id=${item.goodsId}`;
+                        }
                         return (
                             <Navigator
-                                url={item.performanceId ? ('/pages/performance/detail?id=' + item.performanceId) : ('/pages/goods/detail?id=' + item.goodsId)}
+                                url={link}
                                 className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
                                 <View className={'space-y-1 flex-1'}>
                                     <View className={'text-lg font-bold flex-1'}>{item.performanceName || item.goodsName}</View>
