@@ -1,13 +1,9 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row, FormControl} from "react-bootstrap";
 import {Field, useFormik, Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
-import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import PositionListSelector from "~/pages/system/roles/PositionListSelector";
-import classNames from "classnames";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
@@ -37,9 +33,9 @@ const CronEdit = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/monitor/crons/add'});
-        } else {
             postFetcher.submit(values, {method: 'post', action: '/monitor/crons/edit'});
+        } else {
+            postFetcher.submit(values, {method: 'post', action: '/monitor/crons/add'});
         }
     }
     useEffect(() => {
