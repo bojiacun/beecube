@@ -530,6 +530,14 @@ public class WxAppMemberController {
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
+        //检测库存
+        Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
+            Goods goods = goodsService.getById(goodsVO.getId());
+            if(goods.getStock() == null || goodsVO.getCount() > goods.getStock()) {
+                throw new JeecgBootException("商品"+goodsVO.getTitle()+"库存不足");
+            }
+        });
+
         BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
         for (GoodsVO vo : postOrderVO.getGoodsList()) {
             BigDecimal totalPrice = BigDecimal.valueOf(vo.getStartPrice()).multiply(BigDecimal.valueOf(vo.getCount()));
