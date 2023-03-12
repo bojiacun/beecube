@@ -38,6 +38,8 @@ class App extends Component<PropsWithChildren> {
         connectWebSocketServer('/auction/websocket/' + siteInfo.appId +'/'+context.userInfo.id).then(res => {
             this.socket = res;
             this.socket.onMessage(this.onMessageReceive);
+            this.socket.onClose(this.onSocketClose);
+            this.socket.onError(this.onSocketError);
         });
     }
     onSocketError(error) {
