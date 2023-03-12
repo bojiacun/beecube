@@ -72,7 +72,13 @@ public class WxAppGoodsController {
             queryWrapper.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
         }
         else if("2".equals(source)) {
-            queryWrapper.lt("g.end_time", nowDate).or().lt("g.actual_end_time", nowDate);
+            queryWrapper.and(qw -> {
+                qw.and(qw1 -> {
+                    qw1.isNull("g.actual_end_time").lt("g.end_time", nowDate);
+                }).or(qw2 -> {
+                    qw2.isNotNull("g.actual_end_time").lt("g.actual_end_time", nowDate);
+                });
+            });
         }
         queryWrapper.orderByAsc("g.sort_num");
         //排序
