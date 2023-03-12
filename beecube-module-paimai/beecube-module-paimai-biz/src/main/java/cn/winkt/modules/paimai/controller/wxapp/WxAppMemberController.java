@@ -530,66 +530,75 @@ public class WxAppMemberController {
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
+        String lock = "BUYOUT-"+AppContext.getApp();
         //检测库存
-        Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
-            Goods goods = goodsService.getById(goodsVO.getId());
-            if(goods.getStock() == null || goodsVO.getCount() > goods.getStock()) {
-                throw new JeecgBootException("商品"+goodsVO.getTitle()+"库存不足");
+        if(redissonLockClient.tryLock(lock, -1, 2)) {
+            Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
+                Goods goods = goodsService.getById(goodsVO.getId());
+                if (goods.getStock() == null || goodsVO.getCount() > goods.getStock()) {
+                    throw new JeecgBootException("商品" + goodsVO.getTitle() + "库存不足");
+                }
+                goods.setStock(goods.getStock() - goodsVO.getCount());
+                goodsService.updateById(goods);
+            });
+
+            BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
+            for (GoodsVO vo : postOrderVO.getGoodsList()) {
+                BigDecimal totalPrice = BigDecimal.valueOf(vo.getStartPrice()).multiply(BigDecimal.valueOf(vo.getCount()));
+                payAmount = payAmount.add(totalPrice);
             }
-        });
+            //创建订单
+            GoodsOrder goodsOrder = new GoodsOrder();
+            goodsOrder.setType(2);
+            goodsOrder.setMemberId(loginUser.getId());
+            goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
+            goodsOrder.setMemberAvatar(loginUser.getAvatar());
+            goodsOrder.setDeliveryInfo(String.format("%s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getAddress()));
+            goodsOrder.setDeliveryId(postOrderVO.getAddress().getId());
+            goodsOrder.setDeliveryAddress(postOrderVO.getAddress().getAddress());
+            goodsOrder.setDeliveryPhone(postOrderVO.getAddress().getPhone());
+            goodsOrder.setDeliveryUsername(postOrderVO.getAddress().getUsername());
+            goodsOrder.setDeliveryCity(postOrderVO.getAddress().getCity());
+            goodsOrder.setDeliveryDistrict(postOrderVO.getAddress().getDistrict());
+            goodsOrder.setDeliveryProvince(postOrderVO.getAddress().getProvince());
 
-        BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
-        for (GoodsVO vo : postOrderVO.getGoodsList()) {
-            BigDecimal totalPrice = BigDecimal.valueOf(vo.getStartPrice()).multiply(BigDecimal.valueOf(vo.getCount()));
-            payAmount = payAmount.add(totalPrice);
+            goodsOrder.setPayedPrice(payAmount.floatValue());
+            goodsOrder.setTotalPrice(payAmount.floatValue());
+            goodsOrder.setStatus(0);
+
+            goodsOrderService.save(goodsOrder);
+
+            //增加订单商品
+            Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
+                OrderGoods orderGoods = new OrderGoods();
+                orderGoods.setGoodsCount(goodsVO.getCount());
+                orderGoods.setGoodsPrice(goodsVO.getStartPrice());
+                orderGoods.setGoodsId(goodsVO.getId());
+                orderGoods.setGoodsName(goodsVO.getTitle());
+                orderGoods.setOrderId(goodsOrder.getId());
+                orderGoods.setGoodsImage(goodsVO.getImages().split(",")[0]);
+                orderGoodsService.save(orderGoods);
+            });
+
+
+            PayLog payLog = getPayLog(goodsOrder.getId());
+            AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+
+            WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                    .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp())
+                    .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                    .body("支付一口价订单")
+                    .spbillCreateIp("127.0.0.1")
+                    .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                    .detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";")))
+                    .build();
+            WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+            redissonLockClient.unlock(lock);
+            return Result.OK("", wxPayService.createOrder(request));
         }
-        //创建订单
-        GoodsOrder goodsOrder = new GoodsOrder();
-        goodsOrder.setType(2);
-        goodsOrder.setMemberId(loginUser.getId());
-        goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
-        goodsOrder.setMemberAvatar(loginUser.getAvatar());
-        goodsOrder.setDeliveryInfo(String.format("%s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getAddress()));
-        goodsOrder.setDeliveryId(postOrderVO.getAddress().getId());
-        goodsOrder.setDeliveryAddress(postOrderVO.getAddress().getAddress());
-        goodsOrder.setDeliveryPhone(postOrderVO.getAddress().getPhone());
-        goodsOrder.setDeliveryUsername(postOrderVO.getAddress().getUsername());
-        goodsOrder.setDeliveryCity(postOrderVO.getAddress().getCity());
-        goodsOrder.setDeliveryDistrict(postOrderVO.getAddress().getDistrict());
-        goodsOrder.setDeliveryProvince(postOrderVO.getAddress().getProvince());
-
-        goodsOrder.setPayedPrice(payAmount.floatValue());
-        goodsOrder.setTotalPrice(payAmount.floatValue());
-        goodsOrder.setStatus(0);
-
-        goodsOrderService.save(goodsOrder);
-
-        //增加订单商品
-        Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
-            OrderGoods orderGoods = new OrderGoods();
-            orderGoods.setGoodsCount(goodsVO.getCount());
-            orderGoods.setGoodsPrice(goodsVO.getStartPrice());
-            orderGoods.setGoodsId(goodsVO.getId());
-            orderGoods.setGoodsName(goodsVO.getTitle());
-            orderGoods.setOrderId(goodsOrder.getId());
-            orderGoods.setGoodsImage(goodsVO.getImages().split(",")[0]);
-            orderGoodsService.save(orderGoods);
-        });
-
-
-        PayLog payLog = getPayLog(goodsOrder.getId());
-        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-
-        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/notify/buyout/"+AppContext.getApp())
-                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                .body("支付一口价订单")
-                .spbillCreateIp("127.0.0.1")
-                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                .detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";")))
-                .build();
-        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        return Result.OK("",wxPayService.createOrder(request));
+        else {
+            return Result.error("下单失败");
+        }
     }
     /**
      * 出价拍品

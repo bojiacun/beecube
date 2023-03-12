@@ -42,6 +42,7 @@ public class PaimaiWebSocket {
                 this.appId = appId;
                 webSockets.get(appId).add(this);
                 log.info("{}【websocket消息】有新的连接，总数为: {}", appId, webSockets.get(appId).size());
+                redissonLockClient.unlock(lock);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
