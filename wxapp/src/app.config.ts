@@ -24,6 +24,7 @@ export default defineAppConfig({
         'pages/my/offers',
         'pages/my/orders',
         'pages/my/orders/detail',
+        'pages/my/orders/after',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
