@@ -652,7 +652,7 @@ public class WxAppMemberController {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
             if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
                 redissonLockClient.unlock(lockKey);
-                log.info("用户出价{}, 拍品起拍价{}", userOfferPrice.floatValue(), BigDecimal.valueOf(goods.getStartPrice()).floatValue());
+                log.info("用户出价{}, 拍品起拍价{}, 比较结果是{}", userOfferPrice.floatValue(), BigDecimal.valueOf(goods.getStartPrice()).floatValue(), userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())));
                 return Result.error("出价不得低于起拍价");
             }
             Double max = goodsOfferService.getMaxOffer(goods.getId());
