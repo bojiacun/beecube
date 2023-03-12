@@ -9,6 +9,7 @@ import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
+const siteInfo = require('./siteinfo');
 const store = configStore();
 let qqmapSdk;
 
@@ -34,7 +35,7 @@ class App extends Component<PropsWithChildren> {
         });
     }
     connectToServer(context) {
-        connectWebSocketServer('/auction/websocket/' + context.userInfo.id).then(res => {
+        connectWebSocketServer('/auction/websocket/' + siteInfo.appId +'/'+context.userInfo.id).then(res => {
             this.socket = res;
             this.socket.onMessage(this.onMessageReceive);
         });
@@ -60,7 +61,6 @@ class App extends Component<PropsWithChildren> {
 
     componentDidMount() {
         store.dispatch(setPageLoading(true));
-        const siteInfo = require('./siteinfo');
         store.dispatch(setSiteInfo(siteInfo));
         store.dispatch(setSystemInfo(Taro.getSystemInfoSync()));
     }

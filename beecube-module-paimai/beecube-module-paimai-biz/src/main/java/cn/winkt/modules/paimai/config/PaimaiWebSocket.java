@@ -65,8 +65,8 @@ public class PaimaiWebSocket {
 
     // 此为广播消息
     public void sendAllMessage(String message) {
-        log.info("{}【websocket消息】广播消息: {}", this.appId, message);
-        for(PaimaiWebSocket webSocket : webSockets.get(this.appId)) {
+        log.info("{}【websocket消息】广播消息: {}", AppContext.getApp(), message);
+        for(PaimaiWebSocket webSocket : webSockets.get(AppContext.getApp())) {
             try {
                 if(webSocket.session.isOpen()) {
                     webSocket.session.getAsyncRemote().sendText(message);
