@@ -53,8 +53,10 @@ public class AuctionRunJobHandler {
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Goods::getType, 1);
         queryWrapper.and(qw -> {
-            qw.isNull(Goods::getActualEndTime).lt(Goods::getEndTime, nowDate).or(qw1->{
-                qw1.isNotNull(Goods::getActualEndTime).lt(Goods::getActualEndTime, nowDate);
+            qw.and(qw1 -> {
+                qw1.isNull(Goods::getActualEndTime).lt(Goods::getEndTime, nowDate);
+            }).or(qw2 -> {
+                qw2.isNotNull(Goods::getActualEndTime).lt(Goods::getActualEndTime, nowDate);
             });
         });
         List<Goods> goodsList = goodsService.list(queryWrapper);
