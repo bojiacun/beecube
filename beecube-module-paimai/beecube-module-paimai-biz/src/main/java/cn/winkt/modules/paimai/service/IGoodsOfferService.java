@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Param;
  * @Version: V1.0
  */
 public interface IGoodsOfferService extends IService<GoodsOffer> {
-    Double getMaxOffer(@Param("goods_id") String goodsId);
+    Float getMaxOffer(@Param("goods_id") String goodsId);
 
     GoodsOffer getMaxOfferRow(String goodsId);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.paimai.mapper.GoodsOfferMapper">
-    <select id="getMaxOffer" resultType="java.lang.Double">
+    <select id="getMaxOffer" resultType="java.lang.Float">
         select max(price) as price from paimai_goods_offers where goods_id=#{goods_id}
     </select>
 

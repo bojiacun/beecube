@@ -25,7 +25,7 @@ public class GoodsOfferServiceImpl extends ServiceImpl<GoodsOfferMapper, GoodsOf
     @Resource
     GoodsOfferMapper goodsOfferMapper;
     @Override
-    public Double getMaxOffer(String goodsId) {
+    public Float getMaxOffer(String goodsId) {
         return goodsOfferMapper.getMaxOffer(goodsId);
     }
 

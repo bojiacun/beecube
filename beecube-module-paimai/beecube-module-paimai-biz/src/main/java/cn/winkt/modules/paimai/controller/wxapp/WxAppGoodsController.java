@@ -118,10 +118,10 @@ public class WxAppGoodsController {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
-        Double max = goodsOfferService.getMaxOffer(id);
+        Float max = goodsOfferService.getMaxOffer(id);
         if(max == null) {
             Goods goods = goodsService.getById(id);
-            max = goods.getStartPrice().doubleValue();
+            max = goods.getStartPrice().floatValue();
         }
         return Result.OK(max);
     }
