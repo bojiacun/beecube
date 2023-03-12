@@ -39,6 +39,8 @@ public class GoodsVO {
     private String tags;
     private Integer sortNum;
     private Integer stock;
+    private Integer baseSales;
+    private Integer sales;
     private java.lang.String description;
     /**拍品流程*/
 

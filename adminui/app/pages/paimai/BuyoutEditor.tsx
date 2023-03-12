@@ -94,6 +94,7 @@ const BuyoutEditor = (props: any) => {
                                     <BootstrapInput label={'标题'} name={'title'}/>
                                     <BootstrapInput label={'副标题'} name={'subTitle'}/>
                                     <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
+                                    <BootstrapInput label={'基础销量'} name={'baseSales'} placeholder={'基础销量'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <FormGroup>
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
