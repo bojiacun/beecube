@@ -318,7 +318,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     );
                 }
-            } else if(goods.performanceType == 2){
+            } else if (goods.performanceType == 2) {
                 if (goods.performanceState == 1 && goods.state == 1) {
                     return (
                         <View>
@@ -394,8 +394,14 @@ export default class Index extends Component<any, any> {
                                 </View>
                                 {goods.state < 3 &&
                                     <View className={'text-gray-600 mt-2'}>
-                                        当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
-                                        className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
+                                        <View className={'space-x-1'}>
+                                            估价 <Text className={'text-red-500 text-sm font-bold'}>RMB</Text>
+                                            <Text className={'text-lg font-bold'}>{goods.evaluatePrice}</Text>
+                                        </View>
+                                        <View>
+                                            当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                            className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
+                                        </View>
                                     </View>
                                 }
                                 {goods.state == 3 &&
@@ -406,8 +412,7 @@ export default class Index extends Component<any, any> {
                                 }
                                 {goods.state == 4 &&
                                     <View className={'text-gray-600 mt-2'}>
-                                        当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
-                                        className={'text-lg text-red-500 font-bold'}>{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</Text>
+                                        流拍
                                     </View>
                                 }
                             </View>

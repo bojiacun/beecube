@@ -146,19 +146,25 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '商品详情'}}>
                 <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'}/>
                 <View className={'grid bg-white grid-cols-1 px-4 divide-y divide-gray-200'}>
-                    <View className={'space-y-4 py-4'}>
-                        <View className={'flex justify-between items-center'}>
-                            <View className={'space-y-2'}>
-                                <View className={'font-bold text-xl'}>
-                                    {goods.title}
-                                </View>
-                                <View className={'text-gray-400'}>
-                                    {goods.subTitle}
-                                </View>
-                                <View className={'text-gray-600 mt-2'}>
-                                    一口价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
-                                    className={'text-lg text-red-500 font-bold'}>{numeral(goods.startPrice).format('0,0.00')}</Text>
-                                </View>
+                    <View className={'p-4 space-y-2'}>
+                        <View className={'font-bold text-xl'}>
+                            {goods.title}
+                        </View>
+                        <View className={'text-gray-400'}>
+                            {goods.subTitle}
+                        </View>
+                        <View className={'flex justify-between text-gray-600 mt-2'}>
+                            <View>
+                                一口价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text>
+                                <Text className={'text-lg text-red-500 font-bold'}>{numeral(goods.startPrice).format('0,0.00')}</Text>
+                            </View>
+                            <View className={'space-x-2 text-gray-400'}>
+                                <Text>
+                                    已售：{goods.sales + goods.baseSales}
+                                </Text>
+                                <Text>
+                                    库存：{goods.stock}
+                                </Text>
                             </View>
                         </View>
                     </View>

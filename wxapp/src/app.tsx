@@ -43,8 +43,8 @@ class App extends Component<PropsWithChildren> {
         });
     }
     onSocketError(error) {
-        let {context} = store.getState();
         console.log('服务器连接断开,5秒后尝试重连', error);
+        let {context} = store.getState();
         setTimeout(()=>{
             this.connectToServer(context);
         }, 5000);
@@ -52,7 +52,9 @@ class App extends Component<PropsWithChildren> {
     onSocketClose() {
         console.log('服务器连接断开,立即尝试重连');
         let {context} = store.getState();
-        this.connectToServer(context);
+        setTimeout(()=>{
+            this.connectToServer(context);
+        }, 5000);
     }
 
     onMessageReceive(message:any) {
