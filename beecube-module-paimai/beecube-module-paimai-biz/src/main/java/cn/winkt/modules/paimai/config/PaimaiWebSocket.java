@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.WebSocket;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.util.SpringContextUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -21,20 +22,27 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
 @Slf4j
-@ServerEndpoint("/auction/websocket/{userId}")
+@ServerEndpoint("/auction/websocket/{appId}/{userId}")
 public class PaimaiWebSocket {
     private Session session;
-    private static CopyOnWriteArraySet<PaimaiWebSocket> webSockets =new CopyOnWriteArraySet<>();
-    private static Map<String,Session> userSessionPool = new HashMap<String,Session>();
+    private String appId;
+    private static ConcurrentHashMap<String, CopyOnWriteArraySet<PaimaiWebSocket>> webSockets =new ConcurrentHashMap<>();
 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value="userId") String userId) {
+    public void onOpen(Session session, @PathParam(value = "appId") String appId, @PathParam(value="userId") String userId) {
         try {
-            this.session = session;
-            webSockets.add(this);
-            userSessionPool.put(userId, session);
-            log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
+            String lock =  "CREATE-SOCKET-"+appId;
+            RedissonLockClient redissonLockClient = redissonLockClient();
+            if(redissonLockClient.tryLock(lock, 3)) {
+                if(!webSockets.containsKey(appId)) {
+                    webSockets.put(appId, new CopyOnWriteArraySet<>());
+                }
+                this.session = session;
+                this.appId = appId;
+                webSockets.get(appId).add(this);
+                log.info("{}【websocket消息】有新的连接，总数为: {}", appId, webSockets.get(appId).size());
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -42,8 +50,9 @@ public class PaimaiWebSocket {
     @OnClose
     public void onClose() {
         try {
-            webSockets.remove(this);
-            log.info("【websocket消息】连接断开，总数为:"+webSockets.size());
+            String appId = this.appId;
+            webSockets.get(appId).remove(this);
+            log.info("{}【websocket消息】连接断开，总数为: {}", appId, webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -51,16 +60,13 @@ public class PaimaiWebSocket {
 
     @OnMessage
     public void onMessage(String message) {
-        log.info("【websocket消息】收到客户端消息:"+message);
+        log.info("{}【websocket消息】收到客户端消息: {}", this.appId, message);
     }
-    // 此为群组消息
-    public void sendGroupMessage(String goodsId, String message) {
 
-    }
     // 此为广播消息
     public void sendAllMessage(String message) {
-        log.info("【websocket消息】广播消息:"+message);
-        for(PaimaiWebSocket webSocket : webSockets) {
+        log.info("{}【websocket消息】广播消息: {}", this.appId, message);
+        for(PaimaiWebSocket webSocket : webSockets.get(this.appId)) {
             try {
                 if(webSocket.session.isOpen()) {
                     webSocket.session.getAsyncRemote().sendText(message);
@@ -70,33 +76,8 @@ public class PaimaiWebSocket {
             }
         }
     }
-    // 此为单点消息
-    public void sendOneMessage(String userId, String message) {
-        Session session = userSessionPool.get(userId);
-        if (session != null&&session.isOpen()) {
-            try {
-                log.info("【websocket消息】 单点消息:"+message);
-                session.getAsyncRemote().sendText(message);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
+    RedissonLockClient redissonLockClient() {
+        return SpringContextUtils.getBean(RedissonLockClient.class);
     }
-
-    // 此为单点消息(多人)
-    public void sendMoreMessage(String[] userIds, String message) {
-        for(String userId:userIds) {
-            Session session = userSessionPool.get(userId);
-            if (session != null&&session.isOpen()) {
-                try {
-                    log.info("【websocket消息】 单点消息:"+message);
-                    session.getAsyncRemote().sendText(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
 }
