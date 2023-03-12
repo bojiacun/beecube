@@ -1,12 +1,8 @@
 @import "assets/fonts/iconfont.css";
-@import "assets/fonts/fontawesome/font-awesome";
+@import "assets/fonts/font-awesome.css";
 @import "assets/fonts/montserrat";
 
 
-button {
-    background-color: transparent;
-    background-image: none;
-}
 page {
     font-size: 14px;
     overflow-x: hidden;
@@ -26,11 +22,15 @@ page {
     'Apple Color Emoji',
     'Segoe UI Emoji';
 }
-
+view {
+    box-sizing: border-box;
+}
 navigator, picker {
     display: block;
 }
 button, button[plain] {
+    font-size: 14px;
+    line-height: 22px;
     border: none;
     &::after {
         border: none;
@@ -38,6 +38,11 @@ button, button[plain] {
     &:after {
         border: none;
     }
+}
+button[plain] {
+    background-color: transparent;
+    background-image: none;
+    padding: 0;
 }
 .btn {
     border: none;
