@@ -296,7 +296,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             //生成成交订单
             GoodsOrder goodsOrder = new GoodsOrder();
             goodsOrder.setMemberId(goodsOffer.getMemberId());
-            goodsOrder.setMemberName(goodsOrder.getMemberName());
+            goodsOrder.setMemberName(goodsOffer.getMemberName());
             goodsOrder.setMemberAvatar(goodsOffer.getMemberAvatar());
             goodsOrder.setStatus(0);
             goodsOrder.setPayedPrice(goodsOffer.getPrice());
