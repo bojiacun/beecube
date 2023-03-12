@@ -155,6 +155,8 @@ public class Goods {
 	//成交价
 	private Float dealPrice;
 
+	private Integer baseSales;
+
 	@TableField(exist = false)
 	private Integer sales;
 }

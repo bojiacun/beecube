@@ -46,7 +46,7 @@
     </select>
 
     <select id="calcGoodsSales" resultType="java.lang.Integer">
-        select sum(og.count) as count from paimai_order_goods og
+        select sum(og.goods_count) as count from paimai_order_goods og
         left join paimai_orders o on og.order_id = o.id
         where o.status = 3 and og.goods_id = #{goods_id}
     </select>
