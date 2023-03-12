@@ -174,12 +174,14 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Goods goods) {
         Goods old = goodsService.getById(goods.getId());
-        if (old.getStartTime().equals(goods.getStartTime()) || old.getEndTime().equals(goods.getEndTime())) {
-            GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-            goodsUpdateMessage.setGoodsId(goods.getId());
-            goodsUpdateMessage.setStartTime(goods.getStartTime());
-            goodsUpdateMessage.setEndTime(goods.getEndTime());
-            goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
+        if(old.getType() != 2) {
+            if (old.getStartTime().equals(goods.getStartTime()) || old.getEndTime().equals(goods.getEndTime())) {
+                GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
+                goodsUpdateMessage.setGoodsId(goods.getId());
+                goodsUpdateMessage.setStartTime(goods.getStartTime());
+                goodsUpdateMessage.setEndTime(goods.getEndTime());
+                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
+            }
         }
         goodsService.updateById(goods);
         return Result.OK("编辑成功!");
