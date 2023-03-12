@@ -170,6 +170,14 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @PutMapping("/end")
     public Result<?> manualEnd(@RequestParam String id) {
         Performance performance = performanceService.getById(id);
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Goods::getPerformanceId, performance.getId());
+        List<Goods> goodsList = goodsService.list(queryWrapper);
+        goodsList.forEach(goods -> {
+            if(goods.getState() == 1) {
+                throw new JeecgBootException("专场下有拍品正在运行，无法停止专场");
+            }
+        });
         performance.setEndTime(new Date());
         performance.setState(2);
         performanceService.updateById(performance);
@@ -189,6 +197,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @PutMapping("/goods/start")
     public Result<?> startGoods(@RequestParam String id) {
         Goods goods = goodsService.getById(id);
+        Performance performance = performanceService.getById(goods.getPerformanceId());
+        if(performance.getState() != 1) {
+            throw new JeecgBootException("拍品所在专场没有开始，拍品无法开始！");
+        }
         goods.setStartTime(new Date());
         goods.setState(1);
         goodsService.updateById(goods);
