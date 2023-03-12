@@ -649,7 +649,7 @@ public class WxAppMemberController {
 
         String lockKey = "OFFER-LOCKER-"+goods.getId();
         if(redissonLockClient.tryLock(lockKey, -1, 300)) {
-            BigDecimal userOfferPrice = BigDecimal.valueOf(post.getDoubleValue("price"));
+            BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
             if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
                 redissonLockClient.unlock(lockKey);
                 log.info("用户出价{}, 拍品起拍价{}, 比较结果是{}", userOfferPrice.floatValue(), BigDecimal.valueOf(goods.getStartPrice()).floatValue(), userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())));
