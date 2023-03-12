@@ -106,6 +106,7 @@ public class AuctionRunJobHandler {
                 goodsOrder.setPayedPrice(maxOfferRow.getPrice());
                 goodsOrder.setTotalPrice(maxOfferRow.getPrice());
                 goodsOrder.setGoodsCount(1);
+                goodsOrder.setType(2);
                 goodsOrder.setGoodsOfferId(maxOfferRow.getId());
                 goodsOrder.setPerformanceId(maxOfferRow.getPerformanceId());
                 goodsOrderService.save(goodsOrder);

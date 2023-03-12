@@ -302,6 +302,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsOrder.setPayedPrice(goodsOffer.getPrice());
             goodsOrder.setTotalPrice(goodsOffer.getPrice());
             goodsOrder.setGoodsCount(1);
+            goodsOrder.setType(2);
             goodsOrder.setGoodsOfferId(goodsOffer.getId());
             goodsOrder.setPerformanceId(goodsOffer.getPerformanceId());
             goodsOrderService.save(goodsOrder);
