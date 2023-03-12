@@ -147,24 +147,6 @@ export default class Index extends Component<any, any> {
                     </View>
                 );
                 break;
-            case 2:
-                return (
-                    <View className={'flex items-center space-x-2'}>
-                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.requestAfter}>
-                            <View>申请售后</View>
-                        </Button>
-                    </View>
-                );
-                break;
-            case 3:
-                return (
-                    <View className={'flex items-center space-x-2'}>
-                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.requestAfter}>
-                            <View>申请售后</View>
-                        </Button>
-                    </View>
-                );
-                break;
         }
         return <></>
     }
@@ -198,7 +180,15 @@ export default class Index extends Component<any, any> {
                                             <View>{item.goodsName}</View>
                                             <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
                                         </View>
-                                        <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
+                                        <View className={'flex flex-col space-y-2 items-center'}>
+                                            <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
+                                            {item.isAfter == 0 &&
+                                                <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
+                                                           url={`after?ogid=${item.id}&oid=${item.orderId}`}>
+                                                    <View>申请售后</View>
+                                                </Navigator>
+                                            }
+                                        </View>
                                     </View>
                                 );
                             })}

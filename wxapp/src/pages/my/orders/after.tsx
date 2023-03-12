@@ -72,8 +72,8 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '申请售后'}}>
                 <Form onSubmit={this.handleSubmit}>
-                    <View className={'space-y-4'}>
-                        <View className={'p-4'}>
+                    <View className={'p-4 space-y-4'}>
+                        <View className={'bg-white p-4'}>
                             <View className={'font-bold text-lg'}>商品信息</View>
                             {goodsList.map((item:any) => {
                                 return (
@@ -91,7 +91,7 @@ export default class Index extends Component<any, any> {
                                 );
                             })}
                         </View>
-                        <View className={'p-4'}>
+                        <View className={'bg-white p-4'}>
                             <Picker onChange={this.handleTypeChange} range={this.state.types} rangeKey={'name'}>
                                 <View className={'flex items-center justify-between'}>
                                     <View className={'flex items-center space-x-2'}>
@@ -104,8 +104,8 @@ export default class Index extends Component<any, any> {
                                 </View>
                             </Picker>
                         </View>
-                        <View className={'p-4'}>
-                            <View className={'font-bold text-lg'}>商品信息</View>
+                        <View className={'bg-white p-4'}>
+                            <View className={'font-bold text-lg'}>描述信息</View>
                             <View>
                                 <Textarea name={'description'} className={'h-20'}></Textarea>
                             </View>
@@ -113,7 +113,7 @@ export default class Index extends Component<any, any> {
 
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>
+                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>提交</Button>
                     </View>
                 </Form>
             </PageLayout>
