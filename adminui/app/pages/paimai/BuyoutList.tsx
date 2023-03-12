@@ -127,6 +127,10 @@ const BuyoutList = (props: any) => {
             dataField: 'stock',
         },
         {
+            text: '销量',
+            dataField: 'sales',
+        },
+        {
             text: '标签',
             dataField: 'tags',
         },
