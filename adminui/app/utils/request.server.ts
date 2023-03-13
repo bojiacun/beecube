@@ -191,6 +191,11 @@ export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/remove`;
 
 
+export const API_PAIMAI_ARTICLE_LIST = `${BASE_URL}/paimai/articles/list`;
+export const API_PAIMAI_ARTICLE_ADD = `${BASE_URL}/paimai/articles/add`;
+export const API_PAIMAI_ARTICLE_EDIT = `${BASE_URL}/paimai/articles/edit`;
+export const API_PAIMAI_ARTICLE_DELETE = `${BASE_URL}/paimai/articles/delete`;
+
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;
 export const API_PAIMAI_OFFER_LIST = `${BASE_URL}/paimai/offers/list`;
 export const API_PAIMAI_DEPOSIT_LIST = `${BASE_URL}/paimai/deposits/list`;
