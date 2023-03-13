@@ -48,7 +48,7 @@ public class AuctionRunJobHandler {
     @XxlJob(value = "RUN_AUCTION")
     @Transactional
     public ReturnT<String> runningAuction(String params) {
-        log.info("我是定时任务，我执行了哦");
+        log.info("我是定时任务，我执行了哦, APPID {}", params);
         AppContext.setApp(params);
         Date nowDate = new Date();
         //查找限时拍拍品结束了的
