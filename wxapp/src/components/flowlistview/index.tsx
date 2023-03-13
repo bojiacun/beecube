@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
 import stylesFlow from '../../flow.module.scss';
 import LoadMore from "../loadmore";
@@ -40,6 +40,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
     const [noMore, setNoMore] = useState<boolean>(false);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
     const message = useSelector((state:any) => state.message);
+    const systemInfo = useSelector(({context}) => context.systemInfo);
     useEffect(()=>{
         if(message) {
             data.forEach(g => {
@@ -136,8 +137,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            {tabs.length > 0 && <View className={classNames('bg-white w-full px-4 py-3 flex items-center space-x-4 text-gray-700')}
-                  style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
+            {tabs.length > 0 && <View className={classNames('bg-white sticky w-full px-4 py-3 flex items-center space-x-4 text-gray-700')}
+                  style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999, top: Taro.pxTransform(systemInfo.safeArea.top + 40)}}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(tabStyle == 1 ? '':'flex-1','text-center',index === selectedIndex ? styles.active : '')} onClick={() => {

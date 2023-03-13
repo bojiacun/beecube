@@ -76,7 +76,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
                             <Navigator url={'orders?status=0'}>
                                 <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1 text-sm'}>待结算</View>
+                                <View className={'text-gray-500 mt-1'}>待结算</View>
                             </Navigator>
                             <Navigator url={'orders?status=1'}>
                                 <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}}/>

@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
@@ -42,6 +42,8 @@ const ListView: FC<ListViewProps> = (props) => {
     const [noMore, setNoMore] = useState<boolean>(false);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
     const message = useSelector((state: any) => state.message);
+    const systemInfo = useSelector(({context}) => context.systemInfo);
+
     useEffect(() => {
         if (message) {
             data.forEach(g => {
@@ -140,8 +142,8 @@ const ListView: FC<ListViewProps> = (props) => {
     return (
         <>
             <View
-                className={classNames('bg-white px-4 py-3 flex items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
-                style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
+                className={classNames('bg-white px-4 py-3 flex sticky items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
+                style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999, top: Taro.pxTransform(systemInfo.safeArea.top + 40)}}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text
