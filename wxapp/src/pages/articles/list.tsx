@@ -16,16 +16,15 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        this.loadData(1, true).then(() => utils.hideLoading());
     }
 
-    loadData(page, clear = false) {
+    loadData(tag, page, clear = false) {
         return request.get('/paimai/api/articles/list', {
             params: {
                 pageNo: page,
                 column: 'createTime',
                 order: 'desc',
-                tag: this.state.options.tag
+                tag: decodeURIComponent(tag),
             }
         }).then(res => {
             if (clear) {
@@ -45,18 +44,18 @@ export default class Index extends Component<any, any> {
     onLoad(options: any) {
         this.setState({options: options})
         utils.showLoading();
+        this.loadData(options.tag, 1, true).then(() => utils.hideLoading());
     }
 
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.page + 1, false).then(() => {
-        });
+        this.loadData(this.state.options.tag, this.state.page + 1, false).then(() => { });
         this.setState({page: this.state.page + 1});
     }
 
     onPullDownRefresh() {
         utils.showLoading();
-        this.loadData(1, true).then(() => utils.hideLoading());
+        this.loadData(this.state.options.tag,1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
 

@@ -48,7 +48,6 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    @AutoLog(value = "文章表-分页列表查询")
    @ApiOperation(value="文章表-分页列表查询", notes="文章表-分页列表查询")
    @GetMapping(value = "/list")
-   @AutoDict
    public Result<?> queryPageList(Article article,
                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
