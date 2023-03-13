@@ -9,6 +9,7 @@ import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.message.OfferMessage;
+import cn.winkt.modules.paimai.message.PerformanceUpdateMessage;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.*;
 import com.alibaba.fastjson.JSONObject;
@@ -97,13 +98,13 @@ public class WxAppMemberController {
     IGoodsOrderAfterService goodsOrderAfterService;
 
     @AutoLog(value = "订单售后表-分页列表查询")
-    @ApiOperation(value="订单售后表-分页列表查询", notes="订单售后表-分页列表查询")
+    @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
     @GetMapping(value = "/orders/afters")
     @AutoDict
     public Result<?> queryPageOrderAfterList(GoodsOrderAfter goodsOrderAfter,
-                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-                                   HttpServletRequest req) {
+                                             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                             HttpServletRequest req) {
         QueryWrapper<GoodsOrderAfter> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrderAfter, req.getParameterMap());
         Page<GoodsOrderAfter> page = new Page<GoodsOrderAfter>(pageNo, pageSize);
         IPage<GoodsOrderAfterVO> pageList = goodsOrderAfterService.selectPageVO(page, queryWrapper);
@@ -111,11 +112,10 @@ public class WxAppMemberController {
     }
 
 
-
     @AutoLog(value = "订单表-支付订单")
-    @ApiOperation(value="订单表-支付订单", notes="订单表-支付订单")
+    @ApiOperation(value = "订单表-支付订单", notes = "订单表-支付订单")
     @PostMapping(value = "/orders/pay")
-    public Result<?> payOrder(@RequestParam(name="id", defaultValue="") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public Result<?> payOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
@@ -130,7 +130,7 @@ public class WxAppMemberController {
         PayLog payLog = getPayLog(order.getId());
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/notify/orders/"+AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/orders/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("订单支付")
                 .spbillCreateIp("127.0.0.1")
@@ -138,14 +138,14 @@ public class WxAppMemberController {
                 .detail(orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining(",")))
                 .build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        return Result.OK("",wxPayService.createOrder(request));
+        return Result.OK("", wxPayService.createOrder(request));
     }
 
 
     @AutoLog(value = "订单表-取消订单")
-    @ApiOperation(value="订单表-取消订单", notes="订单表-取消订单")
+    @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")
     @PostMapping(value = "/orders/cancel")
-    public Result<?> cancelOrder(@RequestParam(name="id", defaultValue="") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public Result<?> cancelOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
@@ -170,13 +170,13 @@ public class WxAppMemberController {
 
 
     @AutoLog(value = "订单表-分页列表查询")
-    @ApiOperation(value="订单表-分页列表查询", notes="订单表-分页列表查询")
+    @ApiOperation(value = "订单表-分页列表查询", notes = "订单表-分页列表查询")
     @GetMapping(value = "/orders")
     @AutoDict
     public Result<?> queryPageOrderList(GoodsOrder goodsOrder,
-                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-                                   HttpServletRequest req) {
+                                        @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                        @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                        HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
         queryWrapper.eq("member_id", loginUser.getId());
@@ -189,11 +189,12 @@ public class WxAppMemberController {
         });
         return Result.OK(pageList);
     }
+
     @AutoLog(value = "订单表-订单详情")
-    @ApiOperation(value="订单表-订单详情", notes="订单表-订单详情")
+    @ApiOperation(value = "订单表-订单详情", notes = "订单表-订单详情")
     @GetMapping(value = "/orders/detail")
     @AutoDict
-    public Result<?> queryOrderDetail(@RequestParam(name="id", defaultValue="") String id) {
+    public Result<?> queryOrderDetail(@RequestParam(name = "id", defaultValue = "") String id) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
@@ -204,14 +205,15 @@ public class WxAppMemberController {
         order.setOrderGoods(orderGoodsService.list(qw));
         return Result.OK(order);
     }
+
     @AutoLog(value = "用户保证金列表-分页列表查询")
-    @ApiOperation(value="用户保证金列表-分页列表查询", notes="用户保证金列表-分页列表查询")
+    @ApiOperation(value = "用户保证金列表-分页列表查询", notes = "用户保证金列表-分页列表查询")
     @GetMapping(value = "/deposits")
     @AutoDict
     public Result<?> memberGoodsDepositList(GoodsDeposit goodsDeposit,
-                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-                                   HttpServletRequest req) {
+                                            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                            HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsDeposit> queryWrapper = QueryGenerator.initQueryWrapper(goodsDeposit, req.getParameterMap());
         queryWrapper.eq("gd.status", 1);
@@ -220,14 +222,15 @@ public class WxAppMemberController {
         IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
+
     @AutoLog(value = "用户参拍记录列表-分页列表查询")
-    @ApiOperation(value="用户参拍记录列表-分页列表查询", notes="用户参拍记录列表-分页列表查询")
+    @ApiOperation(value = "用户参拍记录列表-分页列表查询", notes = "用户参拍记录列表-分页列表查询")
     @GetMapping(value = "/offers")
     @AutoDict
     public Result<?> memberOfferList(GoodsOffer goodsOffer,
-                                            @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                            @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-                                            HttpServletRequest req) {
+                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                     HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOffer> queryWrapper = QueryGenerator.initQueryWrapper(goodsOffer, req.getParameterMap());
         queryWrapper.eq("gof.member_id", loginUser.getId());
@@ -235,8 +238,10 @@ public class WxAppMemberController {
         IPage<GoodsOfferVO> pageList = goodsOfferService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
+
     /**
      * 获取用户的浏览记录
+     *
      * @param pageNo
      * @param pageSize
      * @return
@@ -247,7 +252,7 @@ public class WxAppMemberController {
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser == null) {
+        if (loginUser == null) {
             return Result.OK(null);
         }
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
@@ -258,25 +263,26 @@ public class WxAppMemberController {
 
     /**
      * 生成用户的浏览记录
+     *
      * @param id
      * @return
      */
     @PostMapping("/views")
     public Result<Boolean> viewGoods(@RequestParam(name = "id", defaultValue = "0") String id) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser != null) {
+        if (loginUser != null) {
             LambdaQueryWrapper<GoodsView> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsView::getGoodsId, id);
             queryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
-            if(goodsViewService.count(queryWrapper) == 0) {
+            if (goodsViewService.count(queryWrapper) == 0) {
                 //没有浏览记录，则生成浏览记录
                 Goods goods = goodsService.getById(id);
                 GoodsView goodsView = new GoodsView();
                 goodsView.setGoodsId(id);
                 goodsView.setPerformanceId(goods.getPerformanceId());
-                if(goods.getPerformanceId() != null) {
+                if (goods.getPerformanceId() != null) {
                     Performance performance = performanceService.getById(goods.getPerformanceId());
-                    if(performance != null) {
+                    if (performance != null) {
                         goodsView.setAuctionId(performance.getAuctionId());
                     }
                 }
@@ -292,6 +298,7 @@ public class WxAppMemberController {
 
     /**
      * 获取用户的关注记录
+     *
      * @param pageNo
      * @param pageSize
      * @return
@@ -302,15 +309,17 @@ public class WxAppMemberController {
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser == null) {
+        if (loginUser == null) {
             return Result.OK(null);
         }
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
         return Result.OK(pageList);
     }
+
     /**
      * 查询用户是否缴纳了本场保证金
+     *
      * @param id
      * @return
      */
@@ -320,7 +329,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("找不到拍品");
         }
         Performance performance = performanceService.getById(id);
-        if(performance.getDeposit() == null || performance.getDeposit() <=0) {
+        if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
             return Result.OK(true);
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -336,6 +345,7 @@ public class WxAppMemberController {
 
     /**
      * 查询用户是否缴纳了拍品保证金
+     *
      * @param id
      * @return
      */
@@ -345,7 +355,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("找不到拍品");
         }
         Goods goods = goodsService.getById(id);
-        if(goods.getDeposit() == null || goods.getDeposit() <=0) {
+        if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
             return Result.OK(true);
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -354,12 +364,11 @@ public class WxAppMemberController {
         }
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            queryWrapper.and(wq->{
+        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            queryWrapper.and(wq -> {
                 wq.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
             });
-        }
-        else {
+        } else {
             queryWrapper.eq(GoodsDeposit::getGoodsId, id);
         }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
@@ -368,14 +377,15 @@ public class WxAppMemberController {
 
     /**
      * 判断用户是否设置了消息提醒
+     *
      * @return
      */
     @GetMapping("/messaged")
     public Result<Boolean> queryMemberMessage(
             @RequestParam(name = "type", defaultValue = "0") Integer type,
-            @RequestParam(name="performanceId", defaultValue = "") String performanceId,
-            @RequestParam(name="goodsId", defaultValue = "") String goodsId
-            ) {
+            @RequestParam(name = "performanceId", defaultValue = "") String performanceId,
+            @RequestParam(name = "goodsId", defaultValue = "") String goodsId
+    ) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
             return Result.OK(false);
@@ -384,10 +394,10 @@ public class WxAppMemberController {
         LambdaQueryWrapper<MessagePool> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MessagePool::getMemberId, loginUser.getId());
         queryWrapper.eq(MessagePool::getType, type);
-        if(StringUtils.isNotEmpty(performanceId)) {
+        if (StringUtils.isNotEmpty(performanceId)) {
             queryWrapper.eq(MessagePool::getPerformanceId, performanceId);
         }
-        if(StringUtils.isNotEmpty(goodsId)) {
+        if (StringUtils.isNotEmpty(goodsId)) {
             queryWrapper.eq(MessagePool::getGoodsId, goodsId);
         }
         return Result.OK(messagePoolService.count(queryWrapper) > 0);
@@ -395,6 +405,7 @@ public class WxAppMemberController {
 
     /**
      * 设置或者取消消息提醒
+     *
      * @param params
      * @return
      */
@@ -408,11 +419,11 @@ public class WxAppMemberController {
         LambdaQueryWrapper<MessagePool> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MessagePool::getMemberId, loginUser.getId());
         queryWrapper.eq(MessagePool::getType, type);
-        if(StringUtils.isNotEmpty(performanceId)) {
-            queryWrapper.eq(MessagePool::getPerformanceId,performanceId);
+        if (StringUtils.isNotEmpty(performanceId)) {
+            queryWrapper.eq(MessagePool::getPerformanceId, performanceId);
         }
-        if(StringUtils.isNotEmpty(goodsId)) {
-            queryWrapper.eq(MessagePool::getGoodsId,goodsId);
+        if (StringUtils.isNotEmpty(goodsId)) {
+            queryWrapper.eq(MessagePool::getGoodsId, goodsId);
         }
         long count = messagePoolService.count(queryWrapper);
         if (count > 0) {
@@ -426,25 +437,23 @@ public class WxAppMemberController {
             messagePool.setType(type);
             messagePool.setMemberId(loginUser.getId());
             //这里计算好发送时间和内容
-            if(StringUtils.isNotEmpty(performanceId)) {
+            if (StringUtils.isNotEmpty(performanceId)) {
                 Performance performance = performanceService.getById(performanceId);
-                if(type == 1) {
+                if (type == 1) {
                     messagePool.setMessage(String.format("%s快开始了", performance.getTitle()));
                     messagePool.setSendTime(DateUtils.addHours(performance.getStartTime(), -2));
-                }
-                else if(type == 2) {
+                } else if (type == 2) {
                     messagePool.setMessage(String.format("%s即将结束", performance.getTitle()));
                     messagePool.setSendTime(DateUtils.addHours(performance.getEndTime(), -2));
                 }
             }
-            if(StringUtils.isNotEmpty(goodsId)) {
+            if (StringUtils.isNotEmpty(goodsId)) {
                 Goods goods = goodsService.getById(goodsId);
-                if(type == 1) {
+                if (type == 1) {
 
-                }
-                else if(type == 2) {
+                } else if (type == 2) {
                     messagePool.setMessage(String.format("%s即将结束", goods.getTitle()));
-                    messagePool.setSendTime(DateUtils.addHours(goods.getActualEndTime() == null ? goods.getEndTime():goods.getActualEndTime(), -2));
+                    messagePool.setSendTime(DateUtils.addHours(goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime(), -2));
                 }
             }
             messagePoolService.save(messagePool);
@@ -454,6 +463,7 @@ public class WxAppMemberController {
 
     /**
      * 判断用户是否关注了拍品
+     *
      * @param id
      * @return
      */
@@ -474,6 +484,7 @@ public class WxAppMemberController {
 
     /**
      * 关注或取消关注商品
+     *
      * @param params
      * @return
      */
@@ -499,9 +510,9 @@ public class WxAppMemberController {
             GoodsFollow goodsFollow = new GoodsFollow();
             goodsFollow.setGoodsId(id);
             goodsFollow.setPerformanceId(goods.getPerformanceId());
-            if(goods.getPerformanceId() != null) {
+            if (goods.getPerformanceId() != null) {
                 Performance performance = performanceService.getById(goods.getPerformanceId());
-                if(performance != null) {
+                if (performance != null) {
                     goodsFollow.setAuctionId(performance.getAuctionId());
                 }
             }
@@ -516,6 +527,7 @@ public class WxAppMemberController {
 
     /**
      * 一口价购买
+     *
      * @param postOrderVO
      * @return
      * @throws InvocationTargetException
@@ -525,14 +537,14 @@ public class WxAppMemberController {
     @PostMapping("/goods/buy")
     @Transactional
     public Result<?> payGoodsDeposit(@RequestBody PostOrderVO postOrderVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
-        if(postOrderVO.getAddress() == null) {
+        if (postOrderVO.getAddress() == null) {
             throw new JeecgBootException("请选择有效的收货地址");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
-        String lock = "BUYOUT-"+AppContext.getApp();
+        String lock = "BUYOUT-" + AppContext.getApp();
         //检测库存
-        if(redissonLockClient.tryLock(lock, -1, 2)) {
+        if (redissonLockClient.tryLock(lock, -1, 2)) {
             Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {
                 Goods goods = goodsService.getById(goodsVO.getId());
                 if (goods.getStock() == null || goodsVO.getCount() > goods.getStock()) {
@@ -595,90 +607,83 @@ public class WxAppMemberController {
             WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
             redissonLockClient.unlock(lock);
             return Result.OK("", wxPayService.createOrder(request));
-        }
-        else {
+        } else {
             return Result.error("下单失败");
         }
     }
+
     /**
      * 出价拍品
+     *
      * @return
      */
     @PostMapping("/offers")
     @Transactional
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
         Goods goods = goodsService.getById(post.getString("id"));
-        if(goods == null) {
+        if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Date nowDate = new Date();
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            Performance performance = performanceService.getById(goods.getPerformanceId());
-            if(performance != null) {
-                if(performance.getType() == 1) {
-                    if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
-                        throw new JeecgBootException("拍品所在专场已结束");
-                    }
-                    if (nowDate.compareTo(performance.getStartTime()) < 0) {
-                        throw new JeecgBootException("拍品所在专场未开始");
-                    }
+        Performance performance = null;
+        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            performance = performanceService.getById(goods.getPerformanceId());
+        }
+        if (performance != null) {
+            if (performance.getType() == 1) {
+                if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
+                    throw new JeecgBootException("拍品所在专场已结束");
                 }
-                else if(performance.getType() == 2){
-                    if(performance.getState() == 0) {
-                        throw new JeecgBootException("拍品所在专场未开始");
-                    }
-                    else if(performance.getState() == 2) {
-                        throw new JeecgBootException("拍品所在专场已结束");
-                    }
-                    if(goods.getState() == 0) {
-                        throw new JeecgBootException("该拍品尚未开始");
-                    }
-                    else if(goods.getState() == 2) {
-                        throw new JeecgBootException("该拍品已结束拍卖");
-                    }
+                if (nowDate.compareTo(performance.getStartTime()) < 0) {
+                    throw new JeecgBootException("拍品所在专场未开始");
+                }
+            } else if (performance.getType() == 2) {
+                if (performance.getState() == 0) {
+                    throw new JeecgBootException("拍品所在专场未开始");
+                } else if (performance.getState() == 2) {
+                    throw new JeecgBootException("拍品所在专场已结束");
+                }
+                if (goods.getState() == 0) {
+                    throw new JeecgBootException("该拍品尚未开始");
+                } else if (goods.getState() == 2) {
+                    throw new JeecgBootException("该拍品已结束拍卖");
                 }
             }
-        }
-        else if(nowDate.compareTo(actualEndTime) >= 0) {
+        } else if (nowDate.compareTo(actualEndTime) >= 0) {
             throw new JeecgBootException("该拍品已结束拍卖");
-        }
-        else if(nowDate.compareTo(goods.getStartTime()) < 0) {
+        } else if (nowDate.compareTo(goods.getStartTime()) < 0) {
             throw new JeecgBootException("该拍品尚未开始");
         }
 
-        String lockKey = "OFFER-LOCKER-"+goods.getId();
-        if(redissonLockClient.tryLock(lockKey, -1, 300)) {
+        String lockKey = "OFFER-LOCKER-" + goods.getId();
+        if (redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
-            if(userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
+            if (userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("出价不得低于起拍价");
             }
             Float max = goodsOfferService.getMaxOffer(goods.getId());
-            if(max != null && userOfferPrice.compareTo(BigDecimal.valueOf(max)) <= 0) {
+            if (max != null && userOfferPrice.compareTo(BigDecimal.valueOf(max)) <= 0) {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("他人已出此价格或更高的价格");
             }
             LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             //查询用户是否缴纳保证金,如果拍品上了某个专场则以专场保证金为主
             String auctionId = null;
-            if(goods.getPerformanceId() != null) {
-                Performance performance = performanceService.getById(goods.getPerformanceId());
-                if(performance != null) {
-                    auctionId = performance.getAuctionId();
-                    LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-                    queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
-                    queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-                    if(goodsDepositService.count(queryWrapper) == 0) {
-                        return Result.error("未缴纳专场保证金");
-                    }
+            if (performance != null) {
+                auctionId = performance.getAuctionId();
+                LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
+                queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+                if (goodsDepositService.count(queryWrapper) == 0) {
+                    return Result.error("未缴纳专场保证金");
                 }
-            }
-            else if(goods.getDeposit() > 0) {
+            } else if (goods.getDeposit() > 0) {
                 LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
                 queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-                if(goodsDepositService.count(queryWrapper) == 0) {
+                if (goodsDepositService.count(queryWrapper) == 0) {
                     return Result.error("未缴纳保证金");
                 }
             }
@@ -695,7 +700,7 @@ public class WxAppMemberController {
 
             //判断是不是进入到了延时周期如果是，则进行延时，延时逻辑设置到实际结束时间中去
             //并发送延时消息
-            if(actualEndTime != null) {
+            if (actualEndTime != null) {
                 long nowTimeMillis = System.currentTimeMillis();
                 long endTimeMillis = actualEndTime.getTime();
                 Integer delayTime = goods.getDelayTime();
@@ -706,6 +711,17 @@ public class WxAppMemberController {
                         message.setGoodsId(goods.getId());
                         message.setType(MessageConstant.MSG_TYPE_DELAY);
                         message.setNewTime(newTime);
+                        if(performance != null) {
+                            performance.setEndTime(newTime);
+                            performanceService.updateById(performance);
+                            //发送专场时间修改通知
+                            PerformanceUpdateMessage performanceUpdateMessage = new PerformanceUpdateMessage();
+                            performanceUpdateMessage.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
+                            performanceUpdateMessage.setStartTime(performance.getStartTime());
+                            performanceUpdateMessage.setEndTime(performance.getEndTime());
+                            performanceUpdateMessage.setPerformanceId(performance.getId());
+                            goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(performanceUpdateMessage));
+                        }
                         goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));
                         goods.setActualEndTime(newTime);
                         goodsService.updateById(goods);
@@ -714,7 +730,7 @@ public class WxAppMemberController {
             }
             try {
                 //发送出价群消息
-                OfferMessage  offerMessage = new OfferMessage();
+                OfferMessage offerMessage = new OfferMessage();
                 offerMessage.setGoodsId(goods.getId());
                 offerMessage.setFromUserAvatar(loginUser.getAvatar());
                 offerMessage.setFromUserId(loginUser.getId());
@@ -723,18 +739,17 @@ public class WxAppMemberController {
                 offerMessage.setType(MessageConstant.MSG_TYPE_OFFER);
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
                 goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(offerMessage));
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
             //在此通知群消息
             redissonLockClient.unlock(lockKey);
             return Result.OK("出价成功");
-        }
-        else {
+        } else {
             return Result.error("出价失败");
         }
     }
+
     @PostMapping("/deposits/performance")
     @Transactional
     public Result<?> payPerformanceDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
@@ -742,10 +757,10 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到专场");
         }
         Performance performance = performanceService.getById(id);
-        if(performance == null) {
+        if (performance == null) {
             throw new JeecgBootException("操作失败找不到专场");
         }
-        if(performance.getDeposit() == null || performance.getDeposit() <= 0) {
+        if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
             throw new JeecgBootException("该拍品无需缴纳保证金");
         }
 
@@ -756,7 +771,7 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsDeposit::getPerformanceId, id);
 
-        if(goodsDepositService.count(queryWrapper) > 0) {
+        if (goodsDepositService.count(queryWrapper) > 0) {
             throw new JeecgBootException("您已经缴纳本场保证金");
         }
 
@@ -770,7 +785,7 @@ public class WxAppMemberController {
         goodsDeposit.setPrice(performance.getDeposit());
         goodsDeposit.setStatus(0);
         boolean result = goodsDepositService.save(goodsDeposit);
-        if(!result) {
+        if (!result) {
             throw new JeecgBootException("支付失败");
         }
         PayLog payLog = getPayLog(goodsDeposit.getId());
@@ -778,7 +793,7 @@ public class WxAppMemberController {
         BigDecimal payAmount = BigDecimal.valueOf(performance.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/notify/deposit/"+AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付专场保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -786,10 +801,12 @@ public class WxAppMemberController {
                 .detail(performance.getTitle())
                 .build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        return Result.OK("",wxPayService.createOrder(request));
+        return Result.OK("", wxPayService.createOrder(request));
     }
+
     /**
      * 缴纳拍品保证金，并生成订单
+     *
      * @param id
      * @return
      * @throws InvocationTargetException
@@ -803,10 +820,10 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Goods goods = goodsService.getById(id);
-        if(goods == null) {
+        if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
-        if(goods.getDeposit() == null || goods.getDeposit() <= 0) {
+        if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
             throw new JeecgBootException("该拍品无需缴纳保证金");
         }
 
@@ -816,15 +833,14 @@ public class WxAppMemberController {
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             queryWrapper.and(wq -> {
                 wq.eq(GoodsDeposit::getGoodsId, goods.getId()).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
             });
-        }
-        else {
+        } else {
             queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
         }
-        if(goodsDepositService.count(queryWrapper) > 0) {
+        if (goodsDepositService.count(queryWrapper) > 0) {
             throw new JeecgBootException("您已经缴纳本拍品或本场保证金");
         }
 
@@ -835,10 +851,10 @@ public class WxAppMemberController {
         goodsDeposit.setMemberId(loginUser.getId());
         goodsDeposit.setMemberAvatar(loginUser.getAvatar());
         goodsDeposit.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
-        if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
+        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             goodsDeposit.setPerformanceId(goods.getPerformanceId());
             Performance performance = performanceService.getById(goods.getPerformanceId());
-            if(performance != null) {
+            if (performance != null) {
                 goodsDeposit.setAuctionId(performance.getAuctionId());
                 deposit = performance.getDeposit();
             }
@@ -846,7 +862,7 @@ public class WxAppMemberController {
         goodsDeposit.setPrice(goods.getDeposit());
         goodsDeposit.setStatus(0);
         boolean result = goodsDepositService.save(goodsDeposit);
-        if(!result) {
+        if (!result) {
             throw new JeecgBootException("支付失败");
         }
         PayLog payLog = getPayLog(goodsDeposit.getId());
@@ -854,7 +870,7 @@ public class WxAppMemberController {
         BigDecimal payAmount = BigDecimal.valueOf(deposit).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp()+"/paimai/api/notify/deposit/"+AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付拍品保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -862,7 +878,7 @@ public class WxAppMemberController {
                 .detail(goods.getTitle())
                 .build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        return Result.OK("",wxPayService.createOrder(request));
+        return Result.OK("", wxPayService.createOrder(request));
     }
 
 

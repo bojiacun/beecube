@@ -15,7 +15,7 @@
     },
     {
       "label": "文章列表",
-      "url": "/pages/articles",
+      "url": "/pages/articles/list",
       "urlSuffix": {
         "label": "标签",
         "value": "tag"
