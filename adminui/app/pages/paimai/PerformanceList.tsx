@@ -16,6 +16,7 @@ import PerformanceEditor from "~/pages/paimai/PerformanceEditor";
 import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
+import moment from "moment";
 
 
 
@@ -162,6 +163,25 @@ const PerformanceList = (props: any) => {
             text: '结束时间',
             dataField: 'endTime',
             hidden: type == 2
+        },
+        {
+            text: '运行状态',
+            dataField: '',
+            isDummyField: true,
+            hidden: type == 2,
+            formatter(cell:number, row: any) {
+                let nowTime = moment();
+                if(moment(row.startTime).isAfter(nowTime)) {
+                    return <Badge variant={'light'}>未开始</Badge>
+                }
+                else if(moment(row.startTime).isBefore(nowTime) && moment(row.endTime).isAfter(nowTime)) {
+                    return <Badge variant={'success'}>进行中</Badge>
+                }
+                else if(moment(row.endTime).isBefore(nowTime)) {
+                    return <Badge variant={'dark'}>已结束</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
         {
             text: '同步状态',
