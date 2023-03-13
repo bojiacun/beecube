@@ -16,6 +16,8 @@ let qqmapSdk;
 class App extends Component<PropsWithChildren> {
 
     socket: any;
+    checkTimer: any;
+    checkTimeout:number = 30000;
 
     constructor(props) {
         super(props);
@@ -24,6 +26,7 @@ class App extends Component<PropsWithChildren> {
         this.onSocketError = this.onSocketError.bind(this);
         this.onSocketClose = this.onSocketClose.bind(this);
         this.connectToServer = this.connectToServer.bind(this);
+        this.healthCheck = this.healthCheck.bind(this);
     }
 
     initUser(context) {
@@ -36,25 +39,37 @@ class App extends Component<PropsWithChildren> {
     }
     connectToServer(context) {
         connectWebSocketServer('/auction/websocket/' + siteInfo.appId +'/'+context.userInfo.id).then(res => {
+            console.log('socket 连接成功');
             this.socket = res;
             this.socket.onMessage(this.onMessageReceive);
             this.socket.onClose(this.onSocketClose);
             this.socket.onError(this.onSocketError);
+            this.healthCheck(this.socket);
         });
     }
     onSocketError(error) {
-        console.log('服务器连接断开,5秒后尝试重连', error);
+        console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
+        clearInterval(this.checkTimer);
         let {context} = store.getState();
         setTimeout(()=>{
             this.connectToServer(context);
         }, 5000);
     }
-    onSocketClose() {
-        console.log('服务器连接断开,立即尝试重连');
+    onSocketClose(res) {
+        console.log('服务器连接断开, 5秒后尝试重连', res);
+        clearInterval(this.checkTimer);
         let {context} = store.getState();
         setTimeout(()=>{
             this.connectToServer(context);
         }, 5000);
+    }
+    healthCheck(socket) {
+        this.checkTimer = setInterval(()=>{
+            let {context} = store.getState();
+            let data = {type: 'MSG_HEALTH', fromUserId: context.userInfo?.id};
+            console.log('发送心跳包', data);
+            socket.send({data: JSON.stringify(data)});
+        }, this.checkTimeout);
     }
 
     onMessageReceive(message:any) {
