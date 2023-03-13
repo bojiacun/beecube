@@ -53,10 +53,12 @@ public class AppMemberProviderImpl implements AppMemberProvider {
         }
         LoginUser user = appMemberService.getEncodeUserInfo(username);
 
-        try {
-            SensitiveInfoUtil.handlerObject(user, false);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        if(user != null) {
+            try {
+                SensitiveInfoUtil.handlerObject(user, false);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
 
         return user;
