@@ -73,4 +73,5 @@ public class Article {
 	@ApiModelProperty(value = "状态（0下架1上架)")
 	@Dict(dicCode = "paimai_article_status")
 	private java.lang.Integer status;
+	private String tags;
 }
