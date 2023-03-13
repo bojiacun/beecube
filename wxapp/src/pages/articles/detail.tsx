@@ -24,11 +24,11 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail} = this.props;
+        const {detail} = this.state;
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout statusBarProps={{title: '文章详情'}} style={{backgroundColor: 'white', padding: 16}}>
+            <PageLayout containerClassName={'p-4'} statusBarProps={{title: '文章详情'}} style={{backgroundColor: 'white'}}>
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>

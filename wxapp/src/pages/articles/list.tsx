@@ -62,13 +62,13 @@ export default class Index extends Component<any, any> {
     render() {
         const {list, noMore, loadingMore, options} = this.state;
         return (
-            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag)}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag), className: 'border-b border-gray-200 bg-white border-solid'}} enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
                 {list[0]?.type == 1 &&
-                    <View className={'grid grid-cols-1 gap-4 p-4 divide-y divide-gray-200'}>
+                    <View className={'grid grid-cols-1 gap-4 px-4 divide-y divide-gray-200'}>
                         {list.map((item) => {
                             return (
-                                <Navigator url={`/pages/articles/detail?id=${item.id}`} className={'bg-white p-4 flex '}>
+                                <Navigator url={`/pages/articles/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
                                     <View className={'flex-1 font-bold'}>
                                         {item.title}
                                     </View>
@@ -84,7 +84,7 @@ export default class Index extends Component<any, any> {
                             return (
                                 <View className={'bg-white space-y-2 p-4 rounded shadow-outer'}>
                                     <View className={'flex-1 font-bold'}>
-                                        <Video src={item.video}  controls={true} />
+                                        <Video src={item.video}  controls={true} className={'block w-full'} />
                                     </View>
                                     <View className={'font-bold'}>{item.title}</View>
                                 </View>

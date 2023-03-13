@@ -44,6 +44,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
             showTabBar = false,
             style = {},
             className,
+            containerClassName = '',
             loading,
             statusBarProps = {},
             enableReachBottom = false
@@ -61,9 +62,9 @@ class PageLayout extends Component<PayLayoutProps, any> {
         }
 
         return (
-            <View className={classNames(styles.page)} style={{...style, ...this.state.pageStyle}}>
+            <View className={classNames(styles.page, className)} style={{...style, ...this.state.pageStyle}}>
                 {showStatusBar && <StatusBar {...statusBarProps} />}
-                <View className={className}>
+                <View className={containerClassName}>
                     {children}
                     {showTabBar && <TabBar/>}
                 </View>

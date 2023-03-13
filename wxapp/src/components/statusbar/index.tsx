@@ -14,6 +14,7 @@ export declare interface StatusbarProps {
     button?: React.ReactElement;
     hide?: boolean;
     style?: any;
+    className?: string;
 }
 
 const StatusBar = (props: StatusbarProps): any => {
@@ -23,6 +24,7 @@ const StatusBar = (props: StatusbarProps): any => {
         button = null,
         hide = false,
         style = {fontSize: 18, fontWeight: 'bold'},
+        className = 'bg-white',
     } = props;
     const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
     const systemInfo = useSelector(({context}) => context.systemInfo);
@@ -53,7 +55,7 @@ const StatusBar = (props: StatusbarProps): any => {
     }
 
     return (
-        <View className={classNames(styles.status_bar, 'bg-white')} style={{...style, ...navigatorBarStyle}}>
+        <View className={classNames(styles.status_bar, className)} style={{...style, ...navigatorBarStyle}}>
             {button !== null && button}
             {button === null && pages?.length > 1 && <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
             {pages?.length == 1 && pages[0].route != 'pages/index/index'
