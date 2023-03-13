@@ -617,7 +617,7 @@ public class WxAppMemberController {
             Performance performance = performanceService.getById(goods.getPerformanceId());
             if(performance != null) {
                 if(performance.getType() == 1) {
-                    if (nowDate.compareTo(performance.getEndTime()) >= 0) {
+                    if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
                         throw new JeecgBootException("拍品所在专场已结束");
                     }
                     if (nowDate.compareTo(performance.getStartTime()) < 0) {
