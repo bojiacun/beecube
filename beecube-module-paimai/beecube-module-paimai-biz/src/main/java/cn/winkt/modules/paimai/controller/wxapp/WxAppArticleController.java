@@ -58,6 +58,8 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        if(StringUtils.isNotEmpty(tag)) {
            queryWrapper.like("title", tag);
        }
+       queryWrapper.eq("status", 1);
+       queryWrapper.select("id", "preview", "video", "type", "description", "title", "create_time");
        Page<Article> page = new Page<Article>(pageNo, pageSize);
        IPage<Article> pageList = articleService.page(page, queryWrapper);
        return Result.OK(pageList);
