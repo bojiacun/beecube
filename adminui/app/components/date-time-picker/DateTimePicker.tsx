@@ -62,6 +62,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (props) => {
             dateFormat={formatter}
             customInput={<BootstrapFormControlInput inputName={inputName} placeholder={placeholder} inputPlaceHolder={placeholder} formik={formik} />}
             showTimeSelect={showTime}
+            showTimeInput={true}
         />
     );
 }

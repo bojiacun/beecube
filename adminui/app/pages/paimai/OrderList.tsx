@@ -48,7 +48,7 @@ const OrderList = (props: any) => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
-                showToastSuccess('删除成功');
+                showToastSuccess('确认成功');
                 searchFetcher.submit(searchState, {method: 'get'});
             } else {
                 showToastError(deleteFetcher.data.message);
@@ -58,16 +58,16 @@ const OrderList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'edit':
+            case 'delivery':
                 //编辑
                 setEditModal(row);
                 break;
-            case 'delete':
+            case 'confirm-pay':
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/auctions/delete?id=${row.id}`, replace: true});
-                });
+                    deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/orders/confirm_pay?id=${row.id}`, replace: true});
+                }, '此订单确认已经支付了吗？', '确认支付');
                 break;
         }
     }
@@ -159,7 +159,8 @@ const OrderList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-
+                        {row.status == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'confirm-pay')}>确认支付</a>}
+                        {row.status == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'delivery')}>发货</a>}
                     </div>
                 );
             }
