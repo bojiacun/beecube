@@ -9,6 +9,7 @@ import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.desensitization.annotation.SensitiveEncode;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
             return null;
         }
         LoginUser loginUser = new LoginUser();
-        log.info("从数据库中查找用户信息 {}", username);
+        log.info("从数据库中查找用户信息 {}, {}", username, AppContext.getApp());
         AppMember appMember = appMemberMapper.getUserByName(username);
         if(appMember == null) {
             return null;
