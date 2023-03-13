@@ -63,6 +63,7 @@ public class AuctionRunJobHandler {
         });
         List<Goods> goodsList = goodsService.list(queryWrapper);
 
+        log.info("有 {} 个拍品待处理", goodsList.size());
         //处理流拍及成交逻辑
         goodsList.forEach(goods -> {
             BigDecimal minPrice = BigDecimal.valueOf(goods.getMinPrice());
@@ -77,6 +78,7 @@ public class AuctionRunJobHandler {
 
             if(maxOfferRow == null || BigDecimal.valueOf(maxOfferRow.getPrice()).compareTo(minPrice) < 0) {
                 //流拍了,将拍品状态改为流拍，并将拍品所有出价改为流拍
+                log.info("拍品 {} 流拍了", goods.getId());
                 goods.setState(4);
                 LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
                 updateWrapper.set(GoodsOffer::getStatus, 2);
@@ -88,6 +90,7 @@ public class AuctionRunJobHandler {
                 goodsService.updateById(goods);
             }
             else {
+                log.info("拍品 {} 成交了", goods.getId());
                 //成交了,将拍品状态改为成交，并将最大出价改为成交
                 goods.setState(3);
                 maxOfferRow.setStatus(1);
