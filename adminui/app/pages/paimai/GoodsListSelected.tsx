@@ -127,14 +127,14 @@ const GoodsListSelected = (props: any) => {
                 showDeleteAlert(function () {
                     startPageLoading();
                     controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=3`, replace: true});
-                });
+                }, '请确认改拍品已成交?', '确认成交');
                 break;
             case 'confirm_deal_fail':
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
                     controlFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/goods/deal?id=${row.id}&status=4`, replace: true});
-                });
+                }, '请确认该拍品已流拍', '确认流拍');
                 break;
         }
     }
