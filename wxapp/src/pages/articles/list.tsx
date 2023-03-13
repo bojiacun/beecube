@@ -16,6 +16,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
+        this.loadData(1, true).then(() => utils.hideLoading());
     }
 
     loadData(page, clear = false) {
@@ -24,7 +25,7 @@ export default class Index extends Component<any, any> {
                 pageNo: page,
                 column: 'createTime',
                 order: 'desc',
-                tag: this.state.tag
+                tag: this.state.options.tag
             }
         }).then(res => {
             if (clear) {
@@ -44,7 +45,6 @@ export default class Index extends Component<any, any> {
     onLoad(options: any) {
         this.setState({options: options})
         utils.showLoading();
-        this.loadData(1, true).then(() => utils.hideLoading());
     }
 
     onReachBottom() {
@@ -63,9 +63,9 @@ export default class Index extends Component<any, any> {
     render() {
         const {list, noMore, loadingMore, options} = this.state;
         return (
-            <PageLayout statusBarProps={{title: options.tag}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag)}} enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
-                {list[0].type == 1 &&
+                {list[0]?.type == 1 &&
                     <View className={'grid grid-cols-1 gap-4 p-4 divide-y divide-gray-200'}>
                         {list.map((item) => {
                             return (
@@ -79,7 +79,7 @@ export default class Index extends Component<any, any> {
                         })}
                     </View>
                 }
-                {list[0].type == 2 &&
+                {list[0]?.type == 2 &&
                     <View className={'p-4 space-y-4'}>
                         {list.map((item) => {
                             return (

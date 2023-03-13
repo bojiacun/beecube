@@ -56,7 +56,7 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        QueryWrapper<Article> queryWrapper = QueryGenerator.initQueryWrapper(article, req.getParameterMap());
        String tag = req.getParameter("tag");
        if(StringUtils.isNotEmpty(tag)) {
-           queryWrapper.like("title", tag);
+           queryWrapper.like("tags", tag);
        }
        queryWrapper.eq("status", 1);
        queryWrapper.select("id", "preview", "video", "type", "description", "title", "create_time");
