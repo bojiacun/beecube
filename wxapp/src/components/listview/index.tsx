@@ -22,6 +22,7 @@ export interface ListViewProps extends Partial<any> {
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
     tabStyle?: number;
     defaultActiveKey?: string | number | null;
+    autoRefresh?: boolean;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -32,7 +33,8 @@ const ListView: FC<ListViewProps> = (props) => {
         dataFetcher,
         tabStyle = 1,
         defaultActiveKey = null,
-        className
+        className,
+        autoRefresh = false,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -126,8 +128,13 @@ const ListView: FC<ListViewProps> = (props) => {
     });
 
     useDidShow(() => {
-        //列表显示的时候主动刷新
-
+        if(autoRefresh) {
+            //列表显示的时候主动刷新
+            dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
+                setData([...res.data.result.records]);
+            });
+            setPage(1);
+        }
     });
 
     return (

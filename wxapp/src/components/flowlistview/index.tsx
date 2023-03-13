@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import Taro, {usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
 import stylesFlow from '../../flow.module.scss';
 import LoadMore from "../loadmore";
@@ -23,6 +23,7 @@ export interface ListViewProps extends Partial<any> {
     dataFetcher: (pageIndex: number, tab: ListViewTabItem, index: number) => Promise<any>;
     tabStyle?: number;
     defaultActiveKey?: string|number|null;
+    autoRefresh?: boolean;
 }
 
 const FlowListView: FC<ListViewProps> = (props) => {
@@ -30,7 +31,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
         tabs, onTabChanged = () => {}, dataFetcher,
         tabStyle = 1,
         defaultActiveKey = null,
-        className
+        className,
+        autoRefresh = false,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -122,7 +124,15 @@ const FlowListView: FC<ListViewProps> = (props) => {
         })
         setPage(page + 1);
     });
-
+    useDidShow(() => {
+        if(autoRefresh) {
+            //列表显示的时候主动刷新
+            dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
+                setData([...res.data.result.records]);
+            });
+            setPage(1);
+        }
+    });
 
     return (
         <>

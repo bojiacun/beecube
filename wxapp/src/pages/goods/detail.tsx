@@ -346,7 +346,7 @@ export default class Index extends Component<any, any> {
                     );
                 }
             }
-        } else {
+        } else if(goods.state < 2 && this.state.status != TimeCountDownerStatus.ENDED){
             return (
                 <View>
                     <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
@@ -356,7 +356,17 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
+        else {
+            return (
+                <View>
+                    <Button className={'btn w-56'} disabled={true}>
+                        <View>已结束</View>
+                    </Button>
+                </View>
+            );
+        }
     }
+
 
     noticeMe() {
         request.put('/paimai/api/members/messages/toggle', {

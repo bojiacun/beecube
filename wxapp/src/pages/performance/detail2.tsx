@@ -259,7 +259,7 @@ export default class Index extends Component<any, any> {
                 {goodsList.length == 0 && <NoData/>}
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
-                {!deposited &&
+                {!deposited && detail.state < 2 &&
                     <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>
                         <View>
