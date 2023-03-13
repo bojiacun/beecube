@@ -23,6 +23,7 @@ export interface ListViewProps extends Partial<any> {
     tabStyle?: number;
     defaultActiveKey?: string | number | null;
     autoRefresh?: boolean;
+    fixed?:boolean;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -35,6 +36,7 @@ const ListView: FC<ListViewProps> = (props) => {
         defaultActiveKey = null,
         className,
         autoRefresh = false,
+        fixed = true,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -139,11 +141,18 @@ const ListView: FC<ListViewProps> = (props) => {
         }
     });
 
+    let tabStyles:any = {
+        overflowY: 'hidden', overflowX: 'auto', zIndex: 9999
+    }
+    if(fixed) {
+        tabStyles.top = Taro.pxTransform(systemInfo.safeArea.top + 40);
+    }
+
     return (
         <>
             <View
-                className={classNames('bg-white px-4 py-3 flex sticky items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
-                style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999, top: Taro.pxTransform(systemInfo.safeArea.top + 40)}}>
+                className={classNames('bg-white px-4 py-3 flex items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden', fixed ? 'sticky':'')}
+                style={tabStyles}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text

@@ -66,7 +66,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '我的余额'}}>
-                <View className={'p-4 my-2 mx-4 text-white bg-gradient-to-r from-indigo-300 to-indigo-500 rounded space-y-2'}>
+                <View className={'p-4 my-2 mx-4 text-white bg-gradient-to-r from-indigo-500 to-indigo-300 rounded space-y-2'}>
                     <View>余额（元）</View>
                     <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[0]}</Text></View>
                     <View className={'flex space-x-2'}>
@@ -80,6 +80,7 @@ export default class Index extends Component<any, any> {
                     tabs={this.tabs}
                     dataFetcher={this.loadData}
                     tabStyle={2}
+                    fixed={false}
                 />
             </PageLayout>
         );

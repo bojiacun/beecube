@@ -24,6 +24,7 @@ export interface ListViewProps extends Partial<any> {
     tabStyle?: number;
     defaultActiveKey?: string|number|null;
     autoRefresh?: boolean;
+    fixed?:boolean;
 }
 
 const FlowListView: FC<ListViewProps> = (props) => {
@@ -33,6 +34,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
         defaultActiveKey = null,
         className,
         autoRefresh = false,
+        fixed = true,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [data, setData] = useState<any[]>([]);
@@ -134,11 +136,16 @@ const FlowListView: FC<ListViewProps> = (props) => {
             setPage(1);
         }
     });
-
+    let tabStyles:any = {
+        overflowY: 'hidden', overflowX: 'auto', zIndex: 9999
+    }
+    if(fixed) {
+        tabStyles.top = Taro.pxTransform(systemInfo.safeArea.top + 40);
+    }
     return (
         <>
-            {tabs.length > 0 && <View className={classNames('bg-white sticky w-full px-4 py-3 flex items-center space-x-4 text-gray-700')}
-                  style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999, top: Taro.pxTransform(systemInfo.safeArea.top + 40)}}>
+            {tabs.length > 0 && <View className={classNames('bg-white w-full px-4 py-3 flex items-center space-x-4 text-gray-700',fixed?'sticky':'')}
+                  style={tabStyles}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(tabStyle == 1 ? '':'flex-1','text-center',index === selectedIndex ? styles.active : '')} onClick={() => {
