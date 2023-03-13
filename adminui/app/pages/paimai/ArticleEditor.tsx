@@ -80,7 +80,7 @@ const ArticleEditor = (props: any) => {
                                             <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                         </FormGroup>
                                     }
-                                    {type == 1 &&
+                                    {type == 2 &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'video'}>视频地址</FormLabel>
                                             <FileBrowserInput name={'video'} type={3} multi={false}/>
