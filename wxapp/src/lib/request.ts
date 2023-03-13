@@ -17,14 +17,14 @@ const handleOnResponse = async (response: AxiosResponse) => {
     let res = response.data;
     if(res.code == 401) {
         //登录态失效，重新执行登录
-        // const res:any = await Taro.login();
-        // const result:any = await instance.get('/app/api/wxapp/login', {params: {code: res.code}});
-        // const token = result.data.result;
-        // Taro.setStorageSync("TOKEN", token);
-        // //重新发起请求
-        // response.config.headers['X-Access-Token'] = token;
-        // response.config.headers['Authorization'] = token;
-        // return await instance.request(response.config);
+        const res:any = await Taro.login();
+        const result:any = await instance.get('/app/api/wxapp/login', {params: {code: res.code}});
+        const token = result.data.result;
+        Taro.setStorageSync("TOKEN", token);
+        //重新发起请求
+        response.config.headers['X-Access-Token'] = token;
+        response.config.headers['Authorization'] = token;
+        return await instance.request(response.config);
     }
     else if(res.code == 403) {
         Taro.showToast({icon: 'none', title: '无权限访问!', duration: 1500}).then();

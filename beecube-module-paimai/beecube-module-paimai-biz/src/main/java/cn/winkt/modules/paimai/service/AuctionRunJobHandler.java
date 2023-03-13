@@ -54,6 +54,7 @@ public class AuctionRunJobHandler {
         //查找限时拍拍品结束了的
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Goods::getType, 1);
+        queryWrapper.lt(Goods::getState, 2);
         queryWrapper.and(qw -> {
             qw.and(qw1 -> {
                 qw1.isNull(Goods::getActualEndTime).lt(Goods::getEndTime, nowDate);
