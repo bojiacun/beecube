@@ -21,7 +21,9 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.GoodsOrder;
 import cn.winkt.modules.paimai.service.IGoodsOrderService;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -42,142 +44,168 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
- /**
+/**
  * @Description: 订单表
  * @Author: jeecg-boot
- * @Date:   2023-02-08
+ * @Date: 2023-02-08
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="订单表")
+@Api(tags = "订单表")
 @RestController
 @RequestMapping("/paimai/orders")
 public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrderService> {
-	@Autowired
-	private IGoodsOrderService goodsOrderService;
+    @Autowired
+    private IGoodsOrderService goodsOrderService;
 
-	@Resource
-	private IOrderGoodsService orderGoodsService;
-	
-	/**
-	 * 分页列表查询
-	 *
-	 * @param goodsOrder
-	 * @param pageNo
-	 * @param pageSize
-	 * @param req
-	 * @return
-	 */
-	@AutoLog(value = "订单表-分页列表查询")
-	@ApiOperation(value="订单表-分页列表查询", notes="订单表-分页列表查询")
-	@GetMapping(value = "/list")
-	@AutoDict
-	public Result<?> queryPageList(GoodsOrder goodsOrder,
-								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-								   HttpServletRequest req) {
-		QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
-		Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
-		IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
-		pageList.getRecords().forEach(r -> {
-			LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
-			qw.eq(OrderGoods::getOrderId, r.getId());
-			r.setOrderGoods(orderGoodsService.list(qw));
-		});
-		return Result.OK(pageList);
-	}
-	
-	/**
-	 * 添加
-	 *
-	 * @param goodsOrder
-	 * @return
-	 */
-	@AutoLog(value = "订单表-添加")
-	@ApiOperation(value="订单表-添加", notes="订单表-添加")
-	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody GoodsOrder goodsOrder) {
-		goodsOrderService.save(goodsOrder);
-		return Result.OK("添加成功！");
-	}
-	
-	/**
-	 * 编辑
-	 *
-	 * @param goodsOrder
-	 * @return
-	 */
-	@AutoLog(value = "订单表-编辑")
-	@ApiOperation(value="订单表-编辑", notes="订单表-编辑")
-	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody GoodsOrder goodsOrder) {
-		goodsOrderService.updateById(goodsOrder);
-		return Result.OK("编辑成功!");
-	}
-	
-	/**
-	 * 通过id删除
-	 *
-	 * @param id
-	 * @return
-	 */
-	@AutoLog(value = "订单表-通过id删除")
-	@ApiOperation(value="订单表-通过id删除", notes="订单表-通过id删除")
-	@DeleteMapping(value = "/delete")
-	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		goodsOrderService.removeById(id);
-		return Result.OK("删除成功!");
-	}
-	
-	/**
-	 * 批量删除
-	 *
-	 * @param ids
-	 * @return
-	 */
-	@AutoLog(value = "订单表-批量删除")
-	@ApiOperation(value="订单表-批量删除", notes="订单表-批量删除")
-	@DeleteMapping(value = "/deleteBatch")
-	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.goodsOrderService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.OK("批量删除成功！");
-	}
-	
-	/**
-	 * 通过id查询
-	 *
-	 * @param id
-	 * @return
-	 */
-	@AutoLog(value = "订单表-通过id查询")
-	@ApiOperation(value="订单表-通过id查询", notes="订单表-通过id查询")
-	@GetMapping(value = "/queryById")
-	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		GoodsOrder goodsOrder = goodsOrderService.getById(id);
-		return Result.OK(goodsOrder);
-	}
+    @Resource
+    private IOrderGoodsService orderGoodsService;
 
-  /**
-   * 导出excel
-   *
-   * @param request
-   * @param goodsOrder
-   */
-  @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, GoodsOrder goodsOrder) {
-      return super.exportXls(request, goodsOrder, GoodsOrder.class, "订单表");
-  }
+    /**
+     * 分页列表查询
+     *
+     * @param goodsOrder
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @AutoLog(value = "订单表-分页列表查询")
+    @ApiOperation(value = "订单表-分页列表查询", notes = "订单表-分页列表查询")
+    @GetMapping(value = "/list")
+    @AutoDict
+    public Result<?> queryPageList(GoodsOrder goodsOrder,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                   HttpServletRequest req) {
+        QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
+        Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
+        IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
+        pageList.getRecords().forEach(r -> {
+            LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
+            qw.eq(OrderGoods::getOrderId, r.getId());
+            r.setOrderGoods(orderGoodsService.list(qw));
+        });
+        return Result.OK(pageList);
+    }
 
-  /**
-   * 通过excel导入数据
-   *
-   * @param request
-   * @param response
-   * @return
-   */
-  @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-  public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, GoodsOrder.class);
-  }
+    /**
+     * 添加
+     *
+     * @param goodsOrder
+     * @return
+     */
+    @AutoLog(value = "订单表-添加")
+    @ApiOperation(value = "订单表-添加", notes = "订单表-添加")
+    @PostMapping(value = "/add")
+    public Result<?> add(@RequestBody GoodsOrder goodsOrder) {
+        goodsOrderService.save(goodsOrder);
+        return Result.OK("添加成功！");
+    }
+
+    /**
+     * 编辑
+     *
+     * @param goodsOrder
+     * @return
+     */
+    @AutoLog(value = "订单表-编辑")
+    @ApiOperation(value = "订单表-编辑", notes = "订单表-编辑")
+    @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
+    public Result<?> edit(@RequestBody GoodsOrder goodsOrder) {
+        goodsOrderService.updateById(goodsOrder);
+        return Result.OK("编辑成功!");
+    }
+
+    @AutoLog(value = "订单表-确认支付")
+    @ApiOperation(value = "订单表-确认支付", notes = "订单表-确认支付")
+    @RequestMapping(value = "/pay/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
+    public Result<?> payConfirm(@RequestParam String id) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        goodsOrder.setStatus(1);
+        goodsOrderService.updateById(goodsOrder);
+        return Result.OK("编辑成功!");
+    }
+    @AutoLog(value = "订单表-确认收货")
+    @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")
+    @RequestMapping(value = "/delivery/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
+    public Result<?> deliveryConfirm(@RequestParam String id) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        goodsOrder.setStatus(3);
+        goodsOrderService.updateById(goodsOrder);
+        return Result.OK("编辑成功!");
+    }
+    @AutoLog(value = "订单表-确认发货")
+    @ApiOperation(value = "订单表-确认发货", notes = "订单表-确认发货")
+    @RequestMapping(value = "/delivery", method = {RequestMethod.PUT, RequestMethod.POST})
+    public Result<?> delivery(@RequestBody GoodsOrder goodsOrder) {
+        goodsOrder.setStatus(2);
+        goodsOrderService.updateById(goodsOrder);
+        return Result.OK("编辑成功!");
+    }
+    /**
+     * 通过id删除
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "订单表-通过id删除")
+    @ApiOperation(value = "订单表-通过id删除", notes = "订单表-通过id删除")
+    @DeleteMapping(value = "/delete")
+    public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
+        goodsOrderService.removeById(id);
+        return Result.OK("删除成功!");
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @AutoLog(value = "订单表-批量删除")
+    @ApiOperation(value = "订单表-批量删除", notes = "订单表-批量删除")
+    @DeleteMapping(value = "/deleteBatch")
+    public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
+        this.goodsOrderService.removeByIds(Arrays.asList(ids.split(",")));
+        return Result.OK("批量删除成功！");
+    }
+
+    /**
+     * 通过id查询
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "订单表-通过id查询")
+    @ApiOperation(value = "订单表-通过id查询", notes = "订单表-通过id查询")
+    @GetMapping(value = "/queryById")
+    public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        return Result.OK(goodsOrder);
+    }
+
+    /**
+     * 导出excel
+     *
+     * @param request
+     * @param goodsOrder
+     */
+    @RequestMapping(value = "/exportXls")
+    public ModelAndView exportXls(HttpServletRequest request, GoodsOrder goodsOrder) {
+        return super.exportXls(request, goodsOrder, GoodsOrder.class, "订单表");
+    }
+
+    /**
+     * 通过excel导入数据
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
+        return super.importExcel(request, response, GoodsOrder.class);
+    }
 
 }
