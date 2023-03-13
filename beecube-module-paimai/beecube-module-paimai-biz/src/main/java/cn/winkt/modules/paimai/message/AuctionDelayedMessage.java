@@ -12,4 +12,6 @@ public class AuctionDelayedMessage extends Message{
     private String type = MessageConstant.MSG_TYPE_DELAY;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date newTime;
+
+    private String goodsId;
 }

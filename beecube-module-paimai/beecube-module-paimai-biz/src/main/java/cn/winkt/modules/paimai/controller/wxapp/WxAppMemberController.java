@@ -703,6 +703,7 @@ public class WxAppMemberController {
                     if ((nowTimeMillis + delayTime * 60 * 1000) >= endTimeMillis) {
                         Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
                         AuctionDelayedMessage message = new AuctionDelayedMessage();
+                        message.setGoodsId(goods.getId());
                         message.setType(MessageConstant.MSG_TYPE_DELAY);
                         message.setNewTime(newTime);
                         goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));

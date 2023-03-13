@@ -90,7 +90,6 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             })
         }
-        console.log('goods detail message received', message);
         if (prevProps.message && prevProps.message.id == message.id) return;
 
         if (goods.id == message.goodsId) {
