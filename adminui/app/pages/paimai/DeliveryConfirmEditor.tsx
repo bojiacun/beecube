@@ -21,17 +21,19 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
 const DeliveryConfirmEditor = (props: any) => {
-    const {model, onHide, id} = props;
+    const {model, onHide} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
 
     const GoodsSchema = Yup.object().shape({
         deliveryNo: Yup.string().required('快递单号'),
+        deliveryCode: Yup.string().required('快递代码'),
     });
 
     const handleOnSubmit = (values: any) => {
-        postFetcher.submit(values, {method: 'put', action: '/paimai/orders/delivery?id='+id});
+        values.id = model.id;
+        postFetcher.submit(values, {method: 'put', action: '/paimai/orders/delivery?id='+model.id});
     }
 
 
@@ -68,6 +70,7 @@ const DeliveryConfirmEditor = (props: any) => {
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                                    <BootstrapInput label={'快递代码'} name={'deliveryCode'} />
                                     <BootstrapInput label={'快递单号'} name={'deliveryNo'} />
                                 </Modal.Body>
                                 <Modal.Footer>

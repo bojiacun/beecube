@@ -12,6 +12,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
+import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
 
 
 const OrderList = (props: any) => {
@@ -68,6 +69,13 @@ const OrderList = (props: any) => {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/orders/confirm_pay?id=${row.id}`, replace: true});
                 }, '此订单确认已经支付了吗？', '确认支付');
+                break;
+            case 'confirm-delivery':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/orders/confirm_delivery?id=${row.id}`, replace: true});
+                }, '此订单确认已经收货了吗？', '确认收货');
                 break;
         }
     }
@@ -161,6 +169,7 @@ const OrderList = (props: any) => {
                     <div className={'d-flex align-items-center'}>
                         {row.status == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'confirm-pay')}>确认支付</a>}
                         {row.status == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'delivery')}>发货</a>}
+                        {row.status == 2  && <a href={'#'} onClick={() => handleOnAction(row, 'confirm-delivery')}>确认收货</a>}
                     </div>
                 );
             }
@@ -239,7 +248,9 @@ const OrderList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-
+            {editModal && <DeliveryConfirmEditor model={editModal} onHide={()=>{
+                setEditModal(null);
+            }} />}
 
         </>
     );

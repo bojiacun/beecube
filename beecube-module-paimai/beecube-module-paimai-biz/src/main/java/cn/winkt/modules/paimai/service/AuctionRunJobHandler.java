@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
+import org.jeecg.config.AppContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ public class AuctionRunJobHandler {
     @Transactional
     public ReturnT<String> runningAuction(String params) {
         log.info("我是定时任务，我执行了哦");
+        AppContext.setApp(params);
         Date nowDate = new Date();
         //查找限时拍拍品结束了的
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();

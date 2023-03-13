@@ -89,6 +89,10 @@ const AppList = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: '应用ID',
+            dataField: 'id',
+        },
+        {
             text: '应用',
             dataField: 'logo',
             isDummyField: true,
