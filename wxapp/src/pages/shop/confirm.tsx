@@ -53,7 +53,7 @@ export default class Index extends Component<any, any> {
         if (address) {
             this.setState({address: JSON.parse(address)});
         } else {
-            request.get('/paimai/api/members/addresses/default', {params: {id: ''}}).then(res => {
+            request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
                 this.setState({address: res.data.result});
             })
         }
