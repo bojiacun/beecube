@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
@@ -140,7 +140,7 @@ const ListView: FC<ListViewProps> = (props) => {
     return (
         <>
             <View
-                className={classNames('bg-white px-4 py-3 flex fixed items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
+                className={classNames('bg-white px-4 py-3 flex items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden')}
                 style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
                 {tabs.map((tab, index) => {
                     return (
@@ -162,7 +162,7 @@ const ListView: FC<ListViewProps> = (props) => {
                 })}
             </View>
             {data.length === 0 && <NoData style={{marginTop: 200}}/>}
-            <View className={classNames('p-4 space-y-4', className)} style={{paddingTop: Taro.pxTransform(70)}}>
+            <View className={classNames('p-4 space-y-4', className)}>
                 {data.map((item) => {
                     let tab = tabs[selectedIndex];
                     return tab.template(item);

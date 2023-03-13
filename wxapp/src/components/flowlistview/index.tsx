@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View} from "@tarojs/components";
 import classNames from "classnames";
-import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
 import stylesFlow from '../../flow.module.scss';
 import LoadMore from "../loadmore";
@@ -136,7 +136,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            {tabs.length > 0 && <View className={classNames('bg-white fixed w-full px-4 py-3 flex items-center space-x-4 text-gray-700')}
+            {tabs.length > 0 && <View className={classNames('bg-white w-full px-4 py-3 flex items-center space-x-4 text-gray-700')}
                   style={{overflowY: 'hidden', overflowX: 'auto', zIndex: 9999}}>
                 {tabs.map((tab, index) => {
                     return (
@@ -159,7 +159,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <View className={classNames('p-4', stylesFlow.flowWrapper, className)} style={{paddingTop: Taro.pxTransform(70)}}>
+                <View className={classNames('p-4', stylesFlow.flowWrapper, className)}>
             {data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);
