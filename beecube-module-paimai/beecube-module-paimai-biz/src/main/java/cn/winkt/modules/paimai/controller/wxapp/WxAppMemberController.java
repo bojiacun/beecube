@@ -714,6 +714,7 @@ public class WxAppMemberController {
             try {
                 //发送出价群消息
                 OfferMessage  offerMessage = new OfferMessage();
+                offerMessage.setGoodsId(goods.getId());
                 offerMessage.setFromUserAvatar(loginUser.getAvatar());
                 offerMessage.setFromUserId(loginUser.getId());
                 offerMessage.setFromUserName(goodsOffer.getMemberName());

@@ -90,6 +90,7 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             })
         }
+        console.log('goods detail message received', message);
         if (prevProps.message && prevProps.message.id == message.id) return;
 
         if (goods.id == message.goodsId) {
@@ -125,8 +126,9 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
         let {goods} = this.state;
-        let msg = JSON.parse(message.data);
+        let msg = message;
 
+        console.log('goods message received', msg);
         //如果是自身产生的消息则忽略
         if (msg.fromUserId === userInfo.id) {
             return;

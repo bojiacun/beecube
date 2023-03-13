@@ -12,6 +12,7 @@ public class OfferMessage extends Message{
     private String fromUserId;
     private String fromUserAvatar;
     private String fromUserName;
+    private String goodsId;
     private BigDecimal price;
     private String type = MessageConstant.MSG_TYPE_OFFER;
 
