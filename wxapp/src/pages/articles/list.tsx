@@ -2,12 +2,9 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View, Navigator} from "@tarojs/components";
-import Taro from "@tarojs/taro";
+import {View, Navigator, Video} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
-
-const numeral = require('numeral');
 
 export default class Index extends Component<any, any> {
     state: any = {
@@ -22,7 +19,14 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(page, clear = false) {
-        return request.get('/paimai/api/articles/list', {params: {pageNo: page, column: 'createTime', order: 'desc', tag: this.state.tag}}).then(res => {
+        return request.get('/paimai/api/articles/list', {
+            params: {
+                pageNo: page,
+                column: 'createTime',
+                order: 'desc',
+                tag: this.state.tag
+            }
+        }).then(res => {
             if (clear) {
                 this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
             } else {
@@ -37,8 +41,8 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    onLoad(options:any) {
-        this.setState({options:options})
+    onLoad(options: any) {
+        this.setState({options: options})
         utils.showLoading();
         this.loadData(1, true).then(() => utils.hideLoading());
     }
@@ -61,39 +65,34 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: options.tag}} enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
-                <View className={'grid grid-cols-1 gap-4 p-4'}>
-                    {list.map((item) => {
-                        let radius = 0;
-                        let link;
-                        if(item.performanceType == 1) {
-                            link = `/pages/performance/detail?id=${item.performanceId}`;
-                        }
-                        else if(item.performanceType == 2) {
-                            link = `/pages/performance/detail2?id=${item.performanceId}`;
-                        }
-                        else {
-                            link = `/pages/goods/detail?id=${item.goodsId}`;
-                        }
-                        return (
-                            <Navigator
-                                url={link}
-                                className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <View className={'space-y-1 flex-1'}>
-                                    <View className={'text-lg font-bold flex-1'}>{item.performanceName || item.goodsName}</View>
-                                    <View className={'text-gray-400 text-sm'}>
-                                        交易单号:{item.transactionId}
+                {list[0].type == 1 &&
+                    <View className={'grid grid-cols-1 gap-4 p-4 divide-y divide-gray-200'}>
+                        {list.map((item) => {
+                            return (
+                                <Navigator url={`/pages/articles/detail?id=${item.id}`} className={'bg-white p-4 flex '}>
+                                    <View className={'flex-1 font-bold'}>
+                                        {item.title}
                                     </View>
-                                    <View className={'text-gray-400 text-sm'}>
-                                        交易时间：{item.createTime}
+                                    <View className={'iconfont icon-youjiantou_huaban w-20 text-right'}/>
+                                </Navigator>
+                            );
+                        })}
+                    </View>
+                }
+                {list[0].type == 2 &&
+                    <View className={'p-4 space-y-4'}>
+                        {list.map((item) => {
+                            return (
+                                <View className={'bg-white space-y-2 p-4 rounded shadow-outer'}>
+                                    <View className={'flex-1 font-bold'}>
+                                        <Video src={item.video}  controls={true} />
                                     </View>
+                                    <View className={'font-bold'}>{item.title}</View>
                                 </View>
-                                <View className={'font-bold flex items-center justify-center'}>
-                                    ￥{numeral(item.price).format('0,0.00')}
-                                </View>
-                            </Navigator>
-                        );
-                    })}
-                </View>
+                            );
+                        })}
+                    </View>
+                }
                 {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
             </PageLayout>
         );
