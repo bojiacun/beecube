@@ -34,7 +34,7 @@ export default class Index extends Component<any, any> {
         if (options.id) {
             //如果是有ID的情况说明是立即购买则从远程服务器获取商品信息
             this.setState({id: options.id});
-            request.get('/app/api/goods/detail', {params: {id: options.id}}).then(res => {
+            request.get('/paimai/api/goods/detail', {params: {id: options.id}}).then(res => {
                 res.data.result.count = 1;
                 this.state.goodsList.push(res.data.result);
                 this.setState({goodsList: this.state.goodsList});
@@ -53,7 +53,7 @@ export default class Index extends Component<any, any> {
         if (address) {
             this.setState({address: JSON.parse(address)});
         } else {
-            request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
+            request.get('/paimai/api/members/addresses/default', {params: {id: ''}}).then(res => {
                 this.setState({address: res.data.result});
             })
         }
