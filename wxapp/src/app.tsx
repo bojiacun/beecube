@@ -75,6 +75,10 @@ class App extends Component<PropsWithChildren> {
     onMessageReceive(message:any) {
         message = JSON.parse(message.data);
         console.log('received a message', message);
+        if(message.type === 'MSG_REPLY') {
+            console.log('收到心跳包', message);
+            return;
+        }
         store.dispatch(setMessage(message));
     }
 
