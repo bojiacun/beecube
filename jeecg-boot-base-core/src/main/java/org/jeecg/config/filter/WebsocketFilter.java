@@ -7,6 +7,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.config.AppContext;
 import org.jeecg.config.shiro.LoginType;
 
 import javax.servlet.*;
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class WebsocketFilter implements Filter {
 
     private static final String TOKEN_KEY = CommonConstant.X_ACCESS_TOKEN;
+    private static final String X_APP_ID_KEY = CommonConstant.X_APP_ID;
 
     private static CommonAPI commonApi;
 
@@ -38,6 +40,8 @@ public class WebsocketFilter implements Filter {
         }
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         String token = request.getHeader(TOKEN_KEY);
+        String appId = request.getHeader(X_APP_ID_KEY);
+        AppContext.setApp(appId);
 
         log.debug("Websocket连接 Token安全校验，Path = {}，token:{}", request.getRequestURI(), token);
 
