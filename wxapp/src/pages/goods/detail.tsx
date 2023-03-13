@@ -140,26 +140,16 @@ export default class Index extends Component<any, any> {
                 let offers = this.state.offers;
                 if (offers.length >= 3) {
                     offers.pop();
-                    offers.unshif(
-                        {
-                            memberAvatar: msg.memberAvatar,
-                            memberName: msg.memberName,
-                            memberId: msg.memberId,
-                            price: msg.price,
-                            offerTime: msg.createTime
-                        }
-                    );
-                } else {
-                    offers.unshift(
-                        {
-                            memberAvatar: userInfo.avatar,
-                            memberId: userInfo.id,
-                            memberName: userInfo.phone || userInfo.realname,
-                            price: this.state.nextPrice,
-                            offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                        }
-                    );
                 }
+                offers.unshift(
+                    {
+                        memberAvatar: msg.fromUserAvatar,
+                        memberName: msg.fromUserName,
+                        memberId: msg.fromUserId,
+                        price: msg.price,
+                        offerTime: msg.createTime
+                    }
+                );
                 this.setState({offers: [...offers]});
                 break;
             case 'MSG_TYPE_DELAY':
@@ -201,24 +191,14 @@ export default class Index extends Component<any, any> {
                 let offers = this.state.offers;
                 if (offers.length >= 3) {
                     offers.pop();
-                    offers.unshift({
-                        memberAvatar: userInfo.avatar,
-                        memberId: userInfo.id,
-                        memberName: userInfo.phone || userInfo.realname,
-                        price: this.state.nextPrice,
-                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                    });
-                } else {
-                    offers.unshift(
-                        {
-                            memberAvatar: userInfo.avatar,
-                            memberId: userInfo.id,
-                            memberName: userInfo.phone || userInfo.realname,
-                            price: this.state.nextPrice,
-                            offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                        }
-                    );
                 }
+                offers.unshift({
+                    memberAvatar: userInfo.avatar,
+                    memberId: userInfo.id,
+                    memberName: userInfo.phone || userInfo.realname,
+                    price: this.state.nextPrice,
+                    offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                });
                 this.setState({offers: [...offers]});
                 this.nextPrice(goods);
                 //出价成功加入队列

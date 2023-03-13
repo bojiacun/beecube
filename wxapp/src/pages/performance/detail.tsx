@@ -64,17 +64,21 @@ export default class Index extends Component<any, any> {
         });
     }
 
+    componentDidShow() {
+        //查询是否需要缴纳保证金
+        if(this.state.id) {
+            return request.get('/paimai/api/members/deposited/performance', {params: {id: this.state.id}}).then(res => {
+                this.setState({deposited: res.data.result});
+            });
+        }
+    }
+
     onLoad(options) {
         this.setState({id: options.id});
         request.get('/paimai/api/performances/detail', {params: {id: options.id}}).then(res => {
             let detail = res.data.result;
             this.setState({detail: detail});
             this.loadData(detail.id, 1, true);
-
-        });
-        //查询是否需要缴纳保证金
-        return request.get('/paimai/api/members/deposited/performance', {params: {id: options.id}}).then(res => {
-            this.setState({deposited: res.data.result});
         });
     }
 
