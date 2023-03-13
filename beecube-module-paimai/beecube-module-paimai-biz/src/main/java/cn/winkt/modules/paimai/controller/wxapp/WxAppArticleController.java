@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -53,6 +54,10 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                                   HttpServletRequest req) {
        QueryWrapper<Article> queryWrapper = QueryGenerator.initQueryWrapper(article, req.getParameterMap());
+       String tag = req.getParameter("tag");
+       if(StringUtils.isNotEmpty(tag)) {
+           queryWrapper.like("title", tag);
+       }
        Page<Article> page = new Page<Article>(pageNo, pageSize);
        IPage<Article> pageList = articleService.page(page, queryWrapper);
        return Result.OK(pageList);
