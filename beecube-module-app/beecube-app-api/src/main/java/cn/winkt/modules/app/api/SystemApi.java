@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 @FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
-public interface SystemApi {
+public interface SystemApi extends CommonAPI{
 
     @PostMapping("/sys/user/addSysUserRole")
     Result<String> addSysUserRole(@RequestBody SysUserRoleVO data);

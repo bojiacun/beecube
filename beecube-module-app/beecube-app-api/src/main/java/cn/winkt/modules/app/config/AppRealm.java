@@ -10,8 +10,11 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.config.TenantContext;
+import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
@@ -89,7 +92,7 @@ public class AppRealm extends AuthorizingRealm {
 
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
-        LoginUser loginUser = TokenUtils.getLoginUser(username, appMemberProvider, redisUtil);
+        LoginUser loginUser = getLoginUser(username, appMemberProvider, redisUtil);
         log.info("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
@@ -145,6 +148,32 @@ public class AppRealm extends AuthorizingRealm {
 
         //redis中不存在此TOEKN，说明token非法返回false
         return false;
+    }
+    /**
+     * 获取登录用户
+     *
+     * @param username
+     * @return
+     */
+    private LoginUser getLoginUser(String username, AppMemberProvider appMemberProvider, RedisUtil redisUtil) {
+        LoginUser loginUser = null;
+        String loginUserKey = CacheConstant.SYS_USERS_CACHE + ":" + username;
+        //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
+        if (redisUtil.hasKey(loginUserKey)) {
+            log.info("缓存中有用户信息 {}", username);
+            try {
+                loginUser = (LoginUser) redisUtil.get(loginUserKey);
+                //解密用户
+                SensitiveInfoUtil.handlerObject(loginUser, false);
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage(), e);
+            }
+        } else {
+            // 查询用户信息
+            log.info("缓存中没有用户信息，从数据库中去查找 {}", username);
+            loginUser = appMemberProvider.getUserByName(username);
+        }
+        return loginUser;
     }
     @Override
     public String getName() {
