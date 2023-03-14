@@ -95,4 +95,12 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        queryWrapper.orderByAsc(ArticleClass::getSortnum);
        return Result.OK(articleClassService.list(queryWrapper));
    }
+
+    @AutoLog(value = "文章表-通过id查询")
+    @ApiOperation(value="文章表-通过id查询", notes="文章表-通过id查询")
+    @GetMapping(value = "/classes/detail")
+    public Result<?> queryClassById(@RequestParam(name="id",required=true) String id) {
+        ArticleClass articleClass = articleClassService.getById(id);
+        return Result.OK(articleClass);
+    }
 }
