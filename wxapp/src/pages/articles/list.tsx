@@ -62,7 +62,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {list, noMore, loadingMore, options} = this.state;
         return (
-            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag), className: 'border-b border-gray-200 bg-white border-solid'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag), className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}} enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
                 {list[0]?.type == 1 &&
                     <View className={'grid grid-cols-1 gap-4 px-4 divide-y divide-gray-200'}>

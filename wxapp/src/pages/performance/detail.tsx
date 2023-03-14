@@ -261,21 +261,20 @@ export default class Index extends Component<any, any> {
                                         }
                                         {item.state == 3 &&
                                             <View className={'text-sm'}>
-                                                落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                                <Text className={'text-green-600 font-bold'}>成交</Text> 落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
                                                 className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
                                             </View>
                                         }
                                         {item.state == 4 &&
-                                            <View className={'text-sm'}>
-                                                当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                                className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
-                                            </View>
+                                            <View className={'text-gray-400'}>流拍</View>
                                         }
-                                        <TimeCountDowner
-                                            className={'text-gray-400 text-xs flex'}
-                                            startTime={item.startTime}
-                                            endTime={item.endTime}
-                                        />
+                                        {item.state < 3 &&
+                                            <TimeCountDowner
+                                                className={'text-gray-400 text-xs flex'}
+                                                startTime={item.startTime}
+                                                endTime={item.endTime}
+                                            />
+                                        }
                                     </View>
                                 </Navigator>
                             </View>
