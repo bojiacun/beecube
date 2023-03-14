@@ -51,4 +51,8 @@ public class AppMemberMoneyRecord {
 	/**产生日期*/
     @ApiModelProperty(value = "产生日期")
 	private java.util.Date createTime;
+
+	private Integer status;
+
+	private String transactionId;
 }

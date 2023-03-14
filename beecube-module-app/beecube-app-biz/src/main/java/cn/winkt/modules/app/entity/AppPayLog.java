@@ -31,7 +31,7 @@ public class AppPayLog {
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
-	private java.lang.Integer id;
+	private java.lang.String id;
 	/**createTime*/
     @ApiModelProperty(value = "createTime")
 	private java.util.Date createTime;
