@@ -14,13 +14,26 @@
       "url": "/pages/index/index"
     },
     {
-      "label": "文章列表",
-      "url": "/pages/articles/list",
+      "label": "图文类文章列表",
+      "url": "/pages/articles/normal",
       "urlSuffix": {
-        "label": "标签",
-        "value": "tag"
+        "label": "分类ID",
+        "value": "id"
       },
-      "suffixOptions": "输入要搜索的标签"
+      "suffixOptions": "输入要显示的文章分类ID"
+    },
+    {
+      "label": "视频类文章列表",
+      "url": "/pages/articles/video",
+      "urlSuffix": {
+        "label": "分类ID",
+        "value": "id"
+      },
+      "suffixOptions": "输入要显示的文章分类ID"
+    },
+    {
+      "label": "服务指南列表",
+      "url": "/pages/articles/services"
     },
     {
       "label": "文章详情页",

@@ -74,7 +74,7 @@ public class ArticleClassController extends JeecgController<ArticleClass, IArtic
 	}
 	 @AutoLog(value = "文章分类表-列表查询")
 	 @ApiOperation(value="文章分类表-列表查询", notes="文章分类表-列表查询")
-	 @GetMapping(value = "/list")
+	 @GetMapping(value = "/all")
 	 public Result<?> allList() {
 		 return Result.OK(articleClassService.list());
 	 }
