@@ -31,6 +31,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                 menubar: false,
                 images_upload_url: UPLOAD_URL,
                 images_upload_credentials: true,
+                lineheight_formats: "1 1.2 1.5 1.8 2 2.5 3 3.5 4 4.5",
                 images_upload_handler: (blobInfo, success, failure, progress: any) => {
                     let xhr: any, formData;
 
@@ -84,7 +85,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                 toolbar:
                     'undo redo | formatselect | bold italic | \
             alignleft aligncenter alignright | image | \
-            bullist numlist outdent indent | help'
+            bullist numlist outdent indent lineheight| help'
             }}
             {...rest}
         />

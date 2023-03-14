@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View, Navigator, Video} from "@tarojs/components";
+import {View, Navigator} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
 
@@ -12,19 +12,18 @@ export default class Index extends Component<any, any> {
         list: [],
         loadingMore: false,
         noMore: false,
-        options: {tag: '文章列表'},
     }
 
     componentDidMount() {
     }
 
-    loadData(tag, page, clear = false) {
+    loadData(page, clear = false) {
         return request.get('/paimai/api/articles/list', {
             params: {
                 pageNo: page,
                 column: 'createTime',
                 order: 'desc',
-                tag: decodeURIComponent(tag),
+                type: 3,
             }
         }).then(res => {
             if (clear) {
@@ -44,54 +43,43 @@ export default class Index extends Component<any, any> {
     onLoad(options: any) {
         this.setState({options: options})
         utils.showLoading();
-        this.loadData(options.tag, 1, true).then(() => utils.hideLoading());
+        this.loadData(1, true).then(() => utils.hideLoading());
     }
 
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.options.tag, this.state.page + 1, false).then(() => { });
+        this.loadData(this.state.page + 1, false).then(() => {
+        });
         this.setState({page: this.state.page + 1});
     }
 
     onPullDownRefresh() {
         utils.showLoading();
-        this.loadData(this.state.options.tag,1, true).then(() => utils.hideLoading());
+        this.loadData(1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
 
     render() {
-        const {list, noMore, loadingMore, options} = this.state;
+        const {list, noMore, loadingMore} = this.state;
         return (
-            <PageLayout statusBarProps={{title: decodeURIComponent(options.tag), className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}} enableReachBottom={true}>
+            <PageLayout
+                statusBarProps={{title: '服务指南', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
+                enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
-                {list[0]?.type == 1 &&
-                    <View className={'grid grid-cols-1 gap-4 px-4 divide-y divide-gray-200'}>
-                        {list.map((item) => {
-                            return (
+                <View className={'grid grid-cols-1 px-4 divide-y divide-gray-100'}>
+                    {list.map((item) => {
+                        return (
+                            <View>
                                 <Navigator url={`/pages/articles/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
                                     <View className={'flex-1 font-bold'}>
                                         {item.title}
                                     </View>
                                     <View className={'iconfont icon-youjiantou_huaban w-20 text-right'}/>
                                 </Navigator>
-                            );
-                        })}
-                    </View>
-                }
-                {list[0]?.type == 2 &&
-                    <View className={'p-4 space-y-4'}>
-                        {list.map((item) => {
-                            return (
-                                <View className={'bg-white space-y-2 p-4 rounded shadow-outer'}>
-                                    <View className={'flex-1 font-bold'}>
-                                        <Video src={item.video}  controls={true} className={'block w-full'} />
-                                    </View>
-                                    <View className={'font-bold'}>{item.title}</View>
-                                </View>
-                            );
-                        })}
-                    </View>
-                }
+                            </View>
+                        );
+                    })}
+                </View>
                 {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
             </PageLayout>
         );

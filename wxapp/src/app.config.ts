@@ -2,7 +2,7 @@ export default defineAppConfig({
     pages: [
         'pages/index/index',
         'pages/articles/detail',
-        'pages/articles/list',
+        'pages/articles/services',
         'pages/goods/buyouts',
         'pages/goods/auctions',
         'pages/goods/detail',

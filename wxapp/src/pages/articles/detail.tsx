@@ -28,7 +28,7 @@ export default class Index extends Component<any, any> {
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout containerClassName={'p-4'} statusBarProps={{title: '文章详情'}} style={{backgroundColor: 'white'}}>
+            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.title}} style={{backgroundColor: 'white'}}>
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>
