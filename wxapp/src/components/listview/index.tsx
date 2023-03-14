@@ -145,7 +145,7 @@ const ListView: FC<ListViewProps> = (props) => {
         overflowY: 'hidden', overflowX: 'auto', zIndex: 9999
     }
     if(fixed) {
-        tabStyles.top = Taro.pxTransform(systemInfo.safeArea.top + 40);
+        tabStyles.top = Taro.pxTransform(systemInfo.safeArea.top + 38);
     }
 
     return (
