@@ -33,6 +33,8 @@ public class Article {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
 	private java.lang.String id;
+
+	private String classId;
 	/**文章标题*/
 	@Excel(name = "文章标题", width = 15)
     @ApiModelProperty(value = "文章标题")

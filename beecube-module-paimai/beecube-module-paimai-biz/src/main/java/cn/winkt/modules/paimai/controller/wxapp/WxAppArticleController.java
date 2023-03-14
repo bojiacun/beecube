@@ -1,7 +1,10 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.Article;
+import cn.winkt.modules.paimai.entity.ArticleClass;
+import cn.winkt.modules.paimai.service.IArticleClassService;
 import cn.winkt.modules.paimai.service.IArticleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,9 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 
 /**
 * @Description: 文章表
@@ -35,6 +40,9 @@ import java.util.Arrays;
 public class WxAppArticleController extends JeecgController<Article, IArticleService> {
    @Autowired
    private IArticleService articleService;
+
+   @Resource
+   private IArticleClassService articleClassService;
 
    /**
     * 分页列表查询
@@ -77,4 +85,11 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        return Result.OK(article);
    }
 
+   @GetMapping("/classes")
+   public Result<List<ArticleClass>> allClasses() {
+       LambdaQueryWrapper<ArticleClass> queryWrapper = new LambdaQueryWrapper<>();
+       queryWrapper.eq(ArticleClass::getStatus, 1);
+       queryWrapper.orderByAsc(ArticleClass::getSortnum);
+       return Result.OK(articleClassService.list(queryWrapper));
+   }
 }
