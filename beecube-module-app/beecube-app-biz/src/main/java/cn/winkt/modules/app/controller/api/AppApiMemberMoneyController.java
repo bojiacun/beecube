@@ -65,9 +65,12 @@ public class AppApiMemberMoneyController {
                                    @RequestParam(name="pageSize", defaultValue="10") Integer pageSize
                                    ) {
         LambdaQueryWrapper<AppMemberMoneyRecord> queryWrapper = new LambdaQueryWrapper<>();
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(type > 0) {
             queryWrapper.eq(AppMemberMoneyRecord::getType, type);
         }
+        queryWrapper.eq(AppMemberMoneyRecord::getMemberId, loginUser.getId());
+        queryWrapper.orderByDesc(AppMemberMoneyRecord::getCreateTime);
 
         Page<AppMemberMoneyRecord> page = new Page<>(pageNo, pageSize);
         IPage<AppMemberMoneyRecord> pageList = appMemberMoneyRecordService.page(page, queryWrapper);
@@ -113,6 +116,7 @@ public class AppApiMemberMoneyController {
         return Result.OK("", wxPayService.createOrder(request));
     }
 
+    @PostMapping("/withdraw")
     public Result<?> withdraw(@RequestBody JSONObject data) {
         float amount = data.getFloatValue("amount");
         if(amount < 0.01) {
