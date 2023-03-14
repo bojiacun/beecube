@@ -36,6 +36,7 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
 
     @Override
     @SensitiveEncode
+    @Cacheable(cacheNames= CacheConstant.SYS_USERS_CACHE, key="#username", unless = "#result == null")
     public LoginUser getEncodeUserInfo(String username) {
         if(oConvertUtils.isEmpty(username)) {
             return null;
