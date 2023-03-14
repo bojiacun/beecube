@@ -165,7 +165,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                 <Col sm={3} key={item.id} className={'item'} style={{backgroundImage: 'url(' + resolveUrl(item.url) + ')'}}
                            onClick={() => checkItem(item)}>
                     {item.checked && <div className={'mask'}><Check size={48} className={'icon'}/></div>}
-                    <div className={'name'}>{item.filename}</div>
+                    <div className={'name'}>{item.fileName}</div>
                 </Col>
             )
             break;
@@ -174,25 +174,25 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
                 <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
                     <Speaker className={'audio'}/>
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
-                    <div className={'name'}>{item.filename}</div>
+                    <div className={'name'}>{item.fileName}</div>
                 </Col>
             )
             break;
         case FILE_TYPE_VIDEO:
             renderChildren = (item: any) => (
                 <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
-                    <Video className={'video'}/>
+                    <Video size={48} className={'video'} />
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
-                    <div className={'name'}>{item.filename}</div>
+                    <div className={'name'}>{item.fileName}</div>
                 </Col>
             )
             break;
         case FILE_TYPE_OTHER:
             renderChildren = (item: any) => (
                 <Col sm={3} key={item.id} className={'item'} onClick={() => checkItem(item)}>
-                    <FileText className={'excel'}/>
+                    <FileText className={'excel'} size={48} />
                     {item.checked && <div className={'mask'}><Check className={'icon'}/></div>}
-                    <div className={'name'}>{item.filename}</div>
+                    <div className={'name'}>{item.fileName}</div>
                 </Col>
             )
             break;

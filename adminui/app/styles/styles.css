@@ -2447,8 +2447,8 @@ span.divider {
 }
 .filebrowser .previewItem {
   position: relative;
-  width: 180px !important;
-  max-width: 180px !important;
+  width: 180px;
+  max-width: 180px;
 }
 .filebrowser .preview {
   outline: 1px solid #ddd;

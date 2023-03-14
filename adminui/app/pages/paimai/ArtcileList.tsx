@@ -29,7 +29,7 @@ export enum ArticleType {
 
 const ArticleTypeNames:any = {
     '1': '图文类',
-    '2': '食品类',
+    '2': '视频类',
     '3': '服务指南',
 }
 
@@ -96,7 +96,7 @@ const ArticleList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/auctions/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/articles/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }

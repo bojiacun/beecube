@@ -153,7 +153,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     {
                         value.split(',').map(v => {
                             return (
-                                <Col className={'previewItem'} key={v}>
+                                <Col className={'previewItem'} key={v} style={{width: 340, maxWidth: 340}}>
                                     <X className={'close'} onClick={()=>removeFile(v)} />
                                     <video src={resolveUrl(v)} controls={true} style={{width: 320}} className={'previeew'}> 您的浏览器不支持 video 标签。 </video>
                                 </Col>
@@ -167,7 +167,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                     {
                         value.split(',').map(v => {
                             return (
-                                <Col className={'previewItem'} key={v}>
+                                <Col className={'previewItem'} key={v} style={{width: 340, maxWidth: 340}}>
                                     <X className={'close'} onClick={()=>removeFile(v)} />
                                     <audio src={resolveUrl(v)} controls={true} style={{width: 320}} className={'preview'}> 您的浏览器不支持 audio 标签。 </audio>
                                 </Col>
