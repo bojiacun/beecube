@@ -132,7 +132,7 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         }
     }
     const handleOnProgress = (step:any, file:any) => {
-        setProgress(step.percent);
+        setProgress(step.percent.toFixed(2));
     }
 
 

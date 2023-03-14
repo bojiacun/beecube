@@ -125,6 +125,7 @@ const ArticleEditor = (props: any) => {
                                             <TinymceEditor name={'content'}/>
                                         </FormGroup>
                                     }
+                                    <BootstrapInput label={'阅读数'} name={'views'}/>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>
