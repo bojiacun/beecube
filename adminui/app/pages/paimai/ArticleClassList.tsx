@@ -69,7 +69,7 @@ const ArticleClassList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/buyout/classes/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/articles/classes/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }

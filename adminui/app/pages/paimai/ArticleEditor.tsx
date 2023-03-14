@@ -37,6 +37,9 @@ const ArticleEditor = (props: any) => {
             articleClassFetcher.load('/paimai/articles/classes/all');
         }
     }, [model]);
+
+
+
     useEffect(() => {
         if (articleClassFetcher.type === 'done' && articleClassFetcher.data) {
             setArticleClassOptions(articleClassFetcher.data.map((item: any) => ({label: item.name, value: item.id})));

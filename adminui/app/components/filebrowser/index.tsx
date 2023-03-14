@@ -123,9 +123,8 @@ const FileBrowser: FC<FileBrowserProps> = (props) => {
         showToastError('上传失败');
     }
     const handleOnUploadSuccess = (e:any) => {
-        console.log(e);
         if(!e.success) {
-            showToastError('上传失败');
+            showToastError(e.message || '上传失败');
         }
         else {
             showToastSuccess('上传成功');

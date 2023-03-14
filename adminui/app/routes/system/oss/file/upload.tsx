@@ -13,10 +13,11 @@ export const action: ActionFunction = async ({request}) => {
     let result = await requestWithToken(request)(
         API_OSS_FILE_UPLOAD, {method: 'post', body: data}
     );
+    console.log(result);
     return json({
         code: result.code,
         message: result.message,
         success: result.success,
-        data: result.result.url
+        data: result.result?.url
     });
 }
