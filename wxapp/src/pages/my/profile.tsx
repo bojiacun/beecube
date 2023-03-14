@@ -104,7 +104,7 @@ export default class Index extends Component<any, any> {
                 <>
                     <View className={''}>
                         <Button style={{border: 'none'}} onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}
-                                className={'p-4 block border-0 flex items-center justify-between '}>
+                                className={'p-4 block border-0 flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View>我的头像</View>
                             </View>
