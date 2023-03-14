@@ -5,9 +5,11 @@ import cn.winkt.modules.app.config.MiniAppPayServices;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
+import cn.winkt.modules.app.entity.AppMemberWithdraw;
 import cn.winkt.modules.app.entity.AppPayLog;
 import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppMemberWithdrawService;
 import cn.winkt.modules.app.service.IAppPayLogService;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import com.alibaba.fastjson.JSONObject;
@@ -54,6 +56,9 @@ public class AppApiMemberMoneyController {
     @Resource
     MiniAppPayServices miniAppPayServices;
 
+    @Resource
+    IAppMemberWithdrawService appMemberWithdrawService;
+
     @GetMapping(value = "/records")
     public Result<?> queryPageList(@RequestParam(name = "type", defaultValue = "0") Integer type,
                                    @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -69,8 +74,16 @@ public class AppApiMemberMoneyController {
         return Result.OK(pageList);
     }
 
+    /**
+     * 用户充值
+     * @param data
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws WxPayException
+     */
     @PutMapping("/charge")
-    public Result<?> charge(JSONObject data) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public Result<?> charge(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException, WxPayException {
         double amount = data.getDoubleValue("amount");
         if(amount < 0.01) {
             throw new JeecgBootException("充值金额太小");
@@ -99,6 +112,35 @@ public class AppApiMemberMoneyController {
         WxPayService wxPayService = miniAppPayServices.getService(AppContext.getApp());
         return Result.OK("", wxPayService.createOrder(request));
     }
+
+    public Result<?> withdraw(@RequestBody JSONObject data) {
+        float amount = data.getFloatValue("amount");
+        if(amount < 0.01) {
+            throw new JeecgBootException("提现金额太小");
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        AppMember member = appMemberService.getById(loginUser.getId());
+        if(BigDecimal.valueOf(member.getMoney()).compareTo(BigDecimal.valueOf(amount)) < 0) {
+            throw new JeecgBootException("您没有这么多的额度");
+        }
+        LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppMemberWithdraw::getMemberId, loginUser.getId());
+        queryWrapper.eq(AppMemberWithdraw::getStatus, 0);
+
+        long exits = appMemberWithdrawService.count(queryWrapper);
+        if(exits > 0) {
+            throw new JeecgBootException("已申请提现");
+        }
+        AppMemberWithdraw appMemberWithdraw = new AppMemberWithdraw();
+        appMemberWithdraw.setMemberId(loginUser.getId());
+        appMemberWithdraw.setAmount(amount);
+        appMemberWithdraw.setMemberId(member.getId());
+        appMemberWithdraw.setMemberPhone(member.getPhone());
+        appMemberWithdraw.setMemberName(member.getRealname());
+        appMemberWithdrawService.save(appMemberWithdraw);
+        return Result.OK("申请成功");
+    }
+
     protected AppPayLog getPayLog(String ordersn) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppPayLog payLog = new AppPayLog();
