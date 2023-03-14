@@ -76,4 +76,5 @@ public class Article {
 	@Dict(dicCode = "paimai_article_status")
 	private java.lang.Integer status;
 	private String tags;
+	private Integer views;
 }

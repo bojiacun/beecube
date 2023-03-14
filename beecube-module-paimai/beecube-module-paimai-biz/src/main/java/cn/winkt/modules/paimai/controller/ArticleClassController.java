@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -70,7 +72,12 @@ public class ArticleClassController extends JeecgController<ArticleClass, IArtic
 		IPage<ArticleClass> pageList = articleClassService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "文章分类表-列表查询")
+	 @ApiOperation(value="文章分类表-列表查询", notes="文章分类表-列表查询")
+	 @GetMapping(value = "/list")
+	 public Result<?> allList() {
+		 return Result.OK(articleClassService.list());
+	 }
 	/**
 	 * 添加
 	 *

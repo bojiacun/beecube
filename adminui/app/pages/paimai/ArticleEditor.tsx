@@ -20,17 +20,39 @@ import BootstrapDateTime from "~/components/form/BootstrapDateTime";
 import TinymceEditor from "~/components/tinymce-editor";
 import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
+import {ArticleType} from "~/pages/paimai/ArtcileList";
 
 
 const ArticleEditor = (props: any) => {
     const {model, onHide, type} = props;
+    const [articleClassOptions, setArticleClassOptions] = useState<any[]>([]);
     const postFetcher = useFetcher();
+    const articleClassFetcher = useFetcher();
     const formikRef = useRef<any>();
+    let ArticleSchema;
 
 
-    const GoodsSchema = Yup.object().shape({
-        title: Yup.string().required('必填字段'),
-    });
+    useEffect(() => {
+        if (model) {
+            articleClassFetcher.load('/paimai/articles/classes/all');
+        }
+    }, [model]);
+    useEffect(() => {
+        if (articleClassFetcher.type === 'done' && articleClassFetcher.data) {
+            setArticleClassOptions(articleClassFetcher.data.map((item: any) => ({label: item.name, value: item.id})));
+        }
+    }, [articleClassFetcher.state]);
+
+    if(type  == ArticleType.SERVICES) {
+        ArticleSchema = Yup.object().shape({
+            title: Yup.string().required('必填字段'),
+        });
+    }
+    else {
+        ArticleSchema = Yup.object().shape({
+            classId: Yup.string().required('必填字段'),
+        });
+    }
 
     const handleOnSubmit = (values: any) => {
         values.type = type;
@@ -50,6 +72,8 @@ const ArticleEditor = (props: any) => {
             }
         }
     }, [postFetcher.state]);
+
+
     if (!model) return <></>
 
     const newModel = {status: 0, type: type, ...model};
@@ -66,21 +90,23 @@ const ArticleEditor = (props: any) => {
                 <Modal.Header closeButton>
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}文章</Modal.Title>
                 </Modal.Header>
-                <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
+                <Formik innerRef={formikRef} initialValues={newModel} validationSchema={ArticleSchema}
                         onSubmit={handleOnSubmit}>
                     {(formik)=>{
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                                    {type != ArticleType.SERVICES &&
+                                        <BootstrapSelect name={'classId'} label={'分类'} options={articleClassOptions}/>
+                                    }
                                     <BootstrapInput label={'标题'} name={'title'}/>
-                                    <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如帮助中心'}/>
-                                    {type == 1 &&
+                                    {type == ArticleType.TEXT_IMAGE &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                             <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                         </FormGroup>
                                     }
-                                    {type == 2 &&
+                                    {type == ArticleType.VIDEO &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'video'}>视频地址</FormLabel>
                                             <FileBrowserInput name={'video'} type={3} multi={false}/>
@@ -90,7 +116,7 @@ const ArticleEditor = (props: any) => {
                                         <FormLabel htmlFor={'description'}>文章简介</FormLabel>
                                         <TinymceEditor name={'description'}/>
                                     </FormGroup>
-                                    {type === 1 &&
+                                    {type != ArticleType.VIDEO &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'content'}>文章正文</FormLabel>
                                             <TinymceEditor name={'content'}/>

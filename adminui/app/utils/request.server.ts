@@ -196,6 +196,12 @@ export const API_PAIMAI_ARTICLE_ADD = `${BASE_URL}/paimai/articles/add`;
 export const API_PAIMAI_ARTICLE_EDIT = `${BASE_URL}/paimai/articles/edit`;
 export const API_PAIMAI_ARTICLE_DELETE = `${BASE_URL}/paimai/articles/delete`;
 
+export const API_PAIMAI_ARTICLE_CLASS_LIST = `${BASE_URL}/paimai/article/classes/list`;
+export const API_PAIMAI_ARTICLE_CLASS_ALLLIST = `${BASE_URL}/paimai/article/classes/all`;
+export const API_PAIMAI_ARTICLE_CLASS_ADD = `${BASE_URL}/paimai/article/classes/add`;
+export const API_PAIMAI_ARTICLE_CLASS_EDIT = `${BASE_URL}/paimai/article/classes/edit`;
+export const API_PAIMAI_ARTICLE_CLASS_DELETE = `${BASE_URL}/paimai/article/classes/delete`;
+
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;
 export const API_PAIMAI_OFFER_LIST = `${BASE_URL}/paimai/offers/list`;
 export const API_PAIMAI_DEPOSIT_LIST = `${BASE_URL}/paimai/deposits/list`;

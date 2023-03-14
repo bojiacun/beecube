@@ -82,6 +82,9 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    @GetMapping(value = "/queryById")
    public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
        Article article = articleService.getById(id);
+       //增加阅读量
+       article.setViews(article.getViews()+1);
+       articleService.updateById(article);
        return Result.OK(article);
    }
 
