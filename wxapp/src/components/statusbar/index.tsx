@@ -58,16 +58,16 @@ const StatusBar = (props: StatusbarProps): any => {
     }
 
     return (
-        <View className={classNames(styles.status_bar, className)} style={{...style, ...navigatorBarStyle}}>
+        <View className={classNames(styles.status_bar, className, 'flex items-center justify-center')} style={{...style, ...navigatorBarStyle}}>
             {button !== null && button}
-            {button === null && pages?.length > 1 && <Image className={classNames('ml-1 btn')} src={backImage} onClick={goBack}/>}
+            {button === null && pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
             {pages?.length == 1 && pages[0].route != 'pages/index/index'
                 &&
                 <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
                     <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
                 </View>}
             {!logo && <Text>{title}</Text>}
-            {logo && <Image src={utils.resolveUrl(logo)} mode={'heightFix'} className={'inline-block h-full'} />}
+            {logo && <Image src={utils.resolveUrl(logo)} style={{height: '90%'}} mode={'heightFix'} className={'inline-block box-border'} />}
         </View>
     );
 }
