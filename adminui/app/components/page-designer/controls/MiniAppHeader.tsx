@@ -6,6 +6,10 @@ import {Formik, Form} from "formik";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import {FormGroup, FormLabel} from "react-bootstrap";
+import FileBrowserInput from "~/components/filebrowser/form";
+import FigureImage from "react-bootstrap/FigureImage";
+import {resolveUrl} from "~/utils/utils";
 
 export const MINI_APP_HEADER = "MINI_APP_HEADER";
 
@@ -18,6 +22,7 @@ export const defaultAppHeaderData = {
         fontStyle: 'normal',
         hide: 0,
         fixed: 0,
+        logo: null,
     },
     style: {
         background: '#ffffff',
@@ -52,6 +57,10 @@ const AttributeView: React.FC<any> = (props) => {
                                     <BootstrapSwitch label={'字体加粗'} name={'fontWeight'} />
                                     <BootstrapInput label={'字体颜色'} name={'color'} />
                                     <BootstrapInput label={'字体大小'} name={'fontSize'} />
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'logo'}>LOGO</FormLabel>
+                                        <FileBrowserInput name={'logo'} type={1} multi={false} onChange={()=>formik.submitForm()} />
+                                    </FormGroup>
                                     <BootstrapRadioGroup options={[{ label: '正常', value: 'normal' }, { label: '斜体', value: 'italic' }]} name={'fontStyle'} label={'字体样式'} />
                                 </Form>
                             );
@@ -88,7 +97,14 @@ const MiniAppHeader = (props: any) => {
             <span className={'arrow'}>
                 <ArrowLeft/>
             </span>
-            <p className={'tit'} style={{...data.basic, fontWeight: data.basic.fontWeight ? 'bold':'normal'}}><span>{data.basic.text}</span></p>
+            {!data.basic.logo &&
+                <p className={'tit'} style={{...data.basic, fontWeight: data.basic.fontWeight ? 'bold' : 'normal'}}>
+                    <span>{data.basic.text}</span>
+                </p>
+            }
+            {data.basic.logo &&
+                <FigureImage src={resolveUrl(data.basic.logo)} style={{height: '100%', display: 'inline-block'}}  />
+            }
             <img alt="" src={xcx}/>
         </div>
     );

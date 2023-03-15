@@ -23267,7 +23267,7 @@ body.dark-layout {
   position: relative;
   z-index: 1;
 }
-#diy-container .diy-content .main .mobileContainer .title img {
+#diy-container .diy-content .main .mobileContainer .title img:last-child {
   position: absolute;
   z-index: 1;
   right: 12px;
