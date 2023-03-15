@@ -198,11 +198,11 @@ export default class Index extends Component<any, any> {
                     <View className={'font-bold text-lg'}>{detail.title}</View>
                     <View className={'space-x-4'}>
                         <Text className={'font-bold'}>拍卖地点</Text>
-                        <Text>{detail.performanceAddress}</Text>
+                        <Text>{detail.auctionAddress}</Text>
                     </View>
                     <View className={'space-x-4'}>
                         <Text className={'font-bold'}>拍卖时间</Text>
-                        <Text>{detail.startTime}</Text>
+                        <Text>{detail.auctionTimeRange || detail.startTime}</Text>
                     </View>
                     <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
                         <Text>拍品{detail.goodsCount}件</Text>

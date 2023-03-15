@@ -82,9 +82,16 @@ export default class Index extends Component<any, any> {
                 <View className={'p-4'}>
                     {goodsList?.map((item: any) => {
                         let radius = 8;
+                        let link;
+                        if(item.type == 1) {
+                            link = '/pages/performance/detail?id='+item.id;
+                        }
+                        else {
+                            link = '/pages/performance/detail2?id='+item.id;
+                        }
                         return (
                             <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <Navigator url={'/pages/performance/detail?id=' + item.id}>
+                                <Navigator url={link}>
                                     <View className={'relative'} style={{width: '100%'}}>
                                         <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                                     </View>

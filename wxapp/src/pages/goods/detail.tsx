@@ -127,7 +127,6 @@ export default class Index extends Component<any, any> {
         let {goods} = this.state;
         let msg = message;
 
-        console.log('goods message received', msg);
         //如果是自身产生的消息则忽略
         if (msg.fromUserId === userInfo.id) {
             return;
@@ -150,7 +149,8 @@ export default class Index extends Component<any, any> {
                         offerTime: msg.createTime
                     }
                 );
-                this.setState({offers: [...offers]});
+                goods.offerCount++;
+                this.setState({offers: offers, goods: goods});
                 break;
             case 'MSG_TYPE_DELAY':
                 goods.actualEndTime = msg.newTime;
@@ -199,7 +199,8 @@ export default class Index extends Component<any, any> {
                     price: this.state.nextPrice,
                     offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
                 });
-                this.setState({offers: [...offers]});
+                goods.offerCount++;
+                this.setState({offers: offers, goods: goods});
                 this.nextPrice(goods);
                 //出价成功加入队列
             } else {
@@ -218,16 +219,16 @@ export default class Index extends Component<any, any> {
         }
         let currentPrice = parseFloat(goods.currentPrice);
 
-        let rangePirce = 0;
+        let rangePrice = 0;
         for (let i = 0; i < upgradeConfig.length; i++) {
             let config = upgradeConfig[i];
             let min = parseFloat(config.min);
             let price = parseFloat(config.price);
             if (currentPrice >= min) {
-                rangePirce = price;
+                rangePrice = price;
             }
         }
-        this.setState({nextPrice: currentPrice + rangePirce, goods: goods});
+        this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
     }
 
     onLoad(options) {
