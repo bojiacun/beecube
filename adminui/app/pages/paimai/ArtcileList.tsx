@@ -114,6 +114,10 @@ const ArticleList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
+            text: '文章ID',
+            dataField: 'id',
+        },
+        {
             text: '文章标题',
             dataField: 'title',
         },

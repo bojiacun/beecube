@@ -12,7 +12,7 @@ const Descs = (props: any) => {
                                                  url={`/pages/performance/detail?id=${goods.performanceId}`}/> : <></>}
                 {goods.performanceType == 2? <Collapse showArrow={true} title={'拍卖专场'} description={goods.performanceTitle}
                                                        url={`/pages/performance/detail2?id=${goods.performanceId}`}/> : <></>}
-                <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>
+                {goods.performanceType == 1 ? <Collapse title={'结束时间'} description={goods.actualEndTime || goods.endTime}/>:<></>}
                 {goods.fields.map(f => {
                     return <Collapse title={f.key} description={f.value}/>
                 })}
