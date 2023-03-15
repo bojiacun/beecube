@@ -122,7 +122,7 @@ export default class Index extends Component<any, any> {
         if(!this.state.options) return <PageLoading />;
 
         return (
-            <PageLayout statusBarProps={{title: decodeURIComponent(this.state.options.tag)}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: decodeURIComponent(this.state.options.tag)}} enableReachBottom={true} showTabBar={true}>
                 <ListView tabs={this.tabs} dataFetcher={this.loadData}  defaultActiveKey={this.state.options.source} tabStyle={2} />
             </PageLayout>
         );
