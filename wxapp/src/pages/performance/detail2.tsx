@@ -189,10 +189,10 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '同步拍专场详情'}} enableReachBottom={true}>
                 <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
                     <View className={'flex items-center justify-between'}>
-                        <View className={'text-sm text-indigo-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
-                            className={'py-1 px-2 border border-1 border-solid border-indigo-500'}>{item}</Text>)}</View>
+                        <View className={'text-sm text-red-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
+                            className={'py-1 px-2 border border-1 border-solid border-red-500 rounded'}>{item}</Text>)}</View>
                         {detail.state == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
-                        {detail.state == 1 && <View className={'text-indigo-600 font-bold'}>进行中</View>}
+                        {detail.state == 1 && <View className={'text-red-600 font-bold'}>进行中</View>}
                         {detail.state == 2 && <View className={'text-gray-400 font-bold'}>已结束</View>}
                     </View>
                     <View className={'font-bold text-lg'}>{detail.title}</View>
