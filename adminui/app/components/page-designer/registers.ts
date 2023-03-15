@@ -6,6 +6,7 @@ import registerModuleMenus from './modules/common/Menus';
 import registerModuleMultipleImages from './modules/common/MultipleImages';
 import registerModuleSingleImage from './modules/common/SingleImage';
 import registerModuleSwiper from './modules/common/Swiper';
+import registerSearchBarModuleSwiper from './modules/common/SearchAndScaner';
 import registerModuleGoodsList from './modules/paimai/GoodsList';
 import registerModuleBuyoutGoodsList from './modules/paimai/BuyoutGoodsList';
 import registerModulePerformanceList from './modules/paimai/PerformanceList';
@@ -43,4 +44,6 @@ export default function register(module='') {
     registerModulePublicPerformanceList(module);
     registerModuleTitle1(module);
     registerModuleViewMore(module);
+    //@ts-ignore
+    registerSearchBarModuleSwiper(module);
 }

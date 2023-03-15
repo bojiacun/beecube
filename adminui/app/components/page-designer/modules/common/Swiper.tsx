@@ -6,7 +6,6 @@ import BoxSettings, { DEFAULT_BOX_STYLES } from "../BoxSettings";
 import Swiper, { SwipeRef } from 'react-tiga-swiper';
 import FallbackImage from "~/components/fallback-image";
 import {Form, Formik} from "formik";
-import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 import {Button, FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
