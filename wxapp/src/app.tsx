@@ -91,6 +91,7 @@ class App extends Component<PropsWithChildren> {
     onLaunch(options) {
         let {context} = store.getState();
         context.referer = options;
+        context.copyright = siteInfo.copyright;
         Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all')]).then(reses => {
             let settings = reses[0].data.result;
             let dist = {};

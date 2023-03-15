@@ -12,5 +12,5 @@ module.exports = {
     appId: '1604495135656910850',
     version: "1.0.0",
     siteroot: baseUrl,
-    design_method: "3"
+    copyright: true,
 };

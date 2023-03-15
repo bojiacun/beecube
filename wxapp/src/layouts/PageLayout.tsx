@@ -7,6 +7,7 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import styles from './index.module.scss';
 import classNames from "classnames";
+import Copyright from "../components/copyright";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -47,7 +48,8 @@ class PageLayout extends Component<PayLayoutProps, any> {
             containerClassName = '',
             loading,
             statusBarProps = {},
-            enableReachBottom = false
+            enableReachBottom = false,
+            copyright = true,
         } = this.props;
 
         if (pageLoading || loading) return <PageLoading/>;
@@ -56,6 +58,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
                 <>
                     {showStatusBar && <StatusBar {...statusBarProps} />}
                     {children}
+                    {copyright && <Copyright />}
                     {showTabBar && <TabBar/>}
                 </>
             );
@@ -66,6 +69,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
                 {showStatusBar && <StatusBar {...statusBarProps} />}
                 <View className={containerClassName}>
                     {children}
+                    {copyright && <Copyright />}
                     {showTabBar && <TabBar/>}
                 </View>
             </View>
