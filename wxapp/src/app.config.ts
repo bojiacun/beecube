@@ -17,6 +17,7 @@ export default defineAppConfig({
         'pages/performance/detail2',
         'pages/performance/deadline',
         'pages/performance/public',
+        'pages/performance/list',
         'pages/performance/sync',
         'pages/auction/detail',
         'pages/auction/list',
@@ -50,6 +51,10 @@ export default defineAppConfig({
             {
                 pagePath: 'pages/index/index',
                 text: '首页',
+            },
+            {
+                pagePath: 'pages/performance/list',
+                text: '专场列表',
             },
             {
                 pagePath: 'pages/goods/buyouts',

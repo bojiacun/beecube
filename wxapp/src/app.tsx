@@ -97,6 +97,7 @@ class App extends Component<PropsWithChildren> {
             settings.forEach(item => dist[item.settingKey] = item.settingValue);
             context.settings = dist;
             context.tabs = reses[1].data.result;
+
             let position = Taro.getStorageSync("POSITION");
             if (position) {
                 context.position = position;

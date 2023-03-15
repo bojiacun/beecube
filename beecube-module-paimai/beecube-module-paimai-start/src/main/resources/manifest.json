@@ -45,13 +45,17 @@
       "suffixOptions": "输入文章的ID"
     },
     {
-      "label": "专场列表",
+      "label": "专场列表（按标签筛选）",
       "url": "/pages/performance/public",
       "urlSuffix": {
         "label": "标签",
         "value": "tag"
       },
       "suffixOptions": "输入要搜索的标签"
+    },
+    {
+      "label": "专场列表（所有专场）",
+      "url": "/pages/performance/list"
     },
     {
       "label": "限时拍专场列表",
