@@ -125,12 +125,12 @@ public class AppUserController extends JeecgController<AppUser, IAppUserService>
 			 appUser.setUsername(u.getString("username"));
 			 appUserService.save(appUser);
 			 //把用户加入本APP所关联模块的角色
-			 App app = appService.getById(appId);
-			 AppModuleRole appModuleRole = appModuleRoleService.getRoleByModuleId(app.getModuleId());
-			 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
-			 sysUserRoleVO.setRoleId(appModuleRole.getRoleId());
-			 sysUserRoleVO.setUserIdList(Collections.singletonList(appUser.getUserId()));
-			 systemApi.addSysUserRole(sysUserRoleVO);
+//			 App app = appService.getById(appId);
+//			 AppModuleRole appModuleRole = appModuleRoleService.getRoleByModuleId(app.getModuleId());
+//			 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
+//			 sysUserRoleVO.setRoleId(appModuleRole.getRoleId());
+//			 sysUserRoleVO.setUserIdList(Collections.singletonList(appUser.getUserId()));
+//			 systemApi.addSysUserRole(sysUserRoleVO);
 		 });
 		 return Result.OK("绑定成功！");
 	 }
