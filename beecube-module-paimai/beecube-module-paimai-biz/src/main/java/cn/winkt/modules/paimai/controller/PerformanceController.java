@@ -250,8 +250,6 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         if(performance.getType() == 1) {
             for (Goods g : goodsList) {
                 g.setPerformanceId(perfId);
-                g.setPerformanceTitle(performance.getTitle());
-                g.setType(3);
                 g.setStartTime(performance.getStartTime());
                 g.setEndTime(performance.getEndTime());
                 g.setActualEndTime(null);
@@ -268,7 +266,6 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         else if(performance.getType() == 2){
             for (Goods g : goodsList) {
                 g.setPerformanceId(perfId);
-                g.setPerformanceTitle(performance.getTitle());
                 g.setState(0);
                 g.setStartTime(null);
                 g.setActualEndTime(null);
@@ -297,7 +294,6 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(Goods::getId, Arrays.stream(goodsIds.split(",")).collect(Collectors.toList()));
         updateWrapper.eq(Goods::getPerformanceId, perfId);
-        updateWrapper.set(Goods::getPerformanceTitle, null);
         updateWrapper.set(Goods::getPerformanceId, null);
         goodsService.update(updateWrapper);
         return Result.OK("添加成功！");
