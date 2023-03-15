@@ -2,9 +2,11 @@ package org.jeecg.modules.oss.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.config.AppContext;
 import org.jeecg.modules.oss.entity.OssFile;
 import org.jeecg.modules.oss.service.IOssFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class OssFileController {
                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
 		Result<IPage<OssFile>> result = new Result<>();
 		QueryWrapper<OssFile> queryWrapper = QueryGenerator.initQueryWrapper(file, req.getParameterMap());
+		if(StringUtils.isNotEmpty(AppContext.getApp())) {
+			queryWrapper.eq("app_id", AppContext.getApp());
+		}
 		Page<OssFile> page = new Page<>(pageNo, pageSize);
 		IPage<OssFile> pageList = ossFileService.page(page, queryWrapper);
 		result.setSuccess(true);

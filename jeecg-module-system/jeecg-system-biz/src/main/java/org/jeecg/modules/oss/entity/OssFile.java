@@ -26,4 +26,6 @@ public class OssFile extends JeecgEntity {
 	private String url;
 
 	private Integer type;
+
+	private String appId;
 }
