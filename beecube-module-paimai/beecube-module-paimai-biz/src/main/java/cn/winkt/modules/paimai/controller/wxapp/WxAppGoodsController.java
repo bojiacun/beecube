@@ -17,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.desensitization.annotation.SensitiveEncode;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
@@ -99,6 +100,7 @@ public class WxAppGoodsController {
 
 
     @GetMapping("/offers")
+    @SensitiveEncode
     public Result<?> goodsOfferList(@RequestParam(name = "id", defaultValue = "0") String id,
                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize

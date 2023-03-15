@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.jeecg.common.aspect.annotation.Dict;
+import org.jeecg.common.desensitization.annotation.SensitiveField;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -40,6 +41,7 @@ public class GoodsOffer {
 	/**出价人*/
 	@Excel(name = "出价人", width = 15)
     @ApiModelProperty(value = "出价人")
+	@SensitiveField
 	private java.lang.String memberName;
 	/**出价人头像*/
 	@Excel(name = "出价人头像", width = 15)
