@@ -179,6 +179,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Goods goods) {
         Goods old = goodsService.getById(goods.getId());
+        Date endTime = goods.getActualEndTime() == null ? goods.getEndTime(): goods.getActualEndTime();
+        if(endTime.after(new Date())) {
+            throw new JeecgBootException("拍品已结束无法编辑");
+        }
         if(old.getType() != 2) {
             if (old.getStartTime().equals(goods.getStartTime()) || old.getEndTime().equals(goods.getEndTime())) {
                 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();

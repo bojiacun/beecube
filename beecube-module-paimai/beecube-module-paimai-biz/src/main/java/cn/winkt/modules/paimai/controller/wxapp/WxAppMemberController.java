@@ -650,6 +650,9 @@ public class WxAppMemberController {
                 if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
                     throw new JeecgBootException("拍品所在专场已结束");
                 }
+                if(goods.getState() > 1) {
+                    throw new JeecgBootException("该拍品已结束拍卖");
+                }
                 if (nowDate.compareTo(performance.getStartTime()) < 0) {
                     throw new JeecgBootException("拍品所在专场未开始");
                 }
@@ -665,7 +668,7 @@ public class WxAppMemberController {
                     throw new JeecgBootException("该拍品已结束拍卖");
                 }
             }
-        } else if (nowDate.compareTo(actualEndTime) >= 0) {
+        } else if (nowDate.compareTo(actualEndTime) >= 0 || goods.getState() > 1) {
             throw new JeecgBootException("该拍品已结束拍卖");
         } else if (nowDate.compareTo(goods.getStartTime()) < 0) {
             throw new JeecgBootException("该拍品尚未开始");
