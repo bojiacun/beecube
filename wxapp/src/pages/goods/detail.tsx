@@ -276,6 +276,19 @@ export default class Index extends Component<any, any> {
 
     renderButton() {
         const {goods, status} = this.state;
+        //判断按钮状态
+
+        if(goods.deposit && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
+            //需要交保证金的情况
+            return (
+                <View>
+                    <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                        <View>交保证金</View>
+                        <View>RMB {numeral(goods.performanceDeposit || goods.deposit).format('0,0.00')}</View>
+                    </Button>
+                </View>
+            );
+        }
 
         if (!goods.deposit || goods.deposited) {
             if (goods.performanceType == 1) {
