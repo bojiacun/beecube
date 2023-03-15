@@ -27,6 +27,7 @@ export declare interface CustomSwiperProps {
     height: number,
     className: string,
     radius?: string,
+    onItemClick?: (item:any)=>boolean;
 }
 
 const CustomSwiper = (props: CustomSwiperProps) => {
@@ -43,7 +44,8 @@ const CustomSwiper = (props: CustomSwiperProps) => {
         indicatorActiveColor = 'white',
         height = 320,
         className = '',
-        radius = '12rpx'
+        radius = '12rpx',
+        onItemClick = () => false,
     } = props;
 
     return (
@@ -56,7 +58,11 @@ const CustomSwiper = (props: CustomSwiperProps) => {
                 list && list.map(item => {
                     return (
                         <SwiperItem key={item.id}>
-                            <View style={{borderRadius: radius}} className={styles.img} onClick={()=>Taro.navigateTo({url: item.url}).then()}>
+                            <View style={{borderRadius: radius}} className={styles.img} onClick={()=>{
+                                if(!onItemClick(item)){
+                                    Taro.navigateTo({url: item.url}).then();
+                                }
+                            }}>
                                 <Image src={utils.resolveUrl(item.image)} mode={imageMode} />
                             </View>
                         </SwiperItem>

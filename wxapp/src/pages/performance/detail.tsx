@@ -246,7 +246,7 @@ export default class Index extends Component<any, any> {
                         return (
                             <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
                                 <Navigator url={'/pages/goods/detail?id=' + item.id}>
-                                    <View className={'relative'} style={{width: '100%', paddingTop: '130%'}}>
+                                    <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
                                         <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
                                                        className={'absolute z-0 inset-0 block w-full h-full'}
                                                        src={utils.resolveUrl(item.images.split(',')[0])}/>

@@ -50,6 +50,7 @@ export default class Index extends Component<any, any> {
         this.offer = this.offer.bind(this);
         this.onMessageReceive = this.onMessageReceive.bind(this);
         this.noticeMe = this.noticeMe.bind(this);
+        this.handlePreview = this.handlePreview.bind(this);
         this.randomStr = utils.randomString(6);
     }
 
@@ -266,6 +267,15 @@ export default class Index extends Component<any, any> {
         }
     }
 
+    handlePreview(item) {
+        const images  = this.state.goods.images.split(',').map((item) => {
+            return utils.resolveUrl(item);
+        });
+        console.log(images);
+        Taro.previewImage({urls: images, current: item.url}).then();
+        return true;
+    }
+
     toggleFollow() {
         request.put('/paimai/api/members/follow/toggle', {id: this.state.id}).then(res => {
             let goods = this.state.goods;
@@ -350,7 +360,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
-                <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'}/>
+                <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'} height={systemInfo.screenWidth} onItemClick={this.handlePreview} />
                 <View className={'grid grid-cols-1 px-4 divide-y divide-gray-200'}>
                     <View className={'space-y-4 py-4'}>
                         <View className={'flex justify-between items-center'}>
@@ -469,13 +479,13 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
                       style={{paddingBottom: safeBottom}}>
                     <View>
-                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
-                            <View className={'iconfont icon-fenxiang text-lg'}/>
+                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center p-0'}>
+                            <View className={'iconfont icon-fenxiang text-xl'}/>
                             <View>分享</View>
                         </Button>
                     </View>
                     <View>
-                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
+                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center p-0'}>
                             <View className={'iconfont icon-lianxikefu text-xl'}/>
                             <View>客服</View>
                         </Button>
