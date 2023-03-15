@@ -13,6 +13,7 @@ import AuctionListModule from "./components/diy/modules/AuctionList";
 import Title1Module from "./components/diy/modules/Title1";
 import ViewMoreModule from "./components/diy/modules/ViewMore";
 import PublicPerformanceListModule from "./components/diy/modules/PublicPerformanceList";
+import SearchAndScannerModule from "./components/diy/modules/SearchAndScanner";
 
 
 const modules = {
@@ -31,6 +32,7 @@ const modules = {
     'AUCTION_LIST_MODULE': AuctionListModule,
     'TITLE1_MODULE': Title1Module,
     'VIEWMORE_MODULE': ViewMoreModule,
+    'SEARCH_AND_SCANNER_MODULE':  SearchAndScannerModule,
 };
 
 
