@@ -8,6 +8,8 @@ import utils from "../../lib/utils";
 import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 import request from "../../lib/request";
 import PageLoading from "../../components/pageloading";
+import listStyle from './list.module.scss';
+import classNames from "classnames";
 
 
 export default class Index extends Component<any, any> {
@@ -48,6 +50,7 @@ export default class Index extends Component<any, any> {
                         <View className={'relative'} style={{width: '100%'}}>
                             <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
+                            <View className={listStyle.wrap}><Text className={classNames(listStyle.silkRibbon6, 'text-white text-sm bg-red-400')}>限时拍</Text></View>
                         </View>
                         <View className={'p-4 space-y-2 divide-y divide-gray-100'}>
                             <View className={'space-y-1'}>
@@ -77,6 +80,7 @@ export default class Index extends Component<any, any> {
                         <View className={'relative'} style={{width: '100%'}}>
                             <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
+                            <View className={listStyle.wrap}><Text className={classNames(listStyle.silkRibbon6, 'text-white text-sm bg-indigo-600')}>同步拍</Text></View>
                         </View>
                         <View className={'p-4 space-y-2 divide-y divide-gray-100'}>
                             <View className={'space-y-1'}>
