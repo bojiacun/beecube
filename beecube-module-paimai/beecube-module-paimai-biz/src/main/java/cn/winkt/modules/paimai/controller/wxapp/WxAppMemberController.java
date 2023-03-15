@@ -32,6 +32,7 @@ import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
@@ -694,7 +695,7 @@ public class WxAppMemberController {
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
-            goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+            goodsOffer.setMemberName(loginUser.getPhone());
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
 
@@ -738,6 +739,7 @@ public class WxAppMemberController {
                 offerMessage.setCreateTime(new Date());
                 offerMessage.setType(MessageConstant.MSG_TYPE_OFFER);
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
+                SensitiveInfoUtil.handlerObject(offerMessage, true);
                 goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(offerMessage));
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
