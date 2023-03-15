@@ -66,6 +66,11 @@ public class WxAppGoodsController {
         if(StringUtils.isNotEmpty(tag)) {
             queryWrapper.like("g.tags", tag);
         }
+        String key = req.getParameter("key");
+        if(StringUtils.isNotEmpty(key)) {
+            queryWrapper.like("g.title", key);
+        }
+
         queryWrapper.eq("g.status", 1);
         String source = req.getParameter("source");
         Date nowDate = new Date();

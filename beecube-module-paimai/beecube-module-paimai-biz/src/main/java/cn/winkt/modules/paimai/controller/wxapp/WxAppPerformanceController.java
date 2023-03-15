@@ -72,7 +72,10 @@ public class WxAppPerformanceController {
                 });
             });
         }
-
+        String key = req.getParameter("key");
+        if(StringUtils.isNotEmpty(key)) {
+            queryWrapper.like("g.title", key);
+        }
 
         String tag = req.getParameter("tag");
         if (StringUtils.isNotEmpty(tag)) {
