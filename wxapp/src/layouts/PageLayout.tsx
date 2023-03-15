@@ -49,7 +49,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
             loading,
             statusBarProps = {},
             enableReachBottom = false,
-            copyright = true,
+            copyright = false,
         } = this.props;
 
         if (pageLoading || loading) return <PageLoading/>;

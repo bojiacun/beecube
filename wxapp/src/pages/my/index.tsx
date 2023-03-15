@@ -37,7 +37,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
         // @ts-ignore
         return (
-            <PageLayout showTabBar={true} showStatusBar={false}>
+            <PageLayout showTabBar={true} showStatusBar={false} copyright={context.copyright}>
                 <View
                     className={classNames('text-white flex flex-col px-4', styles.userProfile)}
                     style={{paddingTop: Taro.pxTransform(systemInfo.safeArea.top + 40)}}
