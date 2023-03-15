@@ -613,6 +613,13 @@ public class WxAppMemberController {
         }
     }
 
+    @GetMapping("/check")
+    public Result<Boolean> checkUserInfo() {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //用户实名检测，必须绑定手机号才可出价
+        AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
+        return Result.OK(!StringUtils.isAnyEmpty(memberVO.getRealname(), memberVO.getPhone()));
+    }
     /**
      * 出价拍品
      *
@@ -621,6 +628,13 @@ public class WxAppMemberController {
     @PostMapping("/offers")
     @Transactional
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //用户实名检测，必须绑定手机号才可出价
+        AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
+        if(StringUtils.isAnyEmpty(memberVO.getRealname(), memberVO.getPhone())) {
+            throw new JeecgBootException("请完善您的用户信息后再出价");
+        }
+
         Goods goods = goodsService.getById(post.getString("id"));
         if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
@@ -669,7 +683,6 @@ public class WxAppMemberController {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("他人已出此价格或更高的价格");
             }
-            LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             //查询用户是否缴纳保证金,如果拍品上了某个专场则以专场保证金为主
             String auctionId = null;
             if (performance != null) {
