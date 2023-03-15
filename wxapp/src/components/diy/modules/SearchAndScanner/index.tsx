@@ -5,7 +5,7 @@ const SearchAndScanner = (props: any) => {
 
     return (
         <View style={style} {...rest}>
-            <Navigator url={'/pages/index/search'} className={'rounded-lg border border-gray-400 p-4'}>
+            <Navigator url={'/pages/index/search'} className={'rounded-full border border-gray-400 px-4 py-2 flex space-x-4 block border-solid'}>
                 <View className={'text-gray-400'}><Text className={'fa fa-search'} /></View>
                 <Text className='text-gray-300'>{basic.placeholder}</Text>
             </Navigator>

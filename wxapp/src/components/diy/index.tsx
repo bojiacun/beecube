@@ -29,6 +29,7 @@ const DiyPage: FC<DiyPageProps> = (props) => {
             statusBarProps.bgColor = statusBarDiyData.style.background;
             statusBarProps.color = statusBarDiyData.basic.color;
             statusBarProps.fontSize = Taro.pxTransform(statusBarDiyData.basic.fontSize);
+            statusBarProps.logo = statusBarDiyData.basic.logo;
             if (statusBarDiyData.style.background != '#ffffff') {
                 Taro.setNavigationBarColor({ frontColor: '#ffffff', backgroundColor: statusBarDiyData.style.background }).then();
             }

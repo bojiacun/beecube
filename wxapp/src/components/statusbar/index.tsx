@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import {useSelector} from "react-redux";
 import classNames from "classnames";
 import backImage from '../../assets/images/backPageImg.png';
+import utils from "../../lib/utils";
 
 
 export declare interface StatusbarProps {
@@ -15,6 +16,7 @@ export declare interface StatusbarProps {
     hide?: boolean;
     style?: any;
     className?: string;
+    logo?: string;
 }
 
 const StatusBar = (props: StatusbarProps): any => {
@@ -25,6 +27,7 @@ const StatusBar = (props: StatusbarProps): any => {
         hide = false,
         style = {fontSize: 18, fontWeight: 'bold'},
         className = 'bg-white',
+        logo = undefined,
     } = props;
     const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
     const systemInfo = useSelector(({context}) => context.systemInfo);
@@ -57,13 +60,14 @@ const StatusBar = (props: StatusbarProps): any => {
     return (
         <View className={classNames(styles.status_bar, className)} style={{...style, ...navigatorBarStyle}}>
             {button !== null && button}
-            {button === null && pages?.length > 1 && <Image className={classNames('ml-1')} src={backImage} onClick={goBack}/>}
+            {button === null && pages?.length > 1 && <Image className={classNames('ml-1 btn')} src={backImage} onClick={goBack}/>}
             {pages?.length == 1 && pages[0].route != 'pages/index/index'
                 &&
                 <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
                     <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
                 </View>}
-            <Text>{title}</Text>
+            {!logo && <Text>{title}</Text>}
+            {logo && <Image src={utils.resolveUrl(logo)} mode={'heightFix'} className={'inline-block h-full'} />}
         </View>
     );
 }
