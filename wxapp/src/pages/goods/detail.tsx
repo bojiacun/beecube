@@ -289,75 +289,29 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-
-        if (!goods.deposit || goods.deposited) {
-            if (goods.performanceType == 1) {
-                if (status == TimeCountDownerStatus.ENDED) {
-                    //拍品结束
-                    return (
-                        <View>
-                            <Button className={'btn w-56'} disabled={true}>
-                                <View>已结束</View>
-                            </Button>
-                        </View>
-                    );
-                } else if (status == TimeCountDownerStatus.NOT_START) {
-                    return (
-                        <View>
-                            <Button className={'btn w-56'} disabled={true}>
-                                <View>未开始</View>
-                            </Button>
-                        </View>
-                    );
-                } else {
-                    return (
-                        <View>
-                            <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
-                                <View>出价</View>
-                                <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
-                            </Button>
-                        </View>
-                    );
-                }
-            } else if (goods.performanceType == 2) {
-                if (goods.performanceState == 1 && goods.state == 1) {
-                    return (
-                        <View>
-                            <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
-                                <View>出价</View>
-                                <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
-                            </Button>
-                        </View>
-                    );
-                } else if (goods.state == 0 || goods.performanceState == 0) {
-                    return (
-                        <View>
-                            <Button className={'btn w-56'} disabled={true}>
-                                <View>未开始</View>
-                            </Button>
-                        </View>
-                    );
-                } else if (goods.state >= 2 || goods.performanceState == 2) {
-                    return (
-                        <View>
-                            <Button className={'btn w-56'} disabled={true}>
-                                <View>已结束</View>
-                            </Button>
-                        </View>
-                    );
-                }
-            }
-        } else if(goods.state < 2 && this.state.status != TimeCountDownerStatus.ENDED){
+        if((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
+            //可以出价的情况
             return (
                 <View>
-                    <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
-                        <View>交保证金</View>
-                        <View>RMB {numeral(goods.performanceDeposit || goods.deposit).format('0,0.00')}</View>
+                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
+                        <View>出价</View>
+                        <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
         }
-        else {
+        if((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || status == TimeCountDownerStatus.NOT_START) {
+            //未开始的情况
+            return (
+                <View>
+                    <Button className={'btn w-56'} disabled={true}>
+                        <View>未开始</View>
+                    </Button>
+                </View>
+            );
+        }
+        if((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
+            //结束的情况
             return (
                 <View>
                     <Button className={'btn w-56'} disabled={true}>
@@ -366,6 +320,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
+        return <></>;
     }
 
 
@@ -445,7 +400,7 @@ export default class Index extends Component<any, any> {
                                 </View>
                             }
                         </View>
-                        {goods.performanceType == 1 &&
+                        {goods.performanceType != 2 && goods.state < 2 &&
                             <TimeCountDowner
                                 mode={TimeCountDownerMode.TimeBase}
                                 onStatusChanged={status => {
