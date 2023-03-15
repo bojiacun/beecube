@@ -768,6 +768,14 @@ public class WxAppMemberController {
         }
     }
 
+    /**
+     * 缴纳专场保证金
+     * @param id
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws WxPayException
+     */
     @PostMapping("/deposits/performance")
     @Transactional
     public Result<?> payPerformanceDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
@@ -780,6 +788,10 @@ public class WxAppMemberController {
         }
         if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
             throw new JeecgBootException("该拍品无需缴纳保证金");
+        }
+        //专场结束不能缴纳保证金
+        if((performance.getType() == 1 && performance.getEndTime().after(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
+            throw new JeecgBootException("专场已结束无法缴纳保证金");
         }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -844,6 +856,18 @@ public class WxAppMemberController {
         if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
             throw new JeecgBootException("该拍品无需缴纳保证金");
         }
+        Performance performance = performanceService.getById(goods.getPerformanceId());
+        if(performance != null) {
+            //专场结束不能缴纳保证金
+            if((performance.getType() == 1 && performance.getEndTime().after(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
+                throw new JeecgBootException("专场已结束无法缴纳保证金");
+            }
+        }
+        //验证拍品是否结束
+        Date endTime = goods.getActualEndTime() != null ? goods.getActualEndTime() : goods.getEndTime();
+        if(goods.getState() > 1 || (endTime != null && endTime.after(new Date()))) {
+            throw new JeecgBootException("拍品已结束无法缴纳保证金");
+        }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
@@ -869,13 +893,10 @@ public class WxAppMemberController {
         goodsDeposit.setMemberId(loginUser.getId());
         goodsDeposit.setMemberAvatar(loginUser.getAvatar());
         goodsDeposit.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
-        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
+        if (performance != null) {
             goodsDeposit.setPerformanceId(goods.getPerformanceId());
-            Performance performance = performanceService.getById(goods.getPerformanceId());
-            if (performance != null) {
-                goodsDeposit.setAuctionId(performance.getAuctionId());
-                deposit = performance.getDeposit();
-            }
+            goodsDeposit.setAuctionId(performance.getAuctionId());
+            deposit = performance.getDeposit();
         }
         goodsDeposit.setPrice(goods.getDeposit());
         goodsDeposit.setStatus(0);
