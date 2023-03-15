@@ -25,6 +25,7 @@ export default class Index extends Component<any, any> {
         this.handleInputSearch = this.handleInputSearch.bind(this);
         this.renderGoods = this.renderGoods.bind(this);
         this.renderPerformance = this.renderPerformance.bind(this);
+        this.doSearch = this.doSearch.bind(this);
     }
     doSearch(key: string) {
         utils.showLoading();
@@ -32,8 +33,8 @@ export default class Index extends Component<any, any> {
             request.get('/paimai/api/goods/list', {params: {key:key}}),
             request.get('/paimai/api/performances/list', {params: {key:key}})
         ]).then((reses:any)=>{
-            this.setState({goodsList: reses[0].data.result.records, performanceList: reses[1].data.result.records});
             utils.hideLoading();
+            this.setState({goodsList: reses[0].data.result.records, performanceList: reses[1].data.result.records});
         });
     }
     renderGoods(item) {
@@ -122,7 +123,7 @@ export default class Index extends Component<any, any> {
     handleInputSearch(e) {
         console.log(e.detail.value);
         let key = e.detail.value;
-        const doSearch = debounce(800, this.doSearch, {atBegin: false});
+        const doSearch = debounce(1000, this.doSearch);
         doSearch(key);
     }
     render() {
@@ -134,14 +135,16 @@ export default class Index extends Component<any, any> {
                         <Input onInput={this.handleInputSearch} placeholder={'输入关键字，搜索专场或拍品'} className={'text-lg block flex-1'} />
                     </View>
                 </View>
-                <LineTitle text={'搜索到的拍品列表'} />
-                <View className={'p-4 space-y-4'}>
-                    {this.state.goodsList.length == 0 && <NoData />}
+                <LineTitle text={'搜索到的拍品列表'} style={{marginTop: 20, marginBottom: 20}} />
+                {this.state.goodsList.length == 0 && <NoData />}
+                <View className={'grid grid-cols-2 gap-4 px-4'}>
                     {this.state.goodsList.map(item=>this.renderGoods(item))}
                 </View>
-                <LineTitle text={'搜索到的专场列表'} />
+                <LineTitle text={'搜索到的专场列表'} style={{marginTop: 20, marginBottom: 20}} />
                 {this.state.performanceList.length == 0 && <NoData />}
-                {this.state.performanceList.map(item=>this.renderPerformance(item))}
+                <View className={'grid grid-cols-1 gap-4 px-4'}>
+                    {this.state.performanceList.map(item=>this.renderPerformance(item))}
+                </View>
             </PageLayout>
         );
     }
