@@ -618,7 +618,7 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //用户实名检测，必须绑定手机号才可出价
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
-        return Result.OK(!StringUtils.isAnyEmpty(memberVO.getRealname(), memberVO.getPhone()));
+        return Result.OK(!StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()));
     }
     /**
      * 出价拍品
@@ -631,7 +631,7 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //用户实名检测，必须绑定手机号才可出价
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
-        if(StringUtils.isAnyEmpty(memberVO.getRealname(), memberVO.getPhone())) {
+        if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
             throw new JeecgBootException("请完善您的用户信息后再出价");
         }
 

@@ -177,11 +177,17 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    offer() {
+    async offer() {
         const {context} = this.props;
         const {userInfo} = context;
         const {goods} = this.state;
         this.setState({posting: true});
+        let checkResult = await request.get('/paimai/api/members/check');
+        if(!checkResult.data.result) {
+            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function(){
+                Taro.navigateTo({url: '/pages/my/profile'}).then();
+            });
+        }
         //出价
         request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res => {
             this.setState({posting: false});
