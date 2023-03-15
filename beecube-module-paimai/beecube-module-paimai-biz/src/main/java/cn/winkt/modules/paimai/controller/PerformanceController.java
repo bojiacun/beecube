@@ -310,6 +310,10 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @Transactional
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
+        //验证专场是否过了结束时间，如果过了，则不能修改任何信息
+        if(old.getEndTime().after(new Date())) {
+            throw new JeecgBootException("专场已过结束时间不能做任何修改");
+        }
         //限时拍修改专场时间也同步更新所有拍品时间
         if(old.getType() == 1) {
             if (!old.getStartTime().equals(performance.getStartTime()) || !old.getEndTime().equals(performance.getEndTime())) {
