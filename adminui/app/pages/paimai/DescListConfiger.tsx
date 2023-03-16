@@ -19,6 +19,7 @@ const DescListConfiger : FC<DescListConfigerProps> = (props) => {
 
     useEffect(()=>{
         let initValue = formik.values[name];
+        console.log(initValue);
         if(initValue) {
             setList(JSON.parse(initValue) || []);
         }
@@ -34,7 +35,7 @@ const DescListConfiger : FC<DescListConfigerProps> = (props) => {
         setShow(false);
     }
 
-    const hanldeOnItemChange = (e:any, item:any, key:string) => {
+    const handleOnItemChange = (e:any, item:any, key:string) => {
         item[key] = e.target.value;
         setList([...list]);
     }
@@ -60,8 +61,8 @@ const DescListConfiger : FC<DescListConfigerProps> = (props) => {
                     {list.map((item,index)=>{
                         return (
                             <Row className={'mb-1'} key={'range-'+index}>
-                                <Col md={4}><FormControl value={item.min} onChange={e => hanldeOnItemChange(e, item, 'key')} /></Col>
-                                <Col md={8}><FormControl value={item.max} onChange={e => hanldeOnItemChange(e, item, 'value')} /></Col>
+                                <Col md={4}><FormControl value={item.key} onChange={e => handleOnItemChange(e, item, 'key')} /></Col>
+                                <Col md={8}><FormControl value={item.value} onChange={e => handleOnItemChange(e, item, 'value')} /></Col>
                             </Row>
                         );
                     })}
