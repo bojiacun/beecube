@@ -357,10 +357,11 @@ export default class Index extends Component<any, any> {
         });
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
+        console.log(systemInfo);
 
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
-                <CustomSwiper list={images} imageMode={'heightFix'} radius={'0'} height={systemInfo.screenWidth} onItemClick={this.handlePreview} />
+                <CustomSwiper list={images} imageMode={'aspectFit'} radius={'0'} height={systemInfo.safeArea.width} onItemClick={this.handlePreview} />
                 <View className={'grid grid-cols-1 px-4 divide-y divide-gray-200'}>
                     <View className={'space-y-4 py-4'}>
                         <View className={'flex justify-between items-center'}>
