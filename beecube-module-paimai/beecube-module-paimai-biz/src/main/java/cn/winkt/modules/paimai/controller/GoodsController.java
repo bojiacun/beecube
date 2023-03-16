@@ -180,7 +180,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     public Result<?> edit(@RequestBody Goods goods) {
         Goods old = goodsService.getById(goods.getId());
         Date endTime = goods.getActualEndTime() == null ? goods.getEndTime(): goods.getActualEndTime();
-        if((endTime != null && endTime.after(new Date())) || old.getState() > 1) {
+        if((endTime != null && endTime.before(new Date())) || old.getState() > 1) {
             throw new JeecgBootException("拍品已结束无法编辑");
         }
         if(old.getType() != 2) {
