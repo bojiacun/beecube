@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {View, Text, CheckboxGroup, Checkbox, Label, Button} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
+import NoData from "../../components/nodata";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -107,6 +108,7 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '购物车'}} showTabBar={true}>
                 <CheckboxGroup onChange={this.handleCheckChanged}>
                     <View className={'grid pb-4 grid-cols-1 divide-y divide-gray-100'}>
+                        {cart.length == 0 && <NoData text={'您的购物车是空的！'} />}
                         {cart.map((item: any, index) => {
                             return (
                                 <View className={'bg-white py-4 px-4 relative overflow-hidden flex items-center'}>
@@ -133,17 +135,20 @@ export default class Index extends Component<any, any> {
                 </CheckboxGroup>
 
                 <View style={{height: Taro.pxTransform(124)}}/>
-                <View className={'bg-white flex items-center fixed px-4 w-full'} style={{bottom: Taro.pxTransform(56 + safeBottom)}}>
-                    <View className={'flex-1 flex items-center'}>
-                        <Checkbox id={'all'} value={'all'} checked={this.isCheckedAll} onClick={this.toggleCheckAll} />
-                        <Label for={'all'} onClick={this.toggleCheckAll}>全选</Label>
-                        <Text className={'ml-4 font-bold text-red-500'}>总计：</Text>
-                        <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
+                {cart.length > 0 &&
+                    <View className={'bg-white flex items-center fixed px-4 w-full'} style={{bottom: Taro.pxTransform(56 + safeBottom)}}>
+                        <View className={'flex-1 flex items-center'}>
+                            <Checkbox id={'all'} value={'all'} checked={this.isCheckedAll} onClick={this.toggleCheckAll}/>
+                            <Label for={'all'} onClick={this.toggleCheckAll}>全选</Label>
+                            <Text className={'ml-4 font-bold text-red-500'}>总计：</Text>
+                            <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
+                        </View>
+                        <View>
+                            <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}
+                                    onClick={() => Taro.navigateTo({url: 'confirm'})}>去结算</Button>
+                        </View>
                     </View>
-                    <View>
-                        <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'} onClick={()=>Taro.navigateTo({url: 'confirm'})}>去结算</Button>
-                    </View>
-                </View>
+                }
             </PageLayout>
         );
     }
