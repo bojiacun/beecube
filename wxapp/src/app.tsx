@@ -9,7 +9,8 @@ import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
-const siteInfo = require('./siteinfo');
+const siteInfo = require('./siteinfo.js');
+console.log('app: site info is', siteInfo);
 const store = configStore();
 let qqmapSdk;
 
