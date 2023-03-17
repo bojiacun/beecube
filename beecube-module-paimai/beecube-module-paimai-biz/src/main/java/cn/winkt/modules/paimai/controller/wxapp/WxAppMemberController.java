@@ -790,7 +790,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("该拍品无需缴纳保证金");
         }
         //专场结束不能缴纳保证金
-        if((performance.getType() == 1 && performance.getEndTime().after(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
+        if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
             throw new JeecgBootException("专场已结束无法缴纳保证金");
         }
 
