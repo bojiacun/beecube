@@ -215,7 +215,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             } else if (performance.getType() == 2) {
-                if (performance.getState() > 0) {
+                if (performance.getState() == 0) {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             }
