@@ -302,6 +302,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsOffer.setStatus(1);
             goods.setState(3);
             goodsUpdateMessage.setState(3);
+            goodsUpdateMessage.setDealUserId(goodsOffer.getMemberId());
             goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
             goodsOfferService.updateById(goodsOffer);

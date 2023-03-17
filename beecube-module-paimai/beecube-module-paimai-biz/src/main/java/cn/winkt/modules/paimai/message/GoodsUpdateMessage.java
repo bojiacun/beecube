@@ -18,4 +18,5 @@ public class GoodsUpdateMessage extends Message{
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date actualEndTime;
     private Float dealPrice;
+    private String dealUserId;
 }
