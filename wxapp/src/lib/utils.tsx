@@ -108,8 +108,8 @@ export default {
     },
     showMessage: (content: string, callback: Function = () => {
     }, showCancel = false, cancelCallback: Function = () => {
-    }, title = '友情提示') => {
-        return Taro.showModal({title: title, content: content, showCancel: showCancel}).then(res => {
+    }, title = '友情提示', confirmText='确定', cancelText = '取消') => {
+        return Taro.showModal({title: title, content: content, showCancel: showCancel, confirmText: confirmText, cancelText: cancelText}).then(res => {
             if (res.confirm) {
                 callback();
             } else {

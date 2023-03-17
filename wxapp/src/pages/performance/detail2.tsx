@@ -188,6 +188,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '同步拍专场详情'}} enableReachBottom={true}>
                 <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
+                    <View><FallbackImage src={utils.resolveUrl(detail.preview)} mode={'widthFix'} className={'block w-full box-border'} /></View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'text-sm text-red-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
                             className={'py-1 px-2 border border-1 border-solid border-red-500 rounded'}>{item}</Text>)}</View>

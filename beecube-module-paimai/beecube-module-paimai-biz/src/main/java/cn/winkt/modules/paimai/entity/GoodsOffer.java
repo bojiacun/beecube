@@ -42,8 +42,10 @@ public class GoodsOffer {
 	/**出价人*/
 	@Excel(name = "出价人", width = 15)
     @ApiModelProperty(value = "出价人")
-	@SensitiveField(type = SensitiveEnum.MOBILE_PHONE)
+	@SensitiveField(type = SensitiveEnum.CHINESE_NAME)
 	private java.lang.String memberName;
+	@SensitiveField(type = SensitiveEnum.MOBILE_PHONE)
+	private String memberPhone;
 	/**出价人头像*/
 	@Excel(name = "出价人头像", width = 15)
     @ApiModelProperty(value = "出价人头像")

@@ -711,7 +711,8 @@ public class WxAppMemberController {
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
-            goodsOffer.setMemberName(loginUser.getPhone());
+            goodsOffer.setMemberName(loginUser.getRealname());
+            goodsOffer.setMemberPhone(loginUser.getPhone());
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
 

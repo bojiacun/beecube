@@ -182,38 +182,52 @@ export default class Index extends Component<any, any> {
         const {context} = this.props;
         const {userInfo} = context;
         const {goods} = this.state;
-        this.setState({posting: true});
         let checkResult = await request.get('/paimai/api/members/check');
         if(!checkResult.data.result) {
             return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function(){
                 Taro.navigateTo({url: '/pages/my/profile'}).then();
             });
         }
-        //出价
-        request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res => {
-            this.setState({posting: false});
-            if (res.data.success) {
-                utils.showSuccess(false, '出价成功');
-                goods.currentPrice = this.state.nextPrice;
-                let offers = this.state.offers;
-                if (offers.length >= 3) {
-                    offers.pop();
+        let offers = this.state.offers;
+        let doOffer = () => {
+            this.setState({posting: true});
+            request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res => {
+                this.setState({posting: false});
+                if (res.data.success) {
+                    utils.showSuccess(false, '出价成功');
+                    goods.currentPrice = this.state.nextPrice;
+                    if (offers.length >= 3) {
+                        offers.pop();
+                    }
+                    offers.unshift({
+                        memberAvatar: userInfo.avatar,
+                        memberId: userInfo.id,
+                        memberName: userInfo.realname || userInfo.nickname,
+                        price: this.state.nextPrice,
+                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                    });
+                    goods.offerCount++;
+                    this.setState({offers: offers, goods: goods});
+                    this.nextPrice(goods);
+                    //出价成功加入队列
+                } else {
+                    utils.showError(res.data.message || '出价失败');
                 }
-                offers.unshift({
-                    memberAvatar: userInfo.avatar,
-                    memberId: userInfo.id,
-                    memberName: userInfo.phone || userInfo.realname,
-                    price: this.state.nextPrice,
-                    offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                });
-                goods.offerCount++;
-                this.setState({offers: offers, goods: goods});
-                this.nextPrice(goods);
-                //出价成功加入队列
-            } else {
-                utils.showError(res.data.message || '出价失败');
+            }).catch(() => this.setState({posting: false}));
+        }
+        //判断当前自己是不是最高出价人，如果是提醒一次
+        if(offers && offers.length > 0) {
+            if(userInfo.id == offers[0].memberId) {
+                await utils.showMessage('您当前的出价已为最高出价，是否确定继续出价?', function(){
+                    doOffer();
+                }, true, () => {}, '友情提示', '继续出价', '取消出价');
             }
-        }).catch(() => this.setState({posting: false}));
+            else {
+                doOffer();
+            }
+        }
+        //出价
+
     }
 
     nextPrice(newGoods) {
@@ -439,10 +453,8 @@ export default class Index extends Component<any, any> {
                         </View>
                         <View className={'flex'}>
                             <View className={'flex-1'}>起拍价：￥{numeral(goods.startPrice).format('0,0.00')}</View>
-                            <View className={'flex-1'}>延时周期：<Text>{goods.delayTime}分钟</Text></View>
-                        </View>
-                        <View className={'flex'}>
                             <View className={'flex-1'}>拍卖佣金：{goods.commission}%</View>
+                            {/*<View className={'flex-1'}>延时周期：<Text>{goods.delayTime}分钟</Text></View>*/}
                         </View>
                     </View>
                     <View className={'py-4'}>
