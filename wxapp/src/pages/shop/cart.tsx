@@ -104,7 +104,7 @@ export default class Index extends Component<any, any> {
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         return (
-            <PageLayout statusBarProps={{title: '商城购物车'}} showTabBar={true}>
+            <PageLayout statusBarProps={{title: '购物车'}} showTabBar={true}>
                 <CheckboxGroup onChange={this.handleCheckChanged}>
                     <View className={'grid pb-4 grid-cols-1 divide-y divide-gray-100'}>
                         {cart.map((item: any, index) => {

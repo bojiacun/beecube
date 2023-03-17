@@ -157,6 +157,17 @@ export default class Index extends Component<any, any> {
                 goods.actualEndTime = msg.newTime;
                 this.setState({goods: goods});
                 break;
+            case 'MSG_TYPE_DEALED':
+                if(msg.userId == userInfo.id) {
+                    //中拍的人就是我
+                    utils.showMessage('恭喜您成功拍到此拍品，是否立即支付拍品款项?', function() {
+                        Taro.navigateTo({url: '/pages/my/orders?status=0'}).then();
+                    }, true,()=>{}, '恭喜中拍', '立即支付', '稍后支付').then();
+                }
+                else {
+                    utils.showMessage('很遗憾您没有中拍!').then();
+                }
+                break;
         }
     }
 
@@ -506,7 +517,7 @@ export default class Index extends Component<any, any> {
                     <View onClick={this.toggleFollow}
                           className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
                         <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
-                        <View>关注</View>
+                        <View>收藏</View>
                     </View>
                     {this.renderButton()}
                 </View>

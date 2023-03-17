@@ -116,11 +116,18 @@ export default class Index extends Component<any, any> {
 
     renderButton() {
         return (
-            <View className={'flex items-center space-x-2'}>
-                <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.buy}>
-                    <View>立即购买</View>
-                </Button>
-            </View>
+            <>
+                <View className={'flex items-center space-x-2'}>
+                    <Button className={'btn btn-warning'} onClick={this.addInCart}>
+                        <View>加入购物车</View>
+                    </Button>
+                </View>
+                <View className={'flex items-center space-x-2'}>
+                    <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.buy}>
+                        <View>立即购买</View>
+                    </Button>
+                </View>
+            </>
         );
     }
 
@@ -174,15 +181,14 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>
-
+                <View className={'absolute'} style={{bottom: 124, right: 16}}>
+                    <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
+                        <View className={'iconfont icon-fenxiang text-lg'}/>
+                        <View>分享</View>
+                    </Button>
+                </View>
                 <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
                       style={{paddingBottom: safeBottom}}>
-                    <View>
-                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
-                            <View className={'iconfont icon-fenxiang text-lg'}/>
-                            <View>分享</View>
-                        </Button>
-                    </View>
                     <View>
                         <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
                             <View className={'iconfont icon-lianxikefu text-xl'}/>
@@ -192,13 +198,7 @@ export default class Index extends Component<any, any> {
                     <View onClick={this.toggleFollow}
                           className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
                         <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
-                        <View>关注</View>
-                    </View>
-                    <View onClick={this.addInCart} className={'block flex flex-col items-center'}>
-                        <View className={classNames('text-xl')}>
-                            <Text className={'fa fa-shopping-cart '} />
-                        </View>
-                        <View>购物车</View>
+                        <View>收藏</View>
                     </View>
                     {this.renderButton()}
                 </View>

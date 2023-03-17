@@ -140,11 +140,18 @@ export default class Index extends Component<any, any> {
                 break;
             case 1:
                 return (
-                    <View className={'flex items-center space-x-2'}>
-                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
-                            <View>取消订单</View>
-                        </Button>
-                    </View>
+                    <>
+                        <View className={'flex items-center space-x-2'}>
+                            <Button openType={'contact'} className={'btn btn-outline'}>
+                                <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '} />联系客服</View>
+                            </Button>
+                        </View>
+                        <View className={'flex items-center space-x-2'}>
+                            <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                <View>取消订单</View>
+                            </Button>
+                        </View>
+                    </>
                 );
                 break;
         }
@@ -199,18 +206,31 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>收货信息</View>
                         <View className={'space-y-4'}>
-                            <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
-                                <View className={'flex-1 space-y-2'}>
-                                    <View className={'font-bold space-x-2'}>
-                                        <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
+                            {detail.status == 0 &&
+                                <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
+                                    <View className={'flex-1 space-y-2'}>
+                                        <View className={'font-bold space-x-2'}>
+                                            <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
+                                        </View>
+                                        <View
+                                            className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
                                     </View>
-                                    <View
-                                        className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
+                                    <View className={'px-2'}>
+                                        <Text className={'fa fa-chevron-right'}/>
+                                    </View>
+                                </Navigator>
+                            }
+                            {detail.status == 0 &&
+                                <View className={'flex items-center justify-between'}>
+                                    <View className={'flex-1 space-y-2'}>
+                                        <View className={'font-bold space-x-2'}>
+                                            <Text className={'text-lg'}>{address?.username}</Text><Text>{address?.phone}</Text>
+                                        </View>
+                                        <View
+                                            className={'text-gray-400'}>{address?.province} {address?.city} {address?.district} {address?.address}</View>
+                                    </View>
                                 </View>
-                                <View className={'px-2'}>
-                                    <Text className={'fa fa-chevron-right'}/>
-                                </View>
-                            </Navigator>
+                            }
                         </View>
                     </View>
 
