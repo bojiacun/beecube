@@ -72,7 +72,6 @@ export default class Index extends Component<any, any> {
         if (this.state.address) {
             values.id = this.state.address.id;
             request.post('/app/api/members/addresses/edit', values).then((res) => {
-                console.log(res);
                 this.setState({saving: false});
                 utils.showSuccess(true);
             });

@@ -20,7 +20,7 @@ const Collapse: FC<CollapseProps> = (props) => {
         return (
             <View className={''}>
                 <Navigator className={'flex py-4'} url={url}>
-                    <View className={'text-gray-400'} style={{width: Taro.pxTransform(icon ? 100 : 80)}}>
+                    <View className={'text-gray-400'} style={{width: Taro.pxTransform(icon ? 120 : 90)}}>
                         {icon}
                         <Text className={classNames(description == '' ? 'font-bold text-gray-800' : '')}>{title}</Text>
                     </View>
