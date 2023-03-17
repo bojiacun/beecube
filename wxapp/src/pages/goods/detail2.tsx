@@ -181,10 +181,11 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>
-                <View className={'absolute'} style={{bottom: 124, right: 16}}>
-                    <Button openType={'share'} plain={true} className={'block flex flex-col items-center'}>
-                        <View className={'iconfont icon-fenxiang text-lg'}/>
-                        <View>分享</View>
+                <View className={'absolute bg-white rounded-full overflow-hidden p-1 shadow-outer'} style={{bottom: 124, right: 16}}>
+                    <Button openType={'share'} plain={true} className={'block flex flex-col items-center justify-center'} style={{width: 40, height: 40}}>
+                        <View className={'text-xl'}>
+                            <View className={'iconfont icon-fenxiang text-xl'}/>
+                        </View>
                     </Button>
                 </View>
                 <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
