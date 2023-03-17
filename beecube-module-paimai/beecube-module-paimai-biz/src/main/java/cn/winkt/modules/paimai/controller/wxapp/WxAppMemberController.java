@@ -153,20 +153,22 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
 
-        Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).multiply(BigDecimal.valueOf(100)).intValue();
-        log.info("原路返回支付金额 {}", refundAmount);
-        WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
-                .transactionId(order.getTransactionId())
-                .outRefundNo(order.getId())
-                .totalFee(refundAmount)
-                .refundFee(refundAmount)
-                .build();
-        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-        WxPayRefundResult result = wxPayService.refund(refundRequest);
-        if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
-            throw new JeecgBootException("退款失败");
+        if(order.getTransactionId() != null) {
+            Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).multiply(BigDecimal.valueOf(100)).intValue();
+            log.info("原路返回支付金额 {}", refundAmount);
+            WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
+                    .transactionId(order.getTransactionId())
+                    .outRefundNo(order.getId())
+                    .totalFee(refundAmount)
+                    .refundFee(refundAmount)
+                    .build();
+            WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+            WxPayRefundResult result = wxPayService.refund(refundRequest);
+            if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
+                throw new JeecgBootException("退款失败");
+            }
         }
-        return Result.OK("退款成功", order);
+        return Result.OK("取消成功", order);
     }
 
 
