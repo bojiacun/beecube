@@ -215,14 +215,16 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             } else if (performance.getType() == 2) {
-                if (performance.getState() == 1) {
+                if (performance.getState() > 0) {
                     throw new JeecgBootException("拍品所在专场已经开始，并且尚未结束，无法删除");
                 }
             }
-        } else {
+        } else if(goods.getType() == 1){
             Date endTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-            if (nowDate.after(goods.getStartTime()) && nowDate.before(endTime)) {
-                throw new JeecgBootException("拍品正在拍卖中，无法删除");
+            if(endTime != null && goods.getStartTime() != null) {
+                if (nowDate.after(goods.getStartTime()) && nowDate.before(endTime)) {
+                    throw new JeecgBootException("拍品正在拍卖中，无法删除");
+                }
             }
         }
         goodsService.removeById(id);

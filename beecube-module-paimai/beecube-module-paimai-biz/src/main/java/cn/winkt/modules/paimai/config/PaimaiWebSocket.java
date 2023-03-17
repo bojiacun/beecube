@@ -81,6 +81,9 @@ public class PaimaiWebSocket {
     // 此为广播消息
     public void sendAllMessage(String message) {
         log.info("{}【websocket消息】广播消息: {}", AppContext.getApp(), message);
+        if(!webSockets.containsKey(AppContext.getApp())) {
+            return;
+        }
         for(PaimaiWebSocket webSocket : webSockets.get(AppContext.getApp())) {
             try {
                 if(webSocket.session.isOpen()) {
