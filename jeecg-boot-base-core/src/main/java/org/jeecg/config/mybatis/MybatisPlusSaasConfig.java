@@ -56,6 +56,7 @@ public class MybatisPlusSaasConfig {
         APP_TABLE.add("beecube_app_diy_pages");
         APP_TABLE.add("beecube_app_members");
         APP_TABLE.add("beecube_app_navs");
+        APP_TABLE.add("beecube_app_pay_logs");
         APP_TABLE.add("beecube_app_settings");
 
         APP_TABLE_REGXS.add("app_");
