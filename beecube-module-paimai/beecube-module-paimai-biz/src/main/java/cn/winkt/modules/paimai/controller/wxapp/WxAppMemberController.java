@@ -630,7 +630,6 @@ public class WxAppMemberController {
      * @return
      */
     @PostMapping("/offers")
-    @Transactional
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //用户实名检测，必须绑定手机号才可出价

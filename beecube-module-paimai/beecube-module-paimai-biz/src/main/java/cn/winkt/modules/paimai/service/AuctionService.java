@@ -22,6 +22,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -54,6 +55,7 @@ public class AuctionService {
     @Resource
     PaimaiWebSocket goodsOfferWebSocket;
 
+    @Transactional
     public Result<?> offer(JSONObject post) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         Goods goods = goodsService.getById(post.getString("id"));

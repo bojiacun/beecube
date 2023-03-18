@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.message.GoodsUpdateMessage;
@@ -20,11 +21,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 
 import java.util.Date;
@@ -80,6 +83,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @Resource
     private IOrderGoodsService orderGoodsService;
 
+    @Resource
+    AuctionService auctionService;
     /**
      * 分页列表查询
      *
@@ -223,7 +228,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         return Result.OK("编辑成功!");
     }
 
-
+    @PostMapping("/offers")
+    public Result<?> doOffer(@RequestBody JSONObject post) {
+        return auctionService.offer(post);
+    }
 
     /**
      * 通过id删除
