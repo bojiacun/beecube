@@ -108,10 +108,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         queryWrapper.eq("g.status", 1);
         queryWrapper.orderByDesc("g.end_time");
         queryWrapper.and(qw -> {
-            qw.eq("g.type", 1).lt("g.state", 2).or(qw1 -> {
-               qw1.eq("g.type", 2).lt("g.start_time", nowDate).and(qw2 -> {
-                   qw2.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
-               });
+            qw.and(qw1 -> {
+                qw1.eq("p.type", 2).eq("g.state", 1).or(qw2 -> {
+                    qw2.eq("p.type", 1).lt("g.start_time", nowDate).and(qw3 -> {
+                        qw3.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
+                    });
+                });
             });
         });
         if(StringUtils.isNotEmpty(goods.getTitle())) {

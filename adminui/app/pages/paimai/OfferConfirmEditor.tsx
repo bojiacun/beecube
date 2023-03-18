@@ -25,7 +25,7 @@ const OfferSchema = Yup.object().shape({
 });
 
 const OfferConfirmEditor = (props: any) => {
-    const {model, onHide} = props;
+    const {model, onHide, onRefresh} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
@@ -39,9 +39,7 @@ const OfferConfirmEditor = (props: any) => {
         if (postFetcher.type === 'done' && postFetcher.data) {
             formikRef.current!.setSubmitting(false);
             handleSaveResult(postFetcher.data);
-            if (postFetcher.data.success) {
-                onHide(postFetcher.data.result);
-            }
+            onRefresh();
         }
     }, [postFetcher.state]);
 

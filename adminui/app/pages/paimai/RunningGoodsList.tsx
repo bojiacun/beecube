@@ -25,6 +25,8 @@ const RunningGoodsList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [offersShow, setOffersShow] = useState<boolean>(false);
+    const [selectedRow, setSelectedRow] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
@@ -56,6 +58,10 @@ const RunningGoodsList = (props: any) => {
             case 'offer':
                 //编辑
                 setEditModal(row);
+                break;
+            case 'offers':
+                setSelectedRow(row);
+                setOffersShow(true);
                 break;
         }
     }
@@ -93,8 +99,16 @@ const RunningGoodsList = (props: any) => {
             }
         },
         {
-            text: '起拍价',
+            text: '当前价',
             dataField: 'startPrice',
+            isDummyField: true,
+            formatter:(cell:number, row:any)=>{
+                return row.curretnPrice || row.startPrice;
+            }
+        },
+        {
+            text: '所在专场',
+            dataField: 'performanceTitle',
         },
         {
             text: '操作',
@@ -103,7 +117,9 @@ const RunningGoodsList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'offer')}>出价</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'offer')}>我要出价</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>出价记录</a>
                     </div>
                 );
             }
@@ -182,11 +198,16 @@ const RunningGoodsList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-
+            {selectedRow && <OfferList show={offersShow} onHide={()=>{
+                setSelectedRow(null);
+                setOffersShow(false);
+            }} selectedRow={selectedRow} />}
             {editModal && <OfferConfirmEditor model={editModal} onHide={() => {
                 setEditModal(null);
                 loadData();
-            }}/>}
+            }} onRefresh={()=>{
+                loadData();
+            }} />}
         </>
     );
 }
