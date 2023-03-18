@@ -57,7 +57,7 @@ export default class Index extends Component<any, any> {
                         <View className={'text-sm'}>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
                     </View>
                     <View className={'mt-4 text-center'}>
-                        <Button onClick={this.handleCharge} className={'btn btn-primary'} disabled={amount <= 0||posting}>微信支付</Button>
+                        <Button onClick={this.handleCharge} className={'btn btn-primary w-56'} disabled={amount <= 0||posting}>微信支付</Button>
                     </View>
                 </View>
             </PageLayout>
