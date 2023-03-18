@@ -1,12 +1,15 @@
 package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
 import cn.winkt.modules.app.entity.AppSetting;
 import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.vo.AppVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.dto.DataLogDTO;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +31,9 @@ import java.util.Set;
 @RestController
 @RequestMapping("/app/api")
 public class AppApiController {
+
+    @Resource
+    IAppService appService;
     
     @Resource
     AppMemberProvider appMemberProvider;
@@ -40,6 +47,15 @@ public class AppApiController {
     @Resource
     IAppMemberMoneyRecordService appMemberMoneyRecordService;
 
+
+
+    @GetMapping("/all")
+    public List<App> allList() {
+        LambdaQueryWrapper<App> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(App::getStatus, 1);
+        queryWrapper.gt(App::getEndTime, new Date());
+        return appService.list(queryWrapper);
+    }
 
     @GetMapping("/getMemberById")
     public AppMember queryAppMember(@RequestParam("id") String id) {

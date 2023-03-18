@@ -4,6 +4,7 @@ import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.AppModule;
 import cn.winkt.modules.app.vo.AppSettingVO;
+import cn.winkt.modules.app.vo.AppVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
@@ -28,4 +29,7 @@ public interface AppApi {
 
     @GetMapping("/app/api/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
+
+    @GetMapping("/app/api/all")
+    List<AppVO> allApps();
 }
