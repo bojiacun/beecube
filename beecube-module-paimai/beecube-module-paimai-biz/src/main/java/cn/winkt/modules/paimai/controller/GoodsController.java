@@ -128,6 +128,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                });
             });
         });
+        if(StringUtils.isNotEmpty(goods.getTitle())) {
+            queryWrapper.like("g.title", goods.getTitle());
+        }
 
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
