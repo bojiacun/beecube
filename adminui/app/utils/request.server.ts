@@ -159,6 +159,7 @@ export const API_PAIMAI_APIPERFORMANCE_LIST = `${BASE_URL}/paimai/api/performanc
 export const API_PAIMAI_APIAUCTION_LIST = `${BASE_URL}/paimai/api/auctions/list`;
 
 export const API_PAIMAI_GOODS_LIST = `${BASE_URL}/paimai/goods/list`;
+export const API_PAIMAI_GOODS_RUNNING_LIST = `${BASE_URL}/paimai/goods/running`;
 export const API_PAIMAI_GOODS_SELECT_LIST = `${BASE_URL}/paimai/goods/select`;
 export const API_PAIMAI_GOODS_SELECTED_LIST = `${BASE_URL}/paimai/goods/selected`;
 export const API_PAIMAI_GOODS_ADD = `${BASE_URL}/paimai/goods/add`;
