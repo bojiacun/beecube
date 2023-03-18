@@ -223,6 +223,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         return Result.OK("编辑成功!");
     }
 
+
+
     /**
      * 通过id删除
      *
