@@ -42,6 +42,8 @@ public class LoginUser {
 	@SensitiveField
 	private String realname;
 
+	private String nickname;
+
 	/**
 	 * 登录人密码
 	 */
