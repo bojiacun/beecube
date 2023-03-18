@@ -122,7 +122,7 @@ public class TokenUtils {
             }
         } else {
             // 查询用户信息
-            log.info("缓存中没有用户信息，从数据库中去查找 {}", username);
+            log.info("缓存中没有SYSTEM用户信息，从数据库中去查找 {}", username);
             loginUser = commonApi.getUserByName(username);
         }
         return loginUser;

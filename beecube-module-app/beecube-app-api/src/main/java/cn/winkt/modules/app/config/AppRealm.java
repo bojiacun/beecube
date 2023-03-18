@@ -170,7 +170,7 @@ public class AppRealm extends AuthorizingRealm {
             }
         } else {
             // 查询用户信息
-            log.info("缓存中没有用户信息，从数据库中去查找 {}", username);
+            log.info("缓存中没有APP用户信息，从数据库中去查找 {}", username);
             loginUser = appMemberProvider.getUserByName(username);
         }
         return loginUser;
