@@ -127,6 +127,10 @@ const PerformanceList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '排序',
             dataField: 'sortNum',
         },

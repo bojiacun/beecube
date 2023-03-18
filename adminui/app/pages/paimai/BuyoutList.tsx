@@ -102,6 +102,10 @@ const BuyoutList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '拍品名称',
             dataField: 'title',
         },

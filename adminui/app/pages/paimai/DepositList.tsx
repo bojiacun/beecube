@@ -69,6 +69,10 @@ const DepositList = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '缴纳人',
             dataField: '',
             isDummyField: true,
@@ -77,7 +81,7 @@ const DepositList = (props: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         {!row.memberAvatar ? <User size={40} /> : <Image src={row.memberAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        <span className={'ml-1'}>{row.memberName}</span>
+                        <span className={'ml-1'}>{row.memberName} {row.memberPhone}</span>
                     </div>
                 );
             }

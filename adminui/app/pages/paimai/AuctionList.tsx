@@ -102,10 +102,13 @@ const AuctionList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '拍卖会名称',
             dataField: 'title',
         },
-
         {
             text: '预览图',
             dataField: '',
