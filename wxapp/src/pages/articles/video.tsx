@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View, Video} from "@tarojs/components";
+import {View, Navigator} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
 
@@ -75,11 +75,13 @@ export default class Index extends Component<any, any> {
                 <View className={'grid grid-cols-1 px-4 divide-y divide-gray-100'}>
                     {list.map((item) => {
                         return (
-                            <View className={'bg-white space-y-2 p-4 rounded shadow-outer'}>
-                                <View className={'flex-1 font-bold'}>
-                                    <Video src={item.video}  controls={true} className={'block w-full'} />
-                                </View>
-                                <View className={'font-bold'}>{item.title}</View>
+                            <View>
+                                <Navigator url={`/pages/articles/detail2?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
+                                    <View className={'flex-1 font-bold'}>
+                                        {item.title}
+                                    </View>
+                                    <View className={'iconfont icon-youjiantou_huaban w-20 text-right'}/>
+                                </Navigator>
                             </View>
                         );
                     })}

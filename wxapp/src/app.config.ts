@@ -3,6 +3,7 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/index/search',
         'pages/articles/detail',
+        'pages/articles/detail2',
         'pages/articles/services',
         'pages/articles/normal',
         'pages/articles/video',
