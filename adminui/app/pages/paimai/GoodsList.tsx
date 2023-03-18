@@ -111,6 +111,10 @@ const GoodsList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '标的号',
             dataField: 'sortNum',
         },

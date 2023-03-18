@@ -140,6 +140,10 @@ const GoodsListSelected = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '标的号',
             dataField: 'sortNum',
         },

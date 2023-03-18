@@ -118,25 +118,18 @@ const BuyoutList = (props: any) => {
                 return <FigureImage src={previewUrl} style={{width: 60, height: 60}}/>
             }
         },
-        {
-            text: '拍品类型',
-            dataField: 'type_dictText',
-        },
+
         {
             text: '一口价',
             dataField: 'startPrice',
         },
         {
-            text: '库存',
+            text: '库存/销量',
             dataField: 'stock',
-        },
-        {
-            text: '销量',
-            dataField: 'sales',
-        },
-        {
-            text: '标签',
-            dataField: 'tags',
+            isDummyField: true,
+            formatter: (cell:number, row:any) => {
+                return `${row.stock}/${row.sales?row.sales:0}`;
+            }
         },
         {
             text: '显示状态',

@@ -60,6 +60,10 @@ const PerformancesListSelected = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '专场名称',
             dataField: 'title',
         },
