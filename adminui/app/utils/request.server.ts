@@ -164,6 +164,7 @@ export const API_PAIMAI_GOODS_SELECT_LIST = `${BASE_URL}/paimai/goods/select`;
 export const API_PAIMAI_GOODS_SELECTED_LIST = `${BASE_URL}/paimai/goods/selected`;
 export const API_PAIMAI_GOODS_ADD = `${BASE_URL}/paimai/goods/add`;
 export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
+export const API_PAIMAI_GOODS_OFFER = `${BASE_URL}/paimai/goods/offers`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 
 export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/goods/deal`;
