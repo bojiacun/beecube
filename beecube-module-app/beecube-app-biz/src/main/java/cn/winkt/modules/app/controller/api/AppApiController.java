@@ -2,7 +2,9 @@ package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.entity.AppMember;
+import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
 import cn.winkt.modules.app.entity.AppSetting;
+import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
 import cn.winkt.modules.app.service.IAppMemberService;
 import cn.winkt.modules.app.service.IAppSettingService;
 import com.alibaba.fastjson.JSONObject;
@@ -13,9 +15,11 @@ import org.jeecg.common.api.dto.message.*;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.vo.*;
 import org.jeecg.common.util.SqlInjectionUtil;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +36,9 @@ public class AppApiController {
 
     @Resource
     IAppSettingService appSettingService;
+
+    @Resource
+    IAppMemberMoneyRecordService appMemberMoneyRecordService;
 
 
     @GetMapping("/getMemberById")
@@ -72,5 +79,33 @@ public class AppApiController {
             return Result.error("校验失败，sql解析异常！");
         }
         return Result.error("校验失败，sql解析异常！" + msg);
-    } 
+    }
+
+
+    /**
+     * 分销返佣
+     * @param memberId
+     * @param description
+     * @param amount
+     * @return
+     */
+    @PutMapping("/money/in")
+    @Transactional
+    public boolean addMemeberMoney(@RequestParam("member_id") String memberId, @RequestParam("description") String description, @RequestParam("amount") Float amount) {
+        AppMember appMember = appMemberService.getById(memberId);
+        if(appMember == null) {
+            return false;
+        }
+        appMember.setMoney(BigDecimal.valueOf(appMember.getMoney()).add(BigDecimal.valueOf(amount)).floatValue());
+        AppMemberMoneyRecord appMemberMoneyRecord = new AppMemberMoneyRecord();
+        appMemberMoneyRecord.setType(2);
+        appMemberMoneyRecord.setDescription(description);
+        appMemberMoneyRecord.setMemberId(memberId);
+        appMemberMoneyRecord.setMoney(Double.valueOf(amount));
+        appMemberMoneyRecord.setStatus(1);
+        appMemberMoneyRecordService.save(appMemberMoneyRecord);
+        appMemberService.updateById(appMember);
+
+        return true;
+    }
 }

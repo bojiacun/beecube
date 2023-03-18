@@ -74,4 +74,6 @@ public class AppMemberVO {
 	private Integer status;
 	/**创建时间*/
 	private Date createTime;
+
+	private Integer isAgent;
 }
