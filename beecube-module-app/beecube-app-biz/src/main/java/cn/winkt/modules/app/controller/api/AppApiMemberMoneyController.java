@@ -100,6 +100,7 @@ public class AppApiMemberMoneyController {
         record.setType(1);
         record.setMemberId(loginUser.getId());
         record.setDescription("用户充值");
+        record.setStatus(0);
         appMemberMoneyRecordService.save(record);
 
         AppPayLog payLog = getPayLog(record.getId());

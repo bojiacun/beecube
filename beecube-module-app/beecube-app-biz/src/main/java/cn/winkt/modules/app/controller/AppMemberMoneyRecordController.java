@@ -66,6 +66,7 @@ public class AppMemberMoneyRecordController extends JeecgController<AppMemberMon
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		QueryWrapper<AppMemberMoneyRecord> queryWrapper = QueryGenerator.initQueryWrapper(appMemberMoneyRecord, req.getParameterMap());
+		queryWrapper.eq("status", 1);
 		Page<AppMemberMoneyRecord> page = new Page<AppMemberMoneyRecord>(pageNo, pageSize);
 		IPage<AppMemberMoneyRecord> pageList = appMemberMoneyRecordService.page(page, queryWrapper);
 		return Result.OK(pageList);
