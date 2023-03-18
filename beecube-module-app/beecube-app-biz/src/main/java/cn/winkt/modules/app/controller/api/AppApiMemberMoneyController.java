@@ -30,6 +30,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -86,6 +87,7 @@ public class AppApiMemberMoneyController {
      * @throws WxPayException
      */
     @PutMapping("/charge")
+    @Transactional
     public Result<?> charge(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException, WxPayException {
         double amount = data.getDoubleValue("amount");
         if(amount < 0.01) {
@@ -98,6 +100,7 @@ public class AppApiMemberMoneyController {
         record.setType(1);
         record.setMemberId(loginUser.getId());
         record.setDescription("用户充值");
+        appMemberMoneyRecordService.save(record);
 
         AppPayLog payLog = getPayLog(record.getId());
         AppMember member = appMemberService.getById(loginUser.getId());
