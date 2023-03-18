@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用会员余额记录表")
 @RestController
-@RequestMapping("/app/appMemberMoneyRecord")
+@RequestMapping("/app/money/records")
 public class AppMemberMoneyRecordController extends JeecgController<AppMemberMoneyRecord, IAppMemberMoneyRecordService> {
 	@Autowired
 	private IAppMemberMoneyRecordService appMemberMoneyRecordService;

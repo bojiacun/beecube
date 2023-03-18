@@ -13,6 +13,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {Delete, Edit, MoreVertical, User} from "react-feather";
 import AppMemberEdit from "~/pages/app/AppMemberEdit";
+import WalletRecordList from "~/pages/app/WalletRecordList";
 
 
 const AppMemberList = (props: any) => {
@@ -20,6 +21,7 @@ const AppMemberList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [walletShow, setWalletShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
@@ -49,8 +51,12 @@ const AppMemberList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'wallet':
+                setEditModal(row);
+                break;
             case 'edit':
                 setEditModal(row);
+                setWalletShow(true);
                 break;
             case 'delete':
                 //删除按钮
@@ -141,6 +147,8 @@ const AppMemberList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={()=>handleOnAction(row, 'wallet')}> 资金流水 </a>
+                        <span className={'divider'}/>
                         <a href={'#'} onClick={()=>handleOnAction(row, 'edit')}> 编辑 </a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
@@ -224,6 +232,12 @@ const AppMemberList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }} />}
+            {editModal && walletShow &&
+                <WalletRecordList show={walletShow} selectedRow={editModal} onHide={()=>{
+                    setEditModal(null);
+                    setWalletShow(false);
+                }} />
+            }
         </>
     );
 }
