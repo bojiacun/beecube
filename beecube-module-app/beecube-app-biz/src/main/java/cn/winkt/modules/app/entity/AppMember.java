@@ -131,6 +131,11 @@ public class AppMember {
     @ApiModelProperty(value = "用户状态1为正常，0为禁用")
 	@Dict(dicCode = "app_member_status")
 	private java.lang.Integer status;
+
+	/**
+	 * 是否为分销商
+	 */
+	private Integer isAgent;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private java.util.Date createTime;

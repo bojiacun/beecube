@@ -124,6 +124,13 @@ const AppMemberList = (props: any) => {
             sortFunc: emptySortFunc
         },
         {
+            text: '分销商',
+            dataField: 'isAgent',
+            formatter: (cell:any, row:any) => {
+                return row.isAgent == 1 ? <Badge variant={'success'}>是</Badge> : <Badge variant={'danger'}>否</Badge>
+            }
+        },
+        {
             text: '认证状态',
             dataField: 'authStatus_dictText',
             headerStyle: {width: 130},
