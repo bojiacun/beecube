@@ -55,6 +55,7 @@
     "react-tiga-swiper": "^1.0.10",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
+    "react-use-websocket": "3.0.0",
     "remix-auth": "^3.3.0",
     "remix-auth-form": "^1.2.0",
     "remix-utils": "^4.1.0",
