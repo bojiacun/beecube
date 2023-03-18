@@ -6,10 +6,6 @@ import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
-import cn.winkt.modules.paimai.message.AuctionDelayedMessage;
-import cn.winkt.modules.paimai.message.MessageConstant;
-import cn.winkt.modules.paimai.message.OfferMessage;
-import cn.winkt.modules.paimai.message.PerformanceUpdateMessage;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.*;
 import com.alibaba.fastjson.JSONObject;
@@ -24,7 +20,6 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
@@ -32,7 +27,6 @@ import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
-import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
@@ -87,9 +81,6 @@ public class WxAppMemberController {
     IGoodsOfferService goodsOfferService;
 
     @Resource
-    PaimaiWebSocket goodsOfferWebSocket;
-
-    @Resource
     IGoodsOrderService goodsOrderService;
 
     @Resource
@@ -98,7 +89,7 @@ public class WxAppMemberController {
     @Resource
     IGoodsOrderAfterService goodsOrderAfterService;
     @Resource
-    AuctionService auctionService;
+    AuctionGoodsService auctionGoodsService;
 
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
@@ -637,7 +628,7 @@ public class WxAppMemberController {
         if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
             throw new JeecgBootException("请完善您的用户信息后再出价");
         }
-        return auctionService.offer(post);
+        return auctionGoodsService.offer(post);
     }
 
     /**

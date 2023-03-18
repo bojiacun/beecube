@@ -1,7 +1,6 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.app.api.AppApi;
-import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
@@ -31,7 +30,7 @@ import java.util.Date;
 
 @org.springframework.stereotype.Service
 @Slf4j
-public class AuctionService {
+public class AuctionGoodsService {
 
     @Resource
     AppApi appApi;
