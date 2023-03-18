@@ -127,7 +127,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         queryWrapper.eq("g.status", 1);
         queryWrapper.orderByDesc("g.end_time");
         queryWrapper.and(qw -> {
-            qw.lt("g.status", 2).or().and(qw1 -> {
+            qw.lt("g.state", 2).or(qw1 -> {
                qw1.lt("g.start_time", nowDate).and(qw2 -> {
                    qw2.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
                });
