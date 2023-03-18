@@ -64,10 +64,9 @@ public class AuctionGoodsService {
         Date nowDate = new Date();
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
         Performance performance = null;
-        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            performance = performanceService.getById(goods.getPerformanceId());
-        }
+        String auctionId = null;
         if (performance != null) {
+            auctionId = performance.getAuctionId();
             if (performance.getType() == 1) {
                 if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
                     throw new JeecgBootException("拍品所在专场已结束");
@@ -109,23 +108,7 @@ public class AuctionGoodsService {
                 return Result.error("他人已出此价格或更高的价格");
             }
             //查询用户是否缴纳保证金,如果拍品上了某个专场则以专场保证金为主
-            String auctionId = null;
-            if (performance != null) {
-                auctionId = performance.getAuctionId();
-                LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-                queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
-                queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-                if (goodsDepositService.count(queryWrapper) == 0) {
-                    return Result.error("未缴纳专场保证金");
-                }
-            } else if (goods.getDeposit() > 0) {
-                LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-                queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
-                queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-                if (goodsDepositService.count(queryWrapper) == 0) {
-                    return Result.error("未缴纳保证金");
-                }
-            }
+
             GoodsOffer goodsOffer = new GoodsOffer();
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPerformanceId(goods.getPerformanceId());
