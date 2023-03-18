@@ -109,6 +109,29 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         return Result.OK(pageList);
     }
 
+    @AutoLog(value = "拍品表-查询进行中的拍品")
+    @ApiOperation(value = "拍品表-查询进行中的拍品", notes = "拍品表-查询进行中的拍品")
+    @GetMapping(value = "/running")
+    @AutoDict
+    public Result<?> queryRunningPageList(Goods goods,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+                                   ) {
+        Date nowDate = new Date();
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Goods::getStatus, 1);
+        queryWrapper.orderByDesc(Goods::getEndTime);
+        queryWrapper.and(qw -> {
+            qw.lt(Goods::getState, 2).or().and(qw1 -> {
+               qw1.lt(Goods::getStartTime, nowDate).and(qw2 -> {
+                   qw2.gt(Goods::getEndTime, nowDate).or().gt(Goods::getActualEndTime, nowDate);
+               });
+            });
+        });
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+        IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
     @AutoLog(value = "拍品表-选择拍品")
     @ApiOperation(value = "拍品表-选择拍品", notes = "拍品表-选择拍品")
     @GetMapping(value = "/select")
