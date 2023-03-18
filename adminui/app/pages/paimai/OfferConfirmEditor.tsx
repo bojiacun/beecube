@@ -38,7 +38,7 @@ const OfferConfirmEditor = (props: any) => {
     useEffect(() => {
         if (postFetcher.type === 'done' && postFetcher.data) {
             formikRef.current!.setSubmitting(false);
-            handleSaveResult(postFetcher.data);
+            handleSaveResult(postFetcher.data, '出价成功！');
             onRefresh();
         }
     }, [postFetcher.state]);
@@ -70,11 +70,11 @@ const OfferConfirmEditor = (props: any) => {
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button
-                                        variant={'primary'}
+                                        variant={'danger'}
                                         disabled={postFetcher.state === 'submitting'}
                                         type={'submit'}
                                     >
-                                        保存
+                                        出价
                                     </Button>
                                 </Modal.Footer>
                             </Form>

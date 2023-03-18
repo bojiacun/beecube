@@ -13,7 +13,7 @@ import java.util.Date;
 public class OfferMessage extends Message{
     private String fromUserId;
     private String fromUserAvatar;
-    @SensitiveField(type = SensitiveEnum.MOBILE_PHONE)
+    @SensitiveField(type = SensitiveEnum.CHINESE_NAME)
     private String fromUserName;
     private String goodsId;
     private BigDecimal price;
