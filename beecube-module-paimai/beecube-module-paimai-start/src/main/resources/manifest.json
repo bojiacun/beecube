@@ -45,6 +45,15 @@
       "suffixOptions": "输入文章的ID"
     },
     {
+      "label": "文章详情页(视频类)",
+      "url": "/pages/articles/detail2",
+      "urlSuffix": {
+        "label": "文章ID",
+        "value": "id"
+      },
+      "suffixOptions": "输入文章的ID"
+    },
+    {
       "label": "专场列表（按标签筛选）",
       "url": "/pages/performance/public",
       "urlSuffix": {
