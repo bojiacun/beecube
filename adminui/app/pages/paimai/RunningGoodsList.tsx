@@ -103,7 +103,7 @@ const RunningGoodsList = (props: any) => {
             dataField: 'startPrice',
             isDummyField: true,
             formatter:(cell:number, row:any)=>{
-                return row.curretnPrice || row.startPrice;
+                return row.currentPrice || row.startPrice;
             }
         },
         {

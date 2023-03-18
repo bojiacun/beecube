@@ -46,7 +46,7 @@ const OfferConfirmEditor = (props: any) => {
 
     if (!model) return <></>
 
-    const newModel = {...model};
+    const newModel = {price: model.currentPrice||model.startPrice,...model};
 
     return (
         <>

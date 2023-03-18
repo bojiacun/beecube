@@ -65,6 +65,10 @@ public class AuctionGoodsService {
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
         Performance performance = null;
         String auctionId = null;
+        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
+            performance = performanceService.getById(goods.getPerformanceId());
+        }
+
         if (performance != null) {
             auctionId = performance.getAuctionId();
             if (performance.getType() == 1) {
