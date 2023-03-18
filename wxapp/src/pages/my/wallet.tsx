@@ -4,6 +4,7 @@ import {Navigator, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
+import Taro from "@tarojs/taro";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -12,6 +13,9 @@ import request from "../../lib/request";
     }
 ))
 export default class Index extends Component<any, any> {
+    state:any = {
+        userInfo: null,
+    }
     template: any;
     tabs: ListViewTabItem[];
 
@@ -51,17 +55,24 @@ export default class Index extends Component<any, any> {
     }
 
 
+    componentDidShow(){
+        //刷新余额
+        request.get('/app/api/members/profile').then(res=>{
+            this.setState({userInfo: res.data.result});
+        });
+    }
+
+
     loadData(pageIndex: number, tab: ListViewTabItem) {
         return request.get('/app/api/members/money/records', {params: {page: pageIndex, type: tab.id}});
     }
 
     handleWithdraw() {
-
+        Taro.navigateTo({url: '/pages/my/wallet/withdraw'}).then();
     }
 
     render() {
-        const {context} = this.props;
-        const {userInfo} = context;
+        const {userInfo} = this.state;
         const money = userInfo?.money ? (userInfo.money + '') : '0.00';
 
         return (
@@ -70,7 +81,7 @@ export default class Index extends Component<any, any> {
                     <View>余额（元）</View>
                     <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[0]}</Text></View>
                     <View className={'flex space-x-2'}>
-                        <Navigator className={'bg-white text-indigo rounded-full text-indigo-500 py-1 px-4'}>充值</Navigator>
+                        <Navigator url={'/pages/my/wallet/charge'} className={'bg-white text-indigo rounded-full text-indigo-500 py-1 px-4'}>充值</Navigator>
                         <Text onClick={this.handleWithdraw}
                               className={'text-white border-solid border-1 border-white bg-indigo-400 py-1 px-4 rounded-full'}>提现</Text>
                     </View>
@@ -81,6 +92,7 @@ export default class Index extends Component<any, any> {
                     dataFetcher={this.loadData}
                     tabStyle={2}
                     fixed={false}
+                    autoRefresh={true}
                 />
             </PageLayout>
         );

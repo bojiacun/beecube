@@ -25,6 +25,8 @@ export default defineAppConfig({
         'pages/auction/list',
         'pages/my/index',
         'pages/my/wallet',
+        'pages/my/wallet/charge',
+        'pages/my/wallet/withdraw',
         'pages/my/addresses',
         'pages/my/newaddress',
         'pages/my/deposits',
