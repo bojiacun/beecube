@@ -118,18 +118,19 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
                                    ) {
         Date nowDate = new Date();
-        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Goods::getStatus, 1);
-        queryWrapper.orderByDesc(Goods::getEndTime);
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("g.status", 1);
+        queryWrapper.orderByDesc("g.end_time");
         queryWrapper.and(qw -> {
-            qw.lt(Goods::getState, 2).or().and(qw1 -> {
-               qw1.lt(Goods::getStartTime, nowDate).and(qw2 -> {
-                   qw2.gt(Goods::getEndTime, nowDate).or().gt(Goods::getActualEndTime, nowDate);
+            qw.lt("g.status", 2).or().and(qw1 -> {
+               qw1.lt("g.start_time", nowDate).and(qw2 -> {
+                   qw2.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
                });
             });
         });
+
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
-        IPage<Goods> pageList = goodsService.page(page, queryWrapper);
+        IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
     @AutoLog(value = "拍品表-选择拍品")
