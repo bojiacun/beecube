@@ -107,10 +107,7 @@ const AppMemberList = (props: any) => {
             text: '余额',
             dataField: 'money',
         },
-        {
-            text: '积分',
-            dataField: 'score',
-        },
+
         {
             text: '创建时间',
             dataField: 'createTime',
