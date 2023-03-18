@@ -20,20 +20,18 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
+const OfferSchema = Yup.object().shape({
+    price: Yup.string().required('出价金额'),
+});
+
 const OfferConfirmEditor = (props: any) => {
     const {model, onHide} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
 
-
-    const GoodsSchema = Yup.object().shape({
-        deliveryNo: Yup.string().required('快递单号'),
-        deliveryCode: Yup.string().required('快递代码'),
-    });
-
     const handleOnSubmit = (values: any) => {
         values.id = model.id;
-        postFetcher.submit(values, {method: 'put', action: '/paimai/orders/delivery?id='+model.id});
+        postFetcher.submit(values, {method: 'put', action: '/paimai/goods/offer?id='+model.id});
     }
 
 
@@ -62,16 +60,15 @@ const OfferConfirmEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>确认发货</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>出价：{model.title}</Modal.Title>
                 </Modal.Header>
-                <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
+                <Formik innerRef={formikRef} initialValues={newModel} validationSchema={OfferSchema}
                         onSubmit={handleOnSubmit}>
                     {(formik)=>{
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                    <BootstrapInput label={'快递代码'} name={'deliveryCode'} />
-                                    <BootstrapInput label={'快递单号'} name={'deliveryNo'} />
+                                    <BootstrapInput label={'价格'} name={'price'} />
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button
