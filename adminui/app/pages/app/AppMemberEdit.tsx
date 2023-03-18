@@ -88,6 +88,7 @@ const AppMemberEdit = (props: any) => {
                                             <FormLabel htmlFor={'cardBack'}>身份证背照</FormLabel>
                                             <FileBrowserInput name={'cardBack'} type={1} multi={false} />
                                         </FormGroup>
+                                        <BootstrapRadioGroup  options={[{label: '是', value: '1'},{label: '否', value: '0'}]} name={'isAgent'} label={'分销商？'} />
                                         <BootstrapRadioGroup  options={[{label: '已认证', value: '1'},{label: '未认证', value: '0'}]} name={'authStatus'} label={'认证状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>

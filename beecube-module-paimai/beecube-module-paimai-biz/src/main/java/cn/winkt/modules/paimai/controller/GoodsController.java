@@ -1,5 +1,7 @@
 package cn.winkt.modules.paimai.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -288,11 +290,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         if(goods.getState() > 2) {
             throw new JeecgBootException("请不要重复确认成交或流拍");
         }
+        Date endTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             Performance performance = performanceService.getById(goods.getPerformanceId());
             if (performance.getType() == 1) {
                 //未到时间不能成交
-                if (new Date().after(goods.getEndTime())) {
+                if (new Date().before(endTime)) {
                     throw new JeecgBootException("拍品未结束不能成交");
                 }
             } else if (performance.getType() == 2) {
@@ -301,7 +304,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 }
             }
         } else {
-            if (new Date().after(goods.getEndTime())) {
+            if (new Date().before(endTime)) {
                 throw new JeecgBootException("拍品未结束不能成交");
             }
         }
@@ -327,14 +330,23 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
             goodsOfferService.updateById(goodsOffer);
 
+            //计算成交佣金
+            BigDecimal commission = BigDecimal.ZERO;
+            if(goods.getCommission() != null) {
+                commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING);
+            }
+
+            BigDecimal price = BigDecimal.valueOf(goodsOffer.getPrice());
+            BigDecimal newPrice = price.multiply(commission).add(price);
+
             //生成成交订单
             GoodsOrder goodsOrder = new GoodsOrder();
             goodsOrder.setMemberId(goodsOffer.getMemberId());
             goodsOrder.setMemberName(goodsOffer.getMemberName());
             goodsOrder.setMemberAvatar(goodsOffer.getMemberAvatar());
             goodsOrder.setStatus(0);
-            goodsOrder.setPayedPrice(goodsOffer.getPrice());
-            goodsOrder.setTotalPrice(goodsOffer.getPrice());
+            goodsOrder.setPayedPrice(newPrice.floatValue());
+            goodsOrder.setTotalPrice(newPrice.floatValue());
             goodsOrder.setGoodsCount(1);
             goodsOrder.setType(1);
             goodsOrder.setGoodsOfferId(goodsOffer.getId());

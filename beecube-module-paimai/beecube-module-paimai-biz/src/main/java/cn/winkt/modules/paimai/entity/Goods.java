@@ -73,7 +73,7 @@ public class Goods {
 	/**拍卖佣金配置*/
 	@Excel(name = "拍卖佣金配置", width = 15)
     @ApiModelProperty(value = "拍卖佣金配置")
-	private java.lang.Object commission;
+	private java.lang.Float commission;
 	/**专场ID*/
 	@Excel(name = "专场ID", width = 15)
     @ApiModelProperty(value = "专场ID")
