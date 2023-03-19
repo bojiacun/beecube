@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View, Navigator} from "@tarojs/components";
+import {View, Navigator, Text} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
 import FallbackImage from "../../components/FallbackImage";
@@ -78,14 +78,14 @@ export default class Index extends Component<any, any> {
                         return (
                             <View>
                                 <Navigator url={`/pages/articles/detail?id=${item.id}`} className={'bg-white space-x-4 py-4 flex items-center'}>
-                                    <View style={{height: 60}} className={'overflow-hidden'}>
+                                    <View style={{height: 60, width: 60}} className={'overflow-hidden'}>
                                         <FallbackImage mode={'aspectFill'} src={utils.resolveUrl(item.preview)} style={{width: 60, height: 60}} />
                                     </View>
-                                    <View style={{height: 60}} className={'flex flex-col justify-between'}>
+                                    <View style={{height: 60}} className={'flex flex-col flex-1 justify-between'}>
                                         <View className={'font-bold'}>{item.title}</View>
                                         <View className={'flex justify-between text-sm'}>
                                             <View className={'text-gray-400'}>{item.createTime}</View>
-                                            <View>{item.views}</View>
+                                            <View className={'text-gray-400'}><Text className={'fa fa-eye mr-1'} />{item.views}</View>
                                         </View>
                                     </View>
                                 </Navigator>

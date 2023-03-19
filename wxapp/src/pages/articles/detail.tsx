@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
-import {RichText, View} from "@tarojs/components";
+import {RichText, View, Text} from "@tarojs/components";
 import utils from "../../lib/utils";
 
 
@@ -32,7 +32,12 @@ export default class Index extends Component<any, any> {
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>
-                {detail.type != 3 && <View className={'text-gray-400 mt-2'}>{detail.createTime}</View>}
+                {detail.type != 3 &&
+                    <View className={'text-gray-400 mt-2 flex justify-between'}>
+                        <View>{detail.createTime}</View>
+                        <View><Text className={'fa fa-eye mr-1'} />{detail.views}</View>
+                    </View>
+                }
                 <View className={'mt-4'}>
                     <RichText nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'}/>
                 </View>
