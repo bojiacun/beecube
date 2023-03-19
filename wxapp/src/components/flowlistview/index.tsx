@@ -92,11 +92,11 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 tabs.forEach((t,index) => {
                     if(t.id === defaultActiveKey) {
                         initIndex = index;
-                        setSelectedIndex(initIndex);
                         defaultTab = t;
                     }
                 })
             }
+            setSelectedIndex(initIndex);
             dataFetcher(1, defaultTab, initIndex).then(res => {
                 setData([...res.data.result.records]);
                 utils.hideLoading();
@@ -168,7 +168,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
                 <View className={classNames('p-4', stylesFlow.flowWrapper, className)}>
-            {data.map((item) => {
+            {selectedIndex > -1 && data.map((item) => {
                 let tab = tabs[selectedIndex];
                 return tab.template(item);
             })}
