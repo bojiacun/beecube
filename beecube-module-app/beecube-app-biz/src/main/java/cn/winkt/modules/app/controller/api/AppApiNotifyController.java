@@ -1,9 +1,11 @@
 package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.config.MiniAppPayServices;
+import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
 import cn.winkt.modules.app.entity.AppPayLog;
 import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
+import cn.winkt.modules.app.service.IAppMemberService;
 import cn.winkt.modules.app.service.IAppPayLogService;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @RestController
@@ -30,6 +33,9 @@ public class AppApiNotifyController {
 
     @Resource
     private IAppMemberMoneyRecordService appMemberMoneyRecordService;
+
+    @Resource
+    private IAppMemberService appMemberService;
     /**
      *
      * 用户充值回调
@@ -63,6 +69,9 @@ public class AppApiNotifyController {
         record.setTransactionId(notifyResult.getTransactionId());
         appMemberMoneyRecordService.updateById(record);
 
+        AppMember appMember = appMemberService.getById(record.getMemberId());
+        appMember.setMoney(BigDecimal.valueOf(appMember.getMoney()).add(BigDecimal.valueOf(record.getMoney())).floatValue());
+        appMemberService.updateById(appMember);
         return WxPayNotifyResponse.success("成功");
     }
 }
