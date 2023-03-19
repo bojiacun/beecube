@@ -112,6 +112,7 @@ public class AppMember {
 
 	@Excel(name = "用户实名认证状态0为未认证、1为已认证通过", width = 15)
 	@ApiModelProperty(value = "用户实名认证状态0为未认证、1为已认证通过")
+	@Dict(dicCode = "app_member_auth_status")
 	private Integer authStatus;
 
 	/**用户头像*/
