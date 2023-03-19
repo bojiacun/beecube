@@ -190,17 +190,32 @@ export default class Index extends Component<any, any> {
         }
 
         if(!message && templateId) {
-            await Taro.requestSubscribeMessage({tmplIds: [settings.startTemplateId]});
+            const res = await Taro.requestSubscribeMessage({tmplIds: [settings.startTemplateId]});
+            if(res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
+                if(type) {
+                    request.put('/paimai/api/members/messages/toggle', {
+                        type: type,
+                        performanceId: this.state.detail.id,
+                        templateId: templateId,
+                    }).then(res => {
+                        this.setState({message: res.data.result});
+                    });
+                }
+            }
+        }
+        else {
+            if(type) {
+                request.put('/paimai/api/members/messages/toggle', {
+                    type: type,
+                    performanceId: this.state.detail.id,
+                    templateId: templateId,
+                }).then(res => {
+                    this.setState({message: res.data.result});
+                });
+            }
         }
 
-        if(type) {
-            request.put('/paimai/api/members/messages/toggle', {
-                type: type,
-                performanceId: this.state.detail.id
-            }).then(res => {
-                this.setState({message: res.data.result});
-            });
-        }
+
     }
 
     componentWillUnmount() {

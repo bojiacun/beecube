@@ -304,7 +304,6 @@ export default class Index extends Component<any, any> {
         const images  = this.state.goods.images.split(',').map((item) => {
             return utils.resolveUrl(item);
         });
-        console.log(images);
         Taro.previewImage({urls: images, current: item.url}).then();
         return true;
     }
@@ -367,13 +366,45 @@ export default class Index extends Component<any, any> {
     }
 
 
-    noticeMe() {
-        request.put('/paimai/api/members/messages/toggle', {
-            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
-            goodsId: this.state.goods.id
-        }).then(res => {
-            this.setState({message: res.data.result});
-        });
+    async noticeMe() {
+        const {message, status} = this.state;
+        const {settings} = this.props;
+
+        let templateId,type;
+
+        if(status == TimeCountDownerStatus.NOT_START) {
+            //开始提醒
+            type = 1;
+            templateId = settings.startTemplateId;
+        }
+        else if(status == TimeCountDownerStatus.STARTED) {
+            type = 2;
+            templateId = settings.endTemplateId;
+        }
+
+        if(!message && templateId) {
+            const res = await Taro.requestSubscribeMessage({tmplIds: [settings.startTemplateId]});
+            if(res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
+                if (type) {
+                    request.put('/paimai/api/members/messages/toggle', {
+                        type: type,
+                        goodsId: this.state.goods.id
+                    }).then(res => {
+                        this.setState({message: res.data.result});
+                    });
+                }
+            }
+        }
+        else {
+            if (type) {
+                request.put('/paimai/api/members/messages/toggle', {
+                    type: type,
+                    goodsId: this.state.goods.id
+                }).then(res => {
+                    this.setState({message: res.data.result});
+                });
+            }
+        }
     }
 
     componentWillUnmount() {
