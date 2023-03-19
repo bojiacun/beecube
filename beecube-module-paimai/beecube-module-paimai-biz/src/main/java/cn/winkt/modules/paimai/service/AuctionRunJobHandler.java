@@ -75,7 +75,7 @@ public class AuctionRunJobHandler {
      * @return
      */
     @XxlJob(value = "MESSAGE_NOTIFY")
-    public ReturnT<String> messageNotify() {
+    public ReturnT<String> messageNotify(String params) {
         log.info("我是定时任务【消息提醒】，我执行了哦");
         //查找所有应用
         List<AppVO> apps = appApi.allApps();
