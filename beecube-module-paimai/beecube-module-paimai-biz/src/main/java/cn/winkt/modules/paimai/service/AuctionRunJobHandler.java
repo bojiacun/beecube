@@ -58,6 +58,9 @@ public class AuctionRunJobHandler {
     @Resource
     MiniappServices miniappServices;
 
+    @Resource
+    IPerformanceService performanceService;
+
     @XxlJob(value = "REFUND_DEPOSIT")
     public ReturnT<String> refundDeposits(String params) {
         log.info("我是定时任务【自动退保证金】，我执行了哦");
@@ -77,31 +80,71 @@ public class AuctionRunJobHandler {
     }
 
     @Transactional
-    void resolveDeposit(String appId) throws InvocationTargetException, IllegalAccessException {
+    void resolveDeposit(String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         List<GoodsDeposit> goodsDeposits = goodsDepositService.list(queryWrapper);
 
-        goodsDeposits.forEach(goodsDeposit -> {
-            if(StringUtils.isNotEmpty(goodsDeposit.getGoodsId())) {
+        for (GoodsDeposit goodsDeposit : goodsDeposits) {
+            if (StringUtils.isNotEmpty(goodsDeposit.getGoodsId())) {
                 //如果是拍品的
                 Goods goods = goodsService.getById(goodsDeposit.getGoodsId());
-                if(goods.getState() > 1) {
-                    GoodsOffer dealOffer = goodsOfferService.getMaxOfferRow(goodsDeposit.getGoodsId());
-                    if(dealOffer == null || !dealOffer.getMemberId().equals(goodsDeposit.getMemberId())) {
+                if (goods.getState() == 3) {
+                    //拍品状态为成交了
+                    GoodsOffer maxOfferRow = goodsOfferService.getMaxOfferRow(goods.getId());
+                    if (!maxOfferRow.getMemberId().equals(goodsDeposit.getMemberId())) {
+                        refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                    }
+                    else {
+                        //如果成交了，则看看订单有没有支付
+                        LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getGoodsOfferId, maxOfferRow.getId());
+                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getMemberId, maxOfferRow.getMemberId());
 
+                        GoodsOrder goodsOrder = goodsOrderService.getOne(goodsOrderLambdaQueryWrapper);
+                        if(goodsOrder != null && goodsOrder.getStatus() > 0) {
+                            refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                        }
+                    }
+                }
+                else if(goods.getState() == 4) {
+                    //如果是流拍了
+                    refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                }
+            } else if (StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
+                Performance performance = performanceService.getById(goodsDeposit.getPerformanceId());
+                if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || performance.getState() == 2) {
+                    //专场结束了,得看看这个用户在本场中是否有成交记录，如果有则不退款，如果没有则退款
+                    LambdaQueryWrapper<GoodsOffer> goodsOfferLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getPerformanceId, performance.getId());
+                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getMemberId, goodsDeposit.getMemberId());
+                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
+
+                    List<GoodsOffer> memberPerformanceOffers = goodsOfferService.list(goodsOfferLambdaQueryWrapper);
+
+                    if(memberPerformanceOffers.size() > 0) {
+                        GoodsOffer maxOfferRow = memberPerformanceOffers.get(0);
+                        //如果用户在本场有中标
+                        LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getGoodsOfferId, maxOfferRow.getId());
+                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getMemberId, maxOfferRow.getMemberId());
+
+                        GoodsOrder goodsOrder = goodsOrderService.getOne(goodsOrderLambdaQueryWrapper);
+                        if(goodsOrder != null && goodsOrder.getStatus() > 0) {
+                            refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                        }
+                    }
+                    else {
+                        refund(goodsDeposit.getPrice(), goodsDeposit, appId);
                     }
                 }
             }
-            else if(StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
-
-            }
-        });
-
+        }
 
     }
 
-    private void refund(Float amount, GoodsDeposit order, String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    @Transactional
+    void refund(Float amount, GoodsDeposit order, String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         Integer refundAmount = BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(100)).intValue();
         log.info("原路返回支付保证金 {}", refundAmount);
         WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
@@ -115,6 +158,8 @@ public class AuctionRunJobHandler {
         if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
             throw new JeecgBootException("退款失败");
         }
+        order.setStatus(2);
+        goodsDepositService.updateById(order);
     }
 
     @XxlJob(value = "RUN_AUCTION")
