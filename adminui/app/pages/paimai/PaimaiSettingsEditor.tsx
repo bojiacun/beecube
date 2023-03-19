@@ -38,6 +38,7 @@ const PaimaiSettingsEditor = (props:any) => {
                     <Card.Body>
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID'} />
+                        <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID'} />
                         <FormGroup>
                             <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                             <TinymceEditor name={'descFlow'} />
