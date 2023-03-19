@@ -63,5 +63,9 @@ public class MessagePool {
     @ApiModelProperty(value = "消息是否已经发送，0为未发送、1为已发送")
 	private java.lang.Integer status;
 
+	private String memberOpenId;
+	private String templateId;
+	private String formId;
+
 	private String appId;
 }

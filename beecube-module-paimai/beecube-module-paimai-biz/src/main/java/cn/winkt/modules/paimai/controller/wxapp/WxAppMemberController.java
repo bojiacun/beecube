@@ -407,11 +407,14 @@ public class WxAppMemberController {
      */
     @PutMapping("/messages/toggle")
     public Result<Boolean> toggleMessages(@RequestBody JSONObject params) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String performanceId = params.getString("performanceId");
         String goodsId = params.getString("goodsId");
         Integer type = params.getInteger("type");
+        String formId = params.getString("formId");
+        String templateId = params.getString("templateId");
+        AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
 
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<MessagePool> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MessagePool::getMemberId, loginUser.getId());
         queryWrapper.eq(MessagePool::getType, type);
@@ -428,6 +431,9 @@ public class WxAppMemberController {
             return Result.OK(false);
         } else {
             MessagePool messagePool = new MessagePool();
+            messagePool.setMemberOpenId(memberVO.getWxappOpenid());
+            messagePool.setFormId(formId);
+            messagePool.setTemplateId(templateId);
             messagePool.setGoodsId(goodsId);
             messagePool.setPerformanceId(performanceId);
             messagePool.setType(type);
