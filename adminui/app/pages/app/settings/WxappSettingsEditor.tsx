@@ -42,11 +42,11 @@ const WxappSettingsEditor = (props:any) => {
                             <FileBrowserInput name={'apiclientCert'} type={4} multi={false} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'apiclientP12'}>apiclientCert</FormLabel>
+                            <FormLabel htmlFor={'apiclientP12'}>apiclientP12</FormLabel>
                             <FileBrowserInput name={'apiclientP12'} type={4} multi={false} />
                         </FormGroup>
                         <FormGroup>
-                            <FormLabel htmlFor={'apiclientKey'}>apiclientCert</FormLabel>
+                            <FormLabel htmlFor={'apiclientKey'}>apiclientKey</FormLabel>
                             <FileBrowserInput name={'apiclientKey'} type={4} multi={false} />
                         </FormGroup>
                         <BootstrapInput  label={'腾讯地图秘钥'} name={'tencentMapKey'}  placeholder={'腾讯地图秘钥'} />
