@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.config;
 
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -10,19 +11,15 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.config.TenantContext;
-import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
-import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.JwtToken;
-import org.jeecg.config.shiro.LoginType;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +45,7 @@ public class AppRealm extends AuthorizingRealm {
     }
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        log.debug("===============Shiro权限认证开始============ [ roles、permissions]==========");
+        log.debug("===============Shiro App权限认证开始============ [ roles、permissions]==========");
         String username = null;
         if (principals != null) {
             LoginUser sysUser = (LoginUser) principals.getPrimaryPrincipal();
@@ -71,7 +68,7 @@ public class AppRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
-        log.debug("===============Shiro身份认证开始============doGetAuthenticationInfo==========");
+        log.debug("===============Shiro App身份认证开始============doGetAuthenticationInfo==========");
         String token = (String) auth.getCredentials();
         if (token == null) {
             HttpServletRequest req = SpringContextUtils.getHttpServletRequest();
@@ -124,16 +121,16 @@ public class AppRealm extends AuthorizingRealm {
         return loginUser;
     }
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
+        String cacheToken = String.valueOf(redisUtil.get(AppModuleConstants.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
             // 校验token有效性
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
                 String newAuthorization = JwtUtil.sign(userName, passWord);
                 // 设置超时时间
-                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
-                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + userName, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + userName, JwtUtil.EXPIRE_TIME *2 / 1000);
+                redisUtil.set(AppModuleConstants.PREFIX_USER_TOKEN + token, newAuthorization);
+                redisUtil.expire(AppModuleConstants.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
+                redisUtil.set(AppModuleConstants.PREFIX_USER_TOKEN + userName, newAuthorization);
+                redisUtil.expire(AppModuleConstants.PREFIX_USER_TOKEN + userName, JwtUtil.EXPIRE_TIME *2 / 1000);
                 log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
             }
             //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
@@ -157,7 +154,7 @@ public class AppRealm extends AuthorizingRealm {
      */
     private LoginUser getLoginUser(String username, AppMemberProvider appMemberProvider, RedisUtil redisUtil) {
         LoginUser loginUser = null;
-        String loginUserKey = CacheConstant.SYS_USERS_CACHE + ":" + username;
+        String loginUserKey = AppModuleConstants.APP_USERS_CACHE + "::" + username;
         //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
         if (redisUtil.hasKey(loginUserKey)) {
             log.info("缓存中有用户信息 {}", username);

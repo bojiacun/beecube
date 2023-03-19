@@ -1,23 +1,20 @@
 package cn.winkt.modules.app.service.impl;
 
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.mapper.AppMemberMapper;
 import cn.winkt.modules.app.service.IAppMemberService;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.desensitization.annotation.SensitiveEncode;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.AppContext;
-import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @Description: 应用会员表
@@ -36,7 +33,7 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
 
     @Override
     @SensitiveEncode
-    @Cacheable(cacheNames= CacheConstant.SYS_USERS_CACHE, key="#username", unless = "#result == null")
+    @Cacheable(cacheNames= AppModuleConstants.APP_USERS_CACHE, key="#username", unless = "#result == null")
     public LoginUser getEncodeUserInfo(String username) {
         if(oConvertUtils.isEmpty(username)) {
             return null;

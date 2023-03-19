@@ -3,6 +3,7 @@ package cn.winkt.modules.app.controller.api;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.winkt.modules.app.config.WxMiniappServices;
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.apifan.common.random.RandomSource;
@@ -64,10 +65,10 @@ public class AppApiWxappLoginController {
             throw new JeecgBootException("登录失败，您的账户已被禁用");
         }
         String token = JwtUtil.sign(appMember.getUsername(), appMember.getPassword());
-        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
-        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), token);
-        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + appMember.getUsername(), JwtUtil.EXPIRE_TIME * 2 / 1000);
+        redisUtil.set(AppModuleConstants.PREFIX_USER_TOKEN + token, token);
+        redisUtil.expire(AppModuleConstants.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
+        redisUtil.set(AppModuleConstants.PREFIX_USER_TOKEN + appMember.getUsername(), token);
+        redisUtil.expire(AppModuleConstants.PREFIX_USER_TOKEN + appMember.getUsername(), JwtUtil.EXPIRE_TIME * 2 / 1000);
         return Result.OK(token);
     }
 }
