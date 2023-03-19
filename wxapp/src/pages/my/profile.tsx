@@ -46,12 +46,11 @@ export default class Index extends Component<any, any> {
         this.setState({sdkVersion: Taro.getAppBaseInfo().SDKVersion});
     }
 
-    handleChooseAvatarNative(e) {
+    async handleChooseAvatarNative(e) {
         utils.showLoading('上传中');
-        request.get('/app/api/members/system/token').then(res=>{
-
-        });
-        const token = Taro.getStorageSync("TOKEN");
+        const res = await request.get('/app/api/members/system/token');
+        console.log(res);
+        const token = res.data.result;
         let file = e.detail.avatarUrl;
         Taro.uploadFile({
             url: API_URL + '/sys/oss/file/upload',
@@ -73,9 +72,11 @@ export default class Index extends Component<any, any> {
     }
 
     handleChooseAvatar() {
-        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(res => {
+        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const file = res.tempFilePaths[0];
-            const token = Taro.getStorageSync("TOKEN");
+            const res1 = await request.get('/app/api/members/system/token');
+            console.log(res1);
+            const token = res1.data.result;
             //upload image
             utils.showLoading('上传中');
             Taro.uploadFile({
