@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.config.MiniAppPayServices;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import com.alibaba.fastjson.JSONObject;
@@ -47,6 +48,9 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 
 	@Resource
 	private WxMiniappServices wxMiniappServices;
+
+	@Resource
+	private MiniAppPayServices miniAppPayServices;
 
 	@Resource
 	private RabbitMqClient rabbitMqClient;
@@ -135,6 +139,7 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 			 appSetting.setGroupKey(group);
 		 });
 		 wxMiniappServices.remove(appId);
+		 miniAppPayServices.clear(appId);
 		 rabbitMqClient.sendMessage(AppModuleConstants.APP_SETTINGS_QUEUE, appId);
 		 return Result.OK("更新成功!");
 	 }

@@ -51,4 +51,8 @@ public class MiniAppPayServices {
         wxPayServices.put(appId, wxPayService);
         return wxPayService;
     }
+
+    public void clear(String appId) {
+        wxPayServices.remove(appId);
+    }
 }
