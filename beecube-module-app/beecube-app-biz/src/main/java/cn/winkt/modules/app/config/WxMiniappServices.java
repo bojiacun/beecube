@@ -39,6 +39,10 @@ public class WxMiniappServices {
         return wxMaService;
     }
 
+    public void remove(String appId) {
+        wxMaServiceMap.remove(appId);
+    }
+
 
     Map<String, String> wxappSettings(String appId) {
         LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();

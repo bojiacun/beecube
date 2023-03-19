@@ -2,12 +2,16 @@ package cn.winkt.modules.app.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.config.WxMiniappServices;
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.boot.starter.rabbitmq.client.RabbitMqClient;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -40,7 +44,12 @@ import io.swagger.annotations.ApiOperation;
 public class AppSettingController extends JeecgController<AppSetting, IAppSettingService> {
 	@Autowired
 	private IAppSettingService appSettingService;
-	
+
+	@Resource
+	private WxMiniappServices wxMiniappServices;
+
+	@Resource
+	private RabbitMqClient rabbitMqClient;
 	/**
 	 * 分页列表查询
 	 *
@@ -125,7 +134,12 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 			 appSetting.setSettingKey(key);
 			 appSetting.setGroupKey(group);
 			 appSettingService.save(appSetting);
+			 //清空缓存
+			 if(key.equals("appid")) {
+				 wxMiniappServices.remove(jsonObject.getString(key));
+			 }
 		 });
+		 rabbitMqClient.sendMessage(AppModuleConstants.APP_SETTINGS_QUEUE, appId);
 		 return Result.OK("更新成功!");
 	 }
 	/**
