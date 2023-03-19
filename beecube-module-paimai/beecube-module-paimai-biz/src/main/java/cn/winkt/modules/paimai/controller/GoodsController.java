@@ -433,6 +433,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     void sendOfferResultMessage(Goods goods) throws InvocationTargetException, IllegalAccessException, WxErrorException {
         LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
+        queryWrapper.orderByDesc(GoodsOffer::getPrice);
 
         List<GoodsOffer> goodsOffers = goodsOfferService.list(queryWrapper);
         WxMaService wxMaService = miniappServices.getWxMaService(AppContext.getApp());
