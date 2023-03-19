@@ -56,10 +56,9 @@ public class AppApiAppMemberController {
         }
         return Result.OK(appMemberService.getById(sysUser.getId()));
     }
-    @GetMapping("/system/token")
+    @GetMapping("/tmptoken")
     public Result<String> getSystemTempToken() {
-        LoginUser loginUser = systemApi.getUserByName("uploader");
-        return Result.OK("",JwtUtil.sign(loginUser.getUsername(), "ffe55b7947d8403ce5ea631d8503f03f"));
+        return Result.OK("",JwtUtil.sign("uploader", "ffe55b7947d8403ce5ea631d8503f03f"));
     }
 
     @PutMapping("/update")

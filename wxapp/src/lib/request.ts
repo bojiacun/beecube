@@ -18,7 +18,7 @@ const handleOnResponse = async (response: AxiosResponse) => {
     let res = response.data;
     if(res.code == 401) {
         //登录态失效，重新执行登录
-        if(response.config.headers['X-Refresh-Token']) {
+        if(response.config.headers['X-Refresh-Token'] == 'yes') {
             Taro.showToast({icon: 'none', title: '很抱歉，登录失败!您将无法使用某些功能!', duration: 1500}).then();
             return response;
         }
@@ -29,7 +29,7 @@ const handleOnResponse = async (response: AxiosResponse) => {
         //重新发起请求
         response.config.headers['X-Access-Token'] = token;
         response.config.headers['Authorization'] = token;
-        response.config.headers['X-Refresh-Token'] = true;
+        response.config.headers['X-Refresh-Token'] = "yes";
         return await instance.request(response.config);
     }
     else if(res.code == 403) {

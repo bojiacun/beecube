@@ -8,7 +8,7 @@ import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
-import {API_URL} from "../../lib/request";
+import request, {API_URL} from "../../lib/request";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -47,38 +47,34 @@ export default class Index extends Component<any, any> {
     }
 
     async handleChooseAvatarNative(e) {
-        utils.showLoading('上传中');
-        // const res = await request.get('/app/api/members/system/token');
-        // console.log(res);
-        // const token = res.data.result;
-        const token = Taro.getStorageSync("TOKEN");
+        // utils.showLoading('上传中');
+        const res = await request.get('/app/api/members/tmptoken');
+        const token = res.data.result;
         let file = e.detail.avatarUrl;
-        Taro.uploadFile({
-            url: API_URL + '/sys/oss/file/upload',
-            name: 'file',
-            filePath: file,
-            header: {
-                "X-Access-Token": token,
-                "Authorization": token,
-                "Content-Type": 'application/json'
-            }
-        }).then((res: any) => {
-            let result = JSON.parse(res.data);
-            let avatar = result.result.url;
-            let userInfo = this.props.context.userInfo;
-            userInfo.avatar = avatar;
-            this.props.updateUserInfo(userInfo);
-            utils.showSuccess(false, '上传成功');
-        });
+        // Taro.uploadFile({
+        //     url: API_URL + '/sys/oss/file/upload',
+        //     name: 'file',
+        //     filePath: file,
+        //     header: {
+        //         "X-Access-Token": token,
+        //         "Authorization": token,
+        //         "Content-Type": 'application/json'
+        //     }
+        // }).then((res: any) => {
+        //     let result = JSON.parse(res.data);
+        //     let avatar = result.result.url;
+        //     let userInfo = this.props.context.userInfo;
+        //     userInfo.avatar = avatar;
+        //     this.props.updateUserInfo(userInfo);
+        //     utils.showSuccess(false, '上传成功');
+        // });
     }
 
     handleChooseAvatar() {
         Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const file = res.tempFilePaths[0];
-            // const res1 = await request.get('/app/api/members/system/token');
-            // console.log(res1);
-            // const token = res1.data.result;
-            const token = Taro.getStorageSync("TOKEN");
+            const res1 = await request.get('/app/api/members/tmptoken');
+            const token = res1.data.result;
             //upload image
             utils.showLoading('上传中');
             Taro.uploadFile({
