@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller.api;
 
+import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
@@ -20,6 +21,7 @@ import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.DictModel;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.system.vo.SysPermissionDataRuleModel;
@@ -42,6 +44,9 @@ public class AppApiAppMemberController {
     @Resource
     IAppMemberAddressService appMemberAddressService;
 
+    @Resource
+    SystemApi systemApi;
+
     //    获取当前用户信息
     @GetMapping("/profile")
     public Result<AppMember> memberDetail() {
@@ -51,7 +56,11 @@ public class AppApiAppMemberController {
         }
         return Result.OK(appMemberService.getById(sysUser.getId()));
     }
-
+    @GetMapping("/system/token")
+    public String getSystemTempToken() {
+        LoginUser loginUser = systemApi.getUserByName("admin");
+        return JwtUtil.sign(loginUser.getUsername(), loginUser.getPassword());
+    }
 
     @PutMapping("/update")
     @CacheEvict(value = CacheConstant.SYS_USERS_CACHE, allEntries = true)
