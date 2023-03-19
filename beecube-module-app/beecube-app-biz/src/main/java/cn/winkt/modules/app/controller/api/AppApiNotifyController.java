@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.extern.slf4j.Slf4j;
 import org.jeecg.config.AppContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/app/api/notify")
+@Slf4j
 public class AppApiNotifyController {
     @Resource
     private MiniAppPayServices miniAppPayServices;
@@ -40,7 +42,7 @@ public class AppApiNotifyController {
      */
     @RequestMapping(value = "/charge/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
     @Transactional
-    public String depositNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public String chargeNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);
         WxPayService wxPayService = miniAppPayServices.getService(appId);
@@ -53,6 +55,8 @@ public class AppApiNotifyController {
         payLog.setStatus(true);
         payLog.setTransactionId(notifyResult.getTransactionId());
         appPayLogService.updateById(payLog);
+
+        log.info("用户充值回调，充值记录ID是 {}", payLog.getOrdersn());
 
         AppMemberMoneyRecord record = appMemberMoneyRecordService.getById(payLog.getOrdersn());
         record.setStatus(1);
