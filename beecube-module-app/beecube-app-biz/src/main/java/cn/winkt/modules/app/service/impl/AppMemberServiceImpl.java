@@ -54,6 +54,7 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
         loginUser.setPassword(appMember.getPassword());
         loginUser.setCreateTime(appMember.getCreateTime());
         loginUser.setRealname(appMember.getRealname());
+        loginUser.setNickname(appMember.getNickname());
         return loginUser;
     }
 }
