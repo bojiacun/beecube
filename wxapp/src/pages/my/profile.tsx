@@ -51,23 +51,23 @@ export default class Index extends Component<any, any> {
         const res = await request.get('/app/api/members/tmptoken');
         const token = res.data.result;
         let file = e.detail.avatarUrl;
-        // Taro.uploadFile({
-        //     url: API_URL + '/sys/oss/file/upload',
-        //     name: 'file',
-        //     filePath: file,
-        //     header: {
-        //         "X-Access-Token": token,
-        //         "Authorization": token,
-        //         "Content-Type": 'application/json'
-        //     }
-        // }).then((res: any) => {
-        //     let result = JSON.parse(res.data);
-        //     let avatar = result.result.url;
-        //     let userInfo = this.props.context.userInfo;
-        //     userInfo.avatar = avatar;
-        //     this.props.updateUserInfo(userInfo);
-        //     utils.showSuccess(false, '上传成功');
-        // });
+        Taro.uploadFile({
+            url: API_URL + '/sys/oss/file/upload',
+            name: 'file',
+            filePath: file,
+            header: {
+                "X-Access-Token": token,
+                "Authorization": token,
+                "Content-Type": 'application/json'
+            }
+        }).then((res: any) => {
+            let result = JSON.parse(res.data);
+            let avatar = result.result.url;
+            let userInfo = this.props.context.userInfo;
+            userInfo.avatar = avatar;
+            this.props.updateUserInfo(userInfo);
+            utils.showSuccess(false, '上传成功');
+        });
     }
 
     handleChooseAvatar() {

@@ -2,6 +2,7 @@ package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
 import cn.winkt.modules.app.service.IAppMemberAddressService;
@@ -25,6 +26,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.DictModel;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.system.vo.SysPermissionDataRuleModel;
+import org.jeecg.common.util.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +45,8 @@ public class AppApiAppMemberController {
 
     @Resource
     IAppMemberAddressService appMemberAddressService;
-
     @Resource
-    SystemApi systemApi;
+    RedisUtil redisUtil;
 
     //    获取当前用户信息
     @GetMapping("/profile")
@@ -58,7 +59,12 @@ public class AppApiAppMemberController {
     }
     @GetMapping("/tmptoken")
     public Result<String> getSystemTempToken() {
-        return Result.OK("",JwtUtil.sign("uploader", "ffe55b7947d8403ce5ea631d8503f03f"));
+        String systemToken = JwtUtil.sign("uploader", "ffe55b7947d8403ce5ea631d8503f03f");
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + systemToken, systemToken);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + systemToken, 30);
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + "uploader", systemToken);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + "uploader", 30);
+        return Result.OK("",systemToken);
     }
 
     @PutMapping("/update")
