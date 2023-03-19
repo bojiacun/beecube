@@ -1,13 +1,18 @@
 package cn.winkt.modules.paimai.config;
 
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppSettingVO;
 import cn.winkt.modules.paimai.vo.WxAppSetting;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
+import org.codehaus.groovy.runtime.metaclass.ConcurrentReaderHashMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,8 +30,26 @@ public class MiniappServices {
     AppApi appApi;
 
     private final static ConcurrentHashMap<String, WxPayService> wxPayServices = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, WxMaService> wxMaServiceMap = new ConcurrentHashMap<>();
 
 
+
+    public WxMaService getWxMaService(String appId) throws InvocationTargetException, IllegalAccessException {
+        if(wxMaServiceMap.containsKey(appId)) {
+            return wxMaServiceMap.get(appId);
+        }
+        Map<String, String> configs = wxappSettings(appId);
+        WxAppSetting wxappSetting = new WxAppSetting();
+        BeanUtils.populate(wxappSetting, configs);
+
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(wxappSetting.getAppid());
+        wxMaDefaultConfig.setSecret(wxappSetting.getAppsecret());
+        WxMaService wxMaService = new WxMaServiceImpl();
+        wxMaService.setWxMaConfig(wxMaDefaultConfig);
+        wxMaServiceMap.put(appId, wxMaService);
+        return wxMaService;
+    }
     public WxPayService getService(String appId) throws InvocationTargetException, IllegalAccessException {
         if(wxPayServices.containsKey(appId)) {
             return wxPayServices.get(appId);
@@ -51,5 +74,13 @@ public class MiniappServices {
         wxPayService.setConfig(config);
         wxPayServices.put(appId, wxPayService);
         return wxPayService;
+    }
+    private Map<String, String> wxappSettings(String appId) {
+        List<AppSettingVO> settings = appApi.queryAppSettings(appId, "wxapp");
+        Map<String, String> map = new HashMap<>();
+        settings.forEach(appSetting -> {
+            map.put(appSetting.getSettingKey(), appSetting.getSettingValue());
+        });
+        return map;
     }
 }

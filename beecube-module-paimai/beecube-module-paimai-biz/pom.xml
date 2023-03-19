@@ -33,6 +33,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.2.5.B</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>4.2.7.B</version>
         </dependency>
