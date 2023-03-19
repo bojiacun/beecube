@@ -198,7 +198,7 @@ export default class Index extends Component<any, any> {
     }
 
     async offer() {
-        const {context} = this.props;
+        const {context, settings} = this.props;
         const {userInfo} = context;
         const {goods} = this.state;
         let checkResult = await request.get('/paimai/api/members/check');
@@ -206,6 +206,10 @@ export default class Index extends Component<any, any> {
             return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function(){
                 Taro.navigateTo({url: '/pages/my/profile'}).then();
             });
+        }
+        //发送模板消息
+        if(settings.offerResultTemplateId) {
+            await Taro.requestSubscribeMessage({tmplIds: [settings.offerResultTemplateId]});
         }
         let offers = this.state.offers;
         let doOffer = () => {
