@@ -21,6 +21,7 @@ const AppMemberList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
     const [editModal, setEditModal] = useState<any>();
+    const [selectedRow, setSelectedRow] = useState<any>();
     const [walletShow, setWalletShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -52,11 +53,11 @@ const AppMemberList = (props: any) => {
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'wallet':
-                setEditModal(row);
+                setSelectedRow(row);
+                setWalletShow(true);
                 break;
             case 'edit':
                 setEditModal(row);
-                setWalletShow(true);
                 break;
             case 'delete':
                 //删除按钮
@@ -115,15 +116,6 @@ const AppMemberList = (props: any) => {
         },
 
         {
-            text: '创建时间',
-            dataField: 'createTime',
-            headerStyle: {width: 200},
-            sort: true,
-            onSort: handleSort,
-            headerSortingClasses,
-            sortFunc: emptySortFunc
-        },
-        {
             text: '分销商',
             dataField: 'isAgent',
             formatter: (cell:any, row:any) => {
@@ -146,11 +138,21 @@ const AppMemberList = (props: any) => {
                 return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
             }
         },
+
+        {
+            text: '创建时间',
+            dataField: 'createTime',
+            headerStyle: {width: 200},
+            sort: true,
+            onSort: handleSort,
+            headerSortingClasses,
+            sortFunc: emptySortFunc
+        },
         {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 190},
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -239,8 +241,8 @@ const AppMemberList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }} />}
-            {editModal && walletShow &&
-                <WalletRecordList show={walletShow} selectedRow={editModal} onHide={()=>{
+            {selectedRow && walletShow &&
+                <WalletRecordList show={walletShow} selectedRow={selectedRow} onHide={()=>{
                     setEditModal(null);
                     setWalletShow(false);
                 }} />
