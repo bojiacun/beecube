@@ -7,6 +7,7 @@ import styles from './index.module.scss';
 import classNames from "classnames";
 import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
+import request from "../../lib/request";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -25,7 +26,9 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     componentDidShow() {
-        this.setState({userInfo: this.props.context.userInfo});
+        request.get('/app/api/members/profile').then(res=>{
+            this.setState({userInfo: res.data.result});
+        });
     }
 
     componentDidHide() {

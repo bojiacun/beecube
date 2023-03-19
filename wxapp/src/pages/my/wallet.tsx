@@ -64,7 +64,7 @@ export default class Index extends Component<any, any> {
 
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        return request.get('/app/api/members/money/records', {params: {page: pageIndex, type: tab.id}});
+        return request.get('/app/api/members/money/records', {params: {pageNo: pageIndex, type: tab.id, status: 1}});
     }
 
     handleWithdraw() {

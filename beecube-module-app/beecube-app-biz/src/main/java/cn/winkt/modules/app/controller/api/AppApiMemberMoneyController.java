@@ -72,6 +72,7 @@ public class AppApiMemberMoneyController {
         }
         queryWrapper.eq(AppMemberMoneyRecord::getMemberId, loginUser.getId());
         queryWrapper.orderByDesc(AppMemberMoneyRecord::getCreateTime);
+        queryWrapper.eq(AppMemberMoneyRecord::getStatus, 1);
 
         Page<AppMemberMoneyRecord> page = new Page<>(pageNo, pageSize);
         IPage<AppMemberMoneyRecord> pageList = appMemberMoneyRecordService.page(page, queryWrapper);
