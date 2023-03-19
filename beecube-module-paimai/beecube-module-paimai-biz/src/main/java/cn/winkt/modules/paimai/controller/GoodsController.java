@@ -445,8 +445,15 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         }
 
         if(templateId != null) {
+            //发送缓存，已经发送的用户，跳过不再发送
+            Set<String> sended = new HashSet<>();
+
             for (GoodsOffer goodsOffer : goodsOffers) {
                 AppMemberVO appMemberVO = appApi.getMemberById(goodsOffer.getMemberId());
+                if(sended.contains(appMemberVO.getId())) {
+                    continue;
+                }
+                sended.add(appMemberVO.getId());
                 WxMaSubscribeMessage m = new WxMaSubscribeMessage();
                 m.setTemplateId(templateId);
                 m.setMiniprogramState("formal");
