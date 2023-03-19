@@ -8,7 +8,7 @@ import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
-import request, {API_URL} from "../../lib/request";
+import {API_URL} from "../../lib/request";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -48,9 +48,10 @@ export default class Index extends Component<any, any> {
 
     async handleChooseAvatarNative(e) {
         utils.showLoading('上传中');
-        const res = await request.get('/app/api/members/system/token');
-        console.log(res);
-        const token = res.data.result;
+        // const res = await request.get('/app/api/members/system/token');
+        // console.log(res);
+        // const token = res.data.result;
+        const token = Taro.getStorageSync("TOKEN");
         let file = e.detail.avatarUrl;
         Taro.uploadFile({
             url: API_URL + '/sys/oss/file/upload',
@@ -74,9 +75,10 @@ export default class Index extends Component<any, any> {
     handleChooseAvatar() {
         Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const file = res.tempFilePaths[0];
-            const res1 = await request.get('/app/api/members/system/token');
-            console.log(res1);
-            const token = res1.data.result;
+            // const res1 = await request.get('/app/api/members/system/token');
+            // console.log(res1);
+            // const token = res1.data.result;
+            const token = Taro.getStorageSync("TOKEN");
             //upload image
             utils.showLoading('上传中');
             Taro.uploadFile({
