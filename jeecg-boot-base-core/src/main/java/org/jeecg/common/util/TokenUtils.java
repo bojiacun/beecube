@@ -109,7 +109,7 @@ public class TokenUtils {
      */
     public static LoginUser getLoginUser(String username, CommonAPI commonApi, RedisUtil redisUtil) {
         LoginUser loginUser = null;
-        String loginUserKey = CacheConstant.SYS_USERS_CACHE + ":" + username;
+        String loginUserKey = CacheConstant.SYS_USERS_CACHE + "::" + username;
         //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
         if (redisUtil.hasKey(loginUserKey)) {
             log.info("缓存中有用户信息 {}", username);
