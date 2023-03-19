@@ -28,11 +28,11 @@ export default class Index extends Component<any, any> {
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.title}} style={{backgroundColor: 'white'}}>
+            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.type == 3 ? detail.title: '文章详情'}} style={{backgroundColor: 'white'}}>
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>
-                <View className={'text-gray-400 mt-2'}>{detail.createTime}</View>
+                {detail.type != 3 && <View className={'text-gray-400 mt-2'}>{detail.createTime}</View>}
                 <View className={'mt-4'}>
                     <RichText nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'}/>
                 </View>

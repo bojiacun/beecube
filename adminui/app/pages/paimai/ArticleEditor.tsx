@@ -39,19 +39,17 @@ const ArticleEditor = (props: any) => {
     }, [model]);
 
 
-
     useEffect(() => {
         if (articleClassFetcher.type === 'done' && articleClassFetcher.data) {
             setArticleClassOptions(articleClassFetcher.data.map((item: any) => ({label: item.name, value: item.id})));
         }
     }, [articleClassFetcher.state]);
 
-    if(type  == ArticleType.SERVICES) {
+    if (type == ArticleType.SERVICES) {
         ArticleSchema = Yup.object().shape({
             title: Yup.string().required('必填字段'),
         });
-    }
-    else {
+    } else {
         ArticleSchema = Yup.object().shape({
             classId: Yup.string().required('必填字段'),
         });
@@ -95,7 +93,7 @@ const ArticleEditor = (props: any) => {
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={newModel} validationSchema={ArticleSchema}
                         onSubmit={handleOnSubmit}>
-                    {(formik)=>{
+                    {(formik) => {
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
@@ -103,12 +101,10 @@ const ArticleEditor = (props: any) => {
                                         <BootstrapSelect name={'classId'} label={'分类'} options={articleClassOptions}/>
                                     }
                                     <BootstrapInput label={'标题'} name={'title'}/>
-                                    {type == ArticleType.TEXT_IMAGE &&
-                                        <FormGroup>
-                                            <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
-                                            <FileBrowserInput name={'preview'} type={1} multi={false}/>
-                                        </FormGroup>
-                                    }
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
+                                        <FileBrowserInput name={'preview'} type={1} multi={false}/>
+                                    </FormGroup>
                                     {type == ArticleType.VIDEO &&
                                         <FormGroup>
                                             <FormLabel htmlFor={'video'}>视频地址</FormLabel>
@@ -126,7 +122,8 @@ const ArticleEditor = (props: any) => {
                                         </FormGroup>
                                     }
                                     <BootstrapInput label={'阅读数'} name={'views'}/>
-                                    <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
+                                    <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'}
+                                                         label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button
