@@ -388,7 +388,8 @@ export default class Index extends Component<any, any> {
                 if (type) {
                     request.put('/paimai/api/members/messages/toggle', {
                         type: type,
-                        goodsId: this.state.goods.id
+                        goodsId: this.state.goods.id,
+                        templateId: templateId,
                     }).then(res => {
                         this.setState({message: res.data.result});
                     });
@@ -399,7 +400,8 @@ export default class Index extends Component<any, any> {
             if (type) {
                 request.put('/paimai/api/members/messages/toggle', {
                     type: type,
-                    goodsId: this.state.goods.id
+                    goodsId: this.state.goods.id,
+                    templateId: templateId,
                 }).then(res => {
                     this.setState({message: res.data.result});
                 });

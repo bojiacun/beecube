@@ -452,7 +452,8 @@ public class WxAppMemberController {
             if (StringUtils.isNotEmpty(goodsId)) {
                 Goods goods = goodsService.getById(goodsId);
                 if (type == 1) {
-
+                    messagePool.setMessage(String.format("%s即将开始", goods.getTitle()));
+                    messagePool.setSendTime(DateUtils.addHours(goods.getStartTime(), -2));
                 } else if (type == 2) {
                     messagePool.setMessage(String.format("%s即将结束", goods.getTitle()));
                     messagePool.setSendTime(DateUtils.addHours(goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime(), -2));
