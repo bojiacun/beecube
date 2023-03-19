@@ -96,11 +96,11 @@ const ListView: FC<ListViewProps> = (props) => {
                 tabs.forEach((t, index) => {
                     if (t.id == defaultActiveKey) {
                         initIndex = index;
-                        setSelectedIndex(initIndex);
                         defaultTab = t;
                     }
                 })
             }
+            setSelectedIndex(initIndex);
             dataFetcher(1, defaultTab, initIndex).then(res => {
                 setData([...res.data.result.records]);
                 utils.hideLoading();
@@ -174,7 +174,7 @@ const ListView: FC<ListViewProps> = (props) => {
             </View>
             {data.length === 0 && <NoData style={{marginTop: 200}}/>}
             <View className={classNames('p-4 space-y-4', className)}>
-                {data.map((item) => {
+                {selectedIndex > - 1 && data.map((item) => {
                     let tab = tabs[selectedIndex];
                     return tab.template(item);
                 })}

@@ -97,7 +97,7 @@ public class AppApiMemberMoneyController {
         //充值记录
         AppMemberMoneyRecord record = new AppMemberMoneyRecord();
         record.setMoney(amount);
-        record.setType(1);
+        record.setType(3);
         record.setMemberId(loginUser.getId());
         record.setDescription("用户充值");
         record.setStatus(0);
