@@ -8,7 +8,7 @@ import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
-import {API_URL} from "../../lib/request";
+import request, {API_URL} from "../../lib/request";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -48,6 +48,9 @@ export default class Index extends Component<any, any> {
 
     handleChooseAvatarNative(e) {
         utils.showLoading('上传中');
+        request.get('/app/api/members/system/token').then(res=>{
+
+        });
         const token = Taro.getStorageSync("TOKEN");
         let file = e.detail.avatarUrl;
         Taro.uploadFile({
