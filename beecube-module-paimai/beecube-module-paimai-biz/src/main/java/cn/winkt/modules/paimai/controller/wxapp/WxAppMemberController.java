@@ -90,6 +90,7 @@ public class WxAppMemberController {
     IGoodsOrderAfterService goodsOrderAfterService;
     @Resource
     AuctionGoodsService auctionGoodsService;
+    
 
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
