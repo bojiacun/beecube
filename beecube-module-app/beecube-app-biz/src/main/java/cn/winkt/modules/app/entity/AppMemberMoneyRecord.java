@@ -55,4 +55,6 @@ public class AppMemberMoneyRecord {
 	private Integer status;
 
 	private String transactionId;
+
+	private String appId;
 }

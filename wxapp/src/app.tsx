@@ -50,11 +50,11 @@ class App extends Component<PropsWithChildren> {
     }
     onSocketError(error) {
         console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
-        clearInterval(this.checkTimer);
-        let {context} = store.getState();
-        setTimeout(()=>{
-            this.connectToServer(context);
-        }, 5000);
+        // clearInterval(this.checkTimer);
+        // let {context} = store.getState();
+        // setTimeout(()=>{
+        //     this.connectToServer(context);
+        // }, 5000);
     }
     onSocketClose(res) {
         console.log('服务器连接断开, 5秒后尝试重连', res);
