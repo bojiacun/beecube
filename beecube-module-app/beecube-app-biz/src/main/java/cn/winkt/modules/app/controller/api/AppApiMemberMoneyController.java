@@ -147,6 +147,7 @@ public class AppApiMemberMoneyController {
         appMemberWithdraw.setMemberId(member.getId());
         appMemberWithdraw.setMemberPhone(member.getPhone());
         appMemberWithdraw.setMemberName(StringUtils.getIfEmpty(member.getRealname(), member::getNickname));
+        appMemberWithdraw.setAppId(AppContext.getApp());
         appMemberWithdrawService.save(appMemberWithdraw);
         return Result.OK("申请成功");
     }
