@@ -6,6 +6,8 @@ import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
 
+const numeral = require('numeral');
+
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -24,14 +26,15 @@ export default class Index extends Component<any, any> {
         this.handleWithdraw = this.handleWithdraw.bind(this);
         this.loadData = this.loadData.bind(this);
         this.template = (data: any) => {
+            console.log(data);
             let money = data.money + '';
             return (
                 <View className={'bg-white px-4 py-2'}>
                     <View className={'flex justify-between'}>
-                        <Text>{data.descripiton}</Text>
-                        <View className={'text-gray-800'}>
+                        <Text>{data.description}</Text>
+                        <View className={'text-gray-800 font-bold'}>
                             <Text className={'text-lg'}>{money.split('.')[0]}</Text>
-                            <Text className={'text-sm'}>.{money.split(',')[1]}</Text>
+                            <Text className={'text-sm'}>.{money.split('.')[1]}</Text>
                         </View>
                     </View>
                     <View className={'text-sm text-gray-300'}>{data.createTime}</View>
@@ -73,13 +76,13 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {userInfo} = this.state;
-        const money = userInfo?.money ? (userInfo.money + '') : '0.00';
+        const money = userInfo?.money ? numeral(userInfo.money).format('0.00') : '0.00';
 
         return (
             <PageLayout statusBarProps={{title: '我的余额'}}>
                 <View className={'p-4 my-2 mx-4 text-white bg-gradient-to-r from-red-500 to-red-300 rounded space-y-2'}>
                     <View>余额（元）</View>
-                    <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[0]}</Text></View>
+                    <View><Text className={'text-xl'}>{money.split('.')[0]}</Text><Text className={'text-sm'}>.{money.split('.')[1]}</Text></View>
                     <View className={'flex space-x-2'}>
                         <Navigator url={'/pages/my/wallet/charge'} className={'bg-white text-red rounded-full text-red-500 py-1 px-4'}>充值</Navigator>
                         <Text onClick={this.handleWithdraw}

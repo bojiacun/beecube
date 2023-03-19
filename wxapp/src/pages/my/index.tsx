@@ -109,8 +109,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                 <View>我的余额</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
-                                <View>
-                                    RMB 0
+                                <View className={'font-bold'}>
+                                    RMB {userInfo.money}
                                 </View>
                                 <View className={'iconfont icon-youjiantou_huaban'}/>
                             </View>
