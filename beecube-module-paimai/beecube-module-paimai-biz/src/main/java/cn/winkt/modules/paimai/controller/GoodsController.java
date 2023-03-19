@@ -1,12 +1,19 @@
 package cn.winkt.modules.paimai.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
+import java.util.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.app.vo.AppSettingVO;
+import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.message.GoodsUpdateMessage;
@@ -14,14 +21,15 @@ import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
-
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,8 +37,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
 
+import org.jeecg.config.AppContext;
 import org.parboiled.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -68,6 +78,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
     @Resource
     AuctionGoodsService auctionGoodsService;
+
+    @Resource
+    AppApi appApi;
+
+    @Resource
+    MiniappServices miniappServices;
     /**
      * 分页列表查询
      *
@@ -362,6 +378,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             orderGoods.setOrderId(goodsOrder.getId());
             orderGoodsService.save(orderGoods);
 
+
+            //发送模板消息
+
+
         } else if (status == 4) {
             LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
@@ -373,6 +393,14 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         }
 
         goodsService.updateById(goods);
+
+        //发送消息
+        try{
+            this.sendOfferResultMessage(goods);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
 
         return Result.OK("确认成功!");
     }
@@ -400,4 +428,57 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         return super.importExcel(request, response, Goods.class);
     }
 
+
+    @Async
+    void sendOfferResultMessage(Goods goods) throws InvocationTargetException, IllegalAccessException, WxErrorException {
+        LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
+
+        List<GoodsOffer> goodsOffers = goodsOfferService.list(queryWrapper);
+        WxMaService wxMaService = miniappServices.getWxMaService(AppContext.getApp());
+        List<AppSettingVO> paimaiSettings = appApi.queryAppSettings(AppContext.getApp(), "paimai");
+        String templateId = null;
+        for (AppSettingVO s : paimaiSettings) {
+            if (s.getSettingKey().equals("offerResultTemplateId")) {
+                templateId = s.getSettingValue();
+            }
+        }
+
+        if(templateId != null) {
+            for (GoodsOffer goodsOffer : goodsOffers) {
+                AppMemberVO appMemberVO = appApi.getMemberById(goodsOffer.getMemberId());
+                WxMaSubscribeMessage m = new WxMaSubscribeMessage();
+                m.setTemplateId(templateId);
+                m.setMiniprogramState("formal");
+                m.setPage("/pages/goods/detail?id="+goodsOffer.getGoodsId());
+                m.setToUser(appMemberVO.getWxappOpenid());
+                List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
+
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("character_string1.DATA");
+                data1.setValue(goods.getId());
+                data.add(data1);
+
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing6.DATA");
+                data2.setValue(goods.getTitle());
+                data.add(data2);
+
+
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("amount4.DATA");
+                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).toString());
+                data.add(data3);
+
+
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("phrase5.DATA");
+                data2.setValue(goodsOffer.getStatus() == 1 ? "中标":"未中标");
+                data.add(data4);
+                m.setData(data);
+                wxMaService.getMsgService().sendSubscribeMsg(m);
+
+            }
+        }
+    }
 }
