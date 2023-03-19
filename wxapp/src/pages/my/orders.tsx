@@ -10,6 +10,14 @@ import utils from "../../lib/utils";
 
 const numeral = require('numeral');
 
+const ORDER_STATUS = {
+    '0': '待支付',
+    '1': '待发货',
+    '2': '待收货',
+    '3': '已完成',
+    '4': '售后',
+}
+
 export default class Index extends Component<any, any> {
     state: any = {
         tabs: [],
@@ -57,7 +65,7 @@ export default class Index extends Component<any, any> {
                         <View className={'text-gray-400'}>
                             单号：{data.id}
                         </View>
-                        <View className={'text-red-400 font-bold text-lg'}>{data.status_dictText}</View>
+                        <View className={'text-red-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>
                     </View>
                     {data.orderGoods.map((item: any) => {
                         return (

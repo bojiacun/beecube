@@ -38,7 +38,7 @@ const ListView: FC<ListViewProps> = (props) => {
         autoRefresh = false,
         fixed = true,
     } = props;
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [data, setData] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
     const [noMore, setNoMore] = useState<boolean>(false);
@@ -132,7 +132,7 @@ const ListView: FC<ListViewProps> = (props) => {
     });
 
     useDidShow(() => {
-        if(autoRefresh) {
+        if(autoRefresh && selectedIndex > -1) {
             //列表显示的时候主动刷新
             dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
                 setData([...res.data.result.records]);
