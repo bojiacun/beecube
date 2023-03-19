@@ -53,6 +53,7 @@ public class SysUser implements Serializable {
     @Excel(name = "真实姓名", width = 15)
     private String realname;
 
+    private String nickname;
     /**
      * 密码
      */
