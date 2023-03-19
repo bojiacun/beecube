@@ -66,7 +66,7 @@ export default class Index extends Component<any, any> {
 
     componentDidShow() {
         //查询是否需要缴纳保证金
-        if(this.state.id) {
+        if (this.state.id) {
             return request.get('/paimai/api/members/deposited/performance', {params: {id: this.state.id}}).then(res => {
                 this.setState({deposited: res.data.result});
             });
@@ -118,7 +118,12 @@ export default class Index extends Component<any, any> {
         const {message} = this.props;
         if (!detail) return;
         if (prevState.status != status && status != TimeCountDownerStatus.ENDED) {
-            request.get('/paimai/api/members/messaged', {params: {type: status == TimeCountDownerStatus.NOT_START ? 1 : 2, performanceId: detail.id}}).then(res => {
+            request.get('/paimai/api/members/messaged', {
+                params: {
+                    type: status == TimeCountDownerStatus.NOT_START ? 1 : 2,
+                    performanceId: detail.id
+                }
+            }).then(res => {
                 this.setState({message: res.data.result});
             });
         }
@@ -168,13 +173,34 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    noticeMe() {
-        request.put('/paimai/api/members/messages/toggle', {
-            type: this.state.status == TimeCountDownerStatus.NOT_START ? 1 : 2,
-            performanceId: this.state.detail.id
-        }).then(res => {
-            this.setState({message: res.data.result});
-        });
+    async noticeMe() {
+        const {message, status} = this.state;
+        const {settings} = this.props;
+
+        let templateId,type;
+
+        if(status == TimeCountDownerStatus.NOT_START) {
+            //开始提醒
+            type = 1;
+            templateId = settings.startTemplateId;
+        }
+        else if(status == TimeCountDownerStatus.STARTED) {
+            type = 2;
+            templateId = settings.endTemplateId;
+        }
+
+        if(!message && templateId) {
+            await Taro.requestSubscribeMessage({tmplIds: [settings.startTemplateId]});
+        }
+
+        if(type) {
+            request.put('/paimai/api/members/messages/toggle', {
+                type: type,
+                performanceId: this.state.detail.id
+            }).then(res => {
+                this.setState({message: res.data.result});
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -261,7 +287,8 @@ export default class Index extends Component<any, any> {
                                         }
                                         {item.state == 3 &&
                                             <View className={'text-sm'}>
-                                                <Text className={'text-green-600 font-bold'}>成交</Text> 落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                                <Text className={'text-green-600 font-bold'}>成交</Text> 落槌价 <Text
+                                                className={'text-red-500'}>RMB</Text> <Text
                                                 className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
                                             </View>
                                         }

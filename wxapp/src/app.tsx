@@ -93,10 +93,12 @@ class App extends Component<PropsWithChildren> {
         let {context} = store.getState();
         context.referer = options;
         context.copyright = siteInfo.copyright;
-        Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all')]).then(reses => {
+        Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all'), request.get('/paimai/api/settings')]).then(reses => {
             let settings = reses[0].data.result;
             let dist = {};
             settings.forEach(item => dist[item.settingKey] = item.settingValue);
+            let settingsPaimai = reses[2].data.result;
+            settingsPaimai.forEach(item => dist[item.descKey] = item.descValue);
             context.settings = dist;
             context.tabs = reses[1].data.result;
 

@@ -100,6 +100,79 @@ public class AuctionRunJobHandler {
     }
 
     private void notifyGoods(Date now, Integer type, WxMaService wxMaService) throws WxErrorException {
+        LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
+        messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
+        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, new Date());
+        messagePoolLambdaQueryWrapper.isNotNull(MessagePool::getGoodsId);
+
+        List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
+
+        for (MessagePool messagePool : messagePools) {
+            //发送模板消息
+            Goods g = goodsService.getById(messagePool.getGoodsId());
+            Performance performance = performanceService.getById(g.getPerformanceId());
+            WxMaSubscribeMessage m = new WxMaSubscribeMessage();
+            m.setTemplateId(messagePool.getTemplateId());
+            m.setPage("/pages/goods/detail?id="+g.getId());
+            m.setMiniprogramState("formal");
+            m.setLang("zh_CN");
+            m.setToUser(messagePool.getMemberOpenId());
+            List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
+            if(type == 1) {
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("thing4.DATA");
+                data1.setValue(performance == null ? g.getTitle():performance.getTitle());
+                data.add(data1);
+
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing1.DATA");
+                data2.setValue(g.getTitle());
+                data.add(data2);
+
+
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("date2.DATA");
+                data3.setValue(DateFormatUtils.format(g.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
+                data.add(data3);
+
+
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing5.DATA");
+                data2.setValue("你关注的拍品即将开始，请尽快出价!");
+                data.add(data4);
+            }
+            else if(type == 2) {
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("thing5.DATA");
+                data1.setValue(performance == null ? g.getTitle():performance.getTitle());
+                data.add(data1);
+
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing1.DATA");
+                data2.setValue(g.getTitle());
+                data.add(data2);
+
+
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("time7.DATA");
+                Date endTime = g.getActualEndTime() == null ? g.getEndTime():g.getActualEndTime();
+                data3.setValue(DateFormatUtils.format(endTime, "yyyy-MM-dd HH:mm:ss"));
+                data.add(data3);
+
+
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing8.DATA");
+                data2.setValue("你关注的拍品即将结束，请尽快出价!");
+                data.add(data4);
+            }
+            m.setData(data);
+            wxMaService.getMsgService().sendSubscribeMsg(m);
+            messagePool.setStatus(1);
+            messagePool.setSendTime(new Date());
+            messagePoolService.updateById(messagePool);
+        }
+
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Goods::getType, 1);
         queryWrapper.eq(Goods::getStatus, 1);
@@ -114,159 +187,79 @@ public class AuctionRunJobHandler {
         List<Goods> goodsList = goodsService.list(queryWrapper);
         for (Goods g : goodsList) {
             //提醒用户啊
-            LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getGoodsId, g.getId());
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
 
-            List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
-
-            Performance performance = performanceService.getById(g.getPerformanceId());
-            for (MessagePool messagePool : messagePools) {
-                //发送模板消息
-                WxMaSubscribeMessage m = new WxMaSubscribeMessage();
-                m.setTemplateId(messagePool.getTemplateId());
-                m.setPage("/pages/goods/detail?id="+g.getId());
-                m.setMiniprogramState("formal");
-                m.setLang("zh_CN");
-                m.setToUser(messagePool.getMemberOpenId());
-                List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
-                if(type == 1) {
-                    WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                    data1.setName("thing4.DATA");
-                    data1.setValue(performance == null ? g.getTitle():performance.getTitle());
-                    data.add(data1);
-
-                    WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing1.DATA");
-                    data2.setValue(g.getTitle());
-                    data.add(data2);
-
-
-                    WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                    data3.setName("date2.DATA");
-                    data3.setValue(DateFormatUtils.format(g.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
-                    data.add(data3);
-
-
-                    WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing5.DATA");
-                    data2.setValue("你关注的拍品即将开始，请尽快出价!");
-                    data.add(data4);
-                }
-                else if(type == 2) {
-                    WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                    data1.setName("thing5.DATA");
-                    data1.setValue(performance == null ? g.getTitle():performance.getTitle());
-                    data.add(data1);
-
-                    WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing1.DATA");
-                    data2.setValue(g.getTitle());
-                    data.add(data2);
-
-
-                    WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                    data3.setName("time7.DATA");
-                    Date endTime = g.getActualEndTime() == null ? g.getEndTime():g.getActualEndTime();
-                    data3.setValue(DateFormatUtils.format(endTime, "yyyy-MM-dd HH:mm:ss"));
-                    data.add(data3);
-
-
-                    WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing8.DATA");
-                    data2.setValue("你关注的拍品即将结束，请尽快出价!");
-                    data.add(data4);
-                }
-                m.setData(data);
-                wxMaService.getMsgService().sendSubscribeMsg(m);
-                messagePool.setStatus(1);
-                messagePool.setSendTime(new Date());
-                messagePoolService.updateById(messagePool);
-            }
         }
     }
     private void notifyPerformance(Date now, Integer type, WxMaService wxMaService) throws WxErrorException {
-        LambdaQueryWrapper<Performance> queryWrapper = new LambdaQueryWrapper<>();
-        if(type == 1) {
-            queryWrapper.lt(Performance::getStartTime, now);
-        }
-        if(type == 2) {
-            queryWrapper.lt(Performance::getEndTime, now);
-        }
-        queryWrapper.eq(Performance::getType, 1);
-        queryWrapper.eq(Performance::getStatus, 1);
-        List<Performance> performances = performanceService.list(queryWrapper);
-        for (Performance p : performances) {
-            //提醒用户啊
-            LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getPerformanceId, p.getId());
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
-            messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
+        //提醒用户啊
+        LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
+        messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
+        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, new Date());
+        messagePoolLambdaQueryWrapper.isNotNull(MessagePool::getPerformanceId);
+        List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
 
-            List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
+        for (MessagePool messagePool : messagePools) {
+            Performance p = performanceService.getById(messagePool.getPerformanceId());
+            //发送模板消息
+            WxMaSubscribeMessage m = new WxMaSubscribeMessage();
+            m.setTemplateId(messagePool.getTemplateId());
+            m.setPage("/pages/performance/detail?id="+p.getId());
+            m.setMiniprogramState("formal");
+            m.setLang("zh_CN");
+            m.setToUser(messagePool.getMemberOpenId());
+            List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
+            if(type == 1) {
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("thing4.DATA");
+                data1.setValue(p.getTitle());
+                data.add(data1);
 
-            for (MessagePool messagePool : messagePools) {
-                //发送模板消息
-                WxMaSubscribeMessage m = new WxMaSubscribeMessage();
-                m.setTemplateId(messagePool.getTemplateId());
-                m.setPage("/pages/performance/detail?id="+p.getId());
-                m.setMiniprogramState("formal");
-                m.setLang("zh_CN");
-                m.setToUser(messagePool.getMemberOpenId());
-                List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
-                if(type == 1) {
-                    WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                    data1.setName("thing4.DATA");
-                    data1.setValue(p.getTitle());
-                    data.add(data1);
-
-                    WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing1.DATA");
-                    data2.setValue(p.getTitle());
-                    data.add(data2);
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing1.DATA");
+                data2.setValue(p.getTitle());
+                data.add(data2);
 
 
-                    WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                    data3.setName("date2.DATA");
-                    data3.setValue(DateFormatUtils.format(p.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
-                    data.add(data3);
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("date2.DATA");
+                data3.setValue(DateFormatUtils.format(p.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
+                data.add(data3);
 
 
-                    WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing5.DATA");
-                    data2.setValue("你关注的专场即将开始，请尽快出价!");
-                    data.add(data4);
-                }
-                else if(type == 2) {
-                    WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                    data1.setName("thing5.DATA");
-                    data1.setValue(p.getTitle());
-                    data.add(data1);
-
-                    WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing1.DATA");
-                    data2.setValue(p.getTitle());
-                    data.add(data2);
-
-
-                    WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                    data3.setName("time7.DATA");
-                    data3.setValue(DateFormatUtils.format(p.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
-                    data.add(data3);
-
-
-                    WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                    data2.setName("thing8.DATA");
-                    data2.setValue("你关注的专场即将结束，请尽快出价!");
-                    data.add(data4);
-                }
-                m.setData(data);
-                wxMaService.getMsgService().sendSubscribeMsg(m);
-                messagePool.setStatus(1);
-                messagePool.setSendTime(new Date());
-                messagePoolService.updateById(messagePool);
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing5.DATA");
+                data2.setValue("你关注的专场即将开始，请尽快出价!");
+                data.add(data4);
             }
+            else if(type == 2) {
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("thing5.DATA");
+                data1.setValue(p.getTitle());
+                data.add(data1);
+
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing1.DATA");
+                data2.setValue(p.getTitle());
+                data.add(data2);
+
+
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("time7.DATA");
+                data3.setValue(DateFormatUtils.format(p.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
+                data.add(data3);
+
+
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing8.DATA");
+                data2.setValue("你关注的专场即将结束，请尽快出价!");
+                data.add(data4);
+            }
+            m.setData(data);
+            wxMaService.getMsgService().sendSubscribeMsg(m);
+            messagePool.setStatus(1);
+            messagePool.setSendTime(new Date());
+            messagePoolService.updateById(messagePool);
         }
     }
 
