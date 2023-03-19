@@ -32,4 +32,7 @@ public interface AppApi {
 
     @GetMapping("/app/api/all")
     List<AppVO> allApps();
+
+    @GetMapping("/app/api/system/token")
+    String getSystemTempToken();
 }

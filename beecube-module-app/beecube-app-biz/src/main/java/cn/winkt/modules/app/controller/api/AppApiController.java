@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller.api;
 
+import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.entity.AppMember;
@@ -16,6 +17,7 @@ import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.*;
 import org.jeecg.common.util.SqlInjectionUtil;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,8 @@ public class AppApiController {
     @Resource
     IAppMemberMoneyRecordService appMemberMoneyRecordService;
 
+    @Resource
+    SystemApi systemApi;
 
 
     @GetMapping("/all")
@@ -97,6 +101,15 @@ public class AppApiController {
         return Result.error("校验失败，sql解析异常！" + msg);
     }
 
+    /**
+     * 获取系统角色临时TOKEN
+     * @return
+     */
+    @GetMapping("/system/token")
+    public String getSystemTempToken() {
+        LoginUser loginUser = systemApi.getUserByName("admin");
+        return JwtUtil.sign(loginUser.getUsername(), loginUser.getPassword());
+    }
 
     /**
      * 分销返佣

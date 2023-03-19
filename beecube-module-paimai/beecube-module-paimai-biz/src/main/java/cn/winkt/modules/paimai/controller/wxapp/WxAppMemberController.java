@@ -25,7 +25,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -90,12 +89,11 @@ public class WxAppMemberController {
     IGoodsOrderAfterService goodsOrderAfterService;
     @Resource
     AuctionGoodsService auctionGoodsService;
-    
+
 
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
     @GetMapping(value = "/orders/afters")
-    @AutoDict
     public Result<?> queryPageOrderAfterList(GoodsOrderAfter goodsOrderAfter,
                                              @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                              @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
@@ -169,7 +167,6 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-分页列表查询")
     @ApiOperation(value = "订单表-分页列表查询", notes = "订单表-分页列表查询")
     @GetMapping(value = "/orders")
-    @AutoDict
     public Result<?> queryPageOrderList(GoodsOrder goodsOrder,
                                         @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
@@ -190,7 +187,6 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-订单详情")
     @ApiOperation(value = "订单表-订单详情", notes = "订单表-订单详情")
     @GetMapping(value = "/orders/detail")
-    @AutoDict
     public Result<?> queryOrderDetail(@RequestParam(name = "id", defaultValue = "") String id) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
@@ -206,7 +202,6 @@ public class WxAppMemberController {
     @AutoLog(value = "用户保证金列表-分页列表查询")
     @ApiOperation(value = "用户保证金列表-分页列表查询", notes = "用户保证金列表-分页列表查询")
     @GetMapping(value = "/deposits")
-    @AutoDict
     public Result<?> memberGoodsDepositList(GoodsDeposit goodsDeposit,
                                             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
@@ -223,7 +218,6 @@ public class WxAppMemberController {
     @AutoLog(value = "用户参拍记录列表-分页列表查询")
     @ApiOperation(value = "用户参拍记录列表-分页列表查询", notes = "用户参拍记录列表-分页列表查询")
     @GetMapping(value = "/offers")
-    @AutoDict
     public Result<?> memberOfferList(GoodsOffer goodsOffer,
                                      @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
