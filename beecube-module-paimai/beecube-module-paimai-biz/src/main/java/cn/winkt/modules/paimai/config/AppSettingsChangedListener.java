@@ -4,6 +4,7 @@ import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.vo.AppSettingVO;
 import com.rabbitmq.client.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.jeecg.boot.starter.rabbitmq.core.BaseRabbiMqHandler;
 import org.jeecg.boot.starter.rabbitmq.listenter.MqListener;
 import org.jeecg.common.annotation.RabbitComponent;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@Slf4j
 @RabbitListener(queues = AppModuleConstants.APP_SETTINGS_QUEUE)
 @RabbitComponent(value = "AppSettingsChangedListener")
 public class AppSettingsChangedListener extends BaseRabbiMqHandler<String> {
@@ -34,12 +36,8 @@ public class AppSettingsChangedListener extends BaseRabbiMqHandler<String> {
         super.onMessage(appId, deliveryTag, channel, new MqListener<String>(){
             @Override
             public void handler(String map, Channel channel) {
-                List<AppSettingVO> settings = appApi.queryAppSettings(map, "wxapp");
-                settings.forEach(s -> {
-                    if(s.getSettingKey().equals("appid")) {
-                        miniappServices.clear(s.getSettingValue());
-                    }
-                });
+                log.info("收到配置信息修改的消息");
+                miniappServices.clear(map);
             }
         });
     }

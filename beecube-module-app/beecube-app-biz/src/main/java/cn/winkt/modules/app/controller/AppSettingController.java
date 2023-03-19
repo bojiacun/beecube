@@ -133,12 +133,8 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 			 appSetting.setSettingValue(jsonObject.getString(key));
 			 appSetting.setSettingKey(key);
 			 appSetting.setGroupKey(group);
-			 appSettingService.save(appSetting);
-			 //清空缓存
-			 if(key.equals("appid")) {
-				 wxMiniappServices.remove(jsonObject.getString(key));
-			 }
 		 });
+		 wxMiniappServices.remove(appId);
 		 rabbitMqClient.sendMessage(AppModuleConstants.APP_SETTINGS_QUEUE, appId);
 		 return Result.OK("更新成功!");
 	 }
