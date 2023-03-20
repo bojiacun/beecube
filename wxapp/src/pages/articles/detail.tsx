@@ -4,8 +4,16 @@ import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
 import {RichText, View, Text} from "@tarojs/components";
 import utils from "../../lib/utils";
+import {connect} from "react-redux";
 
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context
+    }
+))
 export default class Index extends Component<any, any> {
     state: any = {
         id: null,
@@ -16,6 +24,22 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/articles/queryById', {params: {id: options.id}}).then(res=>{
             this.setState({id: options.id, detail: res.data.result});
         });
+    }
+
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            query: {mid: mid},
+        }
+    }
+
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            path: '/pages/articles/detail?id=' + this.state.id +'&mid='+mid
+        }
     }
 
 

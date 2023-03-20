@@ -80,7 +80,21 @@ export default class Index extends Component<any, any> {
             this.loadData(detail.id, 1, true);
         });
     }
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            query: {mid: mid},
+        }
+    }
 
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            path: '/pages/performance/detail2?id=' + this.state.id +'&mid='+mid
+        }
+    }
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
         this.loadData(this.state.id, this.state.page + 1, false).then(() => {

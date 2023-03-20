@@ -41,7 +41,7 @@ public class AppApiWxappLoginController {
     RedisUtil redisUtil;
 
     @GetMapping
-    public Result<String> code2Session(@RequestParam String code) throws WxErrorException {
+    public Result<String> code2Session(@RequestParam String code, @RequestParam(defaultValue = "") String mid) throws WxErrorException {
         WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
         WxMaJscode2SessionResult result = wxMaService.jsCode2SessionInfo(code);
         LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
@@ -58,6 +58,8 @@ public class AppApiWxappLoginController {
             appMember.setUsername(result.getOpenid());
             appMember.setPassword(PasswordUtil.encrypt(result.getOpenid(), password, salt));
             appMember.setStatus(1);
+            //设置上分享人ID
+            appMember.setShareId(mid);
             appMemberService.save(appMember);
         }
         //执行登录操作

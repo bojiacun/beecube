@@ -90,6 +90,7 @@ class App extends Component<PropsWithChildren> {
     }
 
     onLaunch(options) {
+        console.log("app launch", options);
         let {context} = store.getState();
         context.referer = options;
         context.copyright = siteInfo.copyright;
@@ -116,8 +117,9 @@ class App extends Component<PropsWithChildren> {
             const token = Taro.getStorageSync("TOKEN");
             //本地未存储token则执行登录操作
             if (!token) {
+                let mid = options?.query?.mid || '';
                 Taro.login().then(res => {
-                    request.get('/app/api/wxapp/login', {params: {code: res.code}}).then(res => {
+                    request.get('/app/api/wxapp/login', {params: {code: res.code, mid: mid}}).then(res => {
                         Taro.setStorageSync("TOKEN", res.data.result);
                         this.initUser(context);
                     });

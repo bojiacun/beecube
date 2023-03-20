@@ -9,6 +9,7 @@ import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
 import request from "../../lib/request";
 import {setUserInfo} from "../../store/actions";
+import PageLoading from "../../components/pageloading";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -45,6 +46,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
     render() {
         const {systemInfo, context} = this.props;
         const {userInfo} = context;
+
+        if(userInfo == null) return <PageLoading />;
 
         // @ts-ignore
         return (

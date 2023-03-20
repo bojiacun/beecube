@@ -289,15 +289,18 @@ export default class Index extends Component<any, any> {
     }
 
     onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.goods?.title,
+            query: {mid: mid},
         }
     }
 
     onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.goods?.title,
-            path: '/pages/goods/detail?id=' + this.state.id
+            path: '/pages/goods/detail?id=' + this.state.id +'&mid='+mid
         }
     }
 
@@ -424,7 +427,6 @@ export default class Index extends Component<any, any> {
         });
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
-        console.log(systemInfo);
 
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>

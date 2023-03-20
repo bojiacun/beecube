@@ -26,6 +26,21 @@ export default class Index extends Component<any, any> {
             this.setState({id: options.id, detail: res.data.result});
         });
     }
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            query: {mid: mid},
+        }
+    }
+
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            path: '/pages/articles/detail2?id=' + this.state.id +'&mid='+mid
+        }
+    }
 
 
     componentDidMount() {

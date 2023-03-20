@@ -94,7 +94,21 @@ export default class Index extends Component<any, any> {
         this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            query: {mid: mid},
+        }
+    }
 
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.detail?.title,
+            path: '/pages/performance/detail?id=' + this.state.id +'&mid='+mid
+        }
+    }
     payDeposit() {
         this.setState({posting: true});
         //支付宝保证金
