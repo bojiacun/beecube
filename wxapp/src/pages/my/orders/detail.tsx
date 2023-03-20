@@ -206,7 +206,7 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>收货信息</View>
                         <View className={'space-y-4'}>
-                            {detail.status == 0 && !detail.deliveryId &&
+                            {!detail.deliveryId &&
                                 <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                                     <View className={'flex-1 space-y-2'}>
                                         <View className={'font-bold space-x-2'}>
@@ -220,7 +220,7 @@ export default class Index extends Component<any, any> {
                                     </View>
                                 </Navigator>
                             }
-                            {detail.status == 0 &&
+                            {detail.deliveryId &&
                                 <View className={'flex items-center justify-between'}>
                                     <View className={'flex-1 space-y-2'}>
                                         <View className={'font-bold space-x-2'}>
