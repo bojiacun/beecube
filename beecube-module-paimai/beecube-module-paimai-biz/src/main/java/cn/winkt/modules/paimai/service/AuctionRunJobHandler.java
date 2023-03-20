@@ -121,48 +121,48 @@ public class AuctionRunJobHandler {
             List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
             if(type == 1) {
                 WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                data1.setName("thing4.DATA");
+                data1.setName("thing4");
                 data1.setValue(performance == null ? g.getTitle():performance.getTitle());
                 data.add(data1);
 
                 WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing1.DATA");
+                data2.setName("thing1");
                 data2.setValue(g.getTitle());
                 data.add(data2);
 
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                data3.setName("date2.DATA");
+                data3.setName("date2");
                 data3.setValue(DateFormatUtils.format(g.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
                 data.add(data3);
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data4.setName("thing5.DATA");
+                data4.setName("thing5");
                 data4.setValue("你关注的拍品即将开始，请尽快出价!");
                 data.add(data4);
             }
             else if(type == 2) {
                 WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                data1.setName("thing5.DATA");
+                data1.setName("thing5");
                 data1.setValue(performance == null ? g.getTitle():performance.getTitle());
                 data.add(data1);
 
                 WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing1.DATA");
+                data2.setName("thing1");
                 data2.setValue(g.getTitle());
                 data.add(data2);
 
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                data3.setName("time7.DATA");
+                data3.setName("time7");
                 Date endTime = g.getActualEndTime() == null ? g.getEndTime():g.getActualEndTime();
                 data3.setValue(DateFormatUtils.format(endTime, "yyyy-MM-dd HH:mm:ss"));
                 data.add(data3);
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data4.setName("thing8.DATA");
+                data4.setName("thing8");
                 data4.setValue("你关注的拍品即将结束，请尽快出价!");
                 data.add(data4);
             }
@@ -211,47 +211,47 @@ public class AuctionRunJobHandler {
             List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
             if(type == 1) {
                 WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                data1.setName("thing4.DATA");
+                data1.setName("thing4");
                 data1.setValue(p.getTitle());
                 data.add(data1);
 
                 WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing1.DATA");
+                data2.setName("thing1");
                 data2.setValue(p.getTitle());
                 data.add(data2);
 
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                data3.setName("date2.DATA");
+                data3.setName("date2");
                 data3.setValue(DateFormatUtils.format(p.getStartTime(), "yyyy-MM-dd HH:mm:ss"));
                 data.add(data3);
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data4.setName("thing5.DATA");
+                data4.setName("thing5");
                 data4.setValue("你关注的专场即将开始，请尽快出价!");
                 data.add(data4);
             }
             else if(type == 2) {
                 WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                data1.setName("thing5.DATA");
+                data1.setName("thing5");
                 data1.setValue(p.getTitle());
                 data.add(data1);
 
                 WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing1.DATA");
+                data2.setName("thing1");
                 data2.setValue(p.getTitle());
                 data.add(data2);
 
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                data3.setName("time7.DATA");
+                data3.setName("time7");
                 data3.setValue(DateFormatUtils.format(p.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
                 data.add(data3);
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data4.setName("thing8.DATA");
+                data4.setName("thing8");
                 data4.setValue("你关注的专场即将结束，请尽快出价!");
                 data.add(data4);
             }

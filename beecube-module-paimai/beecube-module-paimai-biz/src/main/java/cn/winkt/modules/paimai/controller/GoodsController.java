@@ -467,24 +467,24 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
 
                 WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
-                data1.setName("character_string1.DATA");
+                data1.setName("character_string1");
                 data1.setValue(goods.getId());
                 data.add(data1);
 
                 WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing6.DATA");
+                data2.setName("thing6");
                 data2.setValue(goods.getTitle());
                 data.add(data2);
 
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
-                data3.setName("amount4.DATA");
+                data3.setName("amount4");
                 data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).toString());
                 data.add(data3);
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data4.setName("phrase5.DATA");
+                data4.setName("phrase5");
                 data4.setValue(goodsOffer.getStatus() == 1 ? "中标":"未中标");
                 data.add(data4);
                 m.setData(data);
