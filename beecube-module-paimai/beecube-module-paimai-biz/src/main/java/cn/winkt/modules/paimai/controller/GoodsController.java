@@ -484,8 +484,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("phrase5.DATA");
-                data2.setValue(goodsOffer.getStatus() == 1 ? "中标":"未中标");
+                data4.setName("phrase5.DATA");
+                data4.setValue(goodsOffer.getStatus() == 1 ? "中标":"未中标");
                 data.add(data4);
                 m.setData(data);
                 wxMaService.getMsgService().sendSubscribeMsg(m);
