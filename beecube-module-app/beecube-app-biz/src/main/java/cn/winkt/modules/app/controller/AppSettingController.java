@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.config.MiniAppPayServices;
+import cn.winkt.modules.app.config.TencentSmsServices;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import com.alibaba.fastjson.JSONObject;
@@ -54,6 +55,9 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 
 	@Resource
 	private RabbitMqClient rabbitMqClient;
+
+	@Resource
+	private TencentSmsServices tencentSmsServices;
 	/**
 	 * 分页列表查询
 	 *
@@ -141,6 +145,7 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 		 });
 		 wxMiniappServices.remove(appId);
 		 miniAppPayServices.clear(appId);
+		 tencentSmsServices.clear(appId);
 		 rabbitMqClient.sendMessage(AppModuleConstants.APP_SETTINGS_QUEUE, appId);
 		 return Result.OK("更新成功!");
 	 }
