@@ -74,7 +74,7 @@ const WalletRecordList = (props: any) => {
         },
         {
             text: '金额',
-            dataField: 'amount',
+            dataField: 'money',
         },
         {
             text: '描述信息',
@@ -83,10 +83,11 @@ const WalletRecordList = (props: any) => {
         {
             text: '交易单号',
             dataField: 'transactionId',
+            style: {wordBreak: 'break-all', wordWrap: 'break-word'}
         },
         {
             text: '创建时间',
-            dataField: 'creatTime',
+            dataField: 'createTime',
         },
     ]
 
@@ -119,6 +120,7 @@ const WalletRecordList = (props: any) => {
                             <searchFetcher.Form action={'/app/money/records'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
+                                <FormControl name={'memberId'} value={selectedRow.id} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>

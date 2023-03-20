@@ -126,7 +126,7 @@ export const API_APP_NAV_ADD = `${BASE_URL}/beecube-app/app/navs/add`;
 export const API_APP_NAV_EDIT = `${BASE_URL}/beecube-app/app/navs/edit`;
 export const API_APP_NAV_DELETE = `${BASE_URL}/beecube-app/app/navs/delete`;
 
-export const API_APP_MEMBER_MONEY_RECORDS_LIST = `${BASE_URL}/beecube-app/app/money/records`;
+export const API_APP_MEMBER_MONEY_RECORDS_LIST = `${BASE_URL}/beecube-app/app/money/records/list`;
 
 
 export const API_APP_DIY_PAGE_LIST = `${BASE_URL}/beecube-app/app/diy/pages/all`;
