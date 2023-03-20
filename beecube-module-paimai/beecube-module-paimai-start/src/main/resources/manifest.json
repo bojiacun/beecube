@@ -103,6 +103,24 @@
       ]
     },
     {
+      "label": "专场详情页（同步拍）",
+      "url": "/pages/performance/detail2",
+      "urlSuffix": {
+        "label": "专场ID",
+        "value": "id"
+      },
+      "suffixOptions": "输入专场的ID"
+    },
+    {
+      "label": "专场详情页（限时拍）",
+      "url": "/pages/performance/detail",
+      "urlSuffix": {
+        "label": "专场ID",
+        "value": "id"
+      },
+      "suffixOptions": "输入专场的ID"
+    },
+    {
       "label": "拍卖会列表",
       "url": "/pages/auction/list"
     },
