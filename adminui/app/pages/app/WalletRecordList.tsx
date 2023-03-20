@@ -17,7 +17,7 @@ const types:any = {
 const WalletRecordList = (props: any) => {
     const {show, onHide, selectedRow, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, goodsId: selectedRow.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, memberId: selectedRow.id});
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
