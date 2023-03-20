@@ -18,7 +18,9 @@ const LoadMore: FC<LoadMoreProps> = (props) => {
     }
 
     useEffect(()=>{
-        setShow(true);
+        if(loading) {
+            setShow(true);
+        }
     }, [loading]);
 
     if(!show) {

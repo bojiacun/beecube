@@ -277,7 +277,7 @@ export default class Index extends Component<any, any> {
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
                         <Text>报名{detail.depositCount}人</Text>
-                        <Text>出价{detail.offerCount}件</Text>
+                        <Text>出价{detail.offerCount}次</Text>
                     </View>
                     <View></View>
                 </View>
