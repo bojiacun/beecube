@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -25,14 +25,17 @@ import request, {API_URL} from "../../lib/request";
     }
 })
 export default class Index extends Component<any, any> {
-    state = {
+    state:any = {
         sdkVersion: '',
         sexes: [
             {id: 1, name: '男'},
             {id: 2, name: '女'},
         ],
         saving: false,
+        userInfo: null,
     }
+
+    nicknameInputRef = React.createRef();
 
     constructor(props: any) {
         super(props);
@@ -42,8 +45,24 @@ export default class Index extends Component<any, any> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({sdkVersion: Taro.getAppBaseInfo().SDKVersion});
+        request.get('/app/api/members/profile').then(res => {
+            let userInfo = res.data.result;
+            this.setState({userInfo: userInfo});
+            setTimeout(()=>{
+                // @ts-ignore
+                this.nicknameInputRef.current.value = userInfo.nickname;
+            }, 500);
+            Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
+        });
+    }
+
+    componentDidShow() {
+        let editUser = Taro.getStorageSync("EDIT-USER");
+        if(editUser) {
+            this.setState({userInfo: JSON.parse(editUser)});
+        }
     }
 
     async handleChooseAvatarNative(e) {
@@ -65,7 +84,7 @@ export default class Index extends Component<any, any> {
             let avatar = result.result.url;
             let userInfo = this.props.context.userInfo;
             userInfo.avatar = avatar;
-            this.props.updateUserInfo(userInfo);
+            this.setState({userInfo: userInfo});
             utils.showSuccess(false, '上传成功');
         });
     }
@@ -89,17 +108,16 @@ export default class Index extends Component<any, any> {
             }).then((res: any) => {
                 let result = JSON.parse(res.data);
                 let avatar = result.result.url;
-                let userInfo = this.props.context.userInfo;
+                let userInfo = this.state.userInfo;
                 userInfo.avatar = avatar;
-                this.props.updateUserInfo(userInfo);
+                this.setState({userInfo: userInfo});
                 utils.showSuccess(false, '上传成功');
             });
         });
     }
 
     renderNicknameAvatar() {
-        const {context} = this.props;
-        const {userInfo} = context;
+        const userInfo = this.state.userInfo;
 
         if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
             return (
@@ -121,7 +139,7 @@ export default class Index extends Component<any, any> {
                             <View>昵称</View>
                         </View>
                         <View className={'flex items-center space-x-2'}>
-                            <Input name={'nickname'} type={'nickname'} value={userInfo?.nickname} className={'text-right'}/>
+                            <Input ref={this.nicknameInputRef} name={'nickname'} type={'nickname'} className={'text-right'} />
                             <View className={'iconfont icon-youjiantou_huaban'}/>
                         </View>
                     </View>
@@ -155,18 +173,30 @@ export default class Index extends Component<any, any> {
     }
 
     handleSubmit(e) {
-        this.setState({saving: true});
-        let userInfo = this.props.context.userInfo;
+
+        let userInfo = this.state.userInfo;
         let values = e.detail.value;
         userInfo.nickname = values.nickname;
+
+        if(!userInfo.avatar || userInfo.avatar == '') {
+            return utils.showError("请完善头像信息");
+        }
+        if(!userInfo.nickname || userInfo.nickname == '') {
+            return utils.showError("请完善昵称信息");
+        }
+        if(!userInfo.phone || userInfo.phone == '') {
+            return utils.showError("请完善手机信息");
+        }
+
+
+        this.setState({saving: true});
         this.updateUserInfo(userInfo);
     }
 
     handleSexChange(e) {
         const index = e.detail.value;
-        let userInfo = this.props.context.userInfo;
-        userInfo.sex = index + 1;
-        this.props.updateUserInfo(userInfo);
+        this.state.userInfo.sex = parseInt(index) + 1;
+        this.setState({userInfo: this.state.userInfo});
     }
 
     updateUserInfo(userInfo) {
@@ -179,11 +209,9 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {context} = this.props;
-        const {userInfo} = context;
-
-        const userSex = userInfo?.sex ? this.state.sexes[userInfo?.sex - 1].name : '';
-
+        const {userInfo} = this.state;
+        const {sexes} = this.state;
+        const userSex = sexes[userInfo?.sex - 1]?.name || '';
 
         return (
             <PageLayout statusBarProps={{title: '完善您的信息'}}>

@@ -30,26 +30,28 @@ export default class Index extends Component<any, any> {
 
     handleSubmit(e) {
         this.setState({saving: true});
-        const {userInfo} = this.props.context;
+        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
         userInfo.email = e.detail.value.email;
-        this.props.updateUserInfo(userInfo);
+        Taro.setStorageSync("EDIT-USER",JSON.stringify(userInfo));
         Taro.navigateBack().then();
     }
 
     render() {
+        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+
         return (
             <PageLayout statusBarProps={{title: '修改邮箱'}}>
                 <Form onSubmit={this.handleSubmit}>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                         <View className={'p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <Input name={'email'} className={'block w-full'} placeholder={'修改邮箱'}/>
+                                <Input name={'email'} className={'block w-full'} value={userInfo?.email} placeholder={'修改邮箱'}/>
                             </View>
                         </View>
                     </View>
 
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
+                        <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
                     </View>
                 </Form>
             </PageLayout>

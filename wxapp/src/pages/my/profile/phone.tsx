@@ -6,6 +6,7 @@ import request from "../../../lib/request";
 import utils from "../../../lib/utils";
 import {setUserInfo} from "../../../store/actions";
 import classNames from "classnames";
+import Taro from "@tarojs/taro";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -62,9 +63,9 @@ export default class Index extends Component<any, any> {
 
         request.put("/app/api/sms/check", values).then(res => {
             if (res.data.result) {
-                let userInfo = this.props.context.userInfo;
+                let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
                 userInfo.phone = values.mobile;
-                this.props.updateUserInfo(userInfo);
+                Taro.setStorageSync("EDIT-USER",JSON.stringify(userInfo));
                 utils.showSuccess(true);
             } else {
                 utils.showMessage('验证码不正确').then();
@@ -78,6 +79,8 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
+        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+
         return (
             <PageLayout statusBarProps={{title: '手机号认证'}}>
                 <Form onSubmit={this.handleSubmit}>
@@ -87,7 +90,7 @@ export default class Index extends Component<any, any> {
                                 <View>手机号</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
-                                <Input name={'mobile'} ref={this.mobileRef} className={'text-right'}/>
+                                <Input name={'mobile'} ref={this.mobileRef} value={userInfo?.phone} className={'text-right'}/>
                             </View>
                         </View>
                         <View className={'p-4 flex items-center justify-between'}>
@@ -102,7 +105,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
+                        <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
                     </View>
                 </Form>
             </PageLayout>
