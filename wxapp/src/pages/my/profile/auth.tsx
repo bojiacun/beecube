@@ -4,7 +4,7 @@ import {Button, Form, Input, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import Taro from "@tarojs/taro";
 import utils from "../../../lib/utils";
-import {API_URL} from "../../../lib/request";
+import request, {API_URL} from "../../../lib/request";
 import {setUserInfo} from "../../../store/actions";
 import {saveUserInfo} from "./services";
 import FallbackImage from "../../../components/FallbackImage";
@@ -34,10 +34,11 @@ export default class Index extends Component<any, any> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    chooseCardFace() {
-        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(res => {
+    async chooseCardFace() {
+        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const file = res.tempFilePaths[0];
-            const token = Taro.getStorageSync("TOKEN");
+            const res1 = await request.get('/app/api/members/tmptoken');
+            const token = res1.data.result;
             //upload image
             utils.showLoading('上传中');
             Taro.uploadFile({
@@ -58,10 +59,11 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    chooseCardBack() {
-        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(res => {
+    async chooseCardBack() {
+        Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const file = res.tempFilePaths[0];
-            const token = Taro.getStorageSync("TOKEN");
+            const res1 = await request.get('/app/api/members/tmptoken');
+            const token = res1.data.result;
             //upload image
             utils.showLoading('上传中');
             Taro.uploadFile({
