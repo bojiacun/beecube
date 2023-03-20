@@ -171,6 +171,13 @@ public class AppApiAppMemberController {
     @PostMapping(value = "/addresses/add")
     public Result<?> add(@RequestBody AppMemberAddress appMemberAddress) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if(appMemberAddress.getIsDefault() != null && appMemberAddress.getIsDefault() == 1) {
+            //将其他的地址设置不默认
+            LambdaUpdateWrapper<AppMemberAddress> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.set(AppMemberAddress::getIsDefault, 0);
+            updateWrapper.eq(AppMemberAddress::getMemberId, loginUser.getId());
+            appMemberAddressService.update(updateWrapper);
+        }
         appMemberAddress.setMemberId(loginUser.getId());
         appMemberAddressService.save(appMemberAddress);
         return Result.OK("添加成功！");
