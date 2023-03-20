@@ -84,6 +84,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
     @Resource
     MiniappServices miniappServices;
+
+    @Resource
+    IGoodsCommonDescService goodsCommonDescService;
+
     /**
      * 分页列表查询
      *
@@ -437,11 +441,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
         List<GoodsOffer> goodsOffers = goodsOfferService.list(queryWrapper);
         WxMaService wxMaService = miniappServices.getWxMaService(AppContext.getApp());
-        List<AppSettingVO> paimaiSettings = appApi.queryAppSettings(AppContext.getApp(), "paimai");
+        List<GoodsCommonDesc> paimaiSettings = goodsCommonDescService.list();
         String templateId = null;
-        for (AppSettingVO s : paimaiSettings) {
-            if (s.getSettingKey().equals("offerResultTemplateId")) {
-                templateId = s.getSettingValue();
+        for (GoodsCommonDesc s : paimaiSettings) {
+            if (s.getDescKey().equals("offerResultTemplateId")) {
+                templateId = s.getDescValue();
             }
         }
 

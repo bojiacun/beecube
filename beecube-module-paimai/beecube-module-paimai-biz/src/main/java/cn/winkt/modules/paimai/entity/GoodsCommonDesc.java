@@ -39,7 +39,7 @@ public class GoodsCommonDesc {
 	/**描述内容*/
 	@Excel(name = "描述内容", width = 15)
     @ApiModelProperty(value = "描述内容")
-	private java.lang.Object descValue;
+	private java.lang.String descValue;
 	/**描述标题*/
 	@Excel(name = "描述标题", width = 15)
     @ApiModelProperty(value = "描述标题")
