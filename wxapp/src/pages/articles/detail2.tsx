@@ -37,9 +37,10 @@ export default class Index extends Component<any, any> {
         const {systemInfo} = this.props;
         if(detail == null) return <PageLoading />;
 
+        const contentHeight = `calc(100vh - 40px - ${systemInfo.safeArea.top}px - ${systemInfo.safeArea.bottom - systemInfo.safeArea.height}px)`;
         return (
-            <PageLayout showTabBar={false} statusBarProps={{title: detail.title, style: {height: '80rpx'}}} style={{backgroundColor: 'white', paddingBottom: 0}}>
-                <Video src={utils.resolveUrl(detail.video)} className={'w-screen'} style={{height: 'calc(100vh - 80rpx - '+systemInfo.safeArea.top+'px)'}} objectFit={'contain'} />
+            <PageLayout showTabBar={false} statusBarProps={{title: detail.title, style: {height: '80rpx'}}} style={{backgroundColor: 'black', paddingBottom: 0}}>
+                <Video src={utils.resolveUrl(detail.video)} className={'w-screen'} style={{height: contentHeight}} objectFit={'contain'} />
             </PageLayout>
         );
     }

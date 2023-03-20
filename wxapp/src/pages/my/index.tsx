@@ -8,6 +8,7 @@ import classNames from "classnames";
 import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
 import request from "../../lib/request";
+import {setUserInfo} from "../../store/actions";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -15,7 +16,13 @@ import request from "../../lib/request";
         settings: state.context.settings,
         context: state.context
     }
-))
+), (dispatch) => {
+    return {
+        updateUserInfo(userInfo) {
+            dispatch(setUserInfo(userInfo));
+        }
+    }
+})
 export default class Index extends Component<PropsWithChildren<any>> {
 
     componentDidMount() {
@@ -27,7 +34,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
     componentDidShow() {
         request.get('/app/api/members/profile').then(res => {
-            this.setState({userInfo: res.data.result});
+            //刷新用户
+            this.props.updateUserInfo(res.data.result);
         });
     }
 
