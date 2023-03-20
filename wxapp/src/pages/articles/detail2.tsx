@@ -4,8 +4,17 @@ import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
 import {Video} from "@tarojs/components";
 import utils from "../../lib/utils";
+import {connect} from "react-redux";
 
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context,
+        message: state.message
+    }
+))
 export default class Index extends Component<any, any> {
     state: any = {
         id: null,
@@ -25,11 +34,12 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {detail} = this.state;
+        const {systemInfo} = this.props;
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout statusBarProps={{title: detail.title}} style={{backgroundColor: 'white'}}>
-                <Video src={utils.resolveUrl(detail.video)} className={'w-screen h-screen'} objectFit={'contain'} />
+            <PageLayout showTabBar={false} statusBarProps={{title: detail.title, style: {height: '80rpx'}}} style={{backgroundColor: 'white', paddingBottom: 0}}>
+                <Video src={utils.resolveUrl(detail.video)} className={'w-screen'} style={{height: 'calc(100vh - 80rpx - '+systemInfo.safeArea.top+'px)'}} objectFit={'contain'} />
             </PageLayout>
         );
     }

@@ -51,6 +51,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
             enableReachBottom = false,
             copyright = false,
         } = this.props;
+        const {pageStyle} = this.state;
 
         if (pageLoading || loading) return <PageLoading/>;
         if (enableReachBottom) {
@@ -63,9 +64,12 @@ class PageLayout extends Component<PayLayoutProps, any> {
                 </>
             );
         }
+        if(style.paddingBottom !== undefined) {
+            pageStyle.paddingBottom = style.paddingBottom;
+        }
 
         return (
-            <View className={classNames(styles.page, className)} style={{...style, ...this.state.pageStyle}}>
+            <View className={classNames(styles.page, className)} style={{ ...style, ...pageStyle}}>
                 {showStatusBar && <StatusBar {...statusBarProps} />}
                 <View className={containerClassName}>
                     {children}

@@ -1,7 +1,7 @@
 import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
-import {View, Text, Navigator} from "@tarojs/components";
+import {View, Text, Navigator, Button} from "@tarojs/components";
 import {connect} from "react-redux";
 import styles from './index.module.scss';
 import classNames from "classnames";
@@ -26,7 +26,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     componentDidShow() {
-        request.get('/app/api/members/profile').then(res=>{
+        request.get('/app/api/members/profile').then(res => {
             this.setState({userInfo: res.data.result});
         });
     }
@@ -183,26 +183,29 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     {/*</View>*/}
 
 
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>帮助中心</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
+                    <View>
+                        <Navigator url={'/pages/articles/services'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>
+                                <View>帮助中心</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
 
-
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>联系客服</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
+                    <View>
+                        <Button plain={true} openType={'contact'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>
+                                <View>联系客服</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Button>
+                    </View>
 
                 </View>
             </PageLayout>
