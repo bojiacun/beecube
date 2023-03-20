@@ -18,7 +18,7 @@ import {Delete, Edit, MoreVertical} from "react-feather";
 const AppList = (props: any) => {
     const {startPageLoading, stopPageLoading, setSelectedApp} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const navigate = useNavigate();
     const searchFetcher = useFetcher();

@@ -10,7 +10,7 @@ const semver = require("semver");
 
 const AppModuleList = () => {
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const searchFetcher = useFetcher();
     const installFetcher = useFetcher();
     const uninstallFetcher = useFetcher();

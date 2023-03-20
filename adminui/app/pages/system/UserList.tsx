@@ -27,7 +27,7 @@ import UserTrash from "~/pages/system/users/UserTrash";
 const UserList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [showTrash, setShowTrash] = useState<boolean>(false);
     const [passwordModel, setPasswordModel] = useState<any>();

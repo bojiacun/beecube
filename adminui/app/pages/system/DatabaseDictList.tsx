@@ -35,7 +35,7 @@ const checkHandlers:any = {};
 const DatabaseDictList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [selectedModel, setSelectedModel] = useState<any>();
     const searchFetcher = useFetcher();

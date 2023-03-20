@@ -23,7 +23,7 @@ import FollowList from "~/pages/paimai/FollowList";
 const GoodsList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [selectedRow, setSelectedRow] = useState<any>();
     const [viewsShow, setViewsShow] = useState<boolean>(false);

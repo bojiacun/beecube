@@ -133,7 +133,7 @@ const DepositList = (props: any) => {
     return (
         <Modal
             show={show}
-            size={'lg'}
+            size={'xl'}
             onHide={onHide}
             centered
             backdrop={'static'}

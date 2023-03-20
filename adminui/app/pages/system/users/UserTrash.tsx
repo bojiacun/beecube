@@ -27,7 +27,7 @@ import UserPassword from "~/pages/system/users/UserPassword";
 const UserTrash = (props: any) => {
     const {show, onHide} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
     const restoreFetcher = useFetcher();

@@ -28,7 +28,7 @@ const EditRoleSchema = Yup.object().shape({
 const RoleList = (props: any) => {
     const {startPageLoading, stopPageLoading, setSelectedRole} = props;
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [authModel, setAuthModel] = useState<any>();
     const searchFetcher = useFetcher();

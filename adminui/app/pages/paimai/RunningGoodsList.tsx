@@ -23,7 +23,7 @@ import OfferConfirmEditor from "~/pages/paimai/OfferConfirmEditor";
 
 const RunningGoodsList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
-    const [searchState, setSearchState] = useState<any>(DefaultListSearchParams);
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [offersShow, setOffersShow] = useState<boolean>(false);
     const [selectedRow, setSelectedRow] = useState<any>();
