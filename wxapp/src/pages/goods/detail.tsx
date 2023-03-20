@@ -104,18 +104,7 @@ export default class Index extends Component<any, any> {
                     goods.endTime = message.endTime;
                     this.setState({goods: goods});
                     break;
-                case 'MSG_TYPE_AUCTION_CHANGED':
-                    goods.startTime = message.startTime;
-                    goods.endTime = message.endTime;
-                    goods.actualEndTime = message.actualEndTime;
-                    goods.state = message.state;
-                    goods.dealPrice = message.dealPrice;
-                    this.setState({goods: goods});
-                    break;
-                case 'MSG_TYPE_OFFER':
-                    this.onMessageReceive(message);
-                    break;
-                case 'MSG_TYPE_DELAY':
+                default:
                     this.onMessageReceive(message);
                     break;
             }
@@ -159,7 +148,12 @@ export default class Index extends Component<any, any> {
                 break;
             case 'MSG_TYPE_AUCTION_CHANGED':
                 if(msg.goodsId != goods.id) return;
-
+                goods.startTime = message.startTime;
+                goods.endTime = message.endTime;
+                goods.actualEndTime = message.actualEndTime;
+                goods.state = message.state;
+                goods.dealPrice = message.dealPrice;
+                this.setState({goods: goods});
                 if(msg.state == 3) {
                     //成交了
                     if(msg.dealUserId == userInfo.id) {
