@@ -179,7 +179,7 @@ const ListView: FC<ListViewProps> = (props) => {
                     return tab.template(item);
                 })}
             </View>
-            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
+            {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
             <View style={{height: 100}}/>
         </>
     );

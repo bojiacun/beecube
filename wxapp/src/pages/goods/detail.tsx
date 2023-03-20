@@ -249,6 +249,9 @@ export default class Index extends Component<any, any> {
                 doOffer();
             }
         }
+        else {
+            doOffer();
+        }
         //出价
 
     }
