@@ -14,7 +14,9 @@ import classNames from "classnames";
 
 export default class Index extends Component<any, any> {
     state:any = {
-        options: null
+        tag: null,
+        source: 1,
+        options: null,
     }
     tabs: ListViewTabItem[];
 
@@ -38,7 +40,11 @@ export default class Index extends Component<any, any> {
 
 
     loadData(page: number, tab: ListViewTabItem) {
-        return request.get('/paimai/api/performances/list', {params: {tag: this.state.tag, source: tab.id, pageNo: page}});
+        let params:any = {pageNo: page, source: tab.id};
+        if(this.state.tag) {
+            params.tag = decodeURIComponent(this.state.tag);
+        }
+        return request.get('/paimai/api/performances/list', {params: params});
     }
 
     renderTemplate(data) {
@@ -111,19 +117,21 @@ export default class Index extends Component<any, any> {
 
     onLoad(options) {
         if(options.tag) {
-            this.setState({options: options});
+            this.setState({tag: options.tag});
         }
-        else {
-            this.setState({options: {tag: '所有专场'}});
+        if(options.source) {
+            this.setState({tag: options.tag, source: options.source});
         }
+        this.setState({options: options});
     }
 
     render() {
+        const {tag, source} = this.state;
         if(!this.state.options) return <PageLoading />;
 
         return (
-            <PageLayout statusBarProps={{title: decodeURIComponent(this.state.options.tag)}} enableReachBottom={true} showTabBar={true}>
-                <ListView tabs={this.tabs} dataFetcher={this.loadData}  defaultActiveKey={this.state.options.source} tabStyle={2} />
+            <PageLayout statusBarProps={{title: tag == null ? '所有专场':decodeURIComponent(tag)}} enableReachBottom={true} showTabBar={true}>
+                <ListView tabs={this.tabs} dataFetcher={this.loadData}  defaultActiveKey={source} tabStyle={2} />
             </PageLayout>
         );
     }
