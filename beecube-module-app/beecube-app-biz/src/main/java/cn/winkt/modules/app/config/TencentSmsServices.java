@@ -34,6 +34,10 @@ public class TencentSmsServices {
         return tencentSmsService;
     }
 
+    public void clear(String appId) {
+        tencentSmsServiceMap.remove(appId);
+    }
+
 
     Map<String, String> tencentSmsSettings(String appId) {
         LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();

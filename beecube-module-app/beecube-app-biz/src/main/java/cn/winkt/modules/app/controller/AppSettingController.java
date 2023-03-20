@@ -137,6 +137,7 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 			 appSetting.setSettingValue(jsonObject.getString(key));
 			 appSetting.setSettingKey(key);
 			 appSetting.setGroupKey(group);
+			 appSettingService.save(appSetting);
 		 });
 		 wxMiniappServices.remove(appId);
 		 miniAppPayServices.clear(appId);
