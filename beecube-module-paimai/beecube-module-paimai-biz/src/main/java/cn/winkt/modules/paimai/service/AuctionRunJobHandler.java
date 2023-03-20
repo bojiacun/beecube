@@ -228,8 +228,8 @@ public class AuctionRunJobHandler {
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing5.DATA");
-                data2.setValue("你关注的专场即将开始，请尽快出价!");
+                data4.setName("thing5.DATA");
+                data4.setValue("你关注的专场即将开始，请尽快出价!");
                 data.add(data4);
             }
             else if(type == 2) {
@@ -251,8 +251,8 @@ public class AuctionRunJobHandler {
 
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
-                data2.setName("thing8.DATA");
-                data2.setValue("你关注的专场即将结束，请尽快出价!");
+                data4.setName("thing8.DATA");
+                data4.setValue("你关注的专场即将结束，请尽快出价!");
                 data.add(data4);
             }
             m.setData(data);
