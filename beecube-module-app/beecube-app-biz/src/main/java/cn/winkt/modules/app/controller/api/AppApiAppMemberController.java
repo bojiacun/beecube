@@ -1,7 +1,9 @@
 package cn.winkt.modules.app.controller.api;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
@@ -14,6 +16,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
@@ -27,17 +31,25 @@ import org.jeecg.common.system.vo.DictModel;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.system.vo.SysPermissionDataRuleModel;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.config.AppContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/app/api/members")
+@Slf4j
 public class AppApiAppMemberController {
 
     @Resource
@@ -47,6 +59,9 @@ public class AppApiAppMemberController {
     IAppMemberAddressService appMemberAddressService;
     @Resource
     RedisUtil redisUtil;
+
+    @Resource
+    WxMiniappServices wxMiniappServices;
 
     //    获取当前用户信息
     @GetMapping("/profile")
@@ -65,6 +80,32 @@ public class AppApiAppMemberController {
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + "uploader", systemToken);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + "uploader", 30);
         return Result.OK("",systemToken);
+    }
+
+    @GetMapping("/qrcode")
+    @ResponseBody
+    public void getMemberQrcode(HttpServletResponse response) throws WxErrorException, IOException {
+        WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        File file = wxMaService.getQrcodeService().createWxaCode("/pages/index/index?mid="+sysUser.getId(), 375);
+        OutputStream os = null;
+        try {
+//        读取图片
+            BufferedImage image = ImageIO.read(file);
+            response.setContentType("image/png");
+            os = response.getOutputStream();
+
+            if (image != null) {
+                ImageIO.write(image, "png", os);
+            }
+        } catch (IOException e) {
+            log.error("获取图片异常{}",e.getMessage());
+        } finally {
+            if (os != null) {
+                os.flush();
+                os.close();
+            }
+        }
     }
 
     @PutMapping("/update")

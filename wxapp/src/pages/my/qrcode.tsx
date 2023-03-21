@@ -9,7 +9,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '我的二维码'}}>
                 <View className={'p-4 bg-white m-4 relative'}>
-                    <FallbackImage src={API_URL+'/app/members/qrcode'} className={'w-full block'} mode={'widthFix'} />
+                    <FallbackImage src={API_URL+'/app/api/members/qrcode'} className={'w-full block'} mode={'widthFix'} />
                 </View>
                 <View className={'mt-4 text-center'}>
                     <Button className={'btn btn-danger'}>保存到相册</Button>
