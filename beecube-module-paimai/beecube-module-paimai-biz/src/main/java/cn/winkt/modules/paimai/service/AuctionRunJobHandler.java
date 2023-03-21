@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.service;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.AppVO;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.config.PaimaiWebSocket;
@@ -26,6 +27,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.config.AppContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +35,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -70,6 +70,11 @@ public class AuctionRunJobHandler {
 
     @Resource
     IMessagePoolService messagePoolService;
+
+    @Resource
+    IGoodsCommonDescService goodsCommonDescService;
+
+
     /**
      * 定时任务提醒
      * @return
@@ -426,6 +431,7 @@ public class AuctionRunJobHandler {
                 goodsOfferService.update(updateWrapper);
 
                 goodsUpdateMessage.setState(4);
+                goodsUpdateMessage.setState(4);
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
                 goodsService.updateById(goods);
             }
@@ -437,6 +443,8 @@ public class AuctionRunJobHandler {
                 goods.setDealPrice(maxOfferRow.getPrice());
                 //发送消息
                 goodsUpdateMessage.setState(3);
+                goodsUpdateMessage.setState(3);
+                goodsUpdateMessage.setDealUserId(maxOfferRow.getMemberId());
                 goodsUpdateMessage.setDealPrice(maxOfferRow.getPrice());
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
                 goodsService.updateById(goods);
@@ -466,6 +474,76 @@ public class AuctionRunJobHandler {
                 orderGoodsService.save(orderGoods);
 
             }
+
+            //发送消息
+            try{
+                this.sendOfferResultMessage(goods);
+            }
+            catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+
         });
+    }
+
+    @Async
+    void sendOfferResultMessage(Goods goods) throws InvocationTargetException, IllegalAccessException, WxErrorException {
+        LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
+        queryWrapper.orderByDesc(GoodsOffer::getPrice);
+
+        List<GoodsOffer> goodsOffers = goodsOfferService.list(queryWrapper);
+        WxMaService wxMaService = miniappServices.getWxMaService(AppContext.getApp());
+        List<GoodsCommonDesc> paimaiSettings = goodsCommonDescService.list();
+        String templateId = null;
+        for (GoodsCommonDesc s : paimaiSettings) {
+            if (s.getDescKey().equals("offerResultTemplateId")) {
+                templateId = s.getDescValue();
+            }
+        }
+
+        if(templateId != null) {
+            //发送缓存，已经发送的用户，跳过不再发送
+            Set<String> sended = new HashSet<>();
+
+            for (GoodsOffer goodsOffer : goodsOffers) {
+                AppMemberVO appMemberVO = appApi.getMemberById(goodsOffer.getMemberId());
+                if(sended.contains(appMemberVO.getId())) {
+                    continue;
+                }
+                sended.add(appMemberVO.getId());
+                WxMaSubscribeMessage m = new WxMaSubscribeMessage();
+                m.setTemplateId(templateId);
+                m.setMiniprogramState("formal");
+                m.setPage("/pages/goods/detail?id="+goodsOffer.getGoodsId());
+                m.setToUser(appMemberVO.getWxappOpenid());
+                List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
+
+                WxMaSubscribeMessage.MsgData data1 = new WxMaSubscribeMessage.MsgData();
+                data1.setName("character_string1");
+                data1.setValue(goods.getId());
+                data.add(data1);
+
+                WxMaSubscribeMessage.MsgData data2 = new WxMaSubscribeMessage.MsgData();
+                data2.setName("thing6");
+                data2.setValue(goods.getTitle());
+                data.add(data2);
+
+
+                WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
+                data3.setName("amount4");
+                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).toString());
+                data.add(data3);
+
+
+                WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
+                data4.setName("phrase5");
+                data4.setValue(goodsOffer.getStatus() == 1 ? "中标":"未中标");
+                data.add(data4);
+                m.setData(data);
+                wxMaService.getMsgService().sendSubscribeMsg(m);
+
+            }
+        }
     }
 }
