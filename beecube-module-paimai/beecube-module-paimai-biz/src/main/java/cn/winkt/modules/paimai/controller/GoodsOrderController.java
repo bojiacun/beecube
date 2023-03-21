@@ -16,6 +16,7 @@ import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.OrderGoods;
+import cn.winkt.modules.paimai.service.CommissionService;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.OrderVo;
@@ -73,6 +74,9 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 
     @Resource
     IGoodsService goodsService;
+
+    @Resource
+    CommissionService commissionService;
 
     /**
      * 分页列表查询
@@ -137,39 +141,6 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
         goodsOrder.setStatus(1);
         goodsOrderService.updateById(goodsOrder);
-
-
-        if(goodsOrder.getType() == 2) {
-            //分销佣金
-            try {
-                AppMemberVO buyer = appApi.getMemberById(goodsOrder.getMemberId());
-                if (buyer != null && StringUtils.isNotEmpty(buyer.getShareId())) {
-                    AppMemberVO sharer = appApi.getMemberById(buyer.getShareId());
-                    if (sharer != null && sharer.getIsAgent() == 1) {
-                        //是分销商，则给分销商返点
-                        BigDecimal amount = BigDecimal.ZERO;
-                        LambdaQueryWrapper<OrderGoods> queryWrapper = new LambdaQueryWrapper<>();
-                        queryWrapper.eq(OrderGoods::getOrderId, goodsOrder.getId());
-                        List<OrderGoods> orderGoodsList = orderGoodsService.list(queryWrapper);
-                        for (OrderGoods orderGoods : orderGoodsList) {
-                            Goods goods = goodsService.getById(orderGoods.getGoodsId());
-                            if (goods.getCommission() != null) {
-                                //计算分佣返点
-                                BigDecimal goodsTotalPrice = BigDecimal.valueOf(orderGoods.getGoodsPrice()).multiply(BigDecimal.valueOf(orderGoods.getGoodsCount()));
-                                amount = amount.add(BigDecimal.valueOf(goods.getCommission()).multiply(goodsTotalPrice).divide(BigDecimal.valueOf(100), RoundingMode.CEILING));
-                            }
-                        }
-                        if(amount.floatValue() > 0) {
-                            appApi.addMemberMoney(sharer.getId(), String.format("分销返佣, 单号为 %s", goodsOrder.getId()), amount.floatValue());
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-
-
         return Result.OK("编辑成功!");
     }
     @AutoLog(value = "订单表-确认收货")
@@ -179,6 +150,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
         goodsOrder.setStatus(3);
         goodsOrderService.updateById(goodsOrder);
+        commissionService.dispatchComission(goodsOrder);
         return Result.OK("编辑成功!");
     }
     @AutoLog(value = "订单表-确认发货")

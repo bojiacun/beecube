@@ -107,35 +107,6 @@ public class WxAppPayNotifyController {
         goodsOrder.setPayTime(new Date());
         goodsOrder.setTransactionId(notifyResult.getTransactionId());
         goodsOrderService.updateById(goodsOrder);
-
-        //分销佣金
-        try {
-            AppMemberVO buyer = appApi.getMemberById(goodsOrder.getMemberId());
-            if (buyer != null && StringUtils.isNotEmpty(buyer.getShareId())) {
-                AppMemberVO sharer = appApi.getMemberById(buyer.getShareId());
-                if(sharer != null && sharer.getIsAgent() == 1) {
-                    //是分销商，则给分销商返点
-                    BigDecimal amount = BigDecimal.ZERO;
-                    LambdaQueryWrapper<OrderGoods> queryWrapper = new LambdaQueryWrapper<>();
-                    queryWrapper.eq(OrderGoods::getOrderId, goodsOrder.getId());
-                    List<OrderGoods> orderGoodsList = orderGoodsService.list(queryWrapper);
-                    for (OrderGoods orderGoods : orderGoodsList) {
-                        Goods goods = goodsService.getById(orderGoods.getGoodsId());
-                        if(goods.getCommission() != null) {
-                            //计算分佣返点
-                            BigDecimal goodsTotalPrice = BigDecimal.valueOf(orderGoods.getGoodsPrice()).multiply(BigDecimal.valueOf(orderGoods.getGoodsCount()));
-                            amount = amount.add(BigDecimal.valueOf(goods.getCommission()).multiply(goodsTotalPrice).divide(BigDecimal.valueOf(100), RoundingMode.CEILING));
-                        }
-                    }
-                    if(amount.floatValue()>0) {
-                        appApi.addMemberMoney(sharer.getId(), String.format("分销返佣, 单号为 %s", goodsOrder.getId()), amount.floatValue());
-                    }
-                }
-            }
-        }
-        catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
         return WxPayNotifyResponse.success("成功");
     }
 
