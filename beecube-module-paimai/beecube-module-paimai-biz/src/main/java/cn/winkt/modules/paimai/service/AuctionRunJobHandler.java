@@ -540,7 +540,7 @@ public class AuctionRunJobHandler {
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
                 data3.setName("amount4");
-                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).toString());
+                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.CEILING).toString());
                 data.add(data3);
 
 
