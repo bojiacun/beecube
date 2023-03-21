@@ -63,7 +63,7 @@ export default class Index extends Component<any, any> {
                     </View>
                 }
                 <View className={'mt-4 relative w-full'}>
-                    <RichText className={'w-full'} nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'}/>
+                    <RichText className={'w-full'} nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'} />
                 </View>
             </PageLayout>
         );
