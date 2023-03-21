@@ -439,6 +439,7 @@ public class AuctionRunJobHandler {
                 //成交了,将拍品状态改为成交，并将最大出价改为成交
                 goods.setState(3);
                 maxOfferRow.setStatus(1);
+                goodsOfferService.updateById(maxOfferRow);
                 goods.setDealPrice(maxOfferRow.getPrice());
                 //发送消息
                 goodsUpdateMessage.setState(3);
