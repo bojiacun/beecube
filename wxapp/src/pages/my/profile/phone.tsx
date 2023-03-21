@@ -78,8 +78,14 @@ export default class Index extends Component<any, any> {
         clearInterval(this.timer);
     }
 
-    render() {
+    componentDidMount() {
         let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+        if(userInfo) {
+            this.mobileRef.current.value = userInfo.phone;
+        }
+    }
+
+    render() {
 
         return (
             <PageLayout statusBarProps={{title: '手机号认证'}}>
@@ -90,7 +96,7 @@ export default class Index extends Component<any, any> {
                                 <View>手机号</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
-                                <Input name={'mobile'} ref={this.mobileRef} value={userInfo?.phone} className={'text-right'}/>
+                                <Input name={'mobile'} ref={this.mobileRef} className={'text-right'}/>
                             </View>
                         </View>
                         <View className={'p-4 flex items-center justify-between'}>
