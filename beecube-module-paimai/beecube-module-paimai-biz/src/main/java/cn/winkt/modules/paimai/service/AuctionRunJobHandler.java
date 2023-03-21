@@ -431,7 +431,6 @@ public class AuctionRunJobHandler {
                 goodsOfferService.update(updateWrapper);
 
                 goodsUpdateMessage.setState(4);
-                goodsUpdateMessage.setState(4);
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
                 goodsService.updateById(goods);
             }
@@ -442,7 +441,6 @@ public class AuctionRunJobHandler {
                 maxOfferRow.setStatus(1);
                 goods.setDealPrice(maxOfferRow.getPrice());
                 //发送消息
-                goodsUpdateMessage.setState(3);
                 goodsUpdateMessage.setState(3);
                 goodsUpdateMessage.setDealUserId(maxOfferRow.getMemberId());
                 goodsUpdateMessage.setDealPrice(maxOfferRow.getPrice());
