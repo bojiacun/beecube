@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -68,6 +70,15 @@ public class AppMemberController extends JeecgController<AppMember, IAppMemberSe
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		QueryWrapper<AppMember> queryWrapper = QueryGenerator.initQueryWrapper(appMember, req.getParameterMap());
+		String keywords = req.getParameter("keywords");
+		if(StringUtils.isNotEmpty(keywords)) {
+			queryWrapper.and(qw -> {
+				qw.eq("id", keywords).or()
+						.like("nickname", keywords).or()
+						.like("realname", keywords).or()
+						.like("phone", keywords);
+			});
+		}
 		Page<AppMember> page = new Page<AppMember>(pageNo, pageSize);
 		IPage<AppMember> pageList = appMemberService.page(page, queryWrapper);
 		return Result.OK(pageList);

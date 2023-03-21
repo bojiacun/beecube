@@ -87,6 +87,10 @@ const AppMemberList = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: '用户ID',
+            dataField: 'id',
+        },
+        {
             text: '头像昵称',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
@@ -199,10 +203,10 @@ const AppMemberList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'nickname'}>会员昵称</FormLabel>
+                                    <FormLabel htmlFor={'keywords'}>关键字</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'nickname'} onChange={handleOnUsernameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'keywords'} onChange={handleOnUsernameChanged} placeholder={'会员昵称、真实姓名、手机号、ID等'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
