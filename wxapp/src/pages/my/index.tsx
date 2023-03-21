@@ -47,7 +47,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
         const {systemInfo, context} = this.props;
         const {userInfo} = context;
 
-        if(userInfo == null) return <PageLoading />;
+        if (userInfo == null) return <PageLoading/>;
 
         // @ts-ignore
         return (
@@ -151,15 +151,17 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
 
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>我的二维码</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
+                    <View>
+                        <Navigator url={'qrcode'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
+                                <View>我的二维码</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
 
 
                     {/*<View className={'flex items-center justify-between p-4'}>*/}

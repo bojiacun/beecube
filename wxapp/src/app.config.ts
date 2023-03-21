@@ -24,6 +24,7 @@ export default defineAppConfig({
         'pages/auction/detail',
         'pages/auction/list',
         'pages/my/index',
+        'pages/my/qrcode',
         'pages/my/wallet',
         'pages/my/wallet/charge',
         'pages/my/wallet/withdraw',
