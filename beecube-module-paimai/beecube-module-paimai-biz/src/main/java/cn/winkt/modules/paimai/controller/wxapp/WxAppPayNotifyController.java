@@ -127,7 +127,9 @@ public class WxAppPayNotifyController {
                             amount = amount.add(BigDecimal.valueOf(goods.getCommission()).multiply(goodsTotalPrice).divide(BigDecimal.valueOf(100), RoundingMode.CEILING));
                         }
                     }
-                    appApi.addMemberMoney(sharer.getId(), String.format("分销返佣, 单号为 %s", goodsOrder.getId()), amount.floatValue());
+                    if(amount.floatValue()>0) {
+                        appApi.addMemberMoney(sharer.getId(), String.format("分销返佣, 单号为 %s", goodsOrder.getId()), amount.floatValue());
+                    }
                 }
             }
         }
