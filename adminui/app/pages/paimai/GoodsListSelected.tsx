@@ -182,7 +182,23 @@ const GoodsListSelected = (props: any) => {
                 return <Badge variant={'dark'}>未知</Badge>
             }
         },
-
+        {
+            text: '成交状态',
+            isDummyField: true,
+            hidden: selectedPerformance.type !=1,
+            formatter(cell:number, row: any) {
+                if(row.state == 0) {
+                    return <Badge variant={'light'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 3) {
+                    return <Badge variant={'success'}>{row.state_dictText}</Badge>
+                }
+                else if(row.state == 4) {
+                    return <Badge variant={'dark'}>{row.state_dictText}</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
+        },
         {
             text: '显示状态',
             dataField: 'status_dictText',
