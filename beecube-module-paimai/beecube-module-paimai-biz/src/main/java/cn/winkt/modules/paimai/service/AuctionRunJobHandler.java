@@ -483,7 +483,7 @@ public class AuctionRunJobHandler {
 
             //发送消息
             try{
-                this.sendOfferResultMessage(goods);
+                this.sendOfferResultMessage(goods, AppContext.getApp());
             }
             catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -493,7 +493,8 @@ public class AuctionRunJobHandler {
     }
 
     @Async
-    void sendOfferResultMessage(Goods goods) throws InvocationTargetException, IllegalAccessException, WxErrorException {
+    void sendOfferResultMessage(Goods goods, String appId) throws InvocationTargetException, IllegalAccessException, WxErrorException {
+        AppContext.setApp(appId);
         LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
         queryWrapper.orderByDesc(GoodsOffer::getPrice);
