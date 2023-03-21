@@ -85,15 +85,10 @@ public class AppApiAppMemberController {
                 .set(AppMember::getCardFace, appMember.getCardFace())
                 .set(AppMember::getCardBack, appMember.getCardBack())
                 .set(AppMember::getIdCard, appMember.getIdCard())
+                .set(AppMember::getAuthStatus, 0)
                 .eq(AppMember::getId, old.getId());
 
-        //使命认真
-        if(StringUtils.isAnyEmpty(appMember.getCardBack(), appMember.getCardFace(), appMember.getRealname())) {
-           lambdaUpdateWrapper.set(AppMember::getAuthStatus, 0);
-        }
-        else {
-            lambdaUpdateWrapper.set(AppMember::getAuthStatus, 1);
-        }
+
         appMemberService.update(lambdaUpdateWrapper);
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
