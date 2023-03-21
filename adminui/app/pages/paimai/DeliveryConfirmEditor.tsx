@@ -58,13 +58,14 @@ const DeliveryConfirmEditor = (props: any) => {
                 show={!!model}
                 onHide={onHide}
                 size={'lg'}
+                centered
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
                     <Modal.Title id={'edit-user-model'}>确认发货</Modal.Title>
                 </Modal.Header>
-                <Formik innerRef={formikRef} initialValues={newModel} validationSchema={GoodsSchema}
+                <Formik innerRef={formikRef} initialValues={{}}  validationSchema={GoodsSchema}
                         onSubmit={handleOnSubmit}>
                     {(formik)=>{
                         return (
