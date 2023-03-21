@@ -495,6 +495,7 @@ public class AuctionRunJobHandler {
     @Async
     void sendOfferResultMessage(Goods goods, String appId) throws InvocationTargetException, IllegalAccessException, WxErrorException {
         AppContext.setApp(appId);
+        log.info("发送模板消息 {}", appId);
         LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
         queryWrapper.orderByDesc(GoodsOffer::getPrice);
