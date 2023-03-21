@@ -448,15 +448,22 @@ public class AuctionRunJobHandler {
                 paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
                 goodsService.updateById(goods);
 
+                //计算成交佣金
+                BigDecimal commission = BigDecimal.ZERO;
+                if(goods.getCommission() != null) {
+                    commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING);
+                }
 
+                BigDecimal price = BigDecimal.valueOf(maxOfferRow.getPrice());
+                BigDecimal newPrice = price.multiply(commission).add(price);
                 //生成成交订单
                 GoodsOrder goodsOrder = new GoodsOrder();
                 goodsOrder.setMemberId(maxOfferRow.getMemberId());
                 goodsOrder.setMemberName(maxOfferRow.getMemberName());
                 goodsOrder.setMemberAvatar(maxOfferRow.getMemberAvatar());
                 goodsOrder.setStatus(0);
-                goodsOrder.setPayedPrice(maxOfferRow.getPrice());
-                goodsOrder.setTotalPrice(maxOfferRow.getPrice());
+                goodsOrder.setPayedPrice(newPrice.floatValue());
+                goodsOrder.setTotalPrice(newPrice.floatValue());
                 goodsOrder.setGoodsCount(1);
                 goodsOrder.setType(1);
                 goodsOrder.setGoodsOfferId(maxOfferRow.getId());

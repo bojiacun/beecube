@@ -188,7 +188,7 @@ const GoodsListSelected = (props: any) => {
             hidden: selectedPerformance.type !=1,
             formatter(cell:number, row: any) {
                 if(row.state == 0) {
-                    return <Badge variant={'light'}>{row.state_dictText}</Badge>
+                    return <Badge variant={'light'}>未成交</Badge>
                 }
                 else if(row.state == 3) {
                     return <Badge variant={'success'}>{row.state_dictText}</Badge>
