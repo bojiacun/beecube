@@ -34,7 +34,6 @@ class App extends Component<PropsWithChildren> {
         request.get('/app/api/members/profile').then(res => {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
-            store.dispatch(setPageLoading(false));
             this.connectToServer(context);
         });
     }
@@ -102,6 +101,8 @@ class App extends Component<PropsWithChildren> {
             settingsPaimai.forEach(item => dist[item.descKey] = item.descValue);
             context.settings = dist;
             context.tabs = reses[1].data.result;
+            store.dispatch(setContext(context));
+            store.dispatch(setPageLoading(false));
 
             let position = Taro.getStorageSync("POSITION");
             if (position) {

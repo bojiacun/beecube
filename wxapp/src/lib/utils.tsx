@@ -132,6 +132,9 @@ export default {
         return pwd;
     },
     resolveHtmlImageWidth(html:string) {
-        return html?.replace(/<img /ig, '<img style="max-width:100%;height:auto;display:block;margin:10px 0;" ');
+        html = html?.replace(/<img /ig, '<img style="max-width:100%;width: 100%;height:auto;display:block;margin:10px 0;" ');
+        html = html.replace(/\\n/ig, '<br />');
+        html = html.replace(/\\r/ig, '<br />');
+        return html;
     }
 }

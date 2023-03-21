@@ -62,8 +62,8 @@ export default class Index extends Component<any, any> {
                         <View><Text className={'fa fa-eye mr-1'} />{detail.views}</View>
                     </View>
                 }
-                <View className={'mt-4'}>
-                    <RichText nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'}/>
+                <View className={'mt-4 relative w-full'}>
+                    <RichText className={'w-full'} nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'}/>
                 </View>
             </PageLayout>
         );
