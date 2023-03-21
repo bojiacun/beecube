@@ -59,9 +59,16 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
+        this.setState({userInfo: this.getEditUser()});
+    }
+
+    saveEditUser() {
+        Taro.setStorageSync("EDIT-USER", JSON.stringify(this.state.userInfo));
+    }
+    getEditUser() {
         let editUser = Taro.getStorageSync("EDIT-USER");
         if(editUser) {
-            this.setState({userInfo: JSON.parse(editUser)});
+            return JSON.parse(editUser);
         }
     }
 
@@ -82,9 +89,10 @@ export default class Index extends Component<any, any> {
         }).then((res: any) => {
             let result = JSON.parse(res.data);
             let avatar = result.result.url;
-            let userInfo = this.props.context.userInfo;
+            let userInfo = this.state.userInfo;
             userInfo.avatar = avatar;
             this.setState({userInfo: userInfo});
+            this.saveEditUser();
             utils.showSuccess(false, '上传成功');
         });
     }
@@ -111,6 +119,7 @@ export default class Index extends Component<any, any> {
                 let userInfo = this.state.userInfo;
                 userInfo.avatar = avatar;
                 this.setState({userInfo: userInfo});
+                this.saveEditUser();
                 utils.showSuccess(false, '上传成功');
             });
         });
@@ -197,6 +206,7 @@ export default class Index extends Component<any, any> {
         const index = e.detail.value;
         this.state.userInfo.sex = parseInt(index) + 1;
         this.setState({userInfo: this.state.userInfo});
+        this.saveEditUser();
     }
 
     updateUserInfo(userInfo) {
@@ -204,6 +214,7 @@ export default class Index extends Component<any, any> {
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
             this.setState({saving: false});
+            this.saveEditUser();
             utils.showSuccess(true);
         });
     }
