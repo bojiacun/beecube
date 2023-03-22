@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -44,6 +45,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -139,6 +141,9 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @RequestMapping(value = "/pay/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> payConfirm(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        if(goodsOrder.getStatus() != 0) {
+            throw new JeecgBootException("订单状态异常，请确认订单是否已经支付");
+        }
         goodsOrder.setStatus(1);
         goodsOrderService.updateById(goodsOrder);
         return Result.OK("编辑成功!");
@@ -146,8 +151,12 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @AutoLog(value = "订单表-确认收货")
     @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")
     @RequestMapping(value = "/delivery/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
+    @Transactional
     public Result<?> deliveryConfirm(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        if(goodsOrder.getStatus() != 2) {
+            throw new JeecgBootException("订单状态异常，请确认订单是否已经收货");
+        }
         goodsOrder.setStatus(3);
         goodsOrderService.updateById(goodsOrder);
         commissionService.dispatchComission(goodsOrder);
@@ -157,6 +166,9 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @ApiOperation(value = "订单表-确认发货", notes = "订单表-确认发货")
     @RequestMapping(value = "/delivery", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> delivery(@RequestBody GoodsOrder goodsOrder) {
+        if(goodsOrder.getStatus() != 1) {
+            throw new JeecgBootException("订单状态异常，请确认订单是否已经发货");
+        }
         goodsOrder.setStatus(2);
         goodsOrderService.updateById(goodsOrder);
         return Result.OK("编辑成功!");
