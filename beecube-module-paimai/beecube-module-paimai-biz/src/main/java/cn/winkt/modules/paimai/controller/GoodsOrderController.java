@@ -151,7 +151,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @AutoLog(value = "订单表-确认收货")
     @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")
     @RequestMapping(value = "/delivery/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> deliveryConfirm(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
         if(goodsOrder.getStatus() != 2) {

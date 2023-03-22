@@ -166,7 +166,7 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-确认收货")
     @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")
     @PutMapping("/confirm_delivery")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<GoodsOrder> confirmDelivery(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
         if(goodsOrder.getStatus() != 2) {
@@ -584,7 +584,7 @@ public class WxAppMemberController {
      * @throws WxPayException
      */
     @PostMapping("/goods/buy")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> payGoodsDeposit(@RequestBody PostOrderVO postOrderVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (postOrderVO.getAddress() == null) {
             throw new JeecgBootException("请选择有效的收货地址");
@@ -723,7 +723,7 @@ public class WxAppMemberController {
      * @throws WxPayException
      */
     @PostMapping("/deposits/performance")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> payPerformanceDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("操作失败找不到专场");
@@ -790,7 +790,7 @@ public class WxAppMemberController {
      * @throws WxPayException
      */
     @PostMapping("/deposits")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> payGoodsDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("操作失败找不到拍品");

@@ -85,7 +85,7 @@ public class GoodsCommonDescController extends JeecgController<GoodsCommonDesc, 
 	 @AutoLog(value = "拍品配置表-编辑")
 	 @ApiOperation(value="拍品配置表-编辑", notes="拍品配置表-编辑")
 	 @RequestMapping(value = "/updateAll", method = RequestMethod.POST)
-	 @Transactional
+	 @Transactional(rollbackFor = Exception.class)
 	 public Result<?> updateAll(@RequestBody JSONObject jsonObject) {
 		 //分组更新设置
 		 String appId = AppContext.getApp();

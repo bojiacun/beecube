@@ -112,7 +112,7 @@ public class AppMemberWithdrawController extends JeecgController<AppMemberWithdr
 	@AutoLog(value = "用户提现申请表-编辑")
 	@ApiOperation(value="用户提现申请表-编辑", notes="用户提现申请表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public Result<?> edit(@RequestBody AppMemberWithdraw appMemberWithdraw) {
 		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 

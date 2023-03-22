@@ -54,7 +54,7 @@ public class AuctionGoodsService {
     @Resource
     PaimaiWebSocket goodsOfferWebSocket;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> offer(JSONObject post) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         Goods goods = goodsService.getById(post.getString("id"));

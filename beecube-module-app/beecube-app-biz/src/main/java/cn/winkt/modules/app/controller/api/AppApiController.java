@@ -119,7 +119,7 @@ public class AppApiController {
      * @return
      */
     @PutMapping("/money/in")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean addMemeberMoney(@RequestParam("member_id") String memberId, @RequestParam("description") String description, @RequestParam("amount") Float amount) {
         AppMember appMember = appMemberService.getById(memberId);
         if(appMember == null) {

@@ -47,7 +47,7 @@ public class AppApiNotifyController {
      * @throws WxPayException
      */
     @RequestMapping(value = "/charge/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String chargeNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);

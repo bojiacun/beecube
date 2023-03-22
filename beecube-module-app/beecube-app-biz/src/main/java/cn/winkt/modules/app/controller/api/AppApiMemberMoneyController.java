@@ -88,7 +88,7 @@ public class AppApiMemberMoneyController {
      * @throws WxPayException
      */
     @PutMapping("/charge")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> charge(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException, WxPayException {
         double amount = data.getDoubleValue("amount");
         if(amount < 0.01) {

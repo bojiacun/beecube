@@ -122,7 +122,7 @@ public class AppSettingController extends JeecgController<AppSetting, IAppSettin
 	 @AutoLog(value = "应用配置表-编辑")
 	 @ApiOperation(value="应用配置表-编辑", notes="应用配置表-编辑")
 	 @RequestMapping(value = "/updateAll", method = RequestMethod.POST)
-	 @Transactional
+	 @Transactional(rollbackFor = Exception.class)
 	 public Result<?> updateAll(@RequestBody JSONObject jsonObject, @RequestParam String group) {
 		 //分组更新设置
 		 String appId = AppContext.getApp();

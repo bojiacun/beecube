@@ -307,7 +307,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     @AutoLog(value = "拍卖专场表-编辑")
     @ApiOperation(value = "拍卖专场表-编辑", notes = "拍卖专场表-编辑")
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
         //验证专场是否过了结束时间，如果过了，则不能修改任何信息

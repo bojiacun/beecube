@@ -304,7 +304,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @AutoLog(value = "出价记录表-确认成交")
     @ApiOperation(value = "出价记录表-确认成交", notes = "出价记录表-确认成交")
     @RequestMapping(value = "/deal", method = {RequestMethod.PUT, RequestMethod.POST})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> confirmDeal(@RequestParam String id, @RequestParam Integer status) {
         Goods goods = goodsService.getById(id);
         if(goods.getState() > 2) {

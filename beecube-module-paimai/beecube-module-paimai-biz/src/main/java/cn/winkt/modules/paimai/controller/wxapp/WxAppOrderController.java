@@ -72,7 +72,7 @@ public class WxAppOrderController {
      * @return
      */
     @PutMapping("/cancel_after")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> cancelAfter(@RequestParam String id) {
         GoodsOrderAfter goodsOrderAfter = goodsOrderAfterService.getById(id);
         goodsOrderAfterService.removeById(id);
@@ -95,7 +95,7 @@ public class WxAppOrderController {
      * @return
      */
     @PostMapping("/afters")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> newAfterOrder(@RequestBody JSONObject post) {
         String orderId = post.getString("orderId");
         String orderGoodsId = post.getString("orderGoodsId");

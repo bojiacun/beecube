@@ -54,7 +54,7 @@ public class WxAppPayNotifyController {
      * @throws WxPayException
      */
     @RequestMapping(value = "/deposit/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String depositNotify(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);
@@ -87,7 +87,7 @@ public class WxAppPayNotifyController {
      * @throws WxPayException
      */
     @RequestMapping(value = "/buyout/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String notifyGoodsOrder(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);
@@ -120,7 +120,7 @@ public class WxAppPayNotifyController {
      * @throws WxPayException
      */
     @RequestMapping(value = "/orders/{appId}", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String notifyGoodsOrderPayed(@RequestBody String xmlData, @PathVariable String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         //这里要设置APPID Context
         AppContext.setApp(appId);
