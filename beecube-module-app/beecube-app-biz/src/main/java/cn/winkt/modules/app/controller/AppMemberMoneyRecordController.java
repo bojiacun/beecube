@@ -8,6 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.app.vo.WithdrawDTO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -71,7 +75,26 @@ public class AppMemberMoneyRecordController extends JeecgController<AppMemberMon
 		IPage<AppMemberMoneyRecord> pageList = appMemberMoneyRecordService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+
+	 @AutoLog(value = "应用会员余额记录表-提现分页列表查询")
+	 @ApiOperation(value="应用会员余额记录表-提现分页列表查询", notes="应用会员余额记录表-提现分页列表查询")
+	 @GetMapping(value = "/withdraws")
+	 public Result<?> queryWithDrawList(WithdrawDTO withdrawDTO,
+										@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+										@RequestParam(name="pageSize", defaultValue="10") Integer pageSize
+									) {
+		 QueryWrapper<AppMemberMoneyRecord> queryWrapper = new QueryWrapper<>();
+		 queryWrapper.eq("mr.type", 4);
+		 queryWrapper.orderByAsc("mr.status");
+		 queryWrapper.orderByDesc("mr.create_time");
+		 if(StringUtils.isNotEmpty(withdrawDTO.getMemberName())) {
+			 queryWrapper.like("m.member_name", withdrawDTO.getMemberName());
+		 }
+
+		 Page<AppMemberMoneyRecord> page = new Page<>(pageNo, pageSize);
+		 IPage<WithdrawDTO> pageList = appMemberMoneyRecordService.selectPageDTO(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 * 添加
 	 *

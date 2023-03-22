@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.app.mapper.AppMemberMoneyRecordMapper">
-
+    <select id="selectPageDTO" resultType="cn.winkt.modules.app.vo.WithdrawDTO">
+        select mr.*,m.avatar as member_avatar, m.nickname as member_name from beecube_app_member_money_records mr
+            left join beecube_app_members m on m.id=mr.member_id ${ew.customSqlSegment}
+    </select>
 </mapper>
