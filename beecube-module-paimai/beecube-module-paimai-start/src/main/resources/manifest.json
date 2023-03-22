@@ -11,7 +11,8 @@
   "links": [
     {
       "label": "首页",
-      "url": "/pages/index/index"
+      "url": "/pages/index/index",
+      "tab": true
     },
     {
       "label": "图文类文章列表",
@@ -64,7 +65,8 @@
     },
     {
       "label": "专场列表（所有专场）",
-      "url": "/pages/performance/list"
+      "url": "/pages/performance/list",
+      "tab": true
     },
     {
       "label": "限时拍专场列表",
@@ -130,11 +132,13 @@
     },
     {
       "label": "购物车",
-      "url": "/pages/shop/cart"
+      "url": "/pages/shop/cart",
+      "tab": true
     },
     {
       "label": "个人中心",
-      "url": "/pages/my/index"
+      "url": "/pages/my/index",
+      "tab": true
     },
     {
       "label": "拍品分类列表",
@@ -161,7 +165,8 @@
         "label": "标签",
         "value": "class_id"
       },
-      "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类"
+      "suffixOptions": "请输入拍品分类的ID, 不输入则为全部分类",
+      "tab": true
     },
     {
       "label": "一口价拍品详情",
