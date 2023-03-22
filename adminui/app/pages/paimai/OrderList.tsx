@@ -7,13 +7,23 @@ import {
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
-import {Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
+import {User} from "react-feather";
 
+
+const ORDER_STATUS_COLORS:any = {
+    '-1': 'light',
+    '0': 'light',
+    '1': 'danger',
+    '2': 'success',
+    '3': 'dark',
+    '4': 'danger',
+}
 
 const OrderList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
@@ -126,12 +136,11 @@ const OrderList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 let previewUrl = row.memberAvatar;
                 return (
-                    <Row>
-                        <Col>
-                            <FigureImage src={previewUrl} roundedCircle style={{width: 40, height: 40}}/>
-                        </Col>
-                        <Col>{row.memberName}</Col>
-                    </Row>
+                    <div className={'d-flex align-items-center'}>
+                        {!previewUrl ? <User size={40}/> :
+                            <Image src={previewUrl} roundedCircle={true} width={40} height={40} className={'badge-minimal'}/>}
+                        <span className={'ml-1'}>{row.memberName}</span>
+                    </div>
                 );
             }
         },
@@ -141,7 +150,7 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
-            text: '已付金额',
+            text: '支付金额',
             dataField: 'payedPrice',
         },
         {
@@ -155,6 +164,12 @@ const OrderList = (props: any) => {
         {
             text: '状态',
             dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.status == -1) {
+                    return <Badge variant={'light'}>已取消</Badge>
+                }
+                return <Badge variant={ORDER_STATUS_COLORS[row.status]}>{row.status_dictText}</Badge>
+            }
         },
         {
             text: '订单类型',

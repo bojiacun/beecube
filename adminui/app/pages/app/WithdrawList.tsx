@@ -113,7 +113,7 @@ const WithdrawList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'confirm')}>确认打款</a>
+                        {row.status == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'confirm')}>确认打款</a>}
                     </div>
                 );
             }
