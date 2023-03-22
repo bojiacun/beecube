@@ -196,7 +196,7 @@ export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/remove`;
 
 
-export const API_APP_MONEY_RECORD_LIST = `${BASE_URL}/app/money/records/list`;
+export const API_APP_MONEY_RECORD_LIST = `${BASE_URL}/app/money/records/withdraws`;
 export const API_APP_MONEY_RECORD_EDIT = `${BASE_URL}/app/money/records/edit`;
 
 

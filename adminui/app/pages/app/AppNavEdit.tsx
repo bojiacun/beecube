@@ -6,16 +6,10 @@ import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
 //@ts-ignore
 import _ from 'lodash';
-import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
 import FileBrowserInput from "~/components/filebrowser/form";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import BootstrapSelect from "~/components/form/BootstrapSelect";
-import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
-import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
-import {AppLinks} from "~/routes/app/links";
 
 
 const formSchema = Yup.object().shape({

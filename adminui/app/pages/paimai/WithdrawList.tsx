@@ -5,33 +5,21 @@ import {
     PageSizeOptions,
     showDeleteAlert,
     showToastError,
-    showToastSuccess
 } from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import FigureImage from "react-bootstrap/FigureImage";
-import AuctionEditor from "~/pages/paimai/AuctionEditor";
-import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
-import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
-import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
-import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
+import {User} from "react-feather";
 
 
 
 
 const WithdrawList = (props: any) => {
-    const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
-    const [editModal, setEditModal] = useState<any>();
-    const [selectedAuction, setSelectedAuction] = useState<any>();
-    const [performanceListShow, setPerformanceListShow] = useState<boolean>(false);
-    const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
-    const deleteFetcher = useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
@@ -46,31 +34,20 @@ const WithdrawList = (props: any) => {
     useEffect(() => {
         if (editFetcher.data && editFetcher.type === 'done') {
             if (editFetcher.data.success) {
-                showToastSuccess(editModal.id ? '修改成功' : '新建成功');
                 searchFetcher.submit(searchState, {method: 'get'});
-                setEditModal(null);
             } else {
                 showToastError(editFetcher.data.message);
             }
         }
     }, [editFetcher.state]);
-    useEffect(() => {
-        if (deleteFetcher.data && deleteFetcher.type === 'done') {
-            if (deleteFetcher.data.success) {
-                stopPageLoading();
-                showToastSuccess('删除成功');
-                searchFetcher.submit(searchState, {method: 'get'});
-            } else {
-                showToastError(deleteFetcher.data.message);
-            }
-        }
-    }, [deleteFetcher.state]);
+
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'confirm':
-                //编辑
-                setEditModal(row);
+                showDeleteAlert(function () {
+                    editFetcher.submit({id: row.id, status: '1'}, {method: 'put', action: `/app/withdraws/edit?id=${row.id}`, replace: true});
+                }, '请确定已经给该提现打款，打款后才能确认已处理', '确认打款？');
                 break;
         }
     }
@@ -87,8 +64,18 @@ const WithdrawList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
-            text: '提现人ID',
+            text: '提现人',
             dataField: 'memberId',
+            isDummyField: true,
+            formatter: (cell: any, row: any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {!row.memberAvatar ? <User size={40}/> :
+                            <Image src={row.memberAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'}/>}
+                        <span className={'ml-1'}>{row.memberName}</span>
+                    </div>
+                );
+            }
         },
         {
             text: '提现金额',
@@ -101,6 +88,14 @@ const WithdrawList = (props: any) => {
         {
             text: '创建日期',
             dataField: 'createTime',
+        },
+        {
+            text: '状态',
+            dataField: 'status',
+            headerStyle: {width: 100},
+            formatter: (cell:any, row:any) => {
+                return row.status == 1 ? <Badge variant={'success'}>已处理</Badge> : <Badge variant={'danger'}>待处理</Badge>
+            }
         },
         {
             text: '操作',
@@ -123,16 +118,14 @@ const WithdrawList = (props: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
 
-    const handleOnAdd = () => {
-        setEditModal({});
-    }
+
     return (
         <>
             <Card>
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">拍卖会管理</h4>
+                            <h4 className="mb-0">提现申请</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -142,7 +135,6 @@ const WithdrawList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建拍卖会</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -152,10 +144,10 @@ const WithdrawList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>拍卖会名称</FormLabel>
+                                    <FormLabel htmlFor={'memberName'}>用户昵称</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'memberName'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
@@ -189,26 +181,6 @@ const WithdrawList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <PerformanceListSelector
-                show={performanceListShow}
-                setPerformanceListShow={()=>{
-                    loadData();
-                    setPerformanceListShow(false);
-                }}
-                selectedAuction={selectedAuction}
-            />
-            <PerformancesListSelected
-                show={selectedListShow}
-                selectedAuction={selectedAuction}
-                setSelectedListShow={()=>{
-                    loadData();
-                    setSelectedListShow(false);
-                }}
-            />
-            {editModal && <AuctionEditor model={editModal} onHide={()=>{
-                setEditModal(null);
-                loadData();
-            }} />}
         </>
     );
 }
