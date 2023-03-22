@@ -84,11 +84,9 @@ export default class Index extends Component<any, any> {
     confirmDelivery() {
         //用户确认收货
         this.setState({posting: true});
-        request.put('/paimai/api/members/confirm_delivery', {},{params: {id: this.state.detail.id}}).then(res=>{
-            if(res.data.result) {
-                this.setState({detail: res.data.result});
-            }
+        request.put('/paimai/api/members/confirm_delivery', {},{params: {id: this.state.detail.id}}).then(()=>{
             this.setState({posting: false});
+            utils.showSuccess(true, '确认收货成功');
         })
     }
 

@@ -55,7 +55,7 @@ export default class Index extends Component<any, any> {
         values.orderId = this.state.options.oid;
         values.orderGoodsId = this.state.options.ogid;
         request.post('/paimai/api/orders/afters', values).then(()=> {
-            utils.showSuccess(true);
+            utils.showSuccess(true, '申请成功');
         });
     }
 
