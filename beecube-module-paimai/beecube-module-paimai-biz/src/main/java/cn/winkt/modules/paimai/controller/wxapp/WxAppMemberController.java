@@ -111,12 +111,34 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-支付订单")
     @ApiOperation(value = "订单表-支付订单", notes = "订单表-支付订单")
     @PostMapping(value = "/orders/pay")
-    public Result<?> payOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public Result<?> payOrder(@RequestParam(name = "id", defaultValue = "") String id, @RequestBody AddressVO addressVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        if(addressVO == null || StringUtils.isEmpty(addressVO.getId())) {
+            throw new JeecgBootException("请选择收货地址");
+        }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+
+        order.setDeliveryId(addressVO.getId());
+        order.setDeliveryUsername(addressVO.getUsername());
+        order.setDeliveryCity(addressVO.getCity());
+        order.setDeliveryDistrict(addressVO.getDistrict());
+        order.setDeliveryPhone(addressVO.getPhone());
+        order.setDeliveryAddress(addressVO.getAddress());
+        order.setDeliveryProvince(addressVO.getProvince());
+
+        order.setDeliveryInfo(String.format("%s %s %s %s %s %s",
+                addressVO.getUsername(),
+                addressVO.getPhone(),
+                addressVO.getProvince(),
+                addressVO.getCity(),
+                addressVO.getDistrict(),
+                addressVO.getAddress()
+                ));
+
+        goodsOrderService.updateById(order);
 
         LambdaQueryWrapper<OrderGoods> orderGoodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
         orderGoodsLambdaQueryWrapper.eq(OrderGoods::getOrderId, id);
@@ -578,7 +600,14 @@ public class WxAppMemberController {
             goodsOrder.setMemberId(loginUser.getId());
             goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
             goodsOrder.setMemberAvatar(loginUser.getAvatar());
-            goodsOrder.setDeliveryInfo(String.format("%s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getAddress()));
+            goodsOrder.setDeliveryInfo(String.format("%s %s %s %s %s %s",
+                    postOrderVO.getAddress().getUsername(),
+                    postOrderVO.getAddress().getPhone(),
+                    postOrderVO.getAddress().getProvince(),
+                    postOrderVO.getAddress().getCity(),
+                    postOrderVO.getAddress().getDistrict(),
+                    postOrderVO.getAddress().getAddress()
+                    ));
             goodsOrder.setDeliveryId(postOrderVO.getAddress().getId());
             goodsOrder.setDeliveryAddress(postOrderVO.getAddress().getAddress());
             goodsOrder.setDeliveryPhone(postOrderVO.getAddress().getPhone());
