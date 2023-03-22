@@ -38,7 +38,7 @@ const handleOnResponse = async (response: AxiosResponse) => {
     }
     else if(res.code == 500) {
         Taro.showToast({icon: 'none', title: res.message || '服务器发生错误', duration: 1500}).then();
-        return response;
+        return Promise.reject(new Error(res.message || '服务器发生错误'));
     }
     return response;
 }

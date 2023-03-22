@@ -52,12 +52,6 @@ export default class Index extends Component<any, any> {
 
     }
 
-    // @ts-ignore
-    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-
-    }
-
-
     onLoad(options) {
         utils.showLoading();
         this.setState({id: options.id});
@@ -105,7 +99,13 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
-        this.loadDefaultAddress(this.state.detail);
+        if(this.state.detail) {
+            this.loadDefaultAddress(this.state.detail);
+            request.get("/paimai/api/members/orders/detail", {params: {id: this.state.detail.id}}).then(res => {
+                let data = res.data.result;
+                this.setState({detail: data});
+            });
+        }
     }
 
 
@@ -116,7 +116,7 @@ export default class Index extends Component<any, any> {
 
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/orders/pay', null, {params: {id: this.state.detail.id}}).then(res => {
+        request.post('/paimai/api/members/orders/pay', this.state.address, {params: {id: this.state.detail.id}}).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {

@@ -59,6 +59,9 @@ public class WxAppOrderController {
         if(StringUtils.isEmpty(description)) {
             throw new JeecgBootException("请填写备注信息");
         }
+        if(orderGoods.getIsAfter() == 1) {
+            throw new JeecgBootException("该商品已经申请售后，请耐心等待客服处理");
+        }
         orderGoods.setIsAfter(1);
         goodsOrder.setStatus(4);
         orderGoodsService.updateById(orderGoods);
