@@ -451,11 +451,11 @@ public class AuctionRunJobHandler {
                 //计算成交佣金
                 BigDecimal commission = BigDecimal.ZERO;
                 if(goods.getCommission() != null) {
-                    commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING);
+                    commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100), 4, RoundingMode.CEILING);
                 }
 
                 BigDecimal price = BigDecimal.valueOf(maxOfferRow.getPrice());
-                BigDecimal newPrice = price.multiply(commission).add(price);
+                BigDecimal newPrice = price.multiply(commission).add(price).setScale(2, RoundingMode.CEILING);
                 //生成成交订单
                 GoodsOrder goodsOrder = new GoodsOrder();
                 goodsOrder.setMemberId(maxOfferRow.getMemberId());
