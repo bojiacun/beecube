@@ -26,8 +26,7 @@ export default class Index extends Component<any, any> {
         this.handleWithdraw = this.handleWithdraw.bind(this);
         this.loadData = this.loadData.bind(this);
         this.template = (data: any) => {
-            console.log(data);
-            let money = data.money + '';
+            let money = numeral(data.money).format('0.00');
             return (
                 <View className={'bg-white px-4 py-2'}>
                     <View className={'flex justify-between'}>
