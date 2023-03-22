@@ -86,6 +86,14 @@ const WithdrawList = (props: any) => {
             dataField: 'amount',
         },
         {
+            text: '处理人',
+            dataField: 'resolver',
+        },
+        {
+            text: '处理时间',
+            dataField: 'resolveTime',
+        },
+        {
             text: '创建日期',
             dataField: 'createTime',
         },
@@ -137,7 +145,7 @@ const WithdrawList = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
+                            <searchFetcher.Form action={'/app/withdraws'} className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>

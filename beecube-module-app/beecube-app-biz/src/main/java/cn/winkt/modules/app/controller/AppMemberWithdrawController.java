@@ -1,16 +1,27 @@
 package cn.winkt.modules.app.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.app.entity.AppMember;
+import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
+import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
+import cn.winkt.modules.app.service.IAppMemberService;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.app.entity.AppMemberWithdraw;
 import cn.winkt.modules.app.service.IAppMemberWithdrawService;
@@ -27,6 +38,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -48,6 +60,12 @@ import io.swagger.annotations.ApiOperation;
 public class AppMemberWithdrawController extends JeecgController<AppMemberWithdraw, IAppMemberWithdrawService> {
 	@Autowired
 	private IAppMemberWithdrawService appMemberWithdrawService;
+
+	@Resource
+	private IAppMemberService appMemberService;
+
+	@Resource
+	private IAppMemberMoneyRecordService appMemberMoneyRecordService;
 	
 	/**
 	 * 分页列表查询
@@ -94,7 +112,30 @@ public class AppMemberWithdrawController extends JeecgController<AppMemberWithdr
 	@AutoLog(value = "用户提现申请表-编辑")
 	@ApiOperation(value="用户提现申请表-编辑", notes="用户提现申请表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
+	@Transactional
 	public Result<?> edit(@RequestBody AppMemberWithdraw appMemberWithdraw) {
+		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+		if(appMemberWithdraw.getStatus() == 1) {
+			AppMember member = appMemberService.getById(appMemberWithdraw.getMemberId());
+			if(member.getMoney() < appMemberWithdraw.getAmount()) {
+				throw new JeecgBootException("余额不足");
+			}
+			//处理了
+			appMemberWithdraw.setResolver(loginUser.getUsername());
+			appMemberWithdraw.setResolveTime(new Date());
+
+			//这里还得给用户减去余额
+			AppMemberMoneyRecord record = new AppMemberMoneyRecord();
+			record.setType(4);
+			record.setStatus(1);
+			record.setMoney(appMemberWithdraw.getAmount().doubleValue());
+			record.setMemberId(appMemberWithdraw.getMemberId());
+			record.setDescription("用户提现");
+			member.setMoney(BigDecimal.valueOf(member.getMoney()).subtract(BigDecimal.valueOf(appMemberWithdraw.getAmount())).setScale(2, RoundingMode.CEILING).floatValue());
+			appMemberService.updateById(member);
+			appMemberMoneyRecordService.save(record);
+		}
 		appMemberWithdrawService.updateById(appMemberWithdraw);
 		return Result.OK("编辑成功!");
 	}
