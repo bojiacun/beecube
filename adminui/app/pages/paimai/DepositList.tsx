@@ -63,7 +63,7 @@ const DepositList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/deposits/refund?id=${row.id}`, replace: true});
-                });
+                }, '确定要退款保证金吗', '退款确认');
                 break;
         }
     }
@@ -122,7 +122,7 @@ const DepositList = (props: any) => {
                 if(row.status == 1) {
                     return (
                         <div className={'d-flex align-items-center'}>
-                            <a href={'#'} onClick={() => handleOnAction(row, 'offers')}>退款</a>
+                            <a href={'#'} onClick={() => handleOnAction(row, 'refund')}>退款</a>
                         </div>
                     );
                 }

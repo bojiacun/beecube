@@ -181,7 +181,7 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-取消订单")
     @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")
     @PostMapping(value = "/orders/cancel")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> cancelOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();

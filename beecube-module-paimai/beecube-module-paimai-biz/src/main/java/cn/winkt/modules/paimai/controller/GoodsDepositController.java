@@ -130,7 +130,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
     @AutoLog(value = "订单售后表-编辑")
     @ApiOperation(value = "订单售后表-编辑", notes = "订单售后表-编辑")
     @RequestMapping(value = "/refund", method = {RequestMethod.DELETE})
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> refund(@RequestParam String id) throws WxPayException, InvocationTargetException, IllegalAccessException {
         GoodsDeposit deposit = goodsDepositService.getById(id);
 		deposit.setStatus(2);
@@ -147,7 +147,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
         if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
             throw new JeecgBootException("退款失败");
         }
-        return Result.OK("编辑成功!");
+        return Result.OK("退款成功!");
     }
 
     /**

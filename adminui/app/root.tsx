@@ -38,6 +38,16 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons';
 import {requireAuthenticated} from "~/utils/auth.server";
 import ServerEnv from "~/env";
+import {setLocale} from "yup";
+
+setLocale({
+    number: {
+        integer: '必须是整数',
+    },
+    mixed: {
+        notType: '请输入正确的内容',
+    }
+})
 library.add(fas, far);
 
 registerLocale('zh-cn', zhCN);

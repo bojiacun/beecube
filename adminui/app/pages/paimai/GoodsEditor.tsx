@@ -20,6 +20,20 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
+
+const GoodsSchema = Yup.object().shape({
+    title: Yup.string().required('必填字段'),
+    startPrice: Yup.number().required('必填字段'),
+    uprange: Yup.string().required('必填字段'),
+    startTime: Yup.string().required('必填字段'),
+    endTime: Yup.string().required('必填字段'),
+    images: Yup.string().required('必填字段'),
+    classId: Yup.number().required('必填字段'),
+    commission: Yup.number().integer().default(0),
+    delayTime: Yup.number().integer().default(0),
+    sortNum: Yup.number().integer().default(0),
+});
+
 const GoodsEditor = (props: any) => {
     const {model, onHide} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
@@ -29,15 +43,7 @@ const GoodsEditor = (props: any) => {
     const formikRef = useRef<any>();
 
 
-    const GoodsSchema = Yup.object().shape({
-        title: Yup.string().required('必填字段'),
-        startPrice: Yup.number().required('必填字段'),
-        uprange: Yup.string().required('必填字段'),
-        startTime: Yup.string().required('必填字段'),
-        endTime: Yup.string().required('必填字段'),
-        images: Yup.string().required('必填字段'),
-        classId: Yup.number().required('必填字段'),
-    });
+
 
     const handleOnSubmit = (values: any) => {
         values.type = 1;
@@ -115,7 +121,7 @@ const GoodsEditor = (props: any) => {
                                     <BootstrapInput label={'预估价'} name={'evaluatePrice'} />
                                     <BootstrapInput label={'保底价'} name={'minPrice'} />
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
-                                    <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比'}/>
+                                    <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比, 50%填50，1%填1'}/>
                                     <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />

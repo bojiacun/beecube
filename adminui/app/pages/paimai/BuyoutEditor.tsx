@@ -33,6 +33,10 @@ const BuyoutEditor = (props: any) => {
         startPrice: Yup.number().required('必填字段'),
         images: Yup.string().required('必填字段'),
         classId: Yup.number().required('必填字段'),
+        commission: Yup.number().integer(),
+        stock: Yup.number().integer(),
+        baseSales: Yup.number().integer().default(1),
+        sortNum: Yup.number().integer().default(0),
     });
 
     const handleOnSubmit = (values: any) => {

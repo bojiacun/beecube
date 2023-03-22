@@ -21,7 +21,7 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
 const OfferSchema = Yup.object().shape({
-    price: Yup.string().required('出价金额'),
+    price: Yup.number().required('出价金额'),
 });
 
 const OfferConfirmEditor = (props: any) => {

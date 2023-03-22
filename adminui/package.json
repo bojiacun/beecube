@@ -61,7 +61,7 @@
     "remix-utils": "^4.1.0",
     "semver": "^7.3.8",
     "sweetalert2": "^11.6.8",
-    "yup": "^0.32.11"
+    "yup": "1.0.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.7.4",

@@ -33,6 +33,7 @@ const AuctionEditor = (props: any) => {
         address: Yup.string().required('必填字段'),
         timeRange: Yup.string().required('必填字段'),
         preview: Yup.string().required('必填字段'),
+        sortNum: Yup.number().integer().default(0),
     });
 
     const handleOnSubmit = (values: any) => {

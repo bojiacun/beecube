@@ -11,6 +11,7 @@ import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 const ArticleClassSchema = Yup.object().shape({
     name: Yup.string().required('必填字段'),
+    sortNum: Yup.number().integer().default(0),
 });
 
 const ArticleClassEditor = (props: any) => {

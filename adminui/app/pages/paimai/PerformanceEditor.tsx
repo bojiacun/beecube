@@ -24,18 +24,20 @@ const PerformanceEditor = (props: any) => {
     if(type == 2) {
         GoodsSchema = Yup.object().shape({
             title: Yup.string().required('必填字段'),
-            deposit: Yup.string().required('必填字段'),
+            deposit: Yup.number().required('必填字段'),
             preview: Yup.string().required('必填字段'),
             startTime: Yup.string().required('必填字段'),
+            sortNum: Yup.number().integer().default(0),
         });
     }
     else {
         GoodsSchema = Yup.object().shape({
             title: Yup.string().required('必填字段'),
             startTime: Yup.string().required('必填字段'),
-            deposit: Yup.string().required('必填字段'),
+            deposit: Yup.number().required('必填字段'),
             endTime: Yup.string().required('必填字段'),
             preview: Yup.string().required('必填字段'),
+            sortNum: Yup.number().integer().default(0),
         });
     }
 

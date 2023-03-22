@@ -48,10 +48,12 @@ const ArticleEditor = (props: any) => {
     if (type == ArticleType.SERVICES) {
         ArticleSchema = Yup.object().shape({
             title: Yup.string().required('必填字段'),
+            views: Yup.number().integer().default(0),
         });
     } else {
         ArticleSchema = Yup.object().shape({
             classId: Yup.string().required('必填字段'),
+            views: Yup.number().integer().default(0),
         });
     }
 
