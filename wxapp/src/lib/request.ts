@@ -20,7 +20,7 @@ const handleOnResponse = async (response: AxiosResponse) => {
         //登录态失效，重新执行登录
         if(response.config.headers['X-Refresh-Token'] == 'yes') {
             Taro.showToast({icon: 'none', title: '很抱歉，登录失败!您将无法使用某些功能!', duration: 1500}).then();
-            return response;
+            return Promise.reject(new Error("无权限访问"));
         }
         const res:any = await Taro.login();
         const result:any = await instance.get('/app/api/wxapp/login', {params: {code: res.code}});

@@ -43,6 +43,8 @@ export default class Index extends Component<any, any> {
         this.pay = this.pay.bind(this);
         this.requestAfter = this.requestAfter.bind(this);
         this.cancel = this.cancel.bind(this);
+        this.loadDefaultAddress = this.loadDefaultAddress.bind(this);
+        this.confirmDelivery= this.confirmDelivery.bind(this);
     }
 
 
@@ -75,20 +77,37 @@ export default class Index extends Component<any, any> {
             }
             utils.hideLoading();
             this.setState({detail: data});
+            this.loadDefaultAddress(data);
         });
     }
 
+    confirmDelivery() {
+        //用户确认收货
+        this.setState({posting: true});
+        request.put('/paimai/api/members/confirm_delivery', {},{params: {id: this.state.detail.id}}).then(res=>{
+            if(res.data.result) {
+                this.setState({detail: res.data.result});
+            }
+            this.setState({posting: false});
+        })
+    }
+
+    loadDefaultAddress(detail:any) {
+        if(detail && detail.status == 0) {
+            //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
+            const address = Taro.getStorageSync('ADDRESS');
+            if (address) {
+                this.setState({address: JSON.parse(address)});
+            } else {
+                request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
+                    this.setState({address: res.data.result});
+                })
+            }
+        }
+    }
 
     componentDidShow() {
-        //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
-        const address = Taro.getStorageSync('ADDRESS');
-        if (address) {
-            this.setState({address: JSON.parse(address)});
-        } else {
-            request.get('/app/api/members/addresses/default', {params: {id: ''}}).then(res => {
-                this.setState({address: res.data.result});
-            })
-        }
+        this.loadDefaultAddress(this.state.detail);
     }
 
 
@@ -154,6 +173,15 @@ export default class Index extends Component<any, any> {
                     </View>
                 );
                 break;
+            case 2:
+                return (
+                    <View className={'flex items-center space-x-2'}>
+                        <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.confirmDelivery}>
+                            <View>确认收货</View>
+                        </Button>
+                    </View>
+                );
+                break;
         }
         return <></>
     }
@@ -206,7 +234,7 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>收货信息</View>
                         <View className={'space-y-4'}>
-                            {!detail.deliveryId &&
+                            {detail.status == 0  && !detail.deliveryId &&
                                 <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                                     <View className={'flex-1 space-y-2'}>
                                         <View className={'font-bold space-x-2'}>
@@ -233,6 +261,22 @@ export default class Index extends Component<any, any> {
                             }
                         </View>
                     </View>
+                    {detail?.status == 2 &&
+                        <View className={'bg-white p-4 rounded space-y-4'}>
+                            <View className={'font-bold'}>快递信息</View>
+                            <View className={'space-y-4'}>
+                                <View className={'flex items-center justify-between'}>
+                                    <View className={'text-gray-400'}>快递类型</View>
+                                    <View>{detail.deliveryCode}</View>
+                                </View>
+                                <View className={'flex items-center justify-between'}>
+                                    <View className={'text-gray-400'}>快递单号</View>
+                                    <View>{detail.deliveryNo}</View>
+                                </View>
+                            </View>
+                        </View>
+                    }
+
 
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>订单信息</View>
