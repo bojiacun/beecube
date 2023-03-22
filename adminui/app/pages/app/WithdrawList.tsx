@@ -78,12 +78,12 @@ const WithdrawList = (props: any) => {
             }
         },
         {
-            text: '提现金额',
-            dataField: 'money',
+            text: '联系方式',
+            dataField: 'memberPhone',
         },
         {
-            text: '描述信息',
-            dataField: 'description',
+            text: '提现金额',
+            dataField: 'amount',
         },
         {
             text: '创建日期',
