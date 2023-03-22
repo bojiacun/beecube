@@ -250,6 +250,7 @@ const OrderList = (props: any) => {
             </Card>
             {editModal && <DeliveryConfirmEditor model={editModal} onHide={()=>{
                 setEditModal(null);
+                loadData();
             }} />}
 
         </>
