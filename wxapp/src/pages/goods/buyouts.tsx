@@ -59,7 +59,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         return (
-            <PageLayout statusBarProps={{title: '华艺甄选'}} enableReachBottom={true} showTabBar={true}>
+            <PageLayout statusBarProps={{title: '一口价商品'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
             </PageLayout>
         );
