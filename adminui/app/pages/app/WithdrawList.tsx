@@ -46,7 +46,8 @@ const WithdrawList = (props: any) => {
         switch (e) {
             case 'confirm':
                 showDeleteAlert(function () {
-                    editFetcher.submit({id: row.id, status: '1'}, {method: 'put', action: `/app/withdraws/edit?id=${row.id}`, replace: true});
+                    row.status = 1;
+                    editFetcher.submit(row, {method: 'put', action: `/app/withdraws/edit?id=${row.id}`, replace: true});
                 }, '请确定已经给该提现打款，打款后才能确认已处理', '确认打款？');
                 break;
         }
