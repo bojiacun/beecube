@@ -51,7 +51,7 @@ export default class Index extends Component<any, any> {
     handleSubmit(e) {
         this.setState({saving: true});
         let values = e.detail.value;
-        values.type = this.state.types[this.state.typeIndex];
+        values.type = this.state.types[this.state.typeIndex].id;
         values.orderId = this.state.options.oid;
         values.orderGoodsId = this.state.options.ogid;
         request.post('/paimai/api/orders/afters', values).then(()=> {

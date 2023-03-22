@@ -36,7 +36,7 @@ export default class Index extends Component<any, any> {
         detail: null,
         posting: false,
         address: null,
-        afters: null,
+        afters: [],
     }
 
     constructor(props) {
@@ -46,6 +46,9 @@ export default class Index extends Component<any, any> {
         this.cancel = this.cancel.bind(this);
         this.loadDefaultAddress = this.loadDefaultAddress.bind(this);
         this.confirmDelivery = this.confirmDelivery.bind(this);
+        this.loadAfters = this.loadAfters.bind(this);
+        this.cancelAfter = this.cancelAfter.bind(this);
+        this.refreshData = this.refreshData.bind(this);
     }
 
 
@@ -85,19 +88,19 @@ export default class Index extends Component<any, any> {
             utils.showSuccess(true, '确认收货成功');
         })
     }
-    cancelAfter() {
+    cancelAfter(item:any) {
         this.setState({posting: true});
-        request.put('/paimai/api/orders/cancel_after', {}, {params: {id: this.state.detail.id}}).then(() => {
+        request.put('/paimai/api/orders/cancel_after', {}, {params: {id: item.id}}).then(() => {
             this.setState({posting: false});
             utils.showSuccess(false, '取消成功');
-            this.loadAfters(this.state.detail);
+            this.refreshData();
         })
     }
 
     loadAfters(detail) {
         if(detail.status == 4) {
             request.get('/paimai/api/orders/afters', {params: {id: detail.id}}).then(res => {
-                this.setState({afters: res.data.resultl});
+                this.setState({afters: res.data.result});
             })
         }
     }
@@ -119,12 +122,16 @@ export default class Index extends Component<any, any> {
     componentDidShow() {
         if (this.state.detail) {
             this.loadDefaultAddress(this.state.detail);
-            request.get("/paimai/api/members/orders/detail", {params: {id: this.state.detail.id}}).then(res => {
-                let data = res.data.result;
-                this.setState({detail: data});
-            });
-            this.loadAfters(this.state.detail);
+            this.refreshData();
         }
+    }
+
+    refreshData() {
+        request.get("/paimai/api/members/orders/detail", {params: {id: this.state.detail.id}}).then(res => {
+            let data = res.data.result;
+            this.setState({detail: data});
+            this.loadAfters(data);
+        });
     }
 
 
@@ -326,7 +333,7 @@ export default class Index extends Component<any, any> {
                         <View className={'bg-white p-4 rounded space-y-4'}>
                             <View className={'font-bold'}>售后信息</View>
                             <View className={'space-y-4'}>
-                                {afters.map((item: any) => {
+                                {afters?.map((item: any) => {
                                     return (
                                         <View className={'flex space-x-2 items-center'}>
                                             <View className={'flex-none'}>
@@ -335,12 +342,10 @@ export default class Index extends Component<any, any> {
                                             </View>
                                             <View className={'flex-1'}>
                                                 <View>{item.goodsName}</View>
-                                                <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
                                                 <View>{item.description}</View>
                                             </View>
                                             <View className={'flex flex-col space-y-2 items-center'}>
-                                                <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
-                                                <Button onClick={this.cancelAfter} style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}>取消售后</Button>
+                                                <Button onClick={()=>this.cancelAfter(item)} style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}>取消售后</Button>
                                             </View>
                                         </View>
                                     );

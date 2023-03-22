@@ -120,6 +120,9 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+        if(order.getStatus() != 0) {
+            throw new JeecgBootException("订单状态异常，不能支付");
+        }
 
         order.setDeliveryId(addressVO.getId());
         order.setDeliveryUsername(addressVO.getUsername());
@@ -166,6 +169,9 @@ public class WxAppMemberController {
     @Transactional
     public Result<GoodsOrder> confirmDelivery(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        if(goodsOrder.getStatus() != 2) {
+            throw new JeecgBootException("订单状态异常，无法确认收货");
+        }
         goodsOrder.setStatus(3);
         goodsOrderService.updateById(goodsOrder);
         commissionService.dispatchComission(goodsOrder);
@@ -175,12 +181,17 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-取消订单")
     @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")
     @PostMapping(value = "/orders/cancel")
+    @Transactional
     public Result<?> cancelOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+
+        if(order.getStatus() !=1 && order.getStatus() != 0) {
+            throw new JeecgBootException("订单状态异常，无法取消");
+        }
 
         if(order.getTransactionId() != null) {
             Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).multiply(BigDecimal.valueOf(100)).intValue();
@@ -197,6 +208,8 @@ public class WxAppMemberController {
                 throw new JeecgBootException("退款失败");
             }
         }
+        order.setStatus(-1);
+        goodsOrderService.updateById(order);
         return Result.OK("取消成功", order);
     }
 
@@ -211,6 +224,7 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
         queryWrapper.eq("member_id", loginUser.getId());
+        queryWrapper.ge("status", 0);
         Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
         pageList.getRecords().forEach(r -> {
