@@ -5,4 +5,8 @@
         select oa.*,og.goods_name,og.goods_image from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
         ${ew.customSqlSegment}
     </select>
+    <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.GoodsOrderAfterVO">
+        select oa.*,og.goods_name,og.goods_image from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

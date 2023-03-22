@@ -21,4 +21,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface GoodsOrderAfterMapper extends BaseMapper<GoodsOrderAfter> {
     IPage<GoodsOrderAfterVO> selectPageVO(Page<GoodsOrderAfter> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsOrderAfter> queryWrapper);
+    List<GoodsOrderAfterVO> selectListVO(@Param(Constants.WRAPPER) QueryWrapper<GoodsOrderAfter> queryWrapper);
 }

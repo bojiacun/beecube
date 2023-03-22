@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 订单售后表
@@ -28,5 +29,10 @@ public class GoodsOrderAfterServiceImpl extends ServiceImpl<GoodsOrderAfterMappe
     @Override
     public IPage<GoodsOrderAfterVO> selectPageVO(Page<GoodsOrderAfter> page, QueryWrapper<GoodsOrderAfter> queryWrapper) {
         return goodsOrderAfterMapper.selectPageVO(page, queryWrapper);
+    }
+
+    @Override
+    public List<GoodsOrderAfterVO> selectListVO(QueryWrapper<GoodsOrderAfter> queryWrapper) {
+        return goodsOrderAfterMapper.selectListVO(queryWrapper);
     }
 }

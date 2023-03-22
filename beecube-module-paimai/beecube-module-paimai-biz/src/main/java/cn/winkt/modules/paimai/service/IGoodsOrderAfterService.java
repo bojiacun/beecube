@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @Description: 订单售后表
  * @Author: jeecg-boot
@@ -17,4 +19,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface IGoodsOrderAfterService extends IService<GoodsOrderAfter> {
     IPage<GoodsOrderAfterVO> selectPageVO(Page<GoodsOrderAfter> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsOrderAfter> queryWrapper);
+
+    List<GoodsOrderAfterVO> selectListVO(@Param(Constants.WRAPPER) QueryWrapper<GoodsOrderAfter> queryWrapper);
 }

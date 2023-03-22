@@ -35,7 +35,8 @@ export default class Index extends Component<any, any> {
         id: 0,
         detail: null,
         posting: false,
-        address: null
+        address: null,
+        afters: null,
     }
 
     constructor(props) {
@@ -44,7 +45,7 @@ export default class Index extends Component<any, any> {
         this.requestAfter = this.requestAfter.bind(this);
         this.cancel = this.cancel.bind(this);
         this.loadDefaultAddress = this.loadDefaultAddress.bind(this);
-        this.confirmDelivery= this.confirmDelivery.bind(this);
+        this.confirmDelivery = this.confirmDelivery.bind(this);
     }
 
 
@@ -70,22 +71,39 @@ export default class Index extends Component<any, any> {
                 Taro.setStorageSync('ADDRESS', JSON.stringify(address));
             }
             utils.hideLoading();
-            this.setState({detail: data});
+            this.setState({detail: data, address: address});
             this.loadDefaultAddress(data);
+            this.loadAfters(data);
         });
     }
 
     confirmDelivery() {
         //用户确认收货
         this.setState({posting: true});
-        request.put('/paimai/api/members/confirm_delivery', {},{params: {id: this.state.detail.id}}).then(()=>{
+        request.put('/paimai/api/members/confirm_delivery', {}, {params: {id: this.state.detail.id}}).then(() => {
             this.setState({posting: false});
             utils.showSuccess(true, '确认收货成功');
         })
     }
+    cancelAfter() {
+        this.setState({posting: true});
+        request.put('/paimai/api/orders/cancel_after', {}, {params: {id: this.state.detail.id}}).then(() => {
+            this.setState({posting: false});
+            utils.showSuccess(false, '取消成功');
+            this.loadAfters(this.state.detail);
+        })
+    }
 
-    loadDefaultAddress(detail:any) {
-        if(detail && detail.status == 0) {
+    loadAfters(detail) {
+        if(detail.status == 4) {
+            request.get('/paimai/api/orders/afters', {params: {id: detail.id}}).then(res => {
+                this.setState({afters: res.data.resultl});
+            })
+        }
+    }
+
+    loadDefaultAddress(detail: any) {
+        if (detail && detail.status == 0) {
             //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
             const address = Taro.getStorageSync('ADDRESS');
             if (address) {
@@ -99,12 +117,13 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
-        if(this.state.detail) {
+        if (this.state.detail) {
             this.loadDefaultAddress(this.state.detail);
             request.get("/paimai/api/members/orders/detail", {params: {id: this.state.detail.id}}).then(res => {
                 let data = res.data.result;
                 this.setState({detail: data});
             });
+            this.loadAfters(this.state.detail);
         }
     }
 
@@ -160,7 +179,7 @@ export default class Index extends Component<any, any> {
                     <View className={'flex space-x-2'}>
                         <View className={'flex items-center'}>
                             <Button openType={'contact'} className={'btn btn-outline'}>
-                                <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '} />联系客服</View>
+                                <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
                             </Button>
                         </View>
                         <View className={'flex items-center space-x-2'}>
@@ -189,7 +208,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {detail, address} = this.state;
+        const {detail, address, afters} = this.state;
         const {systemInfo} = this.props;
         if (detail == null) return <PageLoading/>;
 
@@ -232,7 +251,7 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>收货信息</View>
                         <View className={'space-y-4'}>
-                            {detail.status == 0  && !detail.deliveryId &&
+                            {detail.status == 0 && !detail.deliveryId &&
                                 <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                                     <View className={'flex-1 space-y-2'}>
                                         <View className={'font-bold space-x-2'}>
@@ -274,8 +293,6 @@ export default class Index extends Component<any, any> {
                             </View>
                         </View>
                     }
-
-
                     <View className={'bg-white p-4 rounded space-y-4'}>
                         <View className={'font-bold'}>订单信息</View>
                         <View className={'space-y-4'}>
@@ -305,6 +322,32 @@ export default class Index extends Component<any, any> {
                             </View>
                         </View>
                     </View>
+                    {detail.status == 4 &&
+                        <View className={'bg-white p-4 rounded space-y-4'}>
+                            <View className={'font-bold'}>售后信息</View>
+                            <View className={'space-y-4'}>
+                                {afters.map((item: any) => {
+                                    return (
+                                        <View className={'flex space-x-2 items-center'}>
+                                            <View className={'flex-none'}>
+                                                <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
+                                                               src={utils.resolveUrl(item.goodsImage)}/>
+                                            </View>
+                                            <View className={'flex-1'}>
+                                                <View>{item.goodsName}</View>
+                                                <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
+                                                <View>{item.description}</View>
+                                            </View>
+                                            <View className={'flex flex-col space-y-2 items-center'}>
+                                                <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
+                                                <Button onClick={this.cancelAfter} style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}>取消售后</Button>
+                                            </View>
+                                        </View>
+                                    );
+                                })}
+                            </View>
+                        </View>
+                    }
                 </View>
                 <View style={{height: 100}}></View>
                 <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
