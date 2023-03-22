@@ -1,4 +1,5 @@
 import Taro from "@tarojs/taro";
+import SystemTabs from '../tabs';
 
 const indexOf = (arr, value) => {
     let exists = false;
@@ -60,7 +61,7 @@ export default {
         return style;
     },
     gotoLink: (link) => {
-        if (!indexOf([], link)) {
+        if (!indexOf(SystemTabs, link)) {
             Taro.navigateTo({url: link}).then();
         } else {
             Taro.switchTab({url: link}).then();
