@@ -90,6 +90,9 @@ public class WxAppMemberController {
     @Resource
     AuctionGoodsService auctionGoodsService;
 
+    @Resource
+    CommissionService commissionService;
+
 
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
@@ -134,6 +137,18 @@ public class WxAppMemberController {
         return Result.OK("", wxPayService.createOrder(request));
     }
 
+
+    @AutoLog(value = "订单表-确认收货")
+    @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")
+    @PutMapping("/confirm_delivery")
+    @Transactional
+    public Result<GoodsOrder> confirmDelivery(@RequestParam String id) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(id);
+        goodsOrder.setStatus(3);
+        goodsOrderService.updateById(goodsOrder);
+        commissionService.dispatchComission(goodsOrder);
+        return Result.OK(goodsOrder);
+    }
 
     @AutoLog(value = "订单表-取消订单")
     @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")

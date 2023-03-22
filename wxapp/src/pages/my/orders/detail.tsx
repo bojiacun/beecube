@@ -217,7 +217,7 @@ export default class Index extends Component<any, any> {
                                         </View>
                                         <View className={'flex flex-col space-y-2 items-center'}>
                                             <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
-                                            {item.isAfter == 0 && item.status > 1 &&
+                                            {item.isAfter == 0 && detail.status > 1 &&
                                                 <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
                                                            url={`after?ogid=${item.id}&oid=${item.orderId}`}>
                                                     <View>申请售后</View>
