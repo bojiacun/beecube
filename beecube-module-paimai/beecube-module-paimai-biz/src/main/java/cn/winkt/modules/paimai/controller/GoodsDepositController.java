@@ -2,6 +2,7 @@ package cn.winkt.modules.paimai.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +136,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
         GoodsDeposit deposit = goodsDepositService.getById(id);
 		deposit.setStatus(2);
         goodsDepositService.updateById(deposit);
-        Integer refundAmount = BigDecimal.valueOf(deposit.getPrice()).multiply(BigDecimal.valueOf(100)).intValue();
+        Integer refundAmount = BigDecimal.valueOf(deposit.getPrice()).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.CEILING).intValue();
         WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
                 .transactionId(deposit.getTransactionId())
                 .outRefundNo(deposit.getId())
