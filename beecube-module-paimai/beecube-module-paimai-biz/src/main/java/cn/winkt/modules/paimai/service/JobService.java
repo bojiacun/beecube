@@ -77,23 +77,12 @@ public class JobService {
                     //拍品状态为成交了
                     GoodsOffer maxOfferRow = goodsOfferService.getMaxOfferRow(goods.getId());
                     if (!maxOfferRow.getMemberId().equals(goodsDeposit.getMemberId())) {
-                        refund(goodsDeposit.getPrice(), goodsDeposit, appId);
-                    }
-                    else {
-                        //如果成交了，则看看订单有没有支付
-                        LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getGoodsOfferId, maxOfferRow.getId());
-                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getMemberId, maxOfferRow.getMemberId());
-
-                        GoodsOrder goodsOrder = goodsOrderService.getOne(goodsOrderLambdaQueryWrapper);
-                        if(goodsOrder != null && goodsOrder.getStatus() > 0) {
-                            refund(goodsDeposit.getPrice(), goodsDeposit, appId);
-                        }
+                        refund(goodsDeposit, appId);
                     }
                 }
                 else if(goods.getState() == 4) {
                     //如果是流拍了
-                    refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                    refund(goodsDeposit, appId);
                 }
             } else if (StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
                 Performance performance = performanceService.getById(goodsDeposit.getPerformanceId());
@@ -106,20 +95,8 @@ public class JobService {
 
                     List<GoodsOffer> memberPerformanceOffers = goodsOfferService.list(goodsOfferLambdaQueryWrapper);
 
-                    if(memberPerformanceOffers.size() > 0) {
-                        GoodsOffer maxOfferRow = memberPerformanceOffers.get(0);
-                        //如果用户在本场有中标
-                        LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getGoodsOfferId, maxOfferRow.getId());
-                        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getMemberId, maxOfferRow.getMemberId());
-
-                        GoodsOrder goodsOrder = goodsOrderService.getOne(goodsOrderLambdaQueryWrapper);
-                        if(goodsOrder != null && goodsOrder.getStatus() > 0) {
-                            refund(goodsDeposit.getPrice(), goodsDeposit, appId);
-                        }
-                    }
-                    else {
-                        refund(goodsDeposit.getPrice(), goodsDeposit, appId);
+                    if(memberPerformanceOffers.size() == 0) {
+                        refund(goodsDeposit, appId);
                     }
                 }
             }
@@ -128,8 +105,8 @@ public class JobService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void refund(Float amount, GoodsDeposit order, String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
-        Integer refundAmount = BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(100)).intValue();
+    public void refund(GoodsDeposit order, String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        Integer refundAmount = BigDecimal.valueOf(order.getPrice()).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.CEILING).intValue();
         log.info("原路返回支付保证金 {}", refundAmount);
         WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
                 .transactionId(order.getTransactionId())
