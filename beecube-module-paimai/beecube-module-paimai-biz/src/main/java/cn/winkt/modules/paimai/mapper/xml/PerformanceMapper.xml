@@ -8,7 +8,7 @@
             (select count(*) from paimai_goods_views gv where gv.performance_id=p.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.performance_id=p.id) as follow_count,
             (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count,
-            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id) as deposit_count
+            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id and gd.status > 0) as deposit_count
         from paimai_performances p left join paimai_auctions a on a.id=p.auction_id where p.id = #{id}
     </select>
 
@@ -19,7 +19,7 @@
             (select count(*) from paimai_goods_views gv where gv.performance_id=p.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.performance_id=p.id) as follow_count,
             (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count,
-            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id) as deposit_count
+            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id and gd.status > 0) as deposit_count
         from paimai_performances p left join paimai_auctions a on a.id=p.auction_id ${ew.customSqlSegment}
     </select>
     <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.PerformanceVO">
@@ -29,7 +29,7 @@
             (select count(*) from paimai_goods_views gv where gv.performance_id=p.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.performance_id=p.id) as follow_count,
             (select count(*) from paimai_goods g where g.performance_id=p.id) as goods_count,
-            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id) as deposit_count
+            (select count(*) from paimai_goods_deposits gd where gd.performance_id=p.id and gd.status > 0) as deposit_count
         from paimai_performances p left join paimai_auctions a on a.id=p.auction_id ${ew.customSqlSegment}
     </select>
 </mapper>

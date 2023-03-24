@@ -94,6 +94,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
             queryWrapper.eq("gd.performance_id", goodsDeposit.getPerformanceId());
         }
         queryWrapper.orderByDesc("gd.price");
+        queryWrapper.gt("gd.status", 0);
 
         Page<GoodsDeposit> page = new Page<GoodsDeposit>(pageNo, pageSize);
         IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
