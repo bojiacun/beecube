@@ -16,9 +16,11 @@ import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import groovyjarjarpicocli.CommandLine;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.config.AppContext;
 import org.springframework.scheduling.annotation.Async;
@@ -64,10 +66,13 @@ public class JobService {
     AppApi appApi;
 
     @Transactional(rollbackFor = Exception.class)
-    public void refundDeposit(String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
+    public void refundDeposit(String appId, String delay) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        Date distDate = DateUtils.addHours(new Date(), -Integer.parseInt(delay));
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        queryWrapper.lt(GoodsDeposit::getCreateTime, distDate);
         List<GoodsDeposit> goodsDeposits = goodsDepositService.list(queryWrapper);
+
 
         for (GoodsDeposit goodsDeposit : goodsDeposits) {
             if (StringUtils.isNotEmpty(goodsDeposit.getGoodsId())) {

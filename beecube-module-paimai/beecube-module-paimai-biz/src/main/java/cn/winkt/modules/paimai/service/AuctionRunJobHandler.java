@@ -284,7 +284,7 @@ public class AuctionRunJobHandler {
             log.info("开始处理App {} 的保证金退款", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
-                jobService.refundDeposit(appVO.getId());
+                jobService.refundDeposit(appVO.getId(), params);
             }
             catch (Exception exception) {
                 log.error(exception.getMessage(), exception);
