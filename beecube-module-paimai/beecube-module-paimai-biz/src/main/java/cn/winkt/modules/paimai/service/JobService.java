@@ -68,42 +68,61 @@ public class JobService {
     @Transactional(rollbackFor = Exception.class)
     public void refundDeposit(String appId, String delay) throws InvocationTargetException, IllegalAccessException, WxPayException {
         Date distDate = DateUtils.addHours(new Date(), -Integer.parseInt(delay));
-        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsDeposit::getStatus, 1);
-        queryWrapper.lt(GoodsDeposit::getCreateTime, distDate);
-        List<GoodsDeposit> goodsDeposits = goodsDepositService.list(queryWrapper);
+        //获取所有过期的专场
+        LambdaQueryWrapper<Performance> performanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        performanceLambdaQueryWrapper.lt(Performance::getEndTime, distDate);
+        List<Performance> performances = performanceService.list(performanceLambdaQueryWrapper);
+        for (Performance performance : performances) {
+            //获取专场所有的保证金记录
+            LambdaQueryWrapper<GoodsDeposit> goodsDepositLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            goodsDepositLambdaQueryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
+            goodsDepositLambdaQueryWrapper.eq(GoodsDeposit::getStatus, 1);
 
+            List<GoodsDeposit> performanceDeposits = goodsDepositService.list(goodsDepositLambdaQueryWrapper);
+            //查看当前交保证金的人有没有中标
+            for (GoodsDeposit deposit : performanceDeposits) {
+                String memberId = deposit.getMemberId();
+                //该用户在本专场没有中标一个拍品，则自动退款保证金
+                LambdaQueryWrapper<GoodsOffer> goodsOfferLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getMemberId, memberId);
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getPerformanceId, performance.getId());
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
 
-        for (GoodsDeposit goodsDeposit : goodsDeposits) {
-            if (StringUtils.isNotEmpty(goodsDeposit.getGoodsId())) {
-                //如果是拍品的
-                Goods goods = goodsService.getById(goodsDeposit.getGoodsId());
-                if (goods.getState() == 3) {
-                    //拍品状态为成交了
-                    GoodsOffer maxOfferRow = goodsOfferService.getMaxOfferRow(goods.getId());
-                    if (!maxOfferRow.getMemberId().equals(goodsDeposit.getMemberId())) {
-                        refund(goodsDeposit, appId);
-                    }
+                if(goodsOfferService.count(goodsOfferLambdaQueryWrapper) == 0) {
+                    refund(deposit, appId);
                 }
-                else if(goods.getState() == 4) {
-                    //如果是流拍了
-                    refund(goodsDeposit, appId);
-                }
-            } else if (StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
-                Performance performance = performanceService.getById(goodsDeposit.getPerformanceId());
-                if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || performance.getState() == 2) {
-                    //专场结束了,得看看这个用户在本场中是否有成交记录，如果有则不退款，如果没有则退款
-                    LambdaQueryWrapper<GoodsOffer> goodsOfferLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getPerformanceId, performance.getId());
-                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getMemberId, goodsDeposit.getMemberId());
-                    goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
+            }
+        }
 
-                    List<GoodsOffer> memberPerformanceOffers = goodsOfferService.list(goodsOfferLambdaQueryWrapper);
+        //获取所有过期的独立拍品
+        LambdaQueryWrapper<Goods> goodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        goodsLambdaQueryWrapper.isNull(Goods::getPerformanceId);
+        goodsLambdaQueryWrapper.and(qw -> {
+            qw.isNull(Goods::getActualEndTime).lt(Goods::getEndTime, distDate);
+            qw.or(qw2 -> {
+                qw2.isNotNull(Goods::getActualEndTime).lt(Goods::getActualEndTime, distDate);
+            });
+        });
 
-                    if(memberPerformanceOffers.size() == 0) {
-                        refund(goodsDeposit, appId);
-                    }
+        List<Goods> goodsList = goodsService.list(goodsLambdaQueryWrapper);
+        for (Goods g : goodsList) {
+            //获取拍品所有的保证金记录
+            LambdaQueryWrapper<GoodsDeposit> goodsDepositLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            goodsDepositLambdaQueryWrapper.eq(GoodsDeposit::getGoodsId, g.getId());
+            goodsDepositLambdaQueryWrapper.eq(GoodsDeposit::getStatus, 1);
+
+            List<GoodsDeposit> deposits = goodsDepositService.list(goodsDepositLambdaQueryWrapper);
+            for (GoodsDeposit deposit : deposits) {
+                //当前交保证金的人有没有中标该拍品
+                LambdaQueryWrapper<GoodsOffer> goodsOfferLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getMemberId, deposit.getMemberId());
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getGoodsId, g.getId());
+                goodsOfferLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
+
+                if(goodsOfferService.count(goodsOfferLambdaQueryWrapper) == 0) {
+                    refund(deposit, appId);
                 }
+
             }
         }
 
