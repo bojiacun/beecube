@@ -9,6 +9,7 @@ import cn.winkt.modules.app.service.IAppMemberService;
 import com.apifan.common.random.RandomSource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.RandomUtils;
 import org.jeecg.common.api.vo.Result;
@@ -30,6 +31,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/app/api/wxapp/login")
+@Slf4j
 public class AppApiWxappLoginController {
 
     @Resource
@@ -61,9 +63,10 @@ public class AppApiWxappLoginController {
             //设置上分享人ID
             appMember.setShareId(mid);
             appMemberService.save(appMember);
+            log.info("新用户刚建立ID：{}，分享人ID：{}", appMember.getId(), mid);
         }
         //执行登录操作
-        if(appMember.getStatus() == 0)  {
+        if(appMember.getStatus() == 0) {
             throw new JeecgBootException("登录失败，您的账户已被禁用");
         }
         String token = JwtUtil.sign(appMember.getUsername(), appMember.getPassword());
