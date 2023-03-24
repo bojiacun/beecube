@@ -38,15 +38,17 @@ export default class Index extends Component<any,any> {
 
     onShareAppMessage() {
         let mid = this.props.context?.userInfo?.id || '';
+        let settings = this.props.settings;
+        console.log('mid is',mid);
         return {
-            title: this.state.goods?.title,
+            title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
             path: '/pages/index/index?mid=' + mid
         }
     }
 
     render() {
         return (
-            <DiyPage pageIdentifier={'HOME'}/>
+            <DiyPage pageIdentifier={'HOME'} />
         )
     }
 }

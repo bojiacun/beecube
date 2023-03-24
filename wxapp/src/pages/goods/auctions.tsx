@@ -7,8 +7,15 @@ import classNames from "classnames";
 import styles from "../../flow.module.scss";
 import {Navigator, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
+import {connect} from "react-redux";
 const numeral = require('numeral');
 
+// @ts-ignore
+@connect((state: any) => (
+    {
+        settings: state.context.settings,
+    }
+))
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
@@ -58,8 +65,10 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
+        const {settings} = this.props;
+
         return (
-            <PageLayout statusBarProps={{title: '所有拍品'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: settings.auctionListTitle||'所有拍品'}} enableReachBottom={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
             </PageLayout>
         );
