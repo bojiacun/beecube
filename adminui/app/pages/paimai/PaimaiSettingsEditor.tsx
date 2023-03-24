@@ -37,7 +37,7 @@ const PaimaiSettingsEditor = (props:any) => {
                     </Card.Header>
                     <Card.Body>
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
-                        <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'开始提醒模板ID'} />
+                        <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID'} />
                         <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID'} />
