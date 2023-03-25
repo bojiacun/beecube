@@ -221,7 +221,10 @@ export const API_PAIMAI_ORDER_LIST = `${BASE_URL}/paimai/orders/list`;
 export const API_PAIMAI_ORDER_DELIVERY = `${BASE_URL}/paimai/orders/delivery`;
 export const API_PAIMAI_ORDER_DELIVERY_CONFIRM = `${BASE_URL}/paimai/orders/delivery/confirm`;
 export const API_PAIMAI_ORDER_PAY_CONFIRM = `${BASE_URL}/paimai/orders/pay/confirm`;
+
 export const API_PAIMAI_ORDER_AFTER_LIST = `${BASE_URL}/paimai/orders/afters/list`;
+export const API_PAIMAI_ORDER_AFTER_PASS = `${BASE_URL}/paimai/orders/afters/pass`;
+export const API_PAIMAI_ORDER_AFTER_DENY = `${BASE_URL}/paimai/orders/afters/deny`;
 
 export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;

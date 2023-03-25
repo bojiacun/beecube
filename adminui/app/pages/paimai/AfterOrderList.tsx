@@ -20,9 +20,7 @@ const AfterOrderList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
-    const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
-    const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
     const loadData = () => {
@@ -35,23 +33,13 @@ const AfterOrderList = (props: any) => {
         }
     }, [searchFetcher.state]);
 
-    useEffect(() => {
-        if (editFetcher.data && editFetcher.type === 'done') {
-            if (editFetcher.data.success) {
-                showToastSuccess(editModal.id ? '修改成功' : '新建成功');
-                searchFetcher.submit(searchState, {method: 'get'});
-                setEditModal(null);
-            } else {
-                showToastError(editFetcher.data.message);
-            }
-        }
-    }, [editFetcher.state]);
+
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
-                showToastSuccess('删除成功');
-                searchFetcher.submit(searchState, {method: 'get'});
+                showToastSuccess('处理成功');
+                loadData();
             } else {
                 showToastError(deleteFetcher.data.message);
             }
@@ -60,16 +48,19 @@ const AfterOrderList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'edit':
-                //编辑
-                setEditModal(row);
-                break;
-            case 'delete':
+            case 'after_pass':
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/auctions/delete?id=${row.id}`, replace: true});
-                });
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/orders/after_pass?id=${row.id}`, replace: true});
+                },'确认通过该用户的售后申请吗?', '确认通过');
+                break;
+            case 'after_deny':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/orders/after_pass?id=${row.id}`, replace: true});
+                },'确认拒绝该用户的售后申请吗?', '确认拒绝');
                 break;
         }
     }
@@ -98,7 +89,7 @@ const AfterOrderList = (props: any) => {
             dataField: 'createBy',
         },
         {
-            text: '申请内容',
+            text: '备注信息',
             dataField: 'description',
         },
         {
@@ -116,8 +107,9 @@ const AfterOrderList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'after_pass')}>申请通过</a>
                         <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'after_deny')}>拒绝申请</a>
                     </div>
                 );
             }
