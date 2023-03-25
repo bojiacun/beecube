@@ -131,9 +131,6 @@ const AfterOrderList = (props: any) => {
         setSearchState({...searchState, roleName: e.target.value});
     }
 
-    const handleOnAdd = () => {
-        setEditModal({});
-    }
     return (
         <>
             <Card>
