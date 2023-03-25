@@ -103,7 +103,7 @@ const AfterOrderList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 180},
+            headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
