@@ -36,6 +36,7 @@ public class GoodsOrderAfter {
 	/**售后类型（1退货、2换货）*/
 	@Excel(name = "售后类型（1退货、2换货）", width = 15)
     @ApiModelProperty(value = "售后类型（1退货、2换货）")
+    @Dict(dicCode = "paimai_order_after_type")
 	private java.lang.Integer type;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
