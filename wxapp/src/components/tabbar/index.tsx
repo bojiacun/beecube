@@ -54,7 +54,8 @@ const TabBar = (props: TabBarProps) => {
               style={{
                   backgroundColor: backgroundColor,
                   paddingBottom: safeBottom > 0 ? Taro.pxTransform(safeBottom) : '',
-                  height: Taro.pxTransform(56 + safeBottom)
+                  height: Taro.pxTransform(56 + safeBottom),
+                  zIndex: 9999,
               }}>
             {
                 tabs.map((item: TabBarItem) => {

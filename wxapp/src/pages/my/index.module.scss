@@ -1,13 +1,12 @@
 .userProfile {
   position: relative;
-  height: 280px;
   z-index: 0;
   overflow: visible;
   width: 100%;
   box-sizing: border-box;
   &:after {
     width: 140%;
-    height: 260px;
+    height: calc(100% - 20px);
     position: absolute;
     left: -20%;
     z-index: -1;

@@ -112,7 +112,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     </View>
 
                 </View>
-                <View className={'mt-6 bg-white divide-y divide-gray-100 text-gray-600'}>
+                <View className={'mt-4 bg-white divide-y divide-gray-100 text-gray-600'}>
                     <View>
                         <Navigator url={'wallet'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
