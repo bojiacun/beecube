@@ -14,8 +14,6 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 
 
-
-
 const AfterOrderList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
@@ -52,15 +50,23 @@ const AfterOrderList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/orders/after_pass?id=${row.id}`, replace: true});
-                },'确认通过该用户的售后申请吗?', '确认通过');
+                    deleteFetcher.submit({id: row.id}, {
+                        method: 'delete',
+                        action: `/paimai/orders/after_pass?id=${row.id}`,
+                        replace: true
+                    });
+                }, '确认通过该用户的售后申请吗?', '确认通过');
                 break;
             case 'after_deny':
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/orders/after_pass?id=${row.id}`, replace: true});
-                },'确认拒绝该用户的售后申请吗?', '确认拒绝');
+                    deleteFetcher.submit({id: row.id}, {
+                        method: 'delete',
+                        action: `/paimai/orders/after_pass?id=${row.id}`,
+                        replace: true
+                    });
+                }, '确认拒绝该用户的售后申请吗?', '确认拒绝');
                 break;
         }
     }
@@ -85,20 +91,20 @@ const AfterOrderList = (props: any) => {
                 return (
                     <>
                         <Row><Col>订单号：{row.orderId}</Col></Row>
-                        {row.orderGoods.map((item:any)=>{
-                            return (
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <div style={{width: 60, marginRight: 10}}>
-                                        <FigureImage src={item.goodsImage} style={{width: 60, height: 60}}/>
-                                    </div>
-                                    <div style={{flex:1, display: 'flex', justifyContent: 'space-around', flexDirection: 'column'}}>
-                                        <div> {item.goodsName} </div>
-                                        <div> ￥{item.goodsPrice} X {item.goodsCount} </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                            <div style={{width: 60, marginRight: 10}}>
+                                <FigureImage src={row.goodsImage} style={{width: 60, height: 60}}/>
+                            </div>
+                            <div style={{
+                                flex: 1,
+                                display: 'flex',
+                                justifyContent: 'space-around',
+                                flexDirection: 'column'
+                            }}>
+                                <div> {row.goodsName} </div>
+                                <div> ￥{row.goodsPrice} X {row.goodsCount} </div>
+                            </div>
+                        </div>
                     </>
                 );
             }
@@ -164,7 +170,8 @@ const AfterOrderList = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
+                            <searchFetcher.Form className={'form-inline justify-content-end'}
+                                                onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
@@ -174,7 +181,8 @@ const AfterOrderList = (props: any) => {
                                     <FormLabel htmlFor={'name'}>关键字</FormLabel>
                                     <Col>
                                         <InputGroup>
-                                            <FormControl name={'searchKey'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'searchKey'} onChange={handleOnNameChanged}
+                                                         placeholder={'请输入要搜索的内容'}/>
                                             <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
                                             </InputGroup.Append>
@@ -186,18 +194,21 @@ const AfterOrderList = (props: any) => {
                     </Row>
                 </div>
 
-                <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
+                <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns}
+                                bootstrap4
                                 data={list?.records}
                                 keyField={'id'}/>
 
 
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
-                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                        <Col sm={6}
+                             className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
                             className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
                         </Col>
-                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                        <Col sm={6}
+                             className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
                             <SinglePagination
                                 forcePage={searchState.pageNo - 1}
                                 className={'mb-0'}
