@@ -41,6 +41,14 @@ public class GoodsOrderAfter {
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private java.util.Date createTime;
+
+
+    private String memberId;
+    private String memberName;
+    private String memberAvatar;
+
+    private String resolver;
+
 	/**创建人*/
 	@Excel(name = "创建人", width = 15)
     @ApiModelProperty(value = "创建人")

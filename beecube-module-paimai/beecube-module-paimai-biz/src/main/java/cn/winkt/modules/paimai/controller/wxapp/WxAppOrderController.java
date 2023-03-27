@@ -14,8 +14,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,6 +99,7 @@ public class WxAppOrderController {
     @PostMapping("/afters")
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> newAfterOrder(@RequestBody JSONObject post) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String orderId = post.getString("orderId");
         String orderGoodsId = post.getString("orderGoodsId");
         String description = post.getString("description");
@@ -119,6 +122,10 @@ public class WxAppOrderController {
         goodsOrderAfter.setStatus(0);
         goodsOrderAfter.setType(post.getInteger("type"));
         goodsOrderAfter.setDescription(description);
+        goodsOrderAfter.setMemberAvatar(loginUser.getAvatar());
+        goodsOrderAfter.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getNickname));
+        goodsOrderAfter.setMemberId(loginUser.getId());
+
         goodsOrderAfterService.save(goodsOrderAfter);
 
         return Result.OK(true);

@@ -34,7 +34,10 @@ public class GoodsOrderAfterVO {
     private java.lang.String orderGoodsId;
     private String goodsName;
     private String goodsImage;
-
+    private String memberId;
+    private String memberName;
+    private String memberAvatar;
+    private String resolver;
     private Integer goodsCount;
     private Float goodsPrice;
     private java.lang.String appId;

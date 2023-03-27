@@ -15,10 +15,12 @@ import cn.winkt.modules.paimai.entity.OrderGoods;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.GoodsOrderAfterVO;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.GoodsOrderAfter;
 import cn.winkt.modules.paimai.service.IGoodsOrderAfterService;
@@ -136,8 +138,10 @@ public class GoodsOrderAfterController extends JeecgController<GoodsOrderAfter, 
     @DeleteMapping(value = "/after_pass")
     @Transactional(rollbackFor = Exception.class)
     public Result<?> passRequest(@RequestParam(name = "id", required = true) String id) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         GoodsOrderAfter goodsOrderAfter = goodsOrderAfterService.getById(id);
         goodsOrderAfter.setStatus(1);
+        goodsOrderAfter.setResolver(loginUser.getUsername());
         //申请通过，如果是退货，那么就要找到该拍品并且库存加一
         OrderGoods orderGoods = orderGoodsService.getById(goodsOrderAfter.getOrderGoodsId());
         Goods goods = goodsService.getById(orderGoods.getGoodsId());
@@ -152,8 +156,10 @@ public class GoodsOrderAfterController extends JeecgController<GoodsOrderAfter, 
     @DeleteMapping(value = "/after_deny")
     @Transactional(rollbackFor = Exception.class)
     public Result<?> denyRequest(@RequestParam(name = "id", required = true) String id) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         GoodsOrderAfter goodsOrderAfter = goodsOrderAfterService.getById(id);
         goodsOrderAfter.setStatus(2);
+        goodsOrderAfter.setResolver(loginUser.getUsername());
         goodsOrderAfterService.updateById(goodsOrderAfter);
         return Result.OK("删除成功!");
     }
