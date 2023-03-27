@@ -7,11 +7,24 @@ import {
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
-import {Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {
+    Button,
+    Card,
+    Col,
+    Form,
+    FormControl,
+    FormGroup,
+    FormLabel,
+    Image,
+    InputGroup,
+    Modal,
+    Row
+} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
+import {User} from "react-feather";
 
 
 const AfterOrderList = (props: any) => {
@@ -115,7 +128,19 @@ const AfterOrderList = (props: any) => {
         },
         {
             text: '申请人',
-            dataField: 'createBy',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 200},
+            formatter: (cell: any, row: any) => {
+                let previewUrl = row.memberAvatar;
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {!previewUrl ? <User size={40}/> :
+                            <Image src={previewUrl} roundedCircle={true} width={40} height={40} className={'badge-minimal'}/>}
+                        <span className={'ml-1'}>{row.memberName}</span>
+                    </div>
+                );
+            }
         },
         {
             text: '备注信息',
@@ -123,7 +148,7 @@ const AfterOrderList = (props: any) => {
         },
         {
             text: '处理人',
-            dataField: 'updateBy',
+            dataField: 'resolver',
         },
         {
             text: '状态',
