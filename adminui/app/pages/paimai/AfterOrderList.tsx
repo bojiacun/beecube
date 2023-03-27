@@ -77,8 +77,31 @@ const AfterOrderList = (props: any) => {
 
     const columns: ColumnDescription[] = [
         {
-            text: '订单号',
-            dataField: 'orderId',
+            text: '商品信息',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 300},
+            formatter: (cell: any, row: any) => {
+                return (
+                    <>
+                        <Row><Col>订单号：{row.orderId}</Col></Row>
+                        {row.orderGoods.map((item:any)=>{
+                            return (
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <div style={{width: 60, marginRight: 10}}>
+                                        <FigureImage src={item.goodsImage} style={{width: 60, height: 60}}/>
+                                    </div>
+                                    <div style={{flex:1, display: 'flex', justifyContent: 'space-around', flexDirection: 'column'}}>
+                                        <div> {item.goodsName} </div>
+                                        <div> ￥{item.goodsPrice} X {item.goodsCount} </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                    </>
+                );
+            }
         },
         {
             text: '售后类型',

@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.paimai.mapper.GoodsOrderAfterMapper">
     <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsOrderAfterVO">
-        select oa.*,og.goods_name,og.goods_image from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
+        select oa.*,og.goods_name,og.goods_image,og.goods_price,og.goods_count from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
         ${ew.customSqlSegment}
     </select>
     <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.GoodsOrderAfterVO">
-        select oa.*,og.goods_name,og.goods_image from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
+        select oa.*,og.goods_name,og.goods_image,og.goods_price,og.goods_count from paimai_order_afters oa left join paimai_order_goods og on og.id=oa.order_goods_id
             ${ew.customSqlSegment}
     </select>
 </mapper>

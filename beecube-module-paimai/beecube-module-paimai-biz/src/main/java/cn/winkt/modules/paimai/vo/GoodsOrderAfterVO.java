@@ -13,6 +13,7 @@ public class GoodsOrderAfterVO {
     private java.lang.String id;
     /**售后类型（1退货、2换货）*/
     @ApiModelProperty(value = "售后类型（1退货、2换货）")
+    @Dict(dicCode = "paimai_order_after_type")
     private java.lang.Integer type;
     /**创建时间*/
     private java.util.Date createTime;
@@ -33,5 +34,8 @@ public class GoodsOrderAfterVO {
     private java.lang.String orderGoodsId;
     private String goodsName;
     private String goodsImage;
+
+    private Integer goodsCount;
+    private Float goodsPrice;
     private java.lang.String appId;
 }
