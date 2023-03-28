@@ -353,11 +353,11 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             //计算成交佣金
             BigDecimal commission = BigDecimal.ZERO;
             if(goods.getCommission() != null) {
-                commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100),4, RoundingMode.CEILING);
+                commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100),4, RoundingMode.HALF_DOWN);
             }
 
-            BigDecimal price = BigDecimal.valueOf(goodsOffer.getPrice());
-            BigDecimal newPrice = price.multiply(commission).add(price).setScale(2, RoundingMode.CEILING);
+            BigDecimal price = BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN);
+            BigDecimal newPrice = price.multiply(commission).add(price).setScale(2, RoundingMode.HALF_DOWN);
 
             //生成成交订单
             GoodsOrder goodsOrder = new GoodsOrder();
