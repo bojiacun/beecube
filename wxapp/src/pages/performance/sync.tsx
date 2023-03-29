@@ -7,6 +7,7 @@ import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 import request from "../../lib/request";
+import PageLoading from "../../components/pageloading";
 
 const tabs: ListViewTabItem[] = [
     {
@@ -88,13 +89,24 @@ const tabs: ListViewTabItem[] = [
 ];
 
 export default class Index extends Component<any, any> {
+    state:any = {
+        source: null,
+    }
+
     loadData(page: number, tab: ListViewTabItem) {
         return request.get('/paimai/api/performances/list', {params: {type:2, source: tab.id, pageNo: page}});
     }
+
+    onLoad(options) {
+        this.setState({source: options?.source||1});
+    }
+
     render() {
+        if(this.state.source == null) return <PageLoading />;
+
         return (
             <PageLayout statusBarProps={{title: '同步拍'}} enableReachBottom={true}>
-                <ListView tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
+                <ListView defaultActiveKey={this.state.source} tabs={tabs} dataFetcher={this.loadData}  tabStyle={2} />
             </PageLayout>
         );
     }
