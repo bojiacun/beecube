@@ -58,6 +58,7 @@ export const loader: LoaderFunction = async ({request}) => {
         redirectUrl = perms == null ? '/': perms[1].route!;
     }
 
+
     return redirect(redirectUrl);
 }
 
