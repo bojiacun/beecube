@@ -38,14 +38,16 @@ class App extends Component<PropsWithChildren> {
         });
     }
     connectToServer(context) {
-        connectWebSocketServer('/auction/websocket/' + siteInfo.appId +'/'+context.userInfo.id).then(res => {
-            console.log('socket 连接成功');
-            this.socket = res;
-            this.socket.onMessage(this.onMessageReceive);
-            this.socket.onClose(this.onSocketClose);
-            this.socket.onError(this.onSocketError);
-            this.healthCheck(this.socket);
-        });
+        if(siteInfo?.appId && context.userInfo?.id) {
+            connectWebSocketServer('/auction/websocket/' + siteInfo.appId + '/' + context.userInfo.id).then(res => {
+                console.log('socket 连接成功');
+                this.socket = res;
+                this.socket.onMessage(this.onMessageReceive);
+                this.socket.onClose(this.onSocketClose);
+                this.socket.onError(this.onSocketError);
+                this.healthCheck(this.socket);
+            });
+        }
     }
     onSocketError(error) {
         console.log('发生错误，服务器连接断开,5秒后尝试重连', error);

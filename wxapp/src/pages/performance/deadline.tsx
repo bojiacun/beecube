@@ -52,14 +52,14 @@ const tabs: ListViewTabItem[] = [
                             <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
                         </View>
-                        <View className={'p-4 divide-y divide-gray-100'}>
+                        <View className={'p-4 space-y-2 divide-y divide-gray-100'}>
                             <View className={'space-y-1'}>
                                 <View className={'font-bold text-lg'}>
                                     {data.title}
                                 </View>
                                 <TimeCountDowner className={'flex text-sm'} endTime={data.endTime} startTime={data.startTime}/>
                             </View>
-                            <View className={'flex space-x-4'}>
+                            <View className={'flex pt-2 space-x-4'}>
                                 <Text>报名{data.depositCount}人</Text>
                                 <Text>围观{data.viewCount}人</Text>
                                 <Text>出价{data.offerCount}次</Text>
