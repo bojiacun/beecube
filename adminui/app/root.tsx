@@ -127,7 +127,8 @@ export function ErrorBoundary({error}: { error: Error }) {
 export function CatchBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
     const caught = useCatch();
-    const data = useLoaderData();
+    const data = useLoaderData()||{data:ServerEnv};
+
     if (caught.status === 401) {
         //登录态失效
         return (
