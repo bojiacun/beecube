@@ -8,6 +8,7 @@ import styles from "../../flow.module.scss";
 import {Navigator, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
+import PageLoading from "../../components/pageloading";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -19,12 +20,17 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
+        class_id: null,
     }
 
     constructor(props) {
         super(props);
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
+
+    onLoad(options) {
+        this.setState({class_id: options.class_id||''});
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -66,10 +72,11 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
+        if(this.state.class_id == null) return <PageLoading />;
 
         return (
             <PageLayout statusBarProps={{title: settings.auctionListTitle||'所有拍品'}} enableReachBottom={true}>
-                <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
+                <FlowListView tabs={this.state.tabs} defaultActiveKey={this.state.class_id} dataFetcher={this.loadData}/>
             </PageLayout>
         );
     }
