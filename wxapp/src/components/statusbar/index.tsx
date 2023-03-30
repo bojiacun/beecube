@@ -38,7 +38,7 @@ const StatusBar = (props: StatusbarProps): any => {
 
 
     const navigatorBarStyle: any = {
-        paddingTop: Taro.pxTransform(systemInfo.safeArea.top),
+        paddingTop: systemInfo.safeArea.top,
     };
 
     if (titleCenter) {
