@@ -44,9 +44,7 @@ const StatusBar = (props: StatusbarProps): any => {
     // 获取导航栏高度
     const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
 
-    const navigatorBarStyle: any = {
-        paddingTop: systemInfo.safeArea.top,
-    };
+    const navigatorBarStyle: any = {};
 
     if (titleCenter) {
         navigatorBarStyle.textAlign = 'center';
@@ -55,7 +53,7 @@ const StatusBar = (props: StatusbarProps): any => {
     navigatorBarStyle.top = 0;
     navigatorBarStyle.width = '100%';
     navigatorBarStyle.zIndex = 9999;
-    navigatorBarStyle.height = barHeight;
+    navigatorBarStyle.height = barHeight + barTop;
 
     const goBack = () => {
         Taro.navigateBack().then();
@@ -66,16 +64,19 @@ const StatusBar = (props: StatusbarProps): any => {
     }
 
     return (
-        <View className={classNames(styles.status_bar, className, 'flex items-center justify-center')} style={{...style, ...navigatorBarStyle}}>
-            {button !== null && button}
-            {button === null && pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
-            {pages?.length == 1 && pages[0].route != 'pages/index/index'
-                &&
-                <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
-                    <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
-                </View>}
-            {!logo && <Text>{title}</Text>}
-            {logo && <Image src={utils.resolveUrl(logo)} style={{height: '90%'}} mode={'heightFix'} className={'inline-block box-border'} />}
+        <View className={classNames(styles.status_bar, className)} style={{...style, ...navigatorBarStyle}}>
+            {barTop > 0 && <View style={{height: barTop, width: '100%'}}></View>}
+            <View className={'flex items-center justify-center'} style={{height: barHeight}}>
+                {button !== null && button}
+                {button === null && pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
+                {pages?.length == 1 && pages[0].route != 'pages/index/index'
+                    &&
+                    <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
+                        <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
+                    </View>}
+                {!logo && <Text>{title}</Text>}
+                {logo && <Image src={utils.resolveUrl(logo)} style={{height: '90%'}} mode={'heightFix'} className={'inline-block box-border'}/>}
+            </View>
         </View>
     );
 }
