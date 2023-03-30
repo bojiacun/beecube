@@ -37,6 +37,13 @@ const StatusBar = (props: StatusbarProps): any => {
     });
 
 
+    console.log('status bar: systemInfo is', systemInfo);
+    // 获取距上
+    const barTop = systemInfo.statusBarHeight;
+    const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+    // 获取导航栏高度
+    const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
+
     const navigatorBarStyle: any = {
         paddingTop: systemInfo.safeArea.top,
     };
@@ -48,6 +55,7 @@ const StatusBar = (props: StatusbarProps): any => {
     navigatorBarStyle.top = 0;
     navigatorBarStyle.width = '100%';
     navigatorBarStyle.zIndex = 9999;
+    navigatorBarStyle.height = barHeight;
 
     const goBack = () => {
         Taro.navigateBack().then();

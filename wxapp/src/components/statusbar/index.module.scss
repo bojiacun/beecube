@@ -1,18 +1,17 @@
 .status_bar {
-    height: 42px;
-    line-height: 1.2;
+    line-height: 1;
     box-sizing: content-box;
     position: relative;
     overflow: hidden;
     image.backbtn {
         position: absolute;
-        left: 10px;
-        bottom: 5px;
+        left: 10Px;
+        bottom: 5Px;
         z-index: 99;
-        width: 25px;
-        height: 25px;
-        border-radius: 50px;
-        padding: 3px;
+        width: 25Px;
+        height: 25Px;
+        border-radius: 50Px;
+        padding: 3Px;
         background: rgba(255,255,255,0.6);
         box-sizing: content-box;
     }
