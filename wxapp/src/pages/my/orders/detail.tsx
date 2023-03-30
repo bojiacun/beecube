@@ -175,6 +175,9 @@ export default class Index extends Component<any, any> {
             case 0:
                 return (
                     <View className={'flex items-center space-x-2'}>
+                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                            <View>取消订单</View>
+                        </Button>
                         <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
                             <View>立即支付</View>
                         </Button>

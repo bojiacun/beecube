@@ -224,7 +224,6 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
         queryWrapper.eq("member_id", loginUser.getId());
-        queryWrapper.ge("status", 0);
         Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
         pageList.getRecords().forEach(r -> {

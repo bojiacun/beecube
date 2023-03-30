@@ -16,6 +16,7 @@ const ORDER_STATUS = {
     '2': '待收货',
     '3': '已完成',
     '4': '售后',
+    '-1': '已取消',
 }
 
 export default class Index extends Component<any, any> {
@@ -36,6 +37,7 @@ export default class Index extends Component<any, any> {
             {label: '待收货', id: '2', template: this.renderTemplate},
             {label: '已完成', id: '3', template: this.renderTemplate},
             {label: '售后', id: '4', template: this.renderTemplate},
+            {label: '已取消', id: '-1', template: this.renderTemplate},
         ]
     }
 
