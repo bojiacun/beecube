@@ -488,20 +488,20 @@ public class WxAppMemberController {
                 Performance performance = performanceService.getById(performanceId);
                 if (type == 1) {
                     messagePool.setMessage(String.format("%s快开始了", performance.getTitle()));
-                    messagePool.setSendTime(DateUtils.addHours(performance.getStartTime(), -2));
+                    messagePool.setSendTime(performance.getStartTime());
                 } else if (type == 2) {
                     messagePool.setMessage(String.format("%s即将结束", performance.getTitle()));
-                    messagePool.setSendTime(DateUtils.addHours(performance.getEndTime(), -2));
+                    messagePool.setSendTime(performance.getEndTime());
                 }
             }
             if (StringUtils.isNotEmpty(goodsId)) {
                 Goods goods = goodsService.getById(goodsId);
                 if (type == 1) {
                     messagePool.setMessage(String.format("%s即将开始", goods.getTitle()));
-                    messagePool.setSendTime(DateUtils.addHours(goods.getStartTime(), -2));
+                    messagePool.setSendTime(goods.getStartTime());
                 } else if (type == 2) {
                     messagePool.setMessage(String.format("%s即将结束", goods.getTitle()));
-                    messagePool.setSendTime(DateUtils.addHours(goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime(), -2));
+                    messagePool.setSendTime(goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime());
                 }
             }
             messagePoolService.save(messagePool);

@@ -93,7 +93,7 @@ public class AuctionRunJobHandler {
                 WxMaService wxMaService = miniappServices.getWxMaService(appVO.getId());
                 //获取即将开始的专场提醒
                 Date now = new Date();
-                now = DateUtils.addMinutes(now, 5);
+                now = DateUtils.addHours(now, Integer.parseInt(params));
                 notifyPerformance(now, 1, wxMaService);
                 notifyPerformance(now, 2, wxMaService);
                 notifyGoods(now ,1, wxMaService);
@@ -110,7 +110,7 @@ public class AuctionRunJobHandler {
         LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
         messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
         messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
-        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, new Date());
+        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, now);
         messagePoolLambdaQueryWrapper.isNotNull(MessagePool::getGoodsId);
 
         List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
@@ -146,7 +146,7 @@ public class AuctionRunJobHandler {
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
                 data4.setName("thing5");
-                data4.setValue("你关注的拍品即将开始，请尽快出价!");
+                data4.setValue(messagePool.getMessage());
                 data.add(data4);
             }
             else if(type == 2) {
@@ -170,7 +170,7 @@ public class AuctionRunJobHandler {
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
                 data4.setName("thing8");
-                data4.setValue("你关注的拍品即将结束，请尽快出价!");
+                data4.setValue(messagePool.getMessage());
                 data.add(data4);
             }
             m.setData(data);
@@ -178,23 +178,6 @@ public class AuctionRunJobHandler {
             messagePool.setStatus(1);
             messagePool.setSendTime(new Date());
             messagePoolService.updateById(messagePool);
-        }
-
-        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Goods::getType, 1);
-        queryWrapper.eq(Goods::getStatus, 1);
-        if(type == 1) {
-            queryWrapper.lt(Goods::getStartTime, now);
-        }
-        if(type == 2) {
-            queryWrapper.and(qw -> {
-                queryWrapper.lt(Goods::getEndTime, now).or().lt(Goods::getActualEndTime, now);
-            });
-        }
-        List<Goods> goodsList = goodsService.list(queryWrapper);
-        for (Goods g : goodsList) {
-            //提醒用户啊
-
         }
     }
     private void notifyPerformance(Date now, Integer type, WxMaService wxMaService) throws WxErrorException {
@@ -236,7 +219,7 @@ public class AuctionRunJobHandler {
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
                 data4.setName("thing5");
-                data4.setValue("你关注的专场即将开始，请尽快出价!");
+                data4.setValue(messagePool.getMessage());
                 data.add(data4);
             }
             else if(type == 2) {
@@ -259,7 +242,7 @@ public class AuctionRunJobHandler {
 
                 WxMaSubscribeMessage.MsgData data4 = new WxMaSubscribeMessage.MsgData();
                 data4.setName("thing8");
-                data4.setValue("你关注的专场即将结束，请尽快出价!");
+                data4.setValue(messagePool.getMessage());
                 data.add(data4);
             }
             m.setData(data);
