@@ -174,7 +174,12 @@ public class AuctionRunJobHandler {
                 data.add(data4);
             }
             m.setData(data);
-            wxMaService.getMsgService().sendSubscribeMsg(m);
+            try{
+                wxMaService.getMsgService().sendSubscribeMsg(m);
+            }
+            catch (Exception exception) {
+                log.error(exception.getMessage(), exception);
+            }
             messagePool.setStatus(1);
             messagePool.setSendTime(new Date());
             messagePoolService.updateById(messagePool);
@@ -246,7 +251,12 @@ public class AuctionRunJobHandler {
                 data.add(data4);
             }
             m.setData(data);
-            wxMaService.getMsgService().sendSubscribeMsg(m);
+            try{
+                wxMaService.getMsgService().sendSubscribeMsg(m);
+            }
+            catch (Exception exception) {
+                log.error(exception.getMessage(), exception);
+            }
             messagePool.setStatus(1);
             messagePool.setSendTime(new Date());
             messagePoolService.updateById(messagePool);
