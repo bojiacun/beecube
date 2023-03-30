@@ -67,7 +67,12 @@ export default class Index extends Component<any, any> {
                         <View className={'text-gray-400'}>
                             单号：{data.id}
                         </View>
-                        <View className={'text-red-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>
+                        {data.status == -1 && <View className={'text-gray-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
+                        {data.status == 0 && <View className={'text-red-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
+                        {data.status == 1 && <View className={'text-blue-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
+                        {data.status == 2 && <View className={'text-red-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
+                        {data.status == 3 && <View className={'text-gray-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
+                        {data.status == 4 && <View className={'text-red-400 font-bold text-lg'}>{ORDER_STATUS[data.status]}</View>}
                     </View>
                     {data.orderGoods.map((item: any) => {
                         return (
@@ -104,7 +109,7 @@ export default class Index extends Component<any, any> {
         if (status === null) return <PageLoading/>;
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
-                <ListView autoRefresh={true} tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} tabStyle={2}/>
+                <ListView autoRefresh={true} tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} />
             </PageLayout>
         );
     }
