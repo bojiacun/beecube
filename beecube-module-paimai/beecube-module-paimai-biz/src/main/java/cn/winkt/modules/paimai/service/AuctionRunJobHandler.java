@@ -190,7 +190,7 @@ public class AuctionRunJobHandler {
         LambdaQueryWrapper<MessagePool> messagePoolLambdaQueryWrapper = new LambdaQueryWrapper<>();
         messagePoolLambdaQueryWrapper.eq(MessagePool::getStatus, 0);
         messagePoolLambdaQueryWrapper.eq(MessagePool::getType, type);
-        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, new Date());
+        messagePoolLambdaQueryWrapper.le(MessagePool::getSendTime, now);
         messagePoolLambdaQueryWrapper.isNotNull(MessagePool::getPerformanceId);
         List<MessagePool> messagePools = messagePoolService.list(messagePoolLambdaQueryWrapper);
 
