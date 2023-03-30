@@ -48,13 +48,18 @@ export default class Index extends Component<PropsWithChildren<any>> {
         const {userInfo} = context;
 
         if (userInfo == null) return <PageLoading/>;
+        // 获取距上
+        const barTop = systemInfo.statusBarHeight;
+        const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+        // 获取导航栏高度
+        const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
 
         // @ts-ignore
         return (
             <PageLayout showTabBar={true} showStatusBar={false} copyright={context.copyright}>
                 <View
                     className={classNames('text-white flex flex-col px-4', styles.userProfile)}
-                    style={{paddingTop: Taro.pxTransform(systemInfo.safeArea.top + 40)}}
+                    style={{paddingTop: barTop + barHeight}}
                 >
                     <View className={classNames('flex items-center justify-between space-x-2')}>
                         <View className={'flex items-center space-x-2'}>

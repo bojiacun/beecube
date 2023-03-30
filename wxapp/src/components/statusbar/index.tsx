@@ -37,7 +37,6 @@ const StatusBar = (props: StatusbarProps): any => {
     });
 
 
-    console.log('status bar: systemInfo is', systemInfo);
     // 获取距上
     const barTop = systemInfo.statusBarHeight;
     const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
