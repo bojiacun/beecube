@@ -7,6 +7,7 @@ import {
     API_APP_USER_QUERY,
     requestWithToken
 } from "~/utils/request.server";
+// @ts-ignore
 import _ from "lodash";
 
 function recursiveFilterPerms(perm:any, menus:any) {

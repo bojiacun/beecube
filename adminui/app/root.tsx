@@ -73,14 +73,7 @@ export async function loader({request}:any) {
         userInfo: userInfo,
         from: session.get("FROM"),
         app: session.get("APP"),
-        ENV: {
-            BASE_URL: ServerEnv.BASE_URL,
-            API_BASE_URL: ServerEnv.API_BASE_URL,
-            LOGIN_SUCCESS_URL: ServerEnv.LOGIN_SUCCESS_URL,
-            LOGIN_URL: ServerEnv.LOGIN_URL,
-            LOGOUT_URL: ServerEnv.LOGOUT_URL,
-            USER_INFO_URL: ServerEnv.USER_INFO_URL,
-        },
+        ENV: ServerEnv,
     });
 }
 
@@ -244,16 +237,17 @@ export default function App() {
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
             <div id='app' className='h-100'>
                 <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
-                    <AnimatePresence mode={'wait'} initial={false}>
-                        <motion.div
-                            key={location.pathname}
-                            initial={{scale: 0, opacity: 0}}
-                            animate={{scale: 1, opacity: 1}}
-                            exit={{scale: 0, opacity: 0}}
-                        >
-                            {outlet}
-                        </motion.div>
-                    </AnimatePresence>
+                    {/*<AnimatePresence mode={'wait'} initial={false}>*/}
+                    {/*    <motion.div*/}
+                    {/*        key={location.pathname}*/}
+                    {/*        initial={{opacity: 0}}*/}
+                    {/*        animate={{opacity: 1}}*/}
+                    {/*        exit={{opacity: 0}}*/}
+                    {/*    >*/}
+                    {/*        {outlet}*/}
+                    {/*    </motion.div>*/}
+                    {/*</AnimatePresence>*/}
+                    {outlet}
                 </Layout>
                 <ClipLoader
                     color={'#3366CC'}
