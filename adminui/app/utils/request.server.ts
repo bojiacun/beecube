@@ -269,7 +269,6 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
         options.headers['X-App-Id'] = session.get("APPID");
     }
     const res = await fetch(url, options);
-    console.log(res);
     if(res.status != 200) {
         throw new Response(res.statusText, {status: res.status});
     }
