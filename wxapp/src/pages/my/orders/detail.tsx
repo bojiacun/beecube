@@ -88,7 +88,8 @@ export default class Index extends Component<any, any> {
             utils.showSuccess(true, '确认收货成功');
         })
     }
-    cancelAfter(item:any) {
+
+    cancelAfter(item: any) {
         this.setState({posting: true});
         request.put('/paimai/api/orders/cancel_after', {}, {params: {id: item.id}}).then(() => {
             this.setState({posting: false});
@@ -98,7 +99,7 @@ export default class Index extends Component<any, any> {
     }
 
     loadAfters(detail) {
-        if(detail.status == 4) {
+        if (detail.status == 4) {
             request.get('/paimai/api/orders/afters', {params: {id: detail.id}}).then(res => {
                 this.setState({afters: res.data.result});
             })
@@ -171,41 +172,54 @@ export default class Index extends Component<any, any> {
 
     renderButton() {
         const {detail} = this.state;
+        const {systemInfo} = this.props;
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
+
         switch (detail.status) {
             case 0:
                 return (
-                    <View className={'flex items-center space-x-2'}>
-                        <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
-                            <View>取消订单</View>
-                        </Button>
-                        <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
-                            <View>立即支付</View>
-                        </Button>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View className={'flex items-center space-x-2'}>
+                            <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                <View>取消订单</View>
+                            </Button>
+                            <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
+                                <View>立即支付</View>
+                            </Button>
+                        </View>
                     </View>
                 );
                 break;
             case 1:
                 return (
-                    <View className={'flex space-x-2'}>
-                        <View className={'flex items-center'}>
-                            <Button openType={'contact'} className={'btn btn-outline'}>
-                                <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
-                            </Button>
-                        </View>
-                        <View className={'flex items-center space-x-2'}>
-                            <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
-                                <View>取消订单</View>
-                            </Button>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View className={'flex space-x-2'}>
+                            <View className={'flex items-center'}>
+                                <Button openType={'contact'} className={'btn btn-outline'}>
+                                    <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
+                                </Button>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                    <View>取消订单</View>
+                                </Button>
+                            </View>
                         </View>
                     </View>
                 );
                 break;
             case 2:
                 return (
-                    <View className={'flex items-center space-x-2'}>
-                        <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.confirmDelivery}>
-                            <View>确认收货</View>
-                        </Button>
+                    <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                          style={{paddingBottom: safeBottom}}>
+                        <View className={'flex items-center space-x-2'}>
+                            <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.confirmDelivery}>
+                                <View>确认收货</View>
+                            </Button>
+                        </View>
                     </View>
                 );
                 break;
@@ -219,11 +233,8 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {detail, address, afters} = this.state;
-        const {systemInfo} = this.props;
         if (detail == null) return <PageLoading/>;
 
-        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
-        if (safeBottom > 10) safeBottom -= 10;
 
         return (
             <PageLayout statusBarProps={{title: '订单详情'}}>
@@ -348,7 +359,8 @@ export default class Index extends Component<any, any> {
                                                 <View>{item.description}</View>
                                             </View>
                                             <View className={'flex flex-col space-y-2 items-center'}>
-                                                <Button onClick={()=>this.cancelAfter(item)} style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}>取消售后</Button>
+                                                <Button onClick={() => this.cancelAfter(item)} style={{padding: 5, fontSize: 12}}
+                                                        className={'btn btn-outline'}>取消售后</Button>
                                             </View>
                                         </View>
                                     );
@@ -358,10 +370,7 @@ export default class Index extends Component<any, any> {
                     }
                 </View>
                 <View style={{height: 100}}></View>
-                <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
-                      style={{paddingBottom: safeBottom}}>
-                    {this.renderButton()}
-                </View>
+                {this.renderButton()}
             </PageLayout>
         );
     }
