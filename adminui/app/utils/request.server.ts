@@ -263,6 +263,7 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
     options.headers = options.headers || {};
     options.headers['X-Access-Token'] = user.token;
     options.headers['Authorization'] = user.token;
+    options.requestRedirect = "follow";
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     if(session.has("APPID")) {
         options.headers['X-App-Id'] = session.get("APPID");
