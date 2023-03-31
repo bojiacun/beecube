@@ -7,6 +7,7 @@ import me.chanjar.weixin.open.bean.message.WxOpenXmlMessage;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 
 @RestController
 @RequestMapping("/app/wxopen/event")
@@ -18,8 +19,18 @@ public class AppWxOpenEventController {
 
     @ResponseBody
     @RequestMapping(value = "/authorize", method = {RequestMethod.POST, RequestMethod.PUT})
-    public String authorize(@RequestBody String postData) {
+    public String authorize(@RequestBody String postData,
+                            @RequestParam String signature,
+                            @RequestParam String timestamp,
+                            @RequestParam String nonce,
+                            @RequestParam String encrypt_type,
+                            @RequestParam String msg_signature
+    ) {
         log.info(postData);
+        WxOpenXmlMessage wxOpenXmlMessage = WxOpenXmlMessage.fromEncryptedXml(postData, miniAppOpenService.getWxOpenConfigStorage(), timestamp, nonce, msg_signature);
+        if(wxOpenXmlMessage != null && "component_verify_ticket".equals(wxOpenXmlMessage.getInfoType())) {
+            miniAppOpenService.getWxOpenConfigStorage().setComponentVerifyTicket(wxOpenXmlMessage.getComponentVerifyTicket());
+        }
         return "success";
     }
 
