@@ -158,7 +158,8 @@ export default class Index extends Component<any, any> {
                 if (parseInt(settings.isDealCommission) == 1) {
                     if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                         //落槌价显示佣金
-                        goods.dealPrice = (goods.dealPrice + (goods.dealPrice * parseFloat(goods.commission)));
+                        const commission = goods.commission/100;
+                        goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
                     }
                 }
 
@@ -264,7 +265,8 @@ export default class Index extends Component<any, any> {
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                 //落槌价显示佣金
-                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * parseFloat(goods.commission)));
+                const commission = goods.commission/100;
+                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
         }
         if (!goods.currentPrice) {

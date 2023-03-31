@@ -55,7 +55,8 @@ export default class Index extends Component<any, any> {
                         newGoodsList.forEach(item=>{
                             if(parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //落槌价显示佣金
-                                item.dealPrice = (item.dealPrice + (item.dealPrice * parseFloat(item.commission)));
+                                const commission = item.commission/100;
+                                item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
                     }
@@ -71,7 +72,8 @@ export default class Index extends Component<any, any> {
                         newGoodsList.forEach(item=>{
                             if(parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //落槌价显示佣金
-                                item.dealPrice = (item.dealPrice + (item.dealPrice * parseFloat(item.commission)));
+                                const commission = item.commission/100;
+                                item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
                     }
