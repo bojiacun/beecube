@@ -43,12 +43,21 @@ export default class Index extends Component<any, any> {
 
 
     loadData(id, page: number, clear = false) {
+        const {settings} = this.props;
         return request.get('/paimai/api/goods/list', {params: {performanceId: id, pageNo: page}}).then(res => {
             if (clear) {
                 let newGoodsList = res.data.result.records;
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
                 } else {
+                    if(parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item=>{
+                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                                //落槌价显示佣金
+                                item.dealPrice = (item.dealPrice + (item.dealPrice * parseFloat(item.commission)));
+                            }
+                        })
+                    }
                     this.setState({goodsList: newGoodsList, loadingMore: false, noMore: false});
                 }
             } else {
@@ -57,6 +66,14 @@ export default class Index extends Component<any, any> {
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
                 } else {
+                    if(parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item=>{
+                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                                //落槌价显示佣金
+                                item.dealPrice = (item.dealPrice + (item.dealPrice * parseFloat(item.commission)));
+                            }
+                        })
+                    }
                     this.setState({noMore: false, loadingMore: false, goodsList: [...goodsList, ...newGoodsList]});
                 }
             }

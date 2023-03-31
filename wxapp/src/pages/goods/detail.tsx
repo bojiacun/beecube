@@ -147,26 +147,34 @@ export default class Index extends Component<any, any> {
                 this.setState({goods: goods});
                 break;
             case 'MSG_TYPE_AUCTION_CHANGED':
-                if(msg.goodsId != goods.id) return;
+                if (msg.goodsId != goods.id) return;
+                const {settings} = this.props;
                 goods.startTime = message.startTime;
                 goods.endTime = message.endTime;
                 goods.actualEndTime = message.actualEndTime;
                 goods.state = message.state;
                 goods.dealPrice = message.dealPrice;
-                this.setState({goods: goods});
-                if(msg.state == 3) {
-                    //成交了
-                    if(msg.dealUserId == userInfo.id) {
-                        //中拍的人就是我
-                        utils.showMessage('恭喜您成功拍到此拍品，是否立即支付拍品款项?', function() {
-                            Taro.navigateTo({url: '/pages/my/orders?status=0'}).then();
-                        }, true,()=>{}, '恭喜中拍', '立即支付', '稍后支付').then();
-                    }
-                    else {
-                        utils.showMessage('很遗憾您没有中拍!').then();
+
+                if (parseInt(settings.isDealCommission) == 1) {
+                    if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                        //落槌价显示佣金
+                        goods.dealPrice = (goods.dealPrice + (goods.dealPrice * parseFloat(goods.commission)));
                     }
                 }
-                else if(msg.state == 4){
+
+                this.setState({goods: goods});
+                if (msg.state == 3) {
+                    //成交了
+                    if (msg.dealUserId == userInfo.id) {
+                        //中拍的人就是我
+                        utils.showMessage('恭喜您成功拍到此拍品，是否立即支付拍品款项?', function () {
+                            Taro.navigateTo({url: '/pages/my/orders?status=0'}).then();
+                        }, true, () => {
+                        }, '恭喜中拍', '立即支付', '稍后支付').then();
+                    } else {
+                        utils.showMessage('很遗憾您没有中拍!').then();
+                    }
+                } else if (msg.state == 4) {
                     utils.showMessage('很遗憾您没有中拍!').then();
                 }
                 break;
@@ -196,13 +204,13 @@ export default class Index extends Component<any, any> {
         const {userInfo} = context;
         const {goods} = this.state;
         let checkResult = await request.get('/paimai/api/members/check');
-        if(!checkResult.data.result) {
-            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function(){
+        if (!checkResult.data.result) {
+            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
                 Taro.navigateTo({url: '/pages/my/profile'}).then();
             });
         }
         //发送模板消息
-        if(settings.offerResultTemplateId) {
+        if (settings.offerResultTemplateId) {
             await Taro.requestSubscribeMessage({tmplIds: [settings.offerResultTemplateId]});
         }
         let offers = this.state.offers;
@@ -233,17 +241,16 @@ export default class Index extends Component<any, any> {
             }).catch(() => this.setState({posting: false}));
         }
         //判断当前自己是不是最高出价人，如果是提醒一次
-        if(offers && offers.length > 0) {
-            if(userInfo.id == offers[0].memberId) {
-                await utils.showMessage('您当前的出价已为最高出价，是否确定继续出价?', function(){
+        if (offers && offers.length > 0) {
+            if (userInfo.id == offers[0].memberId) {
+                await utils.showMessage('您当前的出价已为最高出价，是否确定继续出价?', function () {
                     doOffer();
-                }, true, () => {}, '友情提示', '继续出价', '取消出价');
-            }
-            else {
+                }, true, () => {
+                }, '友情提示', '继续出价', '取消出价');
+            } else {
                 doOffer();
             }
-        }
-        else {
+        } else {
             doOffer();
         }
         //出价
@@ -253,6 +260,13 @@ export default class Index extends Component<any, any> {
     nextPrice(newGoods) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
+        const {settings} = this.props;
+        if (parseInt(settings.isDealCommission) == 1) {
+            if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                //落槌价显示佣金
+                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * parseFloat(goods.commission)));
+            }
+        }
         if (!goods.currentPrice) {
             //说明没有人出价，第一次出价可以以起拍价出价
             this.setState({nextPrice: goods.startPrice, goods: goods});
@@ -300,12 +314,12 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.goods?.title,
-            path: '/pages/goods/detail?id=' + this.state.id +'&mid='+mid
+            path: '/pages/goods/detail?id=' + this.state.id + '&mid=' + mid
         }
     }
 
     handlePreview(item) {
-        const images  = this.state.goods.images.split(',').map((item) => {
+        const images = this.state.goods.images.split(',').map((item) => {
             return utils.resolveUrl(item);
         });
         Taro.previewImage({urls: images, current: item.url}).then();
@@ -324,7 +338,7 @@ export default class Index extends Component<any, any> {
         const {goods, status} = this.state;
         //判断按钮状态
 
-        if(goods.deposit && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
+        if (goods.deposit && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
             //需要交保证金的情况
             return (
                 <View>
@@ -335,7 +349,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
+        if ((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
             //可以出价的情况
             return (
                 <View>
@@ -346,7 +360,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || status == TimeCountDownerStatus.NOT_START) {
+        if ((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || status == TimeCountDownerStatus.NOT_START) {
             //未开始的情况
             return (
                 <View>
@@ -356,7 +370,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
+        if ((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
             //结束的情况
             return (
                 <View>
@@ -374,21 +388,20 @@ export default class Index extends Component<any, any> {
         const {message, status} = this.state;
         const {settings} = this.props;
 
-        let templateId,type;
+        let templateId, type;
 
-        if(status == TimeCountDownerStatus.NOT_START) {
+        if (status == TimeCountDownerStatus.NOT_START) {
             //开始提醒
             type = 1;
             templateId = settings.startTemplateId;
-        }
-        else if(status == TimeCountDownerStatus.STARTED) {
+        } else if (status == TimeCountDownerStatus.STARTED) {
             type = 2;
             templateId = settings.endTemplateId;
         }
 
-        if(!message && templateId) {
+        if (!message && templateId) {
             const res = await Taro.requestSubscribeMessage({tmplIds: [templateId]});
-            if(res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
+            if (res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
                 if (type) {
                     request.put('/paimai/api/members/messages/toggle', {
                         type: type,
@@ -399,8 +412,7 @@ export default class Index extends Component<any, any> {
                     });
                 }
             }
-        }
-        else {
+        } else {
             if (type) {
                 request.put('/paimai/api/members/messages/toggle', {
                     type: type,
@@ -430,7 +442,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
-                <CustomSwiper list={images} imageMode={'aspectFit'} radius={'0'} height={systemInfo.safeArea.width} onItemClick={this.handlePreview} />
+                <CustomSwiper list={images} imageMode={'aspectFit'} radius={'0'} height={systemInfo.safeArea.width} onItemClick={this.handlePreview}/>
                 <View className={'grid grid-cols-1 px-4 divide-y divide-gray-200'}>
                     <View className={'space-y-4 py-4'}>
                         <View className={'flex justify-between items-center'}>
