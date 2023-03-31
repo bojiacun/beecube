@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useEffect} from "react";
 import TinymceEditor from "~/components/tinymce-editor";
 import BootstrapInput from "~/components/form/BootstrapInput";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 const SettingsSchema = Yup.object().shape({
@@ -36,11 +37,12 @@ const PaimaiSettingsEditor = (props:any) => {
                         <Card.Title>拍品公共设置</Card.Title>
                     </Card.Header>
                     <Card.Body>
+                        <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
-                        <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID'} />
-                        <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID'} />
-                        <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID'} />
+                        <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
+                        <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
+                        <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
                         <FormGroup>
                             <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                             <TinymceEditor name={'descFlow'} />
