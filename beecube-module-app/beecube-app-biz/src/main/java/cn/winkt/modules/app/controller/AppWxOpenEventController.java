@@ -29,6 +29,7 @@ public class AppWxOpenEventController {
         log.info(postData);
         WxOpenXmlMessage wxOpenXmlMessage = WxOpenXmlMessage.fromEncryptedXml(postData, miniAppOpenService.getWxOpenConfigStorage(), timestamp, nonce, msg_signature);
         if(wxOpenXmlMessage != null && "component_verify_ticket".equals(wxOpenXmlMessage.getInfoType())) {
+            log.info("票据信息为：{}", wxOpenXmlMessage.getComponentVerifyTicket());
             miniAppOpenService.getWxOpenConfigStorage().setComponentVerifyTicket(wxOpenXmlMessage.getComponentVerifyTicket());
         }
         return "success";
