@@ -3,6 +3,7 @@ package cn.winkt.modules.app.controller;
 import cn.winkt.modules.app.config.MiniAppOpenService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.open.api.WxOpenComponentService;
+import me.chanjar.weixin.open.bean.message.WxOpenXmlMessage;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

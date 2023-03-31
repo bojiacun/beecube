@@ -5,5 +5,8 @@ import lombok.Data;
 @Data
 public class WxOpenConfigInfo {
 
-    private String appid;
+    private String componentAppId;
+    private String componentAppSecret;
+    private String componentToken;
+    private String componentAesKey;
 }

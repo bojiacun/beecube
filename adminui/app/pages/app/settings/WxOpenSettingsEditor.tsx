@@ -33,7 +33,10 @@ const WxOpenSettingsEditor = (props:any) => {
                         <Card.Title>微信开放平台配置</Card.Title>
                     </Card.Header>
                     <Card.Body>
-                        <BootstrapInput label={'APPID'} name={'appid'} placeholder={'开放平台中第三方平台Appid'} />
+                        <BootstrapInput label={'APPID'} name={'componentAppId'} placeholder={'开放平台中第三方平台Appid'} />
+                        <BootstrapInput label={'AppSecret'} name={'componentAppSecret'} placeholder={'开放平台中第三方平台AppSecret'} />
+                        <BootstrapInput label={'消息校验Token'} name={'componentToken'} placeholder={'消息校验Token'} />
+                        <BootstrapInput label={'消息加解密Key'} name={'componentAesKey'} placeholder={'消息加解密Key'} />
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
