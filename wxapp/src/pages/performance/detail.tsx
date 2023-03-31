@@ -204,7 +204,7 @@ export default class Index extends Component<any, any> {
         }
 
         if(!message && templateId) {
-            const res = await Taro.requestSubscribeMessage({tmplIds: [settings.startTemplateId]});
+            const res = await Taro.requestSubscribeMessage({tmplIds: [templateId]});
             if(res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
                 if(type) {
                     request.put('/paimai/api/members/messages/toggle', {
