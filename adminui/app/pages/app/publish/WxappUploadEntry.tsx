@@ -7,15 +7,18 @@ export default function WxappUploadEntry() {
     const urlFetcher = useFetcher();
     const [url, setUrl] = useState<string>();
 
-    useEffect(() => {
-        urlFetcher.load('/app/wxopen/url');
-    }, []);
 
     useEffect(() => {
         if (urlFetcher.type === 'done' && urlFetcher.data) {
             setUrl(urlFetcher.data);
         }
     }, [urlFetcher.state]);
+
+
+
+    useEffect(() => {
+        urlFetcher.load('/app/wxopen/url');
+    }, []);
 
     return (
         <>
