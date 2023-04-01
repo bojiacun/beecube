@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import springfox.documentation.swagger.web.SwaggerResource;
@@ -25,6 +26,7 @@ import java.util.*;
 @Component
 @Slf4j
 @Primary
+@Profile("dev")
 public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
     /**
      * swagger2默认的url后缀
