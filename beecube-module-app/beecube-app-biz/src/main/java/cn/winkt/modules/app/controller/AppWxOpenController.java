@@ -69,6 +69,9 @@ public class AppWxOpenController {
                 Collections.singletonList("https://api.beecube.winkt.cn")
                 );
 
+        //设置业务域名
+        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+
         return Result.OK(result);
     }
 
