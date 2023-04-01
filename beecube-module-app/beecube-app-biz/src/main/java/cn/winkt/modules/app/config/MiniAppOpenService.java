@@ -12,6 +12,7 @@ import me.chanjar.weixin.open.api.WxOpenMaService;
 import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenComponentServiceImpl;
 import me.chanjar.weixin.open.api.impl.WxOpenInMemoryConfigStorage;
+import me.chanjar.weixin.open.api.impl.WxOpenInRedissonConfigStorage;
 import me.chanjar.weixin.open.api.impl.WxOpenServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,7 @@ public class MiniAppOpenService {
 
 
     private static WxOpenConfigStorage wxOpenConfigStorage;
+
 
 
     @Bean
