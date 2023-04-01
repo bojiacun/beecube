@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -42,6 +43,7 @@ import java.util.stream.Collectors;
 @EnableSwagger2    //开启 Swagger2
 @EnableKnife4j     //开启 knife4j，可以不写
 @Import(BeanValidatorPluginsConfiguration.class)
+@Profile("dev")
 public class Swagger2Config implements WebMvcConfigurer {
 
     /**
