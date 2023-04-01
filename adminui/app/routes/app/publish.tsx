@@ -8,7 +8,7 @@ const AppPublisher = () => {
     return (
         <Card>
             <Card.Body>
-                <div style={{width: 600, minHeight: 400, margin: '0 auto'}}>
+                <div style={{width: 400, minHeight: 400, margin: '0 auto'}}>
                 <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
                     <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
                         <WxappUploadEntry />
