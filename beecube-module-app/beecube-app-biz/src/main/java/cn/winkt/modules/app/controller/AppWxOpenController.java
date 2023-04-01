@@ -5,6 +5,7 @@ import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenService;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-@Controller
+@RestController
 @RequestMapping("/app/wxopen")
 @Slf4j
 public class AppWxOpenController {
@@ -38,6 +39,12 @@ public class AppWxOpenController {
         String url = wxOpenService.getWxOpenComponentService().getMobilePreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"), "2", null);
         log.info("开放平台授权URL地址为 {}", url);
         return ImageIO.read(new ByteArrayInputStream(QrcodeUtils.createQrcode(url, null)));
+    }
+
+    @GetMapping("/auth/url")
+    public Result<String> cretePreAuthUrl() throws WxErrorException {
+        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"), "2", null);
+        return Result.OK("", url);
     }
 
 //    @GetMapping("/auth/redirect")

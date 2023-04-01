@@ -108,6 +108,7 @@ export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUse
 export const API_USER_DEPARTMENT_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserInDepartBatch`;
 
 export const API_APP_WXOPEN_AUTHQRCODE = `${BASE_URL}/beecube-app/app/wxopen/auth/qrcode`;
+export const API_APP_WXOPEN_AUTH_URL = `${BASE_URL}/beecube-app/app/wxopen/auth/url`;
 
 export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_ALL_LIST = `${BASE_URL}/beecube-app/app/modules/all`;
@@ -272,6 +273,7 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
         options.headers['X-App-Id'] = session.get("APPID");
     }
     const res = await fetch(url, options);
+    console.log(res);
     if(res.status != 200) {
         throw new Response(res.statusText, {status: res.status});
     }

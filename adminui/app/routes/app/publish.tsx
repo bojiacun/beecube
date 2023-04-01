@@ -1,5 +1,4 @@
 import {Card, Tabs, Tab} from "react-bootstrap";
-import WechatH5Entry from "~/pages/app/publish/WechatH5Entry";
 import WxappUploadEntry from "~/pages/app/publish/WxappUploadEntry";
 import {withPageLoading} from "~/utils/components";
 

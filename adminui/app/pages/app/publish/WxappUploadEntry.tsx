@@ -1,13 +1,27 @@
-import {Alert, Image} from "react-bootstrap";
+import {Alert, Button, Image} from "react-bootstrap";
+import {useFetcher} from "@remix-run/react";
+import {useEffect, useState} from "react";
+import {handleSaveResult} from "~/utils/utils";
 
 export default function WxappUploadEntry() {
+    const urlFetcher = useFetcher();
+    const [url, setUrl] = useState<string>();
+
+    useEffect(()=>{
+        urlFetcher.load('/app/wxopen/url');
+    }, []);
+
+    useEffect(() => {
+        if (urlFetcher.type === 'done' && urlFetcher.data) {
+            setUrl(urlFetcher.data);
+        }
+    }, [urlFetcher.state]);
+
     return (
         <>
-            <Image src={'/app/wxopen.png'} />
+            {url && <a href={''} className={'btn btn-primary'} target={'_blank'}>点击开始授权</a>}
             <Alert show variant={'light'}>
-                <div className={'alert-body'}>
-                    请扫码授权
-                </div>
+                点击以上链接，在新页面用微信扫一扫授权发布小程序
             </Alert>
         </>
     );
