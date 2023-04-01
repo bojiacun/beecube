@@ -9,8 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.open.api.WxOpenComponentService;
 import me.chanjar.weixin.open.api.WxOpenConfigStorage;
 import me.chanjar.weixin.open.api.WxOpenMaService;
+import me.chanjar.weixin.open.api.WxOpenService;
+import me.chanjar.weixin.open.api.impl.WxOpenComponentServiceImpl;
 import me.chanjar.weixin.open.api.impl.WxOpenInMemoryConfigStorage;
+import me.chanjar.weixin.open.api.impl.WxOpenServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -30,13 +34,13 @@ public class MiniAppOpenService {
     private static WxOpenConfigStorage wxOpenConfigStorage;
 
 
-    public WxOpenMaService wxOpenMaService() {
-        return null;
+    @Bean
+    public WxOpenService getWxOpenService() {
+        WxOpenService wxOpenService = new WxOpenServiceImpl();
+        wxOpenService.setWxOpenConfigStorage(getWxOpenConfigStorage());
+        return wxOpenService;
     }
 
-    public WxOpenComponentService getWxOpenComponentService() {
-        return null;
-    }
 
     public WxOpenConfigStorage getWxOpenConfigStorage() {
         try {
