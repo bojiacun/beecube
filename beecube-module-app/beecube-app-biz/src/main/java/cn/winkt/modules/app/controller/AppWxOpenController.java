@@ -5,14 +5,12 @@ import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenService;
+import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
@@ -45,6 +43,12 @@ public class AppWxOpenController {
     public Result<String> cretePreAuthUrl() throws WxErrorException {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getPc(), "/app/wxopen/auth"), "2", null);
         return Result.OK("", url);
+    }
+
+    @GetMapping("/auth/callback")
+    public Result<?> authCallback(@RequestParam String auth_code, @RequestParam String expires_in) throws WxErrorException {
+        WxOpenQueryAuthResult result = wxOpenService.getWxOpenComponentService().getQueryAuth(auth_code);
+        return Result.OK(result);
     }
 
 //    @GetMapping("/auth/redirect")
