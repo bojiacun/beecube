@@ -35,14 +35,14 @@ public class AppWxOpenController {
     @GetMapping(value = "/auth/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public BufferedImage createPreAuthQrcode() throws WxErrorException, IOException {
-        String url = jeecgBaseConfig.getDomainUrl().getApp()+"/app/wxopen/auth/redirect";
+        String url = wxOpenService.getWxOpenComponentService().getMobilePreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"), "2", null);
         log.info("开放平台授权URL地址为 {}", url);
         return ImageIO.read(new ByteArrayInputStream(QrcodeUtils.createQrcode(url, null)));
     }
 
-    @GetMapping("/auth/redirect")
-    public RedirectView redirectToWxOpenAuth() throws WxErrorException {
-        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
-        return new RedirectView(url);
-    }
+//    @GetMapping("/auth/redirect")
+//    public RedirectView redirectToWxOpenAuth() throws WxErrorException {
+//        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
+//        return new RedirectView(url);
+//    }
 }
