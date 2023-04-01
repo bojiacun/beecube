@@ -3,15 +3,19 @@ package cn.winkt.modules.app.controller;
 
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenMaService;
 import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
+import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -26,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/app/wxopen")
@@ -72,6 +77,18 @@ public class AppWxOpenController {
 
         //设置业务域名
         wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+
+        //上传代码,永远是最新一份
+        List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
+        if(templates.size() == 0) {
+            throw new JeecgBootException("模板为空");
+        }
+        WxOpenMaCodeTemplate distTemplate = templates.get(0);
+        JSONObject extJsonObject = new JSONObject();
+        extJsonObject.put("appId", AppContext.getApp());
+        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
+        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
+
 
         return Result.OK(result);
     }
