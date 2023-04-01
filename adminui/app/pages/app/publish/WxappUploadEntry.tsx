@@ -7,7 +7,7 @@ export default function WxappUploadEntry() {
     const urlFetcher = useFetcher();
     const [url, setUrl] = useState<string>();
 
-    useEffect(()=>{
+    useEffect(() => {
         urlFetcher.load('/app/wxopen/url');
     }, []);
 
@@ -19,7 +19,9 @@ export default function WxappUploadEntry() {
 
     return (
         <>
-            {url && <a href={''} className={'btn btn-primary'} target={'_blank'}>点击开始授权</a>}
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400}}>
+                {url && <a href={url} className={'btn btn-primary'} target={'_blank'}>点击开始授权</a>}
+            </div>
             <Alert show variant={'light'}>
                 点击以上链接，在新页面用微信扫一扫授权发布小程序
             </Alert>
