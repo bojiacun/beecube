@@ -41,4 +41,10 @@ public class AppWxOpenEventController {
         log.info(postData);
         return "success";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/auth", method = {RequestMethod.POST, RequestMethod.PUT})
+    public String auth() {
+        return "success";
+    }
 }
