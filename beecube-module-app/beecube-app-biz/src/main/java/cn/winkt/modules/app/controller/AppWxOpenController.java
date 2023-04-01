@@ -7,10 +7,12 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenService;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -19,7 +21,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequestMapping("/app/wxopen")
 @Slf4j
 public class AppWxOpenController {
@@ -33,8 +35,14 @@ public class AppWxOpenController {
     @GetMapping(value = "/auth/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public BufferedImage createPreAuthQrcode() throws WxErrorException, IOException {
-        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
+        String url = jeecgBaseConfig.getDomainUrl().getApp()+"/app/wxopen/auth/redirect";
         log.info("开放平台授权URL地址为 {}", url);
         return ImageIO.read(new ByteArrayInputStream(QrcodeUtils.createQrcode(url, null)));
+    }
+
+    @GetMapping("/auth/redirect")
+    public RedirectView redirectToWxOpenAuth() throws WxErrorException {
+        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
+        return new RedirectView(url);
     }
 }
