@@ -9,8 +9,7 @@ import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
-const siteInfo = require('./siteinfo.js');
-console.log('app: site info is', siteInfo);
+const siteInfo = Taro.getExtConfigSync();
 const store = configStore();
 let qqmapSdk;
 
@@ -40,7 +39,6 @@ class App extends Component<PropsWithChildren> {
     connectToServer(context) {
         if(siteInfo?.appId && context.userInfo?.id) {
             connectWebSocketServer('/auction/websocket/' + siteInfo.appId + '/' + context.userInfo.id).then(res => {
-                console.log('socket 连接成功');
                 this.socket = res;
                 this.socket.onMessage(this.onMessageReceive);
                 this.socket.onClose(this.onSocketClose);
@@ -51,11 +49,6 @@ class App extends Component<PropsWithChildren> {
     }
     onSocketError(error) {
         console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
-        // clearInterval(this.checkTimer);
-        // let {context} = store.getState();
-        // setTimeout(()=>{
-        //     this.connectToServer(context);
-        // }, 5000);
     }
     onSocketClose(res) {
         console.log('服务器连接断开, 5秒后尝试重连', res);
@@ -91,7 +84,6 @@ class App extends Component<PropsWithChildren> {
     }
 
     onLaunch(options) {
-        console.log("app launch", options);
         let {context} = store.getState();
         context.referer = options;
         context.copyright = siteInfo.copyright;

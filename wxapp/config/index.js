@@ -23,7 +23,6 @@ const config = {
     defineConstants: {},
     copy: {
         patterns: [
-            {from: 'src/siteinfo.js', to: 'dist/siteinfo.js'},
         ],
         options: {}
     },
@@ -55,14 +54,14 @@ const config = {
                 }
             }
         },
-        webpackChain(chain) {
-            chain.merge({
-                externals: {
-                    './siteinfo.js': 'commonjs2 ./siteinfo.js',
-                    '../siteinfo.js': 'commonjs2 ./siteinfo.js',
-                }
-            })
-        }
+        // webpackChain(chain) {
+        //     chain.merge({
+        //         externals: {
+        //             './siteinfo.js': 'commonjs2 ./siteinfo.js',
+        //             '../siteinfo.js': 'commonjs2 ./siteinfo.js',
+        //         }
+        //     })
+        // }
     },
     h5: {
         publicPath: '/',

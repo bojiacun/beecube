@@ -3,8 +3,7 @@ import axios, {AxiosResponse} from "taro-axios";
 import Taro from "@tarojs/taro";
 import utils from "./utils";
 
-const siteinfo = require('../siteinfo.js');
-console.log('request.ts: site info is', siteinfo);
+const siteinfo = Taro.getExtConfigSync();
 export const API_URL = siteinfo.siteroot;
 export const APP_ID = siteinfo.appId;
 

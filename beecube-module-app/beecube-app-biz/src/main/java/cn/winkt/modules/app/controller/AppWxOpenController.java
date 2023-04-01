@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 @RestController
@@ -63,10 +64,10 @@ public class AppWxOpenController {
         wxMaConfig.setAccessToken(wxOpenAuthorizationInfo.getAuthorizerAccessToken());
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), appId, wxMaConfig);
         wxOpenMaService.modifyDomain("set",
-                Collections.singletonList("https://api.beecube.winkt.cn"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
                 Collections.singletonList("wss://api.beecube.winkt.cn"),
-                Collections.singletonList("https://api.beecube.winkt.cn"),
-                Collections.singletonList("https://api.beecube.winkt.cn")
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
                 );
 
         //设置业务域名
