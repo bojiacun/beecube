@@ -68,6 +68,7 @@ public class AppWxOpenController {
                 Collections.singletonList("https://api.beecube.winkt.cn"),
                 Collections.singletonList("https://api.beecube.winkt.cn")
                 );
+
         return Result.OK(result);
     }
 
