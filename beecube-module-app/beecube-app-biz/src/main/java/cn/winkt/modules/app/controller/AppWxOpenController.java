@@ -43,7 +43,7 @@ public class AppWxOpenController {
 
     @GetMapping("/auth/url")
     public Result<String> cretePreAuthUrl() throws WxErrorException {
-        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"), "2", null);
+        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getPc(), "/app/wxopen/auth"), "2", null);
         return Result.OK("", url);
     }
 
