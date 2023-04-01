@@ -5,6 +5,7 @@ import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenService;
 import org.jeecg.config.JeecgBaseConfig;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +28,7 @@ public class AppWxOpenController {
     @Resource
     JeecgBaseConfig jeecgBaseConfig;
 
-    @GetMapping("/auth/qrcode")
+    @GetMapping(value = "/auth/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public BufferedImage createPreAuthQrcode() throws WxErrorException, IOException {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
