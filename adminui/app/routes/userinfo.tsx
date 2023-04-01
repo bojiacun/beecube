@@ -1,6 +1,6 @@
 import {json, LoaderFunction} from "@remix-run/node";
 import {requireAuthenticated} from "~/utils/auth.server";
-import _ from "lodash";
+import _ from 'lodash';
 import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_USER_INFO, requestWithToken} from "~/utils/request.server";

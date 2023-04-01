@@ -9,10 +9,7 @@ const AppPublisher = () => {
         <Card>
             <Card.Body>
                 <div style={{width: 600, minHeight: 400, margin: '0 auto'}}>
-                <Tabs as={'ul'} defaultActiveKey={'h5'} fill={false} justify={true}>
-                    <Tab title={'公众号/H5入口'} eventKey={'h5'} as={'li'}>
-                        <WechatH5Entry />
-                    </Tab>
+                <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
                     <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
                         <WxappUploadEntry />
                     </Tab>

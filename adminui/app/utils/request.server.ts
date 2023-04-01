@@ -107,6 +107,7 @@ export const API_USER_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/user/userRoleLis
 export const API_USER_ROLE_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserRole`;
 export const API_USER_DEPARTMENT_DELETE = `${BASE_URL}/jeecg-system/sys/user/deleteUserInDepartBatch`;
 
+export const API_APP_WXOPEN_AUTHQRCODE = `${BASE_URL}/beecube-app/app/wxopen/auth/qrcode`;
 
 export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_ALL_LIST = `${BASE_URL}/beecube-app/app/modules/all`;
