@@ -9,4 +9,5 @@ public class WxOpenConfigInfo {
     private String componentAppSecret;
     private String componentToken;
     private String componentAesKey;
+    private String componentVerifyTicket;
 }

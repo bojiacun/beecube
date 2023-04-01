@@ -59,6 +59,7 @@ public class MiniAppOpenService {
                                 wxOpenConfigInfo.getComponentToken(),
                                 wxOpenConfigInfo.getComponentAesKey()
                         );
+                        wxOpenConfigStorage.setComponentVerifyTicket(wxOpenConfigInfo.getComponentVerifyTicket());
                     }
                 }
             }
