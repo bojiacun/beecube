@@ -2,6 +2,7 @@ package cn.winkt.modules.app.controller;
 
 
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenService;
 import org.jeecg.config.JeecgBaseConfig;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/app/wxopen")
+@Slf4j
 public class AppWxOpenController {
 
     @Resource
@@ -32,6 +34,7 @@ public class AppWxOpenController {
     @ResponseBody
     public BufferedImage createPreAuthQrcode() throws WxErrorException, IOException {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
+        log.info("开放平台授权URL地址为 {}", url);
         return ImageIO.read(new ByteArrayInputStream(QrcodeUtils.createQrcode(url, null)));
     }
 }
