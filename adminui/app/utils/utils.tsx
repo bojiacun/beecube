@@ -297,3 +297,7 @@ export function compareVersion(v1:any, v2:any){
 
     return 0
 }
+
+export function nl2br(str:string) {
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>$2');
+}

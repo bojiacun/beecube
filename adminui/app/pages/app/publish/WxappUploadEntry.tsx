@@ -1,5 +1,5 @@
 import {Alert, Button, Image} from "react-bootstrap";
-import {compareVersion, handleResult} from "~/utils/utils";
+import {compareVersion, handleResult, nl2br} from "~/utils/utils";
 import {useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 
@@ -80,6 +80,11 @@ export default function WxappUploadEntry(props: any) {
                     <div style={{marginBottom: 10}}>
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
+                    {newPublish &&
+                        <div>
+                            {nl2br(newPublish.userDesc)}
+                        </div>
+                    }
                     {currentPublish.status == 3 &&
                         <Alert variant={'danger'} style={{marginBottom: 10}}>审核未通过：{currentPublish.reason}</Alert>
                     }

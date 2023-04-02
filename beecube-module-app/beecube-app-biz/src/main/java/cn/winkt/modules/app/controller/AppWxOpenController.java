@@ -200,6 +200,7 @@ public class AppWxOpenController {
         appPublish.setStatus(0);
         appPublish.setPubTime(new Date());
         appPublish.setVersion(distTemplate.getUserVersion());
+        appPublish.setUserDesc(distTemplate.getUserDesc());
         appPublishService.save(appPublish);
 
         return Result.OK(appPublish);
