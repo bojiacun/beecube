@@ -10,6 +10,7 @@ import cn.winkt.modules.app.entity.AppPublish;
 import cn.winkt.modules.app.service.IAppPublishService;
 import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.vo.WxAppExtConfig;
+import cn.winkt.modules.app.vo.WxAppExtJsonConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
@@ -188,7 +189,13 @@ public class AppWxOpenController {
         WxAppExtConfig wxAppExtConfig = new WxAppExtConfig();
         wxAppExtConfig.setAppId(AppContext.getApp());
         wxAppExtConfig.setSiteroot("https://api.beecube.winkt.cn");
-        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), wxAppExtConfig);
+        WxAppExtJsonConfig wxAppExtJsonConfig = new WxAppExtJsonConfig();
+        wxAppExtJsonConfig.setExt(wxAppExtConfig);
+        wxAppExtJsonConfig.setExtEnable(true);
+        wxAppExtJsonConfig.setExtAppid(app.getAuthorizerAppid());
+        wxAppExtJsonConfig.setDirectCommit(false);
+
+        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), wxAppExtJsonConfig);
 
         //获取体验二维码
         File qrcode = wxOpenMaService.getTestQrcode("pages/index/index", null);
