@@ -5,7 +5,7 @@ import querystring from "querystring";
 import {DefaultListSearchParams} from "~/utils/utils";
 import {API_APP_WXOPEN_AUTH_CALLBACK, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
-import {useLoaderData} from "@remix-run/react";
+import {Link, useLoaderData} from "@remix-run/react";
 import {Card} from "react-bootstrap";
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -28,7 +28,16 @@ const WxOpenAuthCallbackPage = (props:any) => {
     return (
         <Card>
             <Card.Body>
-                <div>{JSON.stringify(data)}</div>
+                {data &&
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400}}>
+                        <Link to={'/app/publish'} style={{color: '#3366CC'}}>恭喜您授权成功，点击链接继续发布应用</Link>
+                    </div>
+                }
+                {!data &&
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400}}>
+                        <Link to={'/app/publish'} style={{color: 'red'}}>恭喜您授权成功，点击链接继续发布应用</Link>
+                    </div>
+                }
             </Card.Body>
         </Card>
     );

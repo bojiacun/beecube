@@ -1,16 +1,36 @@
 import {Card, Tabs, Tab} from "react-bootstrap";
 import WxappUploadEntry from "~/pages/app/publish/WxappUploadEntry";
 import {withPageLoading} from "~/utils/components";
+import {json, LoaderFunction} from "@remix-run/node";
+import {requireAuthenticated, sessionStorage} from "~/utils/auth.server";
+import {API_APP_DETAIL, API_APP_WXOPEN_AUTH_URL, requestWithToken} from "~/utils/request.server";
+import {defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
+import {useLoaderData} from "@remix-run/react";
 
+export const ErrorBoundary = defaultRouteErrorBoundary;
+export const CatchBoundary = defaultRouteCatchBoundary;
+
+export const loader: LoaderFunction = async ({request}) => {
+    await requireAuthenticated(request);
+    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+    const result = await requestWithToken(request)(API_APP_WXOPEN_AUTH_URL);
+    const response:any = {};
+    const appResult = await requestWithToken(request)(API_APP_DETAIL+'?id='+session.get("APPID"));
+    response.authUrl = result.result;
+    response.app = appResult.result;
+    return json(response);
+}
 
 const AppPublisher = () => {
+    const data = useLoaderData();
+
     return (
         <Card>
             <Card.Body>
                 <div style={{width: 400, minHeight: 400, margin: '0 auto'}}>
                 <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
                     <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
-                        <WxappUploadEntry />
+                        <WxappUploadEntry data={data} />
                     </Tab>
                 </Tabs>
                 </div>

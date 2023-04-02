@@ -116,7 +116,7 @@ const AppList = (props: any) => {
         {
             text: '到期时间',
             dataField: 'endTime',
-            headerStyle: {width: 120},
+            headerStyle: {width: 140},
             sort: true,
             onSort: handleSort,
             headerSortingClasses,
@@ -130,7 +130,7 @@ const AppList = (props: any) => {
         {
             text: '授权状态',
             dataField: 'authStatus_dictText',
-            headerStyle: {width: 100},
+            headerStyle: {width: 120},
             formatter: (cell:any, row:any) => {
                 return row.authStatus == 'unauthorized' ? <Badge variant={'danger'}>{row.authStatus_dictText}</Badge> : <Badge variant={'success'}>{row.authStatus_dictText}</Badge>
             }
