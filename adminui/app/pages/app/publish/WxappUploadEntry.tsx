@@ -13,7 +13,7 @@ export default function WxappUploadEntry(props: any) {
     useEffect(() => {
         if (submitFetcher.data && submitFetcher.type === 'done') {
             setPublishing(false);
-            handleResult(submitFetcher.data, '发布成功');
+            handleResult(submitFetcher.data, '上传成功');
             setCurrentPublish(submitFetcher.data);
         }
     }, [submitFetcher.state]);
@@ -66,7 +66,7 @@ export default function WxappUploadEntry(props: any) {
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
                     <div>
-                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 && <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'重新发布'}</Button>}
+                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 && <Button variant={'primary'} style={{marginRight: 20}} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'重新发布'}</Button>}
                         {currentPublish.status == 0 && <Button variant={'danger'} disabled={publishing} onClick={publicUpload}>{publishing ? '提交中...':'提交审核'}</Button>}
                     </div>
                 </>
