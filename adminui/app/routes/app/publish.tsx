@@ -13,9 +13,9 @@ export const CatchBoundary = defaultRouteCatchBoundary;
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
-    const response:any = {};
+    const response: any = {};
     const result = await requestWithToken(request)(API_APP_WXOPEN_AUTH_URL);
-    const appResult = await requestWithToken(request)(API_APP_DETAIL+'?id='+session.get("APPID"));
+    const appResult = await requestWithToken(request)(API_APP_DETAIL + '?id=' + session.get("APPID"));
     const appPublishResult = await requestWithToken(request)(API_APP_PUBLISH_LATEST);
     const newPublishResult = await requestWithToken(request)(API_APP_PUBLISH_NEW);
     response.authUrl = result.result;
@@ -31,12 +31,12 @@ const AppPublisher = () => {
     return (
         <Card>
             <Card.Body>
-                <div style={{width: 400, minHeight: 400, margin: '0 auto'}}>
-                <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
-                    <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
-                        <WxappUploadEntry data={data} />
-                    </Tab>
-                </Tabs>
+                <div style={{width: 400, minHeight: 600, margin: '0 auto'}}>
+                    <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
+                        <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
+                            <WxappUploadEntry data={data}/>
+                        </Tab>
+                    </Tabs>
                 </div>
             </Card.Body>
         </Card>

@@ -8,6 +8,7 @@ export default function WxappUploadEntry(props: any) {
     const [currentPublish, setCurrentPublish] = useState<any>(publish);
     const [publishing, setPublishing] = useState<boolean>(false);
     const submitFetcher = useFetcher();
+    const publicFetcher = useFetcher();
 
     useEffect(() => {
         if (submitFetcher.data && submitFetcher.type === 'done') {
@@ -17,13 +18,24 @@ export default function WxappUploadEntry(props: any) {
         }
     }, [submitFetcher.state]);
 
+    useEffect(() => {
+        if (publicFetcher.data && publicFetcher.type === 'done') {
+            setPublishing(false);
+            handleResult(submitFetcher.data, '提交审核成功');
+        }
+    }, [publicFetcher.state]);
+
     const submitPreview = () => {
         setPublishing(true);
         submitFetcher.submit(newPublish, {method: 'post', action: '/app/wxopen/upload'})
     }
+    const publicUpload = () => {
+        setPublishing(true);
+        publicFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/public'});
+    }
 
     return (
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400, flexDirection: 'column'}}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, flexDirection: 'column'}}>
             {app.authStatus == 'unauthorized' &&
                 <>
                     <div><a href={authUrl} className={'btn btn-primary'}>点击开始授权</a></div>
@@ -47,10 +59,15 @@ export default function WxappUploadEntry(props: any) {
                             <Image src={currentPublish.qrcode} style={{width: '100%'}} />
                         }
                     </div>
-                    <div>当前版本为{currentPublish.version}，最新版本为{newPublish.user_version}</div>
+                    <div style={{marginBottom: 10}}>
+                        当前版本为<span style={{fontWeight: 'bold'}}>{currentPublish.version}</span>，最新版本为<span style={{color: 'red', fontWeight: 'bold'}}>{newPublish.userVersion}</span>
+                    </div>
+                    <div style={{marginBottom: 10}}>
+                        上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
+                    </div>
                     <div>
-                        {compareVersion(currentPublish.version, newPublish.user_version) < 0 && <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'重新发布'}</Button>}
-                        <Button variant={'danger'}>提交审核</Button>
+                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 && <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'重新发布'}</Button>}
+                        {currentPublish.status == 0 && <Button variant={'danger'} disabled={publishing} onClick={publicUpload}>{publishing ? '提交中...':'提交审核'}</Button>}
                     </div>
                 </>
             }

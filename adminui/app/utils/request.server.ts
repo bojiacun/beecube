@@ -111,6 +111,7 @@ export const API_APP_WXOPEN_AUTHQRCODE = `${BASE_URL}/beecube-app/app/wxopen/aut
 export const API_APP_WXOPEN_AUTH_URL = `${BASE_URL}/beecube-app/app/wxopen/auth/url`;
 export const API_APP_WXOPEN_AUTH_CALLBACK = `${BASE_URL}/beecube-app/app/wxopen/auth/callback`;
 export const API_APP_WXOPEN_UPLOAD_PREVIEW = `${BASE_URL}/beecube-app/app/wxopen/auth/upload`;
+export const API_APP_WXOPEN_UPLOAD_PUBLIC = `${BASE_URL}/beecube-app/app/wxopen/auth/public`;
 
 export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_ALL_LIST = `${BASE_URL}/beecube-app/app/modules/all`;
