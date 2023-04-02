@@ -58,20 +58,32 @@ export default class Index extends Component<any, any> {
     }
 
     handleSubmit(e) {
+        const {context} = this.props;
+        const {settings} = context;
+
         let values = e.detail.value;
         this.setState({saving: true});
 
-        request.put("/app/api/sms/check", values).then(res => {
-            if (res.data.result) {
-                let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-                userInfo.phone = values.mobile;
-                Taro.setStorageSync("EDIT-USER",JSON.stringify(userInfo));
-                utils.showSuccess(true);
-            } else {
-                utils.showMessage('验证码不正确').then();
-            }
+        if(settings.signName) {
+            request.put("/app/api/sms/check", values).then(res => {
+                if (res.data.result) {
+                    let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+                    userInfo.phone = values.mobile;
+                    Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
+                    Taro.navigateBack().then();
+                } else {
+                    utils.showMessage('验证码不正确').then();
+                }
+                this.setState({saving: false});
+            })
+        }
+        else {
+            let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+            userInfo.phone = values.mobile;
+            Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
+            Taro.navigateBack().then();
             this.setState({saving: false});
-        })
+        }
     }
 
     componentWillUnmount() {
@@ -80,12 +92,14 @@ export default class Index extends Component<any, any> {
 
     componentDidMount() {
         let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-        if(userInfo) {
+        if (userInfo) {
             this.mobileRef.current.value = userInfo.phone;
         }
     }
 
     render() {
+        const {context} = this.props;
+        const {settings} = context;
 
         return (
             <PageLayout statusBarProps={{title: '手机号认证'}}>
@@ -99,7 +113,7 @@ export default class Index extends Component<any, any> {
                                 <Input name={'mobile'} ref={this.mobileRef} className={'text-right'}/>
                             </View>
                         </View>
-                        <View className={'p-4 flex items-center justify-between'}>
+                        {settings.signName && <View className={'p-4 flex items-center justify-between'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View>验证码</View>
                             </View>
@@ -109,6 +123,7 @@ export default class Index extends Component<any, any> {
                                         disabled={this.state.sending}>{this.state.sending ? this.state.counter + '' : '获取验证码'}</Button>
                             </View>
                         </View>
+                        }
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
                         <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
