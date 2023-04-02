@@ -9,6 +9,7 @@ import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.entity.AppPublish;
 import cn.winkt.modules.app.service.IAppPublishService;
 import cn.winkt.modules.app.service.IAppService;
+import cn.winkt.modules.app.vo.WxAppExtConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
@@ -184,10 +185,10 @@ public class AppWxOpenController {
             throw new JeecgBootException("模板为空");
         }
         WxOpenMaCodeTemplate distTemplate = templates.get(0);
-        JSONObject extJsonObject = new JSONObject();
-        extJsonObject.put("appId", AppContext.getApp());
-        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
-        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
+        WxAppExtConfig wxAppExtConfig = new WxAppExtConfig();
+        wxAppExtConfig.setAppId(AppContext.getApp());
+        wxAppExtConfig.setSiteroot("https://api.beecube.winkt.cn");
+        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), wxAppExtConfig);
 
         //获取体验二维码
         File qrcode = wxOpenMaService.getTestQrcode("pages/index/index", null);
