@@ -85,6 +85,7 @@ class App extends Component<PropsWithChildren> {
 
     onLaunch(options) {
         let {context} = store.getState();
+        console.log('App的SiteInfo为', siteInfo);
         context.referer = options;
         context.copyright = siteInfo.copyright;
         Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all'), request.get('/paimai/api/settings')]).then(reses => {
