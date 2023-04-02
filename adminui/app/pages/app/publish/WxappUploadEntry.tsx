@@ -50,7 +50,7 @@ export default function WxappUploadEntry(props: any) {
     }
 
     return (
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, flexDirection: 'column'}}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, minHeight: 400, flexDirection: 'column'}}>
             {app.authStatus == 'unauthorized' &&
                 <>
                     <div><a href={authUrl} className={'btn btn-primary'}>点击开始授权</a></div>
@@ -81,7 +81,7 @@ export default function WxappUploadEntry(props: any) {
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
                     {newPublish &&
-                        <div>
+                        <div style={{marginBottom: 10}}>
                             {nl2br(newPublish.userDesc)}
                         </div>
                     }
