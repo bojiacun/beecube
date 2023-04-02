@@ -10,12 +10,20 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.service.IAppService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenComponentService;
+import me.chanjar.weixin.open.api.WxOpenMaService;
 import me.chanjar.weixin.open.api.WxOpenService;
+import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
+import me.chanjar.weixin.open.bean.result.WxOpenMaQueryAuditResult;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -29,6 +37,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -60,6 +69,9 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
 
     @Resource
     private WxOpenService wxOpenService;
+
+    @Resource
+    private IAppService appService;
 
     /**
      * 分页列表查询
@@ -157,8 +169,36 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
     @AutoLog(value = "应用前端发布版本表-获取最后一次发布")
     @ApiOperation(value = "应用前端发布版本表-获取最后一次发布", notes = "应用前端发布版本表-获取最后一次发布")
     @GetMapping(value = "/latest")
-    public Result<?> queryLatest() {
-        return Result.OK(appPublishService.getLatestPublish());
+    public Result<?> queryLatest() throws WxErrorException {
+        //查询体验版是否审核通过,如果通过则更新
+        AppPublish publish = appPublishService.getLatestPublish();
+
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
+        }
+        if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
+            throw new JeecgBootException("无法获取刷新令牌");
+        }
+        wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
+
+        String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(app.getAuthorizerAppid());
+        wxMaDefaultConfig.setAccessToken(appAccessToken);
+        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
+
+        WxOpenMaQueryAuditResult result = wxOpenMaService.getAuditStatus(publish.getAuditId());
+        if(result.getStatus() == 1) {
+            publish.setReason(result.getReason());
+            publish.setStatus(3);
+        }
+        else if(result.getStatus() == 0) {
+            publish.setStatus(2);
+        }
+        appPublishService.updateById(publish);
+
+        return Result.OK(publish);
     }
 
     @AutoLog(value = "应用前端发布版本表-最新版本")

@@ -22,7 +22,9 @@ import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
 import me.chanjar.weixin.open.bean.ma.WxOpenMaCategory;
 import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
 import me.chanjar.weixin.open.bean.result.WxOpenMaCategoryListResult;
+import me.chanjar.weixin.open.bean.result.WxOpenMaSubmitAuditResult;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
+import me.chanjar.weixin.open.bean.result.WxOpenResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
@@ -75,6 +77,29 @@ public class AppWxOpenController {
         return Result.OK("", url);
     }
 
+    @PostMapping("/auth/release")
+    public Result<?> releasePublic(@RequestBody AppPublish publish) throws WxErrorException {
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
+        }
+        if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
+            throw new JeecgBootException("无法获取刷新令牌");
+        }
+        wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
+
+        String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(app.getAuthorizerAppid());
+        wxMaDefaultConfig.setAccessToken(appAccessToken);
+        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
+
+        WxOpenResult result = wxOpenMaService.releaseAudited();
+        publish.setStatus(4);
+        appPublishService.updateById(publish);
+        return Result.OK(result);
+    }
+
     @PostMapping("/auth/public")
     public Result<?> publicUpload(@RequestBody AppPublish publish) throws WxErrorException {
         App app = appService.getById(AppContext.getApp());
@@ -115,8 +140,10 @@ public class AppWxOpenController {
         });
 
         message.setItemList(itemList);
-        wxOpenMaService.submitAudit(message);
-
+        WxOpenMaSubmitAuditResult result = wxOpenMaService.submitAudit(message);
+        publish.setAuditId(result.getAuditId());
+        publish.setStatus(1);
+        appPublishService.updateById(publish);
         return Result.OK(true);
     }
 

@@ -36,6 +36,8 @@ public class AppPublish {
 	@Excel(name = "发布的代码版本号", width = 15)
     @ApiModelProperty(value = "发布的代码版本号")
 	private java.lang.String version;
+	private Long auditId;
+	private String reason;
 	/**该版本的体验二维码*/
 	@Excel(name = "该版本的体验二维码", width = 15)
     @ApiModelProperty(value = "该版本的体验二维码")
