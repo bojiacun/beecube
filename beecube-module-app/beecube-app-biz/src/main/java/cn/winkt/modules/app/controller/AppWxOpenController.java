@@ -4,6 +4,8 @@ package cn.winkt.modules.app.controller;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppPublish;
+import cn.winkt.modules.app.service.IAppPublishService;
 import cn.winkt.modules.app.service.IAppService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -16,6 +18,8 @@ import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.config.AppContext;
@@ -28,13 +32,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.util.*;
 
 @RestController
 @RequestMapping("/app/wxopen")
@@ -50,6 +51,10 @@ public class AppWxOpenController {
     @Resource
     IAppService appService;
 
+    @Resource
+    IAppPublishService appPublishService;
+
+    private static final String BASE64_PRE = "data:image/jpg;base64,";
 
     @GetMapping(value = "/auth/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
@@ -64,6 +69,64 @@ public class AppWxOpenController {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getPc(), "/app/wxopen/auth"), "2", null);
         return Result.OK("", url);
     }
+
+    @PostMapping("/auth/upload")
+    public Result<?> upload() throws WxErrorException, IOException {
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
+        }
+        if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
+            throw new JeecgBootException("无法获取刷新令牌");
+        }
+
+        wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
+
+        String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);
+
+
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(app.getAuthorizerAppid());
+        wxMaDefaultConfig.setAccessToken(appAccessToken);
+        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
+
+        //修改小程序域名
+        wxOpenMaService.modifyDomain("set",
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+                Collections.singletonList("wss://api.beecube.winkt.cn"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
+        );
+        //设置业务域名
+        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+
+        //上传代码,永远是最新一份
+        List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
+        if(templates.size() == 0) {
+            throw new JeecgBootException("模板为空");
+        }
+        WxOpenMaCodeTemplate distTemplate = templates.get(0);
+        JSONObject extJsonObject = new JSONObject();
+        extJsonObject.put("appId", AppContext.getApp());
+        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
+        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
+
+        //获取体验二维码
+        File qrcode = wxOpenMaService.getTestQrcode("pages/index/index", null);
+        String base64 = Base64.getEncoder().encodeToString(IOUtils.toByteArray(Files.newInputStream(qrcode.toPath())));
+        base64 = base64.replaceAll("\n", "").replaceAll("\r", "");
+        base64 = BASE64_PRE+base64;
+
+        AppPublish appPublish = new AppPublish();
+        appPublish.setPreviewQrcode(base64);
+        appPublish.setStatus(0);
+        appPublish.setPubTime(new Date());
+        appPublish.setVersion(distTemplate.getUserVersion());
+        appPublishService.save(appPublish);
+
+        return Result.OK(appPublish);
+    }
+
 
     @GetMapping("/auth/callback")
     public Result<?> authCallback(@RequestParam String auth_code, @RequestParam String expires_in) throws WxErrorException {
@@ -82,6 +145,7 @@ public class AppWxOpenController {
         app.setAuthStatus("authorized");
         app.setAuthTime(new Date());
         app.setAuthorizerAppid(appId);
+        app.setAuthorizerRefreshToken(wxOpenAuthorizationInfo.getAuthorizerRefreshToken());
         appService.updateById(app);
 
         //设置域名信息

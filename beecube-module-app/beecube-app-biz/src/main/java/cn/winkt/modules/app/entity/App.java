@@ -57,6 +57,7 @@ public class App {
 	private java.lang.Integer status;
 
 	private String authorizerAppid;
+	private String authorizerRefreshToken;
 
 	@Dict(dicCode = "app_auth_status")
 	private String authStatus;
