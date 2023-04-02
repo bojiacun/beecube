@@ -34,7 +34,7 @@ const AppPublisher = () => {
                 <div style={{width: 400, minHeight: 600, margin: '0 auto'}}>
                     <Tabs as={'ul'} defaultActiveKey={'wxapp'} fill={false} justify={true}>
                         <Tab title={'微信小程序发布'} eventKey={'wxapp'} as={'li'}>
-                            <WxappUploadEntry data={data}/>
+                            <WxappUploadEntry data={data} />
                         </Tab>
                     </Tabs>
                 </div>

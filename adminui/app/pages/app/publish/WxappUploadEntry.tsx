@@ -49,6 +49,8 @@ export default function WxappUploadEntry(props: any) {
         releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/release'});
     }
 
+    if(!app) return <></>;
+
     return (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, minHeight: 400, flexDirection: 'column'}}>
             {app.authStatus == 'unauthorized' &&
