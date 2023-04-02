@@ -188,15 +188,16 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
         wxMaDefaultConfig.setAccessToken(appAccessToken);
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
 
-        WxOpenMaQueryAuditResult result = wxOpenMaService.getAuditStatus(publish.getAuditId());
-        if(result.getStatus() == 1) {
-            publish.setReason(result.getReason());
-            publish.setStatus(3);
+        if(publish.getStatus() == 1) {
+            WxOpenMaQueryAuditResult result = wxOpenMaService.getAuditStatus(publish.getAuditId());
+            if (result.getStatus() == 1) {
+                publish.setReason(result.getReason());
+                publish.setStatus(3);
+            } else if (result.getStatus() == 0) {
+                publish.setStatus(2);
+            }
+            appPublishService.updateById(publish);
         }
-        else if(result.getStatus() == 0) {
-            publish.setStatus(2);
-        }
-        appPublishService.updateById(publish);
 
         return Result.OK(publish);
     }
