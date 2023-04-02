@@ -63,7 +63,7 @@ export default function WxappUploadEntry(props: any) {
             }
             {app.authStatus == 'authorized' && !currentPublish &&
                 <div>
-                    <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'提交代码并生成体验码'}</Button>
+                    <Button variant={'primary'} onClick={submitPreview} disabled={uploading}>{uploading ? '发布中，请稍后...':'提交代码并生成体验码'}</Button>
                 </div>
             }
             {app.authStatus == 'authorized' && currentPublish &&
