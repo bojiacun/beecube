@@ -49,7 +49,7 @@ export default function WxappUploadEntry(props: any) {
         releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/release'});
     }
 
-    if(!app) return <></>;
+    if (!app) return <></>;
 
     return (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, minHeight: 400, flexDirection: 'column'}}>
@@ -63,36 +63,45 @@ export default function WxappUploadEntry(props: any) {
             }
             {app.authStatus == 'authorized' && !currentPublish &&
                 <div>
-                    <Button variant={'primary'} onClick={submitPreview} disabled={uploading}>{uploading ? '发布中，请稍后...':'提交代码并生成体验码'}</Button>
+                    <Button variant={'primary'} onClick={submitPreview}
+                            disabled={uploading}>{uploading ? '发布中，请稍后...' : '提交代码并生成体验码'}</Button>
                 </div>
             }
             {app.authStatus == 'authorized' && currentPublish &&
                 <>
                     <div>
                         {currentPublish.status < 4 &&
-                            <Image src={currentPublish.previewQrcode} style={{width: '100%'}} />
+                            <Image src={currentPublish.previewQrcode} style={{width: '100%'}}/>
                         }
                         {currentPublish.status == 4 &&
-                            <Image src={currentPublish.qrcode} style={{width: '100%'}} />
+                            <Image src={currentPublish.qrcode} style={{width: '100%'}}/>
                         }
                     </div>
                     <div style={{marginBottom: 10}}>
-                        当前版本为<span style={{fontWeight: 'bold'}}>{currentPublish.version}</span>，最新版本为<span style={{color: 'red', fontWeight: 'bold'}}>{newPublish.userVersion}</span>
+                        当前版本为<span style={{fontWeight: 'bold'}}>{currentPublish.version}</span>，最新版本为<span
+                        style={{color: 'red', fontWeight: 'bold'}}>{newPublish.userVersion}</span>
                     </div>
                     <div style={{marginBottom: 10}}>
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
                     {newPublish &&
-                        <div style={{marginBottom: 10}} dangerouslySetInnerHTML={{__html: nl2br(newPublish.userDesc)}}></div>
+                        <>
+                            <div>本次更新：</div>
+                            <div style={{marginBottom: 10, textAlign: 'center'}} dangerouslySetInnerHTML={{__html: nl2br(newPublish.userDesc)}}></div>
+                        </>
                     }
                     {currentPublish.status == 3 &&
                         <Alert variant={'danger'} style={{marginBottom: 10}}>审核未通过：{currentPublish.reason}</Alert>
                     }
                     <div>
-                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 && <Button variant={'primary'} style={{marginRight: 20}} onClick={submitPreview} disabled={uploading}>{uploading? '发布中，请稍后...':'重新发布'}</Button>}
-                        {(currentPublish.status == 0 || currentPublish.status == 3) && <Button variant={'danger'} disabled={publishing} onClick={publicUpload}>{publishing ? '提交中...':'提交审核'}</Button>}
-                        {(currentPublish.status == 2 ) && <Button variant={'success'} disabled={releasing} onClick={release}>{releasing ? '发布中...':'发布上线'}</Button>}
-                        {(currentPublish.status == 1 ) && <Button variant={'light'} disabled={true}>审核中</Button>}
+                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 &&
+                            <Button variant={'primary'} style={{marginRight: 20}} onClick={submitPreview}
+                                    disabled={uploading}>{uploading ? '发布中，请稍后...' : '重新发布'}</Button>}
+                        {(currentPublish.status == 0 || currentPublish.status == 3) &&
+                            <Button variant={'danger'} disabled={publishing} onClick={publicUpload}>{publishing ? '提交中...' : '提交审核'}</Button>}
+                        {(currentPublish.status == 2) &&
+                            <Button variant={'success'} disabled={releasing} onClick={release}>{releasing ? '发布中...' : '发布上线'}</Button>}
+                        {(currentPublish.status == 1) && <Button variant={'light'} disabled={true}>审核中</Button>}
                     </div>
                 </>
             }
