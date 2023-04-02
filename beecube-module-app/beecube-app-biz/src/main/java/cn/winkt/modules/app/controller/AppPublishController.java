@@ -170,9 +170,6 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
     @ApiOperation(value = "应用前端发布版本表-获取最后一次发布", notes = "应用前端发布版本表-获取最后一次发布")
     @GetMapping(value = "/latest")
     public Result<?> queryLatest() throws WxErrorException {
-        //查询体验版是否审核通过,如果通过则更新
-        AppPublish publish = appPublishService.getLatestPublish();
-
         App app = appService.getById(AppContext.getApp());
         if(app == null) {
             throw new JeecgBootException("找不到APP");
@@ -180,6 +177,9 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
         if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
             throw new JeecgBootException("无法获取刷新令牌");
         }
+        //查询体验版是否审核通过,如果通过则更新
+        AppPublish publish = appPublishService.getLatestPublish();
+
         wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
 
         String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);

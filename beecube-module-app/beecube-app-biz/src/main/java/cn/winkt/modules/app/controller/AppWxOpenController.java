@@ -150,6 +150,12 @@ public class AppWxOpenController {
         return Result.OK(publish);
     }
 
+    /**
+     * 提交代码并生成体验版二维码
+     * @return
+     * @throws WxErrorException
+     * @throws IOException
+     */
     @PostMapping("/auth/upload")
     public Result<?> upload() throws WxErrorException, IOException {
         App app = appService.getById(AppContext.getApp());
