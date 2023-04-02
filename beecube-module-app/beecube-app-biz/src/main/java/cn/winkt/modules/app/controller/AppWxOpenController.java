@@ -135,8 +135,6 @@ public class AppWxOpenController {
         String appId = wxOpenAuthorizationInfo.getAuthorizerAppid();
         wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(appId, wxOpenAuthorizationInfo.getAuthorizerRefreshToken());
 
-
-
         //设置应用信息
         App app = appService.getById(AppContext.getApp());
         if(app == null) {
@@ -148,38 +146,6 @@ public class AppWxOpenController {
         app.setAuthorizerRefreshToken(wxOpenAuthorizationInfo.getAuthorizerRefreshToken());
         appService.updateById(app);
 
-        //设置域名信息
-//        WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
-//        wxMaConfig.setAppid(appId);
-//        wxMaConfig.setAccessToken(wxOpenAuthorizationInfo.getAuthorizerAccessToken());
-//        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), appId, wxMaConfig);
-//        wxOpenMaService.modifyDomain("set",
-//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-//                Collections.singletonList("wss://api.beecube.winkt.cn"),
-//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
-//                );
-//
-//        //设置业务域名
-//        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
-//
-//        //上传代码,永远是最新一份
-//        List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
-//        if(templates.size() == 0) {
-//            throw new JeecgBootException("模板为空");
-//        }
-//        WxOpenMaCodeTemplate distTemplate = templates.get(0);
-//        JSONObject extJsonObject = new JSONObject();
-//        extJsonObject.put("appId", AppContext.getApp());
-//        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
-//        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
-
         return Result.OK(app);
     }
-
-//    @GetMapping("/auth/redirect")
-//    public RedirectView redirectToWxOpenAuth() throws WxErrorException {
-//        String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"));
-//        return new RedirectView(url);
-//    }
 }
