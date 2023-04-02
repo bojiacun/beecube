@@ -93,6 +93,10 @@ const AppList = (props: any) => {
             dataField: 'id',
         },
         {
+            text: '授权APPID',
+            dataField: 'authorizerAppid',
+        },
+        {
             text: '应用',
             dataField: 'logo',
             isDummyField: true,
@@ -112,11 +116,24 @@ const AppList = (props: any) => {
         {
             text: '到期时间',
             dataField: 'endTime',
-            headerStyle: {width: 200},
+            headerStyle: {width: 120},
             sort: true,
             onSort: handleSort,
             headerSortingClasses,
             sortFunc: emptySortFunc
+        },
+        {
+            text: '授权时间',
+            dataField: 'authTime',
+            headerStyle: {width: 200},
+        },
+        {
+            text: '授权状态',
+            dataField: 'authStatus_dictText',
+            headerStyle: {width: 100},
+            formatter: (cell:any, row:any) => {
+                return row.authStatus == 'unauthorized' ? <Badge variant={'danger'}>{row.authStatus_dictText}</Badge> : <Badge variant={'success'}>{row.authStatus_dictText}</Badge>
+            }
         },
         {
             text: '状态',
