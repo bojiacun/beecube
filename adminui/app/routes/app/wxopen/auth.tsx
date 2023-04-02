@@ -27,14 +27,14 @@ const WxOpenAuthCallbackPage = (props:any) => {
     const data = useLoaderData();
     return (
         <Card>
-            <Card.Body>
+            <Card.Body style={{fontSize: 18}}>
                 {data &&
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400}}>
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 400}}>
                         <Link to={'/app/publish'} style={{color: '#3366CC'}}>恭喜您授权成功，点击链接继续发布应用</Link>
                     </div>
                 }
                 {!data &&
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400}}>
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 400}}>
                         <Link to={'/app/publish'} style={{color: 'red'}}>恭喜您授权成功，点击链接继续发布应用</Link>
                     </div>
                 }
