@@ -48,7 +48,7 @@ public class AppPublish {
 	private String qrcode;
 	/**该发布的状态，0为未发布，1为审核中，2为已发布*/
 	@Excel(name = "该发布的状态，0为未发布，1为审核中，2为已发布", width = 15)
-    @ApiModelProperty(value = "该发布的状态，0为未发布，1为审核中，2为已发布")
+    @ApiModelProperty(value = "该发布的状态，0为未发布，1为审核中，2为审核通过、3为拒绝通过、4为已上线")
 	private java.lang.Integer status;
 	/**appId*/
 	@Excel(name = "appId", width = 15)
