@@ -14,7 +14,7 @@ export default function WxappUploadEntry(props: any) {
         if (submitFetcher.data && submitFetcher.type === 'done') {
             setPublishing(false);
             handleResult(submitFetcher.data, '上传成功');
-            setCurrentPublish(submitFetcher.data);
+            setCurrentPublish(submitFetcher.data.result);
         }
     }, [submitFetcher.state]);
 
