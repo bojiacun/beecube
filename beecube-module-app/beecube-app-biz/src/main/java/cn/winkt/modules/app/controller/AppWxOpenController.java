@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.controller;
 
 
+import cn.binarywang.wx.miniapp.bean.code.WxMaCodeSubmitAuditItem;
 import cn.binarywang.wx.miniapp.bean.code.WxMaCodeSubmitAuditRequest;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
@@ -18,7 +19,9 @@ import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
+import me.chanjar.weixin.open.bean.ma.WxOpenMaCategory;
 import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
+import me.chanjar.weixin.open.bean.result.WxOpenMaCategoryListResult;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -90,7 +93,28 @@ public class AppWxOpenController {
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
 
         //提交代码审核
+
+
+        //获取小程序已经申请好的类目
+        WxOpenMaCategoryListResult categoryListResult = wxOpenMaService.getCategoryList();
+        List<WxOpenMaCategory> categories = categoryListResult.getCategoryList();
+        if(categories.size() == 0) {
+            throw new JeecgBootException("请先去小程序后台设置好服务类目后再来发布审核");
+        }
+
         WxOpenMaSubmitAuditMessage message = new WxOpenMaSubmitAuditMessage();
+        List<WxMaCodeSubmitAuditItem> itemList = new ArrayList<>();
+
+        categories.forEach(wxOpenMaCategory -> {
+            WxMaCodeSubmitAuditItem item = new WxMaCodeSubmitAuditItem();
+            item.setFirstClass(wxOpenMaCategory.getFirstClass());
+            item.setFirstId(Long.valueOf(wxOpenMaCategory.getFirstId()));
+            item.setSecondClass(wxOpenMaCategory.getSecondClass());
+            item.setSecondId(Long.valueOf(wxOpenMaCategory.getSecondId()));
+            itemList.add(item);
+        });
+
+        message.setItemList(itemList);
         wxOpenMaService.submitAudit(message);
 
         return Result.OK(true);
