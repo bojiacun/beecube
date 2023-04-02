@@ -83,9 +83,7 @@ export default function WxappUploadEntry(props: any) {
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
                     {newPublish &&
-                        <div style={{marginBottom: 10}}>
-                            {nl2br(newPublish.userDesc)}
-                        </div>
+                        <div style={{marginBottom: 10}} dangerouslySetInnerHTML={{__html: nl2br(newPublish.userDesc)}}></div>
                     }
                     {currentPublish.status == 3 &&
                         <Alert variant={'danger'} style={{marginBottom: 10}}>审核未通过：{currentPublish.reason}</Alert>
