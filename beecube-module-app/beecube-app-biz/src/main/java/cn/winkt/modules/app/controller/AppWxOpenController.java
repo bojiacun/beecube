@@ -97,7 +97,8 @@ public class AppWxOpenController {
         WxOpenResult result = wxOpenMaService.releaseAudited();
         publish.setStatus(4);
         appPublishService.updateById(publish);
-        return Result.OK(result);
+
+        return Result.OK(publish);
     }
 
     @PostMapping("/auth/public")
@@ -144,7 +145,7 @@ public class AppWxOpenController {
         publish.setAuditId(result.getAuditId());
         publish.setStatus(1);
         appPublishService.updateById(publish);
-        return Result.OK(true);
+        return Result.OK(publish);
     }
 
     @PostMapping("/auth/upload")
