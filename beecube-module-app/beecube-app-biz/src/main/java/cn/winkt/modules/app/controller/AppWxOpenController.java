@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.controller;
 
 
+import cn.binarywang.wx.miniapp.bean.code.WxMaCodeSubmitAuditRequest;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.entity.App;
@@ -17,6 +18,7 @@ import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
+import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +70,30 @@ public class AppWxOpenController {
     public Result<String> cretePreAuthUrl() throws WxErrorException {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getPc(), "/app/wxopen/auth"), "2", null);
         return Result.OK("", url);
+    }
+
+    @PostMapping("/auth/public")
+    public Result<?> publicUpload(@RequestBody AppPublish publish) throws WxErrorException {
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
+        }
+        if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
+            throw new JeecgBootException("无法获取刷新令牌");
+        }
+        wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
+
+        String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(app.getAuthorizerAppid());
+        wxMaDefaultConfig.setAccessToken(appAccessToken);
+        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
+
+        //提交代码审核
+        WxOpenMaSubmitAuditMessage message = new WxOpenMaSubmitAuditMessage();
+        wxOpenMaService.submitAudit(message);
+
+        return Result.OK(true);
     }
 
     @PostMapping("/auth/upload")
