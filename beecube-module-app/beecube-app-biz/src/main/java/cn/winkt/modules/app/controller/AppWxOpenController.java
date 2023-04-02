@@ -3,7 +3,10 @@ package cn.winkt.modules.app.controller;
 
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.service.IAppService;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -30,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -42,6 +46,10 @@ public class AppWxOpenController {
 
     @Resource
     JeecgBaseConfig jeecgBaseConfig;
+
+    @Resource
+    IAppService appService;
+
 
     @GetMapping(value = "/auth/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
@@ -63,34 +71,46 @@ public class AppWxOpenController {
         WxOpenAuthorizationInfo wxOpenAuthorizationInfo = result.getAuthorizationInfo();
         String appId = wxOpenAuthorizationInfo.getAuthorizerAppid();
         wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(appId, wxOpenAuthorizationInfo.getAuthorizerRefreshToken());
-        //设置域名信息
-        WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
-        wxMaConfig.setAppid(appId);
-        wxMaConfig.setAccessToken(wxOpenAuthorizationInfo.getAuthorizerAccessToken());
-        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), appId, wxMaConfig);
-        wxOpenMaService.modifyDomain("set",
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-                Collections.singletonList("wss://api.beecube.winkt.cn"),
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
-                );
 
-        //设置业务域名
-        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
 
-        //上传代码,永远是最新一份
-        List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
-        if(templates.size() == 0) {
-            throw new JeecgBootException("模板为空");
+
+        //设置应用信息
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
         }
-        WxOpenMaCodeTemplate distTemplate = templates.get(0);
-        JSONObject extJsonObject = new JSONObject();
-        extJsonObject.put("appId", AppContext.getApp());
-        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
-        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
+        app.setAuthStatus("authorized");
+        app.setAuthTime(new Date());
+        app.setAuthorizerAppid(appId);
+        appService.updateById(app);
 
+        //设置域名信息
+//        WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
+//        wxMaConfig.setAppid(appId);
+//        wxMaConfig.setAccessToken(wxOpenAuthorizationInfo.getAuthorizerAccessToken());
+//        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), appId, wxMaConfig);
+//        wxOpenMaService.modifyDomain("set",
+//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+//                Collections.singletonList("wss://api.beecube.winkt.cn"),
+//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+//                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
+//                );
+//
+//        //设置业务域名
+//        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+//
+//        //上传代码,永远是最新一份
+//        List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
+//        if(templates.size() == 0) {
+//            throw new JeecgBootException("模板为空");
+//        }
+//        WxOpenMaCodeTemplate distTemplate = templates.get(0);
+//        JSONObject extJsonObject = new JSONObject();
+//        extJsonObject.put("appId", AppContext.getApp());
+//        extJsonObject.put("siteroot", "https://api.beecube.winkt.cn");
+//        wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), extJsonObject);
 
-        return Result.OK(result);
+        return Result.OK(app);
     }
 
 //    @GetMapping("/auth/redirect")

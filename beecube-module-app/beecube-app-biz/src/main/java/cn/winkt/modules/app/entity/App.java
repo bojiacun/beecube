@@ -55,12 +55,20 @@ public class App {
     @ApiModelProperty(value = "应用状态,0是禁用，1是正常")
 	@Dict(dicCode = "app_status")
 	private java.lang.Integer status;
+
+	private String authorizerAppid;
+
+	@Dict(dicCode = "app_auth_status")
+	private String authStatus;
 	/**应用过期时间*/
 	@Excel(name = "应用过期时间", width = 20, format = "yyyy-MM-dd")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "应用过期时间")
 	private java.util.Date endTime;
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private Date authTime;
 	/**创建时间*/
 	@Excel(name = "创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

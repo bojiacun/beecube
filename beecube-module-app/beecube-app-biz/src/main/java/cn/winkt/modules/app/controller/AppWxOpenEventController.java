@@ -1,7 +1,9 @@
 package cn.winkt.modules.app.controller;
 
 import cn.winkt.modules.app.config.MiniAppOpenService;
+import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.entity.AppWxOpenConfig;
+import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.service.IAppWxOpenConfigService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/app/wxopen/event")
@@ -24,6 +27,9 @@ public class AppWxOpenEventController {
 
     @Resource
     IAppWxOpenConfigService appWxOpenConfigService;
+
+    @Resource
+    IAppService appService;
 
     @ResponseBody
     @RequestMapping(value = "/authorize", method = {RequestMethod.POST, RequestMethod.PUT})
@@ -40,6 +46,8 @@ public class AppWxOpenEventController {
         if (wxOpenXmlMessage == null) {
             throw new JeecgBootException("授权事件解析失败");
         }
+        LambdaQueryWrapper<App> appLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        App app;
         switch (wxOpenXmlMessage.getInfoType()) {
             case "component_verify_ticket":
                 log.info("票据信息为：{}", wxOpenXmlMessage.getComponentVerifyTicket());
@@ -59,12 +67,33 @@ public class AppWxOpenEventController {
                 break;
             case "authorized":
                 log.info("{} 授权成功了", wxOpenXmlMessage.getAppId());
+                appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
+                app = appService.getOne(appLambdaQueryWrapper);
+                if(app != null) {
+                    app.setAuthTime(new Date());
+                    app.setAuthStatus(wxOpenXmlMessage.getInfoType());
+                    appService.updateById(app);
+                }
                 break;
             case "unauthorized":
                 log.info("{} 取消授权", wxOpenXmlMessage.getAppId());
+                appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
+                app = appService.getOne(appLambdaQueryWrapper);
+                if(app != null) {
+                    app.setAuthTime(new Date());
+                    app.setAuthStatus(wxOpenXmlMessage.getInfoType());
+                    appService.updateById(app);
+                }
                 break;
             case "updateauthorized":
                 log.info("{} 更新授权成功了", wxOpenXmlMessage.getAppId());
+                appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
+                app = appService.getOne(appLambdaQueryWrapper);
+                if(app != null) {
+                    app.setAuthTime(new Date());
+                    app.setAuthStatus(wxOpenXmlMessage.getInfoType());
+                    appService.updateById(app);
+                }
                 break;
         }
         return "success";
