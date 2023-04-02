@@ -1,8 +1,26 @@
 import {Alert, Button, Image} from "react-bootstrap";
-import {compareVersion} from "~/utils/utils";
+import {compareVersion, handleResult} from "~/utils/utils";
+import {useEffect, useState} from "react";
+import {useFetcher} from "@remix-run/react";
 
 export default function WxappUploadEntry(props: any) {
     const {authUrl, app, publish, newPublish} = props.data;
+    const [currentPublish, setCurrentPublish] = useState<any>(publish);
+    const [publishing, setPublishing] = useState<boolean>(false);
+    const submitFetcher = useFetcher();
+
+    useEffect(() => {
+        if (submitFetcher.data && submitFetcher.type === 'done') {
+            setPublishing(false);
+            handleResult(submitFetcher.data, '发布成功');
+            setCurrentPublish(submitFetcher.data);
+        }
+    }, [submitFetcher.state]);
+
+    const submitPreview = () => {
+        setPublishing(true);
+        submitFetcher.submit(newPublish, {method: 'post', action: '/app/wxopen/upload'})
+    }
 
     return (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400, flexDirection: 'column'}}>
@@ -14,24 +32,24 @@ export default function WxappUploadEntry(props: any) {
                     </Alert>
                 </>
             }
-            {app.authStatus == 'authorized' && !publish &&
+            {app.authStatus == 'authorized' && !currentPublish &&
                 <div>
-                    <Button variant={'primary'}>发布代码</Button>
+                    <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'提交代码并生成体验码'}</Button>
                 </div>
             }
-            {app.authStatus == 'authorized' && publish &&
+            {app.authStatus == 'authorized' && currentPublish &&
                 <>
                     <div>
-                        {publish.status < 2 &&
-                            <Image src={publish.previewQrcode} style={{width: '100%'}} />
+                        {currentPublish.status < 2 &&
+                            <Image src={currentPublish.previewQrcode} style={{width: '100%'}} />
                         }
-                        {publish.status == 2 &&
-                            <Image src={publish.qrcode} style={{width: '100%'}} />
+                        {currentPublish.status == 2 &&
+                            <Image src={currentPublish.qrcode} style={{width: '100%'}} />
                         }
                     </div>
-                    <div>当前版本为{publish.version}，最新版本为{newPublish.user_version}</div>
+                    <div>当前版本为{currentPublish.version}，最新版本为{newPublish.user_version}</div>
                     <div>
-                        {compareVersion(publish.version, newPublish.user_version) < 0 && <Button variant={'primary'}>重新发布</Button>}
+                        {compareVersion(currentPublish.version, newPublish.user_version) < 0 && <Button variant={'primary'} onClick={submitPreview} disabled={publishing}>{publishing ? '发布中，请稍后...':'重新发布'}</Button>}
                         <Button variant={'danger'}>提交审核</Button>
                     </div>
                 </>
