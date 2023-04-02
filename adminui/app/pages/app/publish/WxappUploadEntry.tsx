@@ -2,7 +2,7 @@ import {Alert, Button, Image} from "react-bootstrap";
 import {compareVersion} from "~/utils/utils";
 
 export default function WxappUploadEntry(props: any) {
-    const {authUrl, app, publish, newVersion} = props.data;
+    const {authUrl, app, publish, newPublish} = props.data;
 
     return (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: 400, height: 400, flexDirection: 'column'}}>
@@ -29,9 +29,9 @@ export default function WxappUploadEntry(props: any) {
                             <Image src={publish.qrcode} style={{width: '100%'}} />
                         }
                     </div>
-                    <div>当前版本为{publish.version}，最新版本为{newVersion}</div>
+                    <div>当前版本为{publish.version}，最新版本为{newPublish.user_version}</div>
                     <div>
-                        {compareVersion(publish.version, newVersion) < 0 && <Button variant={'primary'}>重新发布</Button>}
+                        {compareVersion(publish.version, newPublish.user_version) < 0 && <Button variant={'primary'}>重新发布</Button>}
                         <Button variant={'danger'}>提交审核</Button>
                     </div>
                 </>

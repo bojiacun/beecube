@@ -6,10 +6,15 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.open.api.WxOpenComponentService;
+import me.chanjar.weixin.open.api.WxOpenService;
+import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -52,6 +57,9 @@ import io.swagger.annotations.ApiOperation;
 public class AppPublishController extends JeecgController<AppPublish, IAppPublishService> {
     @Autowired
     private IAppPublishService appPublishService;
+
+    @Resource
+    private WxOpenService wxOpenService;
 
     /**
      * 分页列表查询
@@ -153,6 +161,14 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
         return Result.OK(appPublishService.getLatestPublish());
     }
 
+    @AutoLog(value = "应用前端发布版本表-最新版本")
+    @ApiOperation(value = "应用前端发布版本表-最新版本", notes = "应用前端发布版本表-最新版本")
+    @GetMapping(value = "/new")
+    public Result<?> queryNew() throws WxErrorException {
+        WxOpenComponentService wxOpenComponentService = wxOpenService.getWxOpenComponentService();
+        List<WxOpenMaCodeTemplate> templates = wxOpenComponentService.getTemplateList(0);
+        return Result.OK(templates.get(0));
+    }
     /**
      * 导出excel
      *

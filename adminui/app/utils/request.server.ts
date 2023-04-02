@@ -140,6 +140,8 @@ export const API_APP_DIY_PAGE_EDIT = `${BASE_URL}/beecube-app/app/diy/pages/edit
 export const API_APP_DIY_PAGE_ADD = `${BASE_URL}/beecube-app/app/diy/pages/add`;
 
 export const API_APP_PUBLISH_LATEST = `${BASE_URL}/beecube-app/app/publishes/latest`;
+export const API_APP_PUBLISH_NEW = `${BASE_URL}/beecube-app/app/publishes/new`;
+
 export const API_APP_DETAIL = `${BASE_URL}/beecube-app/app/queryById`;
 export const API_APP_MODULE_DETAIL = `${BASE_URL}/beecube-app/app/modules/queryById`;
 export const API_APP_MENU_LIST = `${BASE_URL}/beecube-app/app/menus/all`;
