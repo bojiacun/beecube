@@ -75,6 +75,7 @@ public class MiniAppOpenService {
         if(wxOpenConfigStorage != null) {
             wxOpenConfigStorage.setComponentVerifyTicket(null);
             wxOpenConfigStorage = null;
+            getWxOpenService().setWxOpenConfigStorage(getWxOpenConfigStorage());
         }
     }
 }
