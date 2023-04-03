@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.vo;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class WxAppExtJsonConfig {
@@ -8,4 +9,5 @@ public class WxAppExtJsonConfig {
     private Boolean extEnable;
     private String extAppid;
     private Boolean directCommit;
+    private List<String> requiredPrivateInfos;
 }

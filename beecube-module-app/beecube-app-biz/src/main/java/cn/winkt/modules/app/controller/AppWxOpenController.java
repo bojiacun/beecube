@@ -200,7 +200,7 @@ public class AppWxOpenController {
         wxAppExtJsonConfig.setExtEnable(true);
         wxAppExtJsonConfig.setExtAppid(app.getAuthorizerAppid());
         wxAppExtJsonConfig.setDirectCommit(false);
-
+        wxAppExtJsonConfig.setRequiredPrivateInfos(Arrays.asList("onLocationChange","startLocationUpdate","chooseLocation"));
         wxOpenMaService.codeCommit(distTemplate.getTemplateId(), distTemplate.getUserVersion(), distTemplate.getUserDesc(), wxAppExtJsonConfig);
 
         //获取体验二维码
