@@ -131,6 +131,7 @@ public class AppWxOpenController {
         }
 
         WxOpenMaSubmitAuditMessage message = new WxOpenMaSubmitAuditMessage();
+        message.setPrivacyApiNotUse(true);
         List<WxMaCodeSubmitAuditItem> itemList = new ArrayList<>();
 
         categories.forEach(wxOpenMaCategory -> {
