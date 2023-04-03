@@ -95,7 +95,9 @@ export default function WxappUploadEntry(props: any) {
                         </>
                     }
                     {currentPublish.status == 3 &&
-                        <Alert variant={'danger'} style={{marginBottom: 10}}>审核未通过：{currentPublish.reason}</Alert>
+                        <Alert variant={'danger'} style={{marginBottom: 10}}>审核未通过：
+                            <div dangerouslySetInnerHTML={{__html: nl2br(currentPublish.reason)}}></div>
+                        </Alert>
                     }
                     <div>
                         {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 &&
