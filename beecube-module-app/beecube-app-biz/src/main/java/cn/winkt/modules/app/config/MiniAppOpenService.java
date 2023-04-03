@@ -15,6 +15,7 @@ import me.chanjar.weixin.open.api.impl.WxOpenInMemoryConfigStorage;
 import me.chanjar.weixin.open.api.impl.WxOpenInRedissonConfigStorage;
 import me.chanjar.weixin.open.api.impl.WxOpenServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
+import org.jeecg.common.util.SpringContextUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +76,8 @@ public class MiniAppOpenService {
         if(wxOpenConfigStorage != null) {
             wxOpenConfigStorage.setComponentVerifyTicket(null);
             wxOpenConfigStorage = null;
-            getWxOpenService().setWxOpenConfigStorage(getWxOpenConfigStorage());
+            WxOpenService wxOpenService = SpringContextUtils.getBean(WxOpenService.class);
+            wxOpenService.setWxOpenConfigStorage(getWxOpenConfigStorage());
         }
     }
 }
