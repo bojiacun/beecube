@@ -2,10 +2,8 @@ package cn.winkt.modules.app.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
+
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -56,7 +54,12 @@ public class App {
 	@Dict(dicCode = "app_status")
 	private java.lang.Integer status;
 
+
+
+	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private String authorizerAppid;
+
+	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private String authorizerRefreshToken;
 
 	@Dict(dicCode = "app_auth_status")

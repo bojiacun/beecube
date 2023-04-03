@@ -82,6 +82,8 @@ public class AppWxOpenEventController {
                 if(app != null) {
                     app.setAuthTime(new Date());
                     app.setAuthStatus(wxOpenXmlMessage.getInfoType());
+                    app.setAuthorizerRefreshToken(null);
+                    app.setAuthorizerAppid(null);
                     appService.updateById(app);
                 }
                 break;
