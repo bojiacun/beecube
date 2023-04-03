@@ -137,6 +137,7 @@ public class AppWxOpenController {
         WxOpenMaPrivacyService wxOpenMaPrivacyService = wxOpenMaService.getPrivacyService();
         PrivacyOwnerSetting privacyOwnerSetting = PrivacyOwnerSetting.builder()
                 .noticeMethod("公告")
+                .contactEmail("bojinhong@126.com")
                 .build();
 
         List<SetPrivacySetting.Setting> settingList = new ArrayList<>();
