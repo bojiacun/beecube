@@ -42,6 +42,8 @@ export default defineAppConfig({
         'pages/my/profile/nickname',
         'pages/my/profile/email',
         'pages/my/profile/auth',
+
+        'pages/live/pusher'
     ],
     window: {
         backgroundTextStyle: 'light',
