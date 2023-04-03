@@ -6,9 +6,11 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.config.MiniAppOpenService;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppSetting;
 import com.alibaba.fastjson.JSONObject;
@@ -56,6 +58,10 @@ import io.swagger.annotations.ApiOperation;
 public class AppWxOpenConfigController extends JeecgController<AppWxOpenConfig, IAppWxOpenConfigService> {
 	@Autowired
 	private IAppWxOpenConfigService appWxOpenConfigService;
+
+
+	@Resource
+	MiniAppOpenService miniAppOpenService;
 	
 	/**
 	 * 列表查询
@@ -83,6 +89,7 @@ public class AppWxOpenConfigController extends JeecgController<AppWxOpenConfig, 
 			 config.setSettingKey(key);
 			 appWxOpenConfigService.save(config);
 		 });
+		 miniAppOpenService.clear();
 		 return Result.OK("更新成功!");
 	 }
 }

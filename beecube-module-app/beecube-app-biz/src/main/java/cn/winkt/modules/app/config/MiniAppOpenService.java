@@ -70,4 +70,11 @@ public class MiniAppOpenService {
         }
         return null;
     }
+
+    public void clear() {
+        if(wxOpenConfigStorage != null) {
+            wxOpenConfigStorage.setComponentVerifyTicket(null);
+            wxOpenConfigStorage = null;
+        }
+    }
 }

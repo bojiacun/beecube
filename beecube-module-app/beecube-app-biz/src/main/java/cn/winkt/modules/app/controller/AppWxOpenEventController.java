@@ -2,7 +2,9 @@ package cn.winkt.modules.app.controller;
 
 import cn.winkt.modules.app.config.MiniAppOpenService;
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppPublish;
 import cn.winkt.modules.app.entity.AppWxOpenConfig;
+import cn.winkt.modules.app.service.IAppPublishService;
 import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.service.IAppWxOpenConfigService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -30,6 +32,9 @@ public class AppWxOpenEventController {
 
     @Resource
     IAppService appService;
+
+    @Resource
+    IAppPublishService appPublishService;
 
     @ResponseBody
     @RequestMapping(value = "/authorize", method = {RequestMethod.POST, RequestMethod.PUT})
@@ -85,6 +90,12 @@ public class AppWxOpenEventController {
                     app.setAuthorizerRefreshToken(null);
                     app.setAuthorizerAppid(null);
                     appService.updateById(app);
+
+
+                    //删除APP的发布历史
+                    LambdaQueryWrapper<AppPublish> appPublishLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                    appPublishLambdaQueryWrapper.eq(AppPublish::getAppId, app.getId());
+                    appPublishService.remove(appPublishLambdaQueryWrapper);
                 }
                 break;
             case "updateauthorized":
