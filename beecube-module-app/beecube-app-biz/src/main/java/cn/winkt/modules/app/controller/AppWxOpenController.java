@@ -16,12 +16,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.open.api.WxOpenMaPrivacyService;
 import me.chanjar.weixin.open.api.WxOpenMaService;
 import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenMaServiceImpl;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
 import me.chanjar.weixin.open.bean.auth.WxOpenAuthorizationInfo;
 import me.chanjar.weixin.open.bean.ma.WxOpenMaCategory;
+import me.chanjar.weixin.open.bean.ma.privacy.PrivacyOwnerSetting;
+import me.chanjar.weixin.open.bean.ma.privacy.SetPrivacySetting;
 import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
 import me.chanjar.weixin.open.bean.result.WxOpenMaCategoryListResult;
 import me.chanjar.weixin.open.bean.result.WxOpenMaSubmitAuditResult;
@@ -130,6 +133,48 @@ public class AppWxOpenController {
             throw new JeecgBootException("请先去小程序后台设置好服务类目后再来发布审核");
         }
 
+        //设置用户隐私协议
+        WxOpenMaPrivacyService wxOpenMaPrivacyService = wxOpenMaService.getPrivacyService();
+        PrivacyOwnerSetting privacyOwnerSetting = PrivacyOwnerSetting.builder()
+                .noticeMethod("公告")
+                .build();
+
+        List<SetPrivacySetting.Setting> settingList = new ArrayList<>();
+        SetPrivacySetting.Setting setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("scope.userLocation");
+        setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("scope.userLocationBackground");
+        setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
+        settingList.add(setting);
+
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("UserInfo");
+        setting.setPrivacyText("你的用户信息（微信昵称、头像）将用于小程序的效果展示");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("Location");
+        setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("Address");
+        setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
+        settingList.add(setting);
+
+
+        SetPrivacySetting setPrivacySetting = SetPrivacySetting.builder()
+                .settingList(settingList)
+                .ownerSetting(privacyOwnerSetting)
+                .build();
+        wxOpenMaPrivacyService.setPrivacySetting(setPrivacySetting);
+
+
+        //提交代码审核
         WxOpenMaSubmitAuditMessage message = new WxOpenMaSubmitAuditMessage();
         message.setPrivacyApiNotUse(true);
         List<WxMaCodeSubmitAuditItem> itemList = new ArrayList<>();
@@ -145,9 +190,14 @@ public class AppWxOpenController {
 
         message.setItemList(itemList);
         WxOpenMaSubmitAuditResult result = wxOpenMaService.submitAudit(message);
+
+        //更新本地发布记录
         publish.setAuditId(result.getAuditId());
         publish.setStatus(1);
         appPublishService.updateById(publish);
+
+
+
         return Result.OK(publish);
     }
 
