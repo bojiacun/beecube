@@ -25,6 +25,7 @@ export default function WxappUploadEntry(props: any) {
         if (publicFetcher.data && publicFetcher.type === 'done') {
             setPublishing(false);
             handleResult(publicFetcher.data, '提交审核成功');
+            setCurrentPublish(publicFetcher.data.result);
         }
     }, [publicFetcher.state]);
 
@@ -32,7 +33,7 @@ export default function WxappUploadEntry(props: any) {
         if (releaseFetcher.data && releaseFetcher.type === 'done') {
             setReleasing(false);
             handleResult(releaseFetcher.data, '发布成功！');
-            setCurrentPublish(submitFetcher.data.result);
+            setCurrentPublish(releaseFetcher.data.result);
         }
     }, [releaseFetcher.state]);
 
