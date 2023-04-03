@@ -46,6 +46,7 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
 
                         <BootstrapInput  label={'即购APPID'} name={'zegoAppId'}  placeholder={'即购直播的应用ID'} />
+                        <BootstrapInput  label={'即购AppSign'} name={'zegoAppSign'}  placeholder={'即购直播的即购AppSign'} />
                         <BootstrapInput  label={'即购ServerSecret'} name={'zegoServerSecret'}  placeholder={'即购直播的应用ID'} />
                         <BootstrapInput  label={'即购Server地址'} name={'zegoServerAddress'}  placeholder={'即购直播的Server地址'} />
                         <BootstrapInput  label={'即购CallbackSecret'} name={'zegoCallbackSecret'}  placeholder={'即购直播的CallbackSecret'} />
