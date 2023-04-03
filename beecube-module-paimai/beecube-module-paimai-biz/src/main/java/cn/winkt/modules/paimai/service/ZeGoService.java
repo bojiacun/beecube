@@ -21,7 +21,7 @@ public class ZeGoService {
     /**
      * 测试获取房间内用户数目
      */
-    public void describeUserNum() {
+    public String describeUserNum() {
         // 请填写你要统计的房间ID
         String roomId = "room1";
         // 请填写你从控制台获取的APP ID,
@@ -55,7 +55,7 @@ public class ZeGoService {
         String url = buildAPIUrl("https://rtc-api.zego.im/", params);
 
         String result = sendGet(url);
-        System.out.println(result);
+        return result;
     }
 
     /**
