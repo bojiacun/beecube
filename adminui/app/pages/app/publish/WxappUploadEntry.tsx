@@ -71,6 +71,9 @@ export default function WxappUploadEntry(props: any) {
             {app.authStatus == 'authorized' && currentPublish &&
                 <>
                     <div>
+                        {currentPublish.status < 4 ? '扫码进行体验': '扫码打开小程序'}
+                    </div>
+                    <div>
                         {currentPublish.status < 4 &&
                             <Image src={currentPublish.previewQrcode} style={{width: '100%'}}/>
                         }
@@ -85,7 +88,7 @@ export default function WxappUploadEntry(props: any) {
                     <div style={{marginBottom: 10}}>
                         上传时间为 <span style={{fontWeight: 'bold'}}>{currentPublish.createTime}</span>
                     </div>
-                    {newPublish &&
+                    {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 &&
                         <>
                             <div>本次更新：</div>
                             <div style={{marginBottom: 10, textAlign: 'center'}} dangerouslySetInnerHTML={{__html: nl2br(newPublish.userDesc)}}></div>
