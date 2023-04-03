@@ -18,6 +18,8 @@ import java.util.Map;
 @Service
 public class ZeGoService {
 
+    private static final String ZEGO_BASE_URL = "https://rtc-api.zego.im/";
+
     /**
      * 测试获取房间内用户数目
      */

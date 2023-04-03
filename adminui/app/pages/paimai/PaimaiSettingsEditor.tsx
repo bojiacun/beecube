@@ -43,6 +43,14 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
                         <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
+                        <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
+
+                        <BootstrapInput  label={'即购APPID'} name={'zegoAppId'}  placeholder={'即购直播的应用ID'} />
+                        <BootstrapInput  label={'即购ServerSecret'} name={'zegoServerSecret'}  placeholder={'即购直播的应用ID'} />
+                        <BootstrapInput  label={'即购Server地址'} name={'zegoServerAddress'}  placeholder={'即购直播的Server地址'} />
+                        <BootstrapInput  label={'即购CallbackSecret'} name={'zegoCallbackSecret'}  placeholder={'即购直播的CallbackSecret'} />
+                        <BootstrapInput  label={'即购小程序 LogUrl'} name={'zegoLogUrl'}  placeholder={'即购直播的小程序 LogUrl'} />
+
                         <FormGroup>
                             <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                             <TinymceEditor name={'descFlow'} />

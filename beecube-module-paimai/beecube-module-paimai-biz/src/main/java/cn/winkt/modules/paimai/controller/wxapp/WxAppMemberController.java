@@ -702,7 +702,7 @@ public class WxAppMemberController {
             if (goodsDepositService.count(queryWrapper) == 0) {
                 return Result.error("未缴纳专场保证金");
             }
-        } else if (goods.getDeposit() > 0) {
+        } else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
