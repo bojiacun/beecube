@@ -76,7 +76,7 @@ const LiveRoomEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
-                                    <BootstrapInput label={'开始时间'} name={'startTime'} placeholder={'直播预计开始时间'}/>
+                                    <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
 
                                 </Modal.Body>
