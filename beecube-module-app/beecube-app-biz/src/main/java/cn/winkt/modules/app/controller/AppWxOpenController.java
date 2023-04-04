@@ -182,6 +182,21 @@ public class AppWxOpenController {
         setting.setPrivacyText("照片或视频保存功能将用于小程序前端功能实现");
         settingList.add(setting);
 
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("Record");
+        setting.setPrivacyText("你的麦克风将用于小程序前端功能逻辑实现");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("BlueTooth");
+        setting.setPrivacyText("你的蓝牙将用于小程序前端功能逻辑实现");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("ChooseLocation");
+        setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
+        settingList.add(setting);
+
         SetPrivacySetting setPrivacySetting = SetPrivacySetting.builder()
                 .settingList(settingList)
                 .ownerSetting(privacyOwnerSetting)
