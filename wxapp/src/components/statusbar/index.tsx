@@ -63,7 +63,7 @@ const StatusBar = (props: StatusbarProps): any => {
     }
 
     return (
-        <View className={classNames(styles.status_bar, className)} style={{...style, ...navigatorBarStyle}}>
+        <View className={classNames(styles.status_bar, className)} style={{...navigatorBarStyle, ...style}}>
             {barTop > 0 && <View style={{height: barTop, width: '100%'}}></View>}
             <View className={'flex items-center justify-center'} style={{height: barHeight}}>
                 {button !== null && button}
