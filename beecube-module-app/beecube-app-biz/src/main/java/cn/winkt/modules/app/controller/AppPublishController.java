@@ -196,6 +196,7 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
             } else if (result.getStatus() == 0) {
                 publish.setStatus(2);
             }
+
             appPublishService.updateById(publish);
         }
 

@@ -275,54 +275,55 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
     @ApiOperation(value = "应用模块-卸载", notes = "应用模块-卸载")
     @GlobalTransactional
     public Result<?> uninstallModule(@PathVariable String id) {
-        AppModule appModule = appModuleService.getById(id);
-        if (appModule == null) {
-            throw new JeecgBootException("找不到模块 " + id);
-        }
-        if (appModule.getStatus() == null || appModule.getStatus() != 1) {
-            throw new JeecgBootException("模块状态异常，不可卸载");
-        }
-        AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
-        if (appManifest == null) {
-            throw new JeecgBootException("没有找到模块的安装信息");
-        }
-        //卸载路由
-        LambdaQueryWrapper<AppModuleRoute> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AppModuleRoute::getModuleId, appModule.getId());
-        List<AppModuleRoute> moduleRoutes = appModuleRouteService.list(queryWrapper);
-        moduleRoutes.forEach(mr -> {
-            systemApi.deleteGateway(mr.getRouterId());
-            appModuleRouteService.removeById(mr.getId());
-        });
+        throw new JeecgBootException("暂不支持卸载");
+//        AppModule appModule = appModuleService.getById(id);
+//        if (appModule == null) {
+//            throw new JeecgBootException("找不到模块 " + id);
+//        }
+//        if (appModule.getStatus() == null || appModule.getStatus() != 1) {
+//            throw new JeecgBootException("模块状态异常，不可卸载");
+//        }
+//        AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);
+//        if (appManifest == null) {
+//            throw new JeecgBootException("没有找到模块的安装信息");
+//        }
+//        //卸载路由
+//        LambdaQueryWrapper<AppModuleRoute> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(AppModuleRoute::getModuleId, appModule.getId());
+//        List<AppModuleRoute> moduleRoutes = appModuleRouteService.list(queryWrapper);
+//        moduleRoutes.forEach(mr -> {
+//            systemApi.deleteGateway(mr.getRouterId());
+//            appModuleRouteService.removeById(mr.getId());
+//        });
+//
+//        //卸载菜单
+//        LambdaQueryWrapper<AppModuleMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        menuLambdaQueryWrapper.eq(AppModuleMenu::getModuleId, appModule.getId());
+//        List<AppModuleMenu> moduleMenus = appModuleMenuService.list(menuLambdaQueryWrapper);
+//        AppMenu searchMenu = new AppMenu();
+//        searchMenu.setComponentName(appModule.getIdentify());
+//        List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
+//        systemApi.deleteBatch(menus.stream().map(AppMenu::getId).collect(Collectors.joining(",")));
+//        appModuleMenuService.removeBatchByIds(moduleMenus.stream().map(AppModuleMenu::getId).collect(Collectors.toList()));
+//        //卸载角色
+//        LambdaQueryWrapper<AppModuleRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        roleLambdaQueryWrapper.eq(AppModuleRole::getModuleId, appModule.getId());
+//        List<AppModuleRole> moduleRoles = appModuleRoleService.list(roleLambdaQueryWrapper);
+//        moduleRoles.forEach(role -> {
+//            systemApi.deleteRole(role.getRoleId());
+//            appModuleRoleService.removeById(role.getId());
+//        });
+//
+//        //调用模块卸载方法
+////		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
+////			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
+////		}
+//        //执行卸载后操作
+//        appModule.setStatus(2);
+//
+//        appModuleService.updateById(appModule);
 
-        //卸载菜单
-        LambdaQueryWrapper<AppModuleMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        menuLambdaQueryWrapper.eq(AppModuleMenu::getModuleId, appModule.getId());
-        List<AppModuleMenu> moduleMenus = appModuleMenuService.list(menuLambdaQueryWrapper);
-        AppMenu searchMenu = new AppMenu();
-        searchMenu.setComponentName(appModule.getIdentify());
-        List<AppMenu> menus = systemApi.listMenu(searchMenu).getResult();
-        systemApi.deleteBatch(menus.stream().map(AppMenu::getId).collect(Collectors.joining(",")));
-        appModuleMenuService.removeBatchByIds(moduleMenus.stream().map(AppModuleMenu::getId).collect(Collectors.toList()));
-        //卸载角色
-        LambdaQueryWrapper<AppModuleRole> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        roleLambdaQueryWrapper.eq(AppModuleRole::getModuleId, appModule.getId());
-        List<AppModuleRole> moduleRoles = appModuleRoleService.list(roleLambdaQueryWrapper);
-        moduleRoles.forEach(role -> {
-            systemApi.deleteRole(role.getRoleId());
-            appModuleRoleService.removeById(role.getId());
-        });
-
-        //调用模块卸载方法
-//		if(StringUtils.isNotEmpty(appManifest.getUninstallUrl())) {
-//			restTemplate.put("http://"+ appManifest.getGateway().getRouterId()+appManifest.getUninstallUrl(), null);
-//		}
-        //执行卸载后操作
-        appModule.setStatus(2);
-
-        appModuleService.updateById(appModule);
-
-        return Result.OK(true);
+//        return Result.OK(true);
     }
 
     @PutMapping("/upgrade/{id}")
