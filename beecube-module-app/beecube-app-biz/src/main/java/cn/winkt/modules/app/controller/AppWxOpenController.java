@@ -26,10 +26,7 @@ import me.chanjar.weixin.open.bean.ma.WxOpenMaCategory;
 import me.chanjar.weixin.open.bean.ma.privacy.PrivacyOwnerSetting;
 import me.chanjar.weixin.open.bean.ma.privacy.SetPrivacySetting;
 import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
-import me.chanjar.weixin.open.bean.result.WxOpenMaCategoryListResult;
-import me.chanjar.weixin.open.bean.result.WxOpenMaSubmitAuditResult;
-import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
-import me.chanjar.weixin.open.bean.result.WxOpenResult;
+import me.chanjar.weixin.open.bean.result.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
@@ -100,6 +97,9 @@ public class AppWxOpenController {
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
 
         WxOpenResult result = wxOpenMaService.releaseAudited();
+        log.info("发布上线的结果是{}", JSONObject.toJSONString(result));
+        WxOpenAuthorizerInfoResult infoResult = wxOpenService.getWxOpenComponentService().getAuthorizerInfo(app.getAuthorizerAppid());
+        publish.setQrcode(infoResult.getAuthorizerInfo().getQrcodeUrl());
         publish.setStatus(4);
         appPublishService.updateById(publish);
 
