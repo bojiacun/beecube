@@ -41,16 +41,19 @@ class App extends Component<PropsWithChildren> {
     initZego(context) {
         const settings = context.settings;
         const userInfo = context.userInfo;
-        zg.config({
-            appid: parseInt(settings.zegoAppId),
-            server: settings.zegoServerAddress,
-            idName: userInfo.id,
-            nickName: userInfo.nickname,
-            logLevel: 0,
-            remoteLogLevel: 0,
-            logUrl: settings.zegoLogUrl,
-            audienceCreateRoom: false
-        });
+        const appId = parseInt(settings.zegoAppId);
+        if(appId) {
+            zg.config({
+                appid: appId,
+                server: settings.zegoServerAddress,
+                idName: userInfo.id,
+                nickName: userInfo.nickname,
+                logLevel: 0,
+                remoteLogLevel: 0,
+                logUrl: settings.zegoLogUrl,
+                audienceCreateRoom: false
+            });
+        }
     }
     connectToServer(context) {
         if(siteInfo?.appId && context.userInfo?.id) {

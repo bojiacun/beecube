@@ -25,19 +25,19 @@ const Descs = (props: any) => {
             </View>
             <View className={'bg-white px-4 divide-y divide-gray-100'}>
                 <Collapse title={'拍卖流程'} showArrow={true}>
-                    <RichText nodes={goods.descFlow}/>
+                    <RichText nodes={utils.resolveHtmlImageWidth(goods.descFlow)}/>
                 </Collapse>
                 <Collapse title={'物流运输'} showArrow={true}>
-                    <RichText nodes={goods.descDelivery}/>
+                    <RichText nodes={utils.resolveHtmlImageWidth(goods.descDelivery)}/>
                 </Collapse>
                 <Collapse title={'注意事项'} showArrow={true}>
-                    <RichText nodes={goods.descNotice}/>
+                    <RichText nodes={utils.resolveHtmlImageWidth(goods.descNotice)}/>
                 </Collapse>
                 <Collapse title={'拍卖须知'} showArrow={true}>
-                    <RichText nodes={goods.descRead}/>
+                    <RichText nodes={utils.resolveHtmlImageWidth(goods.descRead)}/>
                 </Collapse>
                 <Collapse title={'保证金说明'} showArrow={true}>
-                    <RichText nodes={goods.descDeposit}/>
+                    <RichText nodes={utils.resolveHtmlImageWidth(goods.descDeposit)}/>
                 </Collapse>
             </View>
         </>
