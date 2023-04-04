@@ -17,18 +17,16 @@ import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
 import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
 import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
+import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 
 
 
 
-const AuctionList = (props: any) => {
+const LiveRoomList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
-    const [selectedAuction, setSelectedAuction] = useState<any>();
-    const [performanceListShow, setPerformanceListShow] = useState<boolean>(false);
-    const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -68,14 +66,6 @@ const AuctionList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'selected':
-                setSelectedAuction(row);
-                setSelectedListShow(true);
-                break;
-            case 'select':
-                setSelectedAuction(row);
-                setPerformanceListShow(true);
-                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -106,7 +96,7 @@ const AuctionList = (props: any) => {
             dataField: 'id',
         },
         {
-            text: '拍卖会名称',
+            text: '直播间名称',
             dataField: 'title',
         },
         {
@@ -119,16 +109,20 @@ const AuctionList = (props: any) => {
             }
         },
         {
-            text: '拍卖地点',
-            dataField: 'address',
+            text: '开始时间',
+            dataField: 'startTime',
         },
         {
-            text: '拍卖时间',
-            dataField: 'timeRange',
+            text: '结束时间',
+            dataField: 'endTime',
         },
         {
-            text: '专场数',
-            dataField: 'performanceCount',
+            text: '围观人次',
+            dataField: 'views',
+        },
+        {
+            text: '点赞数',
+            dataField: 'stars',
         },
         {
             text: '显示状态',
@@ -146,14 +140,10 @@ const AuctionList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 300},
+            headerStyle: {width: 200},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'select')}>选择专场</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选专场</a>
-                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
@@ -179,7 +169,7 @@ const AuctionList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">拍卖会管理</h4>
+                            <h4 className="mb-0">直播间管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -189,7 +179,7 @@ const AuctionList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 mr-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建拍卖会</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建直播间</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -199,7 +189,7 @@ const AuctionList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>拍卖会名称</FormLabel>
+                                    <FormLabel htmlFor={'name'}>直播间名称</FormLabel>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
@@ -236,23 +226,8 @@ const AuctionList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <PerformanceListSelector
-                show={performanceListShow}
-                setPerformanceListShow={()=>{
-                    loadData();
-                    setPerformanceListShow(false);
-                }}
-                selectedAuction={selectedAuction}
-            />
-            <PerformancesListSelected
-                show={selectedListShow}
-                selectedAuction={selectedAuction}
-                setSelectedListShow={()=>{
-                    loadData();
-                    setSelectedListShow(false);
-                }}
-            />
-            {editModal && <AuctionEditor model={editModal} onHide={()=>{
+
+            {editModal && <LiveRoomEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}
@@ -260,4 +235,4 @@ const AuctionList = (props: any) => {
     );
 }
 
-export default AuctionList;
+export default LiveRoomList;

@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -57,6 +58,7 @@ public class LiveRoom {
 	/**直播间显示状态0为不显示、1为显示*/
 	@Excel(name = "直播间显示状态0为不显示、1为显示", width = 15)
     @ApiModelProperty(value = "直播间显示状态0为不显示、1为显示")
+	@Dict(dicCode = "paimai_room_status")
 	private java.lang.Integer status;
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
