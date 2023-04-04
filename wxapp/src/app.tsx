@@ -7,6 +7,7 @@ import {setContext, setMessage, setPageLoading, setSiteInfo, setSystemInfo} from
 import Taro from "@tarojs/taro";
 import request, {connectWebSocketServer} from './lib/request';
 import 'weapp-cookie';
+import zg from './lib/zego';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
 const siteInfo = Taro.getExtConfigSync();
@@ -34,6 +35,21 @@ class App extends Component<PropsWithChildren> {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
             this.connectToServer(context);
+            this.initZego(context);
+        });
+    }
+    initZego(context) {
+        const settings = context.settings;
+        const userInfo = context.userInfo;
+        zg.config({
+            appid: parseInt(settings.zegoAppId),
+            server: settings.zegoServerAddress,
+            idName: userInfo.id,
+            nickName: userInfo.nickname,
+            logLevel: 0,
+            remoteLogLevel: 0,
+            logUrl: settings.zegoLogUrl,
+            audienceCreateRoom: false
         });
     }
     connectToServer(context) {

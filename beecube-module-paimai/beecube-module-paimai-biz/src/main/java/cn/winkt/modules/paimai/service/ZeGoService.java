@@ -1,6 +1,8 @@
 package cn.winkt.modules.paimai.service;
 
 
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -11,15 +13,85 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
+@Slf4j
 public class ZeGoService {
 
     private static final String ZEGO_BASE_URL = "https://rtc-api.zego.im/";
 
+    /**
+     * 拉流端获取登录token
+     * @param appId  即构分配的appId
+     * @param appSign 即构分配的appSign
+     * @param idName 业务系统用户唯一标识
+     * @return
+     */
+    public String getZeGouToken(String appId,String appSign,String idName){
+
+        String nonce= UUID.randomUUID().toString().replaceAll("-", "");
+        long time=new Date().getTime()/1000+30*60;
+        String appSign32=new String(appSign.replace("0x", "").replace(",", "").substring(0, 32));
+        System.out.println("appSign:"+time+"    "+appSign32+"    "+nonce);
+
+        if(appSign32.length()<32){
+            log.error("即购的AppSign错误");
+            return null;
+        }
+
+        String sourece= getPwd(appId+appSign32+idName+nonce+time);
+        System.out.println("hash:"+sourece);
+
+        JSONObject json=new JSONObject();
+        json.put("ver", 1);
+        json.put("hash", sourece);
+        json.put("nonce", nonce);
+        json.put("expired",time); //unix时间戳，单位为秒
+        org.apache.commons.codec.binary.Base64 base64 = new org.apache.commons.codec.binary.Base64();
+        return base64.encodeAsString(json.toString().getBytes());
+    }
+
+    /**
+     * 获取MD5加密
+     * @param pwd 需要加密的字符串
+     * @return String字符串 加密后的字符串
+     */
+    public String getPwd(String pwd) {
+        try {
+            // 创建加密对象
+            MessageDigest digest = MessageDigest.getInstance("md5");
+
+            // 调用加密对象的方法，加密的动作已经完成
+            byte[] bs = digest.digest(pwd.getBytes());
+            // 接下来，我们要对加密后的结果，进行优化，按照mysql的优化思路走
+            // mysql的优化思路：
+            // 第一步，将数据全部转换成正数：
+            String hexString = "";
+            for (byte b : bs) {
+                // 第一步，将数据全部转换成正数：
+                int temp = b & 255;
+                // 第二步，将所有的数据转换成16进制的形式
+                // 注意：转换的时候注意if正数>=0&&<16，那么如果使用Integer.toHexString()，可能会造成缺少位数
+                // 因此，需要对temp进行判断
+                if (temp < 16 && temp >= 0) {
+                    // 手动补上一个“0”
+                    hexString = hexString + "0" + Integer.toHexString(temp);
+                } else {
+                    hexString = hexString + Integer.toHexString(temp);
+                }
+            }
+            return hexString;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     /**
      * 测试获取房间内用户数目
      */
