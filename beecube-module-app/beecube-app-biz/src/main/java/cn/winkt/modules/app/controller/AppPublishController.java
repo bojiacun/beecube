@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.entity.App;
 import cn.winkt.modules.app.service.IAppService;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.api.WxOpenComponentService;
@@ -196,7 +197,7 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
             } else if (result.getStatus() == 0) {
                 publish.setStatus(2);
             }
-
+            log.info("微信返回的审核状态为 {}", JSONObject.toJSONString(result));
             appPublishService.updateById(publish);
         }
 
