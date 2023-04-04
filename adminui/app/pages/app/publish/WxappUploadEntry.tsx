@@ -103,7 +103,7 @@ export default function WxappUploadEntry(props: any) {
                         {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 &&
                             <Button variant={'primary'} style={{marginRight: 20}} onClick={submitPreview}
                                     disabled={uploading}>{uploading ? '发布中，请稍后...' : '重新发布'}</Button>}
-                        {(currentPublish.status == 0 || currentPublish.status == 3) && compareVersion(currentPublish.version, newPublish.userVersion) != 0 &&
+                        {(currentPublish.status == 0 || currentPublish.status == 3) &&
                             <Button variant={'danger'} disabled={publishing} onClick={publicUpload}>{publishing ? '提交中...' : '提交审核'}</Button>}
                         {(currentPublish.status == 2) &&
                             <Button variant={'success'} disabled={releasing} onClick={release}>{releasing ? '发布中...' : '发布上线'}</Button>}
