@@ -59,6 +59,7 @@ public class MybatisPlusSaasConfig {
         APP_TABLE.add("beecube_app_pay_logs");
         APP_TABLE.add("beecube_app_settings");
         APP_TABLE.add("beecube_app_publishes");
+        APP_TABLE.add("beecube_app_withdraws");
 
         APP_TABLE_REGXS.add("app_");
         APP_TABLE_REGXS.add("paimai_");
