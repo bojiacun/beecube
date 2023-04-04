@@ -167,6 +167,20 @@ public class AppWxOpenController {
         setting.setPrivacyText("你的位置信息将用于小程序位置接口的效果展示");
         settingList.add(setting);
 
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("Album");
+        setting.setPrivacyText("选中的照片或视频信息将用于小程序前端页面效果展示");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("Camera");
+        setting.setPrivacyText("拍摄的照片或视频信息将用于小程序前端页面效果展示");
+        settingList.add(setting);
+
+        setting = new SetPrivacySetting.Setting();
+        setting.setPrivacyKey("AlbumWriteOnly");
+        setting.setPrivacyText("照片或视频保存功能将用于小程序前端功能实现");
+        settingList.add(setting);
 
         SetPrivacySetting setPrivacySetting = SetPrivacySetting.builder()
                 .settingList(settingList)
