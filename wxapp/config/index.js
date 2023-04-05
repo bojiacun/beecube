@@ -9,15 +9,6 @@ const config = {
         828: 1.81 / 2,
         375: 2,
     },
-    // // 配置 NutUI 375 尺寸
-    // designWidth: 375,
-    // deviceRatio: {
-    //   640: 2.34 / 2,
-    //   750: 1,
-    //   828: 1.81 / 2,
-    //   375: 2 / 1,
-    // },
-
     sourceRoot: 'src',
     outputRoot: 'dist',
     plugins: ['@dcasia/mini-program-tailwind-webpack-plugin/dist/taro'],
@@ -31,12 +22,13 @@ const config = {
     framework: 'react',
     compiler: 'webpack5',
     cache: {
-        enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
+        enable: true// Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
     },
     mini: {
         compile: {
             exclude: [
-                path.resolve(__dirname, '..', 'src/components/live-room/index.js'),
+                // path.resolve(__dirname, '..', 'src/components/live-room'),
+                // path.resolve(__dirname, '..', 'src/components/custom-modal'),
             ]
         },
         postcss: {
