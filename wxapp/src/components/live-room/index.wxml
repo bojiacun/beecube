@@ -13,18 +13,6 @@
             </view>
         </view>
     </view>
-    <view wx:else>
-        <zego-pusher wx:if="{{isCaster}}" id="zg-pusher" url="{{mainPusher.url}}" class="push-content" muted="{{mainPusher.isMute}}" waitingImage="{{waitingImage}}" beauty="{{beauty}}" whiteness="{{whiteness}}" bindstatechange="onPushStateChange" bindnetstatus="onPushNetStateChange"></zego-pusher>
-        <zego-player wx:if="{{!isCaster}}" id="zg-player" sid="{{mainPusher.streamID}}" url="{{mainPusher.url}}" pictureInPictureMode="{{pictureInPictureMode}}" objectFit="fillCrop" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></zego-player>
-        <view wx:if="{{playStreamList.length || subPusher.url}}" class="sub-video" style="top:{{userTop}}px">
-            <zego-pusher wx:if="{{!isCaster && subPusher.url}}" url="{{subPusher.url}}" autopush="{{true}}" width="90" height="120" bindstatechange="onPushStateChange" bindnetstatus="onPushNetStateChange"></zego-pusher>
-            <view wx:if="{{playStreamList.length}}" class="play-container" wx:for="{{playStreamList}}" wx:key="streamID">
-                <zego-player url="{{item.playUrl}}" sid="{{item.streamID}}" autoplay="{{true}}" width="90" height="120">
-                </zego-player>
-                <image wx:if="{{isCaster}}" class="close-icon" data-userid="{{item.anchorID}}" bindtap="endLive" src="../images/close-play.png"></image>
-            </view>
-        </view>
-    </view>
 
     <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px">
         <image class="avatar" src="{{avatarUrl}}" bindload="" binderror=""></image>

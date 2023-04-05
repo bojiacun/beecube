@@ -1,5 +1,5 @@
 // components/live-room/index.js
-let { ZegoClient } = require("../lib/jZego-wx-1.4.0.js");
+let { ZegoClient } = require("miniprogram-zego/jZego-wx");
 const app = getApp();
 
 let zg;
@@ -246,7 +246,7 @@ Component({
     getUserInfo() {
       let userInfo = app.globalData.userInfo;
       console.log('getUserInfo', userInfo);
-      
+
       if (!userInfo) {
         wx.getUserInfo({
           success: res => {
@@ -511,7 +511,7 @@ Component({
             console.log(anchorAvatar);
             _anchorNickName = anchorNickName
             _anchorAvatar = anchorAvatar
-            
+
           } catch (e) {
             _anchorNickName = anchorName
             _anchorAvatar = '../images/avatar-logo.png'
