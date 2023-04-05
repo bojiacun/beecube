@@ -22,7 +22,11 @@ export default class Index extends Component<any, any> {
         liveAppID: null,
         wsServerURL: null,
         logServerURL: null,
-        loginType: 0
+        loginType: "1",
+        token: null,
+        userID: null,
+        userName: null,
+        userInfo: null
     }
 
     options: any;
@@ -48,6 +52,9 @@ export default class Index extends Component<any, any> {
                 wsServerURL: settings.zegoServerAddress,
                 logServerURL: settings.zegoLogUrl,
                 token: token,
+                userID: userInfo.id,
+                userName: userInfo.nickname,
+                userInfo: userInfo
             });
         }
     }
@@ -73,11 +80,36 @@ export default class Index extends Component<any, any> {
     // }
 
     render() {
-        if(!this.state.token) return <PageLoading />;
+        const {
+            roomID,
+            roomName,
+            liveAppID,
+            wsServerURL,
+            logServerURL,
+            loginType,
+            token,
+            userID,
+            userName,
+            userInfo
+        } = this.state;
+        if(!token) return <PageLoading />;
 
+        // @ts-ignore
         return (
             <PageLayout statusBarProps={{title: '', style: {background: 'transparent', position: 'fixed'}}} style={{background: 'black'}}>
-                <live id={'live-room'} logServerURL='dddd' />
+                <live
+                    id={'live-room'}
+                    liveAppID={liveAppID}
+                    roomName={roomName}
+                    roomID={roomID}
+                    wsServerURL={wsServerURL}
+                    logServerURL={logServerURL}
+                    loginType={loginType}
+                    token={token}
+                    userID={userID}
+                    userName={userName}
+                    userInfo={userInfo}
+                />
             </PageLayout>
         );
     }
