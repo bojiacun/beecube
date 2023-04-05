@@ -93,6 +93,6 @@ export default defineAppConfig({
         "chooseLocation"
     ],
     usingComponents: {
-        'live-room': './components/live-room'
+        'custom-modal': './components/custom-modal'
     }
 })

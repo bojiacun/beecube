@@ -3,7 +3,6 @@ import PageLayout from "../../layouts/PageLayout";
 import {connect} from "react-redux";
 import zg from '../../lib/zego';
 import request from "../../lib/request";
-import {LivePusher} from "@tarojs/components";
 
 
 // @ts-ignore
@@ -70,7 +69,6 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '', style: {background: 'transparent', position: 'fixed'}}} style={{background: 'black'}}>
-                <live-room />
             </PageLayout>
         );
     }
