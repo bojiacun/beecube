@@ -1,4 +1,5 @@
 import {Component} from "react";
+import {getCurrentInstance} from "@tarojs/taro";
 import PageLayout from "../../layouts/PageLayout";
 import {connect} from "react-redux";
 import request from "../../lib/request";
@@ -30,6 +31,7 @@ export default class Index extends Component<any, any> {
     }
 
     options: any;
+    liveRoom: any;
 
     constructor(props) {
         super(props);
@@ -56,6 +58,15 @@ export default class Index extends Component<any, any> {
                 userName: userInfo.nickname,
                 userInfo: userInfo
             });
+        }
+        if(this.state.token) {
+            setTimeout(()=>{
+                const {page} = getCurrentInstance();
+                // @ts-ignore
+                this.liveRoom = page?.selectComponent('#live-room');
+                console.log('live room is',this.liveRoom);
+                this.liveRoom.init();
+            }, 1000);
         }
     }
 
