@@ -25,7 +25,7 @@
             </view>
         </view>
     </view>
-    
+
     <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px">
         <image class="avatar" src="{{avatarUrl}}" bindload="" binderror=""></image>
         <view class="user-text">
@@ -61,7 +61,8 @@
                     <image class="img" src='../images/switchCamera.png'></image>
                 </view>
                 <view class='img-box' bindtap="enableMute">
-                    <image class="img" src='../images/{{mainPusher.isMute ? "mute" : "noMute"}}.png'></image>
+                    <image class="img" wx:if="{{mainPusher.isMute}}" src="../images/mute.png"></image>
+                    <image class="img" wx:else src="../images/noMute.png"></image>
                 </view>
                 <view class='img-box' bindtap="toggleShowBeauty">
                     <image class="img" src='../images/beauty-setting.png'></image>
@@ -69,7 +70,8 @@
             </view>
             <view wx:if="{{loginType==='audience'}}" class="operate">
                 <view class='img-box' bindtap="requestJoinLive">
-                    <image class="img" src='../images/{{isPublishing == true ? "endJoin" : "join"}}.png'></image>
+                    <image class="img" wx:if="{{isPublishing == true}}" src='../images/endJoin.png'></image>
+                    <image class="img" wx:else src='../images/join.png'></image>
                 </view>
             </view>
         </view>
