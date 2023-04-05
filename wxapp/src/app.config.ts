@@ -91,5 +91,8 @@ export default defineAppConfig({
         "onLocationChange",
         "startLocationUpdate",
         "chooseLocation"
-    ]
+    ],
+    usingComponents: {
+        'live-room': './components/live-room'
+    }
 })

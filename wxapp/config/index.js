@@ -1,3 +1,4 @@
+const path = require("path");
 const config = {
     projectName: '汇智拍卖',
     date: '2023-2-13',
@@ -34,7 +35,9 @@ const config = {
     },
     mini: {
         compile: {
-            exclude: []
+            exclude: [
+                path.resolve(__dirname, '..', '../src/components/live-room')
+            ]
         },
         postcss: {
             pxtransform: {

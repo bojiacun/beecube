@@ -70,11 +70,7 @@ export default class Index extends Component<any, any> {
     render() {
         return (
             <PageLayout statusBarProps={{title: '', style: {background: 'transparent', position: 'fixed'}}} style={{background: 'black'}}>
-                <LivePusher
-                    style={{width: '100vw', height: '100vh'}}
-                    url={this.state.pushUrl}
-                    autopush={false}
-                />
+                <live-room />
             </PageLayout>
         );
     }
