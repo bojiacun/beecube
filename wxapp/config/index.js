@@ -36,7 +36,7 @@ const config = {
     mini: {
         compile: {
             exclude: [
-                path.resolve(__dirname, '..', '../src/components/live-room')
+                path.resolve(__dirname, '..', 'src/components/live-room/index.js'),
             ]
         },
         postcss: {
