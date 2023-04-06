@@ -1,9 +1,7 @@
 import {Component} from "react";
 import {getCurrentInstance} from "@tarojs/taro";
-import PageLayout from "../../layouts/PageLayout";
 import {connect} from "react-redux";
 import request from "../../lib/request";
-import PageLoading from "../../components/pageloading";
 
 
 // @ts-ignore
@@ -43,7 +41,12 @@ export default class Index extends Component<any, any> {
         const {userInfo} = this.props.context;
         const {settings} = this.props;
         const options = this.options;
-        if(!prevProps.userInfo && userInfo && !this.state.roomID) {
+        const {page} = getCurrentInstance();
+        if(!this.liveRoom) {
+            // @ts-ignore
+            this.liveRoom = page?.selectComponent('#live-room');
+        }
+        if(settings && userInfo && !this.state.roomID) {
             this.setState({
                 roomID: options.roomId,
                 roomName: options.roomName,
@@ -56,20 +59,15 @@ export default class Index extends Component<any, any> {
                 userInfo: userInfo
             });
             setTimeout(async ()=>{
-                const {page} = getCurrentInstance();
-                // @ts-ignore
-                this.liveRoom = page?.selectComponent('#live-room');
                 this.liveRoom.init();
                 const result = await request.put('/paimai/api/live/login', userInfo);
                 const token = result.data.result;
                 this.setState({token: token});
-            }, 1000);
-        }
-        if(!prevState.roomID && this.state.roomID) {
+            }, 200);
 
         }
+
     }
-
 
 
     onStreamUrlUpdate(streamId, url, type) {

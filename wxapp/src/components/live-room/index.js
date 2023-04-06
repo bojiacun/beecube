@@ -216,8 +216,6 @@ Component({
         })
       }
 
-      console.log('data user info', this.data.userInfo);
-
       zg = new ZegoClient();
       zg.config({
         appid: this.data.liveAppID, // 必填，应用id，由即构提供
