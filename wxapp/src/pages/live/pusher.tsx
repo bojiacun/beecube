@@ -39,13 +39,11 @@ export default class Index extends Component<any, any> {
         // this.onStreamUrlUpdate = this.onStreamUrlUpdate.bind(this);
     }
 
-    async componentDidUpdate(prevProps: Readonly<any>) {
+    async componentDidUpdate(prevProps: Readonly<any>, prevState) {
         const {userInfo} = this.props.context;
         const {settings} = this.props;
         const options = this.options;
-        if(!prevProps.userInfo && userInfo && !this.state.token) {
-            const result = await request.put('/paimai/api/live/login', userInfo);
-            const token = result.data.result;
+        if(!prevProps.userInfo && userInfo && !this.state.roomID) {
             this.setState({
                 roomID: options.roomId,
                 roomName: options.roomName,
@@ -53,20 +51,22 @@ export default class Index extends Component<any, any> {
                 liveAppID: settings.zegoAppId,
                 wsServerURL: settings.zegoServerAddress,
                 logServerURL: settings.zegoLogUrl,
-                token: token,
                 userID: userInfo.id,
                 userName: userInfo.nickname,
                 userInfo: userInfo
             });
-        }
-        if(this.state.token) {
-            setTimeout(()=>{
+            setTimeout(async ()=>{
                 const {page} = getCurrentInstance();
                 // @ts-ignore
                 this.liveRoom = page?.selectComponent('#live-room');
-                console.log('live room is',this.liveRoom);
                 this.liveRoom.init();
+                const result = await request.put('/paimai/api/live/login', userInfo);
+                const token = result.data.result;
+                this.setState({token: token});
             }, 1000);
+        }
+        if(!prevState.roomID && this.state.roomID) {
+
         }
     }
 
@@ -93,35 +93,29 @@ export default class Index extends Component<any, any> {
     render() {
         const {
             roomID,
-            roomName,
             liveAppID,
             wsServerURL,
             logServerURL,
             loginType,
             token,
             userID,
-            userName,
-            userInfo
         } = this.state;
-        if(!token) return <PageLoading />;
+        const {systemInfo} = this.props;
+        const barTop = systemInfo.statusBarHeight;
 
         // @ts-ignore
         return (
-            <PageLayout statusBarProps={{title: '', style: {background: 'transparent', position: 'fixed'}}} style={{background: 'black'}}>
                 <live
                     id={'live-room'}
                     liveAppID={liveAppID}
-                    roomName={roomName}
                     roomID={roomID}
                     wsServerURL={wsServerURL}
                     logServerURL={logServerURL}
                     loginType={loginType}
                     token={token}
                     userID={userID}
-                    userName={userName}
-                    userInfo={userInfo}
+                    navBarHeight={barTop}
                 />
-            </PageLayout>
         );
     }
 }

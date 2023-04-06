@@ -193,11 +193,11 @@ Component({
           newBot: this.data.newBot
         })
       }
-      let userTop = this.data.navBarHeight + 16;
+      let userTop = this.data.navBarHeight;
 
       let timestamp = new Date().getTime();
-      const nickName = this.data.userInfo.nickName ? this.data.userInfo.nickName : 'xcxU' + timestamp;
-      const avatar = this.data.userInfo.avatarUrl ? this.data.userInfo.avatarUrl : '../images/avatar-logo.png';
+      const nickName = this.data.userInfo.nickname? this.data.userInfo.nickname: 'xcxU' + timestamp;
+      const avatar = this.data.userInfo.avatar ? this.data.userInfo.avatar: '../images/avatar-logo.png';
       const nickAvatar = {
         nickName: nickName,
         avatar: avatar
@@ -215,6 +215,8 @@ Component({
           nickName: nickName
         })
       }
+
+      console.log('data user info', this.data.userInfo);
 
       zg = new ZegoClient();
       zg.config({

@@ -1,15 +1,26 @@
 {
-  "miniprogramRoot": "./dist",
-  "projectname": "汇智拍卖",
-  "description": "汇智拍卖",
-  "appid": "wx6a459460d394f202",
-  "setting": {
-    "urlCheck": false,
-    "es6": true,
-    "enhance": false,
-    "compileHotReLoad": false,
-    "postcss": false,
-    "minified": true
-  },
-  "compileType": "miniprogram"
+    "miniprogramRoot": "./dist",
+    "projectname": "汇智拍卖",
+    "description": "汇智拍卖",
+    "appid": "wx6a459460d394f202",
+    "setting": {
+        "urlCheck": false,
+        "es6": true,
+        "enhance": false,
+        "compileHotReLoad": false,
+        "postcss": false,
+        "minified": true
+    },
+    "compileType": "miniprogram",
+    "condition": {
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "主播端",
+                    "pathName": "/pages/live/pusher",
+                    "query": "roomId=1643056960030203905&loginType=anchor"
+                }
+            ]
+        }
+    }
 }
