@@ -1096,7 +1096,7 @@ Component({
       //审核通过之后的操作 if == 0
       // if (ckres.result.errCode == 0){
       let message = {
-        id: this.data.userID + Date.parse(new Date()),
+        id: 'M'+this.data.userID + Date.parse(new Date()),
         // name: this.data.userID,
         name: '我',
         color: "#FF4EB2",

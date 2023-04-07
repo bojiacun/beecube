@@ -175,8 +175,7 @@ export default class Index extends Component<any, any> {
                 Taro.showToast({
                     title: '商品推送成功',
                     icon: 'none'
-                });
-
+                }).then();
             }
             default: {
                 // console.log('onRoomEvent default: ', e);
