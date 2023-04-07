@@ -32,50 +32,7 @@ export default class Index extends Component<any, any> {
         userInfo: null,
         hideModal: true,
         animationData: {},
-        merchandises: [
-            {
-                name: 'Givenchy/纪梵希高定香榭天鹅绒唇纪梵希高定香榭天鹅绒唇膏膏',
-                img: '../../assets/images/m0.png',
-                price: '345',
-                id: 0,
-                link: {
-                    path: "../web/index",
-                    extraDatas: {
-                        url: 'https://shop-ecommerce.yunyikao.com/product.html'
-                    }
-                }
-            },
-            {
-                name: 'OACH蔻驰Charlie 27 Carryal单肩斜挎手提包女包包2952过长样式挎手提包女包包2952过',
-                img: '../../assets/images/m1.png',
-                price: '1599',
-                id: 1,
-                link: {
-                    path: "../assets/images/index",
-                }
-            },
-            {
-                name: 'Vero Moda2020春夏新款褶皱收腰蕾丝拼接雪纺连衣裙',
-                img: '../../assets/images/m2.png',
-                price: '749',
-                id: 2,
-            },
-            {
-                name: 'OACH蔻驰Charlie 27 Carryal单肩斜挎手提包女包包2952过长样式挎手提包女包包2952过',
-                img: '../../assets/images/m1.png',
-                price: '1599',
-                id: 3,
-                link: {
-                    path: "../assets/images/index",
-                }
-            },
-            {
-                name: 'Vero Moda2020春夏新款褶皱收腰蕾丝拼接雪纺连衣裙',
-                img: '../../assets/images/m2.png',
-                price: '749',
-                id: 4,
-            },
-        ],
+        merchandises: [],
         pushIndex: -1,
         merBot: 0,
     }
@@ -268,7 +225,10 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/live/rooms/'+options.roomId).then(res=>{
             let room = res.data.result;
             this.setState({liveRoom: room});
-        })
+            request.get('/paimai/api/performances/goodslist', {params: {id: room.performanceId}}).then(res=>{
+                this.setState({merchandises: res.data.result});
+            })
+        });
     }
 
     //

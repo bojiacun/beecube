@@ -7,6 +7,7 @@ import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import cn.winkt.modules.paimai.vo.LiveRoomMerchandise;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/paimai/api/performances")
@@ -118,6 +120,24 @@ public class WxAppPerformanceController {
         queryWrapper.eq(LiveRoom::getPerformanceId, id);
         List<LiveRoom> liveRooms = liveRoomService.list(queryWrapper);
         return Result.OK("获取成功", liveRooms.get(0));
+    }
+
+    @GetMapping("/goodslist")
+    public Result<List<LiveRoomMerchandise>> merchandises(@RequestParam String id) {
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("g.performance_id", id);
+        queryWrapper.orderByAsc("g.sort_num");
+        List<GoodsVO> goodsVOS = goodsService.selectListVO(queryWrapper);
+        List<LiveRoomMerchandise> merchandises = goodsVOS.stream().map(goodsVO -> {
+           LiveRoomMerchandise merchandise = new LiveRoomMerchandise();
+           merchandise.setImg(goodsVO.getImages().split(",")[0]);
+           merchandise.setName(goodsVO.getTitle());
+           merchandise.setPrice(goodsVO.getStartPrice().toString());
+           merchandise.setId(goodsVO.getId());
+           merchandise.setLink("/pages/goods/detail?id="+goodsVO.getId());
+           return merchandise;
+        }).collect(Collectors.toList());
+        return Result.OK(merchandises);
     }
 
     /**
