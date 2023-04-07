@@ -20,6 +20,7 @@
             <view class="">{{stringUtil.substr(nickName,8)}}</view>
             <view class="user-count">{{userCount - 1}}观看</view>
         </view>
+        <image src="../images/beauty-close.png" bindtap="back" style="width: 56rpx; height: 56rpx" />
     </view>
     <view class="new-msg">
         <view class="new-one" style="bottom:{{newBot}}rpx" wx:if="{{newestName}}">
@@ -56,12 +57,12 @@
                     <image class="img" src='../images/beauty-setting.png'></image>
                 </view>
             </view>
-            <view wx:if="{{loginType==='audience'}}" class="operate">
-                <view class='img-box' bindtap="requestJoinLive">
-                    <image class="img" wx:if="{{isPublishing == true}}" src='../images/endJoin.png'></image>
-                    <image class="img" wx:else src='../images/join.png'></image>
-                </view>
-            </view>
+<!--            <view wx:if="{{loginType==='audience'}}" class="operate">-->
+<!--                <view class='img-box' bindtap="requestJoinLive">-->
+<!--                    <image class="img" wx:if="{{isPublishing == true}}" src='../images/endJoin.png'></image>-->
+<!--                    <image class="img" wx:else src='../images/join.png'></image>-->
+<!--                </view>-->
+<!--            </view>-->
         </view>
         <view wx:else class="mmprise-con">
             <view class='message-input' style='bottom:{{inputBottom}}px'>
