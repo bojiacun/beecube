@@ -6,10 +6,16 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -49,6 +55,9 @@ import io.swagger.annotations.ApiOperation;
 public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomService> {
 	@Autowired
 	private ILiveRoomService liveRoomService;
+
+	@Resource
+	private AppApi appApi;
 	
 	/**
 	 * 分页列表查询
@@ -83,6 +92,22 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	@ApiOperation(value="直播间表-添加", notes="直播间表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody LiveRoom liveRoom) {
+		if(StringUtils.isNotEmpty(liveRoom.getMainAnchor())) {
+			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getMainAnchor());
+			if(appMemberVO == null) {
+				throw new JeecgBootException("找不到用户");
+			}
+			liveRoom.setMainAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
+			liveRoom.setMainAnchorAvatar(appMemberVO.getAvatar());
+		}
+		if(StringUtils.isNotEmpty(liveRoom.getSubAnchor())) {
+			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getSubAnchor());
+			if(appMemberVO == null) {
+				throw new JeecgBootException("找不到用户");
+			}
+			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
+			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
+		}
 		liveRoomService.save(liveRoom);
 		return Result.OK("添加成功！");
 	}
@@ -97,6 +122,22 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	@ApiOperation(value="直播间表-编辑", notes="直播间表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody LiveRoom liveRoom) {
+		if(StringUtils.isNotEmpty(liveRoom.getMainAnchor())) {
+			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getMainAnchor());
+			if(appMemberVO == null) {
+				throw new JeecgBootException("找不到用户");
+			}
+			liveRoom.setMainAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
+			liveRoom.setMainAnchorAvatar(appMemberVO.getAvatar());
+		}
+		if(StringUtils.isNotEmpty(liveRoom.getSubAnchor())) {
+			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getSubAnchor());
+			if(appMemberVO == null) {
+				throw new JeecgBootException("找不到用户");
+			}
+			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
+			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
+		}
 		liveRoomService.updateById(liveRoom);
 		return Result.OK("编辑成功!");
 	}

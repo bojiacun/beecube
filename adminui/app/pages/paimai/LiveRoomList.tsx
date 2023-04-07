@@ -7,7 +7,7 @@ import {
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -18,6 +18,7 @@ import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
 import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
+import {User} from "react-feather";
 
 
 
@@ -115,6 +116,34 @@ const LiveRoomList = (props: any) => {
         {
             text: '结束时间',
             dataField: 'endTime',
+        },
+        {
+            text: '第一主播',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 200},
+            formatter: (cell:any, row:any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {row.mainAnchor && <Image src={row.mainAnchorAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        {row.mainAnchor && <span className={'ml-1'}>{row.mainAnchorName}</span>}
+                    </div>
+                );
+            }
+        },
+        {
+            text: '第二主播',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 200},
+            formatter: (cell:any, row:any) => {
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {row.subAnchor && <Image src={row.subAnchorAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        {row.subAnchor && <span className={'ml-1'}>{row.subAnchorName}</span>}
+                    </div>
+                );
+            }
         },
         {
             text: '围观人次',

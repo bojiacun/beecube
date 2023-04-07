@@ -67,4 +67,12 @@ public class LiveRoom {
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")
 	private java.lang.String appId;
+
+	private String mainAnchor;
+	private String mainAnchorAvatar;
+	private String mainAnchorName;
+
+	private String subAnchor;
+	private String subAnchorAvatar;
+	private String subAnchorName;
 }
