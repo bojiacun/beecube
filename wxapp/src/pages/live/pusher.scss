@@ -15,10 +15,10 @@
 .merchandise-container {
     position: absolute;
     width: 702rpx;
-    /* height: 400rpx; */
-    /* bottom: 20rpx; */
     background-color: #fff;
     border-radius: 16rpx;
+    overflow: hidden;
+    height: 100%;
 }
 .merchandise-head {
     height: 86rpx;
@@ -50,6 +50,8 @@
 }
 .merchandise-list {
     padding: 0 40rpx;
+    box-sizing: border-box;
+    height: calc(100% - 170rpx);
 }
 .merchandise-item {
     height: 240rpx;
@@ -72,6 +74,7 @@
     font-size: 28rpx;
     padding-left: 22rpx;
     margin-top: -20rpx;
+    width: 200px;
 }
 .merchandise-action {
     display: flex;
@@ -99,6 +102,8 @@
     text-overflow: ellipsis;
     font-size: 28rpx;
     line-height: 40rpx;
+    white-space: nowrap;
+    width: 100%;
 }
 .m-price {
     color: #F2034C;

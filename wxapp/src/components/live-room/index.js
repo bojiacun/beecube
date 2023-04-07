@@ -184,9 +184,9 @@ Component({
       console.log("zg", zgPusher, zgPlayer);
       // iphoneX 等机型
       if (iphoneXX) {
-        this.data.mmBot += 68;
-        this.data.meBot += 68;
-        this.data.newBot += 68;
+        this.data.mmBot += 48;
+        this.data.meBot += 48;
+        this.data.newBot += 48;
         this.setData({
           mmBot: this.data.mmBot,
           meBot: this.data.meBot,
