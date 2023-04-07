@@ -201,17 +201,34 @@ export default class Index extends Component<any, any> {
         this.setState({hideModal: true});
         this.fadeDown();
     }
-    clickMech() {
+    clickMech(e) {
+        const mer = this.state.merchandises.find(item => item.id == e.currentTarget.id)
+        if (!mer || !mer.link) return;
+        const link = mer.link;
 
+        if (link) {
+            Taro.navigateTo({
+                url: link,
+            }).then();
+        }
     }
-    pushMer() {
-
+    pushMer(e) {
+        const {currentTarget:{dataset:{indx}}} = e;
+        console.log(indx);
+        this.liveRoom.pushMer(indx);
     }
-    addShoppingCart() {
-
+    addShoppingCart(e) {
+        const {currentTarget:{dataset:{indx}}} = e;
+        console.log('addShoppingCart ', indx);
     }
     clickPush() {
-
+        console.log(this.state.pushIndex);
+        const mer = this.state.merchandises.find(item => item.id == this.state.pushIndex)
+        if (!mer || !mer.link) return;
+        const link = mer.link;
+        Taro.navigateTo({
+            url: link,
+        }).then();
     }
     fadeIn() {
         this.animation.translateY(0).step()
@@ -247,7 +264,6 @@ export default class Index extends Component<any, any> {
     render() {
         const {
             roomID,
-            roomName,
             liveAppID,
             wsServerURL,
             logServerURL,
