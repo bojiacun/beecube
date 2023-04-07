@@ -244,7 +244,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     {liveRoom &&
                         <View className={'space-x-4'}>
-                            <Navigator url={`/pages/live/pusher?roomId=${liveRoom.id}&loginType=audience&roomName=${liveRoom.title}`} className={'font-bold'}>进入直播间</Navigator>
+                            <Navigator url={`/pages/live/room?roomId=${liveRoom.id}&loginType=audience&roomName=${liveRoom.title}`} className={'font-bold'}>进入直播间</Navigator>
                         </View>
                     }
                     <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
