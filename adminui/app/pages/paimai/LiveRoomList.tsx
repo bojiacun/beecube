@@ -118,6 +118,10 @@ const LiveRoomList = (props: any) => {
             dataField: 'endTime',
         },
         {
+            text: '关联的专场',
+            dataField: 'performanceName',
+        },
+        {
             text: '第一主播',
             dataField: '',
             isDummyField: true,

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IPerformanceService;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -58,6 +60,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 	@Resource
 	private AppApi appApi;
+
+	@Resource
+	private IPerformanceService performanceService;
 	
 	/**
 	 * 分页列表查询
@@ -108,6 +113,13 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
 		}
+		if(StringUtils.isNotEmpty(liveRoom.getPerformanceId())) {
+			Performance performance = performanceService.getById(liveRoom.getPerformanceId());
+			if(performance == null) {
+				throw new JeecgBootException("找不到专场");
+			}
+			liveRoom.setPerformanceName(performance.getTitle());
+		}
 		liveRoomService.save(liveRoom);
 		return Result.OK("添加成功！");
 	}
@@ -137,6 +149,13 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			}
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
+		}
+		if(StringUtils.isNotEmpty(liveRoom.getPerformanceId())) {
+			Performance performance = performanceService.getById(liveRoom.getPerformanceId());
+			if(performance == null) {
+				throw new JeecgBootException("找不到专场");
+			}
+			liveRoom.setPerformanceName(performance.getTitle());
 		}
 		liveRoomService.updateById(liveRoom);
 		return Result.OK("编辑成功!");
