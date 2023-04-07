@@ -3,7 +3,7 @@ import Taro, {getCurrentInstance} from "@tarojs/taro";
 import {connect} from "react-redux";
 import request from "../../lib/request";
 import {Image, Text, View, CoverView, ScrollView} from "@tarojs/components";
-import './pusher.scss';
+import './room.scss';
 import utils from "../../lib/utils";
 
 

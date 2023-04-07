@@ -1,8 +1,10 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.paimai.service.ILiveRoomService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
@@ -35,6 +37,10 @@ public class WxAppPerformanceController {
 
     @Resource
     IGoodsService goodsService;
+
+
+    @Resource
+    ILiveRoomService liveRoomService;
 
 
     @AutoLog(value = "专场表-分页列表查询")
@@ -104,6 +110,14 @@ public class WxAppPerformanceController {
             throw new JeecgBootException("找不到专场");
         }
         return Result.OK(performanceService.getDetail(id));
+    }
+
+    @GetMapping("/room")
+    public Result<LiveRoom> liveRoom(@RequestParam String id) {
+        LambdaQueryWrapper<LiveRoom> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(LiveRoom::getPerformanceId, id);
+        List<LiveRoom> liveRooms = liveRoomService.list(queryWrapper);
+        return Result.OK("获取成功", liveRooms.get(0));
     }
 
     /**

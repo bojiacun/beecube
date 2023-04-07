@@ -234,7 +234,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
                     {this.state.liveRoom &&
                         <View>
-                            <Navigator url={`/pages/live/pusher?roomId=${this.state.liveRoom.id}&loginType=anchor&roomName=${this.state.liveRoom.title}`} className={'flex items-center justify-between p-4'}>
+                            <Navigator url={`/pages/live/room?roomId=${this.state.liveRoom.id}&loginType=anchor&roomName=${this.state.liveRoom.title}`} className={'flex items-center justify-between p-4'}>
                                 <View className={'flex items-center space-x-2'}>
                                     <View className={'fa fa-video-camera'} style={{fontSize: 18}}/>
                                     <View>{this.state.liveRoom.title}</View>

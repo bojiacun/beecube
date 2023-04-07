@@ -33,6 +33,7 @@ export default class Index extends Component<any, any> {
         status: undefined,
         message: false,
         deposited: true,
+        liveRoom: null
     }
 
     constructor(props) {
@@ -98,6 +99,9 @@ export default class Index extends Component<any, any> {
             this.setState({detail: detail});
             this.loadData(detail.id, 1, true);
         });
+        request.get('/paimai/api/performances/room', {params: {id: options.id}}).then(res=>{
+            this.setState({liveRoom: res.data.result});
+        })
     }
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
@@ -209,7 +213,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
+        const {detail, goodsList, noMore, loadingMore, deposited, liveRoom} = this.state;
         const {systemInfo} = this.props;
 
 
@@ -238,6 +242,11 @@ export default class Index extends Component<any, any> {
                         <Text className={'font-bold'}>拍卖时间</Text>
                         <Text>{detail.auctionTimeRange || detail.startTime}</Text>
                     </View>
+                    {liveRoom &&
+                        <View className={'space-x-4'}>
+                            <Navigator url={`/pages/live/pusher?roomId=${liveRoom.id}&loginType=audience&roomName=${liveRoom.title}`} className={'font-bold'}>进入直播间</Navigator>
+                        </View>
+                    }
                     <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
