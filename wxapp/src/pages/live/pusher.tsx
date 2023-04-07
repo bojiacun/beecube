@@ -17,7 +17,7 @@ import utils from "../../lib/utils";
     }
 ))
 export default class Index extends Component<any, any> {
-    state:any = {
+    state: any = {
         isNative: true,
         roomID: null,
         roomName: null,
@@ -89,7 +89,7 @@ export default class Index extends Component<any, any> {
         this.hideModal = this.hideModal.bind(this);
         this.clickMech = this.clickMech.bind(this);
         this.pushMer = this.pushMer.bind(this);
-        this.addShoppingCart= this.addShoppingCart.bind(this);
+        this.addShoppingCart = this.addShoppingCart.bind(this);
         this.clickPush = this.clickPush.bind(this);
         this.fadeIn = this.fadeIn.bind(this);
         this.fadeDown = this.fadeDown.bind(this);
@@ -104,11 +104,11 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
         const options = this.options;
         const {page} = getCurrentInstance();
-        if(!this.liveRoom) {
+        if (!this.liveRoom) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
         }
-        if(settings && userInfo && !this.state.roomID) {
+        if (settings && userInfo && !this.state.roomID) {
             this.setState({
                 roomID: options.roomId,
                 roomName: options.roomName,
@@ -120,7 +120,7 @@ export default class Index extends Component<any, any> {
                 userName: userInfo.nickname,
                 userInfo: userInfo
             });
-            setTimeout(async ()=>{
+            setTimeout(async () => {
                 this.liveRoom.init();
                 const result = await request.put('/paimai/api/live/login', userInfo);
                 const token = result.data.result;
@@ -133,7 +133,7 @@ export default class Index extends Component<any, any> {
 
     onRoomEvent(ev) {
         console.log('onRoomEvent', ev);
-        let { tag, content } = ev.detail;
+        let {tag, content} = ev.detail;
         switch (tag) {
             case 'onMerchandise': {
                 console.log('onMerchandise', content);
@@ -196,10 +196,12 @@ export default class Index extends Component<any, any> {
             this.fadeIn(); //调用显示动画
         }, 10);
     }
+
     hideModal() {
         this.setState({hideModal: true});
         this.fadeDown();
     }
+
     clickMech(e) {
         const mer = this.state.merchandises.find(item => item.id == e.currentTarget.id)
         if (!mer || !mer.link) return;
@@ -211,15 +213,18 @@ export default class Index extends Component<any, any> {
             }).then();
         }
     }
+
     pushMer(e) {
-        const {currentTarget:{dataset:{indx}}} = e;
+        const {currentTarget: {dataset: {indx}}} = e;
         console.log(indx);
         this.liveRoom.pushMer(indx);
     }
+
     addShoppingCart(e) {
-        const {currentTarget:{dataset:{indx}}} = e;
+        const {currentTarget: {dataset: {indx}}} = e;
         console.log('addShoppingCart ', indx);
     }
+
     clickPush() {
         console.log(this.state.pushIndex);
         const mer = this.state.merchandises.find(item => item.id == this.state.pushIndex)
@@ -229,12 +234,14 @@ export default class Index extends Component<any, any> {
             url: link,
         }).then();
     }
+
     fadeIn() {
         this.animation.translateY(0).step()
         this.setState({
             animationData: this.animation.export() //动画实例的export方法导出动画数据传递给组件的animation属性
         })
     }
+
     fadeDown() {
         this.animation.translateY(450).step()
         this.setState({
@@ -246,6 +253,7 @@ export default class Index extends Component<any, any> {
         console.log(streamId, url, type);
         this.setState({pushUrl: url});
     }
+
     // async startPushStream() {
     //     zg.startPublishingStream(this.streamId);
     // }
@@ -253,6 +261,7 @@ export default class Index extends Component<any, any> {
     onLoad(options) {
         this.options = options;
     }
+
     //
     // componentWillUnmount() {
     //     zg.stopPublishingStream(this.streamId);
@@ -263,6 +272,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {
             roomID,
+            roomName,
             liveAppID,
             wsServerURL,
             logServerURL,
@@ -277,75 +287,82 @@ export default class Index extends Component<any, any> {
         } = this.state;
         const {systemInfo} = this.props;
         const barTop = systemInfo.statusBarHeight;
-
+        let rect = Taro.getMenuButtonBoundingClientRect();
+        let gap = rect.top - systemInfo.statusBarHeight; //动态计算每台手机状态栏到胶囊按钮间距
+        let navBarHeight = gap + rect.bottom;
         // @ts-ignore
         return (
-            <View className={'live-container'}>
-                <live
-                    id={'live-room'}
-                    liveAppID={liveAppID}
-                    roomID={roomID}
-                    wsServerURL={wsServerURL}
-                    logServerURL={logServerURL}
-                    loginType={loginType}
-                    token={token}
-                    userID={userID}
-                    navBarHeight={barTop}
-                    onRoomEvent={this.onRoomEvent}
-                    bindRoomEvent
-                />
-                <CoverView className="modals modals-bottom-dialog" hidden={hideModal}>
-                    <View className="bottom-dialog-body bottom-pos" animation={animationData}>
-                        <View className="merchandise-container">
-                            <View className="merchandise-head">
-                                <View className="m-t">
-                                    <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
-                                    <View className="m-title">商品列表</View>
+            <>
+                <zego-nav navBarHeight={navBarHeight} statusBarHeight={barTop}>
+                    <view className="room-title">{roomName}</view>
+                </zego-nav>
+                <View className={'live-container'}>
+                    <live
+                        id={'live-room'}
+                        liveAppID={liveAppID}
+                        roomID={roomID}
+                        wsServerURL={wsServerURL}
+                        logServerURL={logServerURL}
+                        loginType={loginType}
+                        token={token}
+                        userID={userID}
+                        navBarHeight={barTop}
+                        onRoomEvent={this.onRoomEvent}
+                        bindRoomEvent
+                    />
+                    <CoverView className="modals modals-bottom-dialog" hidden={hideModal}>
+                        <View className="bottom-dialog-body bottom-pos" animation={animationData}>
+                            <View className="merchandise-container">
+                                <View className="merchandise-head">
+                                    <View className="m-t">
+                                        <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
+                                        <View className="m-title">商品列表</View>
+                                    </View>
+                                    <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
                                 </View>
-                                <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
-                            </View>
-                            <ScrollView className="merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
-                                {merchandises.map((item,index)=>{
-                                    return (
-                                        <View key={item.id} className="merchandise-item">
-                                            <Image className="" src={utils.resolveUrl(item.img)}></Image>
-                                            <View className="merchandise-detail">
-                                                <Text className={'merchandise-text'} id={index} onClick={this.clickMech}>
-                                                    {item.name}
-                                                </Text>
-                                                <View className="merchandise-action">
-                                                    <Text className="m-price">¥{item.price}</Text>
-                                                    {loginType === 'anchor' &&
-                                                        <View data-indx={item.id} className="shop-cart"
-                                                              onClick={this.pushMer}>
-                                                            推送商品
-                                                        </View>
-                                                    }
-                                                    {loginType === 'audience' &&
-                                                        <View data-indx={item.id} className="shop-cart"
-                                                              onClick={this.addShoppingCart}>
-                                                            加入购物车
-                                                        </View>
-                                                    }
+                                <ScrollView className="merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
+                                    {merchandises.map((item, index) => {
+                                        return (
+                                            <View key={item.id} className="merchandise-item">
+                                                <Image className="" src={utils.resolveUrl(item.img)}></Image>
+                                                <View className="merchandise-detail">
+                                                    <Text className={'merchandise-text'} id={index} onClick={this.clickMech}>
+                                                        {item.name}
+                                                    </Text>
+                                                    <View className="merchandise-action">
+                                                        <Text className="m-price">¥{item.price}</Text>
+                                                        {loginType === 'anchor' &&
+                                                            <View data-indx={item.id} className="shop-cart"
+                                                                  onClick={this.pushMer}>
+                                                                推送商品
+                                                            </View>
+                                                        }
+                                                        {loginType === 'audience' &&
+                                                            <View data-indx={item.id} className="shop-cart"
+                                                                  onClick={this.addShoppingCart}>
+                                                                加入购物车
+                                                            </View>
+                                                        }
+                                                    </View>
                                                 </View>
                                             </View>
-                                        </View>
-                                    );
-                                })}
-                            </ScrollView>
+                                        );
+                                    })}
+                                </ScrollView>
+                            </View>
                         </View>
-                    </View>
-                </CoverView>
-                {pushIndex >= 0 &&
-                    <View className="push-mer" style={{bottom:merBot}} onClick={this.clickPush}>
-                        <Image className="push-mer-img" src={merchandises[pushIndex].img}></Image>
-                        <View className="push-mer-detail">
-                            <Text className="push-mer-text">{merchandises[pushIndex].name}</Text>
-                            <Text className="push-mer-price">¥{merchandises[pushIndex].price}</Text>
+                    </CoverView>
+                    {pushIndex >= 0 &&
+                        <View className="push-mer" style={{bottom: merBot}} onClick={this.clickPush}>
+                            <Image className="push-mer-img" src={merchandises[pushIndex].img}></Image>
+                            <View className="push-mer-detail">
+                                <Text className="push-mer-text">{merchandises[pushIndex].name}</Text>
+                                <Text className="push-mer-price">¥{merchandises[pushIndex].price}</Text>
+                            </View>
                         </View>
-                    </View>
-                }
-            </View>
+                    }
+                </View>
+            </>
         );
     }
 }

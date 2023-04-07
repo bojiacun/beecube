@@ -10,7 +10,7 @@ Component({
     },
 
     created() {
-        
+
     },
     /**
      * 组件的初始数据
@@ -29,8 +29,8 @@ Component({
             if(getCurrentPages().length>1){
                 wx.navigateBack();
             }else{
-                wx.navigateTo({
-                    url:'/pages/main/main'
+                wx.redirectTo({
+                    url:'/pages/index/index'
                 });
             }
         },

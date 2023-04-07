@@ -40,6 +40,7 @@
     margin-right: 16rpx;
 }
 .user-text {
+    margin-right: 30rpx;
     font-weight: 500;
 }
 .user-count {

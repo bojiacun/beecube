@@ -14,13 +14,12 @@
         </view>
     </view>
 
-    <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px">
+    <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 30px">
         <image class="avatar" src="{{avatarUrl}}" bindload="" binderror=""></image>
         <view class="user-text">
             <view class="">{{stringUtil.substr(nickName,8)}}</view>
             <view class="user-count">{{userCount - 1}}观看</view>
         </view>
-        <image src="../images/beauty-close.png" bindtap="back" style="width: 56rpx; height: 56rpx" />
     </view>
     <view class="new-msg">
         <view class="new-one" style="bottom:{{newBot}}rpx" wx:if="{{newestName}}">

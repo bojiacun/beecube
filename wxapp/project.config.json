@@ -18,12 +18,12 @@
                 {
                     "name": "主播端",
                     "pathName": "/pages/live/pusher",
-                    "query": "roomId=1643056960030203905&loginType=anchor"
+                    "query": "roomId=1643056960030203905&loginType=anchor&roomName=测试直播间"
                 },
                 {
                     "name": "用户端",
                     "pathName": "/pages/live/pusher",
-                    "query": "roomId=1643056960030203905&loginType=audience"
+                    "query": "roomId=1643056960030203905&loginType=audience&roomName=测试直播间"
                 }
             ]
         }
