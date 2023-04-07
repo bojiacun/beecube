@@ -113,10 +113,10 @@ const LiveRoomList = (props: any) => {
             text: '开始时间',
             dataField: 'startTime',
         },
-        {
-            text: '结束时间',
-            dataField: 'endTime',
-        },
+        // {
+        //     text: '结束时间',
+        //     dataField: 'endTime',
+        // },
         {
             text: '关联的专场',
             dataField: 'performanceName',
