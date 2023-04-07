@@ -17,7 +17,7 @@ const config = {
         patterns: [
             {from: 'src/ext.json', to: 'dist/ext.json'},
             {from: 'src/components/images', to: 'dist/components/images'},
-            {from: 'src/assets', to: 'dist/assets'},
+            {from: 'src/assets/images', to: 'dist/assets/images'},
         ],
         options: {}
     },
