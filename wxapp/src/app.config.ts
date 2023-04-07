@@ -94,6 +94,7 @@ export default defineAppConfig({
     ],
     usingComponents: {
         'modal': './components/custom-modal/index',
-        'live': './components/live-room/index'
+        'live': './components/live-room/index',
+        "zego-nav": "./components/zego-nav/zego-nav"
     }
 })
