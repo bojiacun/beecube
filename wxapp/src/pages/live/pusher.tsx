@@ -18,6 +18,7 @@ import utils from "../../lib/utils";
 ))
 export default class Index extends Component<any, any> {
     state: any = {
+        liveRoom: null,
         isNative: true,
         roomID: null,
         roomName: null,
@@ -108,7 +109,11 @@ export default class Index extends Component<any, any> {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
         }
-        if (settings && userInfo && !this.state.roomID) {
+        if (settings && userInfo && !this.state.roomID && this.state.liveRoom) {
+            if(this.state.liveRoom.mainAnchor != userInfo.id && this.state.liveRoom.subAnchor != userInfo.id) {
+                utils.showError('您不是该直播间主播，请退出');
+                return Taro.navigateBack().then();
+            }
             this.setState({
                 roomID: options.roomId,
                 roomName: options.roomName,
@@ -260,6 +265,10 @@ export default class Index extends Component<any, any> {
     //
     onLoad(options) {
         this.options = options;
+        request.get('/paimai/api/live/rooms/'+options.roomId).then(res=>{
+            let room = res.data.result;
+            this.setState({liveRoom: room});
+        })
     }
 
     //

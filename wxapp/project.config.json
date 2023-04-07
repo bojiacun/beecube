@@ -16,6 +16,10 @@
         "miniprogram": {
             "list": [
                 {
+                    "name": "我的",
+                    "pathName": "/pages/my/index",
+                },
+                {
                     "name": "主播端",
                     "pathName": "/pages/live/pusher",
                     "query": "roomId=1643056960030203905&loginType=anchor&roomName=测试直播间"

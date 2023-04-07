@@ -25,6 +25,9 @@ import PageLoading from "../../components/pageloading";
     }
 })
 export default class Index extends Component<PropsWithChildren<any>> {
+    state:any = {
+        liveRoom: null
+    }
 
     componentDidMount() {
 
@@ -37,6 +40,10 @@ export default class Index extends Component<PropsWithChildren<any>> {
         request.get('/app/api/members/profile').then(res => {
             //刷新用户
             this.props.updateUserInfo(res.data.result);
+            //获取当前用户的主播直播间
+            request.get('/paimai/api/live/rooms', {params: {memberId: res.data.result.id}}).then(res=>{
+                this.setState({liveRoom: res.data.result});
+            })
         });
     }
 
@@ -225,6 +232,19 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Button>
                     </View>
 
+                    {this.state.liveRoom &&
+                        <View>
+                            <Navigator url={`/pages/live/pusher?roomId=${this.state.liveRoom.id}&loginType=anchor&roomName=${this.state.liveRoom.title}`} className={'flex items-center justify-between p-4'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'fa fa-video-camera'} style={{fontSize: 18}}/>
+                                    <View>{this.state.liveRoom.title}</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Navigator>
+                        </View>
+                    }
                 </View>
             </PageLayout>
         )

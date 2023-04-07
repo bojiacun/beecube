@@ -1,7 +1,9 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
+import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.IGoodsCommonDescService;
+import cn.winkt.modules.paimai.service.ILiveRoomService;
 import cn.winkt.modules.paimai.service.ZeGoService;
 import cn.winkt.modules.paimai.vo.ZegoSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -26,10 +28,8 @@ public class WxAppLiveController {
     @Resource
     ZeGoService zeGoService;
 
-    @GetMapping("/test")
-    public Result<?> test() {
-        return Result.OK(zeGoService.describeUserNum());
-    }
+    @Resource
+    ILiveRoomService liveRoomService;
 
     @PutMapping("/login")
     public Result<?> login(@RequestBody LoginUser loginUser) throws InvocationTargetException, IllegalAccessException {
@@ -41,5 +41,16 @@ public class WxAppLiveController {
         BeanUtils.copyProperties(zegoSetting, settingsMap);
         String token = zeGoService.getZeGouToken(zegoSetting.getZegoAppId(), zegoSetting.getZegoAppSign(), loginUser.getId());
         return Result.OK("登录成功",token);
+    }
+    @GetMapping("/rooms/{id}")
+    public Result<LiveRoom> liveRoom(@PathVariable  String id) {
+        return Result.OK("获取成功", liveRoomService.getById(id));
+    }
+    @GetMapping("/rooms")
+    public Result<LiveRoom> memberLiveRoom(@RequestParam String memberId) {
+        LambdaQueryWrapper<LiveRoom> liveRoomLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        liveRoomLambdaQueryWrapper.eq(LiveRoom::getMainAnchor, memberId).or().eq(LiveRoom::getSubAnchor, memberId);
+        List<LiveRoom> liveRooms = liveRoomService.list(liveRoomLambdaQueryWrapper);
+        return Result.OK("获取成功", liveRooms.get(0));
     }
 }
