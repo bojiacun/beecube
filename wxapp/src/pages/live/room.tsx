@@ -2,7 +2,7 @@ import {Component} from "react";
 import Taro, {getCurrentInstance} from "@tarojs/taro";
 import {connect} from "react-redux";
 import request from "../../lib/request";
-import {Image, Text, View, CoverView, ScrollView} from "@tarojs/components";
+import {Image, Text, View, ScrollView} from "@tarojs/components";
 import './room.scss';
 import utils from "../../lib/utils";
 
@@ -279,7 +279,7 @@ export default class Index extends Component<any, any> {
                         onRoomEvent={this.onRoomEvent}
                         bindRoomEvent
                     />
-                    <CoverView className="modals modals-bottom-dialog" hidden={hideModal}>
+                    <View className="modals modals-bottom-dialog" hidden={hideModal}>
                         <View className="bottom-dialog-body bottom-pos" animation={animationData}>
                             <View className="merchandise-container">
                                 <View className="merchandise-head">
@@ -301,7 +301,7 @@ export default class Index extends Component<any, any> {
                                                     <View className="merchandise-action">
                                                         <Text className="m-price">¥{item.price}</Text>
                                                         {loginType === 'anchor' &&
-                                                            <View data-indx={item.id} className="shop-cart"
+                                                            <View data-indx={index} className="shop-cart"
                                                                   onClick={this.pushMer}>
                                                                 推送商品
                                                             </View>
@@ -320,7 +320,7 @@ export default class Index extends Component<any, any> {
                                 </ScrollView>
                             </View>
                         </View>
-                    </CoverView>
+                    </View>
                     {pushIndex >= 0 &&
                         <View className="push-mer" style={{bottom: merBot}} onClick={this.clickPush}>
                             <Image className="push-mer-img" src={merchandises[pushIndex].img}></Image>
