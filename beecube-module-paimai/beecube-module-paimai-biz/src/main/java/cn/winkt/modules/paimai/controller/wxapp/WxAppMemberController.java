@@ -699,6 +699,7 @@ public class WxAppMemberController {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            queryWrapper.eq(GoodsDeposit::getStatus, 1);
             if (goodsDepositService.count(queryWrapper) == 0) {
                 return Result.error("未缴纳专场保证金");
             }
@@ -706,6 +707,7 @@ public class WxAppMemberController {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            queryWrapper.eq(GoodsDeposit::getStatus, 1);
             if (goodsDepositService.count(queryWrapper) == 0) {
                 return Result.error("未缴纳保证金");
             }
