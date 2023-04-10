@@ -27,9 +27,9 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(result.result);
 }
 
-const LiveRoomListPage = () => {
+const LiveRoomListPage = (props:any) => {
     return (
-        <LiveRoomList />
+        <LiveRoomList {...props} />
     );
 }
 

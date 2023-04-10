@@ -51,6 +51,10 @@ public class WxAppLiveController {
         LambdaQueryWrapper<LiveRoom> liveRoomLambdaQueryWrapper = new LambdaQueryWrapper<>();
         liveRoomLambdaQueryWrapper.eq(LiveRoom::getMainAnchor, memberId).or().eq(LiveRoom::getSubAnchor, memberId);
         List<LiveRoom> liveRooms = liveRoomService.list(liveRoomLambdaQueryWrapper);
-        return Result.OK("获取成功", liveRooms.get(0));
+        LiveRoom result = null;
+        if(liveRooms.size() > 0) {
+            result = liveRooms.get(0);
+        }
+        return Result.OK("获取成功", result);
     }
 }
