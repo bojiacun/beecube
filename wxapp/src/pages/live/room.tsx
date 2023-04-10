@@ -83,10 +83,10 @@ export default class Index extends Component<any, any> {
                 userInfo: userInfo
             });
             setTimeout(async () => {
-                this.liveRoom.init();
                 const result = await request.put('/paimai/api/live/login', userInfo);
                 const token = result.data.result;
                 this.setState({token: token});
+                this.liveRoom.init();
             }, 200);
 
         }
@@ -268,6 +268,7 @@ export default class Index extends Component<any, any> {
                 <View className={'live-container'}>
                     <live
                         id={'live-room'}
+                        isNative={false}
                         liveAppID={liveAppID}
                         roomID={roomID}
                         wsServerURL={wsServerURL}
