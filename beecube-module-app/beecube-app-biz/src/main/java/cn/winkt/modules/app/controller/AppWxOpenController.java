@@ -210,12 +210,14 @@ public class AppWxOpenController {
         List<WxMaCodeSubmitAuditItem> itemList = new ArrayList<>();
 
         categories.forEach(wxOpenMaCategory -> {
-            WxMaCodeSubmitAuditItem item = new WxMaCodeSubmitAuditItem();
-            item.setFirstClass(wxOpenMaCategory.getFirstClass());
-            item.setFirstId(Long.valueOf(wxOpenMaCategory.getFirstId()));
-            item.setSecondClass(wxOpenMaCategory.getSecondClass());
-            item.setSecondId(Long.valueOf(wxOpenMaCategory.getSecondId()));
-            itemList.add(item);
+            if(itemList.size() < 5) {
+                WxMaCodeSubmitAuditItem item = new WxMaCodeSubmitAuditItem();
+                item.setFirstClass(wxOpenMaCategory.getFirstClass());
+                item.setFirstId(Long.valueOf(wxOpenMaCategory.getFirstId()));
+                item.setSecondClass(wxOpenMaCategory.getSecondClass());
+                item.setSecondId(Long.valueOf(wxOpenMaCategory.getSecondId()));
+                itemList.add(item);
+            }
         });
 
         message.setItemList(itemList);
