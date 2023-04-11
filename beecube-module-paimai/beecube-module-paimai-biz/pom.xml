@@ -41,6 +41,11 @@
             <artifactId>weixin-java-pay</artifactId>
             <version>4.4.9.B</version>
         </dependency>
+        <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smack-core</artifactId>
+            <version>4.4.6</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->
