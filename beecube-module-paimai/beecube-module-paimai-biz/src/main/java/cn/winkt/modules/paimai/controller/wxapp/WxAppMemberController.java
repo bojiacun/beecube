@@ -395,14 +395,11 @@ public class WxAppMemberController {
         if (StringUtils.isEmpty(id)) {
             throw new JeecgBootException("找不到拍品");
         }
-        Goods goods = goodsService.getById(id);
-        if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
-            return Result.OK(true);
-        }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
             return Result.OK(false);
         }
+        Goods goods = goodsService.getById(id);
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
@@ -410,9 +407,13 @@ public class WxAppMemberController {
                 wq.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
             });
         } else {
+            if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
+                return Result.OK(true);
+            }
             queryWrapper.eq(GoodsDeposit::getGoodsId, id);
         }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        log.info("查询拍品是否缴纳保证金 {}", id);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
     }
 

@@ -36,6 +36,7 @@ export default class Index extends Component<any, any> {
         uprangeShow: false,
         status: undefined,
         message: false,
+        preOffered: false,
     }
     socket: any;
     randomStr: string;
@@ -203,16 +204,19 @@ export default class Index extends Component<any, any> {
     async offer() {
         const {context, settings} = this.props;
         const {userInfo} = context;
-        const {goods} = this.state;
-        let checkResult = await request.get('/paimai/api/members/check');
-        if (!checkResult.data.result) {
-            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
-                Taro.navigateTo({url: '/pages/my/profile'}).then();
-            });
-        }
-        //发送模板消息
-        if (settings.offerResultTemplateId) {
-            await Taro.requestSubscribeMessage({tmplIds: [settings.offerResultTemplateId]});
+        const {goods, preOffered} = this.state;
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (!checkResult.data.result) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            //发送模板消息
+            if (settings.offerResultTemplateId) {
+                await Taro.requestSubscribeMessage({tmplIds: [settings.offerResultTemplateId]});
+            }
+            this.setState({preOffered: true});
         }
         let offers = this.state.offers;
         let doOffer = () => {
@@ -340,7 +344,7 @@ export default class Index extends Component<any, any> {
         const {goods, status} = this.state;
         //判断按钮状态
 
-        if (goods.deposit && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
+        if ((goods.performanceDeposit || goods.deposit) && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
             //需要交保证金的情况
             return (
                 <View>
