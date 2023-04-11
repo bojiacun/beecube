@@ -735,7 +735,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到专场");
         }
         if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
-            throw new JeecgBootException("该拍品无需缴纳保证金");
+            throw new JeecgBootException("该专场无需缴纳保证金");
         }
         //专场结束不能缴纳保证金
         if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
@@ -801,14 +801,19 @@ public class WxAppMemberController {
         if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
-        if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
-            throw new JeecgBootException("该拍品无需缴纳保证金");
-        }
         Performance performance = performanceService.getById(goods.getPerformanceId());
         if(performance != null) {
+            if(performance.getDeposit() == null || performance.getDeposit() <= 0) {
+                throw new JeecgBootException("该拍品无需缴纳保证金");
+            }
             //专场结束不能缴纳保证金
             if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
                 throw new JeecgBootException("专场已结束无法缴纳保证金");
+            }
+        }
+        else {
+            if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
+                throw new JeecgBootException("该拍品无需缴纳保证金");
             }
         }
         //验证拍品是否结束
@@ -846,7 +851,7 @@ public class WxAppMemberController {
             goodsDeposit.setAuctionId(performance.getAuctionId());
             deposit = performance.getDeposit();
         }
-        goodsDeposit.setPrice(goods.getDeposit());
+        goodsDeposit.setPrice(deposit);
         goodsDeposit.setStatus(0);
         boolean result = goodsDepositService.save(goodsDeposit);
         if (!result) {
