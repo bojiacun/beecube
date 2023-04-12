@@ -166,7 +166,6 @@ class App extends Component<PropsWithChildren> {
             });
         });
 
-
     }
 
     componentDidShow() {
