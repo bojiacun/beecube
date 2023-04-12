@@ -6,11 +6,13 @@ import configStore from "./store";
 import {setContext, setMessage, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
 import request, {connectWebSocketServer} from './lib/request';
+import IMManager from './utils/im-manager';
 import 'weapp-cookie';
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
 const siteInfo = Taro.getExtConfigSync();
 const store = configStore();
+const IM_SERVER_URL = "wss://im.winkt.cn/websocket";
 let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
@@ -34,27 +36,17 @@ class App extends Component<PropsWithChildren> {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
             this.connectToServer(context);
-            this.initZego(context);
+            this.initIM(context);
         });
     }
-    initZego(context) {
-        // const settings = context.settings;
+    initIM(context) {
         const userInfo = context.userInfo;
-        // const appId = parseInt(settings.zegoAppId);
-        //
-        // if(appId) {
-        //     zg.config({
-        //         appid: appId,
-        //         server: settings.zegoServerAddress,
-        //         idName: userInfo.id,
-        //         nickName: userInfo.nickname,
-        //         logLevel: 0,
-        //         remoteLogLevel: 0,
-        //         logUrl: settings.zegoLogUrl,
-        //         audienceCreateRoom: false
-        //     });
-        // }
         const app = Taro.getApp();
+        app.imManager = new IMManager(app);
+        app.imManager.IM_SERVER_URL = IM_SERVER_URL;
+        if(userInfo?.id) {
+            wx.IMSDK.loginImpl({loginUserId: userInfo.id, loginToken: Taro.getStorageSync("TOKEN")}, app.imManager.IM_SERVER_URL);
+        }
         app.globalData = {userInfo: userInfo};
     }
     connectToServer(context) {

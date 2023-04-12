@@ -18,7 +18,7 @@
  * 联系QQ： 413980957
  * 官方社区：http://www.52im.net
  */
-require("../../../mobileimsdk/mobileimsdk-client-sdk.js")
+require("../lib/mobileimsdk/mobileimsdk-client-sdk.js")
 let EventType = require("./event-type.js");
 let EventBus = require("./event-bus.js");
 
@@ -38,7 +38,7 @@ class IMManager {
 
   /**
    * 初始化SDK。
-   * 
+   *
    * 提示：不能像MobileIMSDK-H5端那样在各个回调实现函数（即“on...”这样的函数）中调用本类范围内的
    *      全局变量，因为它们作为回调被设置到IMSDK层之后，读取到的“this”对象是IMSDK本身，而非本类。
    */
