@@ -1,5 +1,5 @@
 // components/live-room/index.js
-let {ZegoClient} = require("miniprogram-zego/jZego-wx");
+let {ZegoClient} = {};
 const app = getApp();
 
 let zg;
