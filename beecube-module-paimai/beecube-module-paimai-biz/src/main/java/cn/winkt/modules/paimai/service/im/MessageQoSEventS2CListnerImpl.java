@@ -21,6 +21,7 @@ import net.x52im.mobileimsdk.server.event.MessageQoSEventListenerS2C;
 import net.x52im.mobileimsdk.server.protocal.Protocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,7 @@ import java.util.ArrayList;
  * @see MessageQoSEventListenerS2C
  */
 @Slf4j
+@Component
 public class MessageQoSEventS2CListnerImpl implements MessageQoSEventListenerS2C
 {
 

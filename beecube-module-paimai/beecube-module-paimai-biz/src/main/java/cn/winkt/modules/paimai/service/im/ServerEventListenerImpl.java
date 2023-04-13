@@ -28,6 +28,7 @@ import net.x52im.mobileimsdk.server.utils.GlobalSendHelper;
 import org.jeecg.common.util.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -39,6 +40,7 @@ import javax.annotation.Resource;
  * @since 3.1
  */
 @Slf4j
+@Component
 public class ServerEventListenerImpl implements ServerEventListener
 {
 	@Resource
@@ -69,7 +71,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public int onUserLoginVerify(String userId, String token, String extra, Channel session)
 	{
 		int result = 0;
-		log.debug("【DEBUG_回调通知】正在调用回调方法：OnVerifyUserCallBack...(extra="+extra+")");
+		log.info("【DEBUG_回调通知】正在调用回调方法：OnVerifyUserCallBack...(extra="+extra+")");
 		try {
 			appApi.verifyToken(extra, userId, token);
 		}
@@ -110,7 +112,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 	@Override
 	public void onUserLogout(String userId, Channel session, int beKickoutCode)
 	{
-		log.debug("【DEBUG_回调通知onUserLogout】用户："+userId+" 离线了（beKickoutCode="+beKickoutCode+"）！");
+		log.info("【DEBUG_回调通知onUserLogout】用户："+userId+" 离线了（beKickoutCode="+beKickoutCode+"）！");
 	}
 	
 	/**
@@ -180,7 +182,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		int typeu = p.getTypeu();
 
 
-		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
+		log.info("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
 		return true;
 	}
 
@@ -213,7 +215,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
 				
-		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给客户端"+userId+"的消息：str="+dataContent);
+		log.info("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给客户端"+userId+"的消息：str="+dataContent);
 	}
 
 	/**
@@ -291,7 +293,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
 
-		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]客户端"+from_user_id+"发给客户端"+userId+"的消息：str="+dataContent
+		log.info("【DEBUG_回调通知】[typeu="+typeu+"]客户端"+from_user_id+"发给客户端"+userId+"的消息：str="+dataContent
 				+"，因实时发送没有成功，需要上层应用作离线处理哦，否则此消息将被丢弃.");
 		return false;
 	}

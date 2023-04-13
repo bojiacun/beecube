@@ -16,6 +16,7 @@ import net.x52im.mobileimsdk.server.utils.ServerToolKits;
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
 
     @javax.annotation.Resource
     ImConfig imConfig;
+
+    @javax.annotation.Resource
+    ServerEventListenerImpl serverEventListener;
+
+    @javax.annotation.Resource
+    MessageQoSEventS2CListnerImpl messageQoSEventS2CListner;
 
     public ImService() throws IOException {
         super();
@@ -99,9 +106,10 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
     @Override
     protected void initListeners() {
         // ** 设置各种回调事件处理实现类
-        this.setServerEventListener(new ServerEventListenerImpl());
-        this.setServerMessageQoSEventListener(new MessageQoSEventS2CListnerImpl());
+        this.setServerEventListener(serverEventListener);
+        this.setServerMessageQoSEventListener(messageQoSEventS2CListner);
     }
+
 
 
     /**
