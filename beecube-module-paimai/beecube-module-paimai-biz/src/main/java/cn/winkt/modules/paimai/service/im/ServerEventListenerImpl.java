@@ -18,10 +18,12 @@ package cn.winkt.modules.paimai.service.im;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
 import cn.winkt.modules.paimai.service.im.message.JoinRoomMessage;
 import cn.winkt.modules.paimai.service.im.message.LiveRoomNoticeMessage;
+import cn.winkt.modules.paimai.service.im.message.UserJoinNotifyMessage;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -211,6 +213,11 @@ public class ServerEventListenerImpl implements ServerEventListener
 					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
 					break;
 				}
+				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
+				if(appMemberVO == null) {
+					log.debug("用户不存在，无法加入房间");
+					break;
+				}
 
 				if(!roomUsers.containsKey(roomId)) {
 					synchronized (roomId) {
@@ -242,6 +249,24 @@ public class ServerEventListenerImpl implements ServerEventListener
 						log.error(e.getMessage(), e);
 					}
 				}
+
+				UserJoinNotifyMessage userJoinNotifyMessage = new UserJoinNotifyMessage();
+				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
+				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
+				userJoinNotifyMessage.setUserId(appMemberVO.getId());
+
+				//给房间所有用户发送用户加入房间成功通知
+				roomUsers.get(roomId).forEach(uid -> {
+					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(userJoinNotifyMessage), "0", uid, true, snowflake.nextIdStr(), ServerMessageType.USER_JOIN_NOTIFY);
+					try {
+						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+							log.debug("发送用户加入房间通知回调，是否送达 {} 到 {}", b, uid);
+						});
+					} catch (Exception e) {
+						log.error(e.getMessage(), e);
+					}
+				});
+
 				break;
 		}
 
