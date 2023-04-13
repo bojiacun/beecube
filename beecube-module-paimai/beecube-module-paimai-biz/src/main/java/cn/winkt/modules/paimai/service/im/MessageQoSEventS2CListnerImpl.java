@@ -51,7 +51,11 @@ import java.util.ArrayList;
 @Component
 public class MessageQoSEventS2CListnerImpl implements MessageQoSEventListenerS2C
 {
+	private ImService imService;
 
+	public void setImService(ImService imService) {
+		this.imService = imService;
+	}
 	/**
 	 * 消息未送达的回调事件通知.
 	 * 

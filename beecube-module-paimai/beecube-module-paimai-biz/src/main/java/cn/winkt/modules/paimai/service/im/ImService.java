@@ -106,6 +106,8 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
     @Override
     protected void initListeners() {
         // ** 设置各种回调事件处理实现类
+        serverEventListener.setImService(this);
+        messageQoSEventS2CListner.setImService(this);
         this.setServerEventListener(serverEventListener);
         this.setServerMessageQoSEventListener(messageQoSEventS2CListner);
     }

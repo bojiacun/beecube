@@ -62,8 +62,11 @@ public class ServerEventListenerImpl implements ServerEventListener
 	@Resource
 	ILiveRoomService liveRoomService;
 
-	@Resource
-	ImService imService;
+	private ImService imService;
+
+	public void setImService(ImService imService) {
+		this.imService = imService;
+	}
 
 	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>();
 
