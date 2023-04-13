@@ -16,21 +16,32 @@
  */
 package cn.winkt.modules.paimai.service.im;
 
+import cn.hutool.core.lang.Snowflake;
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
+import cn.winkt.modules.paimai.service.im.message.JoinRoomMessage;
+import cn.winkt.modules.paimai.service.im.message.LiveRoomNoticeMessage;
+import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import net.x52im.mobileimsdk.server.event.ServerEventListener;
+import net.x52im.mobileimsdk.server.network.MBObserver;
 import net.x52im.mobileimsdk.server.processor.OnlineProcessor;
 import net.x52im.mobileimsdk.server.protocal.Protocal;
+import net.x52im.mobileimsdk.server.protocal.ProtocalFactory;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
 import net.x52im.mobileimsdk.server.utils.GlobalSendHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.util.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 与客服端的所有数据交互事件在此ServerEventListener子类中实现即可。
@@ -48,6 +59,11 @@ public class ServerEventListenerImpl implements ServerEventListener
 
 	@Resource
 	ILiveRoomService liveRoomService;
+
+	@Resource
+	ImService imService;
+
+	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>();
 
 	/**
 	 * 用户身份验证回调方法定义（即验证客户端连接的合法性，合法就允许正常能信，否则断开）.
@@ -180,9 +196,55 @@ public class ServerEventListenerImpl implements ServerEventListener
 		String fingerPrint = p.getFp();
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
-
-
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
+		Snowflake snowflake = new Snowflake(15, 1);
+		switch (typeu) {
+			case UserMessageType.JOIN_ROOM:
+				//用户加入房间消息
+				JoinRoomMessage message = JSONObject.parseObject(dataContent, JoinRoomMessage.class);
+				String roomId = message.getRoomId();
+				if(StringUtils.isBlank(roomId)) {
+					break;
+				}
+				LiveRoom liveRoom = liveRoomService.getById(roomId);
+				if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
+					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+					break;
+				}
+
+				if(!roomUsers.containsKey(roomId)) {
+					synchronized (roomId) {
+						if(!roomUsers.containsKey(roomId)) {
+							roomUsers.put(roomId, new HashSet<>());
+						}
+						else {
+							roomUsers.get(roomId).add(from_user_id);
+						}
+					}
+				}
+				else {
+					roomUsers.get(roomId).add(from_user_id);
+				}
+				log.debug("用户 {} 加入房间 {} 成功", from_user_id, roomId);
+				//向用户发送房间公告,并更新房间信息
+				liveRoom.setViews(roomUsers.get(roomId).size());
+				liveRoomService.updateById(liveRoom);
+				String notice = liveRoom.getNotice();
+				if(StringUtils.isNotBlank(notice)) {
+					LiveRoomNoticeMessage liveRoomNoticeMessage = new LiveRoomNoticeMessage();
+					liveRoomNoticeMessage.setNotice(liveRoom.getNotice());
+					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, snowflake.nextIdStr(), ServerMessageType.LIVE_ROOM_NOTICE);
+					try {
+						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+							log.debug("发送房间公告消息回调，是否送达 {}", b);
+						});
+					} catch (Exception e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+				break;
+		}
+
 		return true;
 	}
 

@@ -68,6 +68,8 @@ public class LiveRoom {
     @ApiModelProperty(value = "appId")
 	private java.lang.String appId;
 
+	private String notice;
+
 	private String performanceId;
 	private String performanceName;
 
