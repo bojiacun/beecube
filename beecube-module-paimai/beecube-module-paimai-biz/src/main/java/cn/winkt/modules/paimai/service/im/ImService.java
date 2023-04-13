@@ -1,5 +1,6 @@
 package cn.winkt.modules.paimai.service.im;
 
+import cn.winkt.modules.paimai.config.ImConfig;
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -12,8 +13,11 @@ import net.x52im.mobileimsdk.server.network.GatewayWebsocket;
 import net.x52im.mobileimsdk.server.qos.QoS4ReciveDaemonC2S;
 import net.x52im.mobileimsdk.server.qos.QoS4SendDaemonS2C;
 import net.x52im.mobileimsdk.server.utils.ServerToolKits;
+import org.apache.commons.io.IOUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +28,9 @@ import java.io.InputStream;
 public class ImService extends ServerLauncher implements ApplicationRunner {
 
 
+    @javax.annotation.Resource
+    ImConfig imConfig;
+
     public ImService() throws IOException {
         super();
     }
@@ -32,11 +39,11 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         //启用服务
         // 设置MobileIMSDK服务端的UDP网络监听端口
-        GatewayUDP.PORT       = 7901;
+        GatewayUDP.PORT       = imConfig.getUdpPort();
         // 设置MobileIMSDK服务端的TCP网络监听端口
-        GatewayTCP.PORT       = 8901;
+        GatewayTCP.PORT       = imConfig.getTcpPort();
         // 设置MobileIMSDK服务端的WebSocket网络监听端口
-        GatewayWebsocket.PORT = 3000;
+        GatewayWebsocket.PORT = imConfig.getWebsocketPort();
 
         // 设置MobileIMSDK服务端仅支持UDP协议
 //		ServerLauncher.supportedGateways = Gateway.SOCKET_TYPE_UDP;
@@ -48,8 +55,8 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
         ServerLauncher.supportedGateways = Gateway.SOCKET_TYPE_UDP | Gateway.SOCKET_TYPE_TCP | Gateway.SOCKET_TYPE_WEBSOCKET;
 
         // 开/关Demog日志的输出
-        QoS4SendDaemonS2C.getInstance().setDebugable(true);
-        QoS4ReciveDaemonC2S.getInstance().setDebugable(true);
+        QoS4SendDaemonS2C.getInstance().setDebugable(imConfig.getDebug());
+        QoS4ReciveDaemonC2S.getInstance().setDebugable(imConfig.getDebug());
 
         // 与客户端协商一致的心跳频率模式设置
 //		ServerToolKits.setSenseModeUDP(SenseModeUDP.MODE_15S);
@@ -116,9 +123,11 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
             /** 示例 2：使用证书（证书位于相对路径）*/
             // TODO: 注意：请使用自已的证书，Demo中带的证书为自签名证书且已绑定域名，不安全！！！
             // 证书文件
-            InputStream certChainFile = ImService.class.getResourceAsStream("certs/netty-cert2.crt");
+            Resource certChainResource = new ClassPathResource("certs/netty-cert2.crt");
+            InputStream certChainFile = certChainResource.getInputStream();
             // 私钥文件（注意：Netty只支持.pk8格式，如何生成，见JackJiang文章：）
-            InputStream keyFile = ImService.class.getResourceAsStream("certs/netty-key2.pk8");
+            Resource keyFileResource = new ClassPathResource("certs/netty-key2.pk8");
+            InputStream keyFile = keyFileResource.getInputStream();
             // 私钥密码（注意：Netty只支持.pk8格式，如何生成，见JackJiang文章：）
             String keyPassword = "123456";
             // 生成SslContext对象（为了方便理解，此处使用的是单向认证）

@@ -3,7 +3,7 @@ spring:
     dynamic:
       datasource:
         master:
-          url: jdbc:mysql://jeecg-boot-mysql:3306/paimai-test?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-          username: paimai-test
-          password: iwk5wxanSLWWPk3n
+          url: jdbc:mysql://jeecg-boot-mysql:3306/beecube-paimai?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: 1
           driver-class-name: com.mysql.cj.jdbc.Driver
