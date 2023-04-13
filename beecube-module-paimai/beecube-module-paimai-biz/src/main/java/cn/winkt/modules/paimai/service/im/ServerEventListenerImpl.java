@@ -24,6 +24,7 @@ import net.x52im.mobileimsdk.server.event.ServerEventListener;
 import net.x52im.mobileimsdk.server.processor.OnlineProcessor;
 import net.x52im.mobileimsdk.server.protocal.Protocal;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
+import net.x52im.mobileimsdk.server.utils.GlobalSendHelper;
 import org.jeecg.common.util.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,7 +178,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 		String fingerPrint = p.getFp();
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
-				
+
+
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
 		return true;
 	}
