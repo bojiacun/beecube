@@ -10,16 +10,20 @@ import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
 import cn.winkt.modules.app.service.IAppMemberService;
 import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.utils.AppTokenUtils;
 import cn.winkt.modules.app.vo.AppVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.*;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SqlInjectionUtil;
+import org.jeecg.config.AppContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +36,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/app/api")
+@Slf4j
 public class AppApiController {
 
     @Resource
@@ -52,6 +57,23 @@ public class AppApiController {
     @Resource
     SystemApi systemApi;
 
+    @Resource
+    RedisUtil redisUtil;
+
+
+    @PutMapping("/token/verify")
+    public Boolean appVerifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token) {
+        AppContext.setApp(appId);
+        Boolean result = true;
+        try {
+            AppTokenUtils.verifyToken(token, appMemberProvider, redisUtil);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return result;
+    }
 
     @GetMapping("/all")
     public List<App> allList() {

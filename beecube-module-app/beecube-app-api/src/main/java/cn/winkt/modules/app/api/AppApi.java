@@ -35,4 +35,7 @@ public interface AppApi {
 
     @GetMapping("/app/api/system/token")
     String getSystemTempToken();
+
+    @PutMapping("/app/api/token/verify")
+    Boolean verifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token);
 }

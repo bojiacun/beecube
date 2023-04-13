@@ -16,14 +16,18 @@
  */
 package cn.winkt.modules.paimai.service.im;
 
+import cn.winkt.modules.app.api.AppApi;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import net.x52im.mobileimsdk.server.event.ServerEventListener;
 import net.x52im.mobileimsdk.server.processor.OnlineProcessor;
 import net.x52im.mobileimsdk.server.protocal.Protocal;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
+import org.jeecg.common.util.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
 
 /**
  * 与客服端的所有数据交互事件在此ServerEventListener子类中实现即可。
@@ -35,6 +39,8 @@ import org.slf4j.LoggerFactory;
 @Slf4j
 public class ServerEventListenerImpl implements ServerEventListener
 {
+	@Resource
+	AppApi appApi;
 
 	/**
 	 * 用户身份验证回调方法定义（即验证客户端连接的合法性，合法就允许正常能信，否则断开）.
@@ -57,8 +63,16 @@ public class ServerEventListenerImpl implements ServerEventListener
 	@Override
 	public int onUserLoginVerify(String userId, String token, String extra, Channel session)
 	{
+		int result = 0;
 		log.debug("【DEBUG_回调通知】正在调用回调方法：OnVerifyUserCallBack...(extra="+extra+")");
-		return 0;
+		try {
+			appApi.verifyToken(extra, userId, token);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result = 4030;
+		}
+		return result;
 	}
 
 	/**
