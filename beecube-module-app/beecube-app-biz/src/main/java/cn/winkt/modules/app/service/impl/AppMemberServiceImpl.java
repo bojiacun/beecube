@@ -39,7 +39,7 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
             return null;
         }
         LoginUser loginUser = new LoginUser();
-        log.info("从数据库中查找用户信息 {}, {}", username, AppContext.getApp());
+        log.debug("从数据库中查找用户信息 {}, {}", username, AppContext.getApp());
         AppMember appMember = appMemberMapper.getUserByName(username);
         if(appMember == null) {
             return null;

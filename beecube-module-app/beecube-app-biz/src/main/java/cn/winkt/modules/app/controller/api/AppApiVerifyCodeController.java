@@ -37,7 +37,7 @@ public class AppApiVerifyCodeController {
         service.sendCode(mobile, vcode);
         redisUtil.set("MOBILE_CODE:"+mobile, vcode);
         redisUtil.expire("MOBILE_CODE:"+mobile, 300);
-        log.info("发送验证码为 {} {}", mobile, vcode);
+        log.debug("发送验证码为 {} {}", mobile, vcode);
         return Result.OK(true);
     }
 

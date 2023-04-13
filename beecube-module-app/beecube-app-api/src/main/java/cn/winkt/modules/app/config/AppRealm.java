@@ -62,7 +62,7 @@ public class AppRealm extends AuthorizingRealm {
         Set<String> permissionSet = Collections.emptySet();
         info.addStringPermissions(permissionSet);
         //System.out.println(permissionSet);
-        log.info("===============Shiro权限认证成功==============");
+        log.debug("===============Shiro权限认证成功==============");
         return info;
     }
 
@@ -72,7 +72,7 @@ public class AppRealm extends AuthorizingRealm {
         String token = (String) auth.getCredentials();
         if (token == null) {
             HttpServletRequest req = SpringContextUtils.getHttpServletRequest();
-            log.info("————————身份认证失败——————————IP地址:  "+ oConvertUtils.getIpAddrByRequest(req) +"，URL:"+req.getRequestURI());
+            log.debug("————————身份认证失败——————————IP地址:  "+ oConvertUtils.getIpAddrByRequest(req) +"，URL:"+req.getRequestURI());
             throw new AuthenticationException("token为空!");
         }
         // 校验token有效性
@@ -90,7 +90,7 @@ public class AppRealm extends AuthorizingRealm {
         // 查询用户信息
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
         LoginUser loginUser = getLoginUser(username, appMemberProvider, redisUtil);
-        log.info("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
+        log.debug("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
         //LoginUser loginUser = commonApi.getUserByName(username);
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");
@@ -157,7 +157,7 @@ public class AppRealm extends AuthorizingRealm {
         String loginUserKey = AppModuleConstants.APP_USERS_CACHE + "::" + username;
         //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
         if (redisUtil.hasKey(loginUserKey)) {
-            log.info("缓存中有用户信息 {}", username);
+            log.debug("缓存中有用户信息 {}", username);
             try {
                 loginUser = (LoginUser) redisUtil.get(loginUserKey);
                 //解密用户
@@ -167,7 +167,7 @@ public class AppRealm extends AuthorizingRealm {
             }
         } else {
             // 查询用户信息
-            log.info("缓存中没有APP用户信息，从数据库中去查找 {}", username);
+            log.debug("缓存中没有APP用户信息，从数据库中去查找 {}", username);
             loginUser = appMemberProvider.getUserByName(username);
         }
         return loginUser;

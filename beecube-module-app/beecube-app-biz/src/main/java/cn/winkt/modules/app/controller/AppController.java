@@ -78,7 +78,7 @@ public class AppController extends JeecgController<App, IAppService> {
 		App app = appService.getById(id);
 		AppModule appModule = appModuleService.getById(app.getModuleId());
 		JSONObject jsonObject = JSONObject.parseObject(appModule.getManifest());
-		log.info(jsonObject.toJSONString());
+		log.debug(jsonObject.toJSONString());
 		return Result.OK(jsonObject.get("links"));
 	}
 

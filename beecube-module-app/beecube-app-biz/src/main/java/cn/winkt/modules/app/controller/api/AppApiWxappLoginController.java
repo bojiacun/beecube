@@ -63,7 +63,7 @@ public class AppApiWxappLoginController {
             //设置上分享人ID
             appMember.setShareId(mid);
             appMemberService.save(appMember);
-            log.info("新用户刚建立ID：{}，分享人ID：{}", appMember.getId(), mid);
+            log.debug("新用户刚建立ID：{}，分享人ID：{}", appMember.getId(), mid);
         }
         //执行登录操作
         if(appMember.getStatus() == 0) {

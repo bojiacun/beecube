@@ -114,7 +114,7 @@ public class AppTokenUtils {
         String loginUserKey = AppModuleConstants.APP_USERS_CACHE + "::" + username;
         //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
         if (redisUtil.hasKey(loginUserKey)) {
-            log.info("缓存中有用户信息 {}", username);
+            log.debug("缓存中有用户信息 {}", username);
             try {
                 loginUser = (LoginUser) redisUtil.get(loginUserKey);
                 //解密用户
@@ -124,7 +124,7 @@ public class AppTokenUtils {
             }
         } else {
             // 查询用户信息
-            log.info("缓存中没有APP用户信息，从数据库中去查找 {}", username);
+            log.debug("缓存中没有APP用户信息，从数据库中去查找 {}", username);
             loginUser = appMemberProvider.getUserByName(username);
         }
         return loginUser;

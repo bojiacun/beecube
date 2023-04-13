@@ -45,7 +45,7 @@ public class PaimaiWebSocket {
                 this.appId = appId;
                 webSockets.get(appId).add(this);
                 userSessionPool.put(userId, session);
-                log.info("{}【websocket消息】有新的连接，总数为: {}", appId, webSockets.get(appId).size());
+                log.debug("{}【websocket消息】有新的连接，总数为: {}", appId, webSockets.get(appId).size());
                 redissonLockClient.unlock(lock);
             }
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class PaimaiWebSocket {
         try {
             String appId = this.appId;
             webSockets.get(appId).remove(this);
-            log.info("{}【websocket消息】连接断开，总数为: {}", appId, webSockets.size());
+            log.debug("{}【websocket消息】连接断开，总数为: {}", appId, webSockets.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -65,7 +65,7 @@ public class PaimaiWebSocket {
 
     @OnMessage
     public void onMessage(String message) {
-        log.info("{}【websocket消息】收到客户端消息: {}", this.appId, message);
+        log.debug("{}【websocket消息】收到客户端消息: {}", this.appId, message);
         JSONObject jsonObject = JSONObject.parseObject(message);
         String fromUserId = jsonObject.getString("fromUserId");
         if(StringUtils.isNotEmpty(fromUserId)) {
@@ -80,7 +80,7 @@ public class PaimaiWebSocket {
 
     // 此为广播消息
     public void sendAllMessage(String message) {
-        log.info("{}【websocket消息】广播消息: {}", AppContext.getApp(), message);
+        log.debug("{}【websocket消息】广播消息: {}", AppContext.getApp(), message);
         if(!webSockets.containsKey(AppContext.getApp())) {
             return;
         }

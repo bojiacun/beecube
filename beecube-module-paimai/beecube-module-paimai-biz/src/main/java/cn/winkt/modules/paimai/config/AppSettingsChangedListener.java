@@ -36,7 +36,7 @@ public class AppSettingsChangedListener extends BaseRabbiMqHandler<String> {
         super.onMessage(appId, deliveryTag, channel, new MqListener<String>(){
             @Override
             public void handler(String map, Channel channel) {
-                log.info("收到配置信息修改的消息");
+                log.debug("收到配置信息修改的消息");
                 miniappServices.clear(map);
             }
         });

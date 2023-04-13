@@ -83,11 +83,11 @@ public class AuctionRunJobHandler {
      */
     @XxlJob(value = "MESSAGE_NOTIFY")
     public ReturnT<String> messageNotify(String params) {
-        log.info("我是定时任务【消息提醒】，我执行了哦");
+        log.debug("我是定时任务【消息提醒】，我执行了哦");
         //查找所有应用
         List<AppVO> apps = appApi.allApps();
         apps.forEach(appVO -> {
-            log.info("开始处理App{} 的消息提醒", appVO.getId());
+            log.debug("开始处理App{} 的消息提醒", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
                 WxMaService wxMaService = miniappServices.getWxMaService(appVO.getId());
@@ -270,11 +270,11 @@ public class AuctionRunJobHandler {
      */
     @XxlJob(value = "REFUND_DEPOSIT")
     public ReturnT<String> refundDeposits(String params) {
-        log.info("我是定时任务【自动退保证金】，我执行了哦");
+        log.debug("我是定时任务【自动退保证金】，我执行了哦");
         //查找所有应用
         List<AppVO> apps = appApi.allApps();
         apps.forEach(appVO -> {
-            log.info("开始处理App {} 的保证金退款", appVO.getId());
+            log.debug("开始处理App {} 的保证金退款", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
                 jobService.refundDeposit(appVO.getId(), params);
@@ -292,11 +292,11 @@ public class AuctionRunJobHandler {
 
     @XxlJob(value = "RUN_AUCTION")
     public ReturnT<String> runningAuction(String params) {
-        log.info("我是定时任务【处理拍品】，我执行了哦");
+        log.debug("我是定时任务【处理拍品】，我执行了哦");
         //查找所有应用
         List<AppVO> apps = appApi.allApps();
         apps.forEach(appVO -> {
-            log.info("开始处理App {} 的拍品数据", appVO.getId());
+            log.debug("开始处理App {} 的拍品数据", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
                 jobService.resolveGoods();

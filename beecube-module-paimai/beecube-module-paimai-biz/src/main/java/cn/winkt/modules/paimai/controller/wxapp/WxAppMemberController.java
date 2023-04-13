@@ -195,7 +195,7 @@ public class WxAppMemberController {
 
         if(order.getTransactionId() != null) {
             Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(100)).intValue();
-            log.info("原路返回支付金额 {}", refundAmount);
+            log.debug("原路返回支付金额 {}", refundAmount);
             WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
                     .transactionId(order.getTransactionId())
                     .outRefundNo(order.getId())
@@ -413,7 +413,7 @@ public class WxAppMemberController {
             queryWrapper.eq(GoodsDeposit::getGoodsId, id);
         }
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
-        log.info("查询拍品是否缴纳保证金 {}", id);
+        log.debug("查询拍品是否缴纳保证金 {}", id);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
     }
 

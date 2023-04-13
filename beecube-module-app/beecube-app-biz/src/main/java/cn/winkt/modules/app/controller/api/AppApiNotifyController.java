@@ -62,7 +62,7 @@ public class AppApiNotifyController {
         payLog.setTransactionId(notifyResult.getTransactionId());
         appPayLogService.updateById(payLog);
 
-        log.info("用户充值回调，充值记录ID是 {}", payLog.getOrdersn());
+        log.debug("用户充值回调，充值记录ID是 {}", payLog.getOrdersn());
 
         AppMemberMoneyRecord record = appMemberMoneyRecordService.getById(payLog.getOrdersn());
         record.setStatus(1);

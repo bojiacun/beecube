@@ -21,7 +21,7 @@ public class WebAppIdInterceptor implements HandlerInterceptor {
         String appId = request.getHeader(CommonConstant.X_APP_ID);
         AppContext.setApp(appId);
 
-        log.info("设置Header中的AppId和TenantId {} {}", appId, tenantId);
+        log.debug("设置Header中的AppId和TenantId {} {}", appId, tenantId);
         return true;
     }
 

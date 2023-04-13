@@ -131,7 +131,7 @@ public class JobService {
     @Transactional(rollbackFor = Exception.class)
     public void refund(GoodsDeposit order, String appId) throws InvocationTargetException, IllegalAccessException, WxPayException {
         Integer refundAmount = BigDecimal.valueOf(order.getPrice()).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.CEILING).intValue();
-        log.info("原路返回支付保证金 {}", refundAmount);
+        log.debug("原路返回支付保证金 {}", refundAmount);
         WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
                 .transactionId(order.getTransactionId())
                 .outRefundNo(order.getId())
@@ -164,7 +164,7 @@ public class JobService {
         });
         List<Goods> goodsList = goodsService.list(queryWrapper);
 
-        log.info("有 {} 个拍品待处理", goodsList.size());
+        log.debug("有 {} 个拍品待处理", goodsList.size());
         //处理流拍及成交逻辑
         goodsList.forEach(goods -> {
             BigDecimal minPrice = BigDecimal.valueOf(goods.getMinPrice());
@@ -179,7 +179,7 @@ public class JobService {
 
             if(maxOfferRow == null || BigDecimal.valueOf(maxOfferRow.getPrice()).compareTo(minPrice) < 0) {
                 //流拍了,将拍品状态改为流拍，并将拍品所有出价改为流拍
-                log.info("拍品 {} 流拍了", goods.getId());
+                log.debug("拍品 {} 流拍了", goods.getId());
                 goods.setState(4);
                 LambdaUpdateWrapper<GoodsOffer> updateWrapper = new LambdaUpdateWrapper<>();
                 updateWrapper.set(GoodsOffer::getStatus, 2);
@@ -191,7 +191,7 @@ public class JobService {
                 goodsService.updateById(goods);
             }
             else {
-                log.info("拍品 {} 成交了", goods.getId());
+                log.debug("拍品 {} 成交了", goods.getId());
                 //成交了,将拍品状态改为成交，并将最大出价改为成交
                 goods.setState(3);
                 maxOfferRow.setStatus(1);
@@ -251,7 +251,7 @@ public class JobService {
     @Async
     void sendOfferResultMessage(Goods goods, String appId) throws InvocationTargetException, IllegalAccessException, WxErrorException {
         AppContext.setApp(appId);
-        log.info("发送模板消息 {}", appId);
+        log.debug("发送模板消息 {}", appId);
         LambdaQueryWrapper<GoodsOffer> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOffer::getGoodsId, goods.getId());
         queryWrapper.orderByDesc(GoodsOffer::getPrice);

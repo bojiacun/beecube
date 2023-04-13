@@ -69,7 +69,7 @@ public class AppWxOpenController {
     @ResponseBody
     public BufferedImage createPreAuthQrcode() throws WxErrorException, IOException {
         String url = wxOpenService.getWxOpenComponentService().getMobilePreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getApp(), "/app/wxopen/event/auth"), "2", null);
-        log.info("开放平台授权URL地址为 {}", url);
+        log.debug("开放平台授权URL地址为 {}", url);
         return ImageIO.read(new ByteArrayInputStream(QrcodeUtils.createQrcode(url, null)));
     }
 
@@ -97,7 +97,7 @@ public class AppWxOpenController {
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
 
         WxOpenResult result = wxOpenMaService.releaseAudited();
-        log.info("发布上线的结果是{}", JSONObject.toJSONString(result));
+        log.debug("发布上线的结果是{}", JSONObject.toJSONString(result));
         WxOpenAuthorizerInfoResult infoResult = wxOpenService.getWxOpenComponentService().getAuthorizerInfo(app.getAuthorizerAppid());
         publish.setQrcode(infoResult.getAuthorizerInfo().getQrcodeUrl());
         publish.setStatus(4);

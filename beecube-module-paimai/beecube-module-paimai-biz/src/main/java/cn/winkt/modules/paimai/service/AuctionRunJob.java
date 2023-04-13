@@ -9,6 +9,6 @@ import org.quartz.JobExecutionException;
 public class AuctionRunJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        log.info("我是定时任务，我执行了哦");
+        log.debug("我是定时任务，我执行了哦");
     }
 }

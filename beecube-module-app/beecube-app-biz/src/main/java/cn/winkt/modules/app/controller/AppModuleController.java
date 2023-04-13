@@ -168,7 +168,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
             throw new JeecgBootException("模块无可安装信息");
         }
 
-        log.info("事务XID为：{}", RootContext.getXID());
+        log.debug("事务XID为：{}", RootContext.getXID());
 
         //以下执行模块安装操作
         AppManifest appManifest = JSONObject.parseObject(appModule.getManifest(), AppManifest.class);

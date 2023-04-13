@@ -45,7 +45,7 @@ public class AppWxOpenEventController {
                             @RequestParam String encrypt_type,
                             @RequestParam String msg_signature
     ) {
-        log.info(postData);
+        log.debug(postData);
         WxOpenConfigStorage wxOpenConfigStorage = miniAppOpenService.getWxOpenConfigStorage();
         WxOpenXmlMessage wxOpenXmlMessage = WxOpenXmlMessage.fromEncryptedXml(postData, wxOpenConfigStorage, timestamp, nonce, msg_signature);
         if (wxOpenXmlMessage == null) {
@@ -55,7 +55,7 @@ public class AppWxOpenEventController {
         App app;
         switch (wxOpenXmlMessage.getInfoType()) {
             case "component_verify_ticket":
-                log.info("票据信息为：{}", wxOpenXmlMessage.getComponentVerifyTicket());
+                log.debug("票据信息为：{}", wxOpenXmlMessage.getComponentVerifyTicket());
                 wxOpenConfigStorage.setComponentVerifyTicket(wxOpenXmlMessage.getComponentVerifyTicket());
                 LambdaQueryWrapper<AppWxOpenConfig> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.eq(AppWxOpenConfig::getSettingKey, "componentVerifyTicket");
@@ -71,7 +71,7 @@ public class AppWxOpenEventController {
                 }
                 break;
             case "authorized":
-                log.info("{} 授权成功了", wxOpenXmlMessage.getAppId());
+                log.debug("{} 授权成功了", wxOpenXmlMessage.getAppId());
                 appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
                 app = appService.getOne(appLambdaQueryWrapper);
                 if(app != null) {
@@ -81,7 +81,7 @@ public class AppWxOpenEventController {
                 }
                 break;
             case "unauthorized":
-                log.info("{} 取消授权", wxOpenXmlMessage.getAppId());
+                log.debug("{} 取消授权", wxOpenXmlMessage.getAppId());
                 appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
                 app = appService.getOne(appLambdaQueryWrapper);
                 if(app != null) {
@@ -99,7 +99,7 @@ public class AppWxOpenEventController {
                 }
                 break;
             case "updateauthorized":
-                log.info("{} 更新授权成功了", wxOpenXmlMessage.getAppId());
+                log.debug("{} 更新授权成功了", wxOpenXmlMessage.getAppId());
                 appLambdaQueryWrapper.eq(App::getAuthorizerAppid, wxOpenXmlMessage.getAuthorizerAppid());
                 app = appService.getOne(appLambdaQueryWrapper);
                 if(app != null) {
@@ -115,7 +115,7 @@ public class AppWxOpenEventController {
     @ResponseBody
     @RequestMapping(value = "/callback/{appId}", method = {RequestMethod.POST, RequestMethod.PUT})
     public String appEventCallback(@RequestBody String postData) {
-        log.info(postData);
+        log.debug(postData);
         return "success";
     }
 
