@@ -17,6 +17,7 @@
 package cn.winkt.modules.paimai.service.im;
 
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.paimai.service.ILiveRoomService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import net.x52im.mobileimsdk.server.event.ServerEventListener;
@@ -41,6 +42,9 @@ public class ServerEventListenerImpl implements ServerEventListener
 {
 	@Resource
 	AppApi appApi;
+
+	@Resource
+	ILiveRoomService liveRoomService;
 
 	/**
 	 * 用户身份验证回调方法定义（即验证客户端连接的合法性，合法就允许正常能信，否则断开）.
