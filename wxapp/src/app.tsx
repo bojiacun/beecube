@@ -45,7 +45,11 @@ class App extends Component<PropsWithChildren> {
         app.imManager = new IMManager(app);
         app.imManager.IM_SERVER_URL = IM_SERVER_URL;
         if(userInfo?.id) {
-            wx.IMSDK.loginImpl({loginUserId: userInfo.id, loginToken: Taro.getStorageSync("TOKEN")}, app.imManager.IM_SERVER_URL);
+            wx.IMSDK.loginImpl({
+                loginUserId: userInfo.id,
+                loginToken: Taro.getStorageSync("TOKEN"),
+                extra: siteInfo.appId
+            }, app.imManager.IM_SERVER_URL);
         }
         app.globalData = {userInfo: userInfo};
     }
