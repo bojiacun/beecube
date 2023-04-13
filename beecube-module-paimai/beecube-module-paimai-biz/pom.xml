@@ -51,6 +51,13 @@
             <artifactId>smack-tcp</artifactId>
             <version>4.4.6</version>
         </dependency>
+        <dependency>
+            <groupId>net.x52im</groupId>
+            <artifactId>mobile-im-sdk</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/MobileIMSDKServer.jar</systemPath>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->
