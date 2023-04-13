@@ -58,6 +58,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/MobileIMSDKServer.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>net.x52im</groupId>
+            <artifactId>mobile-im-sdk-client-tcp</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/MobileIMSDK4j_tcp.jar</systemPath>
+        </dependency>
     </dependencies>
     <build>
         <!-- 打包名称 -->
