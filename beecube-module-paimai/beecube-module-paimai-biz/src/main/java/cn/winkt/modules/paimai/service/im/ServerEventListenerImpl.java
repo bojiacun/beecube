@@ -211,17 +211,18 @@ public class ServerEventListenerImpl implements ServerEventListener
 			log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
 			return false;
 		}
-		LiveRoom liveRoom = liveRoomService.getById(roomId);
-		if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
-			log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
-			return false;
-		}
+
 
 		switch (typeu) {
 			case UserMessageType.JOIN_ROOM:
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
 				if(appMemberVO == null) {
 					log.debug("用户不存在");
+					return false;
+				}
+				LiveRoom liveRoom = liveRoomService.getById(roomId);
+				if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
+					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
 					return false;
 				}
 				//用户加入房间消息
@@ -281,7 +282,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				notifyRoomUsers(roomId, dataContent, from_user_id, typeu);
 				break;
 			case UserMessageType.SHUTUP:
-				Set<String> mutedUserIds = mutedUsers.get(roomId);
+				Set<String> mutedUserIds = mutedUsers.computeIfAbsent(roomId, k -> new HashSet<>());
 				mutedUserIds.add(from_user_id);
 				Snowflake snowflake = new Snowflake(9, 9);
 				Protocal fp = ProtocalFactory.createCommonData("", "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
