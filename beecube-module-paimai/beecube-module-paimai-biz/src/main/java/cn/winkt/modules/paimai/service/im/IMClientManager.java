@@ -29,6 +29,7 @@ import net.x52im.mobileimsdk.java.conf.ConfigEntity.SenseMode;
 import net.x52im.mobileimsdk.java.utils.Log;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -57,14 +58,14 @@ public class IMClientManager
 	@Resource
 	private ImConfig imConfig;
 
-	private IMClientManager()
+	public IMClientManager()
 	{
-		initMobileIMSDK();
 	}
 
 	/**
 	 * MobileIMSDK的初始化方法。
 	 */
+	@PostConstruct
 	public void initMobileIMSDK()
 	{
 		if(!init)
