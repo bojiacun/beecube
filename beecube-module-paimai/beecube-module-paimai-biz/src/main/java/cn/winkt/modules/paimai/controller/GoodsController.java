@@ -13,10 +13,10 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.MiniappServices;
-import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.im.ImClientService;
+import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
-import cn.winkt.modules.paimai.message.MessageConstant;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
@@ -66,7 +66,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     private IGoodsOfferService goodsOfferService;
 
     @Resource
-    PaimaiWebSocket paimaiWebSocket;
+    ImClientService imClientService;
 
     @Resource
     private IGoodsOrderService goodsOrderService;
@@ -224,7 +224,6 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 goodsUpdateMessage.setGoodsId(goods.getId());
                 goodsUpdateMessage.setStartTime(goods.getStartTime());
                 goodsUpdateMessage.setEndTime(goods.getEndTime());
-                goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
             }
         }
         goodsService.updateById(goods);
@@ -329,7 +328,6 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
         GoodsOffer goodsOffer = goodsOfferService.getMaxOfferRow(id);
         GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-        goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
         goodsUpdateMessage.setEndTime(goods.getEndTime());
         goodsUpdateMessage.setActualEndTime(goods.getActualEndTime());
         goodsUpdateMessage.setGoodsId(goods.getId());
@@ -345,7 +343,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsUpdateMessage.setState(3);
             goodsUpdateMessage.setDealUserId(goodsOffer.getMemberId());
             goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
-            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
+            imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             goodsOfferService.updateById(goodsOffer);
 
             //计算成交佣金
@@ -391,7 +389,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsOfferService.update(updateWrapper);
             goods.setState(4);
             goodsUpdateMessage.setState(4);
-            paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
+            imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
         }
 
         goodsService.updateById(goods);

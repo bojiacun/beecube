@@ -5,10 +5,10 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.config.MiniappServices;
-import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.im.ImClientService;
+import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
-import cn.winkt.modules.paimai.message.MessageConstant;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -53,7 +53,7 @@ public class JobService {
     MiniappServices miniappServices;
 
     @Resource
-    PaimaiWebSocket paimaiWebSocket;
+    ImClientService imClientService;
 
     @Resource
     IGoodsCommonDescService goodsCommonDescService;
@@ -169,7 +169,6 @@ public class JobService {
             GoodsOffer maxOfferRow = goodsOfferService.getMaxOfferRow(goods.getId());
 
             GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
-            goodsUpdateMessage.setType(MessageConstant.MSG_TYPE_AUCTION_CHANGED);
             goodsUpdateMessage.setEndTime(goods.getEndTime());
             goodsUpdateMessage.setActualEndTime(goods.getActualEndTime());
             goodsUpdateMessage.setGoodsId(goods.getId());
@@ -185,7 +184,7 @@ public class JobService {
                 goodsOfferService.update(updateWrapper);
 
                 goodsUpdateMessage.setState(4);
-                paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
+                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
                 goodsService.updateById(goods);
             }
             else {
@@ -199,7 +198,7 @@ public class JobService {
                 goodsUpdateMessage.setState(3);
                 goodsUpdateMessage.setDealUserId(maxOfferRow.getMemberId());
                 goodsUpdateMessage.setDealPrice(maxOfferRow.getPrice());
-                paimaiWebSocket.sendAllMessage(JSONObject.toJSONString(goodsUpdateMessage));
+                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
                 goodsService.updateById(goods);
 
                 //计算成交佣金

@@ -5,8 +5,8 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppVO;
 import cn.winkt.modules.paimai.config.MiniappServices;
-import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.im.ImClientService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -39,7 +39,7 @@ public class AuctionRunJobHandler {
     private IOrderGoodsService orderGoodsService;
 
     @Resource
-    private PaimaiWebSocket paimaiWebSocket;
+    private ImClientService imClientService;
 
     @Resource
     private AppApi appApi;
