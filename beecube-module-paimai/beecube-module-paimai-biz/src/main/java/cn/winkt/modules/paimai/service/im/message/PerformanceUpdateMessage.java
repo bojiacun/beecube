@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class PerformanceUpdateMessage extends RoomMessage{
+public class PerformanceUpdateMessage extends BaseMessage{
     private String performanceId;
     private String type;
     private Integer state;

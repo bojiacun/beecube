@@ -241,18 +241,20 @@ public class ServerEventListenerImpl implements ServerEventListener
 		String fingerPrint = p.getFp();
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
+
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
 
-		RoomMessage message = JSONObject.parseObject(dataContent, RoomMessage.class);
-		String roomId = message.getRoomId();
-		if(StringUtils.isBlank(roomId)) {
-			log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
-			return false;
-		}
 
+		BaseMessage message = JSONObject.parseObject(dataContent, BaseMessage.class);
+		String roomId = message.getRoomId();
+		String appId = message.getAppId();
 
 		switch (typeu) {
 			case UserMessageType.JOIN_ROOM:
+				if(StringUtils.isBlank(roomId)) {
+					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+					return false;
+				}
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
 				if(appMemberVO == null) {
 					log.debug("用户不存在");
@@ -334,10 +336,10 @@ public class ServerEventListenerImpl implements ServerEventListener
 				break;
 			case UserMessageType.OFFER:
 				//用户出价
-				notifyAppUsers(roomId, dataContent, from_user_id, typeu);
+				notifyAppUsers(appId, dataContent, from_user_id, typeu);
 				break;
 			default:
-				notifyAppUsers(roomId, dataContent, null, typeu);
+				notifyAppUsers(appId, dataContent, null, typeu);
 				break;
 		}
 

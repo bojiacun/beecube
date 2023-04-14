@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class UserOfferMessage extends RoomMessage{
+public class UserOfferMessage extends BaseMessage{
     private String goodsId;
     private BigDecimal price;
     private String userId;

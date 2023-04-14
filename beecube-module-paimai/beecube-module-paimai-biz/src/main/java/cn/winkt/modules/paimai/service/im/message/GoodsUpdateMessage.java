@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class GoodsUpdateMessage extends RoomMessage{
+public class GoodsUpdateMessage extends BaseMessage{
     private String goodsId;
     private String type;
     private Integer state;
