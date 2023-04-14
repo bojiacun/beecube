@@ -19,6 +19,7 @@ package cn.winkt.modules.paimai.service.im.event;
 import net.x52im.mobileimsdk.java.event.MessageQoSEvent;
 import net.x52im.mobileimsdk.java.utils.Log;
 import net.x52im.mobileimsdk.server.protocal.Protocal;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
  * @author Jack Jiang, 20170501
  * @version.1.1
  */
+@Component
 public class MessageQoSEventImpl implements MessageQoSEvent
 {
 	private final static String TAG = MessageQoSEventImpl.class.getSimpleName();

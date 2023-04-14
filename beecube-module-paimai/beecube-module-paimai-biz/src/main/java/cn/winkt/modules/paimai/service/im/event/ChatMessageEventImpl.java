@@ -19,6 +19,7 @@ package cn.winkt.modules.paimai.service.im.event;
 import net.x52im.mobileimsdk.java.event.ChatMessageEvent;
 import net.x52im.mobileimsdk.java.utils.Log;
 import net.x52im.mobileimsdk.server.protocal.ErrorCode;
+import org.springframework.stereotype.Component;
 
 /**
  * 与IM服务器的数据交互事件在此ChatTransDataEvent子类中实现即可。
@@ -26,6 +27,7 @@ import net.x52im.mobileimsdk.server.protocal.ErrorCode;
  * @author Jack Jiang, 20170501
  * @version.1.1
  */
+@Component
 public class ChatMessageEventImpl implements ChatMessageEvent
 {
 	private final static String TAG = ChatMessageEventImpl.class.getSimpleName();

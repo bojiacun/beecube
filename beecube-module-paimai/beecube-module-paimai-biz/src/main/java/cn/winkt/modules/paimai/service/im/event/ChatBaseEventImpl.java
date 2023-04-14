@@ -19,6 +19,7 @@ package cn.winkt.modules.paimai.service.im.event;
 import net.x52im.mobileimsdk.java.event.ChatBaseEvent;
 import net.x52im.mobileimsdk.java.utils.Log;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.util.Observer;
@@ -29,6 +30,7 @@ import java.util.Observer;
  * @author Jack Jiang
  * @version.1.1
  */
+@Component
 public class ChatBaseEventImpl implements ChatBaseEvent
 {
 	private final static String TAG = ChatBaseEventImpl.class.getSimpleName();

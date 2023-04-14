@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "im")
 @Data
 public class ImConfig {
+    private String serverIp;
     private Integer udpPort;
     private Integer tcpPort;
     private Integer websocketPort;

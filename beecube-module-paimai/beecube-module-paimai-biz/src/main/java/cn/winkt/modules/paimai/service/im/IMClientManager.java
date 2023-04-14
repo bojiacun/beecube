@@ -16,6 +16,7 @@
  */
 package cn.winkt.modules.paimai.service.im;
 
+import cn.winkt.modules.paimai.config.ImConfig;
 import cn.winkt.modules.paimai.service.im.event.ChatBaseEventImpl;
 import cn.winkt.modules.paimai.service.im.event.ChatMessageEventImpl;
 import cn.winkt.modules.paimai.service.im.event.MessageQoSEventImpl;
@@ -26,35 +27,36 @@ import net.x52im.mobileimsdk.java.ClientCoreSDK;
 import net.x52im.mobileimsdk.java.conf.ConfigEntity;
 import net.x52im.mobileimsdk.java.conf.ConfigEntity.SenseMode;
 import net.x52im.mobileimsdk.java.utils.Log;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * MobileIMSDK的管理类。
  *
  * @author Jack Jiang(http://www.52im.net/thread-2792-1-1.html)
  */
+@Service
 public class IMClientManager
 {
-	private static String TAG = IMClientManager.class.getSimpleName();
-	
-	private static IMClientManager instance = null;
+	private static final String TAG = IMClientManager.class.getSimpleName();
 	
 	/** MobileIMSDK是否已被初始化. true表示已初化完成，否则未初始化. */
 	private boolean init = false;
 	
 	/** 基本连接状态事件监听器 */
-	private ChatBaseEventImpl baseEventListener = null;
+	@Resource
+	private ChatBaseEventImpl baseEventListener;
 	/** 数据接收事件监听器 */
-	private ChatMessageEventImpl transDataListener = null;
+	@Resource
+	private ChatMessageEventImpl transDataListener;
 	/** 消息送达保证事件监听器 */
-	private MessageQoSEventImpl messageQoSListener = null;
+	@Resource
+	private MessageQoSEventImpl messageQoSListener;
 
-	public static IMClientManager getInstance()
-	{
-		if(instance == null)
-			instance = new IMClientManager();
-		return instance;
-	}
-	
+	@Resource
+	private ImConfig imConfig;
+
 	private IMClientManager()
 	{
 		initMobileIMSDK();
@@ -69,9 +71,8 @@ public class IMClientManager
 		{
 		
 			// 设置服务器ip和服务器端口
-//			ConfigEntity.serverIP = "192.168.82.138";
-//			ConfigEntity.serverIP = "rbcore.openmob.net";
-//			ConfigEntity.serverUDPPort = 7901;
+			ConfigEntity.serverIP = imConfig.getServerIp();
+			ConfigEntity.serverPort = imConfig.getTcpPort();
 	    
 			// MobileIMSDK核心IM框架的敏感度模式设置
 			ConfigEntity.setSenseMode(SenseMode.MODE_5S);
@@ -80,15 +81,12 @@ public class IMClientManager
 //			LocalSocketProvider.TCP_FRAME_MAX_BODY_LENGTH = 60 * 1024;
 	    
 			// 开启/关闭DEBUG信息输出
-	    	ClientCoreSDK.DEBUG = true;
+	    	ClientCoreSDK.DEBUG = imConfig.getDebug();
 	    	
 	    	// 开启SSL/TLS加密传输（请确保服务端也已开启SSL）
 //	    	LocalSocketProvider.sslContext = createSslContext();
 	    
 			// 设置事件回调
-			baseEventListener = new ChatBaseEventImpl();
-			transDataListener = new ChatMessageEventImpl();
-			messageQoSListener = new MessageQoSEventImpl();
 			ClientCoreSDK.getInstance().setChatBaseEvent(baseEventListener);
 			ClientCoreSDK.getInstance().setChatMessageEvent(transDataListener);
 			ClientCoreSDK.getInstance().setMessageQoSEvent(messageQoSListener);
