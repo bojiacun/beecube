@@ -3,7 +3,6 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
-import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;

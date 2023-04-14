@@ -1,13 +1,10 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.app.api.AppApi;
-import cn.winkt.modules.paimai.config.PaimaiWebSocket;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.im.message.AuctionDelayedMessage;
-import cn.winkt.modules.paimai.message.MessageConstant;
-import cn.winkt.modules.paimai.message.OfferMessage;
 import cn.winkt.modules.paimai.service.im.message.PerformanceUpdateMessage;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +46,6 @@ public class AuctionGoodsService {
     IGoodsDepositService goodsDepositService;
 
 
-    @Resource
-    PaimaiWebSocket goodsOfferWebSocket;
 
     @Transactional(rollbackFor = Exception.class)
     public Result<?> offer(JSONObject post) {
@@ -134,14 +129,12 @@ public class AuctionGoodsService {
                         Date newTime = DateUtils.addMinutes(actualEndTime, delayTime);
                         AuctionDelayedMessage message = new AuctionDelayedMessage();
                         message.setGoodsId(goods.getId());
-                        message.setType(MessageConstant.MSG_TYPE_DELAY);
                         message.setNewTime(newTime);
                         if(performance != null) {
                             performance.setEndTime(newTime);
                             performanceService.updateById(performance);
                             //发送专场时间修改通知
                             PerformanceUpdateMessage performanceUpdateMessage = new PerformanceUpdateMessage();
-                            performanceUpdateMessage.setType(MessageConstant.MSG_TYPE_PEFORMANCE_CHANGED);
                             performanceUpdateMessage.setStartTime(performance.getStartTime());
                             performanceUpdateMessage.setEndTime(performance.getEndTime());
                             performanceUpdateMessage.setPerformanceId(performance.getId());
