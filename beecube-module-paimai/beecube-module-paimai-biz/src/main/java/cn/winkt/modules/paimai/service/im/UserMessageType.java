@@ -3,4 +3,16 @@ package cn.winkt.modules.paimai.service.im;
 public interface UserMessageType {
     int JOIN_ROOM = 1;
     int LEAVE_ROOM = 2;
+
+    int SPEAK = 3;
+
+    int OFFER = 4;
+
+    int AUCTION_DELAYED = 5;
+    int DEAL = 6;
+    int GOODS_UPDATE = 7;
+    int PERFORMANCE_UPDATE = 8;
+
+    int ROOM_NOTICE = 99;
+    int SHUTUP = 100;
 }

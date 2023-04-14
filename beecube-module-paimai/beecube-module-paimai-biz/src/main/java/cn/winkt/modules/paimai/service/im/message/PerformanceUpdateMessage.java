@@ -1,4 +1,4 @@
-package cn.winkt.modules.paimai.message;
+package cn.winkt.modules.paimai.service.im.message;
 
 
 import cn.hutool.core.lang.Snowflake;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class PerformanceUpdateMessage extends Message{
+public class PerformanceUpdateMessage extends RoomMessage{
     private String performanceId;
     private String type;
     private Integer state;

@@ -1,4 +1,4 @@
-package cn.winkt.modules.paimai.message;
+package cn.winkt.modules.paimai.service.im.message;
 
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -8,10 +8,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class AuctionDelayedMessage extends Message{
-    private String type = MessageConstant.MSG_TYPE_DELAY;
+public class AuctionDelayedMessage extends RoomMessage{
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date newTime;
-
     private String goodsId;
 }

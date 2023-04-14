@@ -21,9 +21,7 @@ import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
-import cn.winkt.modules.paimai.service.im.message.JoinRoomMessage;
-import cn.winkt.modules.paimai.service.im.message.LiveRoomNoticeMessage;
-import cn.winkt.modules.paimai.service.im.message.UserJoinNotifyMessage;
+import cn.winkt.modules.paimai.service.im.message.*;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +66,11 @@ public class ServerEventListenerImpl implements ServerEventListener
 		this.imService = imService;
 	}
 
+	//房间用户
 	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>();
+	//禁言用户列表
+	private final static ConcurrentHashMap<String, Set<String>> mutedUsers = new ConcurrentHashMap<>();
+
 
 	/**
 	 * 用户身份验证回调方法定义（即验证客户端连接的合法性，合法就允许正常能信，否则断开）.
@@ -202,26 +204,27 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
-		Snowflake snowflake = new Snowflake(15, 1);
+
+		RoomMessage message = JSONObject.parseObject(dataContent, RoomMessage.class);
+		String roomId = message.getRoomId();
+		if(StringUtils.isBlank(roomId)) {
+			log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+			return false;
+		}
+		LiveRoom liveRoom = liveRoomService.getById(roomId);
+		if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
+			log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+			return false;
+		}
+
 		switch (typeu) {
 			case UserMessageType.JOIN_ROOM:
-				//用户加入房间消息
-				JoinRoomMessage message = JSONObject.parseObject(dataContent, JoinRoomMessage.class);
-				String roomId = message.getRoomId();
-				if(StringUtils.isBlank(roomId)) {
-					break;
-				}
-				LiveRoom liveRoom = liveRoomService.getById(roomId);
-				if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
-					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
-					break;
-				}
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
 				if(appMemberVO == null) {
-					log.debug("用户不存在，无法加入房间");
-					break;
+					log.debug("用户不存在");
+					return false;
 				}
-
+				//用户加入房间消息
 				if(!roomUsers.containsKey(roomId)) {
 					synchronized (roomId) {
 						if(!roomUsers.containsKey(roomId)) {
@@ -243,7 +246,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 				if(StringUtils.isNotBlank(notice)) {
 					LiveRoomNoticeMessage liveRoomNoticeMessage = new LiveRoomNoticeMessage();
 					liveRoomNoticeMessage.setNotice(liveRoom.getNotice());
-					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, snowflake.nextIdStr(), ServerMessageType.LIVE_ROOM_NOTICE);
+					Snowflake snowflake = new Snowflake(9, 9);
+					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.ROOM_NOTICE);
 					try {
 						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 							log.debug("发送房间公告消息回调，是否送达 {}", b);
@@ -257,19 +261,44 @@ public class ServerEventListenerImpl implements ServerEventListener
 				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
 				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
 				userJoinNotifyMessage.setUserId(appMemberVO.getId());
-
-				//给房间所有用户发送用户加入房间成功通知
-				roomUsers.get(roomId).forEach(uid -> {
-					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(userJoinNotifyMessage), "0", uid, true, snowflake.nextIdStr(), ServerMessageType.USER_JOIN_NOTIFY);
-					try {
-						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
-							log.debug("发送用户加入房间通知回调，是否送达 {} 到 {}", b, uid);
-						});
-					} catch (Exception e) {
-						log.error(e.getMessage(), e);
-					}
-				});
-
+				notifyRoomUsers(roomId, userJoinNotifyMessage, from_user_id, typeu);
+				break;
+			case UserMessageType.LEAVE_ROOM:
+				//将用户从房间移除
+				Set<String> users = roomUsers.get(roomId);
+				if(users != null) {
+					users.remove(from_user_id);
+				}
+				break;
+			case UserMessageType.SPEAK:
+				//用户在房间发言
+				//查询用户是否在禁言列表中，如果是则禁言
+				Set<String> userIds = mutedUsers.get(roomId);
+				if(userIds != null && userIds.contains(from_user_id)) {
+					log.debug("用户 {} 已被禁言", from_user_id);
+					return false;
+				}
+				notifyRoomUsers(roomId, dataContent, from_user_id, typeu);
+				break;
+			case UserMessageType.SHUTUP:
+				Set<String> mutedUserIds = mutedUsers.get(roomId);
+				mutedUserIds.add(from_user_id);
+				Snowflake snowflake = new Snowflake(9, 9);
+				Protocal fp = ProtocalFactory.createCommonData("", "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
+				try {
+					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+						log.debug("发送房间公告消息回调，是否送达 {}", b);
+					});
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+				break;
+			case UserMessageType.OFFER:
+				//用户出价
+				notifyRoomUsers(roomId, dataContent, from_user_id, typeu);
+				break;
+			default:
+				notifyRoomUsers(roomId, dataContent, null, typeu);
 				break;
 		}
 
@@ -399,5 +428,38 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public void onTransferMessage4C2C_AfterBridge(Protocal p)
 	{	
 		// 默认本方法可
+	}
+
+	private void notifyRoomUsers(String roomId, Object message, String excludeUserId, int messageType) {
+		Snowflake snowflake = new Snowflake(9, 9);
+		roomUsers.get(roomId).forEach(uid -> {
+			if(uid.equals(excludeUserId)) {
+				return;
+			}
+			Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(message), "0", uid, true, snowflake.nextIdStr(), messageType);
+			try {
+				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+					log.debug("通知回调，是否送达 {} 到 {}", b, uid);
+				});
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		});
+	}
+	private void notifyRoomUsers(String roomId, String message, String excludeUserId, int messageType) {
+		Snowflake snowflake = new Snowflake(9, 9);
+		roomUsers.get(roomId).forEach(uid -> {
+			if(uid.equals(excludeUserId)) {
+				return;
+			}
+			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
+			try {
+				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+					log.debug("通知回调，是否送达 {} 到 {}", b, uid);
+				});
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		});
 	}
 }

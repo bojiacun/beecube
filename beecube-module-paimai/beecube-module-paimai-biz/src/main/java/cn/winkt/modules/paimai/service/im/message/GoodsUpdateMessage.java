@@ -1,4 +1,4 @@
-package cn.winkt.modules.paimai.message;
+package cn.winkt.modules.paimai.service.im.message;
 
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class GoodsUpdateMessage extends Message{
+public class GoodsUpdateMessage extends RoomMessage{
     private String goodsId;
     private String type;
     private Integer state;
