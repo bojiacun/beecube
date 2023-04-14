@@ -311,10 +311,10 @@ public class ServerEventListenerImpl implements ServerEventListener
 				break;
 			case UserMessageType.OFFER:
 				//用户出价
-				notifyRoomUsers(roomId, dataContent, from_user_id, typeu);
+				notifyAppUsers(roomId, dataContent, from_user_id, typeu);
 				break;
 			default:
-				notifyRoomUsers(roomId, dataContent, null, typeu);
+				notifyAppUsers(roomId, dataContent, null, typeu);
 				break;
 		}
 
@@ -447,12 +447,15 @@ public class ServerEventListenerImpl implements ServerEventListener
 	}
 
 	private void notifyRoomUsers(String roomId, Object message, String excludeUserId, int messageType) {
+		notifyRoomUsers(roomId, JSONObject.toJSONString(message), excludeUserId, messageType);
+	}
+	private void notifyRoomUsers(String roomId, String message, String excludeUserId, int messageType) {
 		Snowflake snowflake = new Snowflake(9, 9);
 		roomUsers.get(roomId).forEach(uid -> {
 			if(uid.equals(excludeUserId)) {
 				return;
 			}
-			Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(message), "0", uid, true, snowflake.nextIdStr(), messageType);
+			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
 			try {
 				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 					log.debug("通知回调，是否送达 {} 到 {}", b, uid);
@@ -462,9 +465,9 @@ public class ServerEventListenerImpl implements ServerEventListener
 			}
 		});
 	}
-	private void notifyRoomUsers(String roomId, String message, String excludeUserId, int messageType) {
+	private void notifyAppUsers(String appId, String message, String excludeUserId, int messageType) {
 		Snowflake snowflake = new Snowflake(9, 9);
-		roomUsers.get(roomId).forEach(uid -> {
+		appUsers.get(appId).forEach(uid -> {
 			if(uid.equals(excludeUserId)) {
 				return;
 			}
