@@ -67,9 +67,11 @@ public class ServerEventListenerImpl implements ServerEventListener
 	}
 
 	//房间用户
-	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>();
+	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>(200);
 	//禁言用户列表
-	private final static ConcurrentHashMap<String, Set<String>> mutedUsers = new ConcurrentHashMap<>();
+	private final static ConcurrentHashMap<String, Set<String>> mutedUsers = new ConcurrentHashMap<>(200);
+
+	private final static ConcurrentHashMap<String, Set<String>> appUsers = new ConcurrentHashMap<>(200);
 
 
 	/**
@@ -120,6 +122,19 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public void onUserLoginSucess(String userId, String extra, Channel session)
 	{
 		log.debug("【IM_回调通知onUserLoginSucess】用户："+userId+" 上线了！");
+		if(!appUsers.containsKey(extra)) {
+			synchronized (extra) {
+				if(!appUsers.containsKey(extra)) {
+					appUsers.put(extra, new HashSet<>());
+				}
+				else {
+					appUsers.get(extra).add(userId);
+				}
+			}
+		}
+		else {
+			appUsers.get(extra).add(userId);
+		}
 	}
 
 	/**
