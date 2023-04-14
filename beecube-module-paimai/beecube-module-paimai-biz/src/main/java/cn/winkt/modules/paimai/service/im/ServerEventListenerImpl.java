@@ -475,11 +475,13 @@ public class ServerEventListenerImpl implements ServerEventListener
 		notifyRoomUsers(roomId, JSONObject.toJSONString(message), excludeUserId, messageType);
 	}
 	private void notifyRoomUsers(String roomId, String message, String excludeUserId, int messageType) {
+		log.debug("通知房间 {} 所有用户", roomId);
 		Snowflake snowflake = new Snowflake(9, 9);
 		roomUsers.get(roomId).forEach(uid -> {
 			if(uid.equals(excludeUserId)) {
 				return;
 			}
+			log.debug("通知用户 {}", uid);
 			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
 			try {
 				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -491,11 +493,13 @@ public class ServerEventListenerImpl implements ServerEventListener
 		});
 	}
 	private void notifyAppUsers(String appId, String message, String excludeUserId, int messageType) {
+		log.debug("通知应用 {} 所有在线用户", appId);
 		Snowflake snowflake = new Snowflake(9, 9);
 		appUsers.get(appId).forEach(uid -> {
 			if(uid.equals(excludeUserId)) {
 				return;
 			}
+			log.debug("通知用户 {}", uid);
 			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
 			try {
 				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {

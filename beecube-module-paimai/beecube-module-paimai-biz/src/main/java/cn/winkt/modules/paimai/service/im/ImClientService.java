@@ -33,6 +33,7 @@ public class ImClientService {
         String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String userId = loginUser.getId();
+        message.setAppId(appId);
 
         //后台管理员发送消息必须登录
         imClientManager.getBaseEventListener().setLoginOkForLaunchObserver(new Observer() {
@@ -52,7 +53,6 @@ public class ImClientService {
                             else {
                                 log.error("数据发送失败");
                             }
-                            LocalDataSender.getInstance().sendLoginout();
                         }
                     }.execute();
                 }
@@ -62,6 +62,7 @@ public class ImClientService {
             }
         });
 
+        //执行登录操作
         LoginExtraInfo loginExtraInfo = new LoginExtraInfo();
         loginExtraInfo.setAppId(appId);
         loginExtraInfo.setLoginType(2);
