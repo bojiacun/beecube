@@ -33,6 +33,8 @@ import net.x52im.mobileimsdk.server.protocal.ProtocalFactory;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
 import net.x52im.mobileimsdk.server.utils.GlobalSendHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.common.api.CommonAPI;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,12 @@ public class ServerEventListenerImpl implements ServerEventListener
 
 	@Resource
 	ILiveRoomService liveRoomService;
+
+	@Resource
+	CommonAPI commonAPI;
+
+	@Resource
+	RedisUtil redisUtil;
 
 	private ImService imService;
 
@@ -97,12 +105,24 @@ public class ServerEventListenerImpl implements ServerEventListener
 	{
 		int result = 0;
 		log.debug("【DEBUG_回调通知】正在调用回调方法：OnVerifyUserCallBack...(extra="+extra+")");
-		try {
-			appApi.verifyToken(extra, userId, token);
+		//判断extra是否为空，不为空则为
+		LoginExtraInfo loginExtraInfo = JSONObject.parseObject(extra, LoginExtraInfo.class);
+
+		if(loginExtraInfo.getLoginType() == 1) {
+			try {
+				appApi.verifyToken(loginExtraInfo.getAppId(), userId, token);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				result = 4030;
+			}
 		}
-		catch (Exception e) {
-			log.error(e.getMessage(), e);
-			result = 4030;
+		else if(loginExtraInfo.getLoginType() == 2) {
+			try {
+				TokenUtils.verifyToken(token, commonAPI, redisUtil);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				result = 4030;
+			}
 		}
 		return result;
 	}
@@ -122,18 +142,21 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public void onUserLoginSucess(String userId, String extra, Channel session)
 	{
 		log.debug("【IM_回调通知onUserLoginSucess】用户："+userId+" 上线了！");
-		if(!appUsers.containsKey(extra)) {
-			synchronized (extra) {
-				if(!appUsers.containsKey(extra)) {
-					appUsers.put(extra, new HashSet<>());
+		LoginExtraInfo loginExtraInfo = JSONObject.parseObject(extra, LoginExtraInfo.class);
+		String appId = loginExtraInfo.getAppId();
+
+		if(loginExtraInfo.getLoginType() == 1) {
+			if (!appUsers.containsKey(appId)) {
+				synchronized (appId) {
+					if (!appUsers.containsKey(appId)) {
+						appUsers.put(appId, new HashSet<>());
+					} else {
+						appUsers.get(appId).add(userId);
+					}
 				}
-				else {
-					appUsers.get(extra).add(userId);
-				}
+			} else {
+				appUsers.get(appId).add(userId);
 			}
-		}
-		else {
-			appUsers.get(extra).add(userId);
 		}
 	}
 

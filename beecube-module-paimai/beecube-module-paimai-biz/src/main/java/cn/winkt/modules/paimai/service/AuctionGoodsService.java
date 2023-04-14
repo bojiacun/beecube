@@ -4,8 +4,11 @@ import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.im.ImClientService;
+import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.service.im.message.PerformanceUpdateMessage;
+import cn.winkt.modules.paimai.service.im.message.UserOfferMessage;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +20,7 @@ import org.jeecg.common.desensitization.util.SensitiveInfoUtil;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -44,6 +48,9 @@ public class AuctionGoodsService {
 
     @Resource
     IGoodsDepositService goodsDepositService;
+
+    @Resource
+    ImClientService imClientService;
 
 
 
@@ -138,9 +145,9 @@ public class AuctionGoodsService {
                             performanceUpdateMessage.setStartTime(performance.getStartTime());
                             performanceUpdateMessage.setEndTime(performance.getEndTime());
                             performanceUpdateMessage.setPerformanceId(performance.getId());
-                            goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(performanceUpdateMessage));
+                            imClientService.sendMessage(performanceUpdateMessage, UserMessageType.PERFORMANCE_UPDATE);
                         }
-                        goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(message));
+                        imClientService.sendMessage(message, UserMessageType.AUCTION_DELAYED);
                         goods.setActualEndTime(newTime);
                         goodsService.updateById(goods);
                     }
@@ -148,16 +155,14 @@ public class AuctionGoodsService {
             }
             try {
                 //发送出价群消息
-                OfferMessage offerMessage = new OfferMessage();
+                UserOfferMessage offerMessage = new UserOfferMessage();
                 offerMessage.setGoodsId(goods.getId());
-                offerMessage.setFromUserAvatar(loginUser.getAvatar());
-                offerMessage.setFromUserId(loginUser.getId());
-                offerMessage.setFromUserName(goodsOffer.getMemberName());
-                offerMessage.setCreateTime(new Date());
-                offerMessage.setType(MessageConstant.MSG_TYPE_OFFER);
+                offerMessage.setUserAvatar(loginUser.getAvatar());
+                offerMessage.setUserId(loginUser.getId());
+                offerMessage.setUserName(goodsOffer.getMemberName());
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
                 SensitiveInfoUtil.handlerObject(offerMessage, true);
-                goodsOfferWebSocket.sendAllMessage(JSONObject.toJSONString(offerMessage));
+                imClientService.sendMessage(offerMessage, UserMessageType.OFFER);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }

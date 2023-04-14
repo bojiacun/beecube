@@ -38,6 +38,9 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
     @javax.annotation.Resource
     MessageQoSEventS2CListnerImpl messageQoSEventS2CListner;
 
+    @javax.annotation.Resource
+    IMClientManager imClientManager;
+
     public ImService() throws IOException {
         super();
     }
@@ -92,12 +95,14 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
         // 启动MobileIMSDK服务端的Demo
         this.startup();
 
+
         final ImService that = this;
 
         // 加一个钩子，确保在JVM退出时释放netty的资源
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
+                imClientManager.release();
                 that.shutdown();
             }
         });
