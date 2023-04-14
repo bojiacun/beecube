@@ -54,7 +54,7 @@ class IMManager {
     // 开启或关闭SDK的框架内部心跳包的Log输出，建议仅在调试时设为true
     wx.IMSDK.setDebugPingPongEnable(true)
     // SDK核心IM框架的敏感度模式设置（默认MBSenseMode.MODE_15S，建议MBSenseMode.MODE_5S）
-    wx.MBKeepAliveDaemon.setSenseMode(wx.MBSenseMode.MODE_3S)
+    wx.MBKeepAliveDaemon.setSenseMode(wx.MBSenseMode.MODE_5S)
     // 设置生成的消息id长度（建议设置32，不设置则默认24）
     wx.MBProtocalFactory.setMsgIdLength(12)
 

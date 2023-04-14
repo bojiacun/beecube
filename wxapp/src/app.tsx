@@ -35,7 +35,7 @@ class App extends Component<PropsWithChildren> {
         request.get('/app/api/members/profile').then(res => {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
-            this.connectToServer(context);
+            // this.connectToServer(context);
             this.initIM(context);
         });
     }
@@ -48,7 +48,7 @@ class App extends Component<PropsWithChildren> {
             wx.IMSDK.loginImpl({
                 loginUserId: userInfo.id,
                 loginToken: Taro.getStorageSync("TOKEN"),
-                extra: siteInfo.appId
+                extra: JSON.stringify({appId: siteInfo.appId, loginType: 1})
             }, app.imManager.IM_SERVER_URL);
         }
         app.globalData = {userInfo: userInfo};
@@ -169,7 +169,6 @@ class App extends Component<PropsWithChildren> {
     }
 
     componentDidHide() {
-
     }
 
     render() {
