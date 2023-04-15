@@ -40,7 +40,7 @@ const TencentCloudConfigPage = () => {
     });
 
     return (
-        <TencentCloudSettingsEditor settings={appSettings} />
+        <TencentCloudSettingsEditor settings={settings} />
     );
 }
 
