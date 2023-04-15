@@ -1,7 +1,9 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.GoodsDeposit;
 import cn.winkt.modules.paimai.entity.GoodsOffer;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.im.ImClientService;
@@ -10,6 +12,7 @@ import cn.winkt.modules.paimai.service.im.message.AuctionDelayedMessage;
 import cn.winkt.modules.paimai.service.im.message.PerformanceUpdateMessage;
 import cn.winkt.modules.paimai.service.im.message.UserOfferMessage;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -57,17 +60,40 @@ public class AuctionGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public Result<?> offer(JSONObject post) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //用户实名检测，必须绑定手机号才可出价
+        AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
+        if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
+            throw new JeecgBootException("请完善您的用户信息后再出价");
+        }
         Goods goods = goodsService.getById(post.getString("id"));
         if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
-        Date nowDate = new Date();
-        Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
         Performance performance = null;
-        String auctionId = null;
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             performance = performanceService.getById(goods.getPerformanceId());
         }
+        if (performance != null) {
+            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
+            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            queryWrapper.eq(GoodsDeposit::getStatus, 1);
+            if (goodsDepositService.count(queryWrapper) == 0) {
+                return Result.error("未缴纳专场保证金");
+            }
+        } else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
+            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
+            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            queryWrapper.eq(GoodsDeposit::getStatus, 1);
+            if (goodsDepositService.count(queryWrapper) == 0) {
+                return Result.error("未缴纳保证金");
+            }
+        }
+
+        Date nowDate = new Date();
+        Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
+        String auctionId = null;
 
         if (performance != null) {
             auctionId = performance.getAuctionId();
@@ -118,10 +144,10 @@ public class AuctionGoodsService {
             goodsOffer.setPerformanceId(goods.getPerformanceId());
             goodsOffer.setAuctionId(auctionId);
             goodsOffer.setPrice(userOfferPrice.floatValue());
-            goodsOffer.setMemberId(loginUser.getId());
-            goodsOffer.setMemberAvatar(loginUser.getAvatar());
-            goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getNickname));
-            goodsOffer.setMemberPhone(loginUser.getPhone());
+            goodsOffer.setMemberId(memberVO.getId());
+            goodsOffer.setMemberAvatar(memberVO.getAvatar());
+            goodsOffer.setMemberName(StringUtils.getIfEmpty(memberVO.getRealname(), memberVO::getNickname));
+            goodsOffer.setMemberPhone(memberVO.getPhone());
             goodsOffer.setOfferTime(new Date());
             goodsOfferService.save(goodsOffer);
 
@@ -157,8 +183,8 @@ public class AuctionGoodsService {
                 //发送出价群消息
                 UserOfferMessage offerMessage = new UserOfferMessage();
                 offerMessage.setGoodsId(goods.getId());
-                offerMessage.setUserAvatar(loginUser.getAvatar());
-                offerMessage.setUserId(loginUser.getId());
+                offerMessage.setUserAvatar(memberVO.getAvatar());
+                offerMessage.setUserId(memberVO.getId());
                 offerMessage.setUserName(goodsOffer.getMemberName());
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
                 SensitiveInfoUtil.handlerObject(offerMessage, true);

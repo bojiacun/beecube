@@ -2,14 +2,8 @@ package cn.winkt.modules.app.controller.api;
 
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
-import cn.winkt.modules.app.entity.App;
-import cn.winkt.modules.app.entity.AppMember;
-import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
-import cn.winkt.modules.app.entity.AppSetting;
-import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
-import cn.winkt.modules.app.service.IAppMemberService;
-import cn.winkt.modules.app.service.IAppService;
-import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.entity.*;
+import cn.winkt.modules.app.service.*;
 import cn.winkt.modules.app.utils.AppTokenUtils;
 import cn.winkt.modules.app.vo.AppVO;
 import com.alibaba.fastjson.JSONObject;
@@ -59,6 +53,9 @@ public class AppApiController {
 
     @Resource
     RedisUtil redisUtil;
+
+    @Resource
+    IAppTencentConfigService tencentConfigService;
 
 
     @PutMapping("/token/verify")
@@ -158,5 +155,10 @@ public class AppApiController {
         appMemberService.updateById(appMember);
 
         return true;
+    }
+
+    @GetMapping("/tencent/configs")
+    public List<AppTencentConfig> allTencentConfigs() {
+        return tencentConfigService.list();
     }
 }

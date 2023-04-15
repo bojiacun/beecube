@@ -80,4 +80,10 @@ public class LiveRoom {
 	private String subAnchor;
 	private String subAnchorAvatar;
 	private String subAnchorName;
+
+    @TableField(exist = false)
+    private String pushAddress;
+
+    @TableField(exist = false)
+    private String playAddress;
 }

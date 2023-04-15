@@ -1,8 +1,7 @@
 package cn.winkt.modules.paimai.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -12,8 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.app.vo.AppTencentConfigItemVO;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.util.TencentLiveTool;
+import cn.winkt.modules.paimai.vo.AppConfigItemVO;
+import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.map.CompositeMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -23,7 +28,6 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
-import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -96,7 +100,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	@AutoLog(value = "直播间表-添加")
 	@ApiOperation(value="直播间表-添加", notes="直播间表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody LiveRoom liveRoom) {
+	public Result<?> add(@RequestBody LiveRoom liveRoom) throws InvocationTargetException, IllegalAccessException {
 		if(StringUtils.isNotEmpty(liveRoom.getMainAnchor())) {
 			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getMainAnchor());
 			if(appMemberVO == null) {
@@ -120,7 +124,60 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			}
 			liveRoom.setPerformanceName(performance.getTitle());
 		}
-		liveRoomService.save(liveRoom);
+        liveRoomService.save(liveRoom);
+        List<AppTencentConfigItemVO> configItemVOS = appApi.tencentConfigs();
+        Map<String, String> configMap = new HashMap<>();
+        configItemVOS.forEach(item -> {
+            configMap.put(item.getSettingKey(), item.getSettingValue());
+        });
+        AppTencentConfigVO appTencentConfigVO = new AppTencentConfigVO();
+        BeanUtils.copyProperties(appTencentConfigVO, configMap);
+        long endTime = liveRoom.getEndTime().getTime() / 1000;
+        //计算腾讯云直播推流以及拉流地址
+        String pushAddress = String.format("%s://%s/%s/%s?%s",
+                appTencentConfigVO.getPushSchema(),
+                appTencentConfigVO.getPushDomain(),
+                appTencentConfigVO.getAppName(),
+                liveRoom.getId(),
+                TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
+        );
+        String playAddress = StringUtils.EMPTY;
+        switch (appTencentConfigVO.getPlaySchema().toLowerCase()) {
+            case "rtmp":
+                playAddress = String.format("rtmp://%s/%s/%s?%s",
+                        appTencentConfigVO.getPlayDomain(),
+                        appTencentConfigVO.getAppName(),
+                        liveRoom.getId(),
+                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
+                );
+                break;
+            case "flv":
+                playAddress = String.format("http://%s/%s/%s.flv?%s",
+                        appTencentConfigVO.getPlayDomain(),
+                        appTencentConfigVO.getAppName(),
+                        liveRoom.getId(),
+                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
+                );
+                break;
+            case "hls":
+                playAddress = String.format("http://%s/%s/%s.m3u8?%s",
+                        appTencentConfigVO.getPlayDomain(),
+                        appTencentConfigVO.getAppName(),
+                        liveRoom.getId(),
+                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
+                );
+                break;
+            case "webrtc":
+                playAddress = String.format("webrtc://%s/%s/%s?%s",
+                        appTencentConfigVO.getPlayDomain(),
+                        appTencentConfigVO.getAppName(),
+                        liveRoom.getId(),
+                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
+                );
+                break;
+        }
+        liveRoom.setPlayAddress(playAddress);
+        liveRoom.setPushAddress(pushAddress);
 		return Result.OK("添加成功！");
 	}
 	

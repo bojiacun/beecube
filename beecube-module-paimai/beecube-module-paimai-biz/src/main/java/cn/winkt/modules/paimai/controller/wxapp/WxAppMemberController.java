@@ -681,37 +681,6 @@ public class WxAppMemberController {
      */
     @PostMapping("/offers")
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        //用户实名检测，必须绑定手机号才可出价
-        AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
-        if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
-            throw new JeecgBootException("请完善您的用户信息后再出价");
-        }
-        Goods goods = goodsService.getById(post.getString("id"));
-        if (goods == null) {
-            throw new JeecgBootException("操作失败找不到拍品");
-        }
-        Performance performance = null;
-        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            performance = performanceService.getById(goods.getPerformanceId());
-        }
-        if (performance != null) {
-            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
-            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-            queryWrapper.eq(GoodsDeposit::getStatus, 1);
-            if (goodsDepositService.count(queryWrapper) == 0) {
-                return Result.error("未缴纳专场保证金");
-            }
-        } else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
-            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
-            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-            queryWrapper.eq(GoodsDeposit::getStatus, 1);
-            if (goodsDepositService.count(queryWrapper) == 0) {
-                return Result.error("未缴纳保证金");
-            }
-        }
         return auctionGoodsService.offer(post);
     }
 

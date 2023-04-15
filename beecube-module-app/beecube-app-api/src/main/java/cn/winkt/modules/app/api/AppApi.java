@@ -1,10 +1,7 @@
 package cn.winkt.modules.app.api;
 
 import cn.winkt.modules.app.constant.AppModuleConstants;
-import cn.winkt.modules.app.vo.AppMemberVO;
-import cn.winkt.modules.app.vo.AppModule;
-import cn.winkt.modules.app.vo.AppSettingVO;
-import cn.winkt.modules.app.vo.AppVO;
+import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
@@ -26,6 +23,8 @@ public interface AppApi {
 
     @GetMapping("/app/api/settings")
     List<AppSettingVO> queryAppSettings(@RequestParam("app_id") String appId, @RequestParam("group") String groupKey);
+    @GetMapping("/app/api/tencent/configs")
+    List<AppTencentConfigItemVO> tencentConfigs();
 
     @GetMapping("/app/api/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
