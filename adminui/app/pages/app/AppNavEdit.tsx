@@ -79,7 +79,7 @@ const AppNavEdit = (props: any) => {
                             return (
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                        <BootstrapInput label={'导航名称'} readOnly={model?.id} name={'title'}/>
+                                        <BootstrapInput label={'导航名称'}  name={'title'}/>
                                         <BootstrapLinkSelector links={links} label={'链接地址'} name={'url'} />
                                         <FormGroup>
                                             <FormLabel htmlFor={'icon'}>图标</FormLabel>
@@ -89,9 +89,9 @@ const AppNavEdit = (props: any) => {
                                             <FormLabel htmlFor={'iconActive'}>图标激活</FormLabel>
                                             <FileBrowserInput name={'iconActive'} type={1} multi={false} />
                                         </FormGroup>
-                                        <BootstrapInput label={'文本颜色'} readOnly={model?.id} name={'textColor'}/>
-                                        <BootstrapInput label={'激活文本颜色'} readOnly={model?.id} name={'textColorActive'}/>
-                                        <BootstrapInput label={'排序'} readOnly={model?.id} name={'ordernum'} type={'number'} />
+                                        <BootstrapInput label={'文本颜色'}  name={'textColor'}/>
+                                        <BootstrapInput label={'激活文本颜色'} name={'textColorActive'}/>
+                                        <BootstrapInput label={'排序'} name={'ordernum'} type={'number'} />
                                         <BootstrapRadioGroup  options={[{label: '正常', value: '1'},{label: '禁用', value: '0'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>
