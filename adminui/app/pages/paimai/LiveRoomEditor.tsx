@@ -24,6 +24,7 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 const FormSchema = Yup.object().shape({
     title: Yup.string().required('必填字段'),
     startTime: Yup.string().required('必填字段'),
+    endTime: Yup.string().required('必填字段'),
     preview: Yup.string().required('必填字段'),
 });
 
@@ -77,6 +78,7 @@ const LiveRoomEditor = (props: any) => {
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
                                     <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
+                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'关联专场'} name={'performanceId'} placeholder={'要关联专场的ID'}/>
                                     <BootstrapInput label={'主播ID'} name={'mainAnchor'} placeholder={'主播的用户ID'}/>
                                     <BootstrapInput label={'第二主播ID'} name={'subAnchor'} placeholder={'第二主播的用户ID'}/>

@@ -101,6 +101,23 @@ const LiveRoomList = (props: any) => {
             dataField: 'title',
         },
         {
+            text: '推拉流地址',
+            dataField: '',
+            isDummyField: true,
+            formatter: (cell:any, row:any) => {
+                return (
+                    <Row>
+                        <Col md={12}>
+                            推流地址：{row.pushAddress}
+                        </Col>
+                        <Col md={12}>
+                            拉流地址：{row.playAddress}
+                        </Col>
+                    </Row>
+                );
+            }
+        },
+        {
             text: '预览图',
             dataField: '',
             isDummyField: true,
@@ -113,10 +130,10 @@ const LiveRoomList = (props: any) => {
             text: '开始时间',
             dataField: 'startTime',
         },
-        // {
-        //     text: '结束时间',
-        //     dataField: 'endTime',
-        // },
+        {
+            text: '结束时间',
+            dataField: 'endTime',
+        },
         {
             text: '关联的专场',
             dataField: 'performanceName',
