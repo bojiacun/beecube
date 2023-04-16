@@ -152,10 +152,12 @@ public class ServerEventListenerImpl implements ServerEventListener
 						appUsers.put(appId, new HashSet<>());
 					} else {
 						appUsers.get(appId).add(userId);
+                        log.debug("应用{}在线人数为{}", appId, appUsers.get(appId).size());
 					}
 				}
 			} else {
 				appUsers.get(appId).add(userId);
+                log.debug("应用{}在线人数为{}", appId, appUsers.get(appId).size());
 			}
 		}
 	}
@@ -493,7 +495,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		});
 	}
 	private void notifyAppUsers(String appId, String message, String excludeUserId, int messageType) {
-		log.debug("通知应用 {} 所有在线用户", appId);
+		log.debug("通知应用 {} 所有在线用户{}个", appId, appUsers.get(appId).size());
 		Snowflake snowflake = new Snowflake(9, 9);
 		appUsers.get(appId).forEach(uid -> {
 			if(uid.equals(excludeUserId)) {
