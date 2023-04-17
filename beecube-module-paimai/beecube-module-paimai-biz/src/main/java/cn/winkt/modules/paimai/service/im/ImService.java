@@ -38,9 +38,6 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
     @javax.annotation.Resource
     MessageQoSEventS2CListnerImpl messageQoSEventS2CListner;
 
-    @javax.annotation.Resource
-    IMClientManager imClientManager;
-
     public ImService() throws IOException {
         super();
     }
@@ -102,7 +99,6 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                imClientManager.release();
                 that.shutdown();
             }
         });

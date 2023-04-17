@@ -1,5 +1,6 @@
 package org.jeecg.common.util;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.CommonAPI;
@@ -10,6 +11,8 @@ import org.jeecg.common.exception.JeecgBoot401Exception;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.config.shiro.LoginType;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -110,7 +113,10 @@ public class TokenUtils {
     public static LoginUser getLoginUser(String username, CommonAPI commonApi, RedisUtil redisUtil) {
         LoginUser loginUser = null;
         String loginUserKey = CacheConstant.SYS_USERS_CACHE + "::" + username;
-        log.debug("查询登录用户，RedisKey 为：{}", loginUserKey);
+        ServletRequestAttributes servletRequestAttributes =  (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+        String url = request.getRequestURL().toString();
+        log.debug("查询登录用户，RedisKey 为：{}, 当前请求的网址为 {}", loginUserKey, url);
         //【重要】此处通过redis原生获取缓存用户，是为了解决微服务下system服务挂了，其他服务互调不通问题---
         if (redisUtil.hasKey(loginUserKey)) {
             log.debug("缓存中有用户信息 {}", username);
