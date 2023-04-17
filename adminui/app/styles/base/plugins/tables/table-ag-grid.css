@@ -35,7 +35,7 @@
 }
 @media (max-width: 575.98px) {
   .aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbCurrent],
-.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbTotal] {
+  .aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbTotal] {
     margin: 0 0.4rem;
   }
 }

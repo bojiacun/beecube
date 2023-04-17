@@ -2097,8 +2097,17 @@ span.divider {
   overflow-wrap: break-word;
 }
 
-.table-layout-fixed {
-  table-layout: fixed;
+.react-bootstrap-table {
+  overflow-x: auto;
+}
+
+.table {
+  width: auto !important;
+  min-width: 100%;
+}
+
+.table td, .table th {
+  white-space: nowrap;
 }
 
 .dropdown-toggle.noafter:after {

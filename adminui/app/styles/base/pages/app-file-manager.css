@@ -292,9 +292,9 @@
     max-width: 100%;
   }
   .file-manager-application .content-area-wrapper .view-container.list-view .file-date,
-.file-manager-application .content-area-wrapper .view-container.list-view .file-last-modified,
-.file-manager-application .content-area-wrapper .view-container.list-view .file-size,
-.file-manager-application .content-area-wrapper .view-container.list-view .file-item-size {
+  .file-manager-application .content-area-wrapper .view-container.list-view .file-last-modified,
+  .file-manager-application .content-area-wrapper .view-container.list-view .file-size,
+  .file-manager-application .content-area-wrapper .view-container.list-view .file-item-size {
     display: none !important;
   }
 }

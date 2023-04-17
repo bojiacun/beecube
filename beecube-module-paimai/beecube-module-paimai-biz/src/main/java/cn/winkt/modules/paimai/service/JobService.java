@@ -19,7 +19,11 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.time.DateUtils;
+import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.RedisUtil;
+import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.config.AppContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -163,6 +167,7 @@ public class JobService {
         List<Goods> goodsList = goodsService.list(queryWrapper);
 
         log.debug("有 {} 个拍品待处理", goodsList.size());
+        String token = getTempToken();
         //处理流拍及成交逻辑
         goodsList.forEach(goods -> {
             BigDecimal minPrice = BigDecimal.valueOf(goods.getMinPrice());
@@ -306,5 +311,15 @@ public class JobService {
 
             }
         }
+    }
+    private String getTempToken() {
+        RedisUtil redisUtil = SpringContextUtils.getBean(RedisUtil.class);
+        //模拟登录生成临时Token
+        //参数说明：第一个参数是用户名、第二个参数是密码的加密串
+        String token = JwtUtil.sign("admin","cb362cfeefbf3d8d");
+        // 设置Token缓存有效时间为 5 分钟
+        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
+        return token;
     }
 }

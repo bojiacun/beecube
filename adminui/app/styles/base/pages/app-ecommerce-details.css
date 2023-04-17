@@ -207,7 +207,7 @@
 }
 @media (max-width: 767.98px) {
   .ecommerce-application .app-ecommerce-details .ratings-list-item svg,
-.ecommerce-application .app-ecommerce-details .ratings-list-item i {
+  .ecommerce-application .app-ecommerce-details .ratings-list-item i {
     font-size: 1rem;
     height: 1rem;
     width: 1rem;

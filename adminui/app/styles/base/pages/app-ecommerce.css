@@ -432,7 +432,7 @@
 }
 @media (max-width: 575.98px) {
   .ecommerce-application .grid-view,
-.ecommerce-application .grid-view.wishlist-items {
+  .ecommerce-application .grid-view.wishlist-items {
     grid-template-columns: 1fr;
   }
 }

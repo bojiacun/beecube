@@ -103,7 +103,7 @@ html .navbar-floating.footer-static .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-floating.footer-static .app-content .content-area-wrapper,
-html .navbar-floating.footer-static .app-content .kanban-wrapper {
+  html .navbar-floating.footer-static .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 1) - calc(0.8rem * 1)) + 4.45rem + 3.35rem +
               1.3rem + 0rem
@@ -125,7 +125,7 @@ html .navbar-floating.footer-hidden .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-floating.footer-hidden .app-content .content-area-wrapper,
-html .navbar-floating.footer-hidden .app-content .kanban-wrapper {
+  html .navbar-floating.footer-hidden .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 0rem +
               1.3rem + 0rem
@@ -147,7 +147,7 @@ html .navbar-floating.footer-fixed .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-floating.footer-fixed .app-content .content-area-wrapper,
-html .navbar-floating.footer-fixed .app-content .kanban-wrapper {
+  html .navbar-floating.footer-fixed .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 3.35rem +
               1.3rem + 0rem
@@ -172,7 +172,7 @@ html .navbar-hidden.footer-static .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-hidden.footer-static .app-content .content-area-wrapper,
-html .navbar-hidden.footer-static .app-content .kanban-wrapper {
+  html .navbar-hidden.footer-static .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 1) - calc(0.8rem * 1)) + 0rem + 3.35rem +
               0rem + 0rem
@@ -194,7 +194,7 @@ html .navbar-hidden.footer-hidden .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-hidden.footer-hidden .app-content .content-area-wrapper,
-html .navbar-hidden.footer-hidden .app-content .kanban-wrapper {
+  html .navbar-hidden.footer-hidden .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 0rem + 0rem +
               0rem + 0rem
@@ -216,7 +216,7 @@ html .navbar-hidden.footer-fixed .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-hidden.footer-fixed .app-content .content-area-wrapper,
-html .navbar-hidden.footer-fixed .app-content .kanban-wrapper {
+  html .navbar-hidden.footer-fixed .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 0rem + 3.35rem +
               0rem + 0rem
@@ -247,7 +247,7 @@ html .navbar-static.footer-static .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-static.footer-static .app-content .content-area-wrapper,
-html .navbar-static.footer-static .app-content .kanban-wrapper {
+  html .navbar-static.footer-static .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 1) - calc(0.8rem * 1)) + 4.45rem + 3.35rem +
               0rem + 0rem
@@ -269,7 +269,7 @@ html .navbar-static.footer-hidden .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-static.footer-hidden .app-content .content-area-wrapper,
-html .navbar-static.footer-hidden .app-content .kanban-wrapper {
+  html .navbar-static.footer-hidden .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 0rem +
               0rem + 0rem
@@ -291,7 +291,7 @@ html .navbar-static.footer-fixed .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-static.footer-fixed .app-content .content-area-wrapper,
-html .navbar-static.footer-fixed .app-content .kanban-wrapper {
+  html .navbar-static.footer-fixed .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 3.35rem +
               0rem + 0rem
@@ -316,7 +316,7 @@ html .navbar-sticky.footer-static .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-sticky.footer-static .app-content .content-area-wrapper,
-html .navbar-sticky.footer-static .app-content .kanban-wrapper {
+  html .navbar-sticky.footer-static .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 1) - calc(0.8rem * 1)) + 4.45rem + 3.35rem +
               0rem + 0rem
@@ -338,7 +338,7 @@ html .navbar-sticky.footer-hidden .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-sticky.footer-hidden .app-content .content-area-wrapper,
-html .navbar-sticky.footer-hidden .app-content .kanban-wrapper {
+  html .navbar-sticky.footer-hidden .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 0rem +
               0rem + 0rem
@@ -360,7 +360,7 @@ html .navbar-sticky.footer-fixed .app-content .kanban-wrapper {
 }
 @media (max-width: 575.98px) {
   html .navbar-sticky.footer-fixed .app-content .content-area-wrapper,
-html .navbar-sticky.footer-fixed .app-content .kanban-wrapper {
+  html .navbar-sticky.footer-fixed .app-content .kanban-wrapper {
     height: calc(100vh - (
             calc(calc(2rem * 2) - calc(0.8rem * 2)) + 4.45rem + 3.35rem +
               0rem + 0rem
@@ -483,7 +483,7 @@ html .pace .pace-progress {
 }
 @media (max-width: 575.98px) {
   .navbar-static .app-content .header-navbar .navbar-container,
-.navbar-sticky .app-content .header-navbar .navbar-container {
+  .navbar-sticky .app-content .header-navbar .navbar-container {
     padding-left: 1rem;
     padding-right: 0.5rem;
   }
@@ -923,10 +923,10 @@ footer.footer-border {
   pointer-events: none;
   margin-top: -0.7rem;
   filter: blur(5px);
-  background: linear-gradient(#fff 41%, hsla(0deg, 0%, 100%, 0.11) 95%, hsla(0deg, 0%, 100%, 0));
+  background: linear-gradient(#fff 41%, hsla(0, 0%, 100%, 0.11) 95%, hsla(0, 0%, 100%, 0));
 }
 .bordered-layout .main-menu .shadow-bottom {
-  background: linear-gradient(#f8f8f8 41%, hsla(0deg, 0%, 100%, 0.11) 95%, hsla(0deg, 0%, 100%, 0));
+  background: linear-gradient(#f8f8f8 41%, hsla(0, 0%, 100%, 0.11) 95%, hsla(0, 0%, 100%, 0));
 }
 .main-menu.menu-native-scroll .main-menu-content {
   overflow-y: scroll !important;
@@ -1028,7 +1028,7 @@ footer.footer-border {
 
 @media (max-width: 767.98px) {
   .menu-hide .main-menu,
-.menu-open .main-menu {
+  .menu-open .main-menu {
     transition: transform 0.25s, top 0.35s, height 0.35s;
   }
   .main-menu {

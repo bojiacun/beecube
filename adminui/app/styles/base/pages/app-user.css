@@ -42,7 +42,7 @@
 }
 @media (max-width: 576px) {
   .app-user-edit .nav-pills .nav-link i,
-.app-user-edit .nav-pills .nav-link svg {
+  .app-user-edit .nav-pills .nav-link svg {
     height: 1.2rem;
     width: 1.2rem;
     font-size: 1.2rem;

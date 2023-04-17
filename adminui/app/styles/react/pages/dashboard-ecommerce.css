@@ -3,7 +3,7 @@
 }
 @media (max-width: 991.98px) {
   .card-statistics .card-header,
-.card-statistics .statistics-body {
+  .card-statistics .statistics-body {
     padding: 1.5rem !important;
   }
 }

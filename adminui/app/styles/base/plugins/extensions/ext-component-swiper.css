@@ -195,7 +195,7 @@
     background-size: 24px;
   }
   .swiper-centered-slides .swiper-button-next:after,
-.swiper-centered-slides .swiper-button-prev:after {
+  .swiper-centered-slides .swiper-button-prev:after {
     height: 28px;
     width: 28px;
     background-size: 18px;
@@ -212,7 +212,7 @@
     padding: 1.6rem 2.5rem;
   }
   .swiper-centered-slides.swiper-container .swiper-slide i,
-.swiper-centered-slides.swiper-container .swiper-slide svg {
+  .swiper-centered-slides.swiper-container .swiper-slide svg {
     height: 1.07rem !important;
     width: 1.07rem !important;
     font-size: 1.07rem !important;

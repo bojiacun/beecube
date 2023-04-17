@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.ServerEndpoint;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,63 +23,15 @@ import java.util.Observer;
 @Slf4j
 public class ImClientService {
     @Resource
-    IMClientManager imClientManager;
+    ServerEventListenerImpl serverEventListener;
+
 
 
     public void sendMessage(BaseMessage message, int typeu) {
-        ServletRequestAttributes servletRequestAttributes =  (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-
+        log.debug("IM客户端开始发送消息，消息体信息是：{}, 类型：{}", JSONObject.toJSONString(message), typeu);
         String appId = AppContext.getApp();
-        String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        String userId = loginUser.getId();
         message.setAppId(appId);
-
-        //后台管理员发送消息必须登录
-        imClientManager.getBaseEventListener().setLoginOkForLaunchObserver(new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                //登录成功之后发送消息
-                int code = (Integer)arg;
-                // 登陆成功
-                if(code == 0)
-                {
-                    new LocalDataSender.SendCommonDataAsync(JSONObject.toJSONString(message), "0", typeu) {
-                        @Override
-                        protected void onPostExecute(Integer integer) {
-                            if(integer == 0) {
-                                log.debug("数据已发出");
-                            }
-                            else {
-                                log.error("数据发送失败");
-                            }
-                        }
-                    }.execute();
-                }
-                else {
-                    log.error("用户 {} 登录失败", userId);
-                }
-            }
-        });
-
-        //执行登录操作
-        LoginExtraInfo loginExtraInfo = new LoginExtraInfo();
-        loginExtraInfo.setAppId(appId);
-        loginExtraInfo.setLoginType(2);
-        PLoginInfo pLoginInfo = new PLoginInfo(userId, token, JSONObject.toJSONString(loginExtraInfo));
-
-        new LocalDataSender.SendLoginDataAsync(pLoginInfo) {
-            protected void fireAfterSendLogin(int code)
-            {
-                if(code == 0) {
-                    log.debug("登录信息已经发出");
-                }
-                else
-                {
-                    log.error("登录信息发送失败");
-                }
-            }
-        }.execute();
+        serverEventListener.notifyAppUsers(appId, JSONObject.toJSONString(message), null, typeu);
     }
 }

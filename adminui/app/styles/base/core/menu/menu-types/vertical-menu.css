@@ -173,11 +173,11 @@
     width: 0;
   }
   .vertical-layout.vertical-menu-modern .content,
-.vertical-layout.vertical-menu-modern .footer {
+  .vertical-layout.vertical-menu-modern .footer {
     margin-left: 0;
   }
   .vertical-layout.vertical-menu-modern.menu-collapsed .app-content,
-.vertical-layout.vertical-menu-modern.menu-collapsed .footer {
+  .vertical-layout.vertical-menu-modern.menu-collapsed .footer {
     margin-left: 0;
   }
   .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu {
@@ -192,7 +192,7 @@
     width: 0;
   }
   .vertical-layout.vertical-menu-modern .content,
-.vertical-layout.vertical-menu-modern .footer {
+  .vertical-layout.vertical-menu-modern .footer {
     margin-left: 0;
   }
 }
