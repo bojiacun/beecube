@@ -606,7 +606,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 		LoginUser loginUser = new LoginUser();
 		SysUser sysUser = userMapper.getUserByName(username);
-        log.debug("读取到的用户信息是：{}", JSONObject.toJSONString(sysUser));
+        log.debug("getEncodeUserInfo："+JSONObject.toJSONString(sysUser));
 		if(sysUser==null) {
 			return null;
 		}

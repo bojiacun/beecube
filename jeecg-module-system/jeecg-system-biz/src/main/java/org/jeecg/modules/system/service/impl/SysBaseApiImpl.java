@@ -53,7 +53,7 @@ import java.util.*;
 /**
  * @Description: 底层共通业务API，提供其他独立模块调用
  * @Author: scott
- * @Date:2019-4-20 
+ * @Date:2019-4-20
  * @Version:V1.0
  */
 @Slf4j
@@ -115,13 +115,15 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		//update-end-author:taoyan date:2022-6-6 for: VUEN-1276 【v3流程图】测试bug 1、通过我发起的流程或者流程实例，查看历史，流程图预览问题
 		LoginUser user = sysUserService.getEncodeUserInfo(username);
 
+        log.debug("从 sysUserService 读取奥的用户信息是" + (user == null ? "NULL": JSONObject.toJSONString(user)));
+
 		//相同类中方法间调用时脱敏解密 Aop会失效，获取用户信息太重要，此处采用原生解密方法，不采用@SensitiveDecodeAble注解方式
 		try {
 			SensitiveInfoUtil.handlerObject(user, false);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
+        log.debug("从 sysUserService 读取奥的用户信息是" + (user == null ? "NULL": JSONObject.toJSONString(user)));
 		return user;
 	}
 

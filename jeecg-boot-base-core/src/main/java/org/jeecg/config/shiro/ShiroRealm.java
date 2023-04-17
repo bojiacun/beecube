@@ -132,10 +132,10 @@ public class ShiroRealm extends AuthorizingRealm {
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
         LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
         //LoginUser loginUser = commonApi.getUserByName(username);
-        log.debug("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");
         }
+        log.debug("从系统表中读取到的用户信息是："+JSONObject.toJSONString(loginUser));
         // 判断用户状态
         if (loginUser.getStatus() != 1) {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
