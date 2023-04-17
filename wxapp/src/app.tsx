@@ -36,7 +36,7 @@ class App extends Component<PropsWithChildren> {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
             // this.connectToServer(context);
-            this.initIM(context);
+            // this.initIM(context);
         });
     }
     initIM(context) {

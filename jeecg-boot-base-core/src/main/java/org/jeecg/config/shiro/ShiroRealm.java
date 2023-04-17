@@ -1,5 +1,6 @@
 package org.jeecg.config.shiro;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -131,6 +132,7 @@ public class ShiroRealm extends AuthorizingRealm {
         log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
         LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
         //LoginUser loginUser = commonApi.getUserByName(username);
+        log.debug("读取到的用户信息是：{}", JSONObject.toJSONString(loginUser));
         if (loginUser == null) {
             throw new AuthenticationException("用户不存在!");
         }
