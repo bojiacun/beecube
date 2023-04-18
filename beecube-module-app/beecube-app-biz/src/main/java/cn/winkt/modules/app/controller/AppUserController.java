@@ -54,7 +54,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用管理员表")
 @RestController
-@RequestMapping("/app/users")
+@RequestMapping("/users")
 public class AppUserController extends JeecgController<AppUser, IAppUserService> {
 	@Autowired
 	private IAppUserService appUserService;

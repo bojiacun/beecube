@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 
 import cn.winkt.modules.app.config.MiniAppPayServices;
@@ -40,7 +40,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @RestController
-@RequestMapping("/app/api/members/money")
+@RequestMapping("/api/members/money")
 public class AppApiMemberMoneyController {
 
     @Resource
@@ -111,7 +111,7 @@ public class AppApiMemberMoneyController {
         BigDecimal payAmount = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/app/api/notify/charge/" + AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/charge/" + AppContext.getApp())
                 .openid(member.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("用户充值")
                 .spbillCreateIp("127.0.0.1")

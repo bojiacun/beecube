@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.winkt.modules.app.entity.AppNav;
 import cn.winkt.modules.app.service.IAppNavService;
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/api/navs")
+@RequestMapping("/api/navs")
 public class AppApiNavController {
 
     @Resource

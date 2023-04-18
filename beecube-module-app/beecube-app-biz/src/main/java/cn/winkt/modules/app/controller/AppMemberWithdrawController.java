@@ -56,7 +56,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="用户提现申请表")
 @RestController
-@RequestMapping("/app/withdraws")
+@RequestMapping("/withdraws")
 public class AppMemberWithdrawController extends JeecgController<AppMemberWithdraw, IAppMemberWithdrawService> {
 	@Autowired
 	private IAppMemberWithdrawService appMemberWithdrawService;

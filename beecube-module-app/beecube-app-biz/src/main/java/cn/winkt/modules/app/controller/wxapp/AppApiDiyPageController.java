@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 
 import cn.winkt.modules.app.entity.AppDiyPage;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@RequestMapping("/app/api/pages")
+@RequestMapping("/api/pages")
 @RestController
 public class AppApiDiyPageController {
 

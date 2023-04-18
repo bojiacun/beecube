@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/app/api/wxapp/login")
+@RequestMapping("/api/wxapp/login")
 @Slf4j
 public class AppApiWxappLoginController {
 

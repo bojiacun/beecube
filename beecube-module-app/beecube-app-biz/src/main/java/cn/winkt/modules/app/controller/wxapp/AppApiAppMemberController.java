@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.winkt.modules.app.api.SystemApi;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/app/api/members")
+@RequestMapping("/api/members")
 @Slf4j
 public class AppApiAppMemberController {
 

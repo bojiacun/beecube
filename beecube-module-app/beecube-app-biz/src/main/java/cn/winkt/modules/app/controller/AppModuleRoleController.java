@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="模块路由映射表")
 @RestController
-@RequestMapping("/app/appModuleRole")
+@RequestMapping("ModuleRole")
 public class AppModuleRoleController extends JeecgController<AppModuleRole, IAppModuleRoleService> {
 	@Autowired
 	private IAppModuleRoleService appModuleRoleService;

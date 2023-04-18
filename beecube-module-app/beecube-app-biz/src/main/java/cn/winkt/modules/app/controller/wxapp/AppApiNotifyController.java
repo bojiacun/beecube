@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.winkt.modules.app.config.MiniAppPayServices;
 import cn.winkt.modules.app.entity.AppMember;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/app/api/notify")
+@RequestMapping("/api/notify")
 @Slf4j
 public class AppApiNotifyController {
     @Resource

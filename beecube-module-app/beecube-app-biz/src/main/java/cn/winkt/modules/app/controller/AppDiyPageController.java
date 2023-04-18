@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用页面设计表")
 @RestController
-@RequestMapping("/app/diy/pages")
+@RequestMapping("/diy/pages")
 public class AppDiyPageController extends JeecgController<AppDiyPage, IAppDiyPageService> {
 	@Autowired
 	private IAppDiyPageService appDiyPageService;

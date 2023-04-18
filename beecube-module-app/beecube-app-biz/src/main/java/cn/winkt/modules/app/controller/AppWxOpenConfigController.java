@@ -54,7 +54,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="微信开放平台配置表")
 @RestController
-@RequestMapping("/app/wxopen/configs")
+@RequestMapping("/wxopen/configs")
 public class AppWxOpenConfigController extends JeecgController<AppWxOpenConfig, IAppWxOpenConfigService> {
 	@Autowired
 	private IAppWxOpenConfigService appWxOpenConfigService;

@@ -45,7 +45,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="模块路由映射表")
 @RestController
-@RequestMapping("/app/appModuleRoute")
+@RequestMapping("ModuleRoute")
 public class AppModuleRouteController extends JeecgController<AppModuleRoute, IAppModuleRouteService> {
 	@Autowired
 	private IAppModuleRouteService appModuleRouteService;

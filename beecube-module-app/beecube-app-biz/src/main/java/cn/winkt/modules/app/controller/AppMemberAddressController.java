@@ -49,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用会员地址信息表")
 @RestController
-@RequestMapping("/app/members/addresses")
+@RequestMapping("/members/addresses")
 public class AppMemberAddressController extends JeecgController<AppMemberAddress, IAppMemberAddressService> {
 	@Autowired
 	private IAppMemberAddressService appMemberAddressService;

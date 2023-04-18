@@ -126,6 +126,9 @@ public class AppTokenUtils {
             // 查询用户信息
             log.debug("缓存中没有APP用户信息，从数据库中去查找 {}", username);
             loginUser = appMemberProvider.getUserByName(username);
+            if(loginUser != null && loginUser.getId() == null) {
+                loginUser = null;
+            }
         }
         return loginUser;
     }

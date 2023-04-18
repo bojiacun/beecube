@@ -49,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="模块路由映射表")
 @RestController
-@RequestMapping("/app/menus")
+@RequestMapping("/menus")
 public class AppModuleMenuController extends JeecgController<AppModuleMenu, IAppModuleMenuService> {
 	@Autowired
 	private IAppModuleMenuService appModuleMenuService;

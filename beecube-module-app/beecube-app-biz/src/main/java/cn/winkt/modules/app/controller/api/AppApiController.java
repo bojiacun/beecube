@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/app/api")
+@RequestMapping("/api")
 @Slf4j
 public class AppApiController {
 

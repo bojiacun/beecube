@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.winkt.modules.app.entity.AppSetting;
 import cn.winkt.modules.app.service.IAppSettingService;
@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/api/settings")
+@RequestMapping("/api/settings")
 public class AppApiSettingController {
 
     @Resource

@@ -63,7 +63,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "应用前端发布版本表")
 @RestController
-@RequestMapping("/app/publishes")
+@RequestMapping("/publishes")
 public class AppPublishController extends JeecgController<AppPublish, IAppPublishService> {
     @Autowired
     private IAppPublishService appPublishService;

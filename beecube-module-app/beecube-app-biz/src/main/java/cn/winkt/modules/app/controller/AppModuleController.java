@@ -60,7 +60,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "应用模块")
 @RestController
-@RequestMapping("/app/modules")
+@RequestMapping("/modules")
 public class AppModuleController extends JeecgController<AppModule, IAppModuleService> {
     @Autowired
     private IAppModuleService appModuleService;

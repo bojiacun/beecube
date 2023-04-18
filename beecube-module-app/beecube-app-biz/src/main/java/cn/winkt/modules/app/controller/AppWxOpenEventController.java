@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/app/wxopen/event")
+@RequestMapping("/wxopen/event")
 @Slf4j
 public class AppWxOpenEventController {
 

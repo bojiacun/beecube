@@ -1,4 +1,4 @@
-package cn.winkt.modules.app.controller.api;
+package cn.winkt.modules.app.controller.wxapp;
 
 import cn.winkt.modules.app.config.TencentSmsService;
 import cn.winkt.modules.app.config.TencentSmsServices;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/app/api/sms")
+@RequestMapping("/api/sms")
 @Slf4j
 public class AppApiVerifyCodeController {
    

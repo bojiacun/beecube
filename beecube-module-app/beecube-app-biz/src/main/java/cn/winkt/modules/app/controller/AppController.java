@@ -40,7 +40,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @Slf4j
 @Api(tags="应用实体类")
 @RestController
-@RequestMapping("/app")
 public class AppController extends JeecgController<App, IAppService> {
 	@Autowired
 	private IAppService appService;

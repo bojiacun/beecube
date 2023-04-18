@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用配置表")
 @RestController
-@RequestMapping("/app/settings")
+@RequestMapping("/settings")
 public class AppSettingController extends JeecgController<AppSetting, IAppSettingService> {
 	@Autowired
 	private IAppSettingService appSettingService;

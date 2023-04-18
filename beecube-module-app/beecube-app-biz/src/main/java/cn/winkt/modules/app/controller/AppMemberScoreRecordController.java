@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="应用会员积分记录表")
 @RestController
-@RequestMapping("/app/appMemberScoreRecord")
+@RequestMapping("MemberScoreRecord")
 public class AppMemberScoreRecordController extends JeecgController<AppMemberScoreRecord, IAppMemberScoreRecordService> {
 	@Autowired
 	private IAppMemberScoreRecordService appMemberScoreRecordService;

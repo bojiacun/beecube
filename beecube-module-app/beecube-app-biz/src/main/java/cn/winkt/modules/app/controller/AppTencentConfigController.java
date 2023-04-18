@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 @Slf4j
 @Api(tags="腾讯云配置表")
 @RestController
-@RequestMapping("/app/tencent/configs")
+@RequestMapping("/tencent/configs")
 public class AppTencentConfigController extends JeecgController<AppTencentConfig, IAppTencentConfigService> {
    @Autowired
    private IAppTencentConfigService appTencentConfigService;
