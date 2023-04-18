@@ -7,13 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-@Configuration
 @Slf4j
 public class FeignClientErrorDecoder implements ErrorDecoder {
 
@@ -23,7 +23,9 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
             try {
                 String errorBody = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8);
                 Result<?> result = JSONObject.parseObject(errorBody, Result.class);
-                
+                if(!result.isSuccess()) {
+                    return new JeecgBootException("调用错误");
+                }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
