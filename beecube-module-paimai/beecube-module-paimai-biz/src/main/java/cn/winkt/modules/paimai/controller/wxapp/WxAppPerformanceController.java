@@ -119,7 +119,7 @@ public class WxAppPerformanceController {
         LambdaQueryWrapper<LiveRoom> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(LiveRoom::getPerformanceId, id);
         List<LiveRoom> liveRooms = liveRoomService.list(queryWrapper);
-        return Result.OK("获取成功", liveRooms.get(0));
+        return Result.OK("获取成功", liveRooms.size() > 0 ? liveRooms.get(0) : null);
     }
 
     @GetMapping("/goodslist")
