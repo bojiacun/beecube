@@ -57,7 +57,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="拍卖会表")
 @RestController
-@RequestMapping("/paimai/auctions")
+@RequestMapping("/auctions")
 public class AuctionController extends JeecgController<Auction, IAuctionService> {
 	@Autowired
 	private IAuctionService auctionService;

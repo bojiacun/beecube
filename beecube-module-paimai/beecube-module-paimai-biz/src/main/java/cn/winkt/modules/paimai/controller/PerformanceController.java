@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "拍卖专场表")
 @RestController
-@RequestMapping("/paimai/performances")
+@RequestMapping("/performances")
 public class PerformanceController extends JeecgController<Performance, IPerformanceService> {
     @Autowired
     private IPerformanceService performanceService;

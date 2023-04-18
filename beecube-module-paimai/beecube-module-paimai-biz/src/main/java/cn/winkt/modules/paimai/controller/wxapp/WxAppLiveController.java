@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/paimai/api/live")
+@RequestMapping("/api/live")
 public class WxAppLiveController {
 
     @Resource

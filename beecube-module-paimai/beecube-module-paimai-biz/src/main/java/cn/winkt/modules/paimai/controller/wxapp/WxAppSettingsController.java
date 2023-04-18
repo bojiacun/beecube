@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/paimai/api/settings")
+@RequestMapping("/api/settings")
 public class WxAppSettingsController {
 
     @Resource

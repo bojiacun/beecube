@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="关注记录表")
 @RestController
-@RequestMapping("/paimai/follows")
+@RequestMapping("/follows")
 public class GoodsFollowController extends JeecgController<GoodsFollow, IGoodsFollowService> {
 	@Autowired
 	private IGoodsFollowService goodsFollowService;

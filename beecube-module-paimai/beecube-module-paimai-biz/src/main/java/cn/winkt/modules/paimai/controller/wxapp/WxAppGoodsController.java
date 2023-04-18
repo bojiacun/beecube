@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/paimai/api/goods")
+@RequestMapping("/api/goods")
 public class WxAppGoodsController {
 
     @Resource

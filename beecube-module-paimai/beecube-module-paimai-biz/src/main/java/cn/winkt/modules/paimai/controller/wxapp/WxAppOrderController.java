@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
-@RequestMapping("/paimai/api/orders")
+@RequestMapping("/api/orders")
 @RestController
 @Slf4j
 public class WxAppOrderController {

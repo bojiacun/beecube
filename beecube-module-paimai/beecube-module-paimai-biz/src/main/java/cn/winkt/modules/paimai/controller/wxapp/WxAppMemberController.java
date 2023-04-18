@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/paimai/api/members")
+@RequestMapping("/api/members")
 @RestController
 @Slf4j
 public class WxAppMemberController {
@@ -150,7 +150,7 @@ public class WxAppMemberController {
         PayLog payLog = getPayLog(order.getId());
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/orders/" + AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/orders/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("订单支付")
                 .spbillCreateIp("127.0.0.1")
@@ -652,7 +652,7 @@ public class WxAppMemberController {
             AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
 
             WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                    .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp())
+                    .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/buyout/" + AppContext.getApp())
                     .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                     .body("支付一口价订单")
                     .spbillCreateIp("127.0.0.1")
@@ -739,7 +739,7 @@ public class WxAppMemberController {
         BigDecimal payAmount = BigDecimal.valueOf(performance.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/deposit/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付专场保证金:")
                 .spbillCreateIp("127.0.0.1")
@@ -830,7 +830,7 @@ public class WxAppMemberController {
         BigDecimal payAmount = BigDecimal.valueOf(deposit).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/deposit/" + AppContext.getApp())
                 .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("支付拍品保证金:")
                 .spbillCreateIp("127.0.0.1")

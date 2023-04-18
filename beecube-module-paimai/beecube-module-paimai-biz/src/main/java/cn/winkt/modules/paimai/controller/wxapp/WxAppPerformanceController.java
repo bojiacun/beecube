@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/paimai/api/performances")
+@RequestMapping("/api/performances")
 public class WxAppPerformanceController {
 
 

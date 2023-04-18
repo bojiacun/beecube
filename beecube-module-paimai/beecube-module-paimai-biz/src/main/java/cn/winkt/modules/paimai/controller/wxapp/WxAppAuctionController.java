@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/paimai/api/auctions")
+@RequestMapping("/api/auctions")
 public class WxAppAuctionController {
 
 

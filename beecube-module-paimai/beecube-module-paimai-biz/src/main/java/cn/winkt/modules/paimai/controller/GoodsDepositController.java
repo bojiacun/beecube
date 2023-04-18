@@ -62,7 +62,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "订单售后表")
 @RestController
-@RequestMapping("/paimai/deposits")
+@RequestMapping("/deposits")
 public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoodsDepositService> {
     @Autowired
     private IGoodsDepositService goodsDepositService;

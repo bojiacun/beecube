@@ -57,7 +57,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="直播间表")
 @RestController
-@RequestMapping("/paimai/rooms")
+@RequestMapping("/rooms")
 public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomService> {
 	@Autowired
 	private ILiveRoomService liveRoomService;

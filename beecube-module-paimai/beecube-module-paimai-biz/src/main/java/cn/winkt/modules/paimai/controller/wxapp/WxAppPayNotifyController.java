@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/paimai/api/notify")
+@RequestMapping("/api/notify")
 @Slf4j
 public class WxAppPayNotifyController {
     @Resource

@@ -36,7 +36,7 @@ import java.util.List;
 @Slf4j
 @Api(tags="文章表")
 @RestController
-@RequestMapping("/paimai/api/articles")
+@RequestMapping("/api/articles")
 public class WxAppArticleController extends JeecgController<Article, IArticleService> {
    @Autowired
    private IArticleService articleService;

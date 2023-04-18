@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="文章分类表")
 @RestController
-@RequestMapping("/paimai/article/classes")
+@RequestMapping("/article/classes")
 public class ArticleClassController extends JeecgController<ArticleClass, IArticleClassService> {
 	@Autowired
 	private IArticleClassService articleClassService;

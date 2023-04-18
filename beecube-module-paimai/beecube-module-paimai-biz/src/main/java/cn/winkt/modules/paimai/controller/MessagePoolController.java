@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="拍卖消息队列表")
 @RestController
-@RequestMapping("/paimai/messagePool")
+@RequestMapping("/messagePool")
 public class MessagePoolController extends JeecgController<MessagePool, IMessagePoolService> {
 	@Autowired
 	private IMessagePoolService messagePoolService;

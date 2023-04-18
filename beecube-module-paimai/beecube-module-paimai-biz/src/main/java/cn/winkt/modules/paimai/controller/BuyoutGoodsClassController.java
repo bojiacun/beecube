@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "一口价分类")
 @RestController
-@RequestMapping("/paimai/buyout/classes")
+@RequestMapping("/buyout/classes")
 public class BuyoutGoodsClassController extends JeecgController<BuyoutGoodsClass, IBuyoutGoodsClassService> {
     @Autowired
     private IBuyoutGoodsClassService buyoutGoodsClassService;
