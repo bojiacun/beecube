@@ -35,7 +35,7 @@ class App extends Component<PropsWithChildren> {
         request.get('/app/api/members/profile').then(res => {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
-            // this.connectToServer(context);
+            this.connectToServer(context);
             // this.initIM(context);
         });
     }
