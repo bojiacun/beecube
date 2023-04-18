@@ -24,7 +24,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/notify")
 @Slf4j
-public class AppApiNotifyController {
+public class WxAppNotifyController {
     @Resource
     private MiniAppPayServices miniAppPayServices;
 

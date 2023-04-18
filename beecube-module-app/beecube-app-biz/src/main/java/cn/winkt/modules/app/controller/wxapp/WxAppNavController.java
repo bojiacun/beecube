@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/navs")
-public class AppApiNavController {
+public class WxAppNavController {
 
     @Resource
     IAppNavService appNavService;

@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @RequestMapping("/api/pages")
 @RestController
-public class AppApiDiyPageController {
+public class WxAppDiyPageController {
 
     @Resource
     IAppDiyPageService appDiyPageService;

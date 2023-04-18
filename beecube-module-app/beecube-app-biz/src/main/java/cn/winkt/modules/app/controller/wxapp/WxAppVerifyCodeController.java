@@ -12,13 +12,12 @@ import org.jeecg.config.AppContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/sms")
 @Slf4j
-public class AppApiVerifyCodeController {
+public class WxAppVerifyCodeController {
    
     @Resource
     TencentSmsServices tencentSmsServices;

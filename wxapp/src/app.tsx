@@ -5,9 +5,12 @@ import './app.scss';
 import configStore from "./store";
 import {setContext, setMessage, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
-import request, {connectWebSocketServer} from './lib/request';
+import request from './lib/request';
 import IMManager from './utils/im-manager';
+import EventBus from './utils/event-bus';
+import EventType from './utils/event-type';
 import 'weapp-cookie';
+import utils from "./lib/utils";
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
 const siteInfo = Taro.getExtConfigSync();
@@ -25,18 +28,19 @@ class App extends Component<PropsWithChildren> {
         super(props);
         this.initUser = this.initUser.bind(this);
         this.onMessageReceive = this.onMessageReceive.bind(this);
-        this.onSocketError = this.onSocketError.bind(this);
-        this.onSocketClose = this.onSocketClose.bind(this);
-        this.connectToServer = this.connectToServer.bind(this);
-        this.healthCheck = this.healthCheck.bind(this);
+        // this.onSocketError = this.onSocketError.bind(this);
+        // this.onSocketClose = this.onSocketClose.bind(this);
+        // this.connectToServer = this.connectToServer.bind(this);
+        this.registerIMEvents = this.registerIMEvents.bind(this);
     }
 
     initUser(context) {
         request.get('/app/api/members/profile').then(res => {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
-            this.connectToServer(context);
-            // this.initIM(context);
+            // this.connectToServer(context);
+            this.registerIMEvents();
+            this.initIM(context);
         });
     }
     initIM(context) {
@@ -53,44 +57,89 @@ class App extends Component<PropsWithChildren> {
         }
         app.globalData = {userInfo: userInfo};
     }
-    connectToServer(context) {
-        if(siteInfo?.appId && context.userInfo?.id) {
-            connectWebSocketServer('/auction/websocket/' + siteInfo.appId + '/' + context.userInfo.id).then(res => {
-                this.socket = res;
-                this.socket.onMessage(this.onMessageReceive);
-                this.socket.onClose(this.onSocketClose);
-                this.socket.onError(this.onSocketError);
-                this.healthCheck(this.socket);
-            });
-        }
-    }
-    onSocketError(error) {
-        console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
-    }
-    onSocketClose(res) {
-        console.log('服务器连接断开, 5秒后尝试重连', res);
-        clearInterval(this.checkTimer);
-        let {context} = store.getState();
-        setTimeout(()=>{
-            this.connectToServer(context);
-        }, 5000);
-    }
-    healthCheck(socket) {
-        this.checkTimer = setInterval(()=>{
-            let {context} = store.getState();
-            let data = {type: 'MSG_HEALTH', fromUserId: context.userInfo?.id};
-            console.log('发送心跳包', data);
-            socket.send({data: JSON.stringify(data)});
-        }, this.checkTimeout);
+    // connectToServer(context) {
+    //     if(siteInfo?.appId && context.userInfo?.id) {
+    //         connectWebSocketServer('/auction/websocket/' + siteInfo.appId + '/' + context.userInfo.id).then(res => {
+    //             this.socket = res;
+    //             this.socket.onMessage(this.onMessageReceive);
+    //             this.socket.onClose(this.onSocketClose);
+    //             this.socket.onError(this.onSocketError);
+    //             this.healthCheck(this.socket);
+    //         });
+    //     }
+    // }
+    // onSocketError(error) {
+    //     console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
+    // }
+    // onSocketClose(res) {
+    //     console.log('服务器连接断开, 5秒后尝试重连', res);
+    //     clearInterval(this.checkTimer);
+    //     let {context} = store.getState();
+    //     setTimeout(()=>{
+    //         this.connectToServer(context);
+    //     }, 5000);
+    // }
+    // healthCheck(socket) {
+    //     this.checkTimer = setInterval(()=>{
+    //         let {context} = store.getState();
+    //         let data = {type: 'MSG_HEALTH', fromUserId: context.userInfo?.id};
+    //         console.log('发送心跳包', data);
+    //         socket.send({data: JSON.stringify(data)});
+    //     }, this.checkTimeout);
+    // }
+    registerIMEvents(){
+        // 提示：ES6的箭头函数中this指向的是外部调用者，而function()这种匿名函数则是指向它自身，别理解错
+
+        // 注册应用层事件通知：事件发生于收到聊天消息时，此处接收通知并在UI上展现出来
+        EventBus.register(EventType.onIMData, (p) => {
+            // 是否“我”发出的消息
+            console.log("收到了消息", p);
+            let isme = (p.from == wx.IMSDK.getLoginInfo().loginUserId);
+            let message = JSON.parse(p.dataContent);
+            message.isme = isme;
+            message.type = p.typeu;
+            this.onMessageReceive(message);
+        })
+
+        // 注册应用层事件通知：事件发生于客户端成功登陆/认证后，此处接收通知并在UI上展开相关逻辑
+        EventBus.register(EventType.onIMAfterLoginSucess, () => {
+            // 设置已成功登录标识并通知ui刷新
+            console.log(wx.IMSDK.getLoginInfo().loginUserId+'用户登录成功');
+        });
+
+        // 注册应用层事件通知：事件发生于客户端登陆/认证失败后（可能是被禁、token/密码被重置等，具体由服务端决定）
+        EventBus.register(EventType.onIMAfterLoginFailed, (isReconnect) => {
+            console.log('对不起，你' + (isReconnect ? '自动重连' : '登陆') + 'IM服务器失败了 ...', false);
+        });
+
+        // 注册应用层事件通知：事件发生于客户端与服务器的网络断开后
+        EventBus.register(EventType.onIMDisconnected, () => {
+            console.log('Sorry，你掉线了 ...', false);
+        });
+
+        // 注册应用层事件通知：事件发生于客户端掉线重连成功后
+        EventBus.register(EventType.onIMReconnectSucess, () => {
+            console.log('掉线自动重连成功了!', false);
+        });
+
+        // 注册应用层事件通知：事件发生于客户端收到服务端的心跳响应包，此事件对于应用层无实质性意义，一般无需理会
+        EventBus.register(EventType.onIMPong, () => {
+            // 绿色呼吸灯效果（表示心跳在后面正常工作中...）
+        });
+
+        // 注册应用层事件通知：事件发生于聊天消息/指令未成功送达时，此处接收通知可在UI界面上标记未送出的消息
+        EventBus.register(EventType.onMessagesLost, (lostMessages) => {
+            console.log('消息发送失败', lostMessages);
+            utils.showError('发送消息失败');
+        });
+
+        // 注册应用层事件通知：事件发生于聊天消息/指令已被对方收到，此处接收通知可在UI界面上标记已送达的消息
+        EventBus.register(EventType.onMessagesBeReceived, (theFingerPrint) => {
+            console.log("[DEMO-UI] [收到消息应答]fp=" + theFingerPrint, true);
+        });
     }
 
     onMessageReceive(message:any) {
-        message = JSON.parse(message.data);
-        console.log('received a message', message);
-        if(message.type === 'MSG_REPLY') {
-            console.log('收到心跳包', message);
-            return;
-        }
         store.dispatch(setMessage(message));
     }
 

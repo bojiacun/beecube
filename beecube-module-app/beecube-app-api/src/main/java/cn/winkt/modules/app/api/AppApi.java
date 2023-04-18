@@ -15,26 +15,26 @@ public interface AppApi {
     @PostMapping("/app/modules/register")
     Result<?> registerModule(@RequestBody AppModule module);
 
-    @PutMapping("/app/api/money/in")
+    @PutMapping("/app/admin/money/in")
     boolean addMemberMoney(@RequestParam("member_id") String memberId, @RequestParam("description") String description, @RequestParam("amount") Float amount);
 
     @GetMapping("/app/modules/queryByIdentify")
     boolean moduleIsRegistered(@RequestParam(value = "identify") String identify);
 
-    @GetMapping("/app/api/settings")
+    @GetMapping("/app/admin/settings")
     List<AppSettingVO> queryAppSettings(@RequestParam("app_id") String appId, @RequestParam("group") String groupKey);
-    @GetMapping("/app/api/tencent/configs")
+    @GetMapping("/app/admin/tencent/configs")
     List<AppTencentConfigItemVO> tencentConfigs();
 
-    @GetMapping("/app/api/getMemberById")
+    @GetMapping("/app/admin/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
 
-    @GetMapping("/app/api/all")
+    @GetMapping("/app/admin/all")
     List<AppVO> allApps();
 
-    @GetMapping("/app/api/system/token")
+    @GetMapping("/app/admin/system/token")
     String getSystemTempToken();
 
-    @PutMapping("/app/api/token/verify")
+    @PutMapping("/app/admin/token/verify")
     Boolean verifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token);
 }

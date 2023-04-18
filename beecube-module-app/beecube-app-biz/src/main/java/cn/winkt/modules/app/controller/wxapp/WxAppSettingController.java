@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/settings")
-public class AppApiSettingController {
+public class WxAppSettingController {
 
     @Resource
     IAppSettingService appSettingService;

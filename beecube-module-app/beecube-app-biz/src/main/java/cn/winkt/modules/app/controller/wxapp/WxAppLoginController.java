@@ -8,17 +8,11 @@ import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
 import com.apifan.common.random.RandomSource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import org.apache.commons.lang3.RandomUtils;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.es.QueryStringBuilder;
 import org.jeecg.common.exception.JeecgBootException;
-import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.CommonUtils;
 import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.config.AppContext;
@@ -32,7 +26,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api/wxapp/login")
 @Slf4j
-public class AppApiWxappLoginController {
+public class WxAppLoginController {
 
     @Resource
     WxMiniappServices wxMiniappServices;
