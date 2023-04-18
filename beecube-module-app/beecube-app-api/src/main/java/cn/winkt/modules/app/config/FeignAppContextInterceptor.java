@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.config;
 
+import feign.Client;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.jeecg.common.constant.CommonConstant;
