@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.api;
 
+import cn.winkt.modules.app.api.fallback.SysBaseAPIFallback;
 import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.CommonAPI;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM)
+@FeignClient(value = ServiceNameConstants.SERVICE_SYSTEM, fallback = SysBaseAPIFallback.class)
 public interface SystemApi extends CommonAPI{
 
     @PostMapping("/sys/user/addSysUserRole")
