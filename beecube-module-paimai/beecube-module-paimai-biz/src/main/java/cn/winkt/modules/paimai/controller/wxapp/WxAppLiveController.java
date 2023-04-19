@@ -25,25 +25,19 @@ import java.util.stream.Collectors;
 public class WxAppLiveController {
 
     @Resource
-    IGoodsCommonDescService goodsCommonDescService;
-
-    @Resource
-    ZeGoService zeGoService;
-
-    @Resource
     ILiveRoomService liveRoomService;
 
     @Resource
     ILiveRoomStreamService liveRoomStreamService;
 
     @GetMapping("/rooms/{id}")
-    public Result<LiveRoom> liveRoom(@PathVariable  String id) {
+    public Result<LiveRoom> liveRoom(@PathVariable String id) {
         LiveRoom room = liveRoomService.getById(id);
         LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
         streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
         streamLambdaQueryWrapper.eq(LiveRoomStream::getStatus, 1);
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
-        return Result.OK("获取成功", liveRoomService.getById(id));
+        return Result.OK("获取成功", room);
     }
     @GetMapping("/rooms")
     public Result<LiveRoom> memberLiveRoom(@RequestParam String memberId) {

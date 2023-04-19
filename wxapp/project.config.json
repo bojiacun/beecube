@@ -27,12 +27,7 @@
                 {
                     "name": "用户端",
                     "pathName": "/pages/live/room",
-                    "query": "roomId=1643056960030203905&loginType=audience&roomName=测试直播间"
-                },
-                {
-                    "name": "测试直播间",
-                    "pathName": "/pages/live/room",
-                    "query": "roomId=1648522142529413121&loginType=audience&roomName=测试直播间"
+                    "query": "roomId=1648634160993374210&loginType=audience&roomName=测试直播间"
                 }
             ]
         }

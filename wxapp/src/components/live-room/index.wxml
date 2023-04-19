@@ -1,14 +1,12 @@
 <!-- components/live-room/index.wxml -->
 <wxs src="../lib/stringUtil.wxs" module="stringUtil" />
 <view class="live-room-container">
-    <view>
-        <video wx:if="{{!isCaster && mainPusher.url}}" id="{{mainPusher.streamID}}" src="{{mainPusher.url}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>
-        <view wx:if="{{playStreamList.length || subPusher.url}}" class="sub-video" style="top:{{userTop}}px">
-            <view wx:if="{{playStreamList.length}}" class="play-container" wx:for="{{playStreamList}}" wx:key="streamID">
-                <video src="{{item.playUrl}}" id="{{item.streamID}}" autoplay="{{true}}" object-fit="fillCrop" class="small-video" />
-                <image wx:if="{{isCaster}}" class="close-icon" data-userid="{{item.anchorID}}" bindtap="endLive" src="../images/close-play.png"></image>
-            </view>
-        </view>
+    <view wx:if="{{streams.length == 1}}">
+        <video wx:if="{{streams[0]}}" id="{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>
+    </view>
+    <view wx:elif="{{streams.length == 2}}" class="grid grid-cols-2 gap-0">
+        <video wx:if="{{streams[0]}}" id="{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>
+        <video wx:if="{{streams[1]}}" id="{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>
     </view>
 
 

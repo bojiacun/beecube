@@ -20,32 +20,21 @@ Component({
             type: Boolean,
             value: false
         },
-        liveAppID: {
-            type: Number,
-            value: 1739272706,
-            observer: function (newVal, oldVal) {
-            }
-        },
-        wsServerURL: {
-            type: String,
-            value: ''
-        },
-        logServerURL: {
-            type: String,
-            value: ""
-        },
-        loginType: {
-            type: String,
-            value: ""
-        },
         pushMerTime: {
             type: Number,
             value: 10
         },
-        roomID: {
-            type: String,
-            value: "",
+        liveRoom: {
+            type: Object,
+            value: null,
             observer: function (newVal, oldVal, changedPath) {
+            }
+        },
+        streams: {
+            type: Array,
+            value: [],
+            observer: function (newVal, oldVal, changedPath) {
+
             }
         },
         userID: {
@@ -94,7 +83,7 @@ Component({
         isMessageHide: true,
         scrollToView: "",
         tryPlayCount: 0,
-
+        streams: [],
         requestJoinLiveList: [],    // 请求连麦的成员列表
         messageList: [], // 消息列表，列表中每个对象结构为 {name:'xxx', time:xxx, content:'xxx'}
         userCount: 1,

@@ -72,13 +72,6 @@ export default class Index extends Component<any, any> {
                 userName: userInfo.nickname,
                 userInfo: userInfo
             });
-            setTimeout(async () => {
-                const result = await request.put('/paimai/api/live/login', userInfo);
-                const token = result.data.result;
-                this.setState({token: token});
-                this.liveRoom.init();
-            }, 200);
-
         }
 
     }
@@ -201,10 +194,6 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    onStreamUrlUpdate(streamId, url, type) {
-        console.log(streamId, url, type);
-        this.setState({pushUrl: url});
-    }
 
     // async startPushStream() {
     //     zg.startPublishingStream(this.streamId);
@@ -230,12 +219,9 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {
-            roomID,
             roomName,
-            liveAppID,
-            wsServerURL,
-            logServerURL,
             loginType,
+            liveRoom,
             token,
             userID,
             hideModal,
@@ -259,11 +245,8 @@ export default class Index extends Component<any, any> {
                     <live
                         id={'live-room'}
                         isNative={false}
-                        liveAppID={liveAppID}
-                        roomID={roomID}
-                        wsServerURL={wsServerURL}
-                        logServerURL={logServerURL}
-                        loginType={loginType}
+                        liveRoom={liveRoom}
+                        streams={liveRoom?.streams||[]}
                         token={token}
                         userID={userID}
                         navBarHeight={barTop}
