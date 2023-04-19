@@ -19,7 +19,7 @@ import utils from "../../lib/utils";
 export default class Index extends Component<any, any> {
     state: any = {
         liveRoom: null,
-        isNative: true,
+        isNative: false,
         roomID: null,
         roomName: null,
         liveAppID: null,

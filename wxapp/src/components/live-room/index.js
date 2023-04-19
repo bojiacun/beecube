@@ -1,10 +1,6 @@
 // components/live-room/index.js
-let {ZegoClient} = {};
 const app = getApp();
 
-let zg;
-let zgPusher;
-let zgPlayer;
 let networkOk = true;
 let isLogout = false;
 let logOutTer = null;
@@ -22,7 +18,7 @@ Component({
     properties: {
         isNative: {
             type: Boolean,
-            value: true
+            value: false
         },
         liveAppID: {
             type: Number,
@@ -91,18 +87,6 @@ Component({
         beginToPublish: false, // 准备连麦标志位
         reachStreamLimit: false, // 房间内达到流上限标志位
         isPublishing: false, // 是否正在推流
-        mainPusher: {
-            url: '',
-            streamID: '',
-            // 推流配置项
-            isMute: false, // 推流是否静音
-            frontCamera: true, // 前后置摄像头，false 表示后置,
-            pusherID: ''
-        },
-        subPusher: {
-            url: '',
-            streamID: '',
-        },
         playConfig: {},
         pictureInPictureMode: ['push', 'pop'],
         upperStreamLimit: 2, // 房间内限制为最多 4 条流，当流数大于 4 条时，禁止新进入的用户连麦
@@ -130,7 +114,7 @@ Component({
         userInfo: {},
         hasUserInfo: false,
 
-        waitingImage: "https://storage.zego.im/downloads/pause_publish.png",
+        waitingImage: null,
         avatarUrl: "",
         nickName: "",
         playUrl: "",
@@ -150,7 +134,6 @@ Component({
     },
     created: function () {
         const sysInfo = wx.getSystemInfoSync();
-        console.log('sysInfo', sysInfo);
         if (sysInfo.model && iphones.some(item => sysInfo.model.indexOf(item) > -1)) {
             iphoneXX = true;
         }
@@ -160,7 +143,6 @@ Component({
     },
     ready: function () {
         console.log("ready", this.data.liveAppID, this.data);
-
     },
     lifetimes: {
         attached() {
@@ -179,8 +161,6 @@ Component({
     methods: {
         init() {
             this.getUserInfo();
-
-            console.log("zg", zgPusher, zgPlayer);
             // iphoneX 等机型
             if (iphoneXX) {
                 this.data.mmBot += 48;
@@ -245,27 +225,12 @@ Component({
         getUserInfo() {
             let userInfo = app.globalData.userInfo;
             console.log('getUserInfo', userInfo);
-
-            if (!userInfo) {
-                wx.getUserInfo({
-                    success: res => {
-                        app.globalData.userInfo = res.userInfo;
-                        this.setData({
-                            hasUserInfo: true,
-                            userInfo: res.userInfo
-                        });
-                    },
-                    fail: e => {
-                        console.error(e);
-                    }
-                })
-            } else {
+            if (userInfo) {
                 this.setData({
                     hasUserInfo: true,
                     userInfo: userInfo
                 });
             }
-
         },
         bindCallBack() {
             let self = this;
