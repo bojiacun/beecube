@@ -41,6 +41,11 @@ const LiveRoomList = (props: any) => {
     useEffect(() => {
         if (searchFetcher.data) {
             setList(searchFetcher.data);
+            searchFetcher.data.records.forEach((item:any)=>{
+                if(item.id == showRoom?.id) {
+                    setShowRoom(item);
+                }
+            });
         }
     }, [searchFetcher.state]);
 
@@ -245,7 +250,7 @@ const LiveRoomList = (props: any) => {
                 loadData();
             }} />}
 
-            {showRoom && <LiveRoomStreamList startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams||[]} onHide={()=>{
+            {showRoom && <LiveRoomStreamList refreshData={loadData} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams} onHide={()=>{
                 setShowRoom(null);
             }} />}
         </>

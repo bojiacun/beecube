@@ -24,15 +24,10 @@ import {User} from "react-feather";
 
 
 const LiveRoomStreamList = (props: any) => {
-    const {startPageLoading, stopPageLoading, streams, show, onHide} = props;
-    const [list, setList] = useState<any>(streams);
+    const {startPageLoading, stopPageLoading, streams, show, onHide, refreshData} = props;
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-
-    const loadData = () => {
-        setList(streams);
-    }
 
 
     useEffect(() => {
@@ -40,7 +35,7 @@ const LiveRoomStreamList = (props: any) => {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
                 showToastSuccess('操作成功');
-                loadData();
+                refreshData();
             } else {
                 showToastError(deleteFetcher.data.message);
             }
@@ -155,7 +150,7 @@ const LiveRoomStreamList = (props: any) => {
                     </div>
 
                     <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
-                                    data={list}
+                                    data={streams}
                                     keyField={'id'}/>
                 </Modal.Body>
             </Modal>
