@@ -475,7 +475,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				if (uid.equals(excludeUserId)) {
 					return;
 				}
-				log.debug("通知用户 {}", uid);
+				log.debug("通知用户 {}, 消息内容是：{}", uid, message);
 				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -495,7 +495,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				if (uid.equals(excludeUserId)) {
 					return;
 				}
-				log.debug("通知用户 {}", uid);
+				log.debug("通知用户 {}, 消息是：{}", uid, message);
 				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
