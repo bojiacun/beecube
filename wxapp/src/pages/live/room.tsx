@@ -22,9 +22,6 @@ export default class Index extends Component<any, any> {
         isNative: false,
         roomID: null,
         roomName: null,
-        liveAppID: null,
-        wsServerURL: null,
-        logServerURL: null,
         loginType: "1",
         token: null,
         userID: null,
@@ -67,17 +64,10 @@ export default class Index extends Component<any, any> {
             this.liveRoom = page?.selectComponent('#live-room');
         }
         if (settings && userInfo && !this.state.roomID && this.state.liveRoom) {
-            if(this.state.liveRoom.mainAnchor != userInfo.id && this.state.liveRoom.subAnchor != userInfo.id) {
-                utils.showError('您不是该直播间主播，请退出');
-                return Taro.navigateBack().then();
-            }
             this.setState({
                 roomID: options.roomId,
-                roomName: options.roomName,
+                roomName: decodeURIComponent(options.roomName),
                 loginType: options.loginType,
-                liveAppID: settings.zegoAppId,
-                wsServerURL: settings.zegoServerAddress,
-                logServerURL: settings.zegoLogUrl,
                 userID: userInfo.id,
                 userName: userInfo.nickname,
                 userInfo: userInfo
