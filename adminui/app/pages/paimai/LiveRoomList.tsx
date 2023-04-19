@@ -245,7 +245,7 @@ const LiveRoomList = (props: any) => {
                 loadData();
             }} />}
 
-            {showRoom && <LiveRoomStreamList show={true} streams={showRoom.streams||[]} onHide={()=>{
+            {showRoom && <LiveRoomStreamList startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams||[]} onHide={()=>{
                 setShowRoom(null);
             }} />}
         </>

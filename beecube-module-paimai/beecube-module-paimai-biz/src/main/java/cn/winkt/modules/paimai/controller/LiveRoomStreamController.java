@@ -53,7 +53,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags = "直播间视频流信息表")
 @RestController
-@RequestMapping("/paimai/streams")
+@RequestMapping("/streams")
 public class LiveRoomStreamController extends JeecgController<LiveRoomStream, ILiveRoomStreamService> {
     @Autowired
     private ILiveRoomStreamService liveRoomStreamService;
