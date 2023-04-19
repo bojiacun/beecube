@@ -36,24 +36,13 @@ public class WxAppLiveController {
     @Resource
     ILiveRoomStreamService liveRoomStreamService;
 
-    @PutMapping("/login")
-    public Result<?> login(@RequestBody LoginUser loginUser) throws InvocationTargetException, IllegalAccessException {
-        LambdaQueryWrapper<GoodsCommonDesc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.notLike(GoodsCommonDesc::getDescKey, "desc");
-        List<GoodsCommonDesc> goodsCommonDescs = goodsCommonDescService.list(queryWrapper);
-        Map<String, String> settingsMap = goodsCommonDescs.stream().collect(Collectors.toMap(GoodsCommonDesc::getDescKey, GoodsCommonDesc::getDescValue));
-        ZegoSetting zegoSetting = new ZegoSetting();
-        BeanUtils.copyProperties(zegoSetting, settingsMap);
-        String token = zeGoService.getZeGouToken(zegoSetting.getZegoAppId(), zegoSetting.getZegoAppSign(), loginUser.getId());
-        return Result.OK("登录成功",token);
-    }
     @GetMapping("/rooms/{id}")
     public Result<LiveRoom> liveRoom(@PathVariable  String id) {
         LiveRoom room = liveRoomService.getById(id);
         LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
         streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
+        streamLambdaQueryWrapper.eq(LiveRoomStream::getStatus, 1);
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
-
         return Result.OK("获取成功", liveRoomService.getById(id));
     }
     @GetMapping("/rooms")

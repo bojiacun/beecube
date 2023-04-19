@@ -171,9 +171,9 @@ public class AuctionGoodsService {
                             performanceUpdateMessage.setStartTime(performance.getStartTime());
                             performanceUpdateMessage.setEndTime(performance.getEndTime());
                             performanceUpdateMessage.setPerformanceId(performance.getId());
-                            imClientService.sendMessage(performanceUpdateMessage, UserMessageType.PERFORMANCE_UPDATE);
+                            imClientService.sendAppMessage(performanceUpdateMessage, UserMessageType.PERFORMANCE_UPDATE);
                         }
-                        imClientService.sendMessage(message, UserMessageType.AUCTION_DELAYED);
+                        imClientService.sendAppMessage(message, UserMessageType.AUCTION_DELAYED);
                         goods.setActualEndTime(newTime);
                         goodsService.updateById(goods);
                     }
@@ -188,7 +188,7 @@ public class AuctionGoodsService {
                 offerMessage.setUserName(goodsOffer.getMemberName());
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
                 SensitiveInfoUtil.handlerObject(offerMessage, true);
-                imClientService.sendMessage(offerMessage, UserMessageType.OFFER);
+                imClientService.sendAppMessage(offerMessage, UserMessageType.OFFER);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }

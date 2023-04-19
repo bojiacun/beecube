@@ -343,7 +343,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsUpdateMessage.setState(3);
             goodsUpdateMessage.setDealUserId(goodsOffer.getMemberId());
             goodsUpdateMessage.setDealPrice(goodsOffer.getPrice());
-            imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+            imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             goodsOfferService.updateById(goodsOffer);
 
             //计算成交佣金
@@ -389,7 +389,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goodsOfferService.update(updateWrapper);
             goods.setState(4);
             goodsUpdateMessage.setState(4);
-            imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+            imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
         }
 
         goodsService.updateById(goods);

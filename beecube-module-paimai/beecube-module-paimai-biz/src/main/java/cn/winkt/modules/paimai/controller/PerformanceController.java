@@ -144,7 +144,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         message.setState(1);
         message.setStartTime(performance.getStartTime());
         message.setPerformanceId(id);
-        imClientService.sendMessage(message, UserMessageType.PERFORMANCE_UPDATE);
+        imClientService.sendAppMessage(message, UserMessageType.PERFORMANCE_UPDATE);
         return Result.OK(performance);
     }
 
@@ -171,7 +171,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         message.setState(2);
         message.setEndTime(performance.getEndTime());
         message.setPerformanceId(id);
-        imClientService.sendMessage(message, UserMessageType.PERFORMANCE_UPDATE);
+        imClientService.sendAppMessage(message, UserMessageType.PERFORMANCE_UPDATE);
         return Result.OK(performance);
     }
 
@@ -193,7 +193,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         goodsUpdateMessage.setGoodsId(id);
         goodsUpdateMessage.setState(1);
         goodsUpdateMessage.setStartTime(goods.getStartTime());
-        imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+        imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
         return Result.OK(goods);
     }
 
@@ -212,7 +212,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         goodsUpdateMessage.setGoodsId(id);
         goodsUpdateMessage.setState(2);
         goodsUpdateMessage.setEndTime(goods.getEndTime());
-        imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+        imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
         return Result.OK(goods);
     }
     @AutoLog(value = "拍卖专场表-添加")
@@ -242,7 +242,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsUpdateMessage.setStartTime(performance.getStartTime());
                 goodsUpdateMessage.setEndTime(performance.getEndTime());
                 goodsUpdateMessage.setActualEndTime(null);
-                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+                imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             }
         }
         else if(performance.getType() == 2){
@@ -257,7 +257,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsUpdateMessage.setStartTime(null);
                 goodsUpdateMessage.setEndTime(null);
                 goodsUpdateMessage.setActualEndTime(null);
-                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+                imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             }
         }
 		goodsService.updateBatchById(goodsList);
@@ -302,7 +302,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 message.setStartTime(performance.getStartTime());
                 message.setEndTime(performance.getEndTime());
                 message.setPerformanceId(performance.getId());
-                imClientService.sendMessage(message, UserMessageType.PERFORMANCE_UPDATE);
+                imClientService.sendAppMessage(message, UserMessageType.PERFORMANCE_UPDATE);
                 //批量更新专场下的所有拍品开始及结束时间
                 LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
                 updateWrapper.set(Goods::getStartTime, performance.getStartTime());

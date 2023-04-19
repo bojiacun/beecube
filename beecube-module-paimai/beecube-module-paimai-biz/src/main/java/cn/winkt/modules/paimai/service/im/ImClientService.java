@@ -25,10 +25,16 @@ public class ImClientService {
     @Resource
     ServerEventListenerImpl serverEventListener;
 
+    public void sendRoomMessage(String roomId, BaseMessage message, int typeu) {
+        log.debug("房间{}内发送消息：{}, 类型：{}", roomId, JSONObject.toJSONString(message), typeu);
+        String appId = AppContext.getApp();
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        message.setAppId(appId);
+        serverEventListener.notifyRoomUsers(roomId, loginUser.getId(), JSONObject.toJSONString(message), null, typeu);
+    }
 
-
-    public void sendMessage(BaseMessage message, int typeu) {
-        log.debug("IM客户端开始发送消息，消息体信息是：{}, 类型：{}", JSONObject.toJSONString(message), typeu);
+    public void sendAppMessage(BaseMessage message, int typeu) {
+        log.debug("发送给所有当前应用客户信息：{}, 类型：{}", JSONObject.toJSONString(message), typeu);
         String appId = AppContext.getApp();
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         message.setAppId(appId);

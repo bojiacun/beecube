@@ -189,7 +189,7 @@ public class JobService {
                 goodsOfferService.update(updateWrapper);
 
                 goodsUpdateMessage.setState(4);
-                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+                imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
                 goodsService.updateById(goods);
             }
             else {
@@ -203,7 +203,7 @@ public class JobService {
                 goodsUpdateMessage.setState(3);
                 goodsUpdateMessage.setDealUserId(maxOfferRow.getMemberId());
                 goodsUpdateMessage.setDealPrice(maxOfferRow.getPrice());
-                imClientService.sendMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+                imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
                 goodsService.updateById(goods);
 
                 //计算成交佣金

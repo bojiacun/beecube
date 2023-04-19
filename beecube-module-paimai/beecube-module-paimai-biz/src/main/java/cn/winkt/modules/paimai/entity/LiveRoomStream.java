@@ -35,11 +35,11 @@ public class LiveRoomStream {
 	/**推送地址*/
 	@Excel(name = "推送地址", width = 15)
     @ApiModelProperty(value = "推送地址")
-	private java.lang.String pushaddress;
+	private java.lang.String pushAddress;
 	/**拉取地址*/
 	@Excel(name = "拉取地址", width = 15)
     @ApiModelProperty(value = "拉取地址")
-	private java.lang.String playaddress;
+	private java.lang.String playAddress;
 	/**liveId*/
 	@Excel(name = "liveId", width = 15)
     @ApiModelProperty(value = "liveId")
