@@ -6,4 +6,5 @@ import lombok.Data;
 public class WxAppExtConfig {
     private String siteroot;
     private String appId;
+    private Boolean copyright;
 }

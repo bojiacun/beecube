@@ -276,6 +276,7 @@ public class AppWxOpenController {
         }
         WxOpenMaCodeTemplate distTemplate = templates.get(0);
         WxAppExtConfig wxAppExtConfig = new WxAppExtConfig();
+        wxAppExtConfig.setCopyright(true);
         wxAppExtConfig.setAppId(AppContext.getApp());
         wxAppExtConfig.setSiteroot("https://api.beecube.winkt.cn");
         WxAppExtJsonConfig wxAppExtJsonConfig = new WxAppExtJsonConfig();

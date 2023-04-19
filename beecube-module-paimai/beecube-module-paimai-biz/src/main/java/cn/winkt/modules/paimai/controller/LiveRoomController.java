@@ -40,6 +40,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -100,6 +101,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	@AutoLog(value = "直播间表-添加")
 	@ApiOperation(value="直播间表-添加", notes="直播间表-添加")
 	@PostMapping(value = "/add")
+	@Transactional(rollbackFor = Exception.class)
 	public Result<?> add(@RequestBody LiveRoom liveRoom) throws InvocationTargetException, IllegalAccessException {
 		if(StringUtils.isNotEmpty(liveRoom.getMainAnchor())) {
 			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getMainAnchor());
@@ -178,6 +180,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
         }
         liveRoom.setPlayAddress(playAddress);
         liveRoom.setPushAddress(pushAddress);
+		liveRoomService.updateById(liveRoom);
 		return Result.OK("添加成功！");
 	}
 	
