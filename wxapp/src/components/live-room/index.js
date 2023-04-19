@@ -618,35 +618,7 @@ Component({
                 scrollToView: message.id,
             });
 
-            zg.sendBigRoomMessage(1, 1, message.content,
-                function (seq, msgId, msg_category, msg_type, msg_content) {
-                    console.log('>>>[liveroom-room] onComment success');
-                },
-                function (err, seq, msg_category, msg_type, msg_content) {
-                    console.log('>>>[liveroom-room] onComment, error: ');
-                    console.log(err);
-                    wx.showModal({
-                        title: '提示',
-                        content: '发送消息失败',
-                        showCancel: false,
-                        success(res) {
-                            // 用户点击确定，或点击安卓蒙层关闭
-                            if (res.confirm || !res.cancel) {
-                                // 强制用户退出
 
-                            }
-                        }
-                    });
-                });
-            //   }else{
-            //     wx.hideLoading();
-            //     wx.showModal({
-            //       title: '提醒',
-            //       content: '请注意言论',
-            //       showCancel:false
-            //     })
-            //   }
-            // })
 
         },
         onNetworkStatus() {
