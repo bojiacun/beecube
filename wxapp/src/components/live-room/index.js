@@ -272,6 +272,9 @@ Component({
                     }
                     //UI显示谁登录成功了
                     this.setData({newestName: message.userName});
+                    setTimeout(()=>{
+                        this.setData({newestName: null});
+                    },2000);
                     break;
                 case MessageType.ROOM_NOTICE:
                     let uiMessage = {

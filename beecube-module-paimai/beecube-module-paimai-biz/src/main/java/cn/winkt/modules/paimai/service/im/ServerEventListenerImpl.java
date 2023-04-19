@@ -256,7 +256,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 					return false;
 				}
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
-				if(appMemberVO == null) {
+				if(appMemberVO == null || appMemberVO.getId() == null) {
 					log.debug("用户不存在");
 					return false;
 				}
