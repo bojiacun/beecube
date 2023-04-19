@@ -13,7 +13,7 @@
             enable-progress-gesture="false"
             autoplay="true"
             src="{{streams[0].playAddress}}"
-            object-fit="contain"
+            object-fit="fill|cover"
             picture-in-picture-mode="{{pictureInPictureMode}}"
             class="play-content"
             binderror="onPlayNetStateChange">
