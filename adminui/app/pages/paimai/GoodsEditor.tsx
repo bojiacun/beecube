@@ -29,9 +29,9 @@ const GoodsSchema = Yup.object().shape({
     endTime: Yup.string().required('必填字段'),
     images: Yup.string().required('必填字段'),
     classId: Yup.number().required('必填字段'),
-    commission: Yup.number().integer().default(0),
-    delayTime: Yup.number().integer().default(0),
-    sortNum: Yup.number().integer().default(0),
+    commission: Yup.number().nullable().integer().default(0),
+    delayTime: Yup.number().nullable().integer().default(0),
+    sortNum: Yup.number().nullable().integer().default(0),
 });
 
 const GoodsEditor = (props: any) => {

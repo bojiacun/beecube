@@ -467,39 +467,43 @@ public class ServerEventListenerImpl implements ServerEventListener
 		notifyRoomUsers(roomId, fromUserId, JSONObject.toJSONString(message), excludeUserId, messageType);
 	}
 	public void notifyRoomUsers(String roomId, String fromUserId, String message, String excludeUserId, int messageType) {
-		log.debug("通知房间 {} 所有用户", roomId);
-		Snowflake snowflake = new Snowflake(9, 9);
-		roomUsers.get(roomId).forEach(uid -> {
-			if(uid.equals(excludeUserId)) {
-				return;
-			}
-			log.debug("通知用户 {}", uid);
-			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
-			try {
-				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
-					log.debug("通知回调，是否送达 {} 到 {}", b, uid);
-				});
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
-			}
-		});
+		if(roomUsers.containsKey(roomId)) {
+			log.debug("通知房间 {} 所有用户 {} 个人", roomId, (roomUsers.containsKey(roomId)?roomUsers.get(roomId).size():0));
+			Snowflake snowflake = new Snowflake(9, 9);
+			roomUsers.get(roomId).forEach(uid -> {
+				if (uid.equals(excludeUserId)) {
+					return;
+				}
+				log.debug("通知用户 {}", uid);
+				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
+				try {
+					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+						log.debug("通知回调，是否送达 {} 到 {}", b, uid);
+					});
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			});
+		}
 	}
 	public void notifyAppUsers(String appId, String fromUserId, String message, String excludeUserId, int messageType) {
-		log.debug("通知应用 {} 所有在线用户{}个", appId, appUsers.get(appId).size());
-		Snowflake snowflake = new Snowflake(9, 9);
-		appUsers.get(appId).forEach(uid -> {
-			if(uid.equals(excludeUserId)) {
-				return;
-			}
-			log.debug("通知用户 {}", uid);
-			Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
-			try {
-				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
-					log.debug("通知回调，是否送达 {} 到 {}", b, uid);
-				});
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
-			}
-		});
+		if(appUsers.containsKey(appId)) {
+			log.debug("通知应用 {} 所有在线用户{}个", appId, (appUsers.containsKey(appId) ? appUsers.get(appId).size() : 0));
+			Snowflake snowflake = new Snowflake(9, 9);
+			appUsers.get(appId).forEach(uid -> {
+				if (uid.equals(excludeUserId)) {
+					return;
+				}
+				log.debug("通知用户 {}", uid);
+				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
+				try {
+					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+						log.debug("通知回调，是否送达 {} 到 {}", b, uid);
+					});
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			});
+		}
 	}
 }
