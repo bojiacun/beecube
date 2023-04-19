@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.AppTencentConfigItemVO;
+import cn.winkt.modules.paimai.entity.LiveRoomStream;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.ILiveRoomStreamService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.util.TencentLiveTool;
 import cn.winkt.modules.paimai.vo.AppConfigItemVO;
@@ -68,6 +70,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 	@Resource
 	private IPerformanceService performanceService;
+
+	@Resource
+	private ILiveRoomStreamService liveRoomStreamService;
 	
 	/**
 	 * 分页列表查询
@@ -135,52 +140,60 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
         AppTencentConfigVO appTencentConfigVO = new AppTencentConfigVO();
         BeanUtils.copyProperties(appTencentConfigVO, configMap);
         long endTime = liveRoom.getEndTime().getTime() / 1000;
-        //计算腾讯云直播推流以及拉流地址
-        String pushAddress = String.format("%s://%s/%s/%s?%s",
-                appTencentConfigVO.getPushSchema(),
-                appTencentConfigVO.getPushDomain(),
-                appTencentConfigVO.getAppName(),
-                liveRoom.getId(),
-                TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
-        );
-        String playAddress = StringUtils.EMPTY;
-        switch (appTencentConfigVO.getPlaySchema().toLowerCase()) {
-            case "rtmp":
-                playAddress = String.format("rtmp://%s/%s/%s?%s",
-                        appTencentConfigVO.getPlayDomain(),
-                        appTencentConfigVO.getAppName(),
-                        liveRoom.getId(),
-                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
-                );
-                break;
-            case "flv":
-                playAddress = String.format("http://%s/%s/%s.flv?%s",
-                        appTencentConfigVO.getPlayDomain(),
-                        appTencentConfigVO.getAppName(),
-                        liveRoom.getId(),
-                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
-                );
-                break;
-            case "hls":
-                playAddress = String.format("http://%s/%s/%s.m3u8?%s",
-                        appTencentConfigVO.getPlayDomain(),
-                        appTencentConfigVO.getAppName(),
-                        liveRoom.getId(),
-                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
-                );
-                break;
-            case "webrtc":
-                playAddress = String.format("webrtc://%s/%s/%s?%s",
-                        appTencentConfigVO.getPlayDomain(),
-                        appTencentConfigVO.getAppName(),
-                        liveRoom.getId(),
-                        TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), liveRoom.getId(), endTime)
-                );
-                break;
-        }
-        liveRoom.setPlayAddress(playAddress);
-        liveRoom.setPushAddress(pushAddress);
-		liveRoomService.updateById(liveRoom);
+
+		Arrays.asList(1,2).forEach(n -> {
+			LiveRoomStream stream = new LiveRoomStream();
+			stream.setLiveId(liveRoom.getId());
+			liveRoomStreamService.save(stream);
+			//计算腾讯云直播推流以及拉流地址
+			String pushAddress = String.format("%s://%s/%s/%s?%s",
+					appTencentConfigVO.getPushSchema(),
+					appTencentConfigVO.getPushDomain(),
+					appTencentConfigVO.getAppName(),
+					stream.getId(),
+					TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+			);
+			String playAddress = StringUtils.EMPTY;
+			switch (appTencentConfigVO.getPlaySchema().toLowerCase()) {
+				case "rtmp":
+					playAddress = String.format("rtmp://%s/%s/%s?%s",
+							appTencentConfigVO.getPlayDomain(),
+							appTencentConfigVO.getAppName(),
+							stream.getId(),
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+					);
+					break;
+				case "flv":
+					playAddress = String.format("http://%s/%s/%s.flv?%s",
+							appTencentConfigVO.getPlayDomain(),
+							appTencentConfigVO.getAppName(),
+							stream.getId(),
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+					);
+					break;
+				case "hls":
+					playAddress = String.format("http://%s/%s/%s.m3u8?%s",
+							appTencentConfigVO.getPlayDomain(),
+							appTencentConfigVO.getAppName(),
+							stream.getId(),
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+					);
+					break;
+				case "webrtc":
+					playAddress = String.format("webrtc://%s/%s/%s?%s",
+							appTencentConfigVO.getPlayDomain(),
+							appTencentConfigVO.getAppName(),
+							stream.getId(),
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+					);
+					break;
+			}
+
+			stream.setPlayaddress(pushAddress);
+			stream.setPlayaddress(playAddress);
+			liveRoomStreamService.updateById(stream);
+		});
+
 		return Result.OK("添加成功！");
 	}
 	
