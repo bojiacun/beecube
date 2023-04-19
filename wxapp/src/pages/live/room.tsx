@@ -20,12 +20,6 @@ export default class Index extends Component<any, any> {
     state: any = {
         liveRoom: null,
         isNative: false,
-        roomID: null,
-        roomName: null,
-        loginType: "1",
-        token: null,
-        userID: null,
-        userName: null,
         userInfo: null,
         hideModal: true,
         animationData: {},
@@ -55,25 +49,13 @@ export default class Index extends Component<any, any> {
     }
 
     async componentDidUpdate(prevProps: Readonly<any>, prevState) {
-        const {userInfo} = this.props.context;
-        const {settings} = this.props;
-        const options = this.options;
         const {page} = getCurrentInstance();
-        if (!this.liveRoom) {
+        const {userInfo} = this.props.context;
+        if (!this.liveRoom && userInfo) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
+            this.liveRoom.init();
         }
-        if (settings && userInfo && !this.state.roomID && this.state.liveRoom) {
-            this.setState({
-                roomID: options.roomId,
-                roomName: decodeURIComponent(options.roomName),
-                loginType: options.loginType,
-                userID: userInfo.id,
-                userName: userInfo.nickname,
-                userInfo: userInfo
-            });
-        }
-
     }
 
     onRoomEvent(ev) {
@@ -201,10 +183,10 @@ export default class Index extends Component<any, any> {
     //
     onLoad(options) {
         this.options = options;
-        request.get('/paimai/api/live/rooms/'+options.roomId).then(res=>{
+        request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
             this.setState({liveRoom: room});
-            request.get('/paimai/api/performances/goodslist', {params: {id: room.performanceId}}).then(res=>{
+            request.get('/paimai/api/performances/goodslist', {params: {id: room.performanceId}}).then(res => {
                 this.setState({merchandises: res.data.result});
             })
         });
@@ -219,11 +201,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {
-            roomName,
-            loginType,
             liveRoom,
-            token,
-            userID,
             hideModal,
             animationData,
             merchandises,
@@ -239,16 +217,14 @@ export default class Index extends Component<any, any> {
         return (
             <>
                 <zego-nav navBarHeight={navBarHeight} statusBarHeight={barTop}>
-                    <view className="room-title">{roomName}</view>
+                    <view className="room-title">{liveRoom?.title}</view>
                 </zego-nav>
                 <View className={'live-container'}>
                     <live
                         id={'live-room'}
                         isNative={false}
                         liveRoom={liveRoom}
-                        streams={liveRoom?.streams||[]}
-                        token={token}
-                        userID={userID}
+                        streams={liveRoom?.streams || []}
                         navBarHeight={barTop}
                         onRoomEvent={this.onRoomEvent}
                         bindRoomEvent
@@ -274,18 +250,10 @@ export default class Index extends Component<any, any> {
                                                     </Text>
                                                     <View className="merchandise-action">
                                                         <Text className="m-price">¥{item.price}</Text>
-                                                        {loginType === 'anchor' &&
-                                                            <View data-indx={index} className="shop-cart"
-                                                                  onClick={this.pushMer}>
-                                                                推送商品
-                                                            </View>
-                                                        }
-                                                        {loginType === 'audience' &&
-                                                            <View data-indx={item.id} className="shop-cart"
-                                                                  onClick={this.addShoppingCart}>
-                                                                加入购物车
-                                                            </View>
-                                                        }
+                                                        <View data-indx={item.id} className="shop-cart"
+                                                              onClick={this.addShoppingCart}>
+                                                            加入购物车
+                                                        </View>
                                                     </View>
                                                 </View>
                                             </View>
