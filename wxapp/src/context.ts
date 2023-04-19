@@ -58,6 +58,7 @@ export declare interface Context {
     headerHeight?: number;
     tabs: TabBarItem[];
     copyright: boolean;
+    isImReady: boolean;
 }
 
 const context: Context = {
@@ -76,6 +77,7 @@ const context: Context = {
     districtId: undefined,
     tabs: [],
     copyright: true,
+    isImReady: false
 }
 
 export default context;

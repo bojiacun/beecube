@@ -2,7 +2,23 @@
 <wxs src="../lib/stringUtil.wxs" module="stringUtil" />
 <view class="live-room-container">
     <view wx:if="{{streams.length == 1}}">
-        <video wx:if="{{streams[0]}}" id="{{streams[0].id}}" controls="false" autoplay="true" src="{{streams[0].playAddress}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>
+        <video
+            wx:if="{{streams[0]}}"
+            id="{{streams[0].id}}"
+            controls="false"
+            show-progress="false"
+            show-fullscreen-btn="false"
+            show-center-play-btn="false"
+            show-play-btn="false"
+            enable-progress-gesture="false"
+            autoplay="true"
+            src="{{streams[0].playAddress}}"
+            object-fit="contain"
+            picture-in-picture-mode="{{pictureInPictureMode}}"
+            class="play-content"
+            binderror="onPlayNetStateChange">
+
+        </video>
     </view>
     <view wx:elif="{{streams.length == 2}}" class="grid grid-cols-2 gap-0">
         <video wx:if="{{streams[0]}}" id="{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="fillCrop" picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange" bindnetstatus="onPlayNetStateChange"></video>

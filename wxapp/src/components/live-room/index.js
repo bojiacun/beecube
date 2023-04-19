@@ -1,4 +1,6 @@
 // components/live-room/index.js
+import MessageType from "../../utils/message-type";
+
 const app = getApp();
 
 let networkOk = true;
@@ -41,12 +43,12 @@ Component({
             type: String,
             value: ""
         },
-        token: {
-            type: String,
-            value: "",
+        isImReady: {
+            type: Boolean,
+            value: false,
             observer: function (newVal, oldVal, changedPath) {
-                if (newVal !== '') {
-                    this.loginRoom(newVal);
+                if (newVal) {
+                    this.loginRoom();
                 }
             }
         },
@@ -68,6 +70,7 @@ Component({
      */
     data: {
         isCaster: true,
+        appId: '',
         roomName: "", // 房间名
         userName: "", // 当前初始化的用户名
         anchorID: "", // 主播 ID
@@ -150,6 +153,7 @@ Component({
     methods: {
         init() {
             this.getUserInfo();
+            let appId = wx.getExtConfigSync().appId;
             // iphoneX 等机型
             if (iphoneXX) {
                 this.data.mmBot += 48;
@@ -174,24 +178,10 @@ Component({
                 userTop,
                 roomName: this.data.roomID,
                 userName: JSON.stringify(nickAvatar),
-                publishStreamID: "xcxS" + timestamp,
-                isCaster: this.data.loginType !== 'audience'
+                isCaster: this.data.loginType !== 'audience',
+                appId: appId,
             });
-            if (this.data.loginType === 'anchor') {
-                this.setData({
-                    avatarUrl: avatar,
-                    nickName: nickName
-                })
-            }
-
             this.bindCallBack(); //监听zego-sdk回调
-
-            console.log(
-                ">>>[liveroom-room] publishStreamID is: " + this.data.publishStreamID
-            );
-
-            console.log('token', this.data.token)
-
             this.onNetworkStatus();
             // 保持屏幕常亮
             wx.setKeepScreenOn({
@@ -200,7 +190,6 @@ Component({
         },
         getUserInfo() {
             let userInfo = app.globalData.userInfo;
-            console.log('getUserInfo', userInfo);
             if (userInfo) {
                 this.setData({
                     hasUserInfo: true,
@@ -214,13 +203,15 @@ Component({
         checkParam() {
             return true;
         },
-        loginRoom(token) {
-            let self = this;
-            console.log(
-                ">>>[liveroom-room] login room, roomID: " + self.data.roomID,
-                ", userID: " + self.data.userID + ", userName: " + self.data.userName + ", token: " + token
-            );
+        loginRoom() {
+            console.log('用户登录房间');
             if (!this.checkParam()) return;
+            //用户登录房间
+            let message = {roomId: this.data.liveRoom.id, appId: this.data.appId};
+            // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
+            let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(message), wx.IMSDK.getLoginInfo().loginUserId, "0", MessageType.JOIN_ROOM);
+            // 将消息通过websocket发送出去
+            wx.IMSDK.sendData(p);
         },
         //输入聚焦
         foucus: function (e) {
@@ -249,286 +240,9 @@ Component({
             })
 
         },
-        setPushUrl(streamID, url) {
-            console.log('>>>[liveroom-room] setPushUrl: ', url);
-            let self = this;
 
-            if (!url) {
-                console.log('>>>[liveroom-room] setPushUrl, url is null');
-                return;
-            }
 
-            // 主播推流
-            if (this.data.isCaster) {
-                this.setData({
-                    mainPusher: {
-                        ...this.data.mainPusher,
-                        ...{
-                            streamID,
-                            url: url
-                        }
-                    }
-                }, () => {
-                    if (this.data.isNative) {
-                        this.data.pusherContext = wx.createLivePusherContext();
-                        setTimeout(() => {
-                            this.data.pusherContext.start();
-                            console.log('start');
-                        }, 10);
-                    } else {
-                        zgPusher = this.selectComponent("#zg-pusher");
-                        console.log('zgPusher', zgPusher);
-                        zgPusher.start();
-                    }
-                });
-            } else { // 子主播推流
-                this.setData({
-                    subPusher: {
-                        ...this.data.subPusher,
-                        ...{
-                            streamID,
-                            url: url
-                        }
-                    }
-                })
-            }
 
-        },
-
-        setPlayUrl(streamid, url) {
-            console.log('>>>[liveroom-room] setPlayUrl: ', url);
-            let self = this;
-            if (!url) {
-                console.log('>>>[liveroom-room] setPlayUrl, url is null');
-                return;
-            }
-
-            let founded = false, isHost = false;
-            let streamInfo = {};
-            console.log('playingList', playingList.length);
-            playingList.forEach(item => {
-                if (item.stream_id === streamid) {
-                    streamInfo['streamID'] = streamid;
-                    streamInfo['playUrl'] = url;
-                    streamInfo['anchorID'] = item.anchor_id_name;
-                    founded = true;
-                }
-            });
-            console.log(founded, streamInfo);
-            if (!founded) return;
-            console.log('pusherID', self.data.mainPusher.pusherID);
-            if (streamInfo.anchorID === self.data.mainPusher.pusherID) {
-                self.setData({
-                    mainPusher: {
-                        ...self.data.mainPusher,
-                        ...{
-                            streamID: streamInfo.streamID,
-                            url: streamInfo.playUrl,
-                            pusherID: streamInfo.anchorID
-                        }
-                    }
-                }, () => {
-                    if (self.data.isNative) {
-                        this.data.playerContext = wx.createLivePlayerContext(streamInfo.streamID, self);
-                        console.log(self.data.mainPusher, this.data.playerContext)
-                        setTimeout(() => {
-                            this.data.playerContext.play()
-                        }, 10)
-                    } else {
-                        console.log('zgPlayer', zgPlayer)
-                        zgPlayer = this.selectComponent("#zg-player");
-                        setTimeout(() => {
-                            zgPlayer && zgPlayer.play();
-                        }, 100)
-                    }
-
-                })
-            } else {
-                self.data.playStreamList.push(streamInfo);
-                self.setData({
-                    playStreamList: self.data.playStreamList
-                });
-            }
-
-        },
-
-        startPlayingStreamList(streamList) {
-            let self = this;
-
-            if (streamList.length === 0) {
-                console.log(
-                    '>>>[liveroom-room] startPlayingStream, streamList is null'
-                );
-                return;
-            }
-
-            zg.setPreferPlaySourceType(self.data.preferPlaySourceType);
-
-            console.log(
-                '>>>[liveroom-room] startPlayingStream, preferPlaySourceType: ',
-                self.data.preferPlaySourceType
-            );
-            console.log('startPlayingStreamList', self.data.sid, self.data.playStreamList);
-
-            if (self.data.loginType === 'anchor') {
-                if (self.data.playStreamList.length) return;
-                let streamID = streamList[0].stream_id;
-                if (!playingList.some(playItem => playItem.stream_id === streamID)) {
-                    playingList.push(streamList[0]);
-                    zg.startPlayingStream(streamID);
-                }
-            } else if (self.data.loginType === 'audience') {
-
-                isLogout = streamList.find(item => item.stream_id === self.data.mainPusher.streamID);
-                // 获取每个 streamID 对应的拉流 url
-                for (let i = 0; i < streamList.length; i++) {
-                    let streamID = streamList[i].stream_id;
-                    let anchorID = streamList[i].anchor_id_name; // 推这条流的用户id
-                    console.log(
-                        '>>>[liveroom-room] startPlayingStream, playStreamID: ' +
-                        streamID +
-                        ', pushed by : ' +
-                        anchorID
-                    );
-                    console.log('playingList', playingList);
-                    if (!playingList.some(playItem => playItem.stream_id === streamID)) {
-                        console.log('no exist')
-                        playingList.push(streamList[i]);
-                        console.log('playingList', playingList);
-                        zg.startPlayingStream(streamID);
-
-                    }
-                }
-            }
-        },
-
-        stopPlayingStreamList(streamList) {
-            let self = this;
-
-            if (streamList.length === 0) {
-                console.log(
-                    '>>>[liveroom-room] stopPlayingStream, streamList is empty'
-                );
-                return;
-            }
-
-            for (let i = 0; i < streamList.length; i++) {
-                let streamID = streamList[i].stream_id;
-                console.log(
-                    '>>>[liveroom-room] stopPlayingStream, playStreamID: ' + streamID
-                );
-                zg.stopPlayingStream(streamID);
-
-                if (streamID === self.data.mainPusher.streamID) {
-                    if (self.data.isNative) {
-                        self.data.playerContext && self.data.playerContext.stop();
-                    } else {
-                        zgPlayer && zgPlayer.stop();
-                    }
-                    self.setData({
-                        mainPusher: {
-                            ...self.data.mainPusher,
-                            ...{
-                                streamID: '',
-                                url: ''
-                            }
-                        },
-                    });
-                    playingList = playingList.filter(playItem => playItem.stream_id !== streamID);
-                    if (self.data.isConnecting && self.data.isPublishing) {
-
-                        // 停止推流
-                        zg.stopPublishingStream(self.data.publishStreamID);
-
-                        self.setData({
-                            isPublishing: false,
-                            isConnecting: false,
-                            subPusher: {
-                                ...self.data.subPusher,
-                                ...{
-                                    streamID: '',
-                                    url: ''
-                                }
-                            }
-                        }, function () {
-                        });
-                    }
-                    isLogout = true;
-                    logOutTer && clearTimeout(logOutTer);
-                    console.log('isLogout', isLogout);
-                    logOutTer = setTimeout(() => {
-                        console.log('isLogout', isLogout);
-                        if (isLogout) {
-                            self.setData({
-                                playStreamList: []
-                            });
-                            playingList = [];
-                            zg.logout();
-                            const content = {};
-                            self.triggerEvent('RoomEvent', {
-                                tag: 'onBack',
-                                content
-                            });
-                        }
-                    }, 10000);
-                    break;
-
-                } else {
-                    let playStreamList = self.data.playStreamList;
-                    for (let j = 0; j < playStreamList.length; j++) {
-                        if (playStreamList[j]['streamID'] === streamID) {
-                            console.log(
-                                '>>>[liveroom-room] stopPlayingStream, stream to be deleted: '
-                            );
-                            console.log(playStreamList[j]);
-                            playStreamList[j]['playUrl'] = '';
-                            playStreamList.splice(j, 1);
-                            break;
-                        }
-                    }
-                    playingList = playingList.filter(item => item.stream_id !== streamID);
-
-                    self.setData({
-                            playStreamList
-                        }, function () {
-                            // 检查流删除后，是否低于房间流上限
-                            if (
-                                self.data.playStreamList.length <=
-                                self.data.upperStreamLimit - 1
-                            ) {
-                                self.setData(
-                                    {
-                                        reachStreamLimit: false,
-                                        isConnecting: false
-                                    },
-                                    function () {
-                                        if (self.data.loginType === 'audience') {
-                                            wx.showToast({
-                                                title: '一位观众结束连麦，允许新的连麦',
-                                                icon: 'none',
-                                                duration: 2000
-                                            });
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    )
-                }
-            }
-        },
-        showMerchandise() {
-            console.log('showMerchandise');
-            let role = "anchor";
-            const content = {
-                role,
-            }
-            this.triggerEvent('RoomEvent', {
-                tag: 'onMerchandise',
-                // code: 0,
-                content
-            });
-        },
         clickMessage() {
             console.log('clickMessage');
             this.clickFull();
@@ -602,14 +316,14 @@ Component({
             //审核通过之后的操作 if == 0
             // if (ckres.result.errCode == 0){
             let message = {
-                id: 'M' + this.data.userID + Date.parse(new Date()),
-                // name: this.data.userID,
-                name: '我',
-                color: "#FF4EB2",
+                roomId: this.data.liveRoom.id,
+                appId: this.data.appId,
                 content: msgContent,
+                userInfo: this.data.userInfo,
+                id: 'M'+Math.random()
             };
 
-            console.log('>>>[liveroom-room] currentMessage', msgContent);
+            console.log('>>>[liveroom-room] currentMessage', message);
 
             self.data.messageList.push(message);
 
@@ -618,19 +332,28 @@ Component({
                 scrollToView: message.id,
             });
 
+            // 聊天消息接收者
+            let receiver = '0';
 
+            // 网络连接正常的情况下才允许发送消息哦
+            if (receiver && message && wx.IMSDK.isOnline()) {
+                // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
+                let p = wx.MBProtocalFactory.createCommonDataSimple(msgContent, wx.IMSDK.getLoginInfo().loginUserId, receiver, MessageType.SPEAK);
+                // 将消息通过websocket发送出去
+                wx.IMSDK.sendData(p);
+            } else {
+                if (!receiver) {
+                    wx.MBUtils.alert('消息接收者是空的！');
+                } else if (!message) {
+                    wx.MBUtils.alert('要发送的内容是空的！');
+                } else if (!wx.IMSDK.isOnline()) {
+                    wx.MBUtils.alert('online==false, 当前已离线，无法发送消息！');
+                }
+            }
 
         },
         onNetworkStatus() {
-            console.log('onNetworkStatus');
-            wx.onNetworkStatusChange(res => {
-                console.log('net', res);
-                if (res.isConnected) {
-                    networkOk = true;
-                } else {
-                    networkOk = false;
-                }
-            })
+
         },
         bindMessageInput: function (e) {
             this.data.inputMessage = e.detail.value;
@@ -709,27 +432,6 @@ Component({
             this.triggerEvent('RoomEvent', {tag: 'onBack', content});
         },
         logoutRoom() {
-            this.data.playStreamList.forEach(item => {
-                zg.stopPlayingStream(item.streamID);
-            });
-            this.data.isPublishing && zg.stopPublishingStream(this.data.publishStreamID);
-
-            this.data.pusherContext && this.data.pusherContext.stop();
-            this.data.playerContext && this.data.playerContext.stop();
-
-            zgPusher && zgPusher.stop();
-            zgPlayer && zgPlayer.stop();
-            zg && zg.logout();
-
-            this.setData({
-                isPublishing: false,
-                isConnecting: false,
-                playStreamList: [],
-                mainPusher: {},
-                subPusher: {},
-            });
-            playingList = [];
-
         },
         requestJoinLive() {
             let self = this;
@@ -990,11 +692,7 @@ Component({
             }
         },
         onPlayNetStateChange(e) {
-            if (this.data.isNative) {
-                zg && zg.updatePlayerNetStatus(e.target.id, e);
-            } else {
-                zg && zg.updatePlayerNetStatus(e.detail.streamID, e);
-            }
+            console.log('play error', e);
         },
         onPushError: function (ev) {
             console.error(ev);

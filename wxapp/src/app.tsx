@@ -20,17 +20,10 @@ let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
 
-    socket: any;
-    checkTimer: any;
-    checkTimeout:number = 30000;
-
     constructor(props) {
         super(props);
         this.initUser = this.initUser.bind(this);
         this.onMessageReceive = this.onMessageReceive.bind(this);
-        // this.onSocketError = this.onSocketError.bind(this);
-        // this.onSocketClose = this.onSocketClose.bind(this);
-        // this.connectToServer = this.connectToServer.bind(this);
         this.registerIMEvents = this.registerIMEvents.bind(this);
     }
 
@@ -39,7 +32,7 @@ class App extends Component<PropsWithChildren> {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
             // this.connectToServer(context);
-            this.registerIMEvents();
+            this.registerIMEvents(context);
             this.initIM(context);
         });
     }
@@ -87,7 +80,7 @@ class App extends Component<PropsWithChildren> {
     //         socket.send({data: JSON.stringify(data)});
     //     }, this.checkTimeout);
     // }
-    registerIMEvents(){
+    registerIMEvents(context){
         // 提示：ES6的箭头函数中this指向的是外部调用者，而function()这种匿名函数则是指向它自身，别理解错
 
         // 注册应用层事件通知：事件发生于收到聊天消息时，此处接收通知并在UI上展现出来
@@ -106,6 +99,8 @@ class App extends Component<PropsWithChildren> {
         EventBus.register(EventType.onIMAfterLoginSucess, () => {
             // 设置已成功登录标识并通知ui刷新
             console.log(wx.IMSDK.getLoginInfo().loginUserId+'用户登录成功');
+            context.isImReady = true;
+            store.dispatch(setContext(context));
         });
 
         // 注册应用层事件通知：事件发生于客户端登陆/认证失败后（可能是被禁、token/密码被重置等，具体由服务端决定）
@@ -152,7 +147,6 @@ class App extends Component<PropsWithChildren> {
 
     onLaunch(options) {
         let {context} = store.getState();
-        console.log('App的SiteInfo为', siteInfo);
         context.referer = options;
         context.copyright = siteInfo.copyright;
         Promise.all([request.get('/app/api/settings/all'), request.get('/app/api/navs/all'), request.get('/paimai/api/settings')]).then(reses => {

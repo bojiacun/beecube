@@ -208,7 +208,7 @@ export default class Index extends Component<any, any> {
             pushIndex,
             merBot,
         } = this.state;
-        const {systemInfo} = this.props;
+        const {systemInfo, context} = this.props;
         const barTop = systemInfo.statusBarHeight;
         let rect = Taro.getMenuButtonBoundingClientRect();
         let gap = rect.top - systemInfo.statusBarHeight; //动态计算每台手机状态栏到胶囊按钮间距
@@ -225,6 +225,7 @@ export default class Index extends Component<any, any> {
                         isNative={false}
                         liveRoom={liveRoom}
                         streams={liveRoom?.streams || []}
+                        isImReady={context.isImReady}
                         navBarHeight={barTop}
                         onRoomEvent={this.onRoomEvent}
                         bindRoomEvent
