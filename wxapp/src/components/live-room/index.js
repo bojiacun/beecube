@@ -204,7 +204,6 @@ Component({
             return true;
         },
         loginRoom() {
-            console.log('用户登录房间');
             if (!this.checkParam()) return;
             //用户登录房间
             let message = {roomId: this.data.liveRoom.id, appId: this.data.appId};
@@ -320,7 +319,9 @@ Component({
                 appId: this.data.appId,
                 content: msgContent,
                 userInfo: this.data.userInfo,
-                id: 'M'+Math.random()
+                id: 'M' + this.data.userID + Date.parse(new Date()),
+                name: '我',
+                color: '#FF4EB2'
             };
 
             console.log('>>>[liveroom-room] currentMessage', message);
@@ -338,7 +339,7 @@ Component({
             // 网络连接正常的情况下才允许发送消息哦
             if (receiver && message && wx.IMSDK.isOnline()) {
                 // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
-                let p = wx.MBProtocalFactory.createCommonDataSimple(msgContent, wx.IMSDK.getLoginInfo().loginUserId, receiver, MessageType.SPEAK);
+                let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(message), wx.IMSDK.getLoginInfo().loginUserId, receiver, MessageType.SPEAK);
                 // 将消息通过websocket发送出去
                 wx.IMSDK.sendData(p);
             } else {
@@ -433,157 +434,8 @@ Component({
         },
         logoutRoom() {
         },
-        requestJoinLive() {
-            let self = this;
-
-            if (this.data.loginType === 'anchor') return;
-            // 防止两次点击操作间隔太快
-            let nowTime = new Date();
-            if (nowTime - self.data.tapTime < 1000) {
-                return;
-            }
-            self.setData({'tapTime': nowTime});
-
-            // 正在发起连麦中，不处理
-            if (self.data.beginToPublish === true) {
-                console.log('>>>[liveroom-room] begin to publishing, ignore');
-                return;
-            }
-
-            // 房间流已达上限，不处理
-            if (self.data.reachStreamLimit === true) {
-                console.log('>>>[liveroom-room] reach stream limit, ignore');
-                self.setData({
-                    isShowModal: true,
-                    hasCancel: false,
-                    hasConfirm: false,
-                    showDesc: '主播正在连麦'
-                })
-                setTimeout(() => {
-                    self.setData({
-                        isShowModal: false
-                    })
-                }, 3000)
-                return;
-            }
 
 
-            // 观众正在连麦时点击，则结束连麦
-            if (self.data.isPublishing) {
-                zg.endJoinLive(self.data.anchorID, function (result, userID, userName) {
-                    console.log('>>>[liveroom-room] endJoinLive, result: ' + result);
-                }, null);
-
-                // 停止推流
-                zg.stopPublishingStream(self.data.publishStreamID);
-
-                self.setData({
-                    isPublishing: false,
-                    subPusher: {
-                        ...self.data.subPusher,
-                        ...{
-                            streamID: '',
-                            url: ''
-                        }
-                    }
-                }, function () {
-                    // 自己停止推流，不会收到流删减消息，所以此处需要主动调整视图大小
-                });
-
-                return;
-            }
-
-            // 观众未连麦，点击开始推流
-            console.log('>>>[liveroom-room] audience requestJoinLive');
-            self.setData({
-                beginToPublish: true,
-            });
-
-            zg.requestJoinLive(self.data.anchorID, function (res) {
-                console.log('>>>[liveroom-room] requestJoinLive sent succeeded');
-            }, function (error) {
-                console.log('>>>[liveroom-room] requestJoinLive sent failed, error: ', error);
-            }, function (result, userID, userName) {
-                console.log('>>>[liveroom-room] requestJoinLive, result: ' + result);
-
-                // 待补充，校验 userID
-                if (result === false) {
-                    wx.showToast({
-                        title: '主播拒绝连麦',
-                        icon: 'none',
-                        duration: 2000
-                    });
-
-                    self.setData({
-                        beginToPublish: false,
-                    })
-                } else {
-                    // 主播同意了连麦，但此时已经达到了房间流上限，不再进行连麦
-                    if (self.data.reachStreamLimit) {
-                        self.setData({
-                            beginToPublish: false,
-                        });
-                        return;
-                    }
-
-                    wx.showToast({
-                        title: '主播同意连麦，准备推流',
-                        icon: 'none',
-                        duration: 2000
-                    });
-
-                    // 主播同意连麦后，观众开始推流
-                    console.log('>>>[liveroom-room] startPublishingStream, userID: ' + userID + ', publishStreamID: ' + self.data.publishStreamID);
-                    zg.setPreferPublishSourceType(self.data.preferPublishSourceType);
-                    zg.startPublishingStream(self.data.publishStreamID);
-                    self.setData({
-                        isConnecting: true
-                    });
-                }
-            });
-        },
-        handleMultiJoinLive(requestJoinLiveList, requestId, self) {
-            for (let i = 0; i < requestJoinLiveList.length; i++) {
-                if (requestJoinLiveList[i] != requestId) {
-                    // 新的连麦弹框会覆盖旧的弹框，拒绝被覆盖的连麦请求
-                    zg.respondJoinLive(requestJoinLiveList[i], false);
-                }
-            }
-        },
-        endJoinLive() {
-            let self = this;
-            if (this.data.loginType === 'anchor') {
-                zg.endJoinLive(this.data.kitoutUser, function (result, userID, userName) {
-                    console.log('>>>[liveroom-room] endJoinLive, result: ' + result);
-
-                }, function (err, seq) {
-                    console.log('requestJoinLive err', err, seq);
-                });
-
-                self.data.playStreamList.forEach(item => {
-                    zg.stopPlayingStream(item.streamID);
-                    item['playUrl'] = '';
-                })
-                self.setData({
-                    kitoutUser: '',
-                    isConnecting: false,
-                    playStreamList: []
-                });
-                playingList = [];
-            } else if (this.data.loginType === 'audience') {
-                zg.endJoinLive(self.data.anchorID, function (result, userID, userName) {
-                    console.log('>>>[liveroom-room] endJoinLive, result: ' + result);
-                }, function (err, seq) {
-                    console.log('requestJoinLive err', err, seq);
-                });
-                zg.stopPublishingStream(self.data.publishStreamID);
-                self.setData({
-                    isConnecting: false,
-                    pushUrl: ''
-                })
-            }
-
-        },
         toggleShowBeauty() {
             this.setData({
                 showBeauty: !this.data.showBeauty
@@ -599,36 +451,7 @@ Component({
                 whiteness: e.detail.value
             })
         },
-        confirmJoin() {
-            let self = this
-            console.log('>>>[liveroom-room] onRecvJoinLiveRequest accept join live');
-            console.log('>>>[liveroom-room] onRecvJoinLiveRequest ', self.data.isConnecting, self.data.reachStreamLimit, self.data.requestId);
 
-            if (self.data.isConnecting) return;
-
-            // 已达房间上限，主播依然同意未处理的连麦，强制不处理
-            if (self.data.reachStreamLimit) {
-                wx.showToast({
-                    title: '房间内连麦人数已达上限，不建立新的连麦',
-                    icon: 'none',
-                    duration: 2000
-                });
-                zg.respondJoinLive(self.data.requestId, false); // true：同意；false：拒绝
-            } else {
-                zg.respondJoinLive(self.data.requestId, true); // true：同意；false：拒绝
-                self.setData({
-                    isConnecting: true
-                })
-            }
-            self.handleMultiJoinLive(self.data.requestJoinLiveList, self.data.requestId, self);
-        },
-        cancelJoin() {
-            let self = this
-            console.log('>>>[liveroom-room] onRecvJoinLiveRequest refuse join live');
-            zg.respondJoinLive(self.data.requestId, false); // true：同意；false：拒绝
-
-            self.handleMultiJoinLive(self.data.requestJoinLiveList, self.data.requestId, self);
-        },
         confirm(e) {
             console.log(e);
             let self = this;
@@ -671,11 +494,8 @@ Component({
                 ', message:' +
                 e.detail.message
             );
-            // console.log('onPushStateChange', e.detail.detail.code);
-            zg && zg.updatePlayerState(this.data.publishStreamID, e);
         },
         onPushNetStateChange(e) {
-            zg && zg.updatePlayerNetStatus(this.data.publishStreamID, e);
         },
         onPlayStateChange(e) {
             console.log('onPlayStateChange', e);
@@ -685,11 +505,6 @@ Component({
                 ', message:' +
                 e.detail.message
             );
-            if (this.data.isNative) {
-                zg && zg.updatePlayerState(e.target.id, e);
-            } else {
-                zg && zg.updatePlayerState(e.detail.streamID, e);
-            }
         },
         onPlayNetStateChange(e) {
             console.log('play error', e);
