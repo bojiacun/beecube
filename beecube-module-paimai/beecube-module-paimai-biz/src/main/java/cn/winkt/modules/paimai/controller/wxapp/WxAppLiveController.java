@@ -2,8 +2,10 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
 import cn.winkt.modules.paimai.entity.LiveRoom;
+import cn.winkt.modules.paimai.entity.LiveRoomStream;
 import cn.winkt.modules.paimai.service.IGoodsCommonDescService;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
+import cn.winkt.modules.paimai.service.ILiveRoomStreamService;
 import cn.winkt.modules.paimai.service.ZeGoService;
 import cn.winkt.modules.paimai.vo.ZegoSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -31,6 +33,9 @@ public class WxAppLiveController {
     @Resource
     ILiveRoomService liveRoomService;
 
+    @Resource
+    ILiveRoomStreamService liveRoomStreamService;
+
     @PutMapping("/login")
     public Result<?> login(@RequestBody LoginUser loginUser) throws InvocationTargetException, IllegalAccessException {
         LambdaQueryWrapper<GoodsCommonDesc> queryWrapper = new LambdaQueryWrapper<>();
@@ -44,6 +49,11 @@ public class WxAppLiveController {
     }
     @GetMapping("/rooms/{id}")
     public Result<LiveRoom> liveRoom(@PathVariable  String id) {
+        LiveRoom room = liveRoomService.getById(id);
+        LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
+        room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
+
         return Result.OK("获取成功", liveRoomService.getById(id));
     }
     @GetMapping("/rooms")

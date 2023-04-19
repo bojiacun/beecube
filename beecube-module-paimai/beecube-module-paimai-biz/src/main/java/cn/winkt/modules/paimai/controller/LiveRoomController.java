@@ -19,6 +19,7 @@ import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.util.TencentLiveTool;
 import cn.winkt.modules.paimai.vo.AppConfigItemVO;
 import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.map.CompositeMap;
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +95,11 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 		QueryWrapper<LiveRoom> queryWrapper = QueryGenerator.initQueryWrapper(liveRoom, req.getParameterMap());
 		Page<LiveRoom> page = new Page<LiveRoom>(pageNo, pageSize);
 		IPage<LiveRoom> pageList = liveRoomService.page(page, queryWrapper);
+		pageList.getRecords().forEach(room -> {
+			LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
+			streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
+			room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
+		});
 		return Result.OK(pageList);
 	}
 	
