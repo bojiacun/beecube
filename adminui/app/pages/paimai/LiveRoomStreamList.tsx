@@ -84,25 +84,24 @@ const LiveRoomStreamList = (props: any) => {
             dataField: '',
             isDummyField: true,
             formatter: (cell:any, row:any) => {
+                let index = row.pushAddress.lastIndexOf('/');
+                let obs = [row.pushAddress.substring(0, index+1), row.pushAddress.substring(index+1)];
                 return (
                     <Row>
                         <Col md={12}>
                             推流地址：{row.pushAddress}
                         </Col>
                         <Col md={12}>
+                            OBS服务器：{obs[0]}
+                        </Col>
+                        <Col md={12}>
+                            OBS推流码：{obs[1]}
+                        </Col>
+                        <Col md={12}>
                             拉流地址：{row.playAddress}
                         </Col>
                     </Row>
                 );
-            }
-        },
-        {
-            text: '预览图',
-            dataField: '',
-            isDummyField: true,
-            formatter: (cell:any, row:any) => {
-                let previewUrl = row.preview;
-                return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
             }
         },
         {
@@ -132,14 +131,6 @@ const LiveRoomStreamList = (props: any) => {
             }
         },
     ]
-    const handleOnSearchSubmit = () => {
-        //设置分页为1
-        setSearchState({...searchState, pageNo: 1});
-    }
-    const handleOnNameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
-    }
-
     return (
         <>
             <Modal
@@ -157,15 +148,6 @@ const LiveRoomStreamList = (props: any) => {
                     <div className={'m-2'}>
                         <Row>
                             <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                                <ReactSelectThemed
-                                    id={'role-page-size'}
-                                    placeholder={'分页大小'}
-                                    isSearchable={false}
-                                    defaultValue={PageSizeOptions[0]}
-                                    options={PageSizeOptions}
-                                    className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                    onChange={handlePageSizeChanged}
-                                />
                             </Col>
                             <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             </Col>
@@ -173,26 +155,8 @@ const LiveRoomStreamList = (props: any) => {
                     </div>
 
                     <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
-                                    data={list?.records}
+                                    data={list}
                                     keyField={'id'}/>
-
-
-                    <div className={'mx-2 mb-2 mt-1'}>
-                        <Row>
-                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
-                            </Col>
-                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                                <SinglePagination
-                                    forcePage={searchState.pageNo - 1}
-                                    className={'mb-0'}
-                                    pageCount={list?.pages}
-                                    onPageChange={handlePageChanged}
-                                />
-                            </Col>
-                        </Row>
-                    </div>
                 </Modal.Body>
             </Modal>
         </>
