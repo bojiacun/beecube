@@ -19,6 +19,7 @@ import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
 import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 import {User} from "react-feather";
+import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
 
 
 
@@ -28,6 +29,7 @@ const LiveRoomList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
+    const [showRoom, setShowRoom] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -67,6 +69,10 @@ const LiveRoomList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'show-stream':
+                //编辑
+                setShowRoom(row);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -101,23 +107,6 @@ const LiveRoomList = (props: any) => {
             dataField: 'title',
         },
         {
-            text: '推拉流地址',
-            dataField: '',
-            isDummyField: true,
-            formatter: (cell:any, row:any) => {
-                return (
-                    <Row>
-                        <Col md={12}>
-                            推流地址：{row.pushAddress}
-                        </Col>
-                        <Col md={12}>
-                            拉流地址：{row.playAddress}
-                        </Col>
-                    </Row>
-                );
-            }
-        },
-        {
             text: '预览图',
             dataField: '',
             isDummyField: true,
@@ -137,34 +126,6 @@ const LiveRoomList = (props: any) => {
         {
             text: '关联的专场',
             dataField: 'performanceName',
-        },
-        {
-            text: '第一主播',
-            dataField: '',
-            isDummyField: true,
-            headerStyle: {width: 200},
-            formatter: (cell:any, row:any) => {
-                return (
-                    <div className={'d-flex align-items-center'}>
-                        {row.mainAnchor && <Image src={row.mainAnchorAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        {row.mainAnchor && <span className={'ml-1'}>{row.mainAnchorName}</span>}
-                    </div>
-                );
-            }
-        },
-        {
-            text: '第二主播',
-            dataField: '',
-            isDummyField: true,
-            headerStyle: {width: 200},
-            formatter: (cell:any, row:any) => {
-                return (
-                    <div className={'d-flex align-items-center'}>
-                        {row.subAnchor && <Image src={row.subAnchorAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        {row.subAnchor && <span className={'ml-1'}>{row.subAnchorName}</span>}
-                    </div>
-                );
-            }
         },
         {
             text: '围观人次',
@@ -194,6 +155,8 @@ const LiveRoomList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'show-stream')}>视频流</a>
+                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
@@ -280,6 +243,10 @@ const LiveRoomList = (props: any) => {
             {editModal && <LiveRoomEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
+            }} />}
+
+            {showRoom && <LiveRoomStreamList show={true} streams={showRoom.streams} onHide={()=>{
+                setShowRoom(null);
             }} />}
         </>
     );

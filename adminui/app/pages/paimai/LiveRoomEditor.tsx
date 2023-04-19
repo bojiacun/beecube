@@ -80,8 +80,6 @@ const LiveRoomEditor = (props: any) => {
                                     <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
                                     <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'关联专场'} name={'performanceId'} placeholder={'要关联专场的ID'}/>
-                                    <BootstrapInput label={'主播ID'} name={'mainAnchor'} placeholder={'主播的用户ID'}/>
-                                    <BootstrapInput label={'第二主播ID'} name={'subAnchor'} placeholder={'第二主播的用户ID'}/>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
 
                                 </Modal.Body>
