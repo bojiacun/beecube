@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
+import org.jeecg.config.AppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -247,7 +248,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
 		BaseMessage message = JSONObject.parseObject(dataContent, BaseMessage.class);
 		String roomId = message.getRoomId();
-
+		AppContext.setApp(message.getAppId());
 		switch (typeu) {
 			case UserMessageType.JOIN_ROOM:
 				if(StringUtils.isBlank(roomId)) {
@@ -301,7 +302,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
 				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
 				userJoinNotifyMessage.setUserId(appMemberVO.getId());
-				notifyRoomUsers(roomId, from_user_id, userJoinNotifyMessage, from_user_id, typeu);
+				notifyRoomUsers(roomId, from_user_id, userJoinNotifyMessage, null, typeu);
 				break;
 			case UserMessageType.LEAVE_ROOM:
 				//将用户从房间移除

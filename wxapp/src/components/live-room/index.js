@@ -229,15 +229,10 @@ Component({
 
         //失去聚焦
         blur: function (e) {
-
             var that = this;
-
             that.setData({
-
                 inputBottom: 0
-
             })
-
         },
 
 
