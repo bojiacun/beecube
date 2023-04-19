@@ -36,7 +36,7 @@ const TencentCloudSettingsEditor = (props:any) => {
                     <Card.Body>
                         <BootstrapInput label={'推流协议'} name={'pushSchema'} placeholder={'腾讯云直播推流协议'} />
                         <BootstrapInput label={'推流地址'} name={'pushDomain'} placeholder={'腾讯云直播推流地址'} />
-                        <BootstrapInput label={'推流应用名称'} name={'pushAppName'} placeholder={'腾讯云推流应用名称'} />
+                        <BootstrapInput label={'应用名称'} name={'appName'} placeholder={'腾讯云推流拉流的应用名称'} />
                         <BootstrapInput label={'推流鉴权KEY'} name={'pushTxtSecret'} placeholder={'腾讯云推流鉴权KEY'} />
                         <BootstrapInput label={'拉流协议'} name={'playSchema'} placeholder={'腾讯云直播拉流协议'} />
                         <BootstrapInput label={'拉流地址'} name={'playDomain'} placeholder={'腾讯云直播拉流地址'} />
