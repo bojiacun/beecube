@@ -166,7 +166,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 							appTencentConfigVO.getPlayDomain(),
 							appTencentConfigVO.getAppName(),
 							stream.getId(),
-							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
 					break;
 				case "flv":
@@ -174,7 +174,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 							appTencentConfigVO.getPlayDomain(),
 							appTencentConfigVO.getAppName(),
 							stream.getId(),
-							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
 					break;
 				case "hls":
@@ -182,7 +182,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 							appTencentConfigVO.getPlayDomain(),
 							appTencentConfigVO.getAppName(),
 							stream.getId(),
-							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
 					break;
 				case "webrtc":
@@ -190,7 +190,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 							appTencentConfigVO.getPlayDomain(),
 							appTencentConfigVO.getAppName(),
 							stream.getId(),
-							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
+							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
 					break;
 			}
