@@ -105,7 +105,7 @@ Component({
         userTop: 0,
         userInfo: {},
         hasUserInfo: false,
-
+        loginedRoom: false,
         waitingImage: null,
         avatarUrl: "",
         nickName: "",
@@ -210,6 +210,7 @@ Component({
             // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
             let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(message), wx.IMSDK.getLoginInfo().loginUserId, "0", MessageType.JOIN_ROOM);
             // 将消息通过websocket发送出去
+            console.log('执行登录房间操作，发送消息', p);
             wx.IMSDK.sendData(p);
         },
         //输入聚焦
@@ -234,9 +235,6 @@ Component({
                 inputBottom: 0
             })
         },
-
-
-
         clickMessage() {
             console.log('clickMessage');
             this.clickFull();
@@ -263,21 +261,35 @@ Component({
                 inputShow: true
             });
         },
-        switchCamera() {
-            this.data.mainPusher.frontCamera = !this.data.mainPusher.frontCamera;
-            this.setData({
-                mainPusher: this.data.mainPusher,
-            });
-            if (this.data.isNative) {
-                this.data.pusherContext && this.data.pusherContext.switchCamera();
-            } else {
-                zgPusher && zgPusher.switchCamera();
+        onMessageReceived(message) {
+            console.log('收到了房间消息', message);
+            switch (message.type) {
+                //加入直播间消息
+                case MessageType.JOIN_ROOM:
+                    if (message.isme) {
+                        //如果是自己登录房间成功，则设置状态
+                        this.setData({loginedRoom: true});
+                    }
+                    //UI显示谁登录成功了
+                    this.setData({newestName: message.userName});
+                    break;
+                case MessageType.ROOM_NOTICE:
+                    let uiMessage = {
+                        content: message.notice,
+                        name: '系统公告',
+                        color: '#FF0000',
+                        fontColor: '#10B981',
+                        id: message.id
+                    };
+                    this.pushUiMessage(uiMessage);
+                    break;
             }
         },
-        enableMute() {
-            this.data.mainPusher.isMute = !this.data.mainPusher.isMute;
+        pushUiMessage(message) {
+            this.data.messageList.push(message);
             this.setData({
-                mainPusher: this.data.mainPusher,
+                messageList: this.data.messageList,
+                scrollToView: 'M'+message.id,
             });
         },
         onComment() {
@@ -286,6 +298,14 @@ Component({
                 this.showInput();
                 wx.showToast({
                     title: "您还没有输入内容",
+                    icon: 'none',
+                    duration: 2000
+                });
+                return;
+            }
+            if (!this.data.loginedRoom) {
+                wx.showToast({
+                    title: "登录房间失败，无法发送消息",
                     icon: 'none',
                     duration: 2000
                 });
@@ -318,15 +338,7 @@ Component({
                 name: '我',
                 color: '#FF4EB2'
             };
-
-            console.log('>>>[liveroom-room] currentMessage', message);
-
-            self.data.messageList.push(message);
-
-            self.setData({
-                messageList: self.data.messageList,
-                scrollToView: message.id,
-            });
+            this.pushUiMessage(message);
 
             // 聊天消息接收者
             let receiver = '0';

@@ -34,6 +34,7 @@ const LiveRoomEditor = (props: any) => {
     const formikRef = useRef<any>();
 
     const handleOnSubmit = (values: any) => {
+        delete values.streams;
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/paimai/live/rooms/edit'});
         } else {
@@ -73,6 +74,7 @@ const LiveRoomEditor = (props: any) => {
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapInput label={'标题'} name={'title'}/>
+                                    <BootstrapInput label={'公告'} name={'notice'} type={'textarea'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>

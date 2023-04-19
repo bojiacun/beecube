@@ -51,10 +51,14 @@ export default class Index extends Component<any, any> {
     async componentDidUpdate(prevProps: Readonly<any>, prevState) {
         const {page} = getCurrentInstance();
         const {userInfo} = this.props.context;
+        const {message} = this.props;
         if (!this.liveRoom && userInfo) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
             this.liveRoom.init();
+        }
+        else if(this.liveRoom && message){
+            this.liveRoom.onMessageReceived(message);
         }
     }
 

@@ -38,10 +38,10 @@
             {{stringUtil.substr(newestName, 12)}} 进入了直播间
         </view>
         <scroll-view class='message-view' style="bottom:{{meBot}}rpx" scroll-into-view='{{scrollToView}}' scroll-y='true' bind:tap="clickMessage" bindscroll="scrollMessage">
-            <view class='message-detail' wx:for="{{messageList}}" wx:key="index" id="{{item.id}}">
+            <view class='message-detail' wx:for="{{messageList}}" wx:key="index" id="M{{item.id}}">
                 <view class="msg-text">
-                    <span style="color:{{item.color}}">{{item.name}}</span>
-                    {{item.content}}
+                    <span style="color:{{item.color}}">{{item.name}}</span>：
+                    <span style="color: {{item.fontColor ? item.fontColor:'white'}}">{{item.content}}</span>
                 </view>
             </view>
         </scroll-view>
