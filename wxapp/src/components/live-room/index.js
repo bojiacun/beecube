@@ -261,6 +261,13 @@ Component({
                 inputShow: true
             });
         },
+        showMerchandise() {
+            console.log('showMerchandise');
+            this.triggerEvent('RoomEvent', {
+                tag: 'onMerchandise',
+                content: '',
+            });
+        },
         onMessageReceived(message) {
             console.log('收到了房间消息', message);
             switch (message.type) {
