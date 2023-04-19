@@ -32,6 +32,6 @@ public class ImClientService {
         String appId = AppContext.getApp();
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         message.setAppId(appId);
-        serverEventListener.notifyAppUsers(appId, JSONObject.toJSONString(message), null, typeu);
+        serverEventListener.notifyAppUsers(appId, loginUser.getId(), JSONObject.toJSONString(message), null, typeu);
     }
 }

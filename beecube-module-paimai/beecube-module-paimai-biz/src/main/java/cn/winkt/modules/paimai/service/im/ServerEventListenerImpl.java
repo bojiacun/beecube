@@ -245,11 +245,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 		int typeu = p.getTypeu();
 
 		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
-
-
 		BaseMessage message = JSONObject.parseObject(dataContent, BaseMessage.class);
 		String roomId = message.getRoomId();
-		String appId = message.getAppId();
 
 		switch (typeu) {
 			case UserMessageType.JOIN_ROOM:
@@ -304,7 +301,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
 				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
 				userJoinNotifyMessage.setUserId(appMemberVO.getId());
-				notifyRoomUsers(roomId, userJoinNotifyMessage, from_user_id, typeu);
+				notifyRoomUsers(roomId, from_user_id, userJoinNotifyMessage, from_user_id, typeu);
 				break;
 			case UserMessageType.LEAVE_ROOM:
 				//将用户从房间移除
@@ -321,7 +318,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 					log.debug("用户 {} 已被禁言", from_user_id);
 					return false;
 				}
-				notifyRoomUsers(roomId, dataContent, from_user_id, typeu);
+				notifyRoomUsers(roomId, from_user_id, dataContent, from_user_id, typeu);
 				break;
 			case UserMessageType.SHUTUP:
 				Set<String> mutedUserIds = mutedUsers.computeIfAbsent(roomId, k -> new HashSet<>());
@@ -335,13 +332,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 				} catch (Exception e) {
 					log.error(e.getMessage(), e);
 				}
-				break;
-			case UserMessageType.OFFER:
-				//用户出价
-				notifyAppUsers(appId, dataContent, from_user_id, typeu);
-				break;
-			default:
-				notifyAppUsers(appId, dataContent, null, typeu);
 				break;
 		}
 
@@ -473,10 +463,10 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 默认本方法可
 	}
 
-	private void notifyRoomUsers(String roomId, Object message, String excludeUserId, int messageType) {
-		notifyRoomUsers(roomId, JSONObject.toJSONString(message), excludeUserId, messageType);
+	private void notifyRoomUsers(String roomId, String fromUserId, Object message, String excludeUserId, int messageType) {
+		notifyRoomUsers(roomId, fromUserId, JSONObject.toJSONString(message), excludeUserId, messageType);
 	}
-	public void notifyRoomUsers(String roomId, String message, String excludeUserId, int messageType) {
+	public void notifyRoomUsers(String roomId, String fromUserId, String message, String excludeUserId, int messageType) {
 		log.debug("通知房间 {} 所有用户", roomId);
 		Snowflake snowflake = new Snowflake(9, 9);
 		roomUsers.get(roomId).forEach(uid -> {
@@ -494,7 +484,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 			}
 		});
 	}
-	public void notifyAppUsers(String appId, String message, String excludeUserId, int messageType) {
+	public void notifyAppUsers(String appId, String fromUserId, String message, String excludeUserId, int messageType) {
 		log.debug("通知应用 {} 所有在线用户{}个", appId, appUsers.get(appId).size());
 		Snowflake snowflake = new Snowflake(9, 9);
 		appUsers.get(appId).forEach(uid -> {
@@ -502,7 +492,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				return;
 			}
 			log.debug("通知用户 {}", uid);
-			Protocal fp = ProtocalFactory.createCommonData(message, "0", uid, true, snowflake.nextIdStr(), messageType);
+			Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
 			try {
 				GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 					log.debug("通知回调，是否送达 {} 到 {}", b, uid);

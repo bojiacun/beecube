@@ -13,6 +13,7 @@ import moment from "moment";
 import Uprange from "./components/uprange";
 import Descs from "./components/descs";
 import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
+import MessageType from "../../utils/message-type";
 
 const numeral = require('numeral');
 
@@ -96,11 +97,7 @@ export default class Index extends Component<any, any> {
 
         if (goods.id == message.goodsId) {
             switch (message.type) {
-                case 'MSG_TYPE_AUCTION_STARTED':
-                    goods.state = message.state;
-                    this.setState({goods: goods});
-                    break;
-                case 'MSG_TYPE_AUCTION_ENDED':
+                case MessageType.GOODS_UPDATE:
                     goods.state = message.state;
                     goods.endTime = message.endTime;
                     this.setState({goods: goods});
@@ -119,11 +116,11 @@ export default class Index extends Component<any, any> {
         let msg = message;
 
         //如果是自身产生的消息则忽略
-        if (msg.fromUserId === userInfo.id) {
+        if (msg.isme) {
             return;
         }
         switch (msg.type) {
-            case 'MSG_TYPE_OFFER':
+            case MessageType.OFFER:
                 goods.currentPrice = parseFloat(msg.price).toFixed(2);
                 this.setState({goods: goods});
                 this.nextPrice(goods);
@@ -143,11 +140,11 @@ export default class Index extends Component<any, any> {
                 goods.offerCount++;
                 this.setState({offers: offers, goods: goods});
                 break;
-            case 'MSG_TYPE_DELAY':
+            case MessageType.AUCTION_DELAYED:
                 goods.actualEndTime = msg.newTime;
                 this.setState({goods: goods});
                 break;
-            case 'MSG_TYPE_AUCTION_CHANGED':
+            case MessageType.GOODS_UPDATE:
                 if (msg.goodsId != goods.id) return;
                 const {settings} = this.props;
                 goods.startTime = message.startTime;

@@ -93,11 +93,12 @@ class App extends Component<PropsWithChildren> {
         // 注册应用层事件通知：事件发生于收到聊天消息时，此处接收通知并在UI上展现出来
         EventBus.register(EventType.onIMData, (p) => {
             // 是否“我”发出的消息
-            console.log("收到了消息", p);
             let isme = (p.from == wx.IMSDK.getLoginInfo().loginUserId);
             let message = JSON.parse(p.dataContent);
             message.isme = isme;
-            message.type = p.typeu;
+            message.type = parseInt(p.typeu);
+            message.id = p.fp;
+            console.log('收到服务器发来的消息', p, message);
             this.onMessageReceive(message);
         })
 

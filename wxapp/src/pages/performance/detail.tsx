@@ -11,6 +11,7 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
+import MessageType from "../../utils/message-type";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -149,6 +150,7 @@ export default class Index extends Component<any, any> {
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
         const {detail, status, goodsList} = this.state;
         const {message} = this.props;
+        console.log('peformance detail received a message', message);
         if (!detail) return;
         if (prevState.status != status && status != TimeCountDownerStatus.ENDED) {
             request.get('/paimai/api/members/messaged', {
@@ -165,16 +167,9 @@ export default class Index extends Component<any, any> {
 
         if (detail.id == message.performanceId) {
             switch (message.type) {
-                case 'MSG_TYPE_PEFORMANCE_STARTED':
+                case MessageType.PERFORMANCE_UPDATE:
                     detail.startTime = message.startTime;
                     detail.state = message.state;
-                    break;
-                case 'MSG_TYPE_PEFORMANCE_ENDED':
-                    detail.state = message.state;
-                    detail.endTime = message.endTime;
-                    break;
-                case 'MSG_TYPE_PEFORMANCE_CHANGED':
-                    detail.startTime = message.startTime;
                     detail.endTime = message.endTime;
                     break;
             }
@@ -185,15 +180,7 @@ export default class Index extends Component<any, any> {
         goodsList?.forEach(g => {
             if (g.id == message.goodsId) {
                 switch (message.type) {
-                    case 'MSG_TYPE_AUCTION_STARTED':
-                        g.state = message.state;
-                        g.startTime = message.startTime;
-                        break;
-                    case 'MSG_TYPE_AUCTION_ENDED':
-                        g.state = message.state;
-                        g.endTime = message.endTime;
-                        break;
-                    case 'MSG_TYPE_AUCTION_CHANGED':
+                    case MessageType.GOODS_UPDATE:
                         g.startTime = message.startTime;
                         g.endTime = message.endTime;
                         g.actualEndTime = message.actualEndTime;
