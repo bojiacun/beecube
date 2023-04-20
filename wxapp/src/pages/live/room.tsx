@@ -193,7 +193,7 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
             this.setState({liveRoom: room});
-            request.get('/paimai/api/performances/goodslist', {params: {id: room.performanceId}}).then(res => {
+            request.get('/paimai/api/live/room/goods', {params: {id: room.performanceId}}).then(res => {
                 let goodsList = res.data.result;
                 this.setState(this.resolveGoods(goodsList));
             });
