@@ -1,6 +1,6 @@
 // components/live-room/index.js
 import MessageType from "../../utils/message-type";
-
+const numeral = require('numeral');
 const app = getApp();
 
 let networkOk = true;
@@ -52,6 +52,10 @@ Component({
                 }
             }
         },
+        settings: {
+            type: Object,
+            value: {}
+        },
         preferPublishSourceType: {
             type: Number,
             value: 1
@@ -94,10 +98,13 @@ Component({
         imColors: ["#FFC000", "#AAFF6C", "#63E3FF", "#FF7920"],
         newestName: "",
         inputShow: false,
+        offerShow: false,
         inputBottom: 0,
+        preInputShow: true,
+        goods: null,
         clearHide: true,
         keyboardHold: true,
-
+        nextPrice: 0.00,
         newBot: 568,
         meBot: 140,
         mmBot: 0,
@@ -134,7 +141,6 @@ Component({
         }
     },
     ready: function () {
-        console.log("ready", this.data.liveAppID, this.data);
     },
     lifetimes: {
         attached() {
@@ -222,7 +228,6 @@ Component({
         //输入聚焦
         foucus: function (e) {
             var that = this;
-            console.log(e, iphone6s);
             let inputBot = e.detail.height;
             if (iphone6s) {
                 if (210 < inputBot && inputBot < 220) {
@@ -232,6 +237,52 @@ Component({
             that.setData({
                 inputBottom: inputBot
             })
+        },
+
+        doOffer: function() {
+            this.triggerEvent('RoomEvent', {
+                tag: 'doOffer',
+                content: {price: this.data.nextPrice}
+            })
+        },
+
+        showOffer: function(goods) {
+            this.setData({
+                inputBottom: this.data.mmBot,
+                offerShow: true,
+                inputShow: false,
+                preInputShow: false,
+            });
+            this.getNextPrice(goods);
+        },
+
+        getNextPrice(goods) {
+            let upgradeConfig = goods.uprange;
+            const {settings} = this.data;
+            if (parseInt(settings.isDealCommission) == 1) {
+                if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                    //落槌价显示佣金
+                    const commission = goods.commission/100;
+                    goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
+                }
+            }
+            if (!goods.currentPrice) {
+                //说明没有人出价，第一次出价可以以起拍价出价
+                this.setData({nextPrice: goods.startPrice, goods: goods});
+                return;
+            }
+            let currentPrice = parseFloat(goods.currentPrice);
+
+            let rangePrice = 0;
+            for (let i = 0; i < upgradeConfig.length; i++) {
+                let config = upgradeConfig[i];
+                let min = parseFloat(config.min);
+                let price = parseFloat(config.price);
+                if (currentPrice >= min) {
+                    rangePrice = price;
+                }
+            }
+            this.setData({nextPrice: currentPrice + rangePrice, goods: goods});
         },
 
         //失去聚焦
@@ -250,12 +301,11 @@ Component({
         },
         clickFull() {
             console.log('clickFull')
-            if (this.data.inputShow) {
-                this.setData({
-                    inputShow: false
-                });
-            }
-            ;
+            this.setData({
+                inputShow: false,
+                preInputShow: true,
+                offerShow: false,
+            });
             this.triggerEvent('RoomEvent', {
                 tag: 'onModalClick',
                 content: {}
@@ -264,7 +314,9 @@ Component({
         showInput() {
             console.log('showInput');
             this.setData({
-                inputShow: true
+                inputShow: true,
+                offerShow: false,
+                preInputShow: false,
             });
         },
         showMerchandise() {

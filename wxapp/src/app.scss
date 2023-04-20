@@ -73,6 +73,9 @@ button, button[plain] {
     &.btn-outline {
         @apply text-gray-600 border-solid border-1 border-gray-400;
     }
+    &.btn-sm {
+        @apply text-sm py-1 px-4;
+    }
 }
 
 .screen-swiper {

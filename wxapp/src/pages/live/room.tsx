@@ -2,7 +2,7 @@ import {Component} from "react";
 import Taro, {getCurrentInstance} from "@tarojs/taro";
 import {connect} from "react-redux";
 import request from "../../lib/request";
-import {Image, Text, View, ScrollView, Navigator} from "@tarojs/components";
+import {Image, Text, View, ScrollView, Navigator, Button} from "@tarojs/components";
 import './room.scss';
 import utils from "../../lib/utils";
 import FallbackImage from "../../components/FallbackImage";
@@ -31,6 +31,8 @@ export default class Index extends Component<any, any> {
         pushIndex: -1,
         merBot: 0,
         newBot: 0,
+        preOffered: false,
+        offers: [],
     }
 
     options: any;
@@ -49,7 +51,7 @@ export default class Index extends Component<any, any> {
         this.fadeDown = this.fadeDown.bind(this);
         this.showModal = this.showModal.bind(this);
         this.onRoomEvent = this.onRoomEvent.bind(this);
-        // this.startPushStream = this.startPushStream.bind(this);
+        this.showOffer = this.showOffer.bind(this);
         // this.onStreamUrlUpdate = this.onStreamUrlUpdate.bind(this);
     }
 
@@ -73,7 +75,7 @@ export default class Index extends Component<any, any> {
             let addBot = (pushIndex > - 1 ? 130:0)
             this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
         }
-        if (!goodsList || !message) return;
+        if (!goodsList || !message || message.id == prevProps.message.id) return;
         switch (message.type) {
             case MessageType.GOODS_UPDATE:
                 goodsList?.forEach((g:any) => {
@@ -111,13 +113,79 @@ export default class Index extends Component<any, any> {
                 }
                 break;
             }
+            case 'doOffer': {
+                console.log('doOffer', content);
+                //发送HTTP请求进行出价
+                this.offer(content.price).then();
+                break;
+            }
             default: {
                 // console.log('onRoomEvent default: ', e);
                 break;
             }
         }
     }
+    async offer(nextPrice:number) {
+        const {context, settings} = this.props;
+        const {userInfo} = context;
+        const {pushIndex, merchandises, preOffered} = this.state;
+        const goods = merchandises[pushIndex];
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (!checkResult.data.result) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            //发送模板消息
+            if (settings.offerResultTemplateId) {
+                await Taro.requestSubscribeMessage({tmplIds: [settings.offerResultTemplateId]});
+            }
+            this.setState({preOffered: true});
+        }
+        let offers = this.state.offers;
+        let doOffer = () => {
+            this.setState({posting: true});
+            request.post('/paimai/api/members/offers', {id: goods.id, price: nextPrice, randomStr: utils.randomString(6)}).then(res => {
+                this.setState({posting: false});
+                if (res.data.success) {
+                    utils.showSuccess(false, '出价成功');
+                    goods.currentPrice = this.state.nextPrice;
+                    if (offers.length >= 3) {
+                        offers.pop();
+                    }
+                    offers.unshift({
+                        memberAvatar: userInfo.avatar,
+                        memberId: userInfo.id,
+                        memberName: userInfo.realname || userInfo.nickname,
+                        price: this.state.nextPrice,
+                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                    });
+                    goods.offerCount++;
+                    this.setState({offers: offers, goods: goods});
+                    this.liveRoom?.getNextPrice(goods);
+                    //出价成功加入队列
+                } else {
+                    utils.showError(res.data.message || '出价失败');
+                }
+            }).catch(() => this.setState({posting: false}));
+        }
+        //判断当前自己是不是最高出价人，如果是提醒一次
+        if (offers && offers.length > 0) {
+            if (userInfo.id == offers[0].memberId) {
+                await utils.showMessage('您当前的出价已为最高出价，是否确定继续出价?', function () {
+                    doOffer();
+                }, true, () => {
+                }, '友情提示', '继续出价', '取消出价');
+            } else {
+                doOffer();
+            }
+        } else {
+            doOffer();
+        }
+        //出价
 
+    }
     showModal() {
         this.setState({
             hideModal: false
@@ -210,6 +278,13 @@ export default class Index extends Component<any, any> {
         return {merchandises: goodsList, pushIndex: currentIndex};
     }
 
+    showOffer(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex]);
+        return false;
+    }
+
     //
     // componentWillUnmount() {
     //     zg.stopPublishingStream(this.streamId);
@@ -245,6 +320,7 @@ export default class Index extends Component<any, any> {
                         streams={liveRoom?.streams || []}
                         isImReady={context.isImReady}
                         navBarHeight={barTop}
+                        settings={this.props.settings}
                         onRoomEvent={this.onRoomEvent}
                         bindRoomEvent
                     />
@@ -311,12 +387,13 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     {pushIndex >= 0 &&
-                        <View className="push-mer" style={{bottom: merBot+'rpx'}} onClick={this.clickPush}>
-                            <Image className="push-mer-img" src={merchandises[pushIndex].images.split(',')[0]}></Image>
+                        <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}} onClick={this.clickPush}>
+                            <Image className="push-mer-img" mode={'aspectFit'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
                                 <Text className="push-mer-text">{merchandises[pushIndex].title}</Text>
-                                <Text className="push-mer-price">¥{merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice}</Text>
+                                <Text className="push-mer-price">当前价：¥{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
                             </View>
+                            <View onClick={this.showOffer} className={'flex items-center justify-center mr-2'}><Button className={'btn btn-danger btn-sm'}>出价</Button></View>
                         </View>
                     }
                 </View>
