@@ -202,8 +202,8 @@ const RoomGoodsListSelected = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {row.state == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>开始</a>}
-                        {row.state == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>结束</a>}
+                        {row.state == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start')}>上播</a>}
+                        {row.state == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'end')}>下播</a>}
                         {row.state == 2 && <>
                             <a href={'#'} onClick={() => handleOnAction(row, 'confirm_deal')}>确认成交</a>
                             <span className={'divider'}/>

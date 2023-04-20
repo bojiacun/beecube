@@ -79,6 +79,8 @@ const LiveRoomEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
+                                    <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
+                                    <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
                                     <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
                                     <BootstrapInput label={'关联专场'} name={'performanceId'} placeholder={'要关联专场的ID'}/>
