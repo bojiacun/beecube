@@ -58,6 +58,8 @@ public class WxAppMemberController {
     IGoodsViewService goodsViewService;
 
     @Resource
+    ILiveRoomService liveRoomService;
+    @Resource
     AppApi appApi;
     @Resource
     IPayLogService payLogService;
@@ -356,7 +358,31 @@ public class WxAppMemberController {
         IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
         return Result.OK(pageList);
     }
-
+    /**
+     * 查询用户是否缴纳了直播间保证金
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/deposited/liveroom")
+    public Result<Boolean> queryLiveRoomDeposit(@RequestParam(value = "id", defaultValue = "") String id) {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("找不到拍品");
+        }
+        LiveRoom liveRoom = liveRoomService.getById(id);
+        if (liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
+            return Result.OK(true);
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if (loginUser == null) {
+            return Result.OK(false);
+        }
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getRoomId, id);
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        return Result.OK(goodsDepositService.count(queryWrapper) > 0);
+    }
     /**
      * 查询用户是否缴纳了本场保证金
      *
@@ -425,7 +451,8 @@ public class WxAppMemberController {
     public Result<Boolean> queryMemberMessage(
             @RequestParam(name = "type", defaultValue = "0") Integer type,
             @RequestParam(name = "performanceId", defaultValue = "") String performanceId,
-            @RequestParam(name = "goodsId", defaultValue = "") String goodsId
+            @RequestParam(name = "goodsId", defaultValue = "") String goodsId,
+            @RequestParam(name = "roomId", defaultValue = "") String roomId
     ) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
@@ -441,6 +468,9 @@ public class WxAppMemberController {
         if (StringUtils.isNotEmpty(goodsId)) {
             queryWrapper.eq(MessagePool::getGoodsId, goodsId);
         }
+        if(StringUtils.isNotEmpty(roomId)) {
+            queryWrapper.eq(MessagePool::getRoomId, roomId);
+        }
         return Result.OK(messagePoolService.count(queryWrapper) > 0);
     }
 
@@ -455,6 +485,7 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String performanceId = params.getString("performanceId");
         String goodsId = params.getString("goodsId");
+        String roomId = params.getString("roomId");
         Integer type = params.getInteger("type");
         String formId = params.getString("formId");
         String templateId = params.getString("templateId");
@@ -469,6 +500,9 @@ public class WxAppMemberController {
         if (StringUtils.isNotEmpty(goodsId)) {
             queryWrapper.eq(MessagePool::getGoodsId, goodsId);
         }
+        if (StringUtils.isNotEmpty(roomId)) {
+            queryWrapper.eq(MessagePool::getRoomId, roomId);
+        }
         long count = messagePoolService.count(queryWrapper);
         if (count > 0) {
             //删除所有关注记录
@@ -481,6 +515,7 @@ public class WxAppMemberController {
             messagePool.setTemplateId(templateId);
             messagePool.setGoodsId(goodsId);
             messagePool.setPerformanceId(performanceId);
+            messagePool.setRoomId(roomId);
             messagePool.setType(type);
             messagePool.setMemberId(loginUser.getId());
             //这里计算好发送时间和内容
@@ -683,7 +718,71 @@ public class WxAppMemberController {
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
         return auctionGoodsService.offer(post);
     }
+    /**
+     * 缴纳直播间保证金
+     * @param id
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws WxPayException
+     */
+    @PostMapping("/deposits/liveroom")
+    @Transactional(rollbackFor = Exception.class)
+    public Result<?> payLiveRoomDeposit(@RequestParam("id") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
+        if (StringUtils.isEmpty(id)) {
+            throw new JeecgBootException("操作失败找不到直播间");
+        }
+        LiveRoom liveRoom = liveRoomService.getById(id);
+        if (liveRoom == null) {
+            throw new JeecgBootException("操作失败找不到直播间");
+        }
+        if (liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
+            throw new JeecgBootException("该直播间无需缴纳保证金");
+        }
+        //专场结束不能缴纳保证金
+        if(liveRoom.getEndTime().before(new Date())) {
+            throw new JeecgBootException("直播间已结束无法缴纳保证金");
+        }
 
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //查询用户是否已经缴纳保证金
+        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsDeposit::getStatus, 1);
+        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsDeposit::getRoomId, id);
+
+        if (goodsDepositService.count(queryWrapper) > 0) {
+            throw new JeecgBootException("您已经缴纳本直播间保证金");
+        }
+
+
+        GoodsDeposit goodsDeposit = new GoodsDeposit();
+        goodsDeposit.setPerformanceId(id);
+        goodsDeposit.setMemberId(loginUser.getId());
+        goodsDeposit.setMemberAvatar(loginUser.getAvatar());
+        goodsDeposit.setMemberName(StringUtils.getIfEmpty(loginUser.getPhone(), loginUser::getRealname));
+        goodsDeposit.setRoomId(liveRoom.getId());
+        goodsDeposit.setPrice(liveRoom.getDeposit());
+        goodsDeposit.setStatus(0);
+        boolean result = goodsDepositService.save(goodsDeposit);
+        if (!result) {
+            throw new JeecgBootException("支付失败");
+        }
+        PayLog payLog = getPayLog(goodsDeposit.getId());
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+        BigDecimal payAmount = BigDecimal.valueOf(liveRoom.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
+
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
+                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
+                .body("支付直播间保证金:")
+                .spbillCreateIp("127.0.0.1")
+                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
+                .detail(liveRoom.getTitle())
+                .build();
+        WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+        return Result.OK("", wxPayService.createOrder(request));
+    }
     /**
      * 缴纳专场保证金
      * @param id

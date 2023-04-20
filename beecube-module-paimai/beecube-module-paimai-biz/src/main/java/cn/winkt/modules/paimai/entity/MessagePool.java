@@ -54,6 +54,9 @@ public class MessagePool {
 	@Excel(name = "关联专场ID", width = 15)
     @ApiModelProperty(value = "关联专场ID")
 	private java.lang.String performanceId;
+
+	private String roomId;
+
 	/**消息类型0为未知、1为开始提醒、2为结束提醒*/
 	@Excel(name = "消息类型0为未知、1为开始提醒、2为结束提醒", width = 15)
     @ApiModelProperty(value = "消息类型0为未知、1为开始提醒、2为结束提醒")

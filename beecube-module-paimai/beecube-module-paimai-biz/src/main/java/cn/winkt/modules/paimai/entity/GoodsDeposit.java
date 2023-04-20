@@ -41,6 +41,9 @@ public class GoodsDeposit {
 	@Excel(name = "专场ID", width = 15)
     @ApiModelProperty(value = "专场ID")
 	private java.lang.String performanceId;
+	@Excel(name = "直播专场ID", width = 15)
+	@ApiModelProperty(value = "直播专场ID")
+	private java.lang.String roomId;
 	/**拍卖会ID*/
 	@Excel(name = "拍卖会ID", width = 15)
     @ApiModelProperty(value = "拍卖会ID")

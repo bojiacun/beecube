@@ -2,10 +2,7 @@ package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.entity.GoodsDeposit;
-import cn.winkt.modules.paimai.entity.GoodsOffer;
-import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.AuctionDelayedMessage;
@@ -55,6 +52,9 @@ public class AuctionGoodsService {
     @Resource
     ImClientService imClientService;
 
+    @Resource
+    ILiveRoomService liveRoomService;
+
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -73,6 +73,10 @@ public class AuctionGoodsService {
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             performance = performanceService.getById(goods.getPerformanceId());
         }
+        LiveRoom liveRoom = null;
+        if(StringUtils.isNotEmpty(goods.getRoomId())) {
+            liveRoom = liveRoomService.getById(goods.getRoomId());
+        }
         if (performance != null) {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
@@ -81,7 +85,17 @@ public class AuctionGoodsService {
             if (goodsDepositService.count(queryWrapper) == 0) {
                 return Result.error("未缴纳专场保证金");
             }
-        } else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
+        }
+        else if(liveRoom != null) {
+            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(GoodsDeposit::getRoomId, liveRoom.getId());
+            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            queryWrapper.eq(GoodsDeposit::getStatus, 1);
+            if (goodsDepositService.count(queryWrapper) == 0) {
+                return Result.error("未缴纳专场保证金");
+            }
+        }
+        else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
@@ -119,7 +133,15 @@ public class AuctionGoodsService {
                     throw new JeecgBootException("该拍品已结束拍卖");
                 }
             }
-        } else if (nowDate.compareTo(actualEndTime) >= 0 || goods.getState() > 1) {
+        }
+        else if(liveRoom != null) {
+            if (goods.getState() == 0) {
+                throw new JeecgBootException("该拍品尚未开始");
+            } else if (goods.getState() == 2) {
+                throw new JeecgBootException("该拍品已结束拍卖");
+            }
+        }
+        else if (nowDate.compareTo(actualEndTime) >= 0 || goods.getState() > 1) {
             throw new JeecgBootException("该拍品已结束拍卖");
         } else if (nowDate.compareTo(goods.getStartTime()) < 0) {
             throw new JeecgBootException("该拍品尚未开始");
@@ -142,6 +164,7 @@ public class AuctionGoodsService {
             GoodsOffer goodsOffer = new GoodsOffer();
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPerformanceId(goods.getPerformanceId());
+            goodsOffer.setRoomId(goods.getRoomId());
             goodsOffer.setAuctionId(auctionId);
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(memberVO.getId());
