@@ -30,6 +30,7 @@ export default class Index extends Component<any, any> {
         merchandises: [],
         pushIndex: -1,
         merBot: 0,
+        newBot: 0,
     }
 
     options: any;
@@ -57,14 +58,20 @@ export default class Index extends Component<any, any> {
         const {userInfo} = this.props.context;
         const {message} = this.props;
         const goodsList = this.state.merchandises;
+        const pushIndex = this.state.pushIndex;
+
         if (!this.liveRoom && userInfo) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
             this.liveRoom.init();
-            this.setState({merBot: this.liveRoom.getData().meBot});
+            this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
         }
         else if(this.liveRoom && message && message.id != prevProps.message.id){
             this.liveRoom.onMessageReceived(message);
+        }
+        if(pushIndex != prevState.pushIndex) {
+            let addBot = (pushIndex > - 1 ? 130:0)
+            this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
         }
         if (!goodsList || !message) return;
         switch (message.type) {
@@ -197,19 +204,21 @@ export default class Index extends Component<any, any> {
         let currentIndex = -1;
         goodsList.forEach((item:any, index:number)=>{
             let startTime,endTime, nowTime;
-            if(item.startTime) {
-                startTime = moment(item.startTime);
-            }
-            if(item.endTime) {
-                endTime = moment(item.endTime);
-            }
             nowTime = moment(new Date());
-            if(nowTime.isAfter(endTime)) {
-                item.state = 2;
+            if(item.performanceType == 1) {
+                //限时拍专场
+                startTime = moment(item.startTime);
+                endTime = moment(item.endTime);
+                if(nowTime.isAfter(endTime)) {
+                    item.state = 2;
+                }
+                else if(nowTime.isAfter(startTime)) {
+                    currentIndex = index;
+                    item.state = 1;
+                }
             }
-            else if(item.state == 1 || nowTime.isAfter(startTime)) {
+            else if(item.state == 1){
                 currentIndex = index;
-                item.state = 1;
             }
         });
         return {merchandises: goodsList, pushIndex: currentIndex};
@@ -263,7 +272,7 @@ export default class Index extends Component<any, any> {
                                     </View>
                                     <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
                                 </View>
-                                <ScrollView className="merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
+                                <ScrollView className="p-4 mt-4 grid grid-cols-1 gap-4 merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
                                     {merchandises.map((item) => {
                                         return (
                                             <Navigator url={'/pages/goods/detail?id=' + item.id}
