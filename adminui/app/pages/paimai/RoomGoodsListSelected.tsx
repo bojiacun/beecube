@@ -12,6 +12,7 @@ import OfferList from "~/pages/paimai/OfferList";
 import DepositList from "~/pages/paimai/DepositList";
 import ViewList from "~/pages/paimai/ViewList";
 import FollowList from "~/pages/paimai/FollowList";
+import RoomGoodsEditor from "~/pages/paimai/RoomGoodsEditor";
 
 
 const RoomGoodsListSelected = (props: any) => {
@@ -338,7 +339,7 @@ const RoomGoodsListSelected = (props: any) => {
                     </div>
                 </Modal.Body>
             </Modal>
-            {editModal && <SyncGoodsEditor model={editModal} selectedRoom={selectedRoom} onHide={()=>{
+            {editModal && <RoomGoodsEditor model={editModal} selectedRoom={selectedRoom} onHide={()=>{
                 setEditModal(null);
                 searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
             }} />}
