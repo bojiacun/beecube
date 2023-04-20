@@ -40,6 +40,9 @@ public class LiveRoom {
 	@Excel(name = "直播间名称", width = 15)
     @ApiModelProperty(value = "直播间名称")
 	private java.lang.String title;
+	@Excel(name = "固定保证金", width = 15)
+	@ApiModelProperty(value = "固定保证金")
+	private java.lang.Float deposit;
 	/**直播间预览图*/
 	@Excel(name = "直播间预览图", width = 15)
     @ApiModelProperty(value = "直播间预览图")
@@ -72,10 +75,6 @@ public class LiveRoom {
 	private java.lang.String appId;
 
 	private String notice;
-
-	private String performanceId;
-	private String performanceName;
-
 	private String mainAnchor;
 	private String mainAnchorAvatar;
 	private String mainAnchorName;

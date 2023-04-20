@@ -114,22 +114,6 @@ public class WxAppPerformanceController {
         return Result.OK(performanceService.getDetail(id));
     }
 
-    @GetMapping("/room")
-    public Result<LiveRoom> liveRoom(@RequestParam String id) {
-        LambdaQueryWrapper<LiveRoom> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(LiveRoom::getPerformanceId, id);
-        List<LiveRoom> liveRooms = liveRoomService.list(queryWrapper);
-        return Result.OK("获取成功", liveRooms.size() > 0 ? liveRooms.get(0) : null);
-    }
-
-    @GetMapping("/goodslist")
-    public Result<List<GoodsVO>> merchandises(@RequestParam String id) {
-        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("g.performance_id", id);
-        queryWrapper.orderByAsc("g.sort_num");
-        List<GoodsVO> goodsVOS = goodsService.selectListVO(queryWrapper);
-        return Result.OK(goodsVOS);
-    }
 
     /**
      * 获取该场下所有拍品

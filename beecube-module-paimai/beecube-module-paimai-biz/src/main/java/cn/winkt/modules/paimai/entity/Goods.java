@@ -45,7 +45,7 @@ public class Goods {
 	private java.lang.String subTitle;
 	/**拍品类型（1普通拍品、2一口价）*/
 	@Excel(name = "拍品类型（1普通拍品、2一口价、3同步拍品）", width = 15)
-    @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价、3同步拍品）")
+    @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;
 	private Integer sortNum;
@@ -144,6 +144,8 @@ public class Goods {
     @ApiModelProperty(value = "状态（0下架1上架）")
 	@Dict(dicCode = "paimai_goods_status")
 	private java.lang.Integer status;
+
+	private String roomId;
 
 	/**
 	 * 拍品控制状态，0为未开始、1为已经开始、2为已结束、3为已成交、4为已流拍

@@ -1,14 +1,14 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
+import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.entity.LiveRoomStream;
-import cn.winkt.modules.paimai.service.IGoodsCommonDescService;
-import cn.winkt.modules.paimai.service.ILiveRoomService;
-import cn.winkt.modules.paimai.service.ILiveRoomStreamService;
-import cn.winkt.modules.paimai.service.ZeGoService;
+import cn.winkt.modules.paimai.service.*;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.ZegoSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.vo.LoginUser;
@@ -30,6 +30,9 @@ public class WxAppLiveController {
     @Resource
     ILiveRoomStreamService liveRoomStreamService;
 
+    @Resource
+    IGoodsService goodsService;
+
     @GetMapping("/rooms/{id}")
     public Result<LiveRoom> liveRoom(@PathVariable String id) {
         LiveRoom room = liveRoomService.getById(id);
@@ -39,6 +42,16 @@ public class WxAppLiveController {
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
         return Result.OK("获取成功", room);
     }
+    @GetMapping("/room/goods")
+    public Result<List<GoodsVO>> roomGoodsList(@RequestParam String roomId) {
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("g.room_id", roomId);
+        queryWrapper.eq("g.status", 1);
+        queryWrapper.orderByAsc("g.sortNum");
+        return Result.OK(goodsService.selectListVO(queryWrapper));
+    }
+
+
     @GetMapping("/rooms")
     public Result<LiveRoom> memberLiveRoom(@RequestParam String memberId) {
         LambdaQueryWrapper<LiveRoom> liveRoomLambdaQueryWrapper = new LambdaQueryWrapper<>();

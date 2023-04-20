@@ -12,13 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.AppTencentConfigItemVO;
+import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.LiveRoomStream;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.ILiveRoomStreamService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.util.TencentLiveTool;
 import cn.winkt.modules.paimai.vo.AppConfigItemVO;
 import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.map.CompositeMap;
@@ -70,7 +73,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	private AppApi appApi;
 
 	@Resource
-	private IPerformanceService performanceService;
+	private IGoodsService goodsService;
 
 	@Resource
 	private ILiveRoomStreamService liveRoomStreamService;
@@ -129,13 +132,6 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			}
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
-		}
-		if(StringUtils.isNotEmpty(liveRoom.getPerformanceId())) {
-			Performance performance = performanceService.getById(liveRoom.getPerformanceId());
-			if(performance == null) {
-				throw new JeecgBootException("找不到专场");
-			}
-			liveRoom.setPerformanceName(performance.getTitle());
 		}
         liveRoomService.save(liveRoom);
         List<AppTencentConfigItemVO> configItemVOS = appApi.tencentConfigs();
@@ -229,17 +225,17 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
 		}
-		if(StringUtils.isNotEmpty(liveRoom.getPerformanceId())) {
-			Performance performance = performanceService.getById(liveRoom.getPerformanceId());
-			if(performance == null) {
-				throw new JeecgBootException("找不到专场");
-			}
-			liveRoom.setPerformanceName(performance.getTitle());
-		}
 		liveRoomService.updateById(liveRoom);
 		return Result.OK("编辑成功!");
 	}
-	
+
+	 @GetMapping("/goods")
+	 public Result<List<GoodsVO>> roomGoodsList(@RequestParam String roomId) {
+		 QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+		 queryWrapper.eq("g.room_id", roomId);
+		 queryWrapper.orderByAsc("g.sortNum");
+		 return Result.OK(goodsService.selectListVO(queryWrapper));
+	 }
 	/**
 	 * 通过id删除
 	 *

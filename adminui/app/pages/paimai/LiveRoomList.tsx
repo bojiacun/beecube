@@ -20,6 +20,7 @@ import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 import {User} from "react-feather";
 import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
+import RoomGoodsListSelected from "~/pages/paimai/RoomGoodsListSelected";
 
 
 
@@ -30,6 +31,7 @@ const LiveRoomList = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [showRoom, setShowRoom] = useState<any>();
+    const [selectedRoom, setSelectedRoom] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -78,6 +80,10 @@ const LiveRoomList = (props: any) => {
                 //编辑
                 setShowRoom(row);
                 break;
+            case 'show-goods':
+                //编辑
+                setSelectedRoom(row);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -111,6 +117,7 @@ const LiveRoomList = (props: any) => {
             text: '直播间名称',
             dataField: 'title',
         },
+
         {
             text: '预览图',
             dataField: '',
@@ -121,6 +128,14 @@ const LiveRoomList = (props: any) => {
             }
         },
         {
+            text: '保证金',
+            dataField: 'deposit',
+        },
+        {
+            text: '标签',
+            dataField: 'tags',
+        },
+        {
             text: '开始时间',
             dataField: 'startTime',
         },
@@ -129,16 +144,8 @@ const LiveRoomList = (props: any) => {
             dataField: 'endTime',
         },
         {
-            text: '关联的专场',
-            dataField: 'performanceName',
-        },
-        {
             text: '围观人次',
             dataField: 'views',
-        },
-        {
-            text: '点赞数',
-            dataField: 'stars',
         },
         {
             text: '显示状态',
@@ -156,11 +163,13 @@ const LiveRoomList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 200},
+            headerStyle: {width: 270},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-stream')}>视频流</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'show-goods')}>直播拍品</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -249,7 +258,18 @@ const LiveRoomList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }} />}
-
+            {selectedRoom &&
+                <RoomGoodsListSelected
+                    show={true}
+                    startPageLoading={startPageLoading}
+                    stopPageLoading={stopPageLoading}
+                    selectedRoom={selectedRoom}
+                    onHide={() => {
+                        loadData();
+                        setSelectedRoom(null);
+                    }}
+                />
+            }
             {showRoom && <LiveRoomStreamList refreshData={loadData} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams} onHide={()=>{
                 setShowRoom(null);
             }} />}

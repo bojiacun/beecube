@@ -105,6 +105,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                                    HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         queryWrapper.isNull("performance_id");
+        queryWrapper.isNull("room_id");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.page(page, queryWrapper);
         pageList.getRecords().forEach(goods1 -> {
@@ -169,7 +170,13 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                                       HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         String perfId = req.getParameter("perf_id");
-        queryWrapper.eq("performance_id", perfId);
+        String roomId = req.getParameter("room_id");
+        if(StringUtils.isNotEmpty(perfId)) {
+            queryWrapper.eq("performance_id", perfId);
+        }
+        else if(StringUtils.isNotEmpty(roomId)) {
+            queryWrapper.eq("room_id", roomId);
+        }
         queryWrapper.orderByAsc("sort_num");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.page(page, queryWrapper);
