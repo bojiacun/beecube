@@ -123,21 +123,12 @@ public class WxAppPerformanceController {
     }
 
     @GetMapping("/goodslist")
-    public Result<List<LiveRoomMerchandise>> merchandises(@RequestParam String id) {
+    public Result<List<GoodsVO>> merchandises(@RequestParam String id) {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("g.performance_id", id);
         queryWrapper.orderByAsc("g.sort_num");
         List<GoodsVO> goodsVOS = goodsService.selectListVO(queryWrapper);
-        List<LiveRoomMerchandise> merchandises = goodsVOS.stream().map(goodsVO -> {
-           LiveRoomMerchandise merchandise = new LiveRoomMerchandise();
-           merchandise.setImg(goodsVO.getImages().split(",")[0]);
-           merchandise.setName(goodsVO.getTitle());
-           merchandise.setPrice(goodsVO.getStartPrice().toString());
-           merchandise.setId(goodsVO.getId());
-           merchandise.setLink("/pages/goods/detail?id="+goodsVO.getId());
-           return merchandise;
-        }).collect(Collectors.toList());
-        return Result.OK(merchandises);
+        return Result.OK(goodsVOS);
     }
 
     /**

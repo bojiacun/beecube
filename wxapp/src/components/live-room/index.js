@@ -188,6 +188,12 @@ Component({
                 keepScreenOn: true
             });
         },
+        getData() {
+            return this.data;
+        },
+        setNewBot(newBot) {
+            this.setData({newBot: newBot});
+        },
         getUserInfo() {
             let userInfo = app.globalData.userInfo;
             if (userInfo) {
@@ -396,54 +402,6 @@ Component({
         },
         pushMer(indx) {
             console.log('indx', indx);
-            let self = this;
-            zg.sendReliableMessage('merchandise',
-                indx + '&' + this.data.pushMerTime,
-                function (res) {
-                    console.log('pushMer success', res);
-                    const contents = {
-                        indx,
-                        merTime: self.data.pushMerTime,
-                        merBot: self.data.mmBot + 140
-                    }
-                    self.triggerEvent('RoomEvent', {
-                        tag: 'onRecvMer',
-                        // code: 0,
-                        content: contents
-                    });
-                    console.log(!!merT);
-                    if (merT) {
-                        clearTimeout(merT);
-                        merT = null;
-                    } else {
-                        self.data.meBot += 120;
-                        self.data.newBot += 120;
-                        self.setData({
-                            meBot: self.data.meBot,
-                            newBot: self.data.newBot
-                        });
-                    }
-
-                    merT = setTimeout(() => {
-                        self.data.meBot -= 120;
-                        self.data.newBot -= 120;
-                        self.setData({
-                            meBot: self.data.meBot,
-                            newBot: self.data.newBot
-                        })
-                        clearTimeout(merT);
-                        merT = null;
-                    }, self.data.pushMerTime * 1000);
-                    const content = {}
-                    self.triggerEvent('RoomEvent', {
-                        tag: 'onPushMerSuc',
-                        // code: 0,
-                        content
-                    })
-                },
-                function (err) {
-                    console.error('pushMer error', err)
-                })
         },
         back() {
             const content = {}
