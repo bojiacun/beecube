@@ -245,13 +245,19 @@ Component({
                 content: {price: this.data.nextPrice}
             })
         },
-
-        showOffer: function(goods) {
+        payDeposit: function() {
+            this.triggerEvent('RoomEvent', {
+                tag: 'payDeposit',
+                content: {}
+            })
+        },
+        showOffer: function(goods, deposited) {
             this.setData({
                 inputBottom: this.data.mmBot,
                 offerShow: true,
                 inputShow: false,
                 preInputShow: false,
+                deposited: deposited
             });
             this.getNextPrice(goods);
         },

@@ -288,10 +288,21 @@
     border: none;
     border-radius: 19998rpx;
     display: inline-block;
-    padding-top: 10rpx;
-    padding-bottom: 10rpx;
-    padding-left: 42rpx;
-    padding-right: 42rpx;
+    padding-top: 0rpx;
+    padding-bottom: 0rpx;
+    padding-left: 80rpx;
+    padding-right: 80rpx;
+}
+.btn.btn-primary {
+    background-image: -o-linear-gradient(left, var(--tw-gradient-stops));
+    background-image: -webkit-gradient(linear, left top, right top, from(var(--tw-gradient-stops)));
+    background-image: -webkit-linear-gradient(left, var(--tw-gradient-stops));
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+    --tw-gradient-from: rgba(248, 113, 113, var(--tw-from-opacity, 1));
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+    --tw-gradient-to: rgba(220, 38, 38, var(--tw-to-opacity, 1));
+    --tw-text-opacity: 1;
+    color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 
 .btn.btn-danger {

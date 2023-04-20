@@ -21,6 +21,8 @@ import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 import {User} from "react-feather";
 import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
 import RoomGoodsListSelected from "~/pages/paimai/RoomGoodsListSelected";
+import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
+import LiveRoomDepositList from "~/pages/paimai/LiveRoomDepositList";
 
 
 
@@ -32,6 +34,7 @@ const LiveRoomList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const [showRoom, setShowRoom] = useState<any>();
     const [selectedRoom, setSelectedRoom] = useState<any>();
+    const [selectedDepositRow, setSelectedDepositRow] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -83,6 +86,9 @@ const LiveRoomList = (props: any) => {
             case 'show-goods':
                 //编辑
                 setSelectedRoom(row);
+                break;
+            case 'deposits':
+                setSelectedDepositRow(row);
                 break;
             case 'edit':
                 //编辑
@@ -163,13 +169,15 @@ const LiveRoomList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 270},
+            headerStyle: {width: 300},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-stream')}>视频流</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-goods')}>直播拍品</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -270,6 +278,10 @@ const LiveRoomList = (props: any) => {
                     }}
                 />
             }
+            {selectedDepositRow && <LiveRoomDepositList show={true} onHide={()=>{
+                setSelectedDepositRow(null)
+            }}  selectedRow={selectedDepositRow} />}
+
             {showRoom && <LiveRoomStreamList refreshData={loadData} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams} onHide={()=>{
                 setShowRoom(null);
             }} />}

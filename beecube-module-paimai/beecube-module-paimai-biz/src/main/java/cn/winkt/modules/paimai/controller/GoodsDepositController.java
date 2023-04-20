@@ -93,6 +93,9 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
         if(StringUtils.isNotEmpty(goodsDeposit.getPerformanceId())) {
             queryWrapper.eq("gd.performance_id", goodsDeposit.getPerformanceId());
         }
+        if(StringUtils.isNotEmpty(goodsDeposit.getRoomId())) {
+            queryWrapper.eq("gd.room_id", goodsDeposit.getRoomId());
+        }
         queryWrapper.orderByDesc("gd.price");
         queryWrapper.gt("gd.status", 0);
 

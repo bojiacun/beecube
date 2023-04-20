@@ -33,6 +33,7 @@ export default class Index extends Component<any, any> {
         newBot: 0,
         preOffered: false,
         offers: [],
+        deposited: undefined,
     }
 
     options: any;
@@ -61,15 +62,22 @@ export default class Index extends Component<any, any> {
         const {message} = this.props;
         const goodsList = this.state.merchandises;
         const pushIndex = this.state.pushIndex;
+        const liveRoom = this.state.liveRoom;
 
         if (!this.liveRoom && userInfo) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
             this.liveRoom.init();
             this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
+            //查询是否需要缴纳保证金
         }
         else if(this.liveRoom && message && message.id != prevProps.message.id){
             this.liveRoom.onMessageReceived(message);
+        }
+        if(liveRoom && userInfo && this.state.deposited === undefined) {
+            request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.liveRoom.id}}).then(res => {
+                this.setState({deposited: res.data.result});
+            });
         }
         if(pushIndex != prevState.pushIndex) {
             let addBot = (pushIndex > - 1 ? 130:0)
@@ -119,11 +127,34 @@ export default class Index extends Component<any, any> {
                 this.offer(content.price).then();
                 break;
             }
+            case 'payDeposit': {
+                console.log('payDeposit', content);
+                //发送HTTP请求进行出价
+                this.payDeposit();
+                break;
+            }
             default: {
                 // console.log('onRoomEvent default: ', e);
                 break;
             }
         }
+    }
+    payDeposit() {
+        this.setState({posting: true});
+        //支付宝保证金
+        request.post('/paimai/api/members/deposits/liveroom', null, {params: {id: this.state.liveRoom.id}}).then(res => {
+            let data = res.data.result;
+            data.package = data.packageValue;
+            Taro.requestPayment(data).then(() => {
+                //支付已经完成，提醒支付成功并返回上一页面
+                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+                    let liveRoom = this.state.liveRoom;
+                    liveRoom.deposited = true;
+                    this.setState({liveRoom: liveRoom, deposited: true});
+                });
+                this.setState({posting: false});
+            }).catch(() => this.setState({posting: false}));
+        })
     }
     async offer(nextPrice:number) {
         const {context, settings} = this.props;
@@ -279,9 +310,11 @@ export default class Index extends Component<any, any> {
     }
 
     showOffer(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex]);
+        if(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex], this.state.deposited || this.state.liveRoom.deposit == 0);
         return false;
     }
 

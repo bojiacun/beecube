@@ -80,10 +80,14 @@
             <!--                </view>-->
             <!--            </view>-->
         </view>
-        <view wx:if="{{offerShow}}" style="width: 100%">
-            <button class="btn btn-danger block" plain="true" bindtap="doOffer">
+        <view wx:if="{{offerShow}}" style="width: 100%;display: flex; align-items: center; justify-content: center">
+            <button wx:if="{{deposited}}" class="btn btn-danger" plain="true" bindtap="doOffer">
                 <view>出价</view>
                 <view>RMB {{nextPrice}}</view>
+            </button>
+            <button wx:else class="btn btn-primary" plain="true" bindtap="payDeposit">
+                <view>交保证金</view>
+                <view>RMB {{liveRoom.deposit}}</view>
             </button>
         </view>
         <view wx:if="{{inputShow}}" class="mmprise-con">

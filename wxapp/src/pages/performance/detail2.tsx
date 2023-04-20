@@ -34,7 +34,6 @@ export default class Index extends Component<any, any> {
         status: undefined,
         message: false,
         deposited: true,
-        liveRoom: null
     }
 
     constructor(props) {
