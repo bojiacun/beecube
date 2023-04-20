@@ -226,7 +226,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             throw new JeecgBootException("拍品已结束无法编辑");
         }
         if(old.getType() != 2) {
-            if (old.getStartTime().equals(goods.getStartTime()) || old.getEndTime().equals(goods.getEndTime())) {
+            if (old.getStartTime() != goods.getStartTime() || old.getEndTime() != goods.getEndTime()) {
                 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
                 goodsUpdateMessage.setGoodsId(goods.getId());
                 goodsUpdateMessage.setStartTime(goods.getStartTime());

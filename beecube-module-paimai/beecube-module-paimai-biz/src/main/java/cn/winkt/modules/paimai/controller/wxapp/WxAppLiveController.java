@@ -47,7 +47,7 @@ public class WxAppLiveController {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("g.room_id", roomId);
         queryWrapper.eq("g.status", 1);
-        queryWrapper.orderByAsc("g.sortNum");
+        queryWrapper.orderByAsc("g.sort_num");
         return Result.OK(goodsService.selectListVO(queryWrapper));
     }
 

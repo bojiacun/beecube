@@ -18,6 +18,9 @@ import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.ILiveRoomStreamService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.service.im.ImClientService;
+import cn.winkt.modules.paimai.service.im.UserMessageType;
+import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
 import cn.winkt.modules.paimai.util.TencentLiveTool;
 import cn.winkt.modules.paimai.vo.AppConfigItemVO;
 import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
@@ -77,7 +80,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 	@Resource
 	private ILiveRoomStreamService liveRoomStreamService;
-	
+
+	@Resource
+	private ImClientService imClientService;
 	/**
 	 * 分页列表查询
 	 *
@@ -233,9 +238,47 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	 public Result<List<GoodsVO>> roomGoodsList(@RequestParam String roomId) {
 		 QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
 		 queryWrapper.eq("g.room_id", roomId);
-		 queryWrapper.orderByAsc("g.sortNum");
+		 queryWrapper.orderByAsc("g.sort_num");
 		 return Result.OK(goodsService.selectListVO(queryWrapper));
 	 }
+
+	 /**
+	  * 直播间拍品上播操作
+	  * @return
+	  */
+	 @PutMapping("/goods/up")
+	 public Result<?> startGoods(@RequestParam String id) {
+		 Goods goods = goodsService.getById(id);
+		 LiveRoom room = liveRoomService.getById(goods.getRoomId());
+		 goods.setStartTime(new Date());
+		 goods.setState(1);
+		 goodsService.updateById(goods);
+		 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
+		 goodsUpdateMessage.setGoodsId(id);
+		 goodsUpdateMessage.setState(1);
+		 goodsUpdateMessage.setStartTime(goods.getStartTime());
+		 imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+		 return Result.OK(goods);
+	 }
+	 /**
+	  * 手动设置拍品结束时间
+	  * @return
+	  */
+	 @PutMapping("/goods/down")
+	 public Result<?> endGoods(@RequestParam String id) {
+		 Goods goods = goodsService.getById(id);
+		 goods.setEndTime(new Date());
+		 goods.setActualEndTime(goods.getEndTime());
+		 goods.setState(2);
+		 goodsService.updateById(goods);
+		 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
+		 goodsUpdateMessage.setGoodsId(id);
+		 goodsUpdateMessage.setState(2);
+		 goodsUpdateMessage.setEndTime(goods.getEndTime());
+		 imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
+		 return Result.OK(goods);
+	 }
+
 	/**
 	 * 通过id删除
 	 *

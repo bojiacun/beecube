@@ -193,7 +193,7 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
             this.setState({liveRoom: room});
-            request.get('/paimai/api/live/room/goods', {params: {id: room.performanceId}}).then(res => {
+            request.get('/paimai/api/live/room/goods', {params: {roomId: room.id}}).then(res => {
                 let goodsList = res.data.result;
                 this.setState(this.resolveGoods(goodsList));
             });
@@ -203,21 +203,7 @@ export default class Index extends Component<any, any> {
     resolveGoods(goodsList) {
         let currentIndex = -1;
         goodsList.forEach((item:any, index:number)=>{
-            let startTime,endTime, nowTime;
-            nowTime = moment(new Date());
-            if(item.performanceType == 1) {
-                //限时拍专场
-                startTime = moment(item.startTime);
-                endTime = moment(item.endTime);
-                if(nowTime.isAfter(endTime)) {
-                    item.state = 2;
-                }
-                else if(nowTime.isAfter(startTime)) {
-                    currentIndex = index;
-                    item.state = 1;
-                }
-            }
-            else if(item.state == 1){
+            if(item.state == 1){
                 currentIndex = index;
             }
         });
@@ -272,7 +258,7 @@ export default class Index extends Component<any, any> {
                                     </View>
                                     <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
                                 </View>
-                                <ScrollView className="p-4 mt-4 grid grid-cols-1 gap-4 merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
+                                <ScrollView className="merchandise-list p-4 mt-4 grid grid-cols-1 gap-4" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
                                     {merchandises.map((item) => {
                                         return (
                                             <Navigator url={'/pages/goods/detail?id=' + item.id}

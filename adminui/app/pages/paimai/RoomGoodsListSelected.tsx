@@ -108,13 +108,13 @@ const RoomGoodsListSelected = (props: any) => {
             case 'start':
                 //编辑
                 showDeleteAlert(function () {
-                    controlFetcher.submit({}, {method: 'put', action: `/paimai/performances/goods/start?id=${row.id}`, replace: true});
-                }, '确定要开始本拍品吗？', '确认开始');
+                    controlFetcher.submit({}, {method: 'put', action: `/paimai/live/goods/start?id=${row.id}`, replace: true});
+                }, '确定要上播本拍品吗？', '确认上播');
                 break;
             case 'end':
                 showDeleteAlert(function () {
-                    controlFetcher.submit({}, {method: 'put', action: `/paimai/performances/goods/end?id=${row.id}`, replace: true});
-                }, '确定要结束本拍品吗？', '确认结束');
+                    controlFetcher.submit({}, {method: 'put', action: `/paimai/live/goods/end?id=${row.id}`, replace: true});
+                }, '确定要下播本拍品吗？', '确认下播');
                 break;
             case 'delete':
                 //删除按钮
