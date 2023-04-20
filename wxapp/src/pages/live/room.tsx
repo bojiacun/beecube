@@ -212,12 +212,6 @@ export default class Index extends Component<any, any> {
                 item.state = 1;
             }
         });
-        if(currentIndex > -1) {
-            this.liveRoom?.setNewBot(this.state.merBot + 130);
-        }
-        else {
-            this.liveRoom?.setNewBot(this.state.merBot);
-        }
         return {merchandises: goodsList, pushIndex: currentIndex};
     }
 
