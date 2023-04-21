@@ -464,7 +464,19 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 默认本方法可
 	}
 
-	private void notifyRoomUsers(String roomId, String fromUserId, Object message, String excludeUserId, int messageType) {
+	/**
+	 * 用户退出房间
+	 * @param roomId
+	 * @param userId
+	 */
+	public void logoutRoom(String roomId, String userId) {
+		Set<String> users = roomUsers.get(roomId);
+		if(users != null) {
+			users.remove(userId);
+		}
+	}
+
+	public void notifyRoomUsers(String roomId, String fromUserId, Object message, String excludeUserId, int messageType) {
 		notifyRoomUsers(roomId, fromUserId, JSONObject.toJSONString(message), excludeUserId, messageType);
 	}
 	public void notifyRoomUsers(String roomId, String fromUserId, String message, String excludeUserId, int messageType) {

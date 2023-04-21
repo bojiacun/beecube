@@ -5,11 +5,13 @@ import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.entity.LiveRoomStream;
 import cn.winkt.modules.paimai.service.*;
+import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import cn.winkt.modules.paimai.vo.ZegoSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,9 @@ public class WxAppLiveController {
     @Resource
     IGoodsService goodsService;
 
+    @Resource
+    ImClientService imClientService;
+
     @GetMapping("/rooms/{id}")
     public Result<LiveRoom> liveRoom(@PathVariable String id) {
         LiveRoom room = liveRoomService.getById(id);
@@ -50,7 +55,12 @@ public class WxAppLiveController {
         queryWrapper.orderByAsc("g.sort_num");
         return Result.OK(goodsService.selectListVO(queryWrapper));
     }
-
+    @PutMapping("/room/logout")
+    public Result<Boolean> logoutRoom(@RequestBody LiveRoom liveRoom) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        imClientService.logoutRoom(liveRoom.getId(), loginUser.getId());
+        return Result.OK(true);
+    }
 
     @GetMapping("/rooms")
     public Result<LiveRoom> memberLiveRoom(@RequestParam String memberId) {

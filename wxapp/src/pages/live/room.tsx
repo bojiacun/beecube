@@ -344,6 +344,9 @@ export default class Index extends Component<any, any> {
                 currentIndex = index;
             }
         });
+        if(currentIndex == -1) {
+            this.liveRoom?.clickFull();
+        }
         return {merchandises: goodsList, pushIndex: currentIndex};
     }
 
@@ -356,12 +359,11 @@ export default class Index extends Component<any, any> {
         return false;
     }
 
-    //
-    // componentWillUnmount() {
-    //     zg.stopPublishingStream(this.streamId);
-    //     zg.release();
-    //     zg.logout();
-    // }
+
+    componentWillUnmount() {
+        //用户退出直播间
+        request.put('/paimai/api/live/room/logout', this.state.liveRoom).then();
+    }
 
     render() {
         const {
@@ -405,11 +407,11 @@ export default class Index extends Component<any, any> {
                                     </View>
                                     <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
                                 </View>
-                                <ScrollView className="merchandise-list p-4 mt-4 grid grid-cols-1 gap-4" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
+                                <ScrollView className="merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
                                     {merchandises.map((item) => {
                                         return (
                                             <Navigator url={'/pages/goods/detail?id=' + item.id}
-                                                       className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
+                                                       className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden mt-2'}>
                                                 <View className={'relative w-28 h-28'}>
                                                     <FallbackImage
                                                         mode={'aspectFill'}
@@ -418,7 +420,7 @@ export default class Index extends Component<any, any> {
                                                     />
                                                 </View>
                                                 <View className={'p-2 space-y-4 flex-1'}>
-                                                    <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
+                                                    <View className={'text-gray-600 text-cut'}>LOT{item.sortNum} {item.title}</View>
                                                     {item.state < 3 &&
                                                         <View className={'text-sm'}>
                                                             <View className={'space-x-1'}>

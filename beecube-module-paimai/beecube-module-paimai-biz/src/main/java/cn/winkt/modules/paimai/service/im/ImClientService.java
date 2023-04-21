@@ -25,6 +25,11 @@ public class ImClientService {
     @Resource
     ServerEventListenerImpl serverEventListener;
 
+
+    public void logoutRoom(String roomId, String userId) {
+        serverEventListener.logoutRoom(roomId, userId);
+    }
+
     public void sendRoomMessage(String roomId, BaseMessage message, int typeu) {
         log.debug("房间{}内发送消息：{}, 类型：{}", roomId, JSONObject.toJSONString(message), typeu);
         String appId = AppContext.getApp();
