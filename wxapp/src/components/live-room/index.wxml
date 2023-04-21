@@ -16,33 +16,94 @@
             object-fit="{{streams[0].objectFit}}"
             picture-in-picture-mode="{{pictureInPictureMode}}"
             class="play-content"
-            binderror="onPlayNetStateChange">
-
+            binderror="onPlayError"
+            bindwaiting="onWaiting"
+        >
         </video>
     </view>
     <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
         <video wx:if="{{streams[0]}}" id="layout-1-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
         <video wx:if="{{streams[1]}}" id="layout-1-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
     </view>
     <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
         <video wx:if="{{streams[0]}}" id="layout-2-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
         <video wx:if="{{streams[1]}}" id="layout-2-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
     </view>
     <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 3}}" class="layout-3">
         <video wx:if="{{streams[0]}}" id="layout-3-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
         <video wx:if="{{streams[1]}}" id="layout-3-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
-               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}; width: {{streams[1].width}}"
-               bindnetstatus="onPlayNetStateChange"></video>
+               picture-in-picture-mode="{{pictureInPictureMode}}" style="height: {{streams[1].height}}; width: {{streams[1].width}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
     </view>
 
     <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 30px">

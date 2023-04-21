@@ -283,12 +283,18 @@
     right: -7rpx;
     top: -7rpx;
 }
+video {
+    height: auto;
+}
 .layout-1 {
     display: flex;
+    width: 100%;
+    padding-top: 170px;
 }
 .layout-1 > video {
     display: block;
     flex: 1;
+    padding-top: 60%;
 }
 
 .layout-2 {
@@ -296,6 +302,7 @@
     flex-direction: column;
     padding-top: 168rpx;
     padding-bottom: 168rpx;
+    width: 100%;
 }
 .layout-2 > video {
     flex: 1;
@@ -307,6 +314,7 @@
     width: 100vw;
     height: 100vh;
     position: relative;
+    width: 100%;
 }
 .layout-3 > video:first-child {
     width: 100vw;

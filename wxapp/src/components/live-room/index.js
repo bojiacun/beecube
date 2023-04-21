@@ -511,43 +511,11 @@ Component({
                 self.cancelJoin()
             }
         },
-        endLive(e) {
-            let content = '确认结束连麦？'
-            this.setData({
-                isShowModal: true,
-                showDesc: content,
-                modalType: 'endLive',
-                confirmText: '是',
-                cancelText: '否',
-                kitoutUser: e.target.dataset.userid,
-            })
-
-        },
-        onPushStateChange(e) {
-            console.log('onPushStateChange', e);
-            console.log(
-                '>>>[liveroom-room] onPushStateChange, code: ' +
-                e.detail.code +
-                ', message:' +
-                e.detail.message
-            );
-        },
-        onPushNetStateChange(e) {
-        },
-        onPlayStateChange(e) {
-            console.log('onPlayStateChange', e);
-            console.log(
-                '>>>[liveroom-room] onPlayStateChange, code: ' +
-                e.detail.code +
-                ', message:' +
-                e.detail.message
-            );
-        },
-        onPlayNetStateChange(e) {
+        onPlayError(e) {
             console.log('play error', e);
         },
-        onPushError: function (ev) {
-            console.error(ev);
+        onWaiting(e) {
+            console.log('waiting', e);
         }
     }
 });
