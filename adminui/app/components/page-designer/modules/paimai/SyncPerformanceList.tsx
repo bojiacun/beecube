@@ -89,7 +89,7 @@ const SyncPerformanceListModule = (props: any) => {
                 setAsyncPerformanceList(res.data.records);
             });
         } else if (_data.basic.dataSource == 2) {
-            getPagedGoods(2, 2, _data.basic.count).then(res => {
+            getPagedPerformance(2, 2, _data.basic.count).then(res => {
                 setAsyncPerformanceList(res.data.records);
             });
         } else {

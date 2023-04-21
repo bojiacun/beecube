@@ -14,7 +14,7 @@ export async function getPagedTagedPerformance(tag: string,source:any, count:num
     return axios.get('/paimai/performances/diy/list', { params: {tag: tag, source: source, pageSize: count}});
 }
 export async function getPagedTagedRooms(tag: string,source:any, count:number) {
-    return axios.get('/paimai/rooms/diy/list', { params: {tag: tag, source: source, pageSize: count}});
+    return axios.get('/paimai/live/rooms/diy/list', { params: {tag: tag, source: source, pageSize: count}});
 }
 export async function getPagedAuction(source:any, count:number) {
     return axios.get('/paimai/auctions/diy/list', { params: {source: source, pageSize: count}});

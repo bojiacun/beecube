@@ -76,7 +76,7 @@ public class LiveRoom {
 
 	@Dict(dicCode = "paimai_room_stream_layout")
 	private Integer streamLayout;
-
+	private String tags;
 	private String notice;
 	private String mainAnchor;
 	private String mainAnchorAvatar;

@@ -172,6 +172,7 @@ export const API_CRONJOB_EXECUTE = `${BASE_URL}/jeecg-system/sys/quartzJob/execu
 
 export const API_PAIMAI_APIGOODS_LIST = `${BASE_URL}/paimai/api/goods/list`;
 export const API_PAIMAI_APIPERFORMANCE_LIST = `${BASE_URL}/paimai/api/performances/list`;
+export const API_PAIMAI_ROOM_LIST = `${BASE_URL}/paimai/api/live/rooms`;
 export const API_PAIMAI_APIAUCTION_LIST = `${BASE_URL}/paimai/api/auctions/list`;
 
 export const API_PAIMAI_GOODS_LIST = `${BASE_URL}/paimai/goods/list`;
