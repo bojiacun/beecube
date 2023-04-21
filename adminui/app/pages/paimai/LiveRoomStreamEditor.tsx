@@ -22,14 +22,10 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 const FormSchema = Yup.object().shape({
-    title: Yup.string().required('必填字段'),
-    startTime: Yup.string().required('必填字段'),
-    streamLayout: Yup.number().required('必填字段'),
-    endTime: Yup.string().required('必填字段'),
-    preview: Yup.string().required('必填字段'),
+    objectFit: Yup.string().required('必填字段'),
 });
 
-const LiveRoomEditor = (props: any) => {
+const LiveRoomStreamEditor = (props: any) => {
     const {model, onHide} = props;
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
@@ -37,9 +33,9 @@ const LiveRoomEditor = (props: any) => {
     const handleOnSubmit = (values: any) => {
         delete values.streams;
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/paimai/live/rooms/edit'});
+            postFetcher.submit(values, {method: 'post', action: '/paimai/live/streams/edit'});
         } else {
-            postFetcher.submit(values, {method: 'post', action: '/paimai/live/rooms/add'});
+            postFetcher.submit(values, {method: 'post', action: '/paimai/live/streams/add'});
         }
     }
 
@@ -66,7 +62,7 @@ const LiveRoomEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}直播间</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}流信息</Modal.Title>
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={newModel} validationSchema={FormSchema}
                         onSubmit={handleOnSubmit}>
@@ -74,19 +70,12 @@ const LiveRoomEditor = (props: any) => {
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-                                    <BootstrapInput label={'标题'} name={'title'}/>
-                                    <BootstrapInput label={'公告'} name={'notice'} type={'textarea'} />
-                                    <FormGroup>
-                                        <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
-                                        <FileBrowserInput name={'preview'} type={1} multi={false}/>
-                                    </FormGroup>
-                                    <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
-                                    <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
-                                    <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
-                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
-                                    <BootstrapRadioGroup options={[{label: '布局一', value: '1'}, {label: '布局二', value: '2'}, {label: '布局三', value: '3'}]} name={'streamLayout'} label={'布局方式'} />
-                                    <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
-
+                                    <BootstrapRadioGroup options={[
+                                        {label: 'contain', value: 'contain'},
+                                        {label: 'fill', value: 'fill'},
+                                        {label: 'cover', value: 'cover'},
+                                    ]} name={'objectFit'} label={'屏幕适配'}
+                                    />
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button
@@ -107,4 +96,4 @@ const LiveRoomEditor = (props: any) => {
     );
 }
 
-export default LiveRoomEditor;
+export default LiveRoomStreamEditor;

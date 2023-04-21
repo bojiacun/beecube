@@ -123,7 +123,10 @@ const LiveRoomList = (props: any) => {
             text: '直播间名称',
             dataField: 'title',
         },
-
+        {
+            text: '布局方式',
+            dataField: 'streamLayout_dictText',
+        },
         {
             text: '预览图',
             dataField: '',

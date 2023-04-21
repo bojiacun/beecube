@@ -48,6 +48,10 @@ public class LiveRoomStream {
 	@Excel(name = "流显示控制0不显示、1显示", width = 15)
     @ApiModelProperty(value = "流显示控制0不显示、1显示")
 	private java.lang.Integer status;
+
+	private String objectFit;
+
+
 	/**appId*/
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")

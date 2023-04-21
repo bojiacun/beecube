@@ -214,6 +214,8 @@ export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auction
 export const API_PAIMAI_LIVEROOM_LIST = `${BASE_URL}/paimai/rooms/list`;
 export const API_PAIMAI_LIVEROOM_ADD = `${BASE_URL}/paimai/rooms/add`;
 export const API_PAIMAI_LIVEROOM_EDIT = `${BASE_URL}/paimai/rooms/edit`;
+export const API_PAIMAI_LIVEROOM_STREAM_ADD = `${BASE_URL}/paimai/streams/add`;
+export const API_PAIMAI_LIVEROOM_STREAM_EDIT = `${BASE_URL}/paimai/streams/edit`;
 export const API_PAIMAI_LIVEROOM_DELETE = `${BASE_URL}/paimai/rooms/delete`;
 
 export const API_PAIMAI_LIVEROOM_STREAM_REPUSH = `${BASE_URL}/paimai/streams/repush`;

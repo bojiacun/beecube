@@ -19,6 +19,7 @@ import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
 import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 import {User} from "react-feather";
+import LiveRoomStreamEditor from "~/pages/paimai/LiveRoomStreamEditor";
 
 
 
@@ -26,10 +27,13 @@ import {User} from "react-feather";
 const LiveRoomStreamList = (props: any) => {
     const {startPageLoading, stopPageLoading, streams, show, onHide, refreshData} = props;
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
+    const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
-
+    const loadData = () => {
+        refreshData();
+    }
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
@@ -44,6 +48,10 @@ const LiveRoomStreamList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'edit':
+                //编辑
+                setEditModal(row);
+                break;
             case 'show':
                 showDeleteAlert(function () {
                     startPageLoading();
@@ -100,6 +108,10 @@ const LiveRoomStreamList = (props: any) => {
             }
         },
         {
+            text: '屏幕适配',
+            dataField: 'objectFit',
+        },
+        {
             text: '显示状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
@@ -121,6 +133,8 @@ const LiveRoomStreamList = (props: any) => {
                     <div className={'d-flex align-items-center'}>
                         {row.status == 0  && <a href={'#'} onClick={() => handleOnAction(row, 'show')}>恢复推流</a>}
                         {row.status == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'hide')}>停止推流</a>}
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                     </div>
                 );
             }
@@ -154,6 +168,14 @@ const LiveRoomStreamList = (props: any) => {
                                     keyField={'id'}/>
                 </Modal.Body>
             </Modal>
+
+            {editModal && <LiveRoomStreamEditor model={editModal} onHide={()=>{
+                setEditModal(null);
+                loadData();
+            }} />}
+
+
+
         </>
     );
 }

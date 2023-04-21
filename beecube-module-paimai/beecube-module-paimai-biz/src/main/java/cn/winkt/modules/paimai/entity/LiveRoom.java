@@ -74,6 +74,9 @@ public class LiveRoom {
     @ApiModelProperty(value = "appId")
 	private java.lang.String appId;
 
+	@Dict(dicCode = "paimai_room_stream_layout")
+	private Integer streamLayout;
+
 	private String notice;
 	private String mainAnchor;
 	private String mainAnchorAvatar;
