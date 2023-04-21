@@ -263,10 +263,11 @@ Component({
         },
 
         getNextPrice(goods) {
-            let upgradeConfig = goods.uprange;
+            let upgradeConfig = JSON.parse(goods.uprange);
+            console.log('重新计算拍品的下一次出价钱数', goods);
             const {settings} = this.data;
-            if (parseInt(settings.isDealCommission) == 1) {
-                if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+            if (parseInt(settings.isDealCommission) === 1) {
+                if (parseFloat(goods.commission) > 0.00 && goods.state === 3) {
                     //落槌价显示佣金
                     const commission = goods.commission/100;
                     goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
@@ -334,6 +335,7 @@ Component({
         },
         onMessageReceived(message) {
             console.log('收到了房间消息', message);
+            let uiMessage = {id: message.id};
             switch (message.type) {
                 //加入直播间消息
                 case MessageType.JOIN_ROOM:
@@ -348,13 +350,17 @@ Component({
                     },2000);
                     break;
                 case MessageType.ROOM_NOTICE:
-                    let uiMessage = {
-                        content: message.notice,
-                        name: '系统公告',
-                        color: '#FF0000',
-                        fontColor: '#10B981',
-                        id: message.id
-                    };
+                    uiMessage.color = '#FF0000';
+                    uiMessage.fontColor = '#10B981';
+                    uiMessage.name = '系统公告';
+                    uiMessage.content = message.notice;
+
+                    this.pushUiMessage(uiMessage);
+                    break;
+                case MessageType.OFFER:
+                    uiMessage.content = `出价 ${numeral(message.price).format('0,0.00')} 元`;
+                    uiMessage.name = message.userName;
+                    uiMessage.fontColor = '#FF0000';
                     this.pushUiMessage(uiMessage);
                     break;
             }

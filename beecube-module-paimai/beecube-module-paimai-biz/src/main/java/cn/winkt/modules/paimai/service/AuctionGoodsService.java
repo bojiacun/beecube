@@ -77,7 +77,7 @@ public class AuctionGoodsService {
         if(StringUtils.isNotEmpty(goods.getRoomId())) {
             liveRoom = liveRoomService.getById(goods.getRoomId());
         }
-        if (performance != null) {
+        if (performance != null && performance.getDeposit() != null && performance.getDeposit() > 0) {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
@@ -86,7 +86,7 @@ public class AuctionGoodsService {
                 return Result.error("未缴纳专场保证金");
             }
         }
-        else if(liveRoom != null) {
+        else if(liveRoom != null && liveRoom.getDeposit() != null && liveRoom.getDeposit() > 0) {
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(GoodsDeposit::getRoomId, liveRoom.getId());
             queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());

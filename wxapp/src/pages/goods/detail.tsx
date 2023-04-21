@@ -97,11 +97,6 @@ export default class Index extends Component<any, any> {
 
         if (goods.id == message.goodsId) {
             switch (message.type) {
-                case MessageType.GOODS_UPDATE:
-                    goods.state = message.state;
-                    goods.endTime = message.endTime;
-                    this.setState({goods: goods});
-                    break;
                 default:
                     this.onMessageReceive(message);
                     break;

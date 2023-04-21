@@ -47,7 +47,6 @@ export default class Index extends Component<any, any> {
         this.clickMech = this.clickMech.bind(this);
         this.pushMer = this.pushMer.bind(this);
         this.addShoppingCart = this.addShoppingCart.bind(this);
-        this.clickPush = this.clickPush.bind(this);
         this.fadeIn = this.fadeIn.bind(this);
         this.fadeDown = this.fadeDown.bind(this);
         this.showModal = this.showModal.bind(this);
@@ -59,10 +58,9 @@ export default class Index extends Component<any, any> {
     async componentDidUpdate(prevProps: Readonly<any>, prevState) {
         const {page} = getCurrentInstance();
         const {userInfo} = this.props.context;
-        const {message} = this.props;
+        const {message, settings} = this.props;
         const goodsList = this.state.merchandises;
         const pushIndex = this.state.pushIndex;
-        const liveRoom = this.state.liveRoom;
 
         if (!this.liveRoom && userInfo) {
             // @ts-ignore
@@ -70,34 +68,87 @@ export default class Index extends Component<any, any> {
             this.liveRoom.init();
             this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
             //查询是否需要缴纳保证金
-        }
-        else if(this.liveRoom && message && message.id != prevProps.message.id){
-            this.liveRoom.onMessageReceived(message);
-        }
-        if(liveRoom && userInfo && this.state.deposited === undefined) {
             request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.liveRoom.id}}).then(res => {
                 this.setState({deposited: res.data.result});
             });
+        }
+        else if(this.liveRoom && message && message.id != prevProps.message.id){
+            this.liveRoom.onMessageReceived(message);
         }
         if(pushIndex != prevState.pushIndex) {
             let addBot = (pushIndex > - 1 ? 130:0)
             this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
         }
         if (!goodsList || !message || message.id == prevProps.message.id) return;
+
         switch (message.type) {
             case MessageType.GOODS_UPDATE:
-                goodsList?.forEach((g:any) => {
-                    if (g.id == message.goodsId) {
-                        g.startTime = message.startTime;
-                        g.endTime = message.endTime;
-                        g.actualEndTime = message.actualEndTime;
-                        g.dealPrice = message.dealPrice;
-                        g.state = message.state;
+                goodsList?.forEach((goods:any) => {
+                    if (goods.id == message.goodsId) {
+                        goods.startTime = message.startTime;
+                        goods.endTime = message.endTime;
+                        goods.actualEndTime = message.actualEndTime;
+                        goods.state = message.state;
+                        goods.dealPrice = message.dealPrice;
+
+                        if (parseInt(settings.isDealCommission) == 1) {
+                            if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                                //落槌价显示佣金
+                                const commission = goods.commission/100;
+                                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
+                            }
+                        }
+
+                        this.setState({goods: goods});
+                        if (message.state == 3) {
+                            //成交了
+                            if (message.dealUserId == userInfo.id) {
+                                //中拍的人就是我
+                                utils.showMessage('恭喜您成功拍到此拍品，是否立即支付拍品款项?', function () {
+                                    Taro.navigateTo({url: '/pages/my/orders?status=0'}).then();
+                                }, true, () => {
+                                }, '恭喜中拍', '立即支付', '稍后支付').then();
+                            } else {
+                                utils.showMessage('很遗憾您没有中拍!').then();
+                            }
+                        } else if (message.state == 4) {
+                            utils.showMessage('很遗憾您没有中拍!').then();
+                        }
+
                     }
                 });
-                this.setState(this.resolveGoods(goodsList));
+                break;
+            case MessageType.AUCTION_DELAYED:
+                goodsList?.forEach(goods=>{
+                    if(goods.id == message.goodsId) {
+                        goods.actualEndTime = message.newTime;
+                    }
+                })
+                break;
+            case MessageType.OFFER:
+                goodsList?.forEach(goods=> {
+                    if (goods.id == message.goodsId) {
+                        goods.currentPrice = parseFloat(message.price).toFixed(2);
+                        this.liveRoom?.getNextPrice(goods);
+                        let offers = this.state.offers;
+                        if (offers.length >= 3) {
+                            offers.pop();
+                        }
+                        offers.unshift(
+                            {
+                                memberAvatar: message.fromUserAvatar,
+                                memberName: message.fromUserName,
+                                memberId: message.fromUserId,
+                                price: message.price,
+                                offerTime: message.createTime
+                            }
+                        );
+                        goods.offerCount++;
+                    }
+                });
                 break;
         }
+        this.setState(this.resolveGoods(goodsList));
     }
 
     onRoomEvent(ev) {
@@ -181,7 +232,6 @@ export default class Index extends Component<any, any> {
                 this.setState({posting: false});
                 if (res.data.success) {
                     utils.showSuccess(false, '出价成功');
-                    goods.currentPrice = this.state.nextPrice;
                     if (offers.length >= 3) {
                         offers.pop();
                     }
@@ -193,9 +243,7 @@ export default class Index extends Component<any, any> {
                         offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
                     });
                     goods.offerCount++;
-                    this.setState({offers: offers, goods: goods});
-                    this.liveRoom?.getNextPrice(goods);
-                    //出价成功加入队列
+                    this.setState({offers: offers});
                 } else {
                     utils.showError(res.data.message || '出价失败');
                 }
@@ -256,16 +304,6 @@ export default class Index extends Component<any, any> {
     addShoppingCart(e) {
         const {currentTarget: {dataset: {indx}}} = e;
         console.log('addShoppingCart ', indx);
-    }
-
-    clickPush() {
-        console.log(this.state.pushIndex);
-        const mer = this.state.merchandises.find(item => item.id == this.state.pushIndex)
-        if (!mer || !mer.link) return;
-        const link = mer.link;
-        Taro.navigateTo({
-            url: link,
-        }).then();
     }
 
     fadeIn() {
@@ -420,7 +458,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     {pushIndex >= 0 &&
-                        <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}} onClick={this.clickPush}>
+                        <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
                             <Image className="push-mer-img" mode={'aspectFit'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
                                 <Text className="push-mer-text">{merchandises[pushIndex].title}</Text>
