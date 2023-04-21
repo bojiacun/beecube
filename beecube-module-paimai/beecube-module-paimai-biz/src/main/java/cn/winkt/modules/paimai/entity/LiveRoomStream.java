@@ -51,6 +51,9 @@ public class LiveRoomStream {
 
 	private String objectFit;
 
+	private String width;
+	private String height;
+
 
 	/**appId*/
 	@Excel(name = "appId", width = 15)

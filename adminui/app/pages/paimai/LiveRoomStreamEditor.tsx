@@ -70,6 +70,10 @@ const LiveRoomStreamEditor = (props: any) => {
                         return (
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+                                    <BootstrapInput label={'流宽度'} name={'width'} placeholder={'控制视频流输出的宽度，实际宽度将由布局方式决定'} />
+                                    <BootstrapInput label={'流高度'} name={'height'} placeholder={'控制视频流输出的高度, 实际高度将由布局方式决定'} />
+
+
                                     <BootstrapRadioGroup options={[
                                         {label: 'contain', value: 'contain'},
                                         {label: 'fill', value: 'fill'},

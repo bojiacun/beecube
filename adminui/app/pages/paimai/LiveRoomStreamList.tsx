@@ -112,6 +112,14 @@ const LiveRoomStreamList = (props: any) => {
             dataField: 'objectFit',
         },
         {
+            text: '流宽度',
+            dataField: 'width',
+        },
+        {
+            text: '流高度',
+            dataField: 'height',
+        },
+        {
             text: '显示状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {

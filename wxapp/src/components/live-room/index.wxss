@@ -283,6 +283,36 @@
     right: -7rpx;
     top: -7rpx;
 }
+.layout-1 {
+    display: flex;
+}
+.layout-1 > video {
+    display: block;
+    flex: 1;
+}
+
+.layout-2 {
+    display: flex;
+    flex-direction: column;
+    padding-top: 168rpx;
+    padding-bottom: 168rpx;
+}
+.layout-2 > video {
+    flex: 1;
+    display: block;
+    width: 100%;
+}
+
+.layout-3 {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+.layout-3 > video:first-child {
+    width: 100vw;
+    height: 100vh;
+}
+
 
 .btn {
     border: none;

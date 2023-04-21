@@ -1,4 +1,4 @@
-import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
+import {FormControl, FormGroup, FormLabel, FormText} from "react-bootstrap";
 import {FC} from "react";
 import classNames from "classnames";
 import {useFormikContext} from "formik";
@@ -30,7 +30,7 @@ const BootstrapInput: FC<BootstrapInputProps> = (props) => {
                 {...formik.getFieldProps(name)}
                 {...rest}
             />
-
+            {placeholder && <FormText>{placeholder}</FormText>}
             {formik.errors[name]&&<FormControl.Feedback type={'invalid'}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
         </FormGroup>
     );

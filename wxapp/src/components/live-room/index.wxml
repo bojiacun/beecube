@@ -13,22 +13,37 @@
             enable-progress-gesture="false"
             autoplay="true"
             src="{{streams[0].playAddress}}"
-            object-fit="fill|cover"
+            object-fit="{{streams[0].objectFit}}"
             picture-in-picture-mode="{{pictureInPictureMode}}"
             class="play-content"
             binderror="onPlayNetStateChange">
 
         </video>
     </view>
-    <view wx:elif="{{streams.length == 2}}" class="grid grid-cols-2 gap-0">
-        <video wx:if="{{streams[0]}}" id="{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="fillCrop"
-               picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange"
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
+        <video wx:if="{{streams[0]}}" id="layout-1-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
                bindnetstatus="onPlayNetStateChange"></video>
-        <video wx:if="{{streams[1]}}" id="{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="fillCrop"
-               picture-in-picture-mode="{{pictureInPictureMode}}" class="play-content" bindstatechange="onPlayStateChange"
+        <video wx:if="{{streams[1]}}" id="layout-1-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}"
                bindnetstatus="onPlayNetStateChange"></video>
     </view>
-
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
+        <video wx:if="{{streams[0]}}" id="layout-2-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
+               bindnetstatus="onPlayNetStateChange"></video>
+        <video wx:if="{{streams[1]}}" id="layout-2-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}"
+               bindnetstatus="onPlayNetStateChange"></video>
+    </view>
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 3}}" class="layout-3">
+        <video wx:if="{{streams[0]}}" id="layout-3-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange" style="height: {{streams[0].height}}"
+               bindnetstatus="onPlayNetStateChange"></video>
+        <video wx:if="{{streams[1]}}" id="layout-3-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange" style="height: {{streams[1].height}}; width: {{streams[1].width}}"
+               bindnetstatus="onPlayNetStateChange"></video>
+    </view>
 
     <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 30px">
         <image class="avatar" src="{{avatarUrl}}" bindload="" binderror=""></image>
