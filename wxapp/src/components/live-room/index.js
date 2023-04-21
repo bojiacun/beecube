@@ -389,11 +389,10 @@ Component({
                 });
                 return;
             }
-            let self = this;
             const msgContent = this.data.inputMessage;
             this.setData({
                 clearHide: true,
-                inputShow: false,
+                inputShow: true,
                 keyboardHold: true,
                 inputMessage: "",
             })
