@@ -320,11 +320,6 @@ export default class Index extends Component<any, any> {
         })
     }
 
-
-    // async startPushStream() {
-    //     zg.startPublishingStream(this.streamId);
-    // }
-    //
     onLoad(options) {
         this.options = options;
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {

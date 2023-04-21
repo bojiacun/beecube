@@ -148,9 +148,7 @@ Component({
         },
         detached() {
             console.log('live-room detached');
-            if (zg) {
-                this.logoutRoom();
-            }
+            this.logoutRoom();
         }
     },
     /**
