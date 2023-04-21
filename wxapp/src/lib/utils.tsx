@@ -141,5 +141,12 @@ export default {
         }
         // html = html.replace(/ /ig, '<span style="margin-left: 8px"></span>');
         return html;
+    },
+    calcPageHeaderHeight(systemInfo:any) {
+        const barTop = systemInfo.statusBarHeight;
+        const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+        // 获取导航栏高度
+        const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
+        return barTop + barHeight;
     }
 }

@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
 import {Text, View, ScrollView} from "@tarojs/components";
 import classNames from "classnames";
-import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
+import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
 import LoadMore from "../loadmore";
 import utils from "../../lib/utils";
@@ -145,7 +145,7 @@ const ListView: FC<ListViewProps> = (props) => {
         overflowY: 'hidden', overflowX: 'auto', zIndex: 9999
     }
     if(fixed) {
-        tabStyles.top = Taro.pxTransform(systemInfo.safeArea.top + 38);
+        tabStyles.top = utils.calcPageHeaderHeight(systemInfo)
     }
 
     return (
@@ -153,12 +153,12 @@ const ListView: FC<ListViewProps> = (props) => {
             <ScrollView
                 scrollX={true}
                 scrollY={false}
-                className={classNames('bg-white px-4 py-3 flex items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden', fixed ? 'sticky':'')}
+                className={classNames('bg-white box-border whitespace-nowrap flex px-4 py-2 text-gray-700', fixed ? 'sticky':'')}
                 style={tabStyles} type={'list'}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text
-                            className={classNames(tabStyle == 1 ? '' : 'flex-1', 'text-center whitespace-nowrap', index === selectedIndex ? styles.active : '')}
+                            className={classNames(tabStyle == 1 ? '' : 'flex-1', 'text-center mr-2', index === selectedIndex ? styles.active : '')}
                             onClick={() => {
                                 setSelectedIndex(index);
                                 onTabChanged(tab, index);
