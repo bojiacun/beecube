@@ -392,7 +392,7 @@ Component({
             const msgContent = this.data.inputMessage;
             this.setData({
                 clearHide: true,
-                inputShow: true,
+                inputShow: false,
                 keyboardHold: true,
                 inputMessage: "",
             })
