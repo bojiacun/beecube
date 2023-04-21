@@ -150,30 +150,57 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <ScrollView
-                scrollX={true}
-                scrollY={false}
-                className={classNames('bg-white box-border whitespace-nowrap flex px-4 py-2 text-gray-700', fixed ? 'sticky':'')}
-                style={tabStyles} type={'list'}>
-                {tabs.map((tab, index) => {
-                    return (
-                        <Text
-                            className={classNames(tabStyle == 1 ? '' : 'flex-1', 'text-center mr-2', index === selectedIndex ? styles.active : '')}
-                            onClick={() => {
-                                setSelectedIndex(index);
-                                onTabChanged(tab, index);
-                                setPage(1);
-                                dataFetcher(1, tab, index).then(res => {
-                                    setData(res.data.result.records);
-                                    setNoMore(false);
-                                    setLoadingMore(false);
-                                });
-                            }}>
-                            {tab.label}
-                        </Text>
-                    );
-                })}
-            </ScrollView>
+            {tabStyle == 1 &&
+                <ScrollView
+                    scrollX={true}
+                    scrollY={false}
+                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700', fixed ? 'sticky' : '')}
+                    style={tabStyles} type={'list'}>
+                    {tabs.map((tab, index) => {
+                        return (
+                            <Text
+                                className={classNames('text-center mr-4', index === selectedIndex ? styles.active : '')}
+                                onClick={() => {
+                                    setSelectedIndex(index);
+                                    onTabChanged(tab, index);
+                                    setPage(1);
+                                    dataFetcher(1, tab, index).then(res => {
+                                        setData(res.data.result.records);
+                                        setNoMore(false);
+                                        setLoadingMore(false);
+                                    });
+                                }}>
+                                {tab.label}
+                            </Text>
+                        );
+                    })}
+                </ScrollView>
+            }
+            {tabStyle == 2 &&
+                <View
+                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700 w-full', fixed ? 'sticky' : '')}
+                    style={tabStyles}
+                >
+                    {tabs.map((tab, index) => {
+                        return (
+                            <Text
+                                className={classNames('text-center flex-1', index === selectedIndex ? styles.active : '')}
+                                onClick={() => {
+                                    setSelectedIndex(index);
+                                    onTabChanged(tab, index);
+                                    setPage(1);
+                                    dataFetcher(1, tab, index).then(res => {
+                                        setData(res.data.result.records);
+                                        setNoMore(false);
+                                        setLoadingMore(false);
+                                    });
+                                }}>
+                                {tab.label}
+                            </Text>
+                        );
+                    })}
+                </View>
+            }
             {data.length === 0 && <NoData style={{marginTop: 200}}/>}
             <View className={classNames('p-4 space-y-4', className)}>
                 {selectedIndex > - 1 && data.map((item) => {

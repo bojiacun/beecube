@@ -144,11 +144,11 @@ const FlowListView: FC<ListViewProps> = (props) => {
     }
     return (
         <>
-            {tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('bg-white box-border whitespace-nowrap flex px-4 py-2 text-gray-700',fixed?'sticky':'')}
+            {tabStyle == 1 && tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'')}
                   style={tabStyles}>
                 {tabs.map((tab, index) => {
                     return (
-                        <Text className={classNames(tabStyle == 1 ? '':'flex-1','text-center mr-2',index === selectedIndex ? styles.active : '')} onClick={() => {
+                        <Text className={classNames(tabStyle == 1 ? '':'flex-1','text-center mr-4',index === selectedIndex ? styles.active : '')} onClick={() => {
                             utils.showLoading();
                             onTabChanged(tab, index);
                             dataFetcher(1, tab, index).then(res => {
@@ -165,6 +165,27 @@ const FlowListView: FC<ListViewProps> = (props) => {
                     );
                 })}
             </ScrollView>}
+            {tabStyle == 2 && tabs.length > 0 && <View className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'')}
+                                                             style={tabStyles}>
+                {tabs.map((tab, index) => {
+                    return (
+                        <Text className={classNames('text-center flex-1',index === selectedIndex ? styles.active : '')} onClick={() => {
+                            utils.showLoading();
+                            onTabChanged(tab, index);
+                            dataFetcher(1, tab, index).then(res => {
+                                setData([...res.data.result.records]);
+                                setSelectedIndex(index);
+                                setPage(1);
+                                setNoMore(false);
+                                setLoadingMore(false);
+                                utils.hideLoading();
+                            });
+                        }}>
+                            {tab.label}
+                        </Text>
+                    );
+                })}
+            </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
                 <View className={classNames('p-4', stylesFlow.flowWrapper, className)}>
