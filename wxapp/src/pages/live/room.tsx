@@ -360,6 +360,23 @@ export default class Index extends Component<any, any> {
         request.put('/paimai/api/live/room/logout', this.state.liveRoom).then();
     }
 
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: this.state.liveRoom?.title,
+            query: {mid: mid, roomId: this.state.liveRoom.id},
+        }
+    }
+
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        let settings = this.props.settings;
+        return {
+            title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
+            path: '/pages/live/room?mid=' + mid + '&roomId='+this.state.liveRoom.id
+        }
+    }
+
     render() {
         const {
             liveRoom,
