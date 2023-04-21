@@ -1,7 +1,7 @@
 import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
-import {Text, View} from "@tarojs/components";
+import {Text, View, ScrollView} from "@tarojs/components";
 import classNames from "classnames";
 import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
@@ -150,9 +150,11 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            <View
+            <ScrollView
+                scrollX={true}
+                scrollY={false}
                 className={classNames('bg-white px-4 py-3 flex items-center w-full space-x-4 text-gray-700 overflow-x-auto overflow-y-hidden', fixed ? 'sticky':'')}
-                style={tabStyles}>
+                style={tabStyles} type={'list'}>
                 {tabs.map((tab, index) => {
                     return (
                         <Text
@@ -171,7 +173,7 @@ const ListView: FC<ListViewProps> = (props) => {
                         </Text>
                     );
                 })}
-            </View>
+            </ScrollView>
             {data.length === 0 && <NoData style={{marginTop: 200}}/>}
             <View className={classNames('p-4 space-y-4', className)}>
                 {selectedIndex > - 1 && data.map((item) => {

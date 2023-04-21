@@ -1,7 +1,7 @@
 import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
-import {Text, View} from "@tarojs/components";
+import {Text, View, ScrollView} from "@tarojs/components";
 import classNames from "classnames";
 import Taro, {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -144,7 +144,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
     }
     return (
         <>
-            {tabs.length > 0 && <View className={classNames('bg-white w-full px-4 py-3 flex items-center space-x-4 text-gray-700',fixed?'sticky':'')}
+            {tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('bg-white px-4 py-3 flex items-center space-x-4 text-gray-700',fixed?'sticky':'')}
                   style={tabStyles}>
                 {tabs.map((tab, index) => {
                     return (
@@ -164,7 +164,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
                         </Text>
                     );
                 })}
-            </View>}
+            </ScrollView>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
                 <View className={classNames('p-4', stylesFlow.flowWrapper, className)}>
