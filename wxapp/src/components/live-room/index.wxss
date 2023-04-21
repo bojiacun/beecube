@@ -303,6 +303,8 @@ video {
     padding-top: 168rpx;
     padding-bottom: 168rpx;
     width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
 }
 .layout-2 > video {
     flex: 1;
@@ -314,11 +316,15 @@ video {
     width: 100vw;
     height: 100vh;
     position: relative;
-    width: 100%;
 }
 .layout-3 > video:first-child {
     width: 100vw;
     height: 100vh;
+}
+.layout-3 > video:last-child {
+    position: absolute;
+    top: 140px;
+    right: 20px;
 }
 
 
