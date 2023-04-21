@@ -386,7 +386,7 @@ export default class Index extends Component<any, any> {
                         isNative={false}
                         liveRoom={liveRoom}
                         streams={liveRoom?.streams || []}
-                        isImReady={context.isImReady}
+                        isImReady={context.isImReady && liveRoom}
                         navBarHeight={barTop}
                         settings={this.props.settings}
                         onRoomEvent={this.onRoomEvent}

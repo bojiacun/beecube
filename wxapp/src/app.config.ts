@@ -43,7 +43,8 @@ export default defineAppConfig({
         'pages/my/profile/email',
         'pages/my/profile/auth',
 
-        'pages/live/room'
+        'pages/live/room',
+        'pages/live/list'
     ],
     window: {
         backgroundTextStyle: 'light',

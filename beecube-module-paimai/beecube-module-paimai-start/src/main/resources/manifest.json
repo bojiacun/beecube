@@ -54,6 +54,31 @@
       },
       "suffixOptions": "输入文章的ID"
     },
+
+    {
+      "label": "直播列表（按标签筛选）",
+      "url": "/pages/live/list",
+      "urlSuffix": {
+        "label": "标签",
+        "value": "tag"
+      },
+      "suffixOptions": "输入要搜索的标签"
+    },
+    {
+      "label": "直播列表（所有专场）",
+      "url": "/pages/live/list",
+      "tab": true
+    },
+    {
+      "label": "直播间",
+      "url": "/pages/live/room",
+      "urlSuffix": {
+        "label": "直播间ID",
+        "value": "roomId"
+      },
+      "suffixOptions": "输入直播间的ID"
+    },
+
     {
       "label": "专场列表（按标签筛选）",
       "url": "/pages/performance/public",
