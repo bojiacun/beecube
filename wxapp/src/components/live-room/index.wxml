@@ -107,9 +107,9 @@
     </view>
 
     <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 30px">
-        <image class="avatar" src="{{avatarUrl}}" bindload="" binderror=""></image>
+        <image class="avatar" src="{{liveRoom.mainAnchorAvatar}}" bindload="" binderror=""></image>
         <view class="user-text">
-            <view class="">{{stringUtil.substr(nickName, 8)}}</view>
+            <view class="">{{stringUtil.substr(liveRoom.mainAnchorName, 8)}}</view>
             <view class="user-count">{{userCount - 1}}观看</view>
         </view>
     </view>
