@@ -262,7 +262,7 @@ public class AppWxOpenController {
         //修改小程序域名
         wxOpenMaService.modifyDomain("set",
                 Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-                Collections.singletonList("wss://api.beecube.winkt.cn"),
+                Arrays.asList("wss://api.beecube.winkt.cn","wss://im.winkt.cn"),
                 Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
                 Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
         );
