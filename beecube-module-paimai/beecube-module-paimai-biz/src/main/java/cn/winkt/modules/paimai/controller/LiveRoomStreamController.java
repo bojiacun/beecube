@@ -95,6 +95,7 @@ public class LiveRoomStreamController extends JeecgController<LiveRoomStream, IL
         }
         stream.setPlaybackUrl(callbackVo.getVideoUrl());
         stream.setCallbackData(JSONObject.toJSONString(callbackVo));
+        liveRoomStreamService.updateById(stream);
         return Result.OK("success");
     }
 
