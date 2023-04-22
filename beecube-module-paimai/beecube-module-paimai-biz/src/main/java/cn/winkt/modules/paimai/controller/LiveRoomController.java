@@ -229,7 +229,14 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 		return Result.OK("添加成功！");
 	}
-	
+
+	@PutMapping("/end")
+	public Result<?> endNow(@RequestParam String id) {
+		LiveRoom liveRoom = liveRoomService.getById(id);
+		liveRoom.setEndTime(new Date());
+		liveRoomService.updateById(liveRoom);
+		return Result.OK(true);
+	}
 	/**
 	 * 编辑
 	 *
