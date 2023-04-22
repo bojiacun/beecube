@@ -110,7 +110,7 @@
         <image class="avatar" src="{{liveRoom.mainAnchorAvatar}}" bindload="" binderror=""></image>
         <view class="user-text">
             <view class="">{{stringUtil.substr(liveRoom.mainAnchorName, 8)}}</view>
-            <view class="user-count">{{userCount - 1}}观看</view>
+            <view class="user-count">{{userCount}}观看</view>
         </view>
     </view>
     <view class="new-msg">
