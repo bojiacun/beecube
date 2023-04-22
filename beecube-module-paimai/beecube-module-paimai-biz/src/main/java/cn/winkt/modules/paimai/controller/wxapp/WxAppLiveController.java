@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/live")
+@Slf4j
 public class WxAppLiveController {
 
     @Resource
@@ -44,13 +46,11 @@ public class WxAppLiveController {
     @GetMapping("/rooms/{id}")
     public Result<LiveRoom> liveRoom(@PathVariable String id) {
         LiveRoom room = liveRoomService.getById(id);
+        liveRoomService.updateRoomViews(id);
         LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
         streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
         streamLambdaQueryWrapper.eq(LiveRoomStream::getStatus, 1);
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
-        //观看人次加1
-        room.setViews(room.getViews() == null ? 1: (room.getViews()+1));
-        liveRoomService.updateById(room);
         return Result.OK("获取成功", room);
     }
     @GetMapping("/room/goods")

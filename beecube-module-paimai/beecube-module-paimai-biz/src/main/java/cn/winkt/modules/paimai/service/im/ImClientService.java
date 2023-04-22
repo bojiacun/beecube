@@ -46,16 +46,14 @@ public class ImClientService {
     public void sendRoomMessage(String roomId, BaseMessage message, int typeu) {
         log.debug("房间{}内发送消息：{}, 类型：{}", roomId, JSONObject.toJSONString(message), typeu);
         String appId = AppContext.getApp();
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         message.setAppId(appId);
-        serverEventListener.notifyRoomUsers(roomId, loginUser.getId(), JSONObject.toJSONString(message), null, typeu);
+        serverEventListener.notifyRoomUsers(roomId, "0", JSONObject.toJSONString(message), null, typeu);
     }
 
     public void sendAppMessage(BaseMessage message, int typeu) {
         log.debug("发送给所有当前应用客户信息：{}, 类型：{}", JSONObject.toJSONString(message), typeu);
         String appId = AppContext.getApp();
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         message.setAppId(appId);
-        serverEventListener.notifyAppUsers(appId, loginUser.getId(), JSONObject.toJSONString(message), null, typeu);
+        serverEventListener.notifyAppUsers(appId, "0", JSONObject.toJSONString(message), null, typeu);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import javax.annotation.Resource;
+
 /**
  * @Description: 直播间表
  * @Author: jeecg-boot
@@ -16,4 +18,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> implements ILiveRoomService {
 
+    @Resource
+    LiveRoomMapper liveRoomMapper;
+    @Override
+    public void updateRoomViews(String id) {
+        liveRoomMapper.updateRoomViews(id);
+    }
 }

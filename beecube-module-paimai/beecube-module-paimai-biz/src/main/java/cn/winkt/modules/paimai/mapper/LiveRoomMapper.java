@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface LiveRoomMapper extends BaseMapper<LiveRoom> {
-
+    void updateRoomViews(@Param("id") String id);
 }
