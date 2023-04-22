@@ -1,0 +1,27 @@
+import {ActionFunction} from "@remix-run/node";
+import {requireAuthenticated} from "~/utils/auth.server";
+import {
+    API_PAIMAI_LIVEROOM_EDIT,
+    API_PAIMAI_LIVEROOM_KICKOUT,
+    API_PAIMAI_LIVEROOM_MUTE,
+    postFormInit,
+    putFormInit,
+    requestWithToken
+} from "~/utils/request.server";
+import {DefaultListSearchParams, formData2Json} from "~/utils/utils";
+import _ from "lodash";
+import querystring from "querystring";
+
+export const action: ActionFunction = async ({request}) => {
+    await requireAuthenticated(request);
+    const url = new URL(request.url);
+    let queryString = '';
+    if (_.isEmpty(url.search)) {
+        queryString = '?' + querystring.stringify(DefaultListSearchParams);
+    }
+    else {
+        queryString = '?' + url.searchParams.toString();
+    }
+    const formData = await request.formData();
+    return await requestWithToken(request)(API_PAIMAI_LIVEROOM_KICKOUT+queryString, putFormInit(formData2Json(formData)))
+}

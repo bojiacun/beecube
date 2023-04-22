@@ -23,6 +23,7 @@ import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
 import RoomGoodsListSelected from "~/pages/paimai/RoomGoodsListSelected";
 import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
 import LiveRoomDepositList from "~/pages/paimai/LiveRoomDepositList";
+import LiveRoomOnLineList from "~/pages/paimai/LiveRoomOnLineList";
 
 
 
@@ -33,6 +34,7 @@ const LiveRoomList = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
     const [showRoom, setShowRoom] = useState<any>();
+    const [showOnline, setShowOnline] = useState<any>();
     const [selectedRoom, setSelectedRoom] = useState<any>();
     const [selectedDepositRow, setSelectedDepositRow] = useState<any>();
     const searchFetcher = useFetcher();
@@ -82,6 +84,10 @@ const LiveRoomList = (props: any) => {
             case 'show-stream':
                 //编辑
                 setShowRoom(row);
+                break;
+            case 'show-onlines':
+                //编辑
+                setShowOnline(row);
                 break;
             case 'show-goods':
                 //编辑
@@ -172,13 +178,15 @@ const LiveRoomList = (props: any) => {
         {
             text: '操作',
             dataField: 'operation',
-            headerStyle: {width: 300},
+            headerStyle: {width: 340},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-stream')}>视频流</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-goods')}>直播拍品</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'show-onlines')}>在线用户</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
                         <span className={'divider'}/>
@@ -287,6 +295,9 @@ const LiveRoomList = (props: any) => {
 
             {showRoom && <LiveRoomStreamList refreshData={loadData} startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} streams={showRoom.streams} onHide={()=>{
                 setShowRoom(null);
+            }} />}
+            {showOnline && <LiveRoomOnLineList liveRoom={showOnline}  startPageLoading={startPageLoading} stopPageLoading={stopPageLoading} show={true} onHide={()=>{
+                setShowOnline(null);
             }} />}
         </>
     );

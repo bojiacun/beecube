@@ -362,6 +362,11 @@ Component({
                     this.pushUiMessage(uiMessage);
                     break;
                 case MessageType.SHUTUP:
+                    wx.showToast({
+                        title: "您已被禁言",
+                        icon: 'none',
+                        duration: 2000
+                    });
                     //被禁言了
                     this.setData({muted: true});
                     break;
