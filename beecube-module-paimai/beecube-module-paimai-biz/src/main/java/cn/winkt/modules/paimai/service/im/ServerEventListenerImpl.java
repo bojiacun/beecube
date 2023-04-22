@@ -323,8 +323,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 				}
 				log.debug("用户 {} 加入房间 {} 成功", from_user_id, roomId);
 				//向用户发送房间公告,并更新房间信息
-				liveRoom.setViews(roomUsers.get(roomId).size());
-				liveRoomService.updateById(liveRoom);
+//				liveRoom.setViews(roomUsers.get(roomId).size());
+//				liveRoomService.updateById(liveRoom);
 				String notice = liveRoom.getNotice();
 				if(StringUtils.isNotBlank(notice)) {
 					LiveRoomNoticeMessage liveRoomNoticeMessage = new LiveRoomNoticeMessage();
