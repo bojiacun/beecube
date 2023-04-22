@@ -20,6 +20,7 @@ public class AppDTO {
     private String authStatus;
 
     private String moduleName;
+    private Integer maxRoomUserCount;
 
     private java.lang.String logo;
 
