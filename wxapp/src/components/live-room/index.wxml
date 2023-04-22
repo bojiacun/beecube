@@ -106,7 +106,7 @@
         ></video>
     </view>
 
-    <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 30px">
+    <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 35px">
         <image class="avatar" src="{{liveRoom.mainAnchorAvatar}}" bindload="" binderror=""></image>
         <view class="user-text">
             <view class="">{{stringUtil.substr(liveRoom.mainAnchorName, 8)}}</view>

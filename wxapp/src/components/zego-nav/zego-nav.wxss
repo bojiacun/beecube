@@ -12,14 +12,14 @@
 }
 
 .narrow-left {
-    width: 20rpx;
-    height: 20rpx;
+    width: 28rpx;
+    height: 28rpx;
     border-left: 2px solid white;
     border-bottom: 2px solid white;
     transform: rotate(45deg);
     position: fixed;
     /* top: 5vh; */
-    left: 4vw;
+    left: 5vw;
 
 }
 .narrow-left-native{

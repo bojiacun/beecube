@@ -25,11 +25,12 @@ Component({
      */
     methods: {
         back() {
-            console.log('back');
             if(getCurrentPages().length>1){
+                console.log('back', getCurrentPages());
                 wx.navigateBack();
             }else{
-                wx.redirectTo({
+                console.log('back to home', getCurrentPages());
+                wx.reLaunch({
                     url:'/pages/index/index'
                 });
             }
