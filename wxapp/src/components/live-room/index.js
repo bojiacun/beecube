@@ -365,7 +365,7 @@ Component({
                     if(message.isme) {
                         return;
                     }
-                    uiMessage.content = message.message;
+                    uiMessage.content = message.content;
                     uiMessage.name = message.userName;
                     this.pushUiMessage(uiMessage);
                     break;
@@ -444,17 +444,24 @@ Component({
 
             // 聊天消息接收者
             let receiver = '0';
+            let sendMessage = {
+                content: msgContent,
+                userName: this.data.userInfo.nickname,
+                roomId: this.data.liveRoom.id,
+                appId: this.data.appId,
+                id:message.id,
+            };
 
             // 网络连接正常的情况下才允许发送消息哦
-            if (receiver && message && wx.IMSDK.isOnline()) {
+            if (receiver && sendMessage && wx.IMSDK.isOnline()) {
                 // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
-                let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(message), wx.IMSDK.getLoginInfo().loginUserId, receiver, MessageType.SPEAK);
+                let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(sendMessage), wx.IMSDK.getLoginInfo().loginUserId, receiver, MessageType.SPEAK);
                 // 将消息通过websocket发送出去
                 wx.IMSDK.sendData(p);
             } else {
                 if (!receiver) {
                     wx.MBUtils.alert('消息接收者是空的！');
-                } else if (!message) {
+                } else if (!sendMessage) {
                     wx.MBUtils.alert('要发送的内容是空的！');
                 } else if (!wx.IMSDK.isOnline()) {
                     wx.MBUtils.alert('online==false, 当前已离线，无法发送消息！');
