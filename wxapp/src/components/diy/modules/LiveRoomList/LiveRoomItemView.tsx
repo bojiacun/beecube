@@ -1,9 +1,10 @@
-import {Navigator, View, Text} from "@tarojs/components";
+import {View, Text} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../../FallbackImage";
 import {FC} from "react";
 import utils from "../../../../lib/utils";
 import TimeCountDowner from "../../../TimeCountDowner";
+import moment from "moment";
 
 
 export interface LiveRoomItemViewProps extends Partial<any> {
@@ -15,10 +16,27 @@ const LiveRoomItemView: FC<LiveRoomItemViewProps> = (props) => {
     const {radius = 0, item} = props;
     const tags = item.tags?.split(',') || [];
 
+    const openLiveRoom = (liveRoom:any) => {
+        let nowTime = moment(new Date());
+        let startTime = moment(liveRoom.startTime);
+        let endTime = moment(liveRoom.endTime);
+        if(startTime.isAfter(nowTime)) {
+            //直播尚未开始
+            return utils.showError('直播尚未开始');
+        }
+        else if(startTime.isBefore(nowTime) && endTime.isAfter(nowTime)) {
+            //直播进行中
+            Taro.navigateTo({url: '/pages/live/room?roomId=' + liveRoom.id}).then();
+        }
+        else if(endTime.isAfter(nowTime)) {
+            //直播回放
+            Taro.navigateTo({url: `/pages/live/history?id=${liveRoom.id}`}).then();
+        }
+    }
 
     return (
         <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-            <Navigator url={'/pages/live/room?roomId=' + item.id}>
+            <View onClick={()=>openLiveRoom(item)}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                     <View className={'flex justify-between items-center py-1 text-sm text-gray-200 absolute bottom-0 w-full bg-black bg-opacity-60 overflow-hidden'}>
@@ -40,7 +58,7 @@ const LiveRoomItemView: FC<LiveRoomItemViewProps> = (props) => {
                     <View className={'text-gray-400'}>直播时间：{item.startTime} 开始</View>
                 </View>
 
-            </Navigator>
+            </View>
         </View>
     );
 }
