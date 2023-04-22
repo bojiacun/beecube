@@ -29,6 +29,9 @@ public interface AppApi {
     @GetMapping("/app/admin/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
 
+    @GetMapping("/app/admin/getAppById")
+    AppVO getAppById(@RequestParam String id);
+
     @GetMapping("/app/admin/all")
     List<AppVO> allApps();
 

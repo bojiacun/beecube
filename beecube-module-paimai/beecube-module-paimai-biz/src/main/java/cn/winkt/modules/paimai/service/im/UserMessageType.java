@@ -13,6 +13,7 @@ public interface UserMessageType {
     int GOODS_UPDATE = 7;
     int PERFORMANCE_UPDATE = 8;
 
+    int KICKOUT_ROOM = 97;
     int ROOM_STREAM_CHANGED = 98;
     int ROOM_NOTICE = 99;
     int SHUTUP = 100;

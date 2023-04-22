@@ -84,6 +84,11 @@ public class AppApiController {
     public AppMember queryAppMember(@RequestParam("id") String id) {
         return appMemberService.getById(id);
     }
+
+    @GetMapping("/getAppById")
+    public App getAppById(@RequestParam String id) {
+        return appService.getById(id);
+    }
     @GetMapping("/settings")
     public List<AppSetting> queryAppSettings(@RequestParam("app_id") String appId, @RequestParam("group") String groupKey) {
         LambdaQueryWrapper<AppSetting> queryWrapper = new LambdaQueryWrapper<>();

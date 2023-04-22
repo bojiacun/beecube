@@ -7,4 +7,6 @@ public class UserJoinNotifyMessage {
     private String userId;
     private String userName;
     private String userAvatar;
+
+    private Integer roomUsers;
 }

@@ -19,6 +19,7 @@ package cn.winkt.modules.paimai.service.im;
 import cn.hutool.core.lang.Snowflake;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.app.vo.AppVO;
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
 import cn.winkt.modules.paimai.service.im.message.*;
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,6 +81,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 	private final static ConcurrentHashMap<String, Set<String>> roomUsers = new ConcurrentHashMap<>(200);
 	//禁言用户列表
 	private final static ConcurrentHashMap<String, Set<String>> mutedUsers = new ConcurrentHashMap<>(200);
+	//被踢出的用户列表
+	private final static ConcurrentHashMap<String, Set<String>> kickedUsers = new ConcurrentHashMap<>(200);
 
 	private final static ConcurrentHashMap<String, Set<String>> appUsers = new ConcurrentHashMap<>(200);
 
@@ -253,23 +257,61 @@ public class ServerEventListenerImpl implements ServerEventListener
 			case UserMessageType.JOIN_ROOM:
 				if(StringUtils.isBlank(roomId)) {
 					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+					kickoutUser(roomId, from_user_id, "房间不可用");
 					return false;
 				}
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
-				if(appMemberVO == null || appMemberVO.getId() == null) {
-					log.debug("用户不存在");
+				if(appMemberVO == null || appMemberVO.getId() == null || appMemberVO.getStatus() == null || appMemberVO.getStatus() != 1) {
+					log.debug("用户不可用");
+					kickoutUser(roomId, from_user_id, "您的账号已被禁用");
 					return false;
 				}
 				LiveRoom liveRoom = liveRoomService.getById(roomId);
 				if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
 					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
+					kickoutUser(roomId, from_user_id, "房间不可用");
 					return false;
 				}
+				if(liveRoom.getStartTime().after(new Date())) {
+					log.debug("直播尚未开始，无法加入房间 {}, {}", roomId, from_user_id);
+					kickoutUser(roomId, from_user_id, "直播尚未开始");
+					return false;
+				}
+				AppVO appVO = appApi.getAppById(AppContext.getApp());
+				if(appVO == null || appVO.getStatus() == null || appVO.getStatus() != 1) {
+					log.debug("应用不可用 {}, {}", roomId, from_user_id);
+					kickoutUser(roomId, from_user_id, "应用不可用");
+					return false;
+				}
+				if(appVO.getEndTime().before(new Date())) {
+					log.debug("应用到期 {}, {}", roomId, from_user_id);
+					kickoutUser(roomId, from_user_id, "应用已过期，不可用");
+					return false;
+				}
+				if(roomUsers.containsKey(roomId)) {
+					int nowUserCount = roomUsers.get(roomId).size();
+					if(nowUserCount >= appVO.getMaxRoomUserCount()) {
+						log.debug("直播间人数超过上线，无法加入直播间 {},{}", roomId, from_user_id);
+						kickoutUser(roomId, from_user_id, "直播间人数已超过上线，无法加入直播间");
+						return false;
+					}
+				}
+				if(kickedUsers.containsKey(roomId)) {
+					if(kickedUsers.get(roomId).contains(from_user_id)) {
+						//用户已被踢出直播间
+						log.debug("您已被踢出直播间，无法加入{},{}", roomId, from_user_id);
+						kickoutUser(roomId, from_user_id, "您已被踢出直播间，无法加入");
+						return false;
+					}
+				}
+
+
 				//用户加入房间消息
 				if(!roomUsers.containsKey(roomId)) {
 					synchronized (roomId) {
 						if(!roomUsers.containsKey(roomId)) {
 							roomUsers.put(roomId, new HashSet<>());
+							roomUsers.get(roomId).add(from_user_id);
 						}
 						else {
 							roomUsers.get(roomId).add(from_user_id);
@@ -302,6 +344,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
 				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
 				userJoinNotifyMessage.setUserId(appMemberVO.getId());
+				userJoinNotifyMessage.setRoomUsers(roomUsers.get(roomId).size());
 				notifyRoomUsers(roomId, from_user_id, userJoinNotifyMessage, null, typeu);
 				break;
 			case UserMessageType.LEAVE_ROOM:
@@ -474,6 +517,59 @@ public class ServerEventListenerImpl implements ServerEventListener
 		if(users != null) {
 			users.remove(userId);
 		}
+	}
+
+	/**
+	 * 禁言某用户
+	 * @param roomId
+	 * @param userId
+	 */
+	public void muteUser(String roomId, String userId) {
+		if(!mutedUsers.containsKey(roomId)) {
+			mutedUsers.put(roomId, new HashSet<>());
+		}
+		mutedUsers.get(roomId).add(userId);
+
+		MuteMessage muteMessage = new MuteMessage();
+		muteMessage.setRoomId(roomId);
+		muteMessage.setAppId(AppContext.getApp());
+
+		Snowflake snowflake = new Snowflake(9, 9);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(muteMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
+		try {
+			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+				log.debug("禁言用户消息是否送达 {}", b);
+			});
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	/**
+	 * 将用户从房间踢出去
+	 * @param roomId
+	 * @param userId
+	 * @param message
+	 */
+	public void kickoutUser(String roomId, String userId, String message) {
+		Set<String> users = roomUsers.get(roomId);
+		users.remove(userId);
+		KickRoomMessage kickRoomMessage = new KickRoomMessage();
+		kickRoomMessage.setMessage(message);
+		kickRoomMessage.setRoomId(roomId);
+		kickRoomMessage.setAppId(AppContext.getApp());
+		Snowflake snowflake = new Snowflake(9, 9);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
+		try {
+			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+				log.debug("踢出用户消息是否送达 {}", b);
+			});
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		if(!kickedUsers.containsKey(roomId)) {
+			kickedUsers.put(roomId, new HashSet<>());
+		}
+		kickedUsers.get(roomId).add(userId);
 	}
 
 	public void notifyRoomUsers(String roomId, String fromUserId, Object message, String excludeUserId, int messageType) {
