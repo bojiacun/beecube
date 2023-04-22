@@ -361,6 +361,14 @@ Component({
                     uiMessage.fontColor = '#FF0000';
                     this.pushUiMessage(uiMessage);
                     break;
+                case MessageType.SPEAK:
+                    if(message.isme) {
+                        return;
+                    }
+                    uiMessage.content = message.message;
+                    uiMessage.name = message.userName;
+                    this.pushUiMessage(uiMessage);
+                    break;
                 case MessageType.SHUTUP:
                     wx.showToast({
                         title: "您已被禁言",
