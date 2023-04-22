@@ -48,6 +48,9 @@ public class WxAppLiveController {
         streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
         streamLambdaQueryWrapper.eq(LiveRoomStream::getStatus, 1);
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
+        //观看人次加1
+        room.setViews(room.getViews() == null ? 1: room.getViews()+1);
+        liveRoomService.updateById(room);
         return Result.OK("获取成功", room);
     }
     @GetMapping("/room/goods")
