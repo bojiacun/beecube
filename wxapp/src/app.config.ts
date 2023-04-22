@@ -44,6 +44,7 @@ export default defineAppConfig({
         'pages/my/profile/auth',
 
         'pages/live/room',
+        'pages/live/history',
         'pages/live/list'
     ],
     window: {

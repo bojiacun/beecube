@@ -182,7 +182,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			String pushAddress = String.format("%s://%s/%s/%s?%s",
 					appTencentConfigVO.getPushSchema(),
 					appTencentConfigVO.getPushDomain(),
-					appTencentConfigVO.getAppName(),
+					liveRoom.getAppId(),
 					stream.getId(),
 					TencentLiveTool.getSafeUrl(appTencentConfigVO.getPushTxtSecret(), stream.getId(), endTime)
 			);
@@ -191,7 +191,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 				case "rtmp":
 					playAddress = String.format("rtmp://%s/%s/%s?%s",
 							appTencentConfigVO.getPlayDomain(),
-							appTencentConfigVO.getAppName(),
+							liveRoom.getAppId(),
 							stream.getId(),
 							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
@@ -199,7 +199,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 				case "flv":
 					playAddress = String.format("http://%s/%s/%s.flv?%s",
 							appTencentConfigVO.getPlayDomain(),
-							appTencentConfigVO.getAppName(),
+							liveRoom.getAppId(),
 							stream.getId(),
 							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
@@ -207,7 +207,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 				case "hls":
 					playAddress = String.format("http://%s/%s/%s.m3u8?%s",
 							appTencentConfigVO.getPlayDomain(),
-							appTencentConfigVO.getAppName(),
+							liveRoom.getAppId(),
 							stream.getId(),
 							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
@@ -215,7 +215,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 				case "webrtc":
 					playAddress = String.format("webrtc://%s/%s/%s?%s",
 							appTencentConfigVO.getPlayDomain(),
-							appTencentConfigVO.getAppName(),
+							liveRoom.getAppId(),
 							stream.getId(),
 							TencentLiveTool.getSafeUrl(appTencentConfigVO.getPlayTxtSecret(), stream.getId(), endTime)
 					);
