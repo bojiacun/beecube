@@ -93,11 +93,26 @@ export default {
 
         return 0
     },
+    navigateBack: () => {
+        let pageCount = Taro.getCurrentPages().length;
+        if(pageCount > 1) {
+            Taro.navigateBack().then();
+        }
+        else {
+            Taro.reLaunch({url: '/pages/index/index'}).then();
+        }
+    },
     showSuccess: (autoBack = false, msg = '保存成功') => {
         Taro.showToast({title: msg, icon: 'success'}).then();
         if (autoBack) {
             setTimeout(() => {
-                Taro.navigateBack().then();
+                let pageCount = Taro.getCurrentPages().length;
+                if(pageCount > 1) {
+                    Taro.navigateBack().then();
+                }
+                else {
+                    Taro.reLaunch({url: '/pages/index/index'}).then();
+                }
             }, 1000);
         }
     },

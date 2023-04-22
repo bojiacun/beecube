@@ -129,8 +129,8 @@ export default class Index extends Component<any, any> {
             case MessageType.KICKOUT_ROOM:
                 //被踢出房间
                 utils.showMessage(message.message, function(){
-                    Taro.navigateBack().then();
-                });
+                    utils.navigateBack();
+                }).then();
                 break;
             default:
                 break;
