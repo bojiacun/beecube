@@ -360,6 +360,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				Set<String> userIds = mutedUsers.get(roomId);
 				if(userIds != null && userIds.contains(from_user_id)) {
 					log.debug("用户 {} 已被禁言", from_user_id);
+					muteUser(roomId, from_user_id);
 					return false;
 				}
 				notifyRoomUsers(roomId, from_user_id, dataContent, from_user_id, typeu);

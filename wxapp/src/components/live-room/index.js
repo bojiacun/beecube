@@ -108,7 +108,7 @@ Component({
         newBot: 568,
         meBot: 140,
         mmBot: 0,
-
+        muted: false,
         userTop: 0,
         userInfo: {},
         hasUserInfo: false,
@@ -361,6 +361,10 @@ Component({
                     uiMessage.fontColor = '#FF0000';
                     this.pushUiMessage(uiMessage);
                     break;
+                case MessageType.SHUTUP:
+                    //被禁言了
+                    this.setData({muted: true});
+                    break;
             }
         },
         pushUiMessage(message) {
@@ -388,6 +392,14 @@ Component({
                     duration: 2000
                 });
                 return;
+            }
+            if(this.data.muted) {
+                wx.showToast({
+                    title: "您已被禁言",
+                    icon: 'none',
+                    duration: 2000
+                });
+                return
             }
             const msgContent = this.data.inputMessage;
             this.setData({

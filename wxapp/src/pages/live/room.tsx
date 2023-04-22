@@ -126,6 +126,12 @@ export default class Index extends Component<any, any> {
                     }
                 });
                 break;
+            case MessageType.KICKOUT_ROOM:
+                //被踢出房间
+                utils.showMessage(message.message, function(){
+                    Taro.navigateBack().then();
+                });
+                break;
             default:
                 break;
         }

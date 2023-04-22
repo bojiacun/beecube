@@ -11,6 +11,7 @@ const MessageType = {
     GOODS_UPDATE: 7,
     PERFORMANCE_UPDATE: 8,
 
+    KICKOUT_ROOM: 97,
     ROOM_NOTICE: 99,
     SHUTUP: 100,
 }
