@@ -507,6 +507,17 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 默认本方法可
 	}
 
+
+	/**
+	 * 获取房间的用户列表
+	 * @param roomId
+	 * @return
+	 */
+	public Set<String> getRoomUsers(String roomId) {
+		return roomUsers.get(roomId);
+	}
+
+
 	/**
 	 * 用户退出房间
 	 * @param roomId

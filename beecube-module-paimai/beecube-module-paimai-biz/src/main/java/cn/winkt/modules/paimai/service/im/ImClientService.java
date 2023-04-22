@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -25,6 +26,18 @@ public class ImClientService {
     @Resource
     ServerEventListenerImpl serverEventListener;
 
+
+    public Set<String> getRoomUsers(String roomId) {
+        return serverEventListener.getRoomUsers(roomId);
+    }
+
+    public void kickoutUser(String roomId, String userId, String message) {
+        serverEventListener.kickoutUser(roomId, userId, message);
+    }
+
+    public void muteUser(String roomId, String userId) {
+        serverEventListener.muteUser(roomId, userId);
+    }
 
     public void logoutRoom(String roomId, String userId) {
         serverEventListener.logoutRoom(roomId, userId);

@@ -83,6 +83,8 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 	@Resource
 	private ImClientService imClientService;
+
+
 	/**
 	 * 分页列表查询
 	 *
@@ -109,6 +111,30 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
 		});
 		return Result.OK(pageList);
+	}
+
+
+	@GetMapping("/online/users")
+	public Result<List<AppMemberVO>> roomUserList(@RequestParam String roomId) {
+		List<AppMemberVO> appMemberVOS = new ArrayList<>();
+		Set<String> userIds = imClientService.getRoomUsers(roomId);
+		userIds.forEach(id -> {
+			AppMemberVO appMemberVO = appApi.getMemberById(id);
+			appMemberVOS.add(appMemberVO);
+		});
+		return Result.OK(appMemberVOS);
+	}
+
+	@PutMapping("/mute")
+	public Result<Boolean> muteUser(@RequestParam String roomId, @RequestParam String userId) {
+		imClientService.muteUser(roomId, userId);
+		return Result.OK(true);
+	}
+
+	@PutMapping("/kickout")
+	public Result<Boolean> kickoutUser(@RequestParam String roomId, @RequestParam String userId) {
+		imClientService.kickoutUser(roomId, userId, "管理员将您踢出了房间");
+		return Result.OK(true);
 	}
 	
 	/**
