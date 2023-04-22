@@ -257,42 +257,42 @@ public class ServerEventListenerImpl implements ServerEventListener
 			case UserMessageType.JOIN_ROOM:
 				if(StringUtils.isBlank(roomId)) {
 					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
-					kickoutUser(roomId, from_user_id, "房间不可用");
+					sendLeaveRoom(roomId, from_user_id, "房间不可用");
 					return false;
 				}
 				AppMemberVO appMemberVO = appApi.getMemberById(from_user_id);
 				if(appMemberVO == null || appMemberVO.getId() == null || appMemberVO.getStatus() == null || appMemberVO.getStatus() != 1) {
 					log.debug("用户不可用");
-					kickoutUser(roomId, from_user_id, "您的账号已被禁用");
+					sendLeaveRoom(roomId, from_user_id, "您的账号已被禁用");
 					return false;
 				}
 				LiveRoom liveRoom = liveRoomService.getById(roomId);
 				if(liveRoom == null || liveRoom.getStatus() == null || liveRoom.getStatus() == 0) {
 					log.debug("房间 {} 不可用，用户 {} 无法加入房间", roomId, from_user_id);
-					kickoutUser(roomId, from_user_id, "房间不可用");
+					sendLeaveRoom(roomId, from_user_id, "房间不可用");
 					return false;
 				}
 				if(liveRoom.getStartTime().after(new Date())) {
 					log.debug("直播尚未开始，无法加入房间 {}, {}", roomId, from_user_id);
-					kickoutUser(roomId, from_user_id, "直播尚未开始");
+					sendLeaveRoom(roomId, from_user_id, "直播尚未开始");
 					return false;
 				}
 				AppVO appVO = appApi.getAppById(AppContext.getApp());
 				if(appVO == null || appVO.getStatus() == null || appVO.getStatus() != 1) {
 					log.debug("应用不可用 {}, {}", roomId, from_user_id);
-					kickoutUser(roomId, from_user_id, "应用不可用");
+					sendLeaveRoom(roomId, from_user_id, "应用不可用");
 					return false;
 				}
 				if(appVO.getEndTime().before(new Date())) {
 					log.debug("应用到期 {}, {}", roomId, from_user_id);
-					kickoutUser(roomId, from_user_id, "应用已过期，不可用");
+					sendLeaveRoom(roomId, from_user_id, "应用已过期，不可用");
 					return false;
 				}
 				if(roomUsers.containsKey(roomId)) {
 					int nowUserCount = roomUsers.get(roomId).size();
 					if(nowUserCount >= appVO.getMaxRoomUserCount()) {
 						log.debug("直播间人数超过上线，无法加入直播间 {},{}", roomId, from_user_id);
-						kickoutUser(roomId, from_user_id, "直播间人数已超过上线，无法加入直播间");
+						sendLeaveRoom(roomId, from_user_id, "直播间人数已超过上线，无法加入直播间");
 						return false;
 					}
 				}
@@ -300,7 +300,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 					if(kickedUsers.get(roomId).contains(from_user_id)) {
 						//用户已被踢出直播间
 						log.debug("您已被踢出直播间，无法加入{},{}", roomId, from_user_id);
-						kickoutUser(roomId, from_user_id, "您已被踢出直播间，无法加入");
+						sendLeaveRoom(roomId, from_user_id, "您已被踢出直播间，无法加入");
 						return false;
 					}
 				}
@@ -551,6 +551,29 @@ public class ServerEventListenerImpl implements ServerEventListener
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 				log.debug("禁言用户消息是否送达 {}", b);
+			});
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	/**
+	 * 将用户从房间踢出去
+	 * @param roomId
+	 * @param userId
+	 * @param message
+	 */
+	public void sendLeaveRoom(String roomId, String userId, String message) {
+		Set<String> users = roomUsers.get(roomId);
+		users.remove(userId);
+		KickRoomMessage kickRoomMessage = new KickRoomMessage();
+		kickRoomMessage.setMessage(message);
+		kickRoomMessage.setRoomId(roomId);
+		kickRoomMessage.setAppId(AppContext.getApp());
+		Snowflake snowflake = new Snowflake(9, 9);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
+		try {
+			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
+				log.debug("踢出用户消息是否送达 {}", b);
 			});
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
