@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.RoomStreamChangedMessage;
+import cn.winkt.modules.paimai.vo.LiveRecordCallbackVo;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -80,6 +82,20 @@ public class LiveRoomStreamController extends JeecgController<LiveRoomStream, IL
         Page<LiveRoomStream> page = new Page<LiveRoomStream>(pageNo, pageSize);
         IPage<LiveRoomStream> pageList = liveRoomStreamService.page(page, queryWrapper);
         return Result.OK(pageList);
+    }
+
+
+    @RequestMapping(value = "/records", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Result<String> recordCallbackNotify(@RequestBody LiveRecordCallbackVo callbackVo) {
+        log.info("腾讯直播录制回调内容为：{}", JSONObject.toJSONString(callbackVo));
+        String streamId = callbackVo.getStreamId();
+        LiveRoomStream stream = liveRoomStreamService.getById(streamId);
+        if(stream == null) {
+            return Result.OK("false");
+        }
+        stream.setPlaybackUrl(callbackVo.getVideoUrl());
+        stream.setCallbackData(JSONObject.toJSONString(callbackVo));
+        return Result.OK("success");
     }
 
     /**

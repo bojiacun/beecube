@@ -343,7 +343,8 @@ Component({
                     }
                     //UI显示谁登录成功了
                     this.setData({newestName: message.userName, userCount: message.roomUsers});
-                    setTimeout(()=>{
+                    clearTimeout(this.joinTimer);
+                    this.joinTimer = setTimeout(()=>{
                         this.setData({newestName: null});
                     }, 3000);
                     break;
@@ -418,6 +419,7 @@ Component({
             this.setData({
                 clearHide: true,
                 inputShow: false,
+                preInputShow: true,
                 keyboardHold: true,
                 inputMessage: "",
             })

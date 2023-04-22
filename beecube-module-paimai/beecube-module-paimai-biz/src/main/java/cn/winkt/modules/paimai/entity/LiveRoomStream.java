@@ -54,6 +54,8 @@ public class LiveRoomStream {
 	private String width;
 	private String height;
 
+	private String callbackData;
+	private String playbackUrl;
 
 	/**appId*/
 	@Excel(name = "appId", width = 15)
