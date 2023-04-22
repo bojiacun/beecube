@@ -31,7 +31,7 @@ const LiveRoomOnLineList = (props: any) => {
     const deleteFetcher = useFetcher();
 
     const loadData = () => {
-        searchFetcher.load('/paimai/live/onlines');
+        searchFetcher.load('/paimai/live/onlines?roomId='+liveRoom.id);
     }
     useEffect(()=>{
         loadData();
@@ -79,8 +79,8 @@ const LiveRoomOnLineList = (props: any) => {
             formatter: (cell:any, row:any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {!row.memberAvatar ? <User size={40} /> : <Image src={row.memberAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        <span className={'ml-1'}>{row.memberName}</span>
+                        {!row.avatar ? <User size={40} /> : <Image src={row.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        <span className={'ml-1'}>{row.nickname}</span>
                     </div>
                 );
             }
