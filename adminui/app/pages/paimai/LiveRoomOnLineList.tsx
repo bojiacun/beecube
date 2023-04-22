@@ -33,6 +33,9 @@ const LiveRoomOnLineList = (props: any) => {
     const loadData = () => {
         searchFetcher.load('/paimai/live/onlines');
     }
+    useEffect(()=>{
+        loadData();
+    }, []);
     useEffect(() => {
         if (searchFetcher.data && searchFetcher.type === 'done') {
             setUsers(searchFetcher.data);
