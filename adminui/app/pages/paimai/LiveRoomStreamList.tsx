@@ -108,6 +108,10 @@ const LiveRoomStreamList = (props: any) => {
             }
         },
         {
+            text: '回放地址',
+            dataField: 'playbackUrl',
+        },
+        {
             text: '屏幕适配',
             dataField: 'objectFit',
         },

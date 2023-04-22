@@ -88,12 +88,12 @@ public class LiveRoomStreamController extends JeecgController<LiveRoomStream, IL
     @RequestMapping(value = "/records", method = {RequestMethod.POST, RequestMethod.PUT})
     public Result<String> recordCallbackNotify(@RequestBody LiveRecordCallbackVo callbackVo) {
         log.info("腾讯直播录制回调内容为：{}", JSONObject.toJSONString(callbackVo));
-        String streamId = callbackVo.getStreamId();
+        String streamId = callbackVo.getStream_id();
         LiveRoomStream stream = liveRoomStreamService.getById(streamId);
         if(stream == null) {
             return Result.OK("false");
         }
-        stream.setPlaybackUrl(callbackVo.getVideoUrl());
+        stream.setPlaybackUrl(callbackVo.getVideo_url());
         stream.setCallbackData(JSONObject.toJSONString(callbackVo));
         liveRoomStreamService.updateById(stream);
         return Result.OK("success");

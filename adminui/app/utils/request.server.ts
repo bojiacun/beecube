@@ -218,6 +218,7 @@ export const API_PAIMAI_LIVEROOM_MUTE = `${BASE_URL}/paimai/rooms/mute`;
 export const API_PAIMAI_LIVEROOM_KICKOUT = `${BASE_URL}/paimai/rooms/kickout`;
 export const API_PAIMAI_LIVEROOM_ADD = `${BASE_URL}/paimai/rooms/add`;
 export const API_PAIMAI_LIVEROOM_EDIT = `${BASE_URL}/paimai/rooms/edit`;
+export const API_PAIMAI_LIVEROOM_END_NOW = `${BASE_URL}/paimai/rooms/end`;
 export const API_PAIMAI_LIVEROOM_STREAM_ADD = `${BASE_URL}/paimai/streams/add`;
 export const API_PAIMAI_LIVEROOM_STREAM_EDIT = `${BASE_URL}/paimai/streams/edit`;
 export const API_PAIMAI_LIVEROOM_DELETE = `${BASE_URL}/paimai/rooms/delete`;

@@ -107,6 +107,13 @@ const LiveRoomList = (props: any) => {
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/live/rooms/delete?id=${row.id}`, replace: true});
                 });
                 break;
+            case 'end-now':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/live/rooms/end?id=${row.id}`, replace: true});
+                }, '是否立即结束本次直播?', '结束直播');
+                break;
         }
     }
     const handlePageChanged = (e: any) => {
@@ -189,6 +196,8 @@ const LiveRoomList = (props: any) => {
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-onlines')}>在线用户</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'end-now')}>立即结束</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
