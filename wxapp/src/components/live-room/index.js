@@ -345,7 +345,7 @@ Component({
                     this.setData({newestName: message.userName});
                     setTimeout(()=>{
                         this.setData({newestName: null});
-                    },2000);
+                    }, 3000);
                     break;
                 case MessageType.ROOM_NOTICE:
                     uiMessage.color = '#FF0000';
