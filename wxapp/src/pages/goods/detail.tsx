@@ -14,7 +14,8 @@ import Uprange from "./components/uprange";
 import Descs from "./components/descs";
 import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
 import MessageType from "../../utils/message-type";
-
+import EventBus from '../../utils/event-bus';
+import EventType from '../../utils/event-type';
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -63,7 +64,7 @@ export default class Index extends Component<any, any> {
 
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-        const {context, message} = this.props;
+        const {context} = this.props;
         const {userInfo} = context;
         let {goods, status} = this.state;
         if (!userInfo || !goods) return;
@@ -92,15 +93,6 @@ export default class Index extends Component<any, any> {
             }).then(res => {
                 this.setState({message: res.data.result});
             })
-        }
-        if (prevProps.message && prevProps.message.id == message.id) return;
-
-        if (goods.id == message.goodsId) {
-            switch (message.type) {
-                default:
-                    this.onMessageReceive(message);
-                    break;
-            }
         }
     }
 
@@ -293,6 +285,8 @@ export default class Index extends Component<any, any> {
             data.uprange = JSON.parse(data.uprange);
             this.nextPrice(data);
             utils.hideLoading();
+            //注册全局事件
+            EventBus.register(EventType.onMessageData, this.onMessageReceive);
         });
         //查询出价记录
         request.get('/paimai/api/goods/offers', {params: {id: options.id, pageSize: 3}}).then(res => {
@@ -425,6 +419,7 @@ export default class Index extends Component<any, any> {
 
     componentWillUnmount() {
         this.socket?.close();
+        EventBus.unregister(EventType.onMessageData, this.onMessageReceive);
     }
 
     render() {

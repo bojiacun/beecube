@@ -8,7 +8,8 @@ import utils from "../../lib/utils";
 import FallbackImage from "../../components/FallbackImage";
 import MessageType from "../../utils/message-type";
 import moment from "moment";
-
+import EventBus from '../../utils/event-bus';
+import EventType from '../../utils/event-type';
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -52,35 +53,13 @@ export default class Index extends Component<any, any> {
         this.showModal = this.showModal.bind(this);
         this.onRoomEvent = this.onRoomEvent.bind(this);
         this.showOffer = this.showOffer.bind(this);
-        // this.onStreamUrlUpdate = this.onStreamUrlUpdate.bind(this);
+        this.onMessageReceived = this.onMessageReceived.bind(this);
     }
 
-    async componentDidUpdate(prevProps: Readonly<any>, prevState) {
-        const {page} = getCurrentInstance();
-        const {userInfo} = this.props.context;
-        const {message, settings} = this.props;
+    onMessageReceived(message) {
         const goodsList = this.state.merchandises;
-        const pushIndex = this.state.pushIndex;
-
-        if (!this.liveRoom && userInfo) {
-            // @ts-ignore
-            this.liveRoom = page?.selectComponent('#live-room');
-            this.liveRoom.init();
-            this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
-            //查询是否需要缴纳保证金
-            request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.liveRoom.id}}).then(res => {
-                this.setState({deposited: res.data.result});
-            });
-        }
-        else if(this.liveRoom && message && message.id != prevProps.message.id){
-            this.liveRoom.onMessageReceived(message);
-        }
-        if(pushIndex != prevState.pushIndex) {
-            let addBot = (pushIndex > - 1 ? 130:0)
-            this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
-        }
-        if (!goodsList || !message || message.id == prevProps.message.id) return;
-
+        const {settings} = this.props;
+        const {userInfo} = this.props.context;
         switch (message.type) {
             case MessageType.GOODS_UPDATE:
                 goodsList?.forEach((goods:any) => {
@@ -147,8 +126,31 @@ export default class Index extends Component<any, any> {
                     }
                 });
                 break;
+            default:
+                break;
         }
+        this.liveRoom.onMessageReceived(message);
         this.setState(this.resolveGoods(goodsList));
+    }
+
+    async componentDidUpdate(_prevProps: Readonly<any>, prevState) {
+        const {page} = getCurrentInstance();
+        const {userInfo} = this.props.context;
+        const pushIndex = this.state.pushIndex;
+        if (!this.liveRoom && userInfo) {
+            // @ts-ignore
+            this.liveRoom = page?.selectComponent('#live-room');
+            this.liveRoom.init();
+            this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
+            //查询是否需要缴纳保证金
+            request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.liveRoom.id}}).then(res => {
+                this.setState({deposited: res.data.result});
+            });
+        }
+        if(pushIndex != prevState.pushIndex) {
+            let addBot = (pushIndex > - 1 ? 130:0)
+            this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
+        }
     }
 
     onRoomEvent(ev) {
@@ -325,6 +327,8 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
             this.setState({liveRoom: room});
+            //注册全局事件
+            EventBus.register(EventType.onMessageData, this.onMessageReceived);
             request.get('/paimai/api/live/room/goods', {params: {roomId: room.id}}).then(res => {
                 let goodsList = res.data.result;
                 this.setState(this.resolveGoods(goodsList));
@@ -358,6 +362,7 @@ export default class Index extends Component<any, any> {
     componentWillUnmount() {
         //用户退出直播间
         request.put('/paimai/api/live/room/logout', this.state.liveRoom).then();
+        EventBus.unregister(EventType.onMessageData, this.onMessageReceived);
     }
 
     onShareTimeline() {

@@ -11,6 +11,8 @@ import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
 import MessageType from "../../utils/message-type";
+import EventBus from '../../utils/event-bus';
+import EventType from '../../utils/event-type';
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -40,6 +42,7 @@ export default class Index extends Component<any, any> {
         super(props);
         this.payDeposit = this.payDeposit.bind(this);
         this.noticeMe = this.noticeMe.bind(this);
+        this.onMessageReceived = this.onMessageReceived.bind(this);
     }
 
 
@@ -82,7 +85,35 @@ export default class Index extends Component<any, any> {
             }
         });
     }
-
+    onMessageReceived(message) {
+        console.log('performance detail received a message', message);
+        const {detail, goodsList} = this.state;
+        if (detail.id == message.performanceId) {
+            switch (message.type) {
+                case MessageType.PERFORMANCE_UPDATE:
+                    detail.state = message.state;
+                    detail.startTime = message.startTime;
+                    detail.endTime = message.endTime;
+                    break;
+            }
+            this.setState({detail: detail});
+        }
+        if (!goodsList) return;
+        goodsList?.forEach(g => {
+            if (g.id == message.goodsId) {
+                switch (message.type) {
+                    case MessageType.GOODS_UPDATE:
+                        g.startTime = message.startTime;
+                        g.endTime = message.endTime;
+                        g.actualEndTime = message.actualEndTime;
+                        g.dealPrice = message.dealPrice;
+                        g.state = message.state;
+                        break;
+                }
+                this.setState({goodsList: goodsList});
+            }
+        });
+    }
     componentDidShow() {
         if(this.state.id) {
             //查询是否需要缴纳保证金
@@ -97,7 +128,9 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/performances/detail', {params: {id: options.id}}).then(res => {
             let detail = res.data.result;
             this.setState({detail: detail});
-            this.loadData(detail.id, 1, true);
+            this.loadData(detail.id, 1, true).then();
+            //注册全局事件
+            EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
     }
     onShareTimeline() {
@@ -146,37 +179,6 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<any>) {
-        const {detail, goodsList} = this.state;
-        const {message} = this.props;
-        if (!detail || (prevProps.message && prevProps.message.id == message.id)) return;
-        if (detail.id == message.performanceId) {
-            switch (message.type) {
-                case MessageType.PERFORMANCE_UPDATE:
-                    detail.state = message.state;
-                    detail.startTime = message.startTime;
-                    detail.endTime = message.endTime;
-                    break;
-            }
-            this.setState({detail: detail});
-        }
-        if (!goodsList) return;
-        goodsList?.forEach(g => {
-            if (g.id == message.goodsId) {
-                switch (message.type) {
-                    case MessageType.GOODS_UPDATE:
-                        g.startTime = message.startTime;
-                        g.endTime = message.endTime;
-                        g.actualEndTime = message.actualEndTime;
-                        g.dealPrice = message.dealPrice;
-                        g.state = message.state;
-                        break;
-                }
-                this.setState({goodsList: goodsList});
-            }
-        });
-    }
-
     noticeMe() {
         let type = 0;
         if (this.state.status == 'notstart') {
@@ -192,7 +194,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentWillUnmount() {
-
+        EventBus.unregister(EventType.onMessageData, this.onMessageReceived);
     }
 
 

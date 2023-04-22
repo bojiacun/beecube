@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import "windi.css";
 import './app.scss';
 import configStore from "./store";
-import {setContext, setMessage, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
+import {setContext, setPageLoading, setSiteInfo, setSystemInfo} from "./store/actions";
 import Taro from "@tarojs/taro";
 import request from './lib/request';
 import IMManager from './utils/im-manager';
@@ -31,7 +31,6 @@ class App extends Component<PropsWithChildren> {
         request.get('/app/api/members/profile').then(res => {
             context.userInfo = res.data.result;
             store.dispatch(setContext(context));
-            // this.connectToServer(context);
             this.registerIMEvents(context);
             this.initIM(context);
         });
@@ -50,48 +49,19 @@ class App extends Component<PropsWithChildren> {
         }
         app.globalData = {userInfo: userInfo};
     }
-    // connectToServer(context) {
-    //     if(siteInfo?.appId && context.userInfo?.id) {
-    //         connectWebSocketServer('/auction/websocket/' + siteInfo.appId + '/' + context.userInfo.id).then(res => {
-    //             this.socket = res;
-    //             this.socket.onMessage(this.onMessageReceive);
-    //             this.socket.onClose(this.onSocketClose);
-    //             this.socket.onError(this.onSocketError);
-    //             this.healthCheck(this.socket);
-    //         });
-    //     }
-    // }
-    // onSocketError(error) {
-    //     console.log('发生错误，服务器连接断开,5秒后尝试重连', error);
-    // }
-    // onSocketClose(res) {
-    //     console.log('服务器连接断开, 5秒后尝试重连', res);
-    //     clearInterval(this.checkTimer);
-    //     let {context} = store.getState();
-    //     setTimeout(()=>{
-    //         this.connectToServer(context);
-    //     }, 5000);
-    // }
-    // healthCheck(socket) {
-    //     this.checkTimer = setInterval(()=>{
-    //         let {context} = store.getState();
-    //         let data = {type: 'MSG_HEALTH', fromUserId: context.userInfo?.id};
-    //         console.log('发送心跳包', data);
-    //         socket.send({data: JSON.stringify(data)});
-    //     }, this.checkTimeout);
-    // }
+
     registerIMEvents(context){
         // 提示：ES6的箭头函数中this指向的是外部调用者，而function()这种匿名函数则是指向它自身，别理解错
 
         // 注册应用层事件通知：事件发生于收到聊天消息时，此处接收通知并在UI上展现出来
         EventBus.register(EventType.onIMData, (p) => {
             // 是否“我”发出的消息
+            console.log('收到服务器发来的消息', p);
             let isme = (p.from == wx.IMSDK.getLoginInfo().loginUserId);
             let message = JSON.parse(p.dataContent);
             message.isme = isme;
             message.type = parseInt(p.typeu);
             message.id = p.fp;
-            console.log('收到服务器发来的消息', p, message);
             this.onMessageReceive(message);
         })
 
@@ -136,7 +106,8 @@ class App extends Component<PropsWithChildren> {
     }
 
     onMessageReceive(message:any) {
-        store.dispatch(setMessage(message));
+        // store.dispatch(setMessage(message));
+        EventBus.post(EventType.onMessageData, message);
     }
 
     componentDidMount() {

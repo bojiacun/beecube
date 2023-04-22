@@ -12,6 +12,9 @@ import {connect} from "react-redux";
 import './detail.scss';
 import NoData from "../../components/nodata";
 import MessageType from "../../utils/message-type";
+import EventBus from '../../utils/event-bus';
+import EventType from '../../utils/event-type';
+
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -41,6 +44,7 @@ export default class Index extends Component<any, any> {
         super(props);
         this.payDeposit = this.payDeposit.bind(this);
         this.noticeMe = this.noticeMe.bind(this);
+        this.onMessageReceived = this.onMessageReceived.bind(this);
     }
 
 
@@ -93,12 +97,44 @@ export default class Index extends Component<any, any> {
         }
     }
 
+    onMessageReceived(message) {
+        console.log('performance detail received a message', message);
+        const {detail, goodsList} = this.state;
+        if (detail.id == message.performanceId) {
+            switch (message.type) {
+                case MessageType.PERFORMANCE_UPDATE:
+                    detail.startTime = message.startTime;
+                    detail.state = message.state;
+                    detail.endTime = message.endTime;
+                    break;
+            }
+            this.setState({detail: detail});
+        }
+        if (!goodsList) return;
+        goodsList?.forEach(g => {
+            if (g.id == message.goodsId) {
+                switch (message.type) {
+                    case MessageType.GOODS_UPDATE:
+                        g.startTime = message.startTime;
+                        g.endTime = message.endTime;
+                        g.actualEndTime = message.actualEndTime;
+                        g.state = message.state;
+                        g.dealPrice = message.dealPrice;
+                        break;
+                }
+                this.setState({goodsList: goodsList});
+            }
+        });
+    }
+
     onLoad(options) {
         this.setState({id: options.id});
         request.get('/paimai/api/performances/detail', {params: {id: options.id}}).then(res => {
             let detail = res.data.result;
             this.setState({detail: detail});
-            this.loadData(detail.id, 1, true);
+            this.loadData(detail.id, 1, true).then();
+            //注册全局事件
+            EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
     }
 
@@ -147,10 +183,8 @@ export default class Index extends Component<any, any> {
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>) {
-        const {detail, status, goodsList} = this.state;
-        const {message} = this.props;
-        console.log('peformance detail received a message', message);
+    componentDidUpdate(_prevProps: Readonly<any>, prevState: Readonly<any>) {
+        const {detail, status} = this.state;
         if (!detail) return;
         if (prevState.status != status && status != TimeCountDownerStatus.ENDED) {
             request.get('/paimai/api/members/messaged', {
@@ -162,35 +196,6 @@ export default class Index extends Component<any, any> {
                 this.setState({message: res.data.result});
             });
         }
-
-        if (prevProps.message && prevProps.message.id == message.id) return;
-
-        if (detail.id == message.performanceId) {
-            switch (message.type) {
-                case MessageType.PERFORMANCE_UPDATE:
-                    detail.startTime = message.startTime;
-                    detail.state = message.state;
-                    detail.endTime = message.endTime;
-                    break;
-            }
-            this.setState({detail: detail});
-        }
-
-        if (!goodsList) return;
-        goodsList?.forEach(g => {
-            if (g.id == message.goodsId) {
-                switch (message.type) {
-                    case MessageType.GOODS_UPDATE:
-                        g.startTime = message.startTime;
-                        g.endTime = message.endTime;
-                        g.actualEndTime = message.actualEndTime;
-                        g.state = message.state;
-                        g.dealPrice = message.dealPrice;
-                        break;
-                }
-                this.setState({goodsList: goodsList});
-            }
-        });
     }
 
     async noticeMe() {
@@ -234,12 +239,12 @@ export default class Index extends Component<any, any> {
                 });
             }
         }
-
-
     }
 
-    componentWillUnmount() {
 
+
+    componentWillUnmount() {
+        EventBus.unregister(EventType.onMessageData, this.onMessageReceived);
     }
 
 
