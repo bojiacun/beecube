@@ -101,7 +101,6 @@ const LiveRoomOnLineList = (props: any) => {
         <>
             <Modal
                 show={show}
-                size={'xl'}
                 onHide={onHide}
                 centered
                 backdrop={'static'}
