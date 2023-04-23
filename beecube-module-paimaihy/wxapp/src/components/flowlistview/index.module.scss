@@ -1,0 +1,18 @@
+.active {
+    font-size: 16px;
+    line-height: 2;
+    font-weight: bold;
+    color: #B91C1C;
+    position: relative;
+    padding: 10rpx 0;
+}
+
+.active:before {
+    content: ' ';
+    width: 50%;
+    height: 3px;
+    background-color: #B91C1C;
+    position: absolute;
+    bottom: 0;
+    left: calc((100% - 50%) / 2);
+}

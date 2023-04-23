@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.winkt.modules.paimai.mapper.GoodsMapper">
+    <select id="getDetail" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
+        select
+            g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
+            (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id and gd.status > 0) as deposit_count,
+            (select sum(og.goods_count) as count from paimai_order_goods og left join paimai_orders o on og.order_id = o.id where o.status = 3 and og.goods_id = g.id) as sales
+        from paimai_goods g left join paimai_performances p on p.id=g.performance_id where g.id = #{id}
+    </select>
+
+    <select id="selectPageVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
+        select
+            g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
+            (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id and gd.status > 0) as deposit_count,
+            (select sum(og.goods_count) as count from paimai_order_goods og left join paimai_orders o on og.order_id = o.id where o.status = 3 and og.goods_id = g.id) as sales
+        from paimai_goods g left join paimai_performances p on p.id=g.performance_id ${ew.customSqlSegment}
+    </select>
+    <select id="selectListVO" resultType="cn.winkt.modules.paimai.vo.GoodsVO">
+        select
+            g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
+            p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
+            (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
+            (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
+            (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
+            (select max(price) from paimai_goods_offers go where go.goods_id=g.id) as current_price,
+            (select count(*) from paimai_goods_deposits gd where gd.goods_id=g.id and gd.status > 0) as deposit_count,
+            (select sum(og.goods_count) as count from paimai_order_goods og left join paimai_orders o on og.order_id = o.id where o.status = 3 and og.goods_id = g.id) as sales
+        from paimai_goods g left join paimai_performances p on p.id=g.performance_id ${ew.customSqlSegment}
+    </select>
+    <select id="queryMemberViewGoods" resultType="cn.winkt.modules.paimai.entity.Goods">
+        select g.* from paimai_goods_views gv left join paimai_goods g on g.id=gv.goods_id
+        where g.status = 1 and gv.member_id = #{member_id} order by gv.create_time desc
+    </select>
+
+    <select id="queryMemberFollowGoods" resultType="cn.winkt.modules.paimai.entity.Goods">
+        select g.* from paimai_goods_follows gf left join paimai_goods g on g.id=gf.goods_id
+        where g.status = 1 and gf.member_id = #{member_id} order by gf.create_time desc
+    </select>
+
+    <select id="calcGoodsSales" resultType="java.lang.Integer">
+        select sum(og.goods_count) as count from paimai_order_goods og
+        left join paimai_orders o on og.order_id = o.id
+        where o.status = 3 and og.goods_id = #{goods_id}
+    </select>
+</mapper>

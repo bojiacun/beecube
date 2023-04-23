@@ -1,0 +1,94 @@
+import Taro, {useRouter} from '@tarojs/taro';
+import {Image, Navigator, View} from "@tarojs/components";
+import PropTypes from 'prop-types';
+// @ts-ignore
+import tabStyles from './index.module.scss';
+import utils from '../../lib/utils';
+import {useSelector} from "react-redux";
+import classNames from "classnames";
+import SystemTabs from '../../tabs';
+import _ from 'lodash';
+
+
+export declare interface TabBarItem {
+    selected: boolean,
+    textColor: string,
+    textColorActive: string,
+    icon: string,
+    iconActive: string,
+    url: string,
+    title: string,
+}
+
+export declare interface TabBarProps {
+    backgroundColor: string,
+    cartNum: number,
+    onTabChange: Function
+}
+
+const TabBar = (props: TabBarProps) => {
+    const {backgroundColor, cartNum, onTabChange} = props;
+    const tabs = useSelector(({context}) => context.tabs);
+    const systemInfo = useSelector(({context}) => context.systemInfo);
+    const router = useRouter();
+
+    if (router) {
+        tabs.forEach(tab => {
+            tab.selected = false;
+            if (tab.url === router.path) {
+                tab.selected = true;
+                onTabChange && onTabChange(tab);
+            }
+        });
+    }
+
+    if (!tabs || tabs.length === 0) {
+        return <></>
+    }
+
+    let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+    if (safeBottom > 10) safeBottom -= 10;
+
+    return (
+        <View className={classNames('flex py-2 bottom-0 fixed w-screen box-border', tabStyles.tabbar)}
+              style={{
+                  backgroundColor: backgroundColor,
+                  paddingBottom: safeBottom > 0 ? Taro.pxTransform(safeBottom) : '',
+                  height: Taro.pxTransform(56 + safeBottom),
+                  zIndex: 9999,
+              }}>
+            {
+                tabs.map((item: TabBarItem) => {
+                    const openType = _.indexOf(SystemTabs, item.url) >= 0 ? 'switchTab' : 'navigate';
+                    return (
+                        <Navigator
+                            url={item.url}
+                            openType={openType}
+                            hoverClass="none"
+                            className={'flex-1 flex flex-col items-center relative justify-center space-y-1.5'}
+                            style={{color: (item.selected ? item.textColorActive : item.textColor)}}>
+                            <Image style={{display: 'block', width: Taro.pxTransform(28), height: Taro.pxTransform(28)}} mode={'aspectFit'}
+                                   src={item.selected ? utils.resolveUrl(item.iconActive) : utils.resolveUrl(item.icon)}/>
+                            {cartNum > 0 && <View className={tabStyles.cartNum}>{cartNum}</View>}
+                            <View className={'flex-none text-xs'}>{item.title}</View>
+                        </Navigator>
+                    );
+                })
+            }
+        </View>
+    );
+}
+
+TabBar.propTypes = {
+    backgroundColor: PropTypes.string,
+    cartNum: PropTypes.number,
+    onTabChange: PropTypes.func
+}
+
+TabBar.defaultProps = {
+    backgroundColor: 'rgba(255,255,255,1)',
+    cartNum: 0,
+    onTabChange: () => null
+}
+
+export default TabBar

@@ -67,6 +67,7 @@
         <module>jeecg-module-system</module>
 		<module>beecube-module-app</module>
 		<module>beecube-module-paimai</module>
+		<module>beecube-module-paimaihy</module>
 	</modules>
 
 	<repositories>

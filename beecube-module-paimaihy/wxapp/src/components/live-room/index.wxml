@@ -1,0 +1,205 @@
+<!-- components/live-room/index.wxml -->
+<wxs src="../lib/stringUtil.wxs" module="stringUtil"/>
+<view class="live-room-container">
+    <view wx:if="{{streams.length == 1}}">
+        <video
+            wx:if="{{streams[0]}}"
+            id="{{streams[0].id}}"
+            controls="false"
+            show-progress="false"
+            show-fullscreen-btn="false"
+            show-center-play-btn="false"
+            show-play-btn="false"
+            enable-progress-gesture="false"
+            autoplay="true"
+            src="{{streams[0].playAddress}}"
+            object-fit="{{streams[0].objectFit}}"
+            picture-in-picture-mode="{{pictureInPictureMode}}"
+            class="play-content"
+            binderror="onPlayError"
+            bindwaiting="onWaiting"
+        >
+        </video>
+    </view>
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
+        <video wx:if="{{streams[0]}}" id="layout-1-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="{{false}}"
+               show-progress="{{false}}"
+               show-fullscreen-btn="{{false}}"
+               show-center-play-btn="{{false}}"
+               show-play-btn="{{false}}"
+               enable-progress-gesture="{{false}}"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+        <video wx:if="{{streams[1]}}" id="layout-1-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="{{false}}"
+               show-progress="{{false}}"
+               show-fullscreen-btn="{{false}}"
+               show-center-play-btn="{{false}}"
+               show-play-btn="{{false}}"
+               enable-progress-gesture="{{false}}"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+    </view>
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
+        <video wx:if="{{streams[0]}}" id="layout-2-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange"
+               bindnetstatus="onPlayNetStateChange"
+               controls="{{false}}"
+               show-progress="{{false}}"
+               show-fullscreen-btn="{{false}}"
+               show-center-play-btn="{{false}}"
+               show-play-btn="{{false}}"
+               enable-progress-gesture="{{false}}"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+        <video wx:if="{{streams[1]}}" id="layout-2-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange"
+               bindnetstatus="onPlayNetStateChange"
+               controls="{{false}}"
+               show-progress="{{false}}"
+               show-fullscreen-btn="{{false}}"
+               show-center-play-btn="{{false}}"
+               show-play-btn="{{false}}"
+               enable-progress-gesture="{{false}}"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+    </view>
+    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 3}}" class="layout-3">
+        <video wx:if="{{streams[0]}}" id="layout-3-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+        <video wx:if="{{streams[1]}}" id="layout-3-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
+               picture-in-picture-mode="{{pictureInPictureMode}}" style="height: {{streams[1].height}}; width: {{streams[1].width}}"
+               bindnetstatus="onPlayNetStateChange"
+               controls="false"
+               show-progress="false"
+               show-fullscreen-btn="false"
+               show-center-play-btn="false"
+               show-play-btn="false"
+               enable-progress-gesture="false"
+               autoplay="true"
+               binderror="onPlayError"
+               bindwaiting="onWaiting"
+        ></video>
+    </view>
+
+    <view class="user-info" wx:if="{{userTop > 0}}" style="top:{{userTop}}px;left: 35px">
+        <image class="avatar" src="{{liveRoom.mainAnchorAvatar}}" bindload="" binderror=""></image>
+        <view class="user-text">
+            <view class="">{{stringUtil.substr(liveRoom.mainAnchorName, 8)}}</view>
+            <view class="user-count">{{userCount}}观看</view>
+        </view>
+    </view>
+    <view class="new-msg">
+        <view class="new-one" style="bottom:{{newBot}}rpx" wx:if="{{newestName}}">
+            {{stringUtil.substr(newestName, 12)}} 进入了直播间
+        </view>
+        <scroll-view class='message-view' style="bottom:{{meBot}}rpx" scroll-into-view='{{scrollToView}}' scroll-y='true' bind:tap="clickMessage"
+                     bindscroll="scrollMessage">
+            <view class='message-detail' wx:for="{{messageList}}" wx:key="index" id="M{{item.id}}">
+                <view class="msg-text">
+                    <span style="color:{{item.color}}">{{item.name}}</span>：
+                    <span style="color: {{item.fontColor ? item.fontColor:'white'}}">{{item.content}}</span>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view class="modal-hide" bind:tap="clickFull"></view>
+    <view class="bot-bg" style="height:{{meBot}}rpx"></view>
+    <view wx:if="{{!showBeauty}}" class="mmprise" style="bottom:{{mmBot}}rpx">
+        <view wx:if="{{preInputShow}}" class="mmprise-con">
+            <view class='input-button' catchtap="showInput">
+                说点什么...
+            </view>
+            <view class='merchandise-img' bindtap="showMerchandise">
+                <image src='../images/merchandise.png'></image>
+            </view>
+<!--            <view wx:if="{{loginType==='anchor'}}" class="operate">-->
+<!--                <view class='img-box' bindtap="switchCamera">-->
+<!--                    <image class="img" src='../images/switchCamera.png'></image>-->
+<!--                </view>-->
+<!--                <view class='img-box' bindtap="enableMute">-->
+<!--                    <image class="img" wx:if="{{mainPusher.isMute}}" src="../images/mute.png"></image>-->
+<!--                    <image class="img" wx:else src="../images/noMute.png"></image>-->
+<!--                </view>-->
+<!--                <view class='img-box' bindtap="toggleShowBeauty">-->
+<!--                    <image class="img" src='../images/beauty-setting.png'></image>-->
+<!--                </view>-->
+<!--            </view>-->
+            <!--            <view wx:if="{{loginType==='audience'}}" class="operate">-->
+            <!--                <view class='img-box' bindtap="requestJoinLive">-->
+            <!--                    <image class="img" wx:if="{{isPublishing == true}}" src='../images/endJoin.png'></image>-->
+            <!--                    <image class="img" wx:else src='../images/join.png'></image>-->
+            <!--                </view>-->
+            <!--            </view>-->
+        </view>
+        <view wx:if="{{offerShow}}" style="width: 100%;display: flex; align-items: center; justify-content: center">
+            <button wx:if="{{deposited}}" class="btn btn-danger" plain="true" bindtap="doOffer">
+                <view>出价</view>
+                <view>RMB {{nextPrice}}</view>
+            </button>
+            <button wx:else class="btn btn-primary" plain="true" bindtap="payDeposit">
+                <view>交保证金</view>
+                <view>RMB {{liveRoom.deposit}}</view>
+            </button>
+        </view>
+        <view wx:if="{{inputShow}}" class="mmprise-con">
+            <view class='message-input' style='bottom:{{inputBottom}}px'>
+                <view class="input-conteiner">
+                    <input class="input-content" value="{{inputMessage}}" placeholder="我要说点什么"
+                           placeholder-style='color: #C0C0C0; font-size: 28rpx;' bindinput="bindMessageInput" focus="auto" bindfocus="foucus"
+                           bindblur="blur" cursor-spacing="15" adjust-position='{{false}}' confirm-hold='{{keyboardHold}}'
+                           hold-keyboard='{{keyboardHold}}' confirm-type='send' bindconfirm="onComment"/>
+                    <image hidden="{{clearHide}}" class="clear-input" src="../images/clear-input.png" catch:tap="clearInput"></image>
+                </view>
+                <view class="send-btn" bindtap="onComment">发送</view>
+            </view>
+        </view>
+    </view>
+    <view wx:if="{{showBeauty}}" class='moreTool'>
+        <view class="moreToolHeader">
+            <view class="head-left">
+                <image class="beauty-icon" mode="aspectFit" src="../images/beauty-icon.png"/>
+                <view class="beauty-text">美颜设置</view>
+            </view>
+            <image class="icon moreToolHeaderIco" mode="aspectFit" src="../images/beauty-close.png" bindtap="toggleShowBeauty"/>
+        </view>
+        <view class="moreToolBody">
+            <view class="beauty-item">
+                <view class="beautyLabel">美颜</view>
+                <slider block-size="16" backgroundColor="rgba(255, 255, 255, 0.4)" activeColor="#fff" min="0" max="9" step="1" value="{{beauty}}"
+                        class="beauty-slide" show-value bindchange="handleChangeBeauty"/>
+            </view>
+            <view class="beauty-item">
+                <view class="beautyLabel">美白</view>
+                <slider block-size="16" backgroundColor="rgba(255, 255, 255, 0.4)" activeColor="#fff" min="0" max="9" value="{{whiteness}}"
+                        class="beauty-slide" show-value bindchange="handleChangeWhiteness"/>
+            </view>
+        </view>
+    </view>
+    <modal isShowModal="{{isShowModal}}" top="{{userTop}}" showDesc="{{showDesc}}" hasConfirm="{{hasConfirm}}" hasCancel="{{hasCancel}}"
+           confirmText="{{confirmText}}" cancelText="{{cancelText}}" bindconfirm="confirm" bindcancel="cancel"></modal>
+</view>

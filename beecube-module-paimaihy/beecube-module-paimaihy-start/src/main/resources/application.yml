@@ -1,0 +1,20 @@
+server:
+  port: 7011
+  servlet:
+    context-path: /paimaihy
+spring:
+  profiles:
+    active: dev
+  application:
+    name: beecube-paimaihy
+  config:
+    import:
+      - optional:nacos:jeecg.yaml
+      - optional:nacos:beecube-module-@profile.name@.yaml
+
+  cloud:
+    nacos:
+      config:
+        server-addr: @config.server-addr@
+      discovery:
+        server-addr: ${spring.cloud.nacos.config.server-addr}

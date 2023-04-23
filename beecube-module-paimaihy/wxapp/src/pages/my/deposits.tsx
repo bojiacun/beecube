@@ -1,0 +1,99 @@
+import {Component} from "react";
+import PageLayout from "../../layouts/PageLayout";
+import request from "../../lib/request";
+import utils from "../../lib/utils";
+import {View, Navigator} from "@tarojs/components";
+import Taro from "@tarojs/taro";
+import NoData from "../../components/nodata";
+import LoadMore from "../../components/loadmore";
+
+const numeral = require('numeral');
+
+export default class Index extends Component<any, any> {
+    state: any = {
+        page: 1,
+        list: [],
+        loadingMore: false,
+        noMore: false,
+    }
+
+    componentDidMount() {
+    }
+
+    loadData(page, clear = false) {
+        return request.get('/paimai/api/members/deposits', {params: {pageNo: page, column: 'createTime', order: 'desc'}}).then(res => {
+            if (clear) {
+                this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
+            } else {
+                let list = this.state.list;
+                let newList = res.data.result.records;
+                if (!newList || newList.length == 0) {
+                    this.setState({noMore: true, loadingMore: false});
+                } else {
+                    this.setState({noMore: false, loadingMore: false, list: [...list, ...newList]});
+                }
+            }
+        });
+    }
+
+    onLoad() {
+        utils.showLoading();
+        this.loadData(1, true).then(() => utils.hideLoading());
+    }
+
+    onReachBottom() {
+        this.setState({loadingMore: true, noMore: false});
+        this.loadData(this.state.page + 1, false).then(() => {
+        });
+        this.setState({page: this.state.page + 1});
+    }
+
+    onPullDownRefresh() {
+        utils.showLoading();
+        this.loadData(1, true).then(() => utils.hideLoading());
+        this.setState({page: 1});
+    }
+
+    render() {
+        const {list, noMore, loadingMore} = this.state;
+        return (
+            <PageLayout statusBarProps={{title: '保证金记录'}} enableReachBottom={true}>
+                {list.length == 0 && <NoData/>}
+                <View className={'grid grid-cols-1 gap-4 p-4'}>
+                    {list.map((item) => {
+                        let radius = 0;
+                        let link;
+                        if(item.performanceType == 1) {
+                            link = `/pages/performance/detail?id=${item.performanceId}`;
+                        }
+                        else if(item.performanceType == 2) {
+                            link = `/pages/performance/detail2?id=${item.performanceId}`;
+                        }
+                        else {
+                            link = `/pages/goods/detail?id=${item.goodsId}`;
+                        }
+                        return (
+                            <Navigator
+                                url={link}
+                                className={'bg-white flex shadow-outer p-4 space-y-2'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <View className={'space-y-1 flex-1'}>
+                                    <View className={'text-lg font-bold flex-1'}>{item.performanceName || item.goodsName}</View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        交易单号:{item.transactionId}
+                                    </View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        交易时间：{item.createTime}
+                                    </View>
+                                </View>
+                                <View className={'font-bold flex items-center justify-center'}>
+                                    ￥{numeral(item.price).format('0,0.00')}
+                                </View>
+                            </Navigator>
+                        );
+                    })}
+                </View>
+                {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
+            </PageLayout>
+        );
+    }
+}

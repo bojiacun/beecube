@@ -1,0 +1,24 @@
+package cn.winkt.modules.paimai.api.fallback;
+
+import cn.winkt.modules.paimai.api.PaimaiHelloApi;
+import org.springframework.cloud.openfeign.FallbackFactory;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @author JeecgBoot
+ */
+@Slf4j
+@Component
+public class PaimaiHelloFallback implements FallbackFactory<PaimaiHelloApi> {
+    @Setter
+    private Throwable cause;
+
+    @Override
+    public PaimaiHelloApi create(Throwable throwable) {
+        log.error("微服务接口调用失败： {}", cause);
+        return null;
+    }
+
+}
