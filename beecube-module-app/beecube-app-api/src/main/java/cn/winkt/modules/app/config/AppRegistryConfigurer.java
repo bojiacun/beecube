@@ -82,6 +82,7 @@ public class AppRegistryConfigurer implements ApplicationRunner {
 
         appModule.setAuthor(appManifest.getAuthor());
         appModule.setStatus(0);
+        appModule.setDeveloperAppId(appManifest.getDeveloperAppId());
         appModule.setSupportWechat(NumberUtils.toInt(appManifest.getSupportWechat(),0));
         appModule.setSupportH5(NumberUtils.toInt(appManifest.getSupportH5(), 0));
         appModule.setSupportDouyin(NumberUtils.toInt(appManifest.getSupportDouyin(), 0));

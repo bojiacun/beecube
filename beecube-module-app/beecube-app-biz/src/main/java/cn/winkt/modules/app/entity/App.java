@@ -54,7 +54,6 @@ public class App {
 	@Dict(dicCode = "app_status")
 	private java.lang.Integer status;
 
-
 	private Integer maxRoomUserCount;
 
 	@TableField(updateStrategy = FieldStrategy.IGNORED)

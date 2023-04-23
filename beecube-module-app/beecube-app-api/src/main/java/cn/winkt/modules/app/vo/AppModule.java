@@ -58,6 +58,8 @@ public class AppModule {
 	/**安装信息*/
 
 	private String manifest;
+
+	private String developerAppId;
 	/**模块注册时间*/
 
 	private Date createTime;

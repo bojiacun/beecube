@@ -6,7 +6,9 @@ import cn.binarywang.wx.miniapp.bean.code.WxMaCodeSubmitAuditRequest;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppModule;
 import cn.winkt.modules.app.entity.AppPublish;
+import cn.winkt.modules.app.service.IAppModuleService;
 import cn.winkt.modules.app.service.IAppPublishService;
 import cn.winkt.modules.app.service.IAppService;
 import cn.winkt.modules.app.vo.WxAppExtConfig;
@@ -45,6 +47,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/wxopen")
@@ -62,6 +65,9 @@ public class AppWxOpenController {
 
     @Resource
     IAppPublishService appPublishService;
+
+    @Resource
+    IAppModuleService appModuleService;
 
     private static final String BASE64_PRE = "data:image/jpg;base64,";
 
@@ -268,13 +274,16 @@ public class AppWxOpenController {
         );
         //设置业务域名
         wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+        AppModule appModule = appModuleService.getById(app.getModuleId());
+        String developerAppId = appModule.getDeveloperAppId();
 
         //上传代码,永远是最新一份
         List<WxOpenMaCodeTemplate> templates = wxOpenService.getWxOpenComponentService().getTemplateList(0);
         if(templates.size() == 0) {
             throw new JeecgBootException("模板为空");
         }
-        WxOpenMaCodeTemplate distTemplate = templates.get(0);
+        WxOpenMaCodeTemplate distTemplate = templates.stream().filter(t -> t.getSourceMiniProgramAppid().equals(developerAppId)).collect(Collectors.toList()).get(0);
+
         WxAppExtConfig wxAppExtConfig = new WxAppExtConfig();
         wxAppExtConfig.setCopyright(true);
         wxAppExtConfig.setAppId(AppContext.getApp());

@@ -22,4 +22,5 @@ public class AppManifest {
     private String supportDouyin;
     private String supportH5;
     private String description;
+    private String developerAppId;
 }

@@ -85,4 +85,6 @@ public class AppModule {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "模块注册时间")
 	private java.util.Date createTime;
+
+	private String developerAppId;
 }
