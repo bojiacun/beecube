@@ -15336,7 +15336,7 @@
     margin-left: 4rem;
   }
   .email-application .email-detail-head .mail-meta-item .mail-date,
-  .email-application .email-detail-head .mail-meta-item .mail-time {
+.email-application .email-detail-head .mail-meta-item .mail-time {
     margin: 1rem 0.75rem 0 0;
   }
   .email-application .content-area-wrapper .content-right .email-app-details .email-scroll-area {
@@ -15359,8 +15359,8 @@
     top: 1.5rem;
   }
   .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item i,
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item svg,
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item .bullet {
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item svg,
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item .bullet {
     display: none;
   }
 }

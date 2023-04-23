@@ -73,13 +73,27 @@ const PermissionList = () => {
     }
     const columns: any[] = [
         {
+            text: '所属模块',
+            dataField: 'componentName',
+            style: {width: 120},
+            formatter: (cell: any, row: any) => {
+                if(row.componentName) {
+                    return row.componentName;
+                }
+                else {
+                    return '系统';
+                }
+            }
+        },
+        {
             text: '菜单名称',
             dataField: 'name',
+            style: {width: 120},
         },
         {
             text: '菜单类型',
             dataField: 'menuType',
-            headerStyle: {width: 120},
+            style: {width: 120},
             formatter: (cell: any, row: any) => {
                 return MenuTypes[row.menuType];
             }
@@ -87,31 +101,30 @@ const PermissionList = () => {
         {
             text: '图标',
             dataField: 'icon',
-            headerStyle: {width: 300},
+            style: {width: 300},
             classes: 'text-cut'
         },
         {
             text: '路径',
             dataField: 'url',
-            headerStyle: {width: 260},
+            style: {width: 260},
             classes: 'text-cut'
         },
         {
             text: '权限标识',
             dataField: 'component',
-            headerStyle: {width: 260},
+            style: {width: 260},
             classes: 'text-cut'
         },
         {
             text: '排序',
             dataField: 'sortNo',
-            headerStyle: {width: 120},
+            style: {width: 120},
         },
         {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 190},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
@@ -142,7 +155,7 @@ const PermissionList = () => {
         ...defaultTableExpandRow,
         renderer: (row: any) => {
             return (
-                <div style={{marginLeft: -1, marginRight: -1, paddingLeft: 57}}>
+                <div>
                     <ChildPermissionList list={row.children} onShowRule={(row:any)=>setSelectedPermission(row)} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
                 </div>
             );

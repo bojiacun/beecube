@@ -99,8 +99,8 @@
 }
 @media (min-width: 768px) {
   .invoice-preview .invoice-title,
-  .invoice-edit .invoice-title,
-  .invoice-add .invoice-title {
+.invoice-edit .invoice-title,
+.invoice-add .invoice-title {
     text-align: right;
     margin-bottom: 3rem;
   }
@@ -151,24 +151,24 @@
 }
 @media (max-width: 769px) {
   .invoice-edit .invoice-preview-card .invoice-title,
-  .invoice-add .invoice-preview-card .invoice-title {
+.invoice-add .invoice-preview-card .invoice-title {
     margin-right: 0;
     width: 115px;
   }
   .invoice-edit .invoice-preview-card .invoice-edit-input,
-  .invoice-add .invoice-preview-card .invoice-edit-input {
+.invoice-add .invoice-preview-card .invoice-edit-input {
     max-width: 100%;
   }
 }
 @media (max-width: 992px) {
   .invoice-edit .col-title,
-  .invoice-add .col-title {
+.invoice-add .col-title {
     top: -1.5rem !important;
   }
 }
 @media print {
   .invoice-edit hr,
-  .invoice-add hr {
+.invoice-add hr {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
   }

@@ -161,13 +161,13 @@
     width: 20rem !important;
   }
   .toast-top-full-width,
-  .toast-bottom-full-width {
+.toast-bottom-full-width {
     right: 0;
     left: 0;
     width: 93%;
   }
   .toast-top-full-width > div,
-  .toast-bottom-full-width > div {
+.toast-bottom-full-width > div {
     width: 100%;
   }
   .toast-bottom-left {
@@ -179,7 +179,7 @@
     bottom: 0.75rem;
   }
   .toast-bottom-center,
-  .toast-bottom-full-width {
+.toast-bottom-full-width {
     bottom: 0.75rem;
   }
   [data-textdirection=rtl] #toast-container > div {

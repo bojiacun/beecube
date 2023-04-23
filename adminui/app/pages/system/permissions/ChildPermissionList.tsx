@@ -35,8 +35,22 @@ const ChildPermissionList = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: '所属模块',
+            dataField: 'componentName',
+            style: {width: 120},
+            formatter: (cell: any, row: any) => {
+                if(row.componentName) {
+                    return row.componentName;
+                }
+                else {
+                    return '系统';
+                }
+            }
+        },
+        {
             text: '菜单名称',
             dataField: 'name',
+            style: {width: 120},
         },
         {
             text: '菜单类型',
@@ -73,7 +87,6 @@ const ChildPermissionList = (props: any) => {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            style: {width: 190},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>

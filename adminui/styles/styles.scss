@@ -88,6 +88,10 @@ span.divider {
   white-space: nowrap;
 }
 
+.table-wrap td, .table-wrap th {
+  white-space: normal;
+}
+
 
 .dropdown-toggle.noafter:after {
   display: none;
