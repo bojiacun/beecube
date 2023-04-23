@@ -3,7 +3,7 @@
  * 6 |     color: $body-color !important;
  *   |            ^^^^^^^^^^^
  *   '
- *   styles/base/components/chart.scss 6:12  root stylesheet */
+ *   styles\base\components\chart.scss 6:12  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 6 \2502      color: $body-color !important;\a   \2502             ^^^^^^^^^^^\a   \2575 \a   styles/base/components/chart.scss 6:12  root stylesheet";
+  content: "Error: Undefined variable.\a   \2577 \a 6 \2502      color: $body-color !important;\d\a   \2502             ^^^^^^^^^^^\a   \2575 \a   styles\\base\\components\\chart.scss 6:12  root stylesheet";
 }
