@@ -155,7 +155,7 @@ export default class Index extends Component<any, any> {
         }
         if(pushIndex != prevState.pushIndex) {
             let addBot = (pushIndex > - 1 ? 130:0)
-            this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
+            // this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
         }
     }
 
@@ -484,12 +484,17 @@ export default class Index extends Component<any, any> {
                     </View>
                     {pushIndex >= 0 &&
                         <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
-                            <Image className="push-mer-img" mode={'aspectFit'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
+                            <Image className="push-mer-img" mode={'aspectFill'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
                                 <Text className="push-mer-text">{merchandises[pushIndex].title}</Text>
-                                <Text className="push-mer-price">当前价：¥{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
+                                <View className="push-mer-price justify-between">
+                                    <View>
+                                    <Text className={'text-sm'}>¥</Text>
+                                    <Text>{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
+                                    </View>
+                                    <Text onClick={this.showOffer} className={'font-bold'}>出价</Text>
+                                </View>
                             </View>
-                            <View onClick={this.showOffer} className={'flex items-center justify-center mr-2'}><Button className={'btn btn-danger btn-sm'}>出价</Button></View>
                         </View>
                     }
                 </View>

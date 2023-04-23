@@ -175,13 +175,15 @@
 .input-button {
     /* width: 410rpx; */
     flex: 1;
+    padding: 0rpx 20rpx;
     height: 70rpx;
     line-height: 70rpx;
     color: #fff;
     margin-top: 28rpx;
     margin-right: 18rpx;
     font-size: 26rpx;
-    border-bottom: 2rpx solid rgba(255, 255, 255, 0.2);
+    background-color: rgb(0,0,0, 0.3);
+    border-radius: 30rpx;
 }
 .prise-img-box {
     position: relative;

@@ -27,7 +27,7 @@
                 {
                     "name": "用户端",
                     "pathName": "/pages/live/room",
-                    "query": "roomId=1648700702992969729&loginType=audience&roomName=测试直播间"
+                    "query": "roomId=1649779288961277953&loginType=audience&roomName=测试直播间"
                 },
                 {
                     "name": "直播回放",

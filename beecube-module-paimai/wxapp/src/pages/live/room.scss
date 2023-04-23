@@ -111,26 +111,27 @@
 }
 
 .push-mer {
-    width: 500rpx;
-    height: 120rpx;
+    width: 200rpx;
     display: flex;
+    flex-direction: column;
     position: fixed;
-    margin-left: 24rpx;
     background-color: #fff;
     font-size: 28rpx;
     border-radius: 8rpx;
     z-index: 11;
+    right: 20px;
+    overflow: hidden;
 }
 .push-mer-img {
-    width: 120rpx;
-    height: 120rpx;
+    width: 200rpx;
+    height: 150rpx;
 }
 .push-mer-detail {
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: space-around;
-    margin-left: 16rpx;
+    padding: 10rpx;
 }
 .push-mer-text {
     display: -webkit-box;
@@ -138,11 +139,12 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 28rpx;
+    font-size: 24rpx;
     line-height: 32rpx;
 }
 .push-mer-price {
     color: #F2034C;
+    display: flex;
 }
 /*模态框*/
 .modals-cancel {

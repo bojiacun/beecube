@@ -131,24 +131,24 @@
     <view class="bot-bg" style="height:{{meBot}}rpx"></view>
     <view wx:if="{{!showBeauty}}" class="mmprise" style="bottom:{{mmBot}}rpx">
         <view wx:if="{{preInputShow}}" class="mmprise-con">
+            <view class='input-button' catchtap="showInput">
+                说点什么...
+            </view>
             <view class='merchandise-img' bindtap="showMerchandise">
                 <image src='../images/merchandise.png'></image>
             </view>
-            <view class='input-button' catchtap="showInput">
-                {{loginType == "anchor" ? '跟观众聊聊什么' : '跟主播聊聊什么？'}}
-            </view>
-            <view wx:if="{{loginType==='anchor'}}" class="operate">
-                <view class='img-box' bindtap="switchCamera">
-                    <image class="img" src='../images/switchCamera.png'></image>
-                </view>
-                <view class='img-box' bindtap="enableMute">
-                    <image class="img" wx:if="{{mainPusher.isMute}}" src="../images/mute.png"></image>
-                    <image class="img" wx:else src="../images/noMute.png"></image>
-                </view>
-                <view class='img-box' bindtap="toggleShowBeauty">
-                    <image class="img" src='../images/beauty-setting.png'></image>
-                </view>
-            </view>
+<!--            <view wx:if="{{loginType==='anchor'}}" class="operate">-->
+<!--                <view class='img-box' bindtap="switchCamera">-->
+<!--                    <image class="img" src='../images/switchCamera.png'></image>-->
+<!--                </view>-->
+<!--                <view class='img-box' bindtap="enableMute">-->
+<!--                    <image class="img" wx:if="{{mainPusher.isMute}}" src="../images/mute.png"></image>-->
+<!--                    <image class="img" wx:else src="../images/noMute.png"></image>-->
+<!--                </view>-->
+<!--                <view class='img-box' bindtap="toggleShowBeauty">-->
+<!--                    <image class="img" src='../images/beauty-setting.png'></image>-->
+<!--                </view>-->
+<!--            </view>-->
             <!--            <view wx:if="{{loginType==='audience'}}" class="operate">-->
             <!--                <view class='img-box' bindtap="requestJoinLive">-->
             <!--                    <image class="img" wx:if="{{isPublishing == true}}" src='../images/endJoin.png'></image>-->
