@@ -37,7 +37,6 @@ const ChildPermissionList = (props: any) => {
         {
             text: '所属模块',
             dataField: 'componentName',
-            style: {width: 120},
             formatter: (cell: any, row: any) => {
                 if(row.componentName) {
                     return row.componentName;
@@ -50,7 +49,7 @@ const ChildPermissionList = (props: any) => {
         {
             text: '菜单名称',
             dataField: 'name',
-            style: {width: 120},
+            style: {width: 140},
         },
         {
             text: '菜单类型',
@@ -63,7 +62,7 @@ const ChildPermissionList = (props: any) => {
         {
             text: '图标',
             dataField: 'icon',
-            style: {width: 300},
+            style: {width: 200},
             classes: 'text-cut'
         },
         {

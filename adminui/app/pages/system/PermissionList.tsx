@@ -75,7 +75,6 @@ const PermissionList = () => {
         {
             text: '所属模块',
             dataField: 'componentName',
-            style: {width: 120},
             formatter: (cell: any, row: any) => {
                 if(row.componentName) {
                     return row.componentName;
@@ -88,7 +87,7 @@ const PermissionList = () => {
         {
             text: '菜单名称',
             dataField: 'name',
-            style: {width: 120},
+            style: {width: 140},
         },
         {
             text: '菜单类型',
@@ -101,7 +100,7 @@ const PermissionList = () => {
         {
             text: '图标',
             dataField: 'icon',
-            style: {width: 300},
+            style: {width: 200},
             classes: 'text-cut'
         },
         {
@@ -155,7 +154,7 @@ const PermissionList = () => {
         ...defaultTableExpandRow,
         renderer: (row: any) => {
             return (
-                <div>
+                <div style={{paddingLeft: 60}}>
                     <ChildPermissionList list={row.children} onShowRule={(row:any)=>setSelectedPermission(row)} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
                 </div>
             );
