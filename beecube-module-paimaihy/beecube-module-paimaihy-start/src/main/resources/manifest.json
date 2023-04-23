@@ -209,29 +209,51 @@
       "sortNo": 1,
       "title": "拍卖管理",
       "internalOrExternal": false,
-      "url": "/paimai/goods",
+      "url": "/paimaihy/goods",
       "children": [
         {
           "icon": "",
           "hidden": false,
-          "component": "auction-goods-list",
-          "name": "拍品管理",
+          "component": "paimai-buyout",
+          "name": "一口价管理",
           "menuType": 1,
           "sortNo": 1,
-          "title": "拍品管理",
+          "title": "一口价管理",
           "internalOrExternal": false,
-          "url": "/paimai/goods/list"
+          "url": "/paimaihy/goods/buyout"
         },
         {
           "icon": "",
           "hidden": false,
-          "component": "performance-list",
-          "name": "专场管理",
+          "component": "auction-goods-list",
+          "name": "独立拍品",
           "menuType": 1,
           "sortNo": 2,
-          "title": "专场管理",
+          "title": "独立拍品",
           "internalOrExternal": false,
-          "url": "/paimai/performances"
+          "url": "/paimaihy/goods/auction"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "performance-deadline-list",
+          "name": "限时拍专场",
+          "menuType": 1,
+          "sortNo": 3,
+          "title": "限时拍专场",
+          "internalOrExternal": false,
+          "url": "/paimaihy/performances/deadline"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-performances-sync",
+          "name": "同步拍专场",
+          "menuType": 1,
+          "sortNo": 4,
+          "title": "同步拍专场",
+          "internalOrExternal": false,
+          "url": "/paimaihy/performances/sync"
         },
         {
           "icon": "",
@@ -239,10 +261,10 @@
           "component": "auction-list",
           "name": "拍卖会管理",
           "menuType": 1,
-          "sortNo": 3,
+          "sortNo": 5,
           "title": "拍卖会管理",
           "internalOrExternal": false,
-          "url": "/paimai/auctions"
+          "url": "/paimaihy/auctions"
         },
         {
           "icon": "",
@@ -253,18 +275,51 @@
           "sortNo": 4,
           "title": "拍品设置",
           "internalOrExternal": false,
-          "url": "/paimai/goods/settings"
+          "url": "/paimaihy/goods/settings"
         },
         {
           "icon": "",
           "hidden": false,
           "component": "goods-class",
-          "name": "分类设置",
+          "name": "拍品分类",
           "menuType": 1,
           "sortNo": 5,
-          "title": "分类设置",
+          "title": "拍品分类",
           "internalOrExternal": false,
-          "url": "/paimai/goods/classes"
+          "url": "/paimaihy/goods/classes"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "goods-buyout-classes",
+          "name": "一口价分类",
+          "menuType": 1,
+          "sortNo": 6,
+          "title": "拍品分类",
+          "internalOrExternal": false,
+          "url": "/paimaihy/buyout/classes"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "goods-goods-settings",
+          "name": "拍品设置",
+          "menuType": 1,
+          "sortNo": 6,
+          "title": "拍品设置",
+          "internalOrExternal": false,
+          "url": "/paimaihy/goods/settings"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "goods-goods-running",
+          "name": "进行中拍品",
+          "menuType": 1,
+          "sortNo": 7,
+          "title": "拍品设置",
+          "internalOrExternal": false,
+          "url": "/paimaihy/goods/running"
         }
       ]
     },
@@ -272,12 +327,69 @@
       "icon": "",
       "hidden": false,
       "component": "paimai",
+      "name": "文章管理",
+      "menuType": 0,
+      "sortNo": 3,
+      "title": "文章管理",
+      "internalOrExternal": false,
+      "url": "/paimaihy/articles",
+      "children": [
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-articles-classes",
+          "name": "分类管理",
+          "menuType": 1,
+          "sortNo": 1,
+          "title": "分类管理",
+          "internalOrExternal": false,
+          "url": "/paimaihy/articles/classes"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-articles-services",
+          "name": "服务指南",
+          "menuType": 1,
+          "sortNo": 2,
+          "title": "服务指南",
+          "internalOrExternal": false,
+          "url": "/paimaihy/articles/services"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-articles-normal",
+          "name": "图文类文章",
+          "menuType": 1,
+          "sortNo": 3,
+          "title": "图文类文章",
+          "internalOrExternal": false,
+          "url": "/paimaihy/articles/normal"
+        },
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-articles-video",
+          "name": "视频类文章",
+          "menuType": 1,
+          "sortNo": 4,
+          "title": "视频类文章",
+          "internalOrExternal": false,
+          "url": "/paimaihy/articles/video"
+        }
+      ]
+    },
+    {
+      "icon": "",
+      "hidden": false,
+      "component": "paimai-orders",
       "name": "订单管理",
       "menuType": 0,
       "sortNo": 1,
       "title": "订单管理",
       "internalOrExternal": false,
-      "url": "/paimai/orders",
+      "url": "/paimaihy/orders",
       "children": [
         {
           "icon": "",
@@ -288,7 +400,7 @@
           "sortNo": 1,
           "title": "订单管理",
           "internalOrExternal": false,
-          "url": "/paimai/orders/list"
+          "url": "/paimaihy/orders/list"
         },
         {
           "icon": "",
@@ -299,21 +411,45 @@
           "sortNo": 2,
           "title": "售后订单",
           "internalOrExternal": false,
-          "url": "/paimai/orders/afters"
+          "url": "/paimaihy/orders/afters"
+        }
+      ]
+    },
+    {
+      "icon": "",
+      "hidden": false,
+      "component": "paimai-lives",
+      "name": "直播管理",
+      "menuType": 0,
+      "sortNo": 1,
+      "title": "直播管理",
+      "internalOrExternal": false,
+      "url": "/paimaihy/lives",
+      "children": [
+        {
+          "icon": "",
+          "hidden": false,
+          "component": "paimai-live-rooms",
+          "name": "直播间",
+          "menuType": 1,
+          "sortNo": 1,
+          "title": "直播间",
+          "internalOrExternal": false,
+          "url": "/paimaihy/live/rooms"
         }
       ]
     }
   ],
   "gateway": {
-    "routerId": "beecube-paimai",
-    "name": "汇智拍卖",
-    "uri": "lb://beecube-paimai",
+    "routerId": "beecube-paimaihy",
+    "name": "华艺拍卖",
+    "uri": "lb://beecube-paimaihy",
     "status": 1,
     "predicates": [
       {
         "name": "Path",
         "args": [
-          "/paimai/**"
+          "/paimaihy/**"
         ]
       }
     ],
@@ -329,6 +465,6 @@
   "homeUrl": "/index",
   "role": {
     "roleName": "拍卖主管理员",
-    "roleCode": "role_paimai"
+    "roleCode": "role_paimaihy"
   }
 }

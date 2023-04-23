@@ -205,6 +205,7 @@ public class AppModuleController extends JeecgController<AppModule, IAppModuleSe
         Arrays.stream(appManifest.getMenus()).forEach(appMenu -> {
             installMenu(appMenu, appModule, null);
         });
+        //映射菜单权限
         AppMenu searchMenu = new AppMenu();
         searchMenu.setComponentName(appModule.getIdentify());
         List<String> ids = new ArrayList<>();

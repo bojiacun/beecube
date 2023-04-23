@@ -7,3 +7,12 @@ spring:
           username: beecube-paimai
           password: jKGpNcaBpScMmkLF
           driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+im:
+  server-ip: 127.0.0.1
+  tcpPort: 8902
+  udpPort: 7902
+  websocketPort: 3100
+  debug: true
