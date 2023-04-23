@@ -1,13 +1,13 @@
 {
-  "name": "汇智拍卖",
-  "identify": "paimai",
+  "name": "华艺拍卖",
+  "identify": "paimaihy",
   "author": "薄先生",
   "version": "1.0.1",
   "supportWechat": "1",
   "supportH5": "1",
   "supportDouyin": "0",
-  "description": "标准拍卖程序",
-  "developerAppId": "wx6a459460d394f202",
+  "description": "华艺定制拍卖程序",
+  "developerAppId": "wx6ae74ffdc148237f",
   "diy": [],
   "links": [
     {
