@@ -177,8 +177,10 @@ public class ShiroConfig {
         }
 
         // 未授权界面返回JSON
-        shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
-        shiroFilterFactoryBean.setLoginUrl(jeecgBaseConfig.getShiro().getLoginUrl());
+        if(jeecgBaseConfig.getShiro() != null) {
+            shiroFilterFactoryBean.setUnauthorizedUrl(jeecgBaseConfig.getShiro().getUnauthorizedUrl());
+            shiroFilterFactoryBean.setLoginUrl(jeecgBaseConfig.getShiro().getLoginUrl());
+        }
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
