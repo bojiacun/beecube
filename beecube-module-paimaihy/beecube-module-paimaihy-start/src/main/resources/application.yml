@@ -1,5 +1,5 @@
 server:
-  port: 7011
+  port: 7021
   servlet:
     context-path: /paimaihy
 spring:

@@ -9,6 +9,7 @@ import cn.winkt.modules.paimai.service.IGoodsOrderService;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.GoodsOrderAfterVO;
+import cn.winkt.modules.paimai.vo.OrderBadge;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -42,6 +43,22 @@ public class WxAppOrderController {
 
     @Resource
     IGoodsOrderAfterService goodsOrderAfterService;
+
+
+    @GetMapping("/badges")
+    public Result<?> orderBadges() {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        OrderBadge orderBadge = new OrderBadge();
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getStatus, 0);
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        orderBadge.setPayCount(goodsOrderService.count(queryWrapper));
+        queryWrapper.eq(GoodsOrder::getStatus, 1);
+        orderBadge.setDeliveryCount(goodsOrderService.count(queryWrapper));
+        queryWrapper.eq(GoodsOrder::getStatus, 2);
+        orderBadge.setConfirmDeliveryCount(goodsOrderService.count(queryWrapper));
+        return Result.OK(orderBadge);
+    }
 
     /**
      * 售后详情
