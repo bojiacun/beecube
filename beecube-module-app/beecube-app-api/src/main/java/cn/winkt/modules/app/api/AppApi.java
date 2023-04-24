@@ -8,6 +8,7 @@ import org.jeecg.common.api.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 @FeignClient(value = AppModuleConstants.SERVICE_APP)
@@ -40,4 +41,7 @@ public interface AppApi {
 
     @PutMapping("/app/admin/token/verify")
     Boolean verifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token);
+
+    @GetMapping("/app/admin/qrcode")
+    BufferedImage getMemberQrcode(@RequestParam String userPath);
 }

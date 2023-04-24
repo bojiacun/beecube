@@ -1,7 +1,9 @@
 package cn.winkt.modules.app.controller.api;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.*;
 import cn.winkt.modules.app.service.*;
 import cn.winkt.modules.app.utils.AppTokenUtils;
@@ -9,6 +11,8 @@ import cn.winkt.modules.app.vo.AppVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
@@ -22,6 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +67,9 @@ public class AppApiController {
     @Resource
     IAppTencentConfigService tencentConfigService;
 
+
+    @Resource
+    private WxMiniappServices wxMiniappServices;
 
     @PutMapping("/token/verify")
     public Boolean appVerifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token) {
@@ -107,7 +120,26 @@ public class AppApiController {
         return appMemberProvider.getUserByName(username);
     }
 
-
+    /**
+     * 生成用户二维码
+     * @param response
+     * @throws WxErrorException
+     * @throws IOException
+     */
+    @GetMapping("/qrcode")
+    @ResponseBody
+    public BufferedImage getMemberQrcode(@RequestParam String userPath) throws WxErrorException, IOException {
+        WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
+        File file = wxMaService.getQrcodeService().createWxaCode(userPath, 375);
+        BufferedImage image = null;
+        try {
+//        读取图片
+            image = ImageIO.read(file);
+        } catch (IOException e) {
+            log.error("获取图片异常{}",e.getMessage());
+        }
+        return image;
+    }
     /**
      * VUEN-2584【issue】平台sql注入漏洞几个问题
      * 部分特殊函数 可以将查询结果混夹在错误信息中，导致数据库的信息暴露

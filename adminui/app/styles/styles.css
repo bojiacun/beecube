@@ -2506,4 +2506,8 @@ fieldset legend {
   cursor: pointer;
 }
 
+.form-text {
+  color: #ccc;
+}
+
 /*# sourceMappingURL=styles.css.map */

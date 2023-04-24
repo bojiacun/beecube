@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.freewayso.image.combiner.ImageCombiner;
+import com.freewayso.image.combiner.enums.OutputFormat;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class WxAppGoodsController {
 
     @Resource
     IGoodsOfferService goodsOfferService;
+
 
     @AutoLog(value = "拍品表-分页列表查询")
     @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")

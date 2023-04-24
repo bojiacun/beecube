@@ -75,6 +75,7 @@
             <artifactId>image-combiner</artifactId>
             <version>2.6.3</version>
         </dependency>
+
     </dependencies>
     <build>
         <!-- 打包名称 -->

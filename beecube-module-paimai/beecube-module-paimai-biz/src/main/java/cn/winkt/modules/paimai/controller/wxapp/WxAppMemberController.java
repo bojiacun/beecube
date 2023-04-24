@@ -12,6 +12,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.freewayso.image.combiner.ImageCombiner;
+import com.freewayso.image.combiner.element.TextElement;
+import com.freewayso.image.combiner.enums.Direction;
+import com.freewayso.image.combiner.enums.GradientDirection;
+import com.freewayso.image.combiner.enums.OutputFormat;
+import com.freewayso.image.combiner.enums.ZoomMode;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
@@ -19,6 +25,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import me.zhyd.oauth.log.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
@@ -34,7 +41,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -67,6 +81,8 @@ public class WxAppMemberController {
     IGoodsDepositService goodsDepositService;
     @Resource
     IPerformanceService performanceService;
+    @Resource
+    IGoodsCommonDescService goodsCommonDescService;
 
     @Resource
     JeecgBaseConfig jeecgBaseConfig;
@@ -98,10 +114,7 @@ public class WxAppMemberController {
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
     @GetMapping(value = "/orders/afters")
-    public Result<?> queryPageOrderAfterList(GoodsOrderAfter goodsOrderAfter,
-                                             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                             HttpServletRequest req) {
+    public Result<?> queryPageOrderAfterList(GoodsOrderAfter goodsOrderAfter, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         QueryWrapper<GoodsOrderAfter> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrderAfter, req.getParameterMap());
         Page<GoodsOrderAfter> page = new Page<GoodsOrderAfter>(pageNo, pageSize);
         IPage<GoodsOrderAfterVO> pageList = goodsOrderAfterService.selectPageVO(page, queryWrapper);
@@ -113,7 +126,7 @@ public class WxAppMemberController {
     @ApiOperation(value = "订单表-支付订单", notes = "订单表-支付订单")
     @PostMapping(value = "/orders/pay")
     public Result<?> payOrder(@RequestParam(name = "id", defaultValue = "") String id, @RequestBody AddressVO addressVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
-        if(addressVO == null || StringUtils.isEmpty(addressVO.getId())) {
+        if (addressVO == null || StringUtils.isEmpty(addressVO.getId())) {
             throw new JeecgBootException("请选择收货地址");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -121,7 +134,7 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
-        if(order.getStatus() != 0) {
+        if (order.getStatus() != 0) {
             throw new JeecgBootException("订单状态异常，不能支付");
         }
 
@@ -133,14 +146,7 @@ public class WxAppMemberController {
         order.setDeliveryAddress(addressVO.getAddress());
         order.setDeliveryProvince(addressVO.getProvince());
 
-        order.setDeliveryInfo(String.format("%s %s %s %s %s %s",
-                addressVO.getUsername(),
-                addressVO.getPhone(),
-                addressVO.getProvince(),
-                addressVO.getCity(),
-                addressVO.getDistrict(),
-                addressVO.getAddress()
-                ));
+        order.setDeliveryInfo(String.format("%s %s %s %s %s %s", addressVO.getUsername(), addressVO.getPhone(), addressVO.getProvince(), addressVO.getCity(), addressVO.getDistrict(), addressVO.getAddress()));
 
         goodsOrderService.updateById(order);
 
@@ -151,14 +157,7 @@ public class WxAppMemberController {
         BigDecimal payAmount = BigDecimal.valueOf(order.getPayedPrice()).setScale(2, RoundingMode.HALF_DOWN);
         PayLog payLog = getPayLog(order.getId());
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/orders/" + AppContext.getApp())
-                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                .body("订单支付")
-                .spbillCreateIp("127.0.0.1")
-                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                .detail(orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining(",")))
-                .build();
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/orders/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("订单支付").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining(","))).build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK("", wxPayService.createOrder(request));
     }
@@ -170,7 +169,7 @@ public class WxAppMemberController {
     @Transactional(rollbackFor = Exception.class)
     public Result<GoodsOrder> confirmDelivery(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
-        if(goodsOrder.getStatus() != 2) {
+        if (goodsOrder.getStatus() != 2) {
             throw new JeecgBootException("订单状态异常，无法确认收货");
         }
         goodsOrder.setStatus(3);
@@ -190,19 +189,14 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
 
-        if(order.getStatus() !=1 && order.getStatus() != 0) {
+        if (order.getStatus() != 1 && order.getStatus() != 0) {
             throw new JeecgBootException("订单状态异常，无法取消");
         }
 
-        if(order.getTransactionId() != null) {
+        if (order.getTransactionId() != null) {
             Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(100)).intValue();
             log.debug("原路返回支付金额 {}", refundAmount);
-            WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
-                    .transactionId(order.getTransactionId())
-                    .outRefundNo(order.getId())
-                    .totalFee(refundAmount)
-                    .refundFee(refundAmount)
-                    .build();
+            WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder().transactionId(order.getTransactionId()).outRefundNo(order.getId()).totalFee(refundAmount).refundFee(refundAmount).build();
             WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
             WxPayRefundResult result = wxPayService.refund(refundRequest);
             if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
@@ -218,10 +212,7 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-分页列表查询")
     @ApiOperation(value = "订单表-分页列表查询", notes = "订单表-分页列表查询")
     @GetMapping(value = "/orders")
-    public Result<?> queryPageOrderList(GoodsOrder goodsOrder,
-                                        @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                        @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                        HttpServletRequest req) {
+    public Result<?> queryPageOrderList(GoodsOrder goodsOrder, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
         queryWrapper.eq("member_id", loginUser.getId());
@@ -253,10 +244,7 @@ public class WxAppMemberController {
     @AutoLog(value = "用户保证金列表-分页列表查询")
     @ApiOperation(value = "用户保证金列表-分页列表查询", notes = "用户保证金列表-分页列表查询")
     @GetMapping(value = "/deposits")
-    public Result<?> memberGoodsDepositList(GoodsDeposit goodsDeposit,
-                                            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                            HttpServletRequest req) {
+    public Result<?> memberGoodsDepositList(GoodsDeposit goodsDeposit, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsDeposit> queryWrapper = QueryGenerator.initQueryWrapper(goodsDeposit, req.getParameterMap());
         queryWrapper.eq("gd.status", 1);
@@ -269,10 +257,7 @@ public class WxAppMemberController {
     @AutoLog(value = "用户参拍记录列表-分页列表查询")
     @ApiOperation(value = "用户参拍记录列表-分页列表查询", notes = "用户参拍记录列表-分页列表查询")
     @GetMapping(value = "/offers")
-    public Result<?> memberOfferList(GoodsOffer goodsOffer,
-                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                     HttpServletRequest req) {
+    public Result<?> memberOfferList(GoodsOffer goodsOffer, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<GoodsOffer> queryWrapper = QueryGenerator.initQueryWrapper(goodsOffer, req.getParameterMap());
         queryWrapper.eq("gof.member_id", loginUser.getId());
@@ -289,10 +274,7 @@ public class WxAppMemberController {
      * @return
      */
     @GetMapping("/views")
-    public Result<?> queryMemberViewGoods(
-            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
+    public Result<?> queryMemberViewGoods(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
             return Result.OK(null);
@@ -346,10 +328,7 @@ public class WxAppMemberController {
      * @return
      */
     @GetMapping("/follows")
-    public Result<?> queryMemberFollowGoods(
-            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
+    public Result<?> queryMemberFollowGoods(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
             return Result.OK(null);
@@ -358,6 +337,7 @@ public class WxAppMemberController {
         IPage<Goods> pageList = goodsService.queryMemberFollowGoods(loginUser.getId(), page);
         return Result.OK(pageList);
     }
+
     /**
      * 查询用户是否缴纳了直播间保证金
      *
@@ -383,6 +363,7 @@ public class WxAppMemberController {
         queryWrapper.eq(GoodsDeposit::getStatus, 1);
         return Result.OK(goodsDepositService.count(queryWrapper) > 0);
     }
+
     /**
      * 查询用户是否缴纳了本场保证金
      *
@@ -448,12 +429,7 @@ public class WxAppMemberController {
      * @return
      */
     @GetMapping("/messaged")
-    public Result<Boolean> queryMemberMessage(
-            @RequestParam(name = "type", defaultValue = "0") Integer type,
-            @RequestParam(name = "performanceId", defaultValue = "") String performanceId,
-            @RequestParam(name = "goodsId", defaultValue = "") String goodsId,
-            @RequestParam(name = "roomId", defaultValue = "") String roomId
-    ) {
+    public Result<Boolean> queryMemberMessage(@RequestParam(name = "type", defaultValue = "0") Integer type, @RequestParam(name = "performanceId", defaultValue = "") String performanceId, @RequestParam(name = "goodsId", defaultValue = "") String goodsId, @RequestParam(name = "roomId", defaultValue = "") String roomId) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if (loginUser == null) {
             return Result.OK(false);
@@ -468,7 +444,7 @@ public class WxAppMemberController {
         if (StringUtils.isNotEmpty(goodsId)) {
             queryWrapper.eq(MessagePool::getGoodsId, goodsId);
         }
-        if(StringUtils.isNotEmpty(roomId)) {
+        if (StringUtils.isNotEmpty(roomId)) {
             queryWrapper.eq(MessagePool::getRoomId, roomId);
         }
         return Result.OK(messagePoolService.count(queryWrapper) > 0);
@@ -648,14 +624,7 @@ public class WxAppMemberController {
             goodsOrder.setMemberId(loginUser.getId());
             goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
             goodsOrder.setMemberAvatar(loginUser.getAvatar());
-            goodsOrder.setDeliveryInfo(String.format("%s %s %s %s %s %s",
-                    postOrderVO.getAddress().getUsername(),
-                    postOrderVO.getAddress().getPhone(),
-                    postOrderVO.getAddress().getProvince(),
-                    postOrderVO.getAddress().getCity(),
-                    postOrderVO.getAddress().getDistrict(),
-                    postOrderVO.getAddress().getAddress()
-                    ));
+            goodsOrder.setDeliveryInfo(String.format("%s %s %s %s %s %s", postOrderVO.getAddress().getUsername(), postOrderVO.getAddress().getPhone(), postOrderVO.getAddress().getProvince(), postOrderVO.getAddress().getCity(), postOrderVO.getAddress().getDistrict(), postOrderVO.getAddress().getAddress()));
             goodsOrder.setDeliveryId(postOrderVO.getAddress().getId());
             goodsOrder.setDeliveryAddress(postOrderVO.getAddress().getAddress());
             goodsOrder.setDeliveryPhone(postOrderVO.getAddress().getPhone());
@@ -686,14 +655,7 @@ public class WxAppMemberController {
             PayLog payLog = getPayLog(goodsOrder.getId());
             AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
 
-            WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                    .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp())
-                    .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                    .body("支付一口价订单")
-                    .spbillCreateIp("127.0.0.1")
-                    .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                    .detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";")))
-                    .build();
+            WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付一口价订单").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";"))).build();
             WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
             redissonLockClient.unlock(lock);
             return Result.OK("", wxPayService.createOrder(request));
@@ -709,6 +671,7 @@ public class WxAppMemberController {
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
         return Result.OK(!StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()));
     }
+
     /**
      * 出价拍品
      *
@@ -718,8 +681,10 @@ public class WxAppMemberController {
     public Result<?> goodsOffer(@RequestBody JSONObject post) {
         return auctionGoodsService.offer(post);
     }
+
     /**
      * 缴纳直播间保证金
+     *
      * @param id
      * @return
      * @throws InvocationTargetException
@@ -740,7 +705,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("该直播间无需缴纳保证金");
         }
         //专场结束不能缴纳保证金
-        if(liveRoom.getEndTime().before(new Date())) {
+        if (liveRoom.getEndTime().before(new Date())) {
             throw new JeecgBootException("直播间已结束无法缴纳保证金");
         }
 
@@ -772,19 +737,14 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(liveRoom.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
 
-        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
-                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                .body("支付直播间保证金:")
-                .spbillCreateIp("127.0.0.1")
-                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                .detail(liveRoom.getTitle())
-                .build();
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付直播间保证金:").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(liveRoom.getTitle()).build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK("", wxPayService.createOrder(request));
     }
+
     /**
      * 缴纳专场保证金
+     *
      * @param id
      * @return
      * @throws InvocationTargetException
@@ -805,7 +765,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("该专场无需缴纳保证金");
         }
         //专场结束不能缴纳保证金
-        if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
+        if ((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
             throw new JeecgBootException("专场已结束无法缴纳保证金");
         }
 
@@ -837,14 +797,7 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(performance.getDeposit()).setScale(2, RoundingMode.HALF_DOWN);
 
-        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
-                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                .body("支付专场保证金:")
-                .spbillCreateIp("127.0.0.1")
-                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                .detail(performance.getTitle())
-                .build();
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付专场保证金:").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(performance.getTitle()).build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK("", wxPayService.createOrder(request));
     }
@@ -869,23 +822,22 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Performance performance = performanceService.getById(goods.getPerformanceId());
-        if(performance != null) {
-            if(performance.getDeposit() == null || performance.getDeposit() <= 0) {
+        if (performance != null) {
+            if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
                 throw new JeecgBootException("该拍品无需缴纳保证金");
             }
             //专场结束不能缴纳保证金
-            if((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
+            if ((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
                 throw new JeecgBootException("专场已结束无法缴纳保证金");
             }
-        }
-        else {
+        } else {
             if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
                 throw new JeecgBootException("该拍品无需缴纳保证金");
             }
         }
         //验证拍品是否结束
         Date endTime = goods.getActualEndTime() != null ? goods.getActualEndTime() : goods.getEndTime();
-        if(goods.getState() > 1 || (endTime != null && endTime.before(new Date()))) {
+        if (goods.getState() > 1 || (endTime != null && endTime.before(new Date()))) {
             throw new JeecgBootException("拍品已结束无法缴纳保证金");
         }
 
@@ -928,16 +880,113 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
         BigDecimal payAmount = BigDecimal.valueOf(deposit).setScale(2, RoundingMode.HALF_DOWN);
 
-        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp())
-                .openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId())
-                .body("支付拍品保证金:")
-                .spbillCreateIp("127.0.0.1")
-                .totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue())
-                .detail(goods.getTitle())
-                .build();
+        WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/deposit/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付拍品保证金:").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(goods.getTitle()).build();
         WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
         return Result.OK("", wxPayService.createOrder(request));
+    }
+
+    @PutMapping("/share/goods")
+    public void generateGoodsShareAdv(@RequestParam String id, HttpServletResponse response) throws Exception {
+        LambdaQueryWrapper<GoodsCommonDesc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsCommonDesc::getDescKey, "shareBg");
+        GoodsCommonDesc commonDesc = goodsCommonDescService.getOne(queryWrapper);
+        if (commonDesc == null) {
+            throw new JeecgBootException("没有设置海报背景图，无法生成海报");
+        }
+        Goods goods = goodsService.getById(id);
+        if (goods == null) {
+            throw new JeecgBootException("找不到商品");
+        }
+
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
+
+        String bgImageUrl = commonDesc.getDescValue();
+        BufferedImage qrCode = appApi.getMemberQrcode("/pages/goods/detail?id=" + id + "&mid=" + loginUser.getId());
+        String productImageUrl = goods.getImages().split(",")[0];
+        String avatarUrl = appMemberVO.getAvatar();
+        String title = goods.getTitle();
+        String content = goods.getSubTitle();
+
+        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 1204, 0, ZoomMode.Height,  OutputFormat.JPG);
+        //针对背景和整图的设置
+        combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
+        combiner.setCanvasRoundCorner(100); //设置整图圆角（输出格式必须为PNG）
+        combiner.setQuality(.8f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
+//标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
+        combiner.addTextElement(title, 0, 150, 1400)
+                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
+                .setAlpha(.8f)          //透明度（0.0~1.0）
+                .setRotate(45)          //旋转（0~360）
+                .setColor(Color.RED)    //颜色
+                .setDirection(Direction.RightLeft) //绘制方向（从右到左，用于需要右对齐场景）
+                .setAutoFitWidth(200);  //自适应最大宽度（超出则自动缩小字体）
+
+        //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
+        combiner.addTextElement("年度狂欢", "/font/msyh.ttc", 0, 150, 1450);
+
+        //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
+        combiner.addTextElement(content, "微软雅黑", Font.BOLD, 40, 150, 1480)
+                .setSpace(.5f)                      //字间距
+                .setStrikeThrough(true)             //删除线
+                .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）
+
+        //商品图（设置坐标、宽高和缩放模式，若按宽度缩放，则高度按比例自动计算）
+        combiner.addImageElement(productImageUrl, 0, 160, 837, 0, ZoomMode.Width)
+                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
+                .setRoundCorner(46);    //设置圆角
+
+        //头像（圆角设置一定的大小，可以把头像变成圆的）
+        combiner.addImageElement(avatarUrl, 200, 1200)
+                .setRoundCorner(200);   //圆角
+
+        //水印（设置透明度，0.0~1.0）
+//        combiner.addImageElement(waterMark, 630, 1200)
+//                .setAlpha(.8f)          //透明度（0.0~1.0）
+//                .setRotate(45)          //旋转（0~360）
+//                .setBlur(20)            //高斯模糊(1~100)
+//                .setRepeat(true, 100, 50);    //平铺绘制（可设置水平、垂直间距）
+
+        //加入圆角矩形元素（版本>=1.2.0），作为二维码的底衬
+        combiner.addRectangleElement(138, 1707, 300, 300)
+                .setColor(Color.WHITE)
+                .setRoundCorner(50)     //该值大于等于宽高时，就是圆形，如设为300
+                .setAlpha(.8f)
+                .setGradient(Color.yellow,Color.blue, GradientDirection.LeftRight)  //颜色渐变
+                .setBorderSize(5);      //设置border大小就是空心，不设置就是实心
+
+        //二维码（强制按指定宽度、高度缩放）
+        combiner.addImageElement(qrCode, 138, 1707, 186, 186, ZoomMode.WidthHeight);
+
+        //价格（元素对象也可以直接new，然后手动加入待绘制列表）
+        TextElement textPrice = new TextElement("￥1290", 60, 230, 1300);
+        textPrice.setColor(Color.red);          //红色
+        textPrice.setStrikeThrough(true);       //删除线
+        combiner.addElement(textPrice);         //加入待绘制集合
+
+        //执行图片合并
+        combiner.combine();
+
+        //可以获取流（并上传oss等）
+        InputStream is = combiner.getCombinedImageStream();
+        OutputStream os = null;
+        try {
+//        读取图片
+            BufferedImage image = ImageIO.read(is);
+            response.setContentType("image/png");
+            os = response.getOutputStream();
+
+            if (image != null) {
+                ImageIO.write(image, "png", os);
+            }
+        } catch (IOException e) {
+            log.error("获取图片异常{}",e.getMessage());
+        } finally {
+            if (os != null) {
+                os.flush();
+                os.close();
+            }
+        }
     }
 
 
