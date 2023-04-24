@@ -38,6 +38,7 @@ const PaimaiSettingsEditor = (props:any) => {
                     </Card.Header>
                     <Card.Body>
                         <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
+                        <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />

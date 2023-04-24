@@ -281,10 +281,11 @@ export default class Index extends Component<any, any> {
         }
         let goods = this.state.customGoods || {...this.state.goods};
         goods.currentPrice = this.offerInputRef.current.value = this.prevPrice(goods, false);
+        goods.offerCount--;
         this.setState({customGoods: goods});
     }
     addPrice(){
-        let goods = this.state.customGoods || {...this.state.goods};
+        let goods = this.state.customGoods || {...this.state.goods, currentPrice: this.state.nextPrice};
         goods.offerCount++;
         goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
         this.setState({customGoods: goods});
@@ -523,7 +524,8 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {goods, message, hideModal,animationData} = this.state;
-        const {systemInfo} = this.props;
+        const {systemInfo, settings} = this.props;
+        settings.isCustomOffer = parseInt(settings.isCustomOffer);
         if (goods == null) return <PageLoading/>;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
@@ -685,8 +687,9 @@ export default class Index extends Component<any, any> {
                                 <View>当前价：{numeral(goods.currentPrice).format('0,0.00')}</View>
                                 <View className={'flex items-center text-center'}>
                                     <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
-                                    <Input className={'font-bold text-lg w-30'} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
-                                    <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />
+                                    <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
+                                    {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />}
+                                    {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}} />}
                                 </View>
                                 <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
                             </View>

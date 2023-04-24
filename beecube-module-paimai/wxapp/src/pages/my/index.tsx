@@ -1,7 +1,7 @@
 import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
-import {View, Text, Navigator, Button} from "@tarojs/components";
+import {Button, Navigator, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import styles from './index.module.scss';
 import classNames from "classnames";
@@ -26,7 +26,8 @@ import PageLoading from "../../components/pageloading";
 })
 export default class Index extends Component<PropsWithChildren<any>> {
     state:any = {
-        liveRoom: null
+        liveRoom: null,
+        badges: null
     }
 
     componentDidMount() {
@@ -38,12 +39,11 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
     componentDidShow() {
         request.get('/app/api/members/profile').then(res => {
-            //刷新用户
             this.props.updateUserInfo(res.data.result);
-            //获取当前用户的主播直播间
-            // request.get('/paimai/api/live/rooms', {params: {memberId: res.data.result.id}}).then(res=>{
-            //     this.setState({liveRoom: res.data.result});
-            // })
+            //刷新订单角标提醒
+            request.get('/paimai/api/orders/badges').then(res=>{
+                this.setState({badges: res.data.result})
+            });
         });
     }
 
