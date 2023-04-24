@@ -1,9 +1,9 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, Navigator, Text, View} from "@tarojs/components";
+import {Button, Image, Input, Navigator, ScrollView, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -38,9 +38,13 @@ export default class Index extends Component<any, any> {
         status: undefined,
         message: false,
         preOffered: false,
+        hideModal: true,
+        customGoods: null,
     }
     socket: any;
     randomStr: string;
+    animation: any;
+    offerInputRef: any;
 
 
     constructor(props) {
@@ -54,13 +58,46 @@ export default class Index extends Component<any, any> {
         this.noticeMe = this.noticeMe.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
         this.randomStr = utils.randomString(6);
+        this.hideModal = this.hideModal.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.addPrice = this.addPrice.bind(this);
+        this.subPrice = this.subPrice.bind(this);
+        this.onInputPriceChange = this.onInputPriceChange.bind(this);
+        this.offerInputRef = React.createRef();
     }
 
-
-    componentDidMount() {
-
+    showModal() {
+        this.setState({
+            hideModal: false
+        });
+        this.animation = Taro.createAnimation({
+            duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
+            timingFunction: 'linear', //动画的效果 默认值是linear
+        });
+        if(this.offerInputRef?.current){
+            this.offerInputRef.current.value = this.state.nextPrice;
+        }
+        setTimeout(() => {
+            this.fadeIn(); //调用显示动画
+        }, 10);
+    }
+    hideModal() {
+        this.setState({hideModal: true});
+        this.fadeDown();
+    }
+    fadeIn() {
+        this.animation.translateY(0).step()
+        this.setState({
+            animationData: this.animation.export() //动画实例的export方法导出动画数据传递给组件的animation属性
+        })
     }
 
+    fadeDown() {
+        this.animation.translateY(450).step()
+        this.setState({
+            animationData: this.animation.export(),
+        })
+    }
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
         const {context} = this.props;
@@ -208,24 +245,11 @@ export default class Index extends Component<any, any> {
                 this.setState({posting: false});
                 if (res.data.success) {
                     utils.showSuccess(false, '出价成功');
-                    // goods.currentPrice = this.state.nextPrice;
-                    // if (offers.length >= 3) {
-                    //     offers.pop();
-                    // }
-                    // offers.unshift({
-                    //     memberAvatar: userInfo.avatar,
-                    //     memberId: userInfo.id,
-                    //     memberName: userInfo.realname || userInfo.nickname,
-                    //     price: this.state.nextPrice,
-                    //     offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                    // });
-                    // goods.offerCount++;
-                    // this.setState({offers: offers, goods: goods});
-                    // this.nextPrice(goods);
-                    //出价成功加入队列
                 } else {
                     utils.showError(res.data.message || '出价失败');
                 }
+                this.setState({hideModal: true});
+                this.fadeDown();
             }).catch(() => this.setState({posting: false}));
         }
         //判断当前自己是不是最高出价人，如果是提醒一次
@@ -245,7 +269,27 @@ export default class Index extends Component<any, any> {
 
     }
 
-    nextPrice(newGoods) {
+    onInputPriceChange(e){
+        let newPrice = e.detail.value;
+        let goods = this.state.customGoods || {...this.state.goods};
+        goods.currentPrice = newPrice;
+        this.setState({customGoods: goods});
+    }
+    subPrice(){
+        if(this.offerInputRef.current.value <= this.state.nextPrice) {
+            return;
+        }
+        let goods = this.state.customGoods || {...this.state.goods};
+        goods.currentPrice = this.offerInputRef.current.value = this.prevPrice(goods, false);
+        this.setState({customGoods: goods});
+    }
+    addPrice(){
+        let goods = this.state.customGoods || {...this.state.goods};
+        goods.offerCount++;
+        goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
+        this.setState({customGoods: goods});
+    }
+    prevPrice(newGoods, update= false) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
         const {settings} = this.props;
@@ -285,7 +329,51 @@ export default class Index extends Component<any, any> {
                 rangePrice = price;
             }
         }
-        this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
+        update && this.setState({nextPrice: currentPrice - rangePrice, goods: goods});
+        return currentPrice - rangePrice;
+    }
+    nextPrice(newGoods, update=true) {
+        let goods = newGoods;
+        let upgradeConfig = goods.uprange;
+        const {settings} = this.props;
+        if (parseInt(settings.isDealCommission) == 1) {
+            if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                //落槌价显示佣金
+                const commission = goods.commission/100;
+                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
+            }
+        }
+        if (!goods.currentPrice) {
+            //说明没有人出价，第一次出价可以以起拍价出价
+            this.setState({nextPrice: goods.startPrice, goods: goods});
+            return;
+        }
+        let currentPrice = parseFloat(goods.currentPrice);
+
+        //这里计算要加价多少，并且符合后台的258逻辑
+
+        let rangePrice = 0;
+        let offerCount = goods.offerCount;
+        for (let i = 0; i < upgradeConfig.length; i++) {
+            let config = upgradeConfig[i];
+            let min = parseFloat(config.min);
+            let priceConfigs = config.price.split(',');
+            let price = 0;
+            if(priceConfigs.length == 1) {
+                price = parseFloat(priceConfigs[0]);
+            }
+            else {
+                //计算是第几个人出价
+                let modIndex = (offerCount % priceConfigs.length);
+                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
+                price = parseFloat(priceConfigs[modIndex]);
+            }
+            if (currentPrice >= min) {
+                rangePrice = price;
+            }
+        }
+        update && this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
+        return currentPrice + rangePrice;
     }
 
     onLoad(options) {
@@ -357,9 +445,8 @@ export default class Index extends Component<any, any> {
             //可以出价的情况
             return (
                 <View>
-                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.offer}>
+                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.showModal}>
                         <View>出价</View>
-                        <View>RMB {numeral(this.state.nextPrice).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
@@ -435,7 +522,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {goods, message} = this.state;
+        const {goods, message, hideModal,animationData} = this.state;
         const {systemInfo} = this.props;
         if (goods == null) return <PageLoading/>;
 
@@ -582,7 +669,31 @@ export default class Index extends Component<any, any> {
                     </View>
                     {this.renderButton()}
                 </View>
-                <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
+                <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods} />
+
+                <View className="modals modals-bottom-dialog" hidden={hideModal}>
+                    <View className="bottom-dialog-body bottom-pos" animation={animationData} style={{height: 200}}>
+                        <View className="merchandise-container">
+                            <View className="merchandise-head">
+                                <View className="m-t">
+                                    <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
+                                    <View className="m-title">出价拍品</View>
+                                </View>
+                                <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
+                            </View>
+                            <View className={'flex flex-col items-center justify-center space-y-4'}>
+                                <View>当前价：{numeral(goods.currentPrice).format('0,0.00')}</View>
+                                <View className={'flex items-center text-center'}>
+                                    <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
+                                    <Input className={'font-bold text-lg w-30'} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
+                                    <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />
+                                </View>
+                                <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} />
             </PageLayout>
         );
     }

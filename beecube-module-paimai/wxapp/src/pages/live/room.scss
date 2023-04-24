@@ -13,42 +13,7 @@
     height: 100vh;
     background-color: black;
 }
-.merchandise-container {
-    position: absolute;
-    width: 702rpx;
-    background-color: #fff;
-    border-radius: 16rpx;
-    overflow: hidden;
-    height: 100%;
-}
-.merchandise-head {
-    height: 86rpx;
-    display: flex;
-    box-sizing: border-box;
-    padding-top: 30rpx;
-    align-items: center;
-    padding-left: 40rpx;
-    padding-right: 22rpx;
-    justify-content: space-between;
-}
-.m-t {
-    display: flex;
-}
-.m-list-png {
-    width: 44rpx;
-    height: 44rpx;
-    margin-right: 11rpx;
-}
-.m-title {
-    font-size:30rpx;
-    font-family:PingFang SC;
-    font-weight:400;
-    color:rgba(33,33,33,1);
-}
-.m-close-png {
-    width: 56rpx;
-    height: 56rpx;
-}
+
 .merchandise-list {
     padding: 0 40rpx;
     box-sizing: border-box;
@@ -146,33 +111,8 @@
     color: #F2034C;
     display: flex;
 }
-/*模态框*/
-.modals-cancel {
-    position: absolute;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
 
-.bottom-dialog-body {
-    position: fixed;
-    z-index: 10001;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 814rpx;
-    padding: 24rpx;
-}
 
-/*动画前初始位置*/
-
-.bottom-pos {
-    -webkit-transform: translateY(100%);
-    transform: translateY(100%);
-}
 
 .yuyue {
     width: 100%;
