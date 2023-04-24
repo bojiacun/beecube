@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
@@ -42,6 +43,6 @@ public interface AppApi {
     @PutMapping("/app/admin/token/verify")
     Boolean verifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token);
 
-    @GetMapping("/app/admin/qrcode")
-    BufferedImage getMemberQrcode(@RequestParam String userPath);
+    @GetMapping(value = "/app/admin/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
+    byte[] getMemberQrcode(@RequestParam String userPath);
 }

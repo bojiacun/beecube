@@ -46,9 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -902,7 +900,8 @@ public class WxAppMemberController {
         AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
 
         String bgImageUrl = commonDesc.getDescValue();
-        BufferedImage qrCode = appApi.getMemberQrcode("/pages/goods/detail?id=" + id + "&mid=" + loginUser.getId());
+        ByteArrayInputStream qrCodeStream = new ByteArrayInputStream(appApi.getMemberQrcode("/pages/goods/detail?id=" + id + "&mid=" + loginUser.getId()));
+        BufferedImage qrCode = ImageIO.read(qrCodeStream);
         String productImageUrl = goods.getImages().split(",")[0];
         String avatarUrl = appMemberVO.getAvatar();
         String title = goods.getTitle();

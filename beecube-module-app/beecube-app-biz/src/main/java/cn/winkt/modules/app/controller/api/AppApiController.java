@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
@@ -22,6 +23,7 @@ import org.jeecg.common.system.vo.*;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SqlInjectionUtil;
 import org.jeecg.config.AppContext;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +32,11 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -122,23 +126,22 @@ public class AppApiController {
 
     /**
      * 生成用户二维码
-     * @param response
      * @throws WxErrorException
      * @throws IOException
      */
-    @GetMapping("/qrcode")
+    @GetMapping(value = "/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
-    public BufferedImage getMemberQrcode(@RequestParam String userPath) throws WxErrorException, IOException {
+    public byte[] getMemberQrcode(@RequestParam String userPath) throws WxErrorException, IOException {
         WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
         File file = wxMaService.getQrcodeService().createWxaCode(userPath, 375);
-        BufferedImage image = null;
+        byte[] res = null;
         try {
 //        读取图片
-            image = ImageIO.read(file);
+            res = IOUtils.toByteArray(Files.newInputStream(file.toPath()));
         } catch (IOException e) {
             log.error("获取图片异常{}",e.getMessage());
         }
-        return image;
+        return res;
     }
     /**
      * VUEN-2584【issue】平台sql注入漏洞几个问题
