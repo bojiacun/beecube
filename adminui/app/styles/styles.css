@@ -2108,8 +2108,6 @@ span.divider {
 
 .table td, .table th {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .table-wrap td, .table-wrap th {

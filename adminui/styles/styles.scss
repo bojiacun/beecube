@@ -76,18 +76,18 @@ span.divider {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
-
 .react-bootstrap-table {
   overflow-x: auto;
 }
+.table-scroll{
+}
+
 .table {
   width: auto !important;
   min-width: 100%;
 }
 .table td, .table th {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .table-wrap td, .table-wrap th {

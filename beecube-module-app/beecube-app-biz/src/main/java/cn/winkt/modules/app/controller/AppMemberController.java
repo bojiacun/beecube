@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
@@ -71,6 +74,22 @@ public class AppMemberController extends JeecgController<AppMember, IAppMemberSe
 								   HttpServletRequest req) {
 		QueryWrapper<AppMember> queryWrapper = QueryGenerator.initQueryWrapper(appMember, req.getParameterMap());
 		String keywords = req.getParameter("keywords");
+		String isAgent = req.getParameter("isAgent");
+		if(StringUtils.isNotEmpty(isAgent)) {
+			queryWrapper.eq("is_agent", 1);
+		}
+		String authStatus = req.getParameter("authStatus");
+		if(StringUtils.isNotEmpty(authStatus)) {
+			queryWrapper.eq("auth_status", 1);
+		}
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		if(StringUtils.isNotEmpty(startDate)) {
+			queryWrapper.ge("create_time", DateUtils.str2Date(startDate, new SimpleDateFormat("yyyy-MM-dd")));
+		}
+		if(StringUtils.isNotEmpty(endDate)) {
+			queryWrapper.le("create_time", DateUtils.str2Date(endDate, new SimpleDateFormat("yyyy-MM-dd")));
+		}
 		if(StringUtils.isNotEmpty(keywords)) {
 			queryWrapper.and(qw -> {
 				qw.eq("id", keywords).or()

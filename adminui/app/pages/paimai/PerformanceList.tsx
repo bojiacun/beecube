@@ -359,6 +359,7 @@ const PerformanceList = (props: any) => {
                                 keyField={'id'}/>
 
 
+
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>

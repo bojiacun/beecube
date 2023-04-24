@@ -58,6 +58,8 @@ const AppMemberEdit = (props: any) => {
             <Modal
                 show={!!model}
                 onHide={onHide}
+                size={'lg'}
+                centered
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
             >
