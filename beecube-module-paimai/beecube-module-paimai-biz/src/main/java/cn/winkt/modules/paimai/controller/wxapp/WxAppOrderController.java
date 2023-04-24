@@ -49,14 +49,24 @@ public class WxAppOrderController {
     public Result<?> orderBadges() {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         OrderBadge orderBadge = new OrderBadge();
+
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getStatus, 0);
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         orderBadge.setPayCount(goodsOrderService.count(queryWrapper));
+
+        queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getStatus, 1);
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         orderBadge.setDeliveryCount(goodsOrderService.count(queryWrapper));
+
+
+        queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getStatus, 2);
         orderBadge.setConfirmDeliveryCount(goodsOrderService.count(queryWrapper));
+
+
         return Result.OK(orderBadge);
     }
 

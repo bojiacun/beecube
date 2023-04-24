@@ -53,6 +53,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
     render() {
         const {systemInfo, context} = this.props;
         const {userInfo} = context;
+        const {badges} = this.state;
 
         if (userInfo == null) return <PageLoading/>;
         // 获取距上
@@ -100,17 +101,20 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     </View>
                     <View className={'rounded-md bg-white mt-2 text-red-600 py-4 shadow-lg'}>
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
-                            <Navigator url={'orders?status=0'}>
+                            <Navigator url={'orders?status=0'} className={'relative'}>
                                 <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待结算</View>
+                                {badges?.payCount?<Text className={'badge'}>{badges.payCount}</Text>:<></>}
                             </Navigator>
-                            <Navigator url={'orders?status=1'}>
+                            <Navigator url={'orders?status=1'} className={'relative'}>
                                 <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待发货</View>
+                                {badges?.deliveryCount?<Text className={'badge'}>{badges.deliveryCount}</Text>:<></>}
                             </Navigator>
-                            <Navigator url={'orders?status=2'}>
+                            <Navigator url={'orders?status=2'} className={'relative'}>
                                 <View className={'iconfont icon-daishouhuo'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待收货</View>
+                                {badges?.confirmDeliveryCount?<Text className={'badge'}>{badges.confirmDeliveryCount}</Text>:<></>}
                             </Navigator>
                             <Navigator url={'orders?status=3'}>
                                 <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}}/>
