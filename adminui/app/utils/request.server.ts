@@ -183,11 +183,12 @@ export const API_PAIMAI_GOODS_ADD = `${BASE_URL}/paimai/goods/add`;
 export const API_PAIMAI_GOODS_EDIT = `${BASE_URL}/paimai/goods/edit`;
 export const API_PAIMAI_GOODS_OFFER = `${BASE_URL}/paimai/goods/offers`;
 export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
-
+export const API_PAIMAI_GOODS_TOGGLE_SHOW= `${BASE_URL}/paimai/goods/toggle-show`;
 export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/goods/deal`;
 
 
 export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;
+export const API_PAIMAI_PERFORMANCE_TOGGLE_SHOW= `${BASE_URL}/paimai/performances/toggle-show`;
 export const API_PAIMAI_PERFORMANCE_START = `${BASE_URL}/paimai/performances/start`;
 export const API_PAIMAI_PERFORMANCE_END = `${BASE_URL}/paimai/performances/end`;
 export const API_PAIMAI_PERFORMANCE_SELECT_LIST = `${BASE_URL}/paimai/performances/select`;
@@ -231,6 +232,7 @@ export const API_APP_WITHDRAW_EDIT = `${BASE_URL}/app/withdraws/edit`;
 
 
 export const API_PAIMAI_ARTICLE_LIST = `${BASE_URL}/paimai/articles/list`;
+export const API_PAIMAI_ARTICLE_TOGGLE_SHOW= `${BASE_URL}/paimai/articles/toggle-show`;
 export const API_PAIMAI_ARTICLE_ADD = `${BASE_URL}/paimai/articles/add`;
 export const API_PAIMAI_ARTICLE_EDIT = `${BASE_URL}/paimai/articles/edit`;
 export const API_PAIMAI_ARTICLE_DELETE = `${BASE_URL}/paimai/articles/delete`;

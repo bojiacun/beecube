@@ -28,6 +28,8 @@ const PerformanceList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const [selectedPerformance, setSelectedPerformance] = useState<any>();
     const [selectedRow, setSelectedRow] = useState<any>();
+    const [selectedRows, setSelectedRows] = useState<any>([]);
+    const [operateValue, setOperateValue] = useState<any>();
     const [depositsShow, setDepositsShow] = useState<boolean>(false);
     const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
@@ -60,7 +62,7 @@ const PerformanceList = (props: any) => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
-                showToastSuccess('删除成功');
+                showToastSuccess('操作成功');
                 searchFetcher.submit(searchState, {method: 'get'});
             } else {
                 showToastError(deleteFetcher.data.message);
@@ -277,6 +279,39 @@ const PerformanceList = (props: any) => {
             titleText = '公益拍';
             break;
     }
+
+
+
+    const handleOnOperateValueChanged = (newValue:any) => {
+        setOperateValue(newValue);
+    }
+    let handleOnSelect = (row:any, isSelect:boolean) => {
+        if (isSelect) {
+            setSelectedRows([...selectedRows, row.id]);
+        } else {
+            setSelectedRows(selectedRows.filter((x:string)=> x !== row.id));
+        }
+    }
+
+    let handleOnSelectAll = (isSelect:boolean, rows:any) => {
+        const ids = rows.map((r:any) => r.id);
+        if (isSelect) {
+            setSelectedRows(ids);
+        } else {
+            setSelectedRows([]);
+        }
+    }
+    const selectedRowConfig:any = {
+        mode: 'checkbox',
+        clickToSelect: true,
+        onSelect: handleOnSelect,
+        onSelectAll: handleOnSelectAll,
+    }
+    const operateBatch = () => {
+        deleteFetcher.submit({status: operateValue, rows: selectedRows.join(',')}, {method: 'delete', action: `/paimai/performances/toggle-show`, replace: true});
+    }
+
+
     return (
         <>
             <Card>
@@ -320,16 +355,25 @@ const PerformanceList = (props: any) => {
 
                 <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
                                 data={list?.records}
+                                selectRow={selectedRowConfig}
                                 keyField={'id'}/>
 
 
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
-                        <span
-                            className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
+                            <ReactSelectThemed
+                                id={'operate-buyout'}
+                                placeholder={'操作方式'}
+                                isSearchable={false}
+                                options={[{label: '下架', value: '0'}, {label:'上架', value:'1'}]}
+                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                onChange={handleOnOperateValueChanged}
+                            />
+                            <Button className={'btn btn-danger'} disabled={selectedRows.length == 0 || !operateValue} onClick={operateBatch}><i className={'feather icon-trash'}/>批量操作</Button>
                         </Col>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                        <span className="text-muted mr-2">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
                             <SinglePagination
                                 forcePage={searchState.pageNo - 1}
                                 className={'mb-0'}

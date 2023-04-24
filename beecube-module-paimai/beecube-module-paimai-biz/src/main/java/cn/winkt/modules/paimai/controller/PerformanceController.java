@@ -12,6 +12,7 @@ import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
 import cn.winkt.modules.paimai.service.im.message.PerformanceUpdateMessage;
 import cn.winkt.modules.paimai.service.IGoodsService;
+import cn.winkt.modules.paimai.vo.PostToggleInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -356,7 +357,16 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         goodsService.update(updateWrapper);
         return Result.OK("批量删除成功！");
     }
-
+    @AutoLog(value = "拍卖专场表-批量上架/下架")
+    @ApiOperation(value = "拍卖专场表-批量上架/下架", notes = "拍卖专场表-批量上架/下架")
+    @DeleteMapping(value = "/toggle-show")
+    public Result<?> toggleShow(@RequestBody PostToggleInfo postToggleInfo) {
+        LambdaUpdateWrapper<Performance> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(Performance::getStatus, postToggleInfo.getStatus());
+        updateWrapper.in(Performance::getId, Arrays.asList(postToggleInfo.getRows().split(",")));
+        performanceService.update(updateWrapper);
+        return Result.OK("批量操作成功！");
+    }
     /**
      * 通过id查询
      *
