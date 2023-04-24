@@ -190,7 +190,7 @@ const BuyoutList = (props: any) => {
 
 
     const handleOnOperateValueChanged = (newValue:any) => {
-        setOperateValue(newValue);
+        setOperateValue(newValue.value);
     }
     let handleOnSelect = (row:any, isSelect:boolean) => {
         if (isSelect) {

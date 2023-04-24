@@ -907,7 +907,7 @@ public class WxAppMemberController {
         String title = goods.getTitle();
         String content = goods.getSubTitle();
 
-        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 1204, 0, ZoomMode.Height,  OutputFormat.JPG);
+        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 1204, 0, ZoomMode.Height,  OutputFormat.PNG);
         //针对背景和整图的设置
         combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
         combiner.setCanvasRoundCorner(100); //设置整图圆角（输出格式必须为PNG）
