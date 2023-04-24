@@ -28,6 +28,24 @@ public class JeecgBaseConfig {
      * 本地：local\Minio：minio\阿里云：alioss
      */
     private String uploadType;
+
+    public String getUploadType() {
+        return uploadType;
+    }
+
+    public void setUploadType(String uploadType) {
+        this.uploadType = uploadType;
+    }
+
+    public Integer getImageUploadSize() {
+        return imageUploadSize;
+    }
+
+    public void setImageUploadSize(Integer imageUploadSize) {
+        this.imageUploadSize = imageUploadSize;
+    }
+
+    private Integer imageUploadSize = 2;
     /**
      * 是否启用安全模式
      */
