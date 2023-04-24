@@ -109,6 +109,7 @@ export default class Index extends Component<any, any> {
             case MessageType.OFFER:
                 goods.currentPrice = parseFloat(msg.price).toFixed(2);
                 this.setState({goods: goods});
+                goods.offerCount++;
                 this.nextPrice(goods);
                 let offers = this.state.offers;
                 if (offers.length >= 3) {
@@ -123,7 +124,6 @@ export default class Index extends Component<any, any> {
                         offerTime: msg.offerTime
                     }
                 );
-                goods.offerCount++;
                 this.setState({offers: offers, goods: goods});
                 break;
             case MessageType.AUCTION_DELAYED:
@@ -263,11 +263,24 @@ export default class Index extends Component<any, any> {
         }
         let currentPrice = parseFloat(goods.currentPrice);
 
+        //这里计算要加价多少，并且符合后台的258逻辑
+
         let rangePrice = 0;
+        let offerCount = goods.offerCount;
         for (let i = 0; i < upgradeConfig.length; i++) {
             let config = upgradeConfig[i];
             let min = parseFloat(config.min);
-            let price = parseFloat(config.price);
+            let priceConfigs = config.price.split(',');
+            let price = 0;
+            if(priceConfigs.length == 1) {
+                price = parseFloat(priceConfigs[0]);
+            }
+            else {
+                //计算是第几个人出价
+                let modIndex = (offerCount % priceConfigs.length);
+                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
+                price = parseFloat(priceConfigs[modIndex]);
+            }
             if (currentPrice >= min) {
                 rangePrice = price;
             }
