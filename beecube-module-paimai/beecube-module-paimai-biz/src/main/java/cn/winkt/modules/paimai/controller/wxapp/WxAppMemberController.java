@@ -912,7 +912,7 @@ public class WxAppMemberController {
         combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
         combiner.setCanvasRoundCorner(100); //设置整图圆角（输出格式必须为PNG）
         combiner.setQuality(.8f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
-//标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
+        //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
         combiner.addTextElement(title, 0, 150, 1400)
                 .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
                 .setAlpha(.8f)          //透明度（0.0~1.0）
@@ -922,10 +922,10 @@ public class WxAppMemberController {
                 .setAutoFitWidth(200);  //自适应最大宽度（超出则自动缩小字体）
 
         //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
-        combiner.addTextElement("年度狂欢", "/font/msyh.ttc", 0, 150, 1450);
+        combiner.addTextElement(goods.getSubTitle(),  12, 150, 1450);
 
         //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
-        combiner.addTextElement(content, "微软雅黑", Font.BOLD, 40, 150, 1480)
+        combiner.addTextElement(content,  Font.BOLD, 40, 150, 1480)
                 .setSpace(.5f)                      //字间距
                 .setStrikeThrough(true)             //删除线
                 .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）

@@ -489,11 +489,15 @@ export default class Index extends Component<any, any> {
         return <></>;
     }
 
+    clickMask(){
+        this.setState({hideModal: true, loadingShareAdv: false});
+        this.fadeDown();
+    }
     openShareGoods(){
         this.setState({hideModal: false, loadingShareAdv:true});
         request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res:any)=>{
             let data = Taro.arrayBufferToBase64(res.data);
-            this.setState({shareAdv: data, loadingShareAdv: false});
+            this.setState({shareAdv: data});
         });
     }
     handleSaveToPhotoAlbum() {
@@ -504,6 +508,7 @@ export default class Index extends Component<any, any> {
         }).then(res=>{
             Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(()=>{
                 utils.showSuccess(false,'保存成功');
+                this.clickMask();
             });
         })
     }
@@ -728,7 +733,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                 </View>
-                <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} />
+                <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} onClick={this.clickMask} />
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
                     {this.state.shareAdv && <FallbackImage src={'data:image/png;base64,'+this.state.shareAdv} mode={'widthFix'} />}
                     {!this.state.shareAdv && <PageLoading style={{height: 500}} />}
