@@ -210,6 +210,7 @@ public class AuctionGoodsService {
                 offerMessage.setUserId(memberVO.getId());
                 offerMessage.setUserName(goodsOffer.getMemberName());
                 offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
+                offerMessage.setOfferTime(new Date());
                 SensitiveInfoUtil.handlerObject(offerMessage, true);
                 imClientService.sendAppMessage(offerMessage, UserMessageType.OFFER);
             } catch (Exception ex) {

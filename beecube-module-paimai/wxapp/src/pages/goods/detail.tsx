@@ -9,7 +9,6 @@ import {connect} from "react-redux";
 import classNames from "classnames";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
-import moment from "moment";
 import Uprange from "./components/uprange";
 import Descs from "./components/descs";
 import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../../components/TimeCountDowner";
@@ -101,7 +100,7 @@ export default class Index extends Component<any, any> {
         const {userInfo} = context;
         let {goods} = this.state;
         let msg = message;
-
+        console.log('goods received a message', msg);
         //如果是自身产生的消息则忽略
         if (msg.isme) {
             return;
@@ -117,11 +116,11 @@ export default class Index extends Component<any, any> {
                 }
                 offers.unshift(
                     {
-                        memberAvatar: msg.fromUserAvatar,
-                        memberName: msg.fromUserName,
-                        memberId: msg.fromUserId,
+                        memberAvatar: msg.userAvatar,
+                        memberName: msg.userName,
+                        memberId: msg.userId,
                         price: msg.price,
-                        offerTime: msg.createTime
+                        offerTime: msg.offerTime
                     }
                 );
                 goods.offerCount++;
@@ -209,20 +208,20 @@ export default class Index extends Component<any, any> {
                 this.setState({posting: false});
                 if (res.data.success) {
                     utils.showSuccess(false, '出价成功');
-                    goods.currentPrice = this.state.nextPrice;
-                    if (offers.length >= 3) {
-                        offers.pop();
-                    }
-                    offers.unshift({
-                        memberAvatar: userInfo.avatar,
-                        memberId: userInfo.id,
-                        memberName: userInfo.realname || userInfo.nickname,
-                        price: this.state.nextPrice,
-                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                    });
-                    goods.offerCount++;
-                    this.setState({offers: offers, goods: goods});
-                    this.nextPrice(goods);
+                    // goods.currentPrice = this.state.nextPrice;
+                    // if (offers.length >= 3) {
+                    //     offers.pop();
+                    // }
+                    // offers.unshift({
+                    //     memberAvatar: userInfo.avatar,
+                    //     memberId: userInfo.id,
+                    //     memberName: userInfo.realname || userInfo.nickname,
+                    //     price: this.state.nextPrice,
+                    //     offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
+                    // });
+                    // goods.offerCount++;
+                    // this.setState({offers: offers, goods: goods});
+                    // this.nextPrice(goods);
                     //出价成功加入队列
                 } else {
                     utils.showError(res.data.message || '出价失败');
