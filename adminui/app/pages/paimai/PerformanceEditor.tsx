@@ -1,4 +1,4 @@
-import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
+import {Modal, FormGroup, FormLabel, Button, Col, Row, FormControl, FormText} from "react-bootstrap";
 import {Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
@@ -12,6 +12,7 @@ import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapDateTime from "~/components/form/BootstrapDateTime";
+import UprangConfiger from "~/pages/paimai/UprangConfiger";
 
 
 const PerformanceEditor = (props: any) => {
@@ -102,6 +103,15 @@ const PerformanceEditor = (props: any) => {
                                     <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />
                                     {type != 2 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
+                                        <Row>
+                                            <Col sm={12}>
+                                                <UprangConfiger  label={'点击配置'} name={'uprange'} />
+                                            </Col>
+                                        </Row>
+                                        <FormText>专场统一加价配置，每次编辑的时候都会覆盖专场下所有拍品</FormText>
+                                    </FormGroup>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>

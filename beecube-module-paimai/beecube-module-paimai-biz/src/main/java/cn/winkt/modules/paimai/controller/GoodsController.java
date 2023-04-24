@@ -193,6 +193,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @ApiOperation(value = "拍品表-添加", notes = "拍品表-添加")
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody Goods goods) {
+        //如果拍品所在专场不为空，则复制专场的部分属性供拍品自己使用
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             Performance performance = performanceService.getById(goods.getPerformanceId());
             if (performance.getType() == 1) {
@@ -204,6 +205,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 goods.setStartTime(performance.getStartTime());
                 goods.setEndTime(null);
                 goods.setActualEndTime(null);
+            }
+            if(StringUtils.isNotEmpty(performance.getUprange()) && StringUtils.isEmpty(goods.getUprange())){
+                //复制拍品的加价配置
+                goods.setUprange(performance.getUprange());
             }
         }
         goodsService.save(goods);

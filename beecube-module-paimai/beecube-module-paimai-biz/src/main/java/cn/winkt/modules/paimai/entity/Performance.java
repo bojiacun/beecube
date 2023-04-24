@@ -89,6 +89,9 @@ public class Performance {
 	@TableField(exist = false)
 	private Integer goodsCount;
 
+	@Excel(name = "加价幅度配置", width = 15)
+	@ApiModelProperty(value = "加价幅度配置")
+	private java.lang.String uprange;
 
 	@Dict(dicCode = "paimai_performance_state")
 	private java.lang.Integer state;

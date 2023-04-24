@@ -311,6 +311,12 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsService.update(updateWrapper);
             }
         }
+        if(StringUtils.isNotEmpty(performance.getUprange())) {
+            LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.set(Goods::getUprange, performance.getUprange());
+            updateWrapper.eq(Goods::getPerformanceId, performance.getId());
+            goodsService.update(updateWrapper);
+        }
         performanceService.updateById(performance);
         return Result.OK("编辑成功!");
     }

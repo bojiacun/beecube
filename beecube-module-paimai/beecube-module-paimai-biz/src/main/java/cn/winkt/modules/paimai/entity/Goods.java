@@ -65,7 +65,7 @@ public class Goods {
 	/**加价幅度配置*/
 	@Excel(name = "加价幅度配置", width = 15)
     @ApiModelProperty(value = "加价幅度配置")
-	private java.lang.Object uprange;
+	private java.lang.String uprange;
 	/**延时周期（分钟）*/
 	@Excel(name = "延时周期（分钟）", width = 15)
     @ApiModelProperty(value = "延时周期（分钟）")

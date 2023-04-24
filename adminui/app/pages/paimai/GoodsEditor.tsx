@@ -24,7 +24,6 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 const GoodsSchema = Yup.object().shape({
     title: Yup.string().required('必填字段'),
     startPrice: Yup.number().required('必填字段'),
-    uprange: Yup.string().required('必填字段'),
     startTime: Yup.string().required('必填字段'),
     endTime: Yup.string().required('必填字段'),
     images: Yup.string().required('必填字段'),
