@@ -5,8 +5,8 @@ import styles from './index.module.scss';
 import loadingGif from '../../assets/images/loading.gif';
 
 
-const PageLoading: React.FC = (): any => {
-    return <View className={styles.pageLoading}><Image src={loadingGif} style={{width: 32, height: 32}} /></View>
+const PageLoading: React.FC = (props): any => {
+    return <View className={styles.pageLoading} {...props}><Image src={loadingGif} style={{width: 32, height: 32}} /></View>
 }
 
 

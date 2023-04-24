@@ -885,7 +885,7 @@ public class WxAppMemberController {
         return Result.OK("", wxPayService.createOrder(request));
     }
 
-    @PutMapping("/share/goods")
+    @GetMapping("/share/goods")
     public void generateGoodsShareAdv(@RequestParam String id, HttpServletResponse response) throws Exception {
         LambdaQueryWrapper<GoodsCommonDesc> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsCommonDesc::getDescKey, "shareBg");

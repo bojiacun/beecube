@@ -64,6 +64,9 @@ button, button[plain] {
     &.btn-primary {
         @apply from-red-400 to-red-600 bg-gradient-to-r text-white;
     }
+    &.btn-info {
+        @apply from-indigo-400 to-indigo-600 bg-gradient-to-r text-white;
+    }
     &.btn-danger {
         @apply from-red-400 to-red-600 bg-gradient-to-r text-white;
     }

@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request from "../../lib/request";
+import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, Image, Input, Navigator, ScrollView, Text, View} from "@tarojs/components";
+import {Button, Image, Input, Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -40,6 +40,8 @@ export default class Index extends Component<any, any> {
         preOffered: false,
         hideModal: true,
         customGoods: null,
+        shareAdv: null,
+        loadingShareAdv: false,
     }
     socket: any;
     randomStr: string;
@@ -63,6 +65,8 @@ export default class Index extends Component<any, any> {
         this.addPrice = this.addPrice.bind(this);
         this.subPrice = this.subPrice.bind(this);
         this.onInputPriceChange = this.onInputPriceChange.bind(this);
+        this.openShareGoods = this.openShareGoods.bind(this);
+        this.handleSaveToPhotoAlbum = this.handleSaveToPhotoAlbum.bind(this);
         this.offerInputRef = React.createRef();
     }
 
@@ -203,7 +207,17 @@ export default class Index extends Component<any, any> {
         }
     }
 
-    payDeposit() {
+    async payDeposit() {
+        const {preOffered} = this.state;
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (!checkResult.data.result) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            this.setState({preOffered: true});
+        }
         this.setState({posting: true});
         //支付宝保证金
         request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res => {
@@ -475,6 +489,24 @@ export default class Index extends Component<any, any> {
         return <></>;
     }
 
+    openShareGoods(){
+        this.setState({hideModal: false, loadingShareAdv:true});
+        request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res:any)=>{
+            let data = Taro.arrayBufferToBase64(res.data);
+            this.setState({shareAdv: data, loadingShareAdv: false});
+        });
+    }
+    handleSaveToPhotoAlbum() {
+        const token = Taro.getStorageSync("TOKEN");
+        Taro.downloadFile({
+            url: API_URL+'/paimai/api/members/share/goods?id='+this.state.goods.id,
+            header: {'X-Access-Token': token, 'Authorization': token, 'X-App-Id': APP_ID},
+        }).then(res=>{
+            Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(()=>{
+                utils.showSuccess(false,'保存成功');
+            });
+        })
+    }
 
     async noticeMe() {
         const {message, status} = this.state;
@@ -653,7 +685,7 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
                       style={{paddingBottom: safeBottom}}>
                     <View>
-                        <Button openType={'share'} plain={true} className={'block flex flex-col items-center p-0'}>
+                        <Button onClick={this.openShareGoods} plain={true} className={'block flex flex-col items-center p-0'}>
                             <View className={'iconfont icon-fenxiang text-xl'}/>
                             <View>分享</View>
                         </Button>
@@ -697,6 +729,14 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} />
+                {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
+                    {this.state.shareAdv && <FallbackImage src={'data:image/png;base64,'+this.state.shareAdv} mode={'widthFix'} />}
+                    {!this.state.shareAdv && <PageLoading style={{height: 500}} />}
+                    <View className={'space-x-4'}>
+                        <Button openType={'share'} className={'btn btn-info'}>发给好友</Button>
+                        <Button onClick={this.handleSaveToPhotoAlbum} className={'btn btn-warning'}>保存到相册</Button>
+                    </View>
+                </View>}
             </PageLayout>
         );
     }

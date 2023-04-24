@@ -38,6 +38,7 @@ export default class Index extends Component<any, any> {
         status: undefined,
         message: false,
         deposited: true,
+        preOffered: false,
     }
 
     constructor(props) {
@@ -165,7 +166,17 @@ export default class Index extends Component<any, any> {
             path: '/pages/performance/detail?id=' + this.state.id +'&mid='+mid
         }
     }
-    payDeposit() {
+    async payDeposit() {
+        const {preOffered} = this.state;
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (!checkResult.data.result) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            this.setState({preOffered: true});
+        }
         this.setState({posting: true});
         //支付宝保证金
         request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res => {
