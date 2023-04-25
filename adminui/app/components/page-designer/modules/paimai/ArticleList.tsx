@@ -15,7 +15,7 @@ export const defaultData = {
     basic: {
         itemBorderRadius: 15,
         count: 2,
-        articleType: '0',
+        type: '',
         classId: '',
         direction: 'horizontal'
     },
@@ -47,8 +47,8 @@ const ArticleListModuleAttribute = (props: any) => {
                             return (
                                 <Form method={'post'} onChange={(e) => formik.submitForm()}>
                                     <BootstrapRadioGroup
-                                        options={[{label: '不设置', value: '0'},{label: '图文类文章', value: '1'}, {label: '视频类', value: '2'}, {label: '服务指南', value: '3'}]}
-                                        name={'articleType'}
+                                        options={[{label: '不设置', value: ''},{label: '图文类文章', value: '1'}, {label: '视频类', value: '2'}, {label: '服务指南', value: '3'}]}
+                                        name={'type'}
                                         label={'文章类型'}
                                     />
                                     <BootstrapInput label={'所属分类'} name={'classId'}/>
@@ -87,7 +87,7 @@ const ArticleListModule = (props: any) => {
     const [goodsList, setArticleList] = useState<any[]>([]);
     let _data = {...defaultData, ...data};
     useEffect(() => {
-        getPagedArticle(_data.basic.articleType, _data.basic.classId, _data.basic.count).then(res => {
+        getPagedArticle(_data.basic.type, _data.basic.classId, _data.basic.count).then(res => {
             setArticleList(res.data.records);
         });
     }, [data.basic.dataSource,data.basic.count]);
