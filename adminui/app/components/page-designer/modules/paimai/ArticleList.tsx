@@ -17,6 +17,8 @@ export const defaultData = {
         count: 2,
         type: '',
         classId: '',
+        itemWidth: '90%',
+        itemHeight: 200,
         direction: 'horizontal'
     },
     style: {
@@ -59,6 +61,8 @@ const ArticleListModuleAttribute = (props: any) => {
                                         name={'direction'}
                                         label={'滚动方向'}
                                     />
+                                    <BootstrapInput label={'单项高度'} name={'itemHeight'}/>
+                                    <BootstrapInput label={'单项宽度'} name={'itemWidth'}/>
                                 </Form>
                             );
                         }

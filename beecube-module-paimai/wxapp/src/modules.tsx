@@ -12,6 +12,7 @@ import PerformanceListModule from "./components/diy/modules/PerformanceList";
 import LiveRoomListModule from "./components/diy/modules/LiveRoomList";
 import SyncPerformanceListModule  from "./components/diy/modules/SyncPerformanceList";
 import AuctionListModule from "./components/diy/modules/AuctionList";
+import ArticleListModule from "./components/diy/modules/ArticleList";
 import Title1Module from "./components/diy/modules/Title1";
 import ViewMoreModule from "./components/diy/modules/ViewMore";
 import PublicPerformanceListModule from "./components/diy/modules/PublicPerformanceList";
@@ -34,6 +35,7 @@ const modules = {
     'SYNC_PERFORMANCE_LIST_MODULE': SyncPerformanceListModule,
     'PUBLIC_PERFORMANCE_LIST_MODULE': PublicPerformanceListModule,
     'AUCTION_LIST_MODULE': AuctionListModule,
+    'ARTICLE_LIST_MODULE': ArticleListModule,
     'TITLE1_MODULE': Title1Module,
     'VIEWMORE_MODULE': ViewMoreModule,
     'SEARCH_AND_SCANNER_MODULE':  SearchAndScannerModule,
