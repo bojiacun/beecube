@@ -187,8 +187,9 @@ public class OssBootUtil {
         initOss(endPoint, accessKeyId, accessKeySecret);
         StringBuilder fileUrl = new StringBuilder();
         try {
-            String suffix = file.getName().substring(file.getName().lastIndexOf('.'));
-            String fileName = UUID.randomUUID().toString().replace("-", "");
+//            String suffix = file.getName().substring(file.getName().lastIndexOf('.'));
+//            String fileName = UUID.randomUUID().toString().replace("-", "");
+            String fileName = CommonUtils.randomFileName(32);
             if (!fileDir.endsWith(SymbolConstant.SINGLE_SLASH)) {
                 fileDir = fileDir.concat(SymbolConstant.SINGLE_SLASH);
             }

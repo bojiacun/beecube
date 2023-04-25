@@ -5,6 +5,8 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSour
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.constant.DataBaseConstant;
 import org.jeecg.common.constant.ServiceNameConstants;
@@ -22,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -103,7 +106,29 @@ public class CommonUtils {
         //update-end-author:taoyan date:20220302 for: /issues/3381 online 在线表单 使用文件组件时，上传文件名中含%，下载异常
         return fileName;
     }
+    /**
+     * 生成制定长都的随机字符串
+     * @param length
+     * @return
+     */
+    public static String randomFileName(int length) {
+        String data = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis()));
+        BigInteger bigInteger = new BigInteger(data, 16);
 
+        String seed = bigInteger.toString(35);
+
+        seed = seed + "zZ" + seed.toUpperCase();
+
+        StringBuilder hash = new StringBuilder();
+        hash.append((char)(RandomUtils.nextInt(65,90)));
+
+        int max = seed.length() - 1;
+
+        for (int i = 0; i < length; i++) {
+            hash.append(seed.charAt(RandomUtils.nextInt(0,max)));
+        }
+        return hash.toString();
+    }
     /**
      * java 判断字符串里是否包含中文字符
      * @param str
