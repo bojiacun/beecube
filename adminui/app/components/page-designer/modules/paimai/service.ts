@@ -19,6 +19,9 @@ export async function getPagedTagedRooms(tag: string,source:any, count:number) {
 export async function getPagedAuction(source:any, count:number) {
     return axios.get('/paimai/auctions/diy/list', { params: {source: source, pageSize: count}});
 }
+export async function getPagedArticle(articleType: number, classId = '', count:number) {
+    return axios.get('/paimai/articles/diy/list', { params: {articleType: articleType, pageSize: count, classId: classId}});
+}
 
 export async function getShopClasses() {
     return axios.get('/paimai/goods/class/all');

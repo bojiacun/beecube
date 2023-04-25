@@ -15,6 +15,7 @@ import registerModulePublicPerformanceList from './modules/paimai/PublicPerforma
 import registerModuleLiveRoomList from './modules/paimai/LiveRoomList';
 import registerModuleSyncPerformanceList from './modules/paimai/SyncPerformanceList';
 import registerModuleAuctionList from './modules/paimai/AuctionList';
+import registerModuleArticleList from './modules/paimai/ArticleList';
 import registerModuleTitle1 from './modules/paimai/Title1';
 import registerModuleViewMore from './modules/paimai/ViewMore';
 
@@ -51,4 +52,5 @@ export default function register(module='') {
     //@ts-ignore
     registerSearchBarModuleSwiper(module);
     registerModuleLiveRoomList(module);
+    registerModuleArticleList(module);
 }
