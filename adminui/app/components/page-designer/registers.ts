@@ -1,5 +1,6 @@
 import registerMiniAppHeader from "./controls/MiniAppHeader";
 import registerPopAdvertise from './controls/PopAdvertise';
+import registerPopAttention from './controls/PopAttention';
 import registerModuleDivider from './modules/common/Divider';
 import registerModuleImageText from './modules/common/ImageText';
 import registerModuleMenus from './modules/common/Menus';
@@ -24,6 +25,8 @@ export default function register(module='') {
     registerMiniAppHeader(module);
     //@ts-ignore
     registerPopAdvertise(module);
+    //@ts-ignore
+    registerPopAttention(module);
     //@ts-ignore
     registerModuleDivider(module);
     //@ts-ignore

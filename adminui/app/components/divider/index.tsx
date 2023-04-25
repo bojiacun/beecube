@@ -8,7 +8,7 @@ export interface DividerProps extends Partial<any>{
 }
 
 const Divider: FC<DividerProps> = (props) => {
-    const {color = '#eee', height = 1, margin = 10} = props;
+    const {color = '#ccc', height = 1, margin = 10} = props;
 
     return (
         <div style={{width: '100%', height: height, backgroundColor: color, marginTop: margin, marginBottom: margin}}></div>

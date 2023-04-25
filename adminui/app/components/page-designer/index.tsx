@@ -11,6 +11,7 @@ import { POP_ADVERTISE } from "./controls/PopAdvertise";
 import {AnimatePresence, motion} from "framer-motion";
 import Collapse from 'rc-collapse';
 import collapseMotion from "~/components/page-designer/motion";
+import {POP_ATTENTION} from "~/components/page-designer/controls/PopAttention";
 
 export declare interface PageType {
     title: string;
@@ -371,6 +372,14 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                 })}
                             </div>
                             {_controls.filter(item => item.key === POP_ADVERTISE).map((item: any) => {
+                                const Component = getControl(item.key).designer;
+                                const settings = getControl(item.key).settings;
+                                const index = _.findIndex(currentPage.controls, o => o.key == item.key);
+                                return <Component key={item.key} data={item?.data} links={links} dataKey={item.key} onActive={(key: string) => {
+                                    setCurrentData({type: 1, dataIndex: index, settings: settings, data: item.data});
+                                }}/>
+                            })}
+                            {_controls.filter(item => item.key === POP_ATTENTION).map((item: any) => {
                                 const Component = getControl(item.key).designer;
                                 const settings = getControl(item.key).settings;
                                 const index = _.findIndex(currentPage.controls, o => o.key == item.key);

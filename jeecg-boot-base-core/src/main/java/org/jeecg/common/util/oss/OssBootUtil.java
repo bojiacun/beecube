@@ -113,15 +113,15 @@ public class OssBootUtil {
                 ossClient.createBucket(newBucket);
             }
             // 获取文件名
-//            String orgName = file.getOriginalFilename();
-//            if("" == orgName){
-//              orgName=file.getName();
-//            }
-//            orgName = CommonUtils.getFileName(orgName);
+            String orgName = file.getOriginalFilename();
+            if("" == orgName){
+              orgName=file.getName();
+            }
+            orgName = CommonUtils.getFileName(orgName);
 //            String fileName = orgName.indexOf(".")==-1
 //                              ?orgName + "_" + System.currentTimeMillis()
 //                              :orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.lastIndexOf("."));
-            String fileName = CommonUtils.randomFileName(32);
+            String fileName = CommonUtils.randomFileName(32) + orgName.substring(orgName.lastIndexOf("."));
             if (!fileDir.endsWith(SymbolConstant.SINGLE_SLASH)) {
                 fileDir = fileDir.concat(SymbolConstant.SINGLE_SLASH);
             }
@@ -188,9 +188,9 @@ public class OssBootUtil {
         initOss(endPoint, accessKeyId, accessKeySecret);
         StringBuilder fileUrl = new StringBuilder();
         try {
-//            String suffix = file.getName().substring(file.getName().lastIndexOf('.'));
+            String suffix = file.getName().substring(file.getName().lastIndexOf('.'));
 //            String fileName = UUID.randomUUID().toString().replace("-", "");
-            String fileName = CommonUtils.randomFileName(32);
+            String fileName = CommonUtils.randomFileName(32)+suffix;
             if (!fileDir.endsWith(SymbolConstant.SINGLE_SLASH)) {
                 fileDir = fileDir.concat(SymbolConstant.SINGLE_SLASH);
             }
