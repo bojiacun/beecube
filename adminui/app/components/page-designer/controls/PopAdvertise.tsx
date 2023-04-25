@@ -66,7 +66,7 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
                                         {(item:any, index:number)=>{
                                             return (<div key={'menu'+index+item.url}>
                                                 <FormGroup>
-                                                    <FormLabel>广告图{index+1}图片地址</FormLabel>
+                                                    <FormLabel>广告图{index+1}图片地址  <XCircle onClick={()=>deleteImage(index)} style={{right: -1, position: 'absolute', cursor: 'pointer'}} size={16} /></FormLabel>
                                                     <FileBrowserInput type={1} multi={false} initValue={item.image} onChange={(val:any)=>{
                                                         item.image = val;
                                                         _data.basic.images = images;
@@ -81,11 +81,14 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
                                                         onUpdate({...data});
                                                     }} />
                                                 </FormGroup>
-                                                <BootstrapInput label={'广告图'+(index+1)+'排序值'} name={'sort'+index} onChange={(val:any)=>{
-                                                    item.sort = val;
-                                                    _data.basic.images = images;
-                                                    onUpdate({...data});
-                                                }} />
+                                                <FormGroup>
+                                                    <FormLabel style={{position: 'relative', width: '100%'}}>广告图{index+1}排序值</FormLabel>
+                                                    <FormControl value={item.sort} onChange={(e)=>{
+                                                        item.sort = e.currentTarget.value;
+                                                        _data.basic.images = images;
+                                                        onUpdate({...data});
+                                                    }} />
+                                                </FormGroup>
                                                 <Divider />
                                             </div>);
                                         }}
