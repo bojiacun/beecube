@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="专场预约申请表")
 @RestController
-@RequestMapping("/paimai/invites")
+@RequestMapping("/invites")
 public class PerformanceInviteController extends JeecgController<PerformanceInvite, IPerformanceInviteService> {
 	@Autowired
 	private IPerformanceInviteService performanceInviteService;
