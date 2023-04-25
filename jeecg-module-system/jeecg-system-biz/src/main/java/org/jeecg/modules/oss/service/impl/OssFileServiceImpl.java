@@ -27,7 +27,7 @@ public class OssFileServiceImpl extends ServiceImpl<OssFileMapper, OssFile> impl
 		ossFile.setFileName(fileName);
 		ossFile.setType(type);
 		ossFile.setAppId(AppContext.getApp());
-		String url = OssBootUtil.upload(multipartFile,"upload/test");
+		String url = OssBootUtil.upload(multipartFile,AppContext.getApp());
 		//update-begin--Author:scott  Date:20201227 for：JT-361【文件预览】阿里云原生域名可以文件预览，自己映射域名kkfileview提示文件下载失败-------------------
 		// 返回阿里云原生域名前缀URL
 		ossFile.setUrl(OssBootUtil.getOriginalUrl(url));
