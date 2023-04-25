@@ -188,7 +188,7 @@ public class OssBootUtil {
         StringBuilder fileUrl = new StringBuilder();
         try {
             String suffix = file.getName().substring(file.getName().lastIndexOf('.'));
-            String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
+            String fileName = UUID.randomUUID().toString().replace("-", "");
             if (!fileDir.endsWith(SymbolConstant.SINGLE_SLASH)) {
                 fileDir = fileDir.concat(SymbolConstant.SINGLE_SLASH);
             }
