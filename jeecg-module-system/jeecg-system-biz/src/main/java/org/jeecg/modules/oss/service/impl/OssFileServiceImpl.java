@@ -1,6 +1,7 @@
 package org.jeecg.modules.oss.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.util.CommonUtils;
 import org.jeecg.common.util.oss.OssBootUtil;
 import org.jeecg.config.AppContext;
@@ -22,6 +23,9 @@ public class OssFileServiceImpl extends ServiceImpl<OssFileMapper, OssFile> impl
 	@Override
 	public OssFile upload(MultipartFile multipartFile, Integer type) throws Exception {
 		String fileName = multipartFile.getOriginalFilename();
+		if(StringUtils.isBlank(fileName)) {
+			fileName = multipartFile.getName();
+		}
 		fileName = CommonUtils.getFileName(fileName);
 		OssFile ossFile = new OssFile();
 		ossFile.setFileName(fileName);
