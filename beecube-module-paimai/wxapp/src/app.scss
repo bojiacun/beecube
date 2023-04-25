@@ -164,3 +164,18 @@ button, button[plain] {
     top: -6px;
     right: 3px;
 }
+.title1 {
+    position: relative;
+    > text {
+        @apply ml-4;
+    }
+}
+
+.title1:before {
+    content: ' ';
+    top: 5%;
+    height: 90%;
+    width: 7px;
+    @apply bg-red-600;
+    position: absolute;
+}

@@ -33,6 +33,11 @@
                     "name": "直播回放",
                     "pathName": "/pages/live/history",
                     "query": "id=1649779288961277953"
+                },
+                {
+                    "name": "预约页面",
+                    "pathName": "/pages/performance/invite",
+                    "query": "id=1649080825357336578"
                 }
             ]
         }
