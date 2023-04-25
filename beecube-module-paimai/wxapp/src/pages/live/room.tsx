@@ -194,8 +194,8 @@ export default class Index extends Component<any, any> {
                 console.log('onModalClick', content);
                 if (!this.state.hideModal) {
                     this.hideModal();
+                    this.hideOffer();
                 }
-                this.hideOffer();
                 break;
             }
             default: {
@@ -287,16 +287,18 @@ export default class Index extends Component<any, any> {
         this.setState({customGoods: goods});
     }
     subPrice(){
+        if(this.state.pushIndex < 0) return;
         if(this.offerInputRef.current.value <= this.state.nextPrice) {
             return;
         }
-        let goods = this.state.customGoods || {...this.state.goods};
+        let goods = this.state.customGoods || {...this.state.merchandises[this.state.pushIndex]};
         goods.currentPrice = this.offerInputRef.current.value = this.prevPrice(goods, false);
         goods.offerCount--;
         this.setState({customGoods: goods});
     }
     addPrice(){
-        let goods = this.state.customGoods || {...this.state.goods, currentPrice: this.state.nextPrice};
+        if(this.state.pushIndex < 0) return;
+        let goods = this.state.customGoods || {...this.state.merchandises[this.state.pushIndex], currentPrice: this.state.nextPrice};
         goods.offerCount++;
         goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
         this.setState({customGoods: goods});
@@ -341,8 +343,9 @@ export default class Index extends Component<any, any> {
                 rangePrice = price;
             }
         }
-        update && this.setState({nextPrice: currentPrice - rangePrice, goods: goods});
-        return currentPrice - rangePrice;
+        const finalPrice = currentPrice - rangePrice;
+        update && this.setState({nextPrice: finalPrice, goods: goods});
+        return finalPrice;
     }
     nextPrice(newGoods, update=true) {
         let goods = newGoods;
@@ -377,15 +380,15 @@ export default class Index extends Component<any, any> {
             else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
-                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
                 price = parseFloat(priceConfigs[modIndex]);
             }
             if (currentPrice >= min) {
                 rangePrice = price;
             }
         }
-        update && this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
-        return currentPrice + rangePrice;
+        const finalPrice = currentPrice+rangePrice;
+        update && this.setState({nextPrice: finalPrice, goods: goods});
+        return finalPrice;
     }
 
 
@@ -420,29 +423,29 @@ export default class Index extends Component<any, any> {
         console.log('addShoppingCart ', indx);
     }
     fadeInOffer() {
-        this.animationOffer.translateY(0).step()
+        this.animationOffer?.translateY(0).step()
         this.setState({
             animationOfferData: this.animationOffer.export() //动画实例的export方法导出动画数据传递给组件的animation属性
         })
     }
 
     fadeDownOffer() {
-        this.animationOffer.translateY(450).step()
+        this.animationOffer?.translateY(450).step()
         this.setState({
-            animationOfferData: this.animationOffer.export(),
+            animationOfferData: this.animationOffer?.export(),
         })
     }
     fadeIn() {
-        this.animation.translateY(0).step()
+        this.animation?.translateY(0).step()
         this.setState({
-            animationData: this.animation.export() //动画实例的export方法导出动画数据传递给组件的animation属性
+            animationData: this.animation?.export() //动画实例的export方法导出动画数据传递给组件的animation属性
         })
     }
 
     fadeDown() {
-        this.animation.translateY(450).step()
+        this.animation?.translateY(450).step()
         this.setState({
-            animationData: this.animation.export(),
+            animationData: this.animation?.export(),
         })
     }
 
@@ -455,6 +458,10 @@ export default class Index extends Component<any, any> {
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
             request.get('/paimai/api/live/room/goods', {params: {roomId: room.id}}).then(res => {
                 let goodsList = res.data.result;
+                goodsList.forEach(data=> {
+                    data.fields = JSON.parse(data.fields || '[]');
+                    data.uprange = JSON.parse(data.uprange);
+                })
                 this.setState(this.resolveGoods(goodsList));
             });
         });
@@ -472,8 +479,6 @@ export default class Index extends Component<any, any> {
         }
         else {
             let data = goodsList[currentIndex];
-            data.fields = JSON.parse(data.fields || '[]');
-            data.uprange = JSON.parse(data.uprange);
             this.nextPrice(data);
         }
         return {merchandises: goodsList, pushIndex: currentIndex};
