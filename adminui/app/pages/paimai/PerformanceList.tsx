@@ -243,6 +243,9 @@ const PerformanceList = (props: any) => {
                                 <Dropdown.Item eventKey={'deposits'}>
                                     <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>保证金记录</div>
                                 </Dropdown.Item>
+                                <Dropdown.Item eventKey={'invites'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>预约记录</div>
+                                </Dropdown.Item>
                                 <Dropdown.Item eventKey={'edit'}>
                                     <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
                                 </Dropdown.Item>

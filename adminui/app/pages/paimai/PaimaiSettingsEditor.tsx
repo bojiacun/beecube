@@ -28,7 +28,10 @@ const PaimaiSettingsEditor = (props:any) => {
     const handleOnSubmit = (values: any) => {
         postFetcher.submit(values, {method: 'post', action:'/paimai/goods/settings/update'});
     }
+    settings.isCustomOffer = parseInt(settings.isCustomOffer);
+    settings.isDealCommission = parseInt(settings.isDealCommission);
 
+    console.log(settings);
 
     return (
         <Formik initialValues={settings} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
