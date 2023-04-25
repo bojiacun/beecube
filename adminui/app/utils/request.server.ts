@@ -243,6 +243,7 @@ export const API_PAIMAI_ARTICLE_CLASS_ADD = `${BASE_URL}/paimai/article/classes/
 export const API_PAIMAI_ARTICLE_CLASS_EDIT = `${BASE_URL}/paimai/article/classes/edit`;
 export const API_PAIMAI_ARTICLE_CLASS_DELETE = `${BASE_URL}/paimai/article/classes/delete`;
 
+export const API_PAIMAI_INVITE_LIST = `${BASE_URL}/paimai/invites/list`;
 export const API_PAIMAI_VIEW_LIST = `${BASE_URL}/paimai/views/list`;
 export const API_PAIMAI_OFFER_LIST = `${BASE_URL}/paimai/offers/list`;
 export const API_PAIMAI_DEPOSIT_LIST = `${BASE_URL}/paimai/deposits/list`;
@@ -301,6 +302,7 @@ export const requestWithToken = (request: Request) => async (url:RequestInfo, op
         options.headers['X-App-Id'] = session.get("APPID");
     }
     const res = await fetch(url, options);
+    console.log(res);
     if(res.status != 200) {
         throw new Response(res.statusText, {status: res.status});
     }

@@ -17,6 +17,7 @@ import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
 import moment from "moment";
+import InviteList from "~/pages/paimai/InviteList";
 
 
 
@@ -28,9 +29,11 @@ const PerformanceList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const [selectedPerformance, setSelectedPerformance] = useState<any>();
     const [selectedRow, setSelectedRow] = useState<any>();
+    const [selectedInviteRow, setSelectedInviteRow] = useState<any>();
     const [selectedRows, setSelectedRows] = useState<any>([]);
     const [operateValue, setOperateValue] = useState<any>();
     const [depositsShow, setDepositsShow] = useState<boolean>(false);
+    const [invitesShow, setInvitesShow] = useState<boolean>(false);
     const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
@@ -101,6 +104,10 @@ const PerformanceList = (props: any) => {
                 break;
             case 'deposits':
                 setSelectedRow(row);
+                setDepositsShow(true);
+                break;
+            case 'invites':
+                setSelectedInviteRow(row);
                 setDepositsShow(true);
                 break;
             case 'edit':
@@ -408,6 +415,11 @@ const PerformanceList = (props: any) => {
                 setSelectedRow(null)
                 setDepositsShow(false);
             }}  selectedRow={selectedRow} />}
+
+            {selectedInviteRow && <InviteList show={depositsShow} onHide={()=>{
+                setInvitesShow(false)
+                setSelectedInviteRow(null);
+            }}  selectedRow={selectedInviteRow} />}
         </>
     );
 }
