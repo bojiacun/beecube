@@ -21,6 +21,8 @@ export default defineAppConfig({
         'pages/performance/public',
         'pages/performance/list',
         'pages/performance/sync',
+        'pages/performance/invite',
+        'pages/performance/invited',
         'pages/auction/detail',
         'pages/auction/list',
         'pages/my/index',

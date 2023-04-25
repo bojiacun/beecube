@@ -676,6 +676,14 @@ public class WxAppMemberController {
         return Result.OK(!StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()));
     }
 
+    @GetMapping("/invites")
+    public Result<PerformanceInvite> queryMyInvite(@RequestParam String id) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<PerformanceInvite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PerformanceInvite::getMemberId, loginUser.getId());
+        queryWrapper.eq(PerformanceInvite::getPerformanceId, id);
+        return Result.OK(performanceInviteService.getOne(queryWrapper));
+    }
     @PostMapping("/invites")
     public Result<Boolean> inviteJoin(@RequestBody PerformanceInvite invite, @RequestParam String id) {
         Performance performance = performanceService.getById(id);
@@ -687,6 +695,7 @@ public class WxAppMemberController {
         invite.setPerformanceId(performance.getId());
         invite.setNickname(member.getNickname());
         invite.setAvatar(member.getAvatar());
+        invite.setMemberId(loginUser.getId());
 
         String vcode = RandomStringUtils.randomNumeric(6);
         invite.setInviteCode(vcode);

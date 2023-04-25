@@ -64,4 +64,5 @@ public class PerformanceInvite {
 	private java.lang.String appId;
 
 	private String performanceId;
+	private String memberId;
 }
