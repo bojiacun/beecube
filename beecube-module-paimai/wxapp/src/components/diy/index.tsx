@@ -59,6 +59,13 @@ const DiyPage: FC<DiyPageProps> = (props) => {
                 }
                 return <></>;
             })}
+            {page?.controls.filter(o=>o.key==='POP_ATTENTION').map((m: any) => {
+                const Module = modules[m.key];
+                if (Module) {
+                    return <Module {...m.data} />;
+                }
+                return <></>;
+            })}
         </PageLayout>
     );
 }

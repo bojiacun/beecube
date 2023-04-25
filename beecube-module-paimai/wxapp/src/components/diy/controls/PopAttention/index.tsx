@@ -17,7 +17,6 @@ const PopAttention = (props: any) => {
         //拿到本次要显示的广告图
         let hide = Taro.getStorageSync("CLOSED_ATTENTION");
         setHide(hide);
-
     },[basic]);
     const handleSaveToPhotoAlbum = () => {
         Taro.downloadFile({
@@ -31,6 +30,7 @@ const PopAttention = (props: any) => {
     }
     const closeAdv = () => {
         Taro.setStorageSync('CLOSED_ATTENTION', 1);
+        setHide(true);
     }
     if(hide) {
         return <></>
@@ -38,11 +38,13 @@ const PopAttention = (props: any) => {
 
     return (
         <View {...rest}  style={{width: '100vw',zIndex: 99999, height: '100vh', top: 0, left: 0, position: 'fixed', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `rgba(0,0,0,${style.opacity})`}}>
-            <View style={{width: '70%', position: 'relative', opacity: 1}}>
-                <Image mode={'widthFix'} src={utils.resolveUrl(basic.image)} style={{width: '100%', display: 'block'}} />
-                <View className={'flex items-center justify-content'}>
-                    <View className={'flex-1 text-gray-600'} onClick={closeAdv}>我知道了</View>
-                    <View className={'flex-1 text-red-600'} onClick={handleSaveToPhotoAlbum}>下载二维码</View>
+            <View className={'bg-white'} style={{width: '70%', position: 'relative', opacity: 1}}>
+                <View style={{borderBottom: '1px solid #ccc'}}>
+                    <Image mode={'widthFix'} src={utils.resolveUrl(basic.image)} style={{width: '100%', display: 'block'}} />
+                </View>
+                <View className={'flex items-center justify-content divide-x divide-gray-300'}>
+                    <View className={'flex-1 text-gray-600 text-center py-4 px-6'} onClick={closeAdv}>我知道了</View>
+                    <View className={'flex-1 text-red-600 text-center py-4 px-6'} onClick={handleSaveToPhotoAlbum}>下载二维码</View>
                 </View>
             </View>
         </View>
