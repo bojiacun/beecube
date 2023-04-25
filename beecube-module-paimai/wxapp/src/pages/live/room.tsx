@@ -217,15 +217,13 @@ export default class Index extends Component<any, any> {
         }
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res => {
+        request.post('/paimai/api/members/deposits/liveroom', null, {params: {id: this.state.liveRoom.id}}).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
                 //支付已经完成，提醒支付成功并返回上一页面
                 Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-                    let goods = this.state.goods;
-                    goods.deposited = true;
-                    this.setState({goods: goods});
+                    this.setState({deposited: true});
                 });
                 this.setState({posting: false});
             }).catch(() => this.setState({posting: false}));
@@ -235,7 +233,12 @@ export default class Index extends Component<any, any> {
     async offer() {
         const {context, settings} = this.props;
         const {userInfo} = context;
-        const {goods, preOffered} = this.state;
+        const {preOffered} = this.state;
+        const goods = this.state.merchandises[this.state.pushIndex];
+        if(!goods) {
+            utils.showError('当前没有可以出价的拍品');
+            return;
+        }
         if(!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
@@ -260,7 +263,7 @@ export default class Index extends Component<any, any> {
                     utils.showError(res.data.message || '出价失败');
                 }
                 this.setState({hideModal: true});
-                this.fadeDown();
+                this.fadeDownOffer();
             }).catch(() => this.setState({posting: false}));
         }
         //判断当前自己是不是最高出价人，如果是提醒一次
@@ -670,7 +673,12 @@ export default class Index extends Component<any, any> {
                                         {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />}
                                         {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}} />}
                                     </View>
-                                    <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                                    {this.state.deposited &&
+                                        <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                                    }
+                                    {!this.state.deposited &&
+                                        <View><Button className={'btn btn-info'} onClick={this.payDeposit}>缴纳保证金</Button></View>
+                                    }
                                 </View>
                             </View>
                         </View>
