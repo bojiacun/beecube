@@ -26,6 +26,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.log.Log;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
@@ -35,6 +36,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.CommonUtils;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +109,10 @@ public class WxAppMemberController {
 
     @Resource
     CommissionService commissionService;
+
+
+    @Resource
+    IPerformanceInviteService performanceInviteService;
 
 
     @AutoLog(value = "订单售后表-分页列表查询")
@@ -670,6 +676,25 @@ public class WxAppMemberController {
         return Result.OK(!StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()));
     }
 
+    @PostMapping("/invites")
+    public Result<Boolean> inviteJoin(@RequestBody PerformanceInvite invite, @RequestParam String id) {
+        Performance performance = performanceService.getById(id);
+        if(performance == null || performance.getState() == 0 || (performance.getEndTime() != null && new Date().after(performance.getEndTime())) || performance.getState() >= 2) {
+            throw new JeecgBootException("找不到专场，或者专场已结束或下架");
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        invite.setPerformanceId(performance.getId());
+        invite.setNickname(member.getNickname());
+        invite.setAvatar(member.getAvatar());
+
+        String vcode = RandomStringUtils.randomNumeric(6);
+        invite.setInviteCode(vcode);
+
+        performanceInviteService.save(invite);
+
+        return Result.OK(true);
+    }
     /**
      * 出价拍品
      *
