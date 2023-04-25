@@ -3,6 +3,7 @@ import MultipleImagesModule from "./components/diy/modules/MultipleImages";
 import SingleImageModule from "./components/diy/modules/SingleImage";
 import DividerModule from "./components/diy/modules/Divider";
 import PopAdvertise from "./components/diy/controls/PopAdvertise";
+import PopAttention from "./components/diy/controls/PopAttention";
 import SwiperModule from "./components/diy/modules/Swiper";
 import ImageText from "./components/diy/modules/ImageText";
 import GoodsListModule from "./components/diy/modules/GoodsList";
@@ -24,6 +25,7 @@ const modules = {
     'MULTIPLE_IMAGES_MODULE': MultipleImagesModule,
     'DIVIDER_MODULE': DividerModule,
     'POP_ADVERTISE': PopAdvertise,
+    'POP_ATTENTION': PopAttention,
     'SWIPER_MODULE': SwiperModule,
     'GOODS_LIST_MODULE': GoodsListModule,
     'BUYOUT_GOODS_LIST_MODULE': BuyoutGoodsListModule,
