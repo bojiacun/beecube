@@ -342,7 +342,7 @@ Component({
                         this.setData({loginedRoom: true});
                     }
                     //UI显示谁登录成功了
-                    this.setData({newestName: message.userName, userCount: message.roomUsers});
+                    this.setData({newestName: message.userName ? message.userName:'微信用户', userCount: message.roomUsers});
                     clearTimeout(this.joinTimer);
                     this.joinTimer = setTimeout(()=>{
                         this.setData({newestName: null});

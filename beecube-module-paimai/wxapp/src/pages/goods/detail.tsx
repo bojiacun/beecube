@@ -721,7 +721,7 @@ export default class Index extends Component<any, any> {
                                 <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
                             </View>
                             <View className={'flex flex-col items-center justify-center space-y-4'}>
-                                <View>当前价：{numeral(goods.currentPrice).format('0,0.00')}</View>
+                                <View>当前价：{numeral(goods.currentPrice||goods.startPrice).format('0,0.00')}</View>
                                 <View className={'flex items-center text-center'}>
                                     <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
                                     <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />

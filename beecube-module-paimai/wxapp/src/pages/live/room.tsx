@@ -1,15 +1,15 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import Taro, {getCurrentInstance} from "@tarojs/taro";
 import {connect} from "react-redux";
 import request from "../../lib/request";
-import {Image, Text, View, ScrollView, Navigator, Button} from "@tarojs/components";
+import {Image, Text, View, ScrollView, Navigator, Button, Input} from "@tarojs/components";
 import './room.scss';
 import utils from "../../lib/utils";
 import FallbackImage from "../../components/FallbackImage";
 import MessageType from "../../utils/message-type";
-import moment from "moment";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
+import classNames from "classnames";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -28,19 +28,25 @@ export default class Index extends Component<any, any> {
         userInfo: null,
         hideModal: true,
         animationData: {},
+        animationOfferData: {},
         merchandises: [],
         pushIndex: -1,
+        customGoods: null,
         merBot: 0,
         newBot: 0,
         preOffered: false,
         offers: [],
         deposited: undefined,
+        nextPrice: null,
     }
 
     options: any;
     liveRoom: any;
     animation: any;
+    animationOffer: any;
     merT: any;
+    offerInputRef: any;
+    randomStr: string;
 
     constructor(props) {
         super(props);
@@ -53,13 +59,22 @@ export default class Index extends Component<any, any> {
         this.showModal = this.showModal.bind(this);
         this.onRoomEvent = this.onRoomEvent.bind(this);
         this.showOffer = this.showOffer.bind(this);
+        this.hideOffer = this.hideOffer.bind(this);
         this.onMessageReceived = this.onMessageReceived.bind(this);
+        this.payDeposit = this.payDeposit.bind(this);
+        this.offer = this.offer.bind(this);
+        this.addPrice = this.addPrice.bind(this);
+        this.subPrice = this.subPrice.bind(this);
+        this.onInputPriceChange = this.onInputPriceChange.bind(this);
+        this.offerInputRef = React.createRef();
+        this.randomStr = utils.randomString(6);
     }
 
     onMessageReceived(message) {
         const goodsList = this.state.merchandises;
         const {settings} = this.props;
         const {userInfo} = this.props.context;
+        const msg = message;
         switch (message.type) {
             case MessageType.GOODS_UPDATE:
                 goodsList?.forEach((goods:any) => {
@@ -107,22 +122,24 @@ export default class Index extends Component<any, any> {
             case MessageType.OFFER:
                 goodsList?.forEach(goods=> {
                     if (goods.id == message.goodsId) {
-                        goods.currentPrice = parseFloat(message.price).toFixed(2);
-                        this.liveRoom?.getNextPrice(goods);
+                        goods.currentPrice = parseFloat(msg.price).toFixed(2);
+                        this.setState({goods: goods});
+                        goods.offerCount++;
+                        this.nextPrice(goods);
                         let offers = this.state.offers;
                         if (offers.length >= 3) {
                             offers.pop();
                         }
                         offers.unshift(
                             {
-                                memberAvatar: message.fromUserAvatar,
-                                memberName: message.fromUserName,
-                                memberId: message.fromUserId,
-                                price: message.price,
-                                offerTime: message.createTime
+                                memberAvatar: msg.userAvatar,
+                                memberName: msg.userName,
+                                memberId: msg.userId,
+                                price: msg.price,
+                                offerTime: msg.offerTime
                             }
                         );
-                        goods.offerCount++;
+                        this.setState({offers: offers, goods: goods});
                     }
                 });
                 break;
@@ -139,7 +156,7 @@ export default class Index extends Component<any, any> {
         this.setState(this.resolveGoods(goodsList));
     }
 
-    async componentDidUpdate(_prevProps: Readonly<any>, prevState) {
+    async componentDidUpdate(_prevProps: Readonly<any>, _prevState) {
         const {page} = getCurrentInstance();
         const {userInfo} = this.props.context;
         const pushIndex = this.state.pushIndex;
@@ -153,10 +170,10 @@ export default class Index extends Component<any, any> {
                 this.setState({deposited: res.data.result});
             });
         }
-        if(pushIndex != prevState.pushIndex) {
-            let addBot = (pushIndex > - 1 ? 130:0)
-            // this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
-        }
+        // if(pushIndex != prevState.pushIndex) {
+        //     let addBot = (pushIndex > - 1 ? 130:0)
+        //     this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
+        // }
     }
 
     onRoomEvent(ev) {
@@ -178,18 +195,7 @@ export default class Index extends Component<any, any> {
                 if (!this.state.hideModal) {
                     this.hideModal();
                 }
-                break;
-            }
-            case 'doOffer': {
-                console.log('doOffer', content);
-                //发送HTTP请求进行出价
-                this.offer(content.price).then();
-                break;
-            }
-            case 'payDeposit': {
-                console.log('payDeposit', content);
-                //发送HTTP请求进行出价
-                this.payDeposit();
+                this.hideOffer();
                 break;
             }
             default: {
@@ -198,28 +204,38 @@ export default class Index extends Component<any, any> {
             }
         }
     }
-    payDeposit() {
+    async payDeposit() {
+        const {preOffered} = this.state;
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (!checkResult.data.result) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            this.setState({preOffered: true});
+        }
         this.setState({posting: true});
         //支付宝保证金
-        request.post('/paimai/api/members/deposits/liveroom', null, {params: {id: this.state.liveRoom.id}}).then(res => {
+        request.post('/paimai/api/members/deposits', null, {params: {id: this.state.id}}).then(res => {
             let data = res.data.result;
             data.package = data.packageValue;
             Taro.requestPayment(data).then(() => {
                 //支付已经完成，提醒支付成功并返回上一页面
                 Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-                    let liveRoom = this.state.liveRoom;
-                    liveRoom.deposited = true;
-                    this.setState({liveRoom: liveRoom, deposited: true});
+                    let goods = this.state.goods;
+                    goods.deposited = true;
+                    this.setState({goods: goods});
                 });
                 this.setState({posting: false});
             }).catch(() => this.setState({posting: false}));
         })
     }
-    async offer(nextPrice:number) {
+
+    async offer() {
         const {context, settings} = this.props;
         const {userInfo} = context;
-        const {pushIndex, merchandises, preOffered} = this.state;
-        const goods = merchandises[pushIndex];
+        const {goods, preOffered} = this.state;
         if(!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
@@ -236,25 +252,15 @@ export default class Index extends Component<any, any> {
         let offers = this.state.offers;
         let doOffer = () => {
             this.setState({posting: true});
-            request.post('/paimai/api/members/offers', {id: goods.id, price: nextPrice, randomStr: utils.randomString(6)}).then(res => {
+            request.post('/paimai/api/members/offers', {id: goods.id, price: this.state.nextPrice, randomStr: this.randomStr}).then(res => {
                 this.setState({posting: false});
                 if (res.data.success) {
                     utils.showSuccess(false, '出价成功');
-                    if (offers.length >= 3) {
-                        offers.pop();
-                    }
-                    offers.unshift({
-                        memberAvatar: userInfo.avatar,
-                        memberId: userInfo.id,
-                        memberName: userInfo.realname || userInfo.nickname,
-                        price: this.state.nextPrice,
-                        offerTime: moment(new Date()).format('yyyy-MM-DD HH:mm:ss'),
-                    });
-                    goods.offerCount++;
-                    this.setState({offers: offers});
                 } else {
                     utils.showError(res.data.message || '出价失败');
                 }
+                this.setState({hideModal: true});
+                this.fadeDown();
             }).catch(() => this.setState({posting: false}));
         }
         //判断当前自己是不是最高出价人，如果是提醒一次
@@ -273,24 +279,124 @@ export default class Index extends Component<any, any> {
         //出价
 
     }
-    showModal() {
-        this.setState({
-            hideModal: false
-        });
-        this.animation = Taro.createAnimation({
-            duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
-            timingFunction: 'linear', //动画的效果 默认值是linear
-        });
-        setTimeout(() => {
-            this.fadeIn(); //调用显示动画
-        }, 10);
+
+    onInputPriceChange(e){
+        let newPrice = e.detail.value;
+        let goods = this.state.customGoods || {...this.state.goods};
+        goods.currentPrice = newPrice;
+        this.setState({customGoods: goods});
     }
+    subPrice(){
+        if(this.offerInputRef.current.value <= this.state.nextPrice) {
+            return;
+        }
+        let goods = this.state.customGoods || {...this.state.goods};
+        goods.currentPrice = this.offerInputRef.current.value = this.prevPrice(goods, false);
+        goods.offerCount--;
+        this.setState({customGoods: goods});
+    }
+    addPrice(){
+        let goods = this.state.customGoods || {...this.state.goods, currentPrice: this.state.nextPrice};
+        goods.offerCount++;
+        goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
+        this.setState({customGoods: goods});
+    }
+    prevPrice(newGoods, update= false) {
+        let goods = newGoods;
+        let upgradeConfig = goods.uprange;
+        const {settings} = this.props;
+        if (parseInt(settings.isDealCommission) == 1) {
+            if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                //落槌价显示佣金
+                const commission = goods.commission/100;
+                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
+            }
+        }
+        if (!goods.currentPrice) {
+            //说明没有人出价，第一次出价可以以起拍价出价
+            this.setState({nextPrice: goods.startPrice, goods: goods});
+            return;
+        }
+        let currentPrice = parseFloat(goods.currentPrice);
+
+        //这里计算要加价多少，并且符合后台的258逻辑
+
+        let rangePrice = 0;
+        let offerCount = goods.offerCount;
+        for (let i = 0; i < upgradeConfig.length; i++) {
+            let config = upgradeConfig[i];
+            let min = parseFloat(config.min);
+            let priceConfigs = config.price.split(',');
+            let price = 0;
+            if(priceConfigs.length == 1) {
+                price = parseFloat(priceConfigs[0]);
+            }
+            else {
+                //计算是第几个人出价
+                let modIndex = (offerCount % priceConfigs.length);
+                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
+                price = parseFloat(priceConfigs[modIndex]);
+            }
+            if (currentPrice >= min) {
+                rangePrice = price;
+            }
+        }
+        update && this.setState({nextPrice: currentPrice - rangePrice, goods: goods});
+        return currentPrice - rangePrice;
+    }
+    nextPrice(newGoods, update=true) {
+        let goods = newGoods;
+        let upgradeConfig = goods.uprange;
+        const {settings} = this.props;
+        if (parseInt(settings.isDealCommission) == 1) {
+            if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
+                //落槌价显示佣金
+                const commission = goods.commission/100;
+                goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
+            }
+        }
+        if (!goods.currentPrice) {
+            //说明没有人出价，第一次出价可以以起拍价出价
+            this.setState({nextPrice: goods.startPrice, goods: goods});
+            return;
+        }
+        let currentPrice = parseFloat(goods.currentPrice);
+
+        //这里计算要加价多少，并且符合后台的258逻辑
+
+        let rangePrice = 0;
+        let offerCount = goods.offerCount;
+        for (let i = 0; i < upgradeConfig.length; i++) {
+            let config = upgradeConfig[i];
+            let min = parseFloat(config.min);
+            let priceConfigs = config.price.split(',');
+            let price = 0;
+            if(priceConfigs.length == 1) {
+                price = parseFloat(priceConfigs[0]);
+            }
+            else {
+                //计算是第几个人出价
+                let modIndex = (offerCount % priceConfigs.length);
+                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
+                price = parseFloat(priceConfigs[modIndex]);
+            }
+            if (currentPrice >= min) {
+                rangePrice = price;
+            }
+        }
+        update && this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
+        return currentPrice + rangePrice;
+    }
+
 
     hideModal() {
         this.setState({hideModal: true});
         this.fadeDown();
     }
-
+    hideOffer() {
+        this.setState({hideModal: true});
+        this.fadeDownOffer();
+    }
     clickMech(e) {
         const mer = this.state.merchandises.find(item => item.id == e.currentTarget.id)
         if (!mer || !mer.link) return;
@@ -313,7 +419,19 @@ export default class Index extends Component<any, any> {
         const {currentTarget: {dataset: {indx}}} = e;
         console.log('addShoppingCart ', indx);
     }
+    fadeInOffer() {
+        this.animationOffer.translateY(0).step()
+        this.setState({
+            animationOfferData: this.animationOffer.export() //动画实例的export方法导出动画数据传递给组件的animation属性
+        })
+    }
 
+    fadeDownOffer() {
+        this.animationOffer.translateY(450).step()
+        this.setState({
+            animationOfferData: this.animationOffer.export(),
+        })
+    }
     fadeIn() {
         this.animation.translateY(0).step()
         this.setState({
@@ -352,15 +470,45 @@ export default class Index extends Component<any, any> {
         if(currentIndex == -1) {
             this.liveRoom?.clickFull();
         }
+        else {
+            let data = goodsList[currentIndex];
+            data.fields = JSON.parse(data.fields || '[]');
+            data.uprange = JSON.parse(data.uprange);
+            this.nextPrice(data);
+        }
         return {merchandises: goodsList, pushIndex: currentIndex};
     }
-
+    showModal() {
+        this.setState({
+            hideModal: false
+        });
+        this.animation = Taro.createAnimation({
+            duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
+            timingFunction: 'linear', //动画的效果 默认值是linear
+        });
+        setTimeout(() => {
+            this.fadeIn(); //调用显示动画
+        }, 10);
+    }
     showOffer(e) {
         if(e) {
             e.stopPropagation();
             e.preventDefault();
         }
-        this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex], this.state.deposited || this.state.liveRoom.deposit == 0);
+        // this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex], this.state.deposited || this.state.liveRoom.deposit == 0);
+        this.setState({
+            hideModal: false
+        });
+        this.animationOffer = Taro.createAnimation({
+            duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
+            timingFunction: 'linear', //动画的效果 默认值是linear
+        });
+        if(this.offerInputRef?.current){
+            this.offerInputRef.current.value = this.state.nextPrice;
+        }
+        setTimeout(() => {
+            this.fadeInOffer(); //调用显示动画
+        }, 10);
         return false;
     }
 
@@ -393,11 +541,12 @@ export default class Index extends Component<any, any> {
             liveRoom,
             hideModal,
             animationData,
+            animationOfferData,
             merchandises,
             pushIndex,
             merBot,
         } = this.state;
-        const {systemInfo, context} = this.props;
+        const {systemInfo, context, settings} = this.props;
         const barTop = systemInfo.statusBarHeight;
         let rect = Taro.getMenuButtonBoundingClientRect();
         let gap = rect.top - systemInfo.statusBarHeight; //动态计算每台手机状态栏到胶囊按钮间距
@@ -496,6 +645,31 @@ export default class Index extends Component<any, any> {
                                 </View>
                             </View>
                         </View>
+                    }
+                    {pushIndex >= 0 &&
+                    <View className="modals modals-bottom-dialog" hidden={hideModal}>
+                        <View className="bottom-dialog-body bottom-pos" animation={animationOfferData} style={{height: 200}}>
+                            <View className="merchandise-container">
+                                <View className="merchandise-head">
+                                    <View className="m-t">
+                                        <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
+                                        <View className="m-title">出价拍品</View>
+                                    </View>
+                                    <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideOffer}></Image>
+                                </View>
+                                <View className={'flex flex-col items-center justify-center space-y-4'}>
+                                    <View>当前价：{numeral(merchandises[pushIndex].currentPrice||merchandises[pushIndex].startPrice).format('0,0.00')}</View>
+                                    <View className={'flex items-center text-center'}>
+                                        <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
+                                        <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
+                                        {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />}
+                                        {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}} />}
+                                    </View>
+                                    <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
                     }
                 </View>
             </>
