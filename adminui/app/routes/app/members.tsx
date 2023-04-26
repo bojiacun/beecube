@@ -14,6 +14,13 @@ export const CatchBoundary = defaultRouteCatchBoundary;
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
+    if(url.searchParams.has('authStatus')) {
+        url.searchParams.set('authStatus', '1');
+    }
+    if(url.searchParams.has('isAgent')) {
+        url.searchParams.set('isAgent', '1');
+    }
+
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);

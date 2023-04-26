@@ -270,7 +270,7 @@ export default class Index extends Component<any, any> {
                                     <View>实名认证</View>
                                 </View>
                                 <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo?.authStatus ? '已认证' : '未认证'}</View>
+                                    <View>{userInfo?.authStatus == 2 ? '已认证' : '未认证'}</View>
                                     <View className={'iconfont icon-youjiantou_huaban'}/>
                                 </View>
                             </Navigator>

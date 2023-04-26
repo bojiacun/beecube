@@ -190,8 +190,9 @@ const AppMemberList = (props: any) => {
                                 <Badge variant={'danger'}>{row.status_dictText}</Badge>}
                         </div>
                         <div>
-                            {row.authStatus == 1 ? <Badge variant={'success'}>{row.authStatus_dictText}</Badge> :
-                                <Badge variant={'danger'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 2 && <Badge variant={'success'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 1 && <Badge variant={'warning'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 0 && <Badge variant={'light'}>{row.authStatus_dictText}</Badge>}
                         </div>
                     </div>
                 );
@@ -291,8 +292,8 @@ const AppMemberList = (props: any) => {
                                 </FormGroup>
 
                                 <FormGroup className={'mr-2'}>
-                                    <FormLabel>是否认证：</FormLabel>
-                                    <Form.Switch name={'authStatus'} id={'authStatus'}/>
+                                    <FormLabel>待审核：</FormLabel>
+                                    <Form.Switch name={'authStatus'} id={'authStatus'} />
                                 </FormGroup>
 
                                 <FormGroup className={'mb-0 mr-2'}>

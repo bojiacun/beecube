@@ -91,7 +91,7 @@ const AppMemberEdit = (props: any) => {
                                             <FileBrowserInput name={'cardBack'} type={1} multi={false} />
                                         </FormGroup>
                                         <BootstrapRadioGroup  options={[{label: '是', value: '1'},{label: '否', value: '0'}]} name={'isAgent'} label={'分销商？'} />
-                                        <BootstrapRadioGroup  options={[{label: '已认证', value: '1'},{label: '未认证', value: '0'}]} name={'authStatus'} label={'认证状态'} />
+                                        <BootstrapRadioGroup  options={[{label: '未认证', value: '0'},{label: '待审核', value: '1'},{label: '已认证', value: '2'}]} name={'authStatus'} label={'认证状态'} />
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button

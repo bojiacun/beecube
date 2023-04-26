@@ -2,6 +2,7 @@ package cn.winkt.modules.app.controller.wxapp;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.winkt.modules.app.config.WxMiniappServices;
+import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
 import cn.winkt.modules.app.service.IAppMemberAddressService;
@@ -95,7 +96,7 @@ public class WxAppMemberController {
     }
 
     @PutMapping("/update")
-    @CacheEvict(value = CacheConstant.SYS_USERS_CACHE, allEntries = true)
+    @CacheEvict(value = AppModuleConstants.APP_USERS_CACHE, allEntries = true)
     public Result<AppMember> updateMember(@RequestBody AppMember appMember) {
         AppMember old = appMemberService.getById(appMember.getId());
         if(old == null) {
@@ -112,7 +113,7 @@ public class WxAppMemberController {
                 .set(AppMember::getCardFace, appMember.getCardFace())
                 .set(AppMember::getCardBack, appMember.getCardBack())
                 .set(AppMember::getIdCard, appMember.getIdCard())
-                .set(AppMember::getAuthStatus, 0)
+                .set(AppMember::getAuthStatus, 1)
                 .eq(AppMember::getId, old.getId());
 
 
