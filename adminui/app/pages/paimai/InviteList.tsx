@@ -100,10 +100,11 @@ const InviteList = (props: any) => {
             aria-labelledby={'edit-modal'}
         >
             <Modal.Header closeButton>
-                <Modal.Title id={'edit-modal'}>保证金记录</Modal.Title>
+                <Modal.Title id={'edit-modal'}>专场预约记录</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className={'m-2'}>
+                    <h4>小程序地址页面:/pages/performance/invite?id={selectedRow.id}</h4>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <ReactSelectThemed
