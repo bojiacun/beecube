@@ -16,7 +16,7 @@ const formSchema = Yup.object().shape({
 
 
 const AppMemberEdit = (props: any) => {
-    const {model, onHide} = props;
+    const {model, onHide, refreshData} = props;
     const [links, setLinks] = useState<any[]>([]);
     const postFetcher = useFetcher();
     const searchFetcher = useFetcher();
@@ -37,7 +37,6 @@ const AppMemberEdit = (props: any) => {
         if (values.id) {
             postFetcher.submit(values, {method: 'post', action: '/app/members/edit'});
         }
-
     }
 
     useEffect(() => {
@@ -46,6 +45,7 @@ const AppMemberEdit = (props: any) => {
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
                 onHide();
+                refreshData();
             }
         }
     }, [postFetcher.state]);

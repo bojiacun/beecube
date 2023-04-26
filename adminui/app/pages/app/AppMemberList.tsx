@@ -230,8 +230,14 @@ const AppMemberList = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
+    const handleOnAuthStatusChange = (e:any) => {
+        setSearchState({...searchState, authStatus: e.target.checked ? 'on': null});
+    }
+    const handleOnIsAgentChange = (e:any) => {
+        setSearchState({...searchState, isAgent: e.target.checked?'on': null});
+    }
     const handleOnUsernameChanged = (e: any) => {
-        setSearchState({...searchState, nickname: e.target.value});
+        setSearchState({...searchState, keywords: e.target.value});
     }
 
     const handleOnStartSearchTime = () => {
@@ -288,12 +294,12 @@ const AppMemberList = (props: any) => {
 
                                 <FormGroup className={'mr-2'}>
                                     <FormLabel>是否分销商：</FormLabel>
-                                    <Form.Switch name={'isAgent'} id={'isAgent'}/>
+                                    <Form.Switch name={'isAgent'} id={'isAgent'} onChange={handleOnIsAgentChange} />
                                 </FormGroup>
 
                                 <FormGroup className={'mr-2'}>
                                     <FormLabel>待审核：</FormLabel>
-                                    <Form.Switch name={'authStatus'} id={'authStatus'} />
+                                    <Form.Switch name={'authStatus'} id={'authStatus'} onChange={handleOnAuthStatusChange} />
                                 </FormGroup>
 
                                 <FormGroup className={'mb-0 mr-2'}>
@@ -333,9 +339,8 @@ const AppMemberList = (props: any) => {
                 </div>
             </Card>
 
-            {editModal && <AppMemberEdit model={editModal} onHide={() => {
+            {editModal && <AppMemberEdit model={editModal} refreshData={loadData} onHide={() => {
                 setEditModal(null);
-                loadData();
             }}/>}
             {selectedRow && walletShow &&
                 <WalletRecordList show={walletShow} selectedRow={selectedRow} onHide={() => {

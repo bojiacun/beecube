@@ -210,7 +210,7 @@ const ArticleList = (props: any) => {
         onSelectAll: handleOnSelectAll,
     }
     const operateBatch = () => {
-        deleteFetcher.submit({status: operateValue, rows: selectedRows.join(',')}, {method: 'delete', action: `/paimai/goods/toggle-show`, replace: true});
+        deleteFetcher.submit({status: operateValue, rows: selectedRows.join(',')}, {method: 'delete', action: `/paimai/articles/toggle-show`, replace: true});
     }
 
     return (

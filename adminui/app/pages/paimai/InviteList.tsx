@@ -64,6 +64,10 @@ const InviteList = (props: any) => {
             dataField: 'inviteCode',
         },
         {
+            text: '真实姓名',
+            dataField: 'userName',
+        },
+        {
             text: '预约人',
             dataField: '',
             isDummyField: true,
@@ -71,19 +75,11 @@ const InviteList = (props: any) => {
             formatter: (cell:any, row:any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {!row.memberAvatar ? <User size={40} /> : <Image src={row.memberAvatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
-                        <span className={'ml-1'}>{row.memberName} {row.memberPhone}</span>
+                        {!row.avatar? <User size={40} /> : <Image src={row.avatar} roundedCircle={true} width={40} height={40} className={'badge-minimal'} />}
+                        <span className={'ml-1'}>{row.nickname} {row.phone}</span>
                     </div>
                 );
             }
-        },
-        {
-            text: '姓名',
-            dataField: 'userName',
-        },
-        {
-            text: '电话',
-            dataField: 'phone',
         },
         {
             text: '预计参展时间',
@@ -97,7 +93,7 @@ const InviteList = (props: any) => {
     return (
         <Modal
             show={show}
-            size={'xl'}
+            size={'lg'}
             onHide={onHide}
             centered
             backdrop={'static'}
