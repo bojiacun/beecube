@@ -16,7 +16,15 @@
       "tab": true
     },
     {
-      "label": "图文类文章列表",
+      "label": "图文类文章频道页",
+      "url": "/pages/articles/index_normal"
+    },
+    {
+      "label": "视频类文章频道页",
+      "url": "/pages/articles/index_video"
+    },
+    {
+      "label": "图文类文章列表(按分类)",
       "url": "/pages/articles/normal",
       "urlSuffix": {
         "label": "分类ID",
@@ -25,7 +33,7 @@
       "suffixOptions": "输入要显示的文章分类ID"
     },
     {
-      "label": "视频类文章列表",
+      "label": "视频类文章列表(按分类)",
       "url": "/pages/articles/video",
       "urlSuffix": {
         "label": "分类ID",

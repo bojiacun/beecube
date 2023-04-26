@@ -1,14 +1,12 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {ListViewTabItem} from "../../components/listview";
+import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
-import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
 import {Navigator, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-import PageLoading from "../../components/pageloading";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -20,7 +18,6 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
-        class_id: null,
     }
 
     constructor(props) {
@@ -29,8 +26,7 @@ export default class Index extends Component<any, any> {
         this.loadData = this.loadData.bind(this);
     }
 
-    onLoad(options) {
-        this.setState({class_id: options.class_id||''});
+    onLoad() {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -61,7 +57,7 @@ export default class Index extends Component<any, any> {
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
             });
-            tabs.unshift({label: '精选', id: undefined, template: this.renderTemplate});
+            tabs.unshift({label: '精选', id: '0', template: this.renderTemplate});
             this.setState({tabs: tabs});
         });
     }
@@ -72,11 +68,9 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
-        if(this.state.class_id == null) return <PageLoading />;
-
         return (
-            <PageLayout statusBarProps={{title: settings.auctionListTitle||'所有拍品'}} enableReachBottom={true}>
-                <FlowListView tabs={this.state.tabs} defaultActiveKey={this.state.class_id} dataFetcher={this.loadData}/>
+            <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文件频道页'}} enableReachBottom={true}>
+                <ListView tabs={this.state.tabs} defaultActiveKey={'0'} dataFetcher={this.loadData}/>
             </PageLayout>
         );
     }
