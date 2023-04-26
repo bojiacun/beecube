@@ -35,7 +35,7 @@ public class PerformanceInvite {
 	/**用户名*/
 	@Excel(name = "用户名", width = 15)
     @ApiModelProperty(value = "用户名")
-	private java.lang.String username;
+	private java.lang.String userName;
 	/**电话*/
 	@Excel(name = "电话", width = 15)
     @ApiModelProperty(value = "电话")
