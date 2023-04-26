@@ -57,6 +57,8 @@ public class Article {
 	private java.lang.String preview2;
 
 	private String outerLink;
+
+	private Integer postFlag;
 	/**文章视频*/
 	@Excel(name = "文章视频", width = 15)
     @ApiModelProperty(value = "文章视频")

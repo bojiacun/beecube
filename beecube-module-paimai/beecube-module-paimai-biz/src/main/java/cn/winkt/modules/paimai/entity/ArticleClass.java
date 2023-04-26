@@ -43,7 +43,7 @@ public class ArticleClass {
 	/**分类排序*/
 	@Excel(name = "分类排序", width = 15)
     @ApiModelProperty(value = "分类排序")
-	private java.lang.Integer sortnum;
+	private java.lang.Integer sortNum;
 	/**分类状态0不显示、1显示*/
 	@Excel(name = "分类状态0不显示、1显示", width = 15)
     @ApiModelProperty(value = "分类状态0不显示、1显示")

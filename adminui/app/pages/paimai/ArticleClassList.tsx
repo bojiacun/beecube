@@ -125,7 +125,7 @@ const ArticleClassList = (props: any) => {
         },
         {
             text: '排序',
-            dataField: 'sortnum'
+            dataField: 'sortNum'
         },
         {
             text: '操作',

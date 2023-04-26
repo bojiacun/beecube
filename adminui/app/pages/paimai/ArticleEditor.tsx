@@ -21,6 +21,7 @@ import TinymceEditor from "~/components/tinymce-editor";
 import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 import {ArticleType} from "~/pages/paimai/ArtcileList";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 const ArticleEditor = (props: any) => {
@@ -34,7 +35,7 @@ const ArticleEditor = (props: any) => {
 
     useEffect(() => {
         if (model) {
-            articleClassFetcher.load('/paimai/articles/classes/all');
+            articleClassFetcher.load('/paimai/articles/classes/all?type='+type);
         }
     }, [model]);
 
@@ -103,9 +104,16 @@ const ArticleEditor = (props: any) => {
                                         <BootstrapSelect name={'classId'} label={'分类'} options={articleClassOptions}/>
                                     }
                                     <BootstrapInput label={'标题'} name={'title'}/>
+                                    {type == ArticleType.TEXT_IMAGE &&
+                                        <BootstrapInput label={'外链'} name={'outerLink'}/>
+                                    }
                                     <FormGroup>
-                                        <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
+                                        <FormLabel htmlFor={'preview'}>列表封面图</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'preview2'}>首页封面图</FormLabel>
+                                        <FileBrowserInput name={'preview2'} type={1} multi={false}/>
                                     </FormGroup>
                                     {type == ArticleType.VIDEO &&
                                         <FormGroup>
@@ -124,6 +132,9 @@ const ArticleEditor = (props: any) => {
                                         </FormGroup>
                                     }
                                     <BootstrapInput label={'阅读数'} name={'views'}/>
+
+                                    <BootstrapSwitch label={'精选'} name={'postFlag'} />
+
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'}
                                                          label={'状态'}/>
                                 </Modal.Body>

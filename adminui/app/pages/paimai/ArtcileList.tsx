@@ -119,12 +119,24 @@ const ArticleList = (props: any) => {
             dataField: 'title',
         },
         {
-            text: '预览图',
+            text: '外部链接',
+            dataField: 'outerLink',
+        },
+        {
+            text: '列表封面图',
             dataField: '',
             isDummyField: true,
-            hidden: type == 2,
             formatter: (cell:any, row:any) => {
                 let previewUrl = row.preview;
+                return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
+            }
+        },
+        {
+            text: '首页封面图',
+            dataField: '',
+            isDummyField: true,
+            formatter: (cell:any, row:any) => {
+                let previewUrl = row.preview2;
                 return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
             }
         },
@@ -142,6 +154,19 @@ const ArticleList = (props: any) => {
         {
             text: '创建时间',
             dataField: 'createTime',
+        },
+        {
+            text: '精选',
+            dataField: 'postFlag',
+            formatter(cell:number, row: any) {
+                if(row.postFlag == 0) {
+                    return <Badge variant={'light'}>否</Badge>
+                }
+                else if(row.postFlag == 1) {
+                    return <Badge variant={'success'}>是</Badge>
+                }
+                return <Badge variant={'dark'}>未知</Badge>
+            }
         },
         {
             text: '显示状态',

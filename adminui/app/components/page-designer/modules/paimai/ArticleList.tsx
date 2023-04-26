@@ -7,6 +7,7 @@ import {resolveUrl} from "~/utils/utils";
 import {Form, Formik} from "formik";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 export const ARTICLE_LIST_MODULE = "ARTICLE_LIST_MODULE";
@@ -19,7 +20,8 @@ export const defaultData = {
         classId: '',
         itemWidth: '90%',
         itemHeight: 200,
-        direction: 'horizontal'
+        direction: 'horizontal',
+        postFlag: 1,
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -53,6 +55,7 @@ const ArticleListModuleAttribute = (props: any) => {
                                         name={'type'}
                                         label={'文章类型'}
                                     />
+                                    <BootstrapSwitch label={'精选'} name={'postFlag'}/>
                                     <BootstrapInput label={'所属分类'} name={'classId'}/>
                                     <BootstrapInput label={'数据条数'} name={'count'}/>
                                     <BootstrapInput label={'边框圆角'} name={'itemBorderRadius'}/>
@@ -91,10 +94,10 @@ const ArticleListModule = (props: any) => {
     const [goodsList, setArticleList] = useState<any[]>([]);
     let _data = {...defaultData, ...data};
     useEffect(() => {
-        getPagedArticle(_data.basic.type, _data.basic.classId, _data.basic.count).then(res => {
+        getPagedArticle(_data.basic.type, _data.basic.classId, _data.basic.postFlag, _data.basic.count).then(res => {
             setArticleList(res.data.records);
         });
-    }, [data.basic.dataSource,data.basic.count]);
+    }, [_data.basic.classId, _data.basic.count, _data.basic.type, _data.basic.postFlag]);
 
     return (
         <div {...rest} style={_data.style}>

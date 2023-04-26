@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
@@ -89,10 +90,13 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    }
 
    @GetMapping("/classes")
-   public Result<List<ArticleClass>> allClasses() {
+   public Result<List<ArticleClass>> allClasses(@RequestParam(defaultValue = "0", name = "type") Integer type) {
        LambdaQueryWrapper<ArticleClass> queryWrapper = new LambdaQueryWrapper<>();
        queryWrapper.eq(ArticleClass::getStatus, 1);
-       queryWrapper.orderByAsc(ArticleClass::getSortnum);
+       if(type > 0) {
+           queryWrapper.eq(ArticleClass::getType, type);
+       }
+       queryWrapper.orderByAsc(ArticleClass::getSortNum);
        return Result.OK(articleClassService.list(queryWrapper));
    }
 
