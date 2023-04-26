@@ -65,7 +65,10 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel>文章频道广告</FormLabel>
                             <FileBrowserInput type={1} name={'articleNormalAdv'} multi={false} />
                         </FormGroup>
-                        <BootstrapLinkSelector links={links} name={'articleNormalAdvLink'}  />
+                        <FormGroup>
+                            <FormLabel>文章频道广告链接地址</FormLabel>
+                            <BootstrapLinkSelector links={links} name={'articleNormalAdvLink'} initValue={settings.articleNormalAdvLink}  />
+                        </FormGroup>
 
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
