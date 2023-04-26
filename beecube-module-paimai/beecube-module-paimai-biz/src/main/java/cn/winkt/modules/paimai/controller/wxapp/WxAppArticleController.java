@@ -74,7 +74,7 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
            queryWrapper.eq("class_id", tabId);
        }
        queryWrapper.eq("status", 1);
-       queryWrapper.select("id", "preview", "video", "type", "description", "title", "create_time", "views");
+       queryWrapper.select("id", "preview", "video", "type", "description", "title", "create_time", "views", "outer_link", "preview2");
        Page<Article> page = new Page<Article>(pageNo, pageSize);
        IPage<Article> pageList = articleService.page(page, queryWrapper);
        return Result.OK(pageList);

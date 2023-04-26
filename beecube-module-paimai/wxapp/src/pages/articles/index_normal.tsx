@@ -2,7 +2,6 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
-import classNames from "classnames";
 import {Navigator, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
@@ -36,6 +35,19 @@ export default class Index extends Component<any, any> {
     }
 
     renderTemplate(data: any) {
+        if(data.outerLink) {
+            return (
+                <View className={'py-2'}>
+                    <Navigator className={'block flex items-center'} url={'/pages/articles/detail_h5?url=' + data.outerLink}>
+                        <FallbackImage mode={'aspectFill'} className={'rounded block w-20 h-20 flex-none mr-2'} src={data.preview}/>
+                        <View className={'flex-1 h-20 flex flex-col justify-between'}>
+                            <View className={'font-bold text-lg'}>{data.title}</View>
+                            <View className={'text-gray-400 text-sm'}>{data.createTime}</View>
+                        </View>
+                    </Navigator>
+                </View>
+            );
+        }
         return (
             <View className={'py-2'}>
                 <Navigator className={'block flex items-center'} url={'/pages/articles/detail?id=' + data.id}>
@@ -64,11 +76,29 @@ export default class Index extends Component<any, any> {
 
     }
 
+    renderBottom() {
+        const {settings} = this.props;
+        if(settings.articleNormalAdv) {
+            return (
+                <Navigator className={'p-4'} url={`${settings.articleNormalAdvLink}`}>
+                    <FallbackImage src={settings.articleNormalAdv} mode={'widthFix'} className={'w-full block'} />
+                </Navigator>
+            );
+        }
+        return <></>
+    }
+
     render() {
         const {settings} = this.props;
         return (
             <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文件频道页'}} enableReachBottom={true}>
-                <ListView className={'grid grid-cols-1 divide-y px-4 divide-gray-300'} tabs={this.state.tabs} defaultActiveKey={'0'} dataFetcher={this.loadData}/>
+                <ListView
+                    className={'grid grid-cols-1 divide-y px-4 divide-gray-300'}
+                    tabs={this.state.tabs}
+                    defaultActiveKey={'0'}
+                    dataFetcher={this.loadData}
+                    appendBottom={this.renderBottom()}
+                />
             </PageLayout>
         );
     }

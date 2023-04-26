@@ -24,6 +24,7 @@ export interface ListViewProps extends Partial<any> {
     defaultActiveKey?: string | number | null;
     autoRefresh?: boolean;
     fixed?:boolean;
+    appendBottom?: ReactElement
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -37,6 +38,7 @@ const ListView: FC<ListViewProps> = (props) => {
         className,
         autoRefresh = false,
         fixed = true,
+        appendBottom,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [data, setData] = useState<any[]>([]);
@@ -167,8 +169,9 @@ const ListView: FC<ListViewProps> = (props) => {
                     return tab.template(item);
                 })}
             </View>
+            {appendBottom}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
-            <View style={{height: 100}}/>
+            <View style={{height: 100}} />
         </>
     );
 }

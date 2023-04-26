@@ -7,6 +7,7 @@ export default defineAppConfig({
         'pages/articles/services',
         'pages/articles/normal',
         'pages/articles/video',
+        'pages/articles/detail_h5',
         'pages/articles/index_normal',
         'pages/articles/index_video',
 
