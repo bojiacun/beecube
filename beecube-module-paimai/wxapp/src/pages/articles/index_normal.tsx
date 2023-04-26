@@ -62,7 +62,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        request.get('/paimai/api/articles/classes').then(res => {
+        request.get('/paimai/api/articles/classes', {params: {type: 1}}).then(res => {
             let classes = res.data.result;
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
@@ -72,9 +72,6 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    onPullDownRefresh() {
-
-    }
 
     renderBottom() {
         const {settings} = this.props;
@@ -91,7 +88,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {settings} = this.props;
         return (
-            <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文件频道页'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文章频道页'}} enableReachBottom={true}>
                 <ListView
                     className={'grid grid-cols-1 divide-y px-4 divide-gray-300'}
                     tabs={this.state.tabs}

@@ -57,6 +57,7 @@ public class Article {
 	private java.lang.String preview2;
 
 	private String outerLink;
+	private String author;
 
 	private Integer postFlag;
 	/**文章视频*/

@@ -28,6 +28,7 @@ const StatusBar = (props: StatusbarProps): any => {
         style = {fontSize: 18, fontWeight: 'bold'},
         className = 'bg-white',
         logo = undefined,
+        isFixed,
     } = props;
     const [pages, setPages] = useState<any[]>(Taro.getCurrentPages());
     const systemInfo = useSelector(({context}) => context.systemInfo);
@@ -61,6 +62,8 @@ const StatusBar = (props: StatusbarProps): any => {
     if (hide) {
         return <></>;
     }
+
+    if(isFixed) navigatorBarStyle.position = 'fixed';
 
     return (
         <View className={classNames(styles.status_bar, className)} style={{...navigatorBarStyle, ...style}}>

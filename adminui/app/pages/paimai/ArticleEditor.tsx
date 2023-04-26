@@ -1,25 +1,16 @@
-import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
+import {Button, FormGroup, FormLabel, Modal} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
+import {handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
-import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
 import FileBrowserInput from "~/components/filebrowser/form";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
-import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
-import {usePromise} from "react-use";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
-import BootstrapDateTime from "~/components/form/BootstrapDateTime";
 import TinymceEditor from "~/components/tinymce-editor";
-import UprangConfiger from "~/pages/paimai/UprangConfiger";
-import DescListConfiger from "~/pages/paimai/DescListConfiger";
 import {ArticleType} from "~/pages/paimai/ArtcileList";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
@@ -104,6 +95,7 @@ const ArticleEditor = (props: any) => {
                                         <BootstrapSelect name={'classId'} label={'分类'} options={articleClassOptions}/>
                                     }
                                     <BootstrapInput label={'标题'} name={'title'}/>
+                                    <BootstrapInput label={'作者'} name={'author'}/>
                                     {type == ArticleType.TEXT_IMAGE &&
                                         <BootstrapInput label={'外链'} name={'outerLink'}/>
                                     }

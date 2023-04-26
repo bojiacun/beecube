@@ -1,15 +1,11 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {ListViewTabItem} from "../../components/listview";
+import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
-import FlowListView from "../../components/flowlistview";
-import classNames from "classnames";
-import styles from "../../flow.module.scss";
-import {Navigator, Text, View} from "@tarojs/components";
+import {Navigator, View, Text} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-import PageLoading from "../../components/pageloading";
-const numeral = require('numeral');
+import utils from "../../lib/utils";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -20,7 +16,6 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
-        class_id: null,
     }
 
     constructor(props) {
@@ -29,26 +24,37 @@ export default class Index extends Component<any, any> {
         this.loadData = this.loadData.bind(this);
     }
 
-    onLoad(options) {
-        this.setState({class_id: options.class_id||''});
+    onLoad() {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        let params: any = {type: 2, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id) {
-            params.classId = tab.id;
+            params.tabId = tab.id;
         }
-        return request.get('/paimai/api/goods/list', {params: params});
+        return request.get('/paimai/api/articles/list', {params: params});
     }
 
     renderTemplate(data: any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
-                <Navigator url={'/pages/goods/detail?id=' + data.id}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
-                    <View className={'px-2 mt-2'}>{data.title}</View>
-                    <View className={'px-2 mb-2 text-sm'}>
-                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+            <View className={''}>
+                <Navigator className={'block space-y-2'} url={'/pages/articles/detail2?id=' + data.id}>
+                    <View className={'rounded-lg overflow-hidden relative'} style={{height: '55vw'}}>
+                        <FallbackImage mode={'aspectFill'} className={'w-full h-full'} src={data.preview} />
+                        <View className={'absolute z-10 top-0 bottom-0 w-full h-full flex items-center justify-center text-white text-4xl'} style={{backgroundColor: 'rgb(0,0,0,0.3)'}}>
+                            <Text className={'fa fa-play-circle'} />
+                        </View>
+                    </View>
+                    <View className={'space-y-2'}>
+                        <View className={'font-bold text-lg'}>{data.title}</View>
+                        <View className={'text-gray-400 text-sm'}>{utils.delHtml(data.description)}</View>
+                        <View className={'flex justify-between items-center text-gray-400'}>
+                            <Text>{data.author}</Text>
+                            <View>
+                                <Text className={'fa fa-heart-o mr-2'} />
+                                <Text>{data.views}</Text>
+                            </View>
+                        </View>
                     </View>
                 </Navigator>
             </View>
@@ -56,27 +62,27 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        request.get('/paimai/api/goods/classes').then(res => {
+        request.get('/paimai/api/articles/classes', {params: {type: 2}}).then(res => {
             let classes = res.data.result;
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
             });
-            tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
+            tabs.unshift({label: '精选', id: '0', template: this.renderTemplate});
             this.setState({tabs: tabs});
         });
     }
 
-    onPullDownRefresh() {
-
-    }
 
     render() {
         const {settings} = this.props;
-        if(this.state.class_id == null) return <PageLoading />;
-
         return (
-            <PageLayout statusBarProps={{title: settings.auctionListTitle||'所有拍品'}} enableReachBottom={true}>
-                <FlowListView tabs={this.state.tabs} defaultActiveKey={this.state.class_id} dataFetcher={this.loadData}/>
+            <PageLayout statusBarProps={{title: settings.articleVideoIndexTitle || '视频类文章频道页'}} enableReachBottom={true}>
+                <ListView
+                    className={'grid grid-cols-2 px-4 gap-4'}
+                    tabs={this.state.tabs}
+                    defaultActiveKey={'0'}
+                    dataFetcher={this.loadData}
+                />
             </PageLayout>
         );
     }

@@ -163,5 +163,13 @@ export default {
         // 获取导航栏高度
         const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
         return barTop + barHeight;
+    },
+    calcSafeBottom(systemInfo:any) {
+        return systemInfo.safeArea.bottom - systemInfo.safeArea.height;
+    },
+    delHtml(content) {
+        if(content == null) return '';
+        content = content.replace(/<\/?.+?>/g, "");
+        return content.replace(/ /g, "");
     }
 }

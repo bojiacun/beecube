@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
-import {Video} from "@tarojs/components";
+import {Video, View} from "@tarojs/components";
 import utils from "../../lib/utils";
 import {connect} from "react-redux";
 
@@ -52,11 +52,17 @@ export default class Index extends Component<any, any> {
         const {systemInfo} = this.props;
         if(detail == null) return <PageLoading />;
 
-        let contentHeight = 'calc(100vh - ' + utils.calcPageHeaderHeight(systemInfo)+'px)';
+        let contentHeight = '100vh';
+        let safeBottom = utils.calcSafeBottom(systemInfo);
 
         return (
-            <PageLayout showTabBar={false} statusBarProps={{title: detail.title}} style={{backgroundColor: 'black', paddingBottom: 0}}>
-                <Video src={utils.resolveUrl(detail.video)} className={'w-screen'}  style={{height:contentHeight}} objectFit={'contain'} />
+            <PageLayout showTabBar={false} statusBarProps={{title: '', style: {background: 'transparent'}, isFixed:true}} style={{backgroundColor: 'black', paddingBottom: 0}}>
+                <Video src={utils.resolveUrl(detail.video)} className={'w-screen'} controls={true}  style={{height:contentHeight}} objectFit={'contain'} />
+                <View className={'absolute bottom-0 w-full p-4 space-y-4'} style={{marginBottom: safeBottom}}>
+                    <View className={'text-white text-2xl font-bold'}>{detail.title}</View>
+                    <View className={'text-gray-400'}>{detail.author}</View>
+                    <View className={'text-gray-400'}>{utils.delHtml(detail.description)}</View>
+                </View>
             </PageLayout>
         );
     }
