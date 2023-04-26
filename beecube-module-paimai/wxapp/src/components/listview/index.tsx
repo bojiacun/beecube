@@ -43,49 +43,8 @@ const ListView: FC<ListViewProps> = (props) => {
     const [page, setPage] = useState<number>(1);
     const [noMore, setNoMore] = useState<boolean>(false);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
-    const message = useSelector((state: any) => state.message);
     const systemInfo = useSelector(({context}) => context.systemInfo);
 
-    useEffect(() => {
-        if (message) {
-            data.forEach(g => {
-                if (g.id == message.performanceId) {
-                    switch (message.type) {
-                        case 'MSG_TYPE_PEFORMANCE_STARTED':
-                            g.state = message.state;
-                            g.startTime = message.startTime;
-                            break;
-                        case 'MSG_TYPE_PEFORMANCE_ENDED':
-                            g.state = message.state;
-                            g.endTime = message.endTime;
-                            break;
-                        case 'MSG_TYPE_PEFORMANCE_CHANGED':
-                            g.startTime = message.startTime;
-                            g.endTime = message.endTime;
-                            break;
-                    }
-                }
-                if (g.id == message.goodsId) {
-                    switch (message.type) {
-                        case 'MSG_TYPE_AUCTION_STARTED':
-                            g.state = message.state;
-                            g.startTime = message.startTime;
-                            break;
-                        case 'MSG_TYPE_AUCTION_ENDED':
-                            g.state = message.state;
-                            g.endTime = message.endTime;
-                            break;
-                        case 'MSG_TYPE_AUCTION_CHANGED':
-                            g.startTime = message.startTime;
-                            g.endTime = message.endTime;
-                            g.actualEndTime = message.actualEndTime;
-                            break;
-                    }
-                }
-            });
-            setData([...data]);
-        }
-    }, [message]);
 
     useEffect(() => {
         if (tabs && tabs.length > 0) {
@@ -202,7 +161,7 @@ const ListView: FC<ListViewProps> = (props) => {
                 </View>
             }
             {data.length === 0 && <NoData style={{marginTop: 200}}/>}
-            <View className={classNames('p-4 space-y-4', className)}>
+            <View className={classNames('', className ? className : 'p-4 space-y-4')}>
                 {selectedIndex > - 1 && data.map((item) => {
                     let tab = tabs[selectedIndex];
                     return tab.template(item);

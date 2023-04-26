@@ -3,11 +3,9 @@ import PageLayout from "../../layouts/PageLayout";
 import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import classNames from "classnames";
-import styles from "../../flow.module.scss";
-import {Navigator, Text, View} from "@tarojs/components";
+import {Navigator, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-const numeral = require('numeral');
 
 // @ts-ignore
 @connect((state: any) => (
@@ -39,12 +37,12 @@ export default class Index extends Component<any, any> {
 
     renderTemplate(data: any) {
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
-                <Navigator url={'/pages/goods/detail?id=' + data.id}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
-                    <View className={'px-2 mt-2'}>{data.title}</View>
-                    <View className={'px-2 mb-2 text-sm'}>
-                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+            <View className={'py-2'}>
+                <Navigator className={'block flex items-center'} url={'/pages/articles/detail?id=' + data.id}>
+                    <FallbackImage mode={'aspectFill'} className={'rounded block w-20 h-20 flex-none mr-2'} src={data.preview}/>
+                    <View className={'flex-1 h-20 flex flex-col justify-between'}>
+                        <View className={'font-bold text-lg'}>{data.title}</View>
+                        <View className={'text-gray-400 text-sm'}>{data.createTime}</View>
                     </View>
                 </Navigator>
             </View>
@@ -70,7 +68,7 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
         return (
             <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文件频道页'}} enableReachBottom={true}>
-                <ListView tabs={this.state.tabs} defaultActiveKey={'0'} dataFetcher={this.loadData}/>
+                <ListView className={'grid grid-cols-1 divide-y px-4 divide-gray-300'} tabs={this.state.tabs} defaultActiveKey={'0'} dataFetcher={this.loadData}/>
             </PageLayout>
         );
     }
