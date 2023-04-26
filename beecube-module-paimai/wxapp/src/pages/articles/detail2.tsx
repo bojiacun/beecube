@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
-import {Video, View} from "@tarojs/components";
+import {Button, Text, Video, View} from "@tarojs/components";
 import utils from "../../lib/utils";
 import {connect} from "react-redux";
 
@@ -62,6 +62,12 @@ export default class Index extends Component<any, any> {
                     <View className={'text-white text-2xl font-bold'}>{detail.title}</View>
                     <View className={'text-gray-400'}>{detail.author}</View>
                     <View className={'text-gray-400'}>{utils.delHtml(detail.description)}</View>
+                    <View className={'flex items-center justify-end text-white'}>
+                        <View><Text className={'fa fa-heart-o mr-2'} />{detail.views}</View>
+                        <View className={'ml-4 flex items-center'}>
+                            <Button plain={true} openType={'share'} className={'btn btn-white text-lg block flex-none'}><Text className={'fa fa-share-square-o mr-2'} />分享</Button>
+                        </View>
+                    </View>
                 </View>
             </PageLayout>
         );

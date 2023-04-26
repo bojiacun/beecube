@@ -79,6 +79,9 @@ button, button[plain] {
     &.btn-sm {
         @apply text-sm py-1 px-4;
     }
+    &.btn-white {
+        color: #fff;
+    }
 }
 
 .screen-swiper {
