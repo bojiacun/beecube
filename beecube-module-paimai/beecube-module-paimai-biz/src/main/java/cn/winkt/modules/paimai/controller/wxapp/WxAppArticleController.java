@@ -66,6 +66,13 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        if(StringUtils.isNotEmpty(tag)) {
            queryWrapper.like("tags", tag);
        }
+       String tabId = req.getParameter("tabId");
+       if("0".equals(tabId)) {
+           queryWrapper.eq("post_flag", 1);
+       }
+       else if(StringUtils.isNotEmpty(tabId)){
+           queryWrapper.eq("classId", tabId);
+       }
        queryWrapper.eq("status", 1);
        queryWrapper.select("id", "preview", "video", "type", "description", "title", "create_time", "views");
        Page<Article> page = new Page<Article>(pageNo, pageSize);

@@ -32,9 +32,9 @@ export default class Index extends Component<any, any> {
     loadData(pageIndex: number, tab: ListViewTabItem) {
         let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id) {
-            params.classId = tab.id;
+            params.tabId = tab.id;
         }
-        return request.get('/paimai/api/goods/list', {params: params});
+        return request.get('/paimai/api/articles/list', {params: params});
     }
 
     renderTemplate(data: any) {
@@ -52,7 +52,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        request.get('/paimai/api/goods/classes').then(res => {
+        request.get('/paimai/api/articles/classes').then(res => {
             let classes = res.data.result;
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}

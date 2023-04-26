@@ -38,6 +38,16 @@
                     "name": "预约页面",
                     "pathName": "/pages/performance/invite",
                     "query": "id=1649080825357336578"
+                },
+                {
+                    "name": "图文类频道首页",
+                    "pathName": "/pages/articles/index_normal",
+                    "query": ""
+                },
+                {
+                    "name": "视频类频道首页",
+                    "pathName": "/pages/articles/index_video",
+                    "query": ""
                 }
             ]
         }
