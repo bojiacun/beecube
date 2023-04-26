@@ -95,6 +95,22 @@ const ArticleClassList = (props: any) => {
             dataField: 'name',
         },
         {
+            text: '文章模块',
+            dataField: 'type',
+            formatter(cell:number, row: any) {
+                if(row.type == 1) {
+                    return "图文类";
+                }
+                else if(row.type == 2) {
+                    return '视频类';
+                }
+                else if(row.type == 3){
+                    return '服务指南';
+                }
+                return '未知';
+            }
+        },
+        {
             text: '显示状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {

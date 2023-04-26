@@ -51,6 +51,12 @@ public class Article {
 	@Excel(name = "文章预览图片", width = 15)
     @ApiModelProperty(value = "文章预览图片")
 	private java.lang.String preview;
+
+	@Excel(name = "文章预览图片", width = 15)
+	@ApiModelProperty(value = "文章预览图片")
+	private java.lang.String preview2;
+
+	private String outerLink;
 	/**文章视频*/
 	@Excel(name = "文章视频", width = 15)
     @ApiModelProperty(value = "文章视频")

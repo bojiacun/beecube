@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -36,6 +37,9 @@ public class ArticleClass {
 	@Excel(name = "分类名称", width = 15)
     @ApiModelProperty(value = "分类名称")
 	private java.lang.String name;
+
+	@Dict(dicCode = "paimai_article_type")
+	private Integer type;
 	/**分类排序*/
 	@Excel(name = "分类排序", width = 15)
     @ApiModelProperty(value = "分类排序")
@@ -43,6 +47,7 @@ public class ArticleClass {
 	/**分类状态0不显示、1显示*/
 	@Excel(name = "分类状态0不显示、1显示", width = 15)
     @ApiModelProperty(value = "分类状态0不显示、1显示")
+	@Dict(dicCode = "paimai_article_class_status")
 	private java.lang.Integer status;
 	/**appId*/
 	@Excel(name = "appId", width = 15)

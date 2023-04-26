@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -63,6 +64,7 @@ public class ArticleClassController extends JeecgController<ArticleClass, IArtic
 	@AutoLog(value = "文章分类表-分页列表查询")
 	@ApiOperation(value="文章分类表-分页列表查询", notes="文章分类表-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(ArticleClass articleClass,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
