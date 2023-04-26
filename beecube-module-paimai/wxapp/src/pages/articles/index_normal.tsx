@@ -1,0 +1,83 @@
+import {Component} from "react";
+import PageLayout from "../../layouts/PageLayout";
+import {ListViewTabItem} from "../../components/listview";
+import request from "../../lib/request";
+import FlowListView from "../../components/flowlistview";
+import classNames from "classnames";
+import styles from "../../flow.module.scss";
+import {Navigator, Text, View} from "@tarojs/components";
+import FallbackImage from "../../components/FallbackImage";
+import {connect} from "react-redux";
+import PageLoading from "../../components/pageloading";
+const numeral = require('numeral');
+
+// @ts-ignore
+@connect((state: any) => (
+    {
+        settings: state.context.settings,
+    }
+))
+export default class Index extends Component<any, any> {
+    state = {
+        tabs: [],
+        class_id: null,
+    }
+
+    constructor(props) {
+        super(props);
+        this.renderTemplate = this.renderTemplate.bind(this);
+        this.loadData = this.loadData.bind(this);
+    }
+
+    onLoad(options) {
+        this.setState({class_id: options.class_id||''});
+    }
+
+    loadData(pageIndex: number, tab: ListViewTabItem) {
+        let params: any = {type: 1, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        if (tab.id) {
+            params.classId = tab.id;
+        }
+        return request.get('/paimai/api/goods/list', {params: params});
+    }
+
+    renderTemplate(data: any) {
+        return (
+            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
+                <Navigator url={'/pages/goods/detail?id=' + data.id}>
+                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
+                    <View className={'px-2 mt-2'}>{data.title}</View>
+                    <View className={'px-2 mb-2 text-sm'}>
+                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                    </View>
+                </Navigator>
+            </View>
+        );
+    }
+
+    componentDidMount() {
+        request.get('/paimai/api/goods/classes').then(res => {
+            let classes = res.data.result;
+            let tabs = classes.map((cls) => {
+                return {label: cls.name, id: cls.id, template: this.renderTemplate}
+            });
+            tabs.unshift({label: '精选', id: undefined, template: this.renderTemplate});
+            this.setState({tabs: tabs});
+        });
+    }
+
+    onPullDownRefresh() {
+
+    }
+
+    render() {
+        const {settings} = this.props;
+        if(this.state.class_id == null) return <PageLoading />;
+
+        return (
+            <PageLayout statusBarProps={{title: settings.auctionListTitle||'所有拍品'}} enableReachBottom={true}>
+                <FlowListView tabs={this.state.tabs} defaultActiveKey={this.state.class_id} dataFetcher={this.loadData}/>
+            </PageLayout>
+        );
+    }
+}
