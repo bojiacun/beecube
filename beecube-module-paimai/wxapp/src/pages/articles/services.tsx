@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import utils from "../../lib/utils";
-import {View, Navigator} from "@tarojs/components";
+import {View, Navigator, Button, Text} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
 
@@ -81,6 +81,7 @@ export default class Index extends Component<any, any> {
                     })}
                 </View>
                 {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
+                <View className={'p-4 text-center'}><Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button></View>
             </PageLayout>
         );
     }
