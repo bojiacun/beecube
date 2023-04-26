@@ -1,4 +1,4 @@
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
@@ -94,15 +94,14 @@ const TreePermissionList = (props: any) => {
                 />
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton
+                <Button
                     key={'submit'}
-                    type={'primary'}
-                    containerProps={{type: 'submit'}}
-                    onPress={handleOnSave}
+                    type={'submit'}
+                    onClick={handleOnSave}
                     disabled={savePermissionFetcher.state === 'submitting'}
                 >
                     保存
-                </AwesomeButton>
+                </Button>
             </Modal.Footer>
         </Modal>
     );
