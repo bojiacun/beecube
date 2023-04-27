@@ -73,6 +73,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 
 	private ImService imService;
 
+	private Snowflake snowflake = new Snowflake(3,8);
+
 	public void setImService(ImService imService) {
 		this.imService = imService;
 	}
@@ -249,7 +251,8 @@ public class ServerEventListenerImpl implements ServerEventListener
 		// 【重要】用户定义的消息或指令协议类型（开发者可据此类型来区分具体的消息或指令）
 		int typeu = p.getTypeu();
 
-		log.debug("【DEBUG_回调通知】[typeu="+typeu+"]收到了客户端"+from_user_id+"发给服务端的消息：str="+dataContent);
+		log.debug("收到客户端发来的消息 {}", dataContent);
+
 		BaseMessage message = JSONObject.parseObject(dataContent, BaseMessage.class);
 		String roomId = message.getRoomId();
 		AppContext.setApp(message.getAppId());
@@ -321,7 +324,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				else {
 					roomUsers.get(roomId).add(from_user_id);
 				}
-				log.debug("用户 {} 加入房间 {} 成功", from_user_id, roomId);
+				log.debug("用户 {} 加入房间 {} 成功, 当前房间人数为{}", from_user_id, roomId, roomUsers.get(roomId).size());
 				//向用户发送房间公告,并更新房间信息
 //				liveRoom.setViews(roomUsers.get(roomId).size());
 //				liveRoomService.updateById(liveRoom);
@@ -329,7 +332,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 				if(StringUtils.isNotBlank(notice)) {
 					LiveRoomNoticeMessage liveRoomNoticeMessage = new LiveRoomNoticeMessage();
 					liveRoomNoticeMessage.setNotice(liveRoom.getNotice());
-					Snowflake snowflake = new Snowflake(9, 9);
 					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.ROOM_NOTICE);
 					try {
 						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -339,7 +341,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 						log.error(e.getMessage(), e);
 					}
 				}
-
+				log.debug("给房间内所有人发送用户{}上线通知", from_user_id);
 				UserJoinNotifyMessage userJoinNotifyMessage = new UserJoinNotifyMessage();
 				userJoinNotifyMessage.setUserAvatar(appMemberVO.getAvatar());
 				userJoinNotifyMessage.setUserName(StringUtils.getIfEmpty(appMemberVO.getNickname(), appMemberVO::getRealname));
@@ -349,6 +351,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				break;
 			case UserMessageType.LEAVE_ROOM:
 				//将用户从房间移除
+				log.debug("用户{}离开房间{}", from_user_id, roomId);
 				Set<String> users = roomUsers.get(roomId);
 				if(users != null) {
 					users.remove(from_user_id);
@@ -368,7 +371,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 			case UserMessageType.SHUTUP:
 				Set<String> mutedUserIds = mutedUsers.computeIfAbsent(roomId, k -> new HashSet<>());
 				mutedUserIds.add(from_user_id);
-				Snowflake snowflake = new Snowflake(9, 9);
 				Protocal fp = ProtocalFactory.createCommonData("", "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -546,7 +548,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 		muteMessage.setRoomId(roomId);
 		muteMessage.setAppId(AppContext.getApp());
 
-		Snowflake snowflake = new Snowflake(9, 9);
 		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(muteMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -569,7 +570,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 		kickRoomMessage.setMessage(message);
 		kickRoomMessage.setRoomId(roomId);
 		kickRoomMessage.setAppId(AppContext.getApp());
-		Snowflake snowflake = new Snowflake(9, 9);
 		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -592,7 +592,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 		kickRoomMessage.setMessage(message);
 		kickRoomMessage.setRoomId(roomId);
 		kickRoomMessage.setAppId(AppContext.getApp());
-		Snowflake snowflake = new Snowflake(9, 9);
 		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
@@ -613,7 +612,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public void notifyRoomUsers(String roomId, String fromUserId, String message, String excludeUserId, int messageType) {
 		if(roomUsers.containsKey(roomId)) {
 			log.debug("通知房间 {} 所有用户 {} 个人", roomId, (roomUsers.containsKey(roomId)?roomUsers.get(roomId).size():0));
-			Snowflake snowflake = new Snowflake(9, 9);
 			roomUsers.get(roomId).forEach(uid -> {
 				if (uid.equals(excludeUserId)) {
 					return;
@@ -633,7 +631,6 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public void notifyAppUsers(String appId, String fromUserId, String message, String excludeUserId, int messageType) {
 		if(appUsers.containsKey(appId)) {
 			log.debug("通知应用 {} 所有在线用户{}个", appId, (appUsers.containsKey(appId) ? appUsers.get(appId).size() : 0));
-			Snowflake snowflake = new Snowflake(9, 9);
 			appUsers.get(appId).forEach(uid -> {
 				if (uid.equals(excludeUserId)) {
 					return;

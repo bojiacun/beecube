@@ -141,11 +141,11 @@ export default class Index extends Component<any, any> {
         const {userInfo} = context;
         let {goods} = this.state;
         let msg = message;
-        console.log('goods received a message', msg);
         //如果是自身产生的消息则忽略
         if (msg.isme) {
             return;
         }
+        if (msg.goodsId != goods.id) return;
         switch (msg.type) {
             case MessageType.OFFER:
                 goods.currentPrice = parseFloat(msg.price).toFixed(2);
@@ -172,7 +172,6 @@ export default class Index extends Component<any, any> {
                 this.setState({goods: goods});
                 break;
             case MessageType.GOODS_UPDATE:
-                if (msg.goodsId != goods.id) return;
                 const {settings} = this.props;
                 goods.startTime = message.startTime;
                 goods.endTime = message.endTime;

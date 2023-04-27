@@ -15,7 +15,7 @@ import utils from "./lib/utils";
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
 const siteInfo = Taro.getExtConfigSync();
 const store = configStore();
-const IM_SERVER_URL = "wss://im.winkt.cn/websocket";
+const IM_SERVER_URL = "ws://localhost:3000/websocket";
 let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
