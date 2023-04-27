@@ -105,7 +105,7 @@ Component({
         clearHide: true,
         keyboardHold: true,
         nextPrice: 0.00,
-        newBot: 568,
+        newBot: 456,
         meBot: 140,
         mmBot: 0,
         muted: false,

@@ -51,7 +51,7 @@
     height: 48rpx;
     position: fixed;
     z-index: 2;
-    bottom: 568rpx;
+    bottom: 456rpx;
     background-color: rgba(255,13,64,0.6);
     color: #fff;
     padding: 0 16rpx;
@@ -62,7 +62,7 @@
 }
 .message-view {
     width: 568rpx;
-    height: 412rpx;
+    height: 300rpx;
     position: fixed;
     z-index: 3;
     bottom: 140rpx;
