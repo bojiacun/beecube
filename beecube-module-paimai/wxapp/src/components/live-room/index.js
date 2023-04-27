@@ -367,7 +367,7 @@ Component({
                         return;
                     }
                     uiMessage.content = message.content;
-                    uiMessage.name = message.userName;
+                    uiMessage.name = message.userName ? message.userName:'微信用户';
                     this.pushUiMessage(uiMessage);
                     break;
                 case MessageType.SHUTUP:
