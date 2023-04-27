@@ -736,7 +736,7 @@ export default class Index extends Component<any, any> {
                 <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} onClick={this.clickMask} />
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
                     <View className={'flex flex-col items-center'} style={{height: '70%'}}>
-                    {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,'+this.state.shareAdv} mode={'aspectFill'} />}
+                    {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,'+this.state.shareAdv} mode={'aspectFit'} />}
                     {!this.state.shareAdv && <PageLoading style={{height: 500}} />}
                     <View className={'space-x-4 mt-4 flex-none'}>
                         <Button openType={'share'} className={'btn btn-info'}>发给好友</Button>
