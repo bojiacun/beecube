@@ -267,13 +267,13 @@ public class AppWxOpenController {
 
         //修改小程序域名
         wxOpenMaService.modifyDomain("set",
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com", "https://bojinhong.oss-cn-beijing.aliyuncs.com","https://image.winkt.cn", "https://article.winkt.cn"),
                 Arrays.asList("wss://api.beecube.winkt.cn","wss://im.winkt.cn"),
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com"),
-                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com")
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com", "https://bojinhong.oss-cn-beijing.aliyuncs.com", "https://image.winkt.cn", "https://article.winkt.cn"),
+                Arrays.asList("https://api.beecube.winkt.cn", "https://static.winkt.cn", "https://apis.map.qq.com", "https://restapi.amap.com", "https://bojinhong.oss-cn-beijing.aliyuncs.com", "https://image.winkt.cn", "https://article.winkt.cn")
         );
         //设置业务域名
-        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://api.beecube.winkt.cn"));
+        wxOpenMaService.setWebViewDomain("set", Collections.singletonList("https://article.winkt.cn"));
         AppModule appModule = appModuleService.getById(app.getModuleId());
         String developerAppId = appModule.getDeveloperAppId();
 
