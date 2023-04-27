@@ -415,6 +415,15 @@ Component({
                 });
                 return
             }
+            let userInfo = getApp().globalData.userInfo;
+            if(!userInfo.nickname || !userInfo.avatar) {
+                wx.showModal({title: '温馨提示', content: '请先完善个人信息再发言', confirmText: '去完善', cancelText: '取消', success(res){
+                    if(res.confirm) {
+                        wx.navigateTo({url: '/pages/my/profile'});
+                    }
+                    }});
+                return;
+            }
             const msgContent = this.data.inputMessage;
             this.setData({
                 clearHide: true,

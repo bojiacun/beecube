@@ -196,10 +196,14 @@ export default class Index extends Component<any, any> {
         if(!userInfo.phone || userInfo.phone == '') {
             return utils.showError("请完善手机信息");
         }
-
-
         this.setState({saving: true});
         this.updateUserInfo(userInfo);
+        //更新globalData数据
+        let app = Taro.getApp();
+        if(!app.globalData) {
+            app.globalData = {};
+        }
+        app.globalData.userInfo = userInfo;
     }
 
     handleSexChange(e) {
