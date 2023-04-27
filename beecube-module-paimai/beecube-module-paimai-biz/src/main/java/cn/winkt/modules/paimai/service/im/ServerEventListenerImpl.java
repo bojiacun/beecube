@@ -33,6 +33,7 @@ import net.x52im.mobileimsdk.server.protocal.Protocal;
 import net.x52im.mobileimsdk.server.protocal.ProtocalFactory;
 import net.x52im.mobileimsdk.server.protocal.s.PKickoutInfo;
 import net.x52im.mobileimsdk.server.utils.GlobalSendHelper;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.util.RedisUtil;
@@ -241,7 +242,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 	public boolean onTransferMessage4C2S(Protocal p, Channel session)
 	{
 		// 接收者uid
-		String userId = p.getTo();
+//		String userId = p.getTo();
 		// 发送者uid
 		String from_user_id = p.getFrom();
 		// 消息或指令内容
@@ -332,7 +333,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 				if(StringUtils.isNotBlank(notice)) {
 					LiveRoomNoticeMessage liveRoomNoticeMessage = new LiveRoomNoticeMessage();
 					liveRoomNoticeMessage.setNotice(liveRoom.getNotice());
-					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.ROOM_NOTICE);
+					Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(liveRoomNoticeMessage), "0", from_user_id, true, generateMessageId(roomId, from_user_id), UserMessageType.ROOM_NOTICE);
 					try {
 						GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 							log.debug("发送房间公告消息回调，是否送达 {}", b);
@@ -371,7 +372,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 			case UserMessageType.SHUTUP:
 				Set<String> mutedUserIds = mutedUsers.computeIfAbsent(roomId, k -> new HashSet<>());
 				mutedUserIds.add(from_user_id);
-				Protocal fp = ProtocalFactory.createCommonData("", "0", from_user_id, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
+				Protocal fp = ProtocalFactory.createCommonData("", "0", from_user_id, true, generateMessageId(roomId, from_user_id), UserMessageType.SHUTUP);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 						log.debug("发送房间公告消息回调，是否送达 {}", b);
@@ -548,7 +549,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		muteMessage.setRoomId(roomId);
 		muteMessage.setAppId(AppContext.getApp());
 
-		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(muteMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.SHUTUP);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(muteMessage), "0", userId, true, generateMessageId(roomId, userId), UserMessageType.SHUTUP);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 				log.debug("禁言用户消息是否送达 {}", b);
@@ -558,7 +559,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		}
 	}
 	/**
-	 * 将用户从房间踢出去
+	 * 将用户从房间踢出去, 用户可再次进入房间
 	 * @param roomId
 	 * @param userId
 	 * @param message
@@ -570,7 +571,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		kickRoomMessage.setMessage(message);
 		kickRoomMessage.setRoomId(roomId);
 		kickRoomMessage.setAppId(AppContext.getApp());
-		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, generateMessageId(roomId, userId), UserMessageType.KICKOUT_ROOM);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 				log.debug("踢出用户消息是否送达 {}", b);
@@ -580,7 +581,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		}
 	}
 	/**
-	 * 将用户从房间踢出去
+	 * 将用户从房间踢出去,并加入剔除队列，用户再次进去也无法进入
 	 * @param roomId
 	 * @param userId
 	 * @param message
@@ -592,7 +593,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 		kickRoomMessage.setMessage(message);
 		kickRoomMessage.setRoomId(roomId);
 		kickRoomMessage.setAppId(AppContext.getApp());
-		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, snowflake.nextIdStr(), UserMessageType.KICKOUT_ROOM);
+		Protocal fp = ProtocalFactory.createCommonData(JSONObject.toJSONString(kickRoomMessage), "0", userId, true, generateMessageId(roomId, userId), UserMessageType.KICKOUT_ROOM);
 		try {
 			GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 				log.debug("踢出用户消息是否送达 {}", b);
@@ -617,7 +618,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 					return;
 				}
 				log.debug("通知用户 {}, 消息内容是：{}", uid, message);
-				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
+				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, generateMessageId(roomId, uid), messageType);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 						log.debug("通知回调，是否送达 {} 到 {}", b, uid);
@@ -636,7 +637,7 @@ public class ServerEventListenerImpl implements ServerEventListener
 					return;
 				}
 				log.debug("通知用户 {}, 消息是：{}", uid, message);
-				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, snowflake.nextIdStr(), messageType);
+				Protocal fp = ProtocalFactory.createCommonData(message, fromUserId, uid, true, generateMessageId(appId, uid), messageType);
 				try {
 					GlobalSendHelper.sendDataS2C(imService.getServerCoreHandler().getBridgeProcessor(), fp, (b, o) -> {
 						log.debug("通知回调，是否送达 {} 到 {}", b, uid);
@@ -646,5 +647,15 @@ public class ServerEventListenerImpl implements ServerEventListener
 				}
 			});
 		}
+	}
+
+	/**
+	 * 生成唯一消息ID
+	 * @param appId
+	 * @param userId
+	 * @return
+	 */
+	private String generateMessageId(String appId, String userId) {
+		return DigestUtils.md5Hex(String.format("%s%s%s", appId, userId, snowflake.nextIdStr()));
 	}
 }
