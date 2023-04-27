@@ -941,38 +941,59 @@ public class WxAppMemberController {
         String title = goods.getTitle();
         String content = goods.getSubTitle();
 
-        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 728, 1204, ZoomMode.Height,  OutputFormat.PNG);
-        //针对背景和整图的设置
-        combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
-        combiner.setCanvasRoundCorner(100); //设置整图圆角（输出格式必须为PNG）
-        combiner.setQuality(.8f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
-        //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
-        combiner.addTextElement(title, 0, 150, 1400)
-                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
-                .setAlpha(.8f)          //透明度（0.0~1.0）
-                .setRotate(45)          //旋转（0~360）
-                .setColor(Color.RED)    //颜色
-                .setDirection(Direction.RightLeft) //绘制方向（从右到左，用于需要右对齐场景）
-                .setAutoFitWidth(200);  //自适应最大宽度（超出则自动缩小字体）
 
-        //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
-        combiner.addTextElement(goods.getSubTitle(),  12, 150, 1450);
-
-        //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
-        combiner.addTextElement(content,  Font.BOLD, 40, 150, 1480)
-                .setSpace(.5f)                      //字间距
-                .setStrikeThrough(true)             //删除线
-                .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）
+        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 720, 1200, ZoomMode.Height,  OutputFormat.JPEG);
+        int baseX = 20;
+        int baseY = 720;
 
         //商品图（设置坐标、宽高和缩放模式，若按宽度缩放，则高度按比例自动计算）
-        combiner.addImageElement(productImageUrl, 0, 160, 837, 0, ZoomMode.Width)
-                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
-                .setRoundCorner(46);    //设置圆角
+        combiner.addImageElement(productImageUrl, 0, 0, 0, 720, ZoomMode.Height)
+                .setCenter(true);       //居中绘制（会忽略x坐标，改为自动计算
+//                .setRoundCorner(46);    //设置圆角
+
+
+        //针对背景和整图的设置
+//        combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
+//        combiner.setCanvasRoundCorner(0); //设置整图圆角（输出格式必须为PNG）
+        combiner.setQuality(.8f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
+        //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
+        combiner.addTextElement(title, Font.BOLD, 32, baseX, baseY)
+                .setSpace(.5f)
+                .setAutoFitWidth(680);
+//                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
+//                .setAlpha(.8f)          //透明度（0.0~1.0）
+//                .setRotate(45)          //旋转（0~360）
+//                .setColor(Color.RED)    //颜色
+//                .setDirection(Direction.RightLeft) //绘制方向（从右到左，用于需要右对齐场景）
+//                .setAutoFitWidth(720);  //自适应最大宽度（超出则自动缩小字体）
+
+        baseY += 72;
+        //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
+        combiner.addTextElement(content,  18, baseX, baseY)
+                .setSpace(.5f)
+                .setAutoFitWidth(680);
+
+        baseY += 56;
+        //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
+//        combiner.addTextElement(content,  Font.BOLD, 40, 150, 600)
+//                .setSpace(.5f)                      //字间距
+//                .setStrikeThrough(true)             //删除线
+//                .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）
+
+        //价格（元素对象也可以直接new，然后手动加入待绘制列表）
+        TextElement textPrice = new TextElement("￥"+goods.getStartPrice(), 36, baseX, baseY);
+        textPrice.setLineHeight(48);
+        textPrice.setColor(Color.red);          //红色
+        combiner.addElement(textPrice);         //加入待绘制集合
+
+        baseY += 110;
+
+
 
         //头像（圆角设置一定的大小，可以把头像变成圆的）
-        combiner.addImageElement(avatarUrl, 200, 1200)
-                .setRoundCorner(200);   //圆角
-
+//        combiner.addImageElement(avatarUrl, 0, 500)
+//                .setRoundCorner(200);   //圆角
+//
         //水印（设置透明度，0.0~1.0）
 //        combiner.addImageElement(waterMark, 630, 1200)
 //                .setAlpha(.8f)          //透明度（0.0~1.0）
@@ -981,21 +1002,15 @@ public class WxAppMemberController {
 //                .setRepeat(true, 100, 50);    //平铺绘制（可设置水平、垂直间距）
 
         //加入圆角矩形元素（版本>=1.2.0），作为二维码的底衬
-        combiner.addRectangleElement(138, 1707, 300, 300)
-                .setColor(Color.WHITE)
-                .setRoundCorner(50)     //该值大于等于宽高时，就是圆形，如设为300
-                .setAlpha(.8f)
-                .setGradient(Color.yellow,Color.blue, GradientDirection.LeftRight)  //颜色渐变
-                .setBorderSize(5);      //设置border大小就是空心，不设置就是实心
+//        combiner.addRectangleElement(20, 600, 186, 186)
+//                .setColor(Color.WHITE)
+//                .setRoundCorner(50)     //该值大于等于宽高时，就是圆形，如设为300
+//                .setAlpha(.8f)
+//                .setGradient(Color.yellow,Color.blue, GradientDirection.LeftRight)  //颜色渐变
+//                .setBorderSize(5);      //设置border大小就是空心，不设置就是实心
 
         //二维码（强制按指定宽度、高度缩放）
-        combiner.addImageElement(qrCode, 138, 1707, 186, 186, ZoomMode.WidthHeight);
-
-        //价格（元素对象也可以直接new，然后手动加入待绘制列表）
-        TextElement textPrice = new TextElement("￥1290", 60, 230, 1300);
-        textPrice.setColor(Color.red);          //红色
-        textPrice.setStrikeThrough(true);       //删除线
-        combiner.addElement(textPrice);         //加入待绘制集合
+        combiner.addImageElement(qrCode, baseX, baseY, 186, 186, ZoomMode.WidthHeight);
 
         //执行图片合并
         combiner.combine();
