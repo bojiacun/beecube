@@ -371,7 +371,7 @@ export default class Index extends Component<any, any> {
         //这里计算要加价多少，并且符合后台的258逻辑
 
         let rangePrice = 0;
-        let offerCount = goods.offerCount;
+        let offerCount = goods.offerCount - 1;
         for (let i = 0; i < upgradeConfig.length; i++) {
             let config = upgradeConfig[i];
             let min = parseFloat(config.min);

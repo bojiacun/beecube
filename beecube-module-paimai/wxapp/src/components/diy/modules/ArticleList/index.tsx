@@ -13,6 +13,7 @@ const ArticleListModule = (props: any) => {
             params: {
                 type: basic.type,
                 classId: basic.classId,
+                postFlag: basic.postFlag,
                 pageSize: basic.count
             }
         }).then(res => {
