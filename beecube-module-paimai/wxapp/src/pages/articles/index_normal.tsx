@@ -5,6 +5,8 @@ import request from "../../lib/request";
 import {Navigator, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
+import styles from './index_normal.module.scss';
+import classNames from "classnames";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -37,10 +39,10 @@ export default class Index extends Component<any, any> {
     renderTemplate(data: any) {
         if(data.outerLink) {
             return (
-                <View className={'py-2'}>
+                <View className={classNames('py-4', styles.articleItem)}>
                     <Navigator className={'block flex items-center'} url={'/pages/articles/detail_h5?url=' + encodeURIComponent(data.outerLink)}>
-                        <FallbackImage mode={'aspectFill'} className={'rounded block w-30 h-30 flex-none mr-4'} src={data.preview}/>
-                        <View className={'flex-1 h-30 flex flex-col justify-between'}>
+                        <FallbackImage mode={'aspectFill'} className={'rounded block w-24 h-24 flex-none mr-4'} src={data.preview}/>
+                        <View className={'flex-1 h-24 flex flex-col justify-between'}>
                             <View className={'font-bold text-lg'}>{data.title}</View>
                             <View className={'text-gray-400 text-sm'}>{data.createTime}</View>
                         </View>
@@ -49,10 +51,10 @@ export default class Index extends Component<any, any> {
             );
         }
         return (
-            <View className={'py-2'}>
+            <View className={classNames('py-4', styles.articleItem)}>
                 <Navigator className={'block flex items-center'} url={'/pages/articles/detail?id=' + data.id}>
-                    <FallbackImage mode={'aspectFill'} className={'rounded block w-20 h-20 flex-none mr-2'} src={data.preview}/>
-                    <View className={'flex-1 h-20 flex flex-col justify-between'}>
+                    <FallbackImage mode={'aspectFill'} className={'rounded block w-24 h-24 flex-none mr-2'} src={data.preview}/>
+                    <View className={'flex-1 h-24 flex flex-col justify-between'}>
                         <View className={'font-bold text-lg'}>{data.title}</View>
                         <View className={'text-gray-400 text-sm'}>{data.createTime}</View>
                     </View>
@@ -90,7 +92,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: settings.articleNormalIndexTitle || '图文类文章频道页'}} enableReachBottom={true}>
                 <ListView
-                    className={'grid grid-cols-1 divide-y px-4 divide-gray-300'}
+                    className={'grid grid-cols-1 divide-y px-4 divide-gray-200'}
                     tabs={this.state.tabs}
                     defaultActiveKey={'0'}
                     dataFetcher={this.loadData}

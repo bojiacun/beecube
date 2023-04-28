@@ -5,7 +5,14 @@ import utils from "../../lib/utils";
 import {View, Navigator, Button, Text} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
+import {connect} from "react-redux";
 
+//@ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+    }
+))
 export default class Index extends Component<any, any> {
     state: any = {
         page: 1,
@@ -61,6 +68,8 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {list, noMore, loadingMore} = this.state;
+        const {systemInfo} = this.props;
+        const safeBottom = utils.calcSafeBottom(systemInfo) + 30;
         return (
             <PageLayout
                 statusBarProps={{title: '服务指南', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
@@ -81,7 +90,7 @@ export default class Index extends Component<any, any> {
                     })}
                 </View>
                 {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
-                <View className={'p-4 text-center'}><Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button></View>
+                <View className={'p-4 text-center absolute w-full'} style={{bottom:safeBottom}}><Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button></View>
             </PageLayout>
         );
     }

@@ -118,16 +118,16 @@ const ListView: FC<ListViewProps> = (props) => {
     return (
         <>
             {showSearch && searchUrl &&
-                <Navigator url={searchUrl} className={'rounded-full border border-gray-400 px-4 mx-4 py-2 flex space-x-4 block border-solid'}>
+                <Navigator url={searchUrl} className={'rounded-full bg-gray-100 px-4 mx-4 mb-1 py-2 flex space-x-4 block text-lg'}>
                     <View className={'text-gray-400'}><Text className={'fa fa-search'} /></View>
-                    <Text className='text-gray-300'>{searchPlaceHolder}</Text>
+                    <Text className='text-gray-400'>{searchPlaceHolder}</Text>
                 </Navigator>
             }
             {tabStyle == 1 &&
                 <ScrollView
                     scrollX={true}
                     scrollY={false}
-                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700', fixed ? 'sticky' : '')}
+                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 mb-2 text-gray-700', fixed ? 'sticky' : '')}
                     style={tabStyles} type={'list'}>
                     {tabs.map((tab, index) => {
                         return (

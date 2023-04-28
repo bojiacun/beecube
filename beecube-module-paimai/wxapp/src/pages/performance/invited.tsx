@@ -85,7 +85,7 @@ export default class Index extends Component<any, any> {
                     </View>
 
                     <View className={'p-4 bg-white'}>
-                        <View className={'text-red-600 text-center font-bold text-lg'}>预占参观码</View>
+                        <View className={'text-red-600 text-center font-bold text-lg'}>预展参观码</View>
                         <View className={'flex flex-nowrap  h-30 items-center justify-around'}>
                             {codes.map((code) => {
                                 return (
