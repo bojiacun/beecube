@@ -47,10 +47,10 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'space-y-2'}>
                         <View className={'font-bold text-lg'}>{data.title}</View>
-                        <View className={'text-gray-400 text-sm'}>{utils.delHtml(data.description)}</View>
-                        <View className={'flex justify-between items-center text-gray-400'}>
+                        <View className={'text-gray-400 text-sm text-cut'}>{utils.delHtml(data.description)}</View>
+                        <View className={'flex justify-between items-center'}>
                             <Text>{data.author}</Text>
-                            <View>
+                            <View className={'text-gray-400'}>
                                 <Text className={'fa fa-heart-o mr-2'} />
                                 <Text>{data.views}</Text>
                             </View>
