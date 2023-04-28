@@ -83,6 +83,7 @@ export default class Index extends Component<any, any> {
                     defaultActiveKey={'0'}
                     dataFetcher={this.loadData}
                     showSearch={true}
+                    searchUrl={'/pages/articles/search?title='+encodeURIComponent(settings.articleVideoIndexTitle||'视频类文章频道页')}
                 />
             </PageLayout>
         );

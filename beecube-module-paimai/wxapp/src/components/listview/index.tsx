@@ -26,7 +26,8 @@ export interface ListViewProps extends Partial<any> {
     fixed?:boolean;
     appendBottom?: ReactElement,
     showSearch?: boolean,
-    searchPlaceHolder?: string
+    searchPlaceHolder?: string,
+    searchUrl?: string|undefined,
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -42,7 +43,8 @@ const ListView: FC<ListViewProps> = (props) => {
         fixed = true,
         appendBottom,
         showSearch = false,
-        searchPlaceHolder = '更多您感兴趣的内容给',
+        searchPlaceHolder = '更多您感兴趣的内容',
+        searchUrl
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [data, setData] = useState<any[]>([]);
@@ -115,8 +117,8 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
-            {showSearch &&
-                <Navigator url={'/pages/articles/search'} className={'rounded-full border border-gray-400 px-4 mx-4 py-2 flex space-x-4 block border-solid'}>
+            {showSearch && searchUrl &&
+                <Navigator url={searchUrl} className={'rounded-full border border-gray-400 px-4 mx-4 py-2 flex space-x-4 block border-solid'}>
                     <View className={'text-gray-400'}><Text className={'fa fa-search'} /></View>
                     <Text className='text-gray-300'>{searchPlaceHolder}</Text>
                 </Navigator>

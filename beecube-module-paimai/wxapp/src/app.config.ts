@@ -10,6 +10,7 @@ export default defineAppConfig({
         'pages/articles/detail_h5',
         'pages/articles/index_normal',
         'pages/articles/index_video',
+        'pages/articles/search',
 
         'pages/goods/buyouts',
         'pages/goods/auctions',

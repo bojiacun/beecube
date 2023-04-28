@@ -20,12 +20,14 @@ export default class Index extends Component<any, any> {
         goodsList: [],
         performanceList: [],
     }
+    searchHandler:any;
     constructor(props) {
         super(props);
         this.handleInputSearch = this.handleInputSearch.bind(this);
         this.renderGoods = this.renderGoods.bind(this);
         this.renderPerformance = this.renderPerformance.bind(this);
         this.doSearch = this.doSearch.bind(this);
+        this.searchHandler = debounce(1000, this.doSearch);
     }
     doSearch(key: string) {
         utils.showLoading();
@@ -123,8 +125,9 @@ export default class Index extends Component<any, any> {
     handleInputSearch(e) {
         console.log(e.detail.value);
         let key = e.detail.value;
-        const doSearch = debounce(1000, this.doSearch);
-        doSearch(key);
+        if(key) {
+            this.searchHandler(key);
+        }
     }
     render() {
         return (
