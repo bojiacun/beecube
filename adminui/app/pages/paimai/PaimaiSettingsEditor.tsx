@@ -51,12 +51,13 @@ const PaimaiSettingsEditor = (props:any) => {
                         <Card.Title>拍品公共设置</Card.Title>
                     </Card.Header>
                     <Card.Body>
+                        <BootstrapInput label={'小程序名称'} name={'wxAppName'} placeholder={'设置小程序名称'} />
                         <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
                         <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
-                        <FormGroup>
-                            <FormLabel>分享海报背景</FormLabel>
-                            <FileBrowserInput type={1} name={'shareBg'} multi={false} />
-                        </FormGroup>
+                        {/*<FormGroup>*/}
+                        {/*    <FormLabel>分享海报背景</FormLabel>*/}
+                        {/*    <FileBrowserInput type={1} name={'shareBg'} multi={false} />*/}
+                        {/*</FormGroup>*/}
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
                         <BootstrapInput label={'图文类文章标题'} name={'articleNormalIndexTitle'} placeholder={'图文类文章频道首页标题'} />
