@@ -17,7 +17,7 @@ export default class Index extends Component<any, any> {
     }
 
     onLoad(options){
-        this.setState({url: options.url});
+        this.setState({url: decodeURIComponent(options.url)});
     }
 
     render() {

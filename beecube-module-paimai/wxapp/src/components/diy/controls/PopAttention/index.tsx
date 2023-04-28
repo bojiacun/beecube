@@ -11,12 +11,13 @@ import utils from '../../../../lib/utils';
  */
 const PopAttention = (props: any) => {
     const { data, basic, style, ...rest } = props;
-    const [hide, setHide] = useState<any>();
+    const [hide, setHide] = useState<number>(1);
 
     useEffect(()=>{
         //拿到本次要显示的广告图
         let hide = Taro.getStorageSync("CLOSED_ATTENTION");
         setHide(hide);
+
     },[basic]);
     const handleSaveToPhotoAlbum = () => {
         Taro.downloadFile({
@@ -30,7 +31,7 @@ const PopAttention = (props: any) => {
     }
     const closeAdv = () => {
         Taro.setStorageSync('CLOSED_ATTENTION', 1);
-        setHide(true);
+        setHide(1);
     }
     if(hide) {
         return <></>

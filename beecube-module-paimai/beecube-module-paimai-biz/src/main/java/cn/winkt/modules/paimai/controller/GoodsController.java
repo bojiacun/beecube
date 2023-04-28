@@ -243,9 +243,14 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         return Result.OK("编辑成功!");
     }
 
+    /**
+     * 管理员后台对拍品进行出价操作
+     * @param post
+     * @return
+     */
     @PostMapping("/offers")
     public Result<?> doOffer(@RequestBody JSONObject post) {
-        return auctionGoodsService.offer(post);
+        return auctionGoodsService.offerByAdmin(post);
     }
 
     /**

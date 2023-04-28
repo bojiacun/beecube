@@ -29,7 +29,21 @@ export default class Index extends Component<any, any> {
         this.handleSendCode = this.handleSendCode.bind(this);
         this.mobileRef = React.createRef();
     }
-
+    onShareTimeline() {
+        let mid = this.props.context?.userInfo?.id || '';
+        let detail = this.state.detail;
+        return {
+            title: '您的朋友邀请您一起参加'+detail.title,
+            query: {mid: mid, id: detail.id},
+        }
+    }
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        return {
+            title: '您的朋友邀请您一起参加'+this.state.detail.title,
+            path: '/pages/performance/invite?id=' + this.state.detail.id + '&mid=' + mid
+        }
+    }
     handleOnDateChange(e) {
         this.setState({joinTime: e.detail.value});
     }
@@ -146,14 +160,14 @@ export default class Index extends Component<any, any> {
                                     <View className={'text-gray-400'}>请输入您的姓名 <Text
                                         className={'text-red-600'}>*</Text></View>
                                     <View>
-                                        <Input className={'p-4 bg-gray-200'} name={'userName'}/>
+                                        <Input className={'p-4 bg-gray-200'} name={'userName'} adjustPosition={false} cursorSpacing={24} />
                                     </View>
                                 </View>
                                 <View className={'space-y-2'}>
                                     <View className={'text-gray-400'}>请输入您的手机号 <Text
                                         className={'text-red-600'}>*</Text></View>
                                     <View>
-                                        <Input className={'p-4 bg-gray-200'} name={'phone'} ref={this.mobileRef} />
+                                        <Input className={'p-4 bg-gray-200'} name={'phone'} ref={this.mobileRef} adjustPosition={false} cursorSpacing={24} />
                                     </View>
                                 </View>
                                 <View className={'space-y-2'}>

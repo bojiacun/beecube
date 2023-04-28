@@ -38,7 +38,7 @@ export default class Index extends Component<any, any> {
         if(data.outerLink) {
             return (
                 <View className={'py-2'}>
-                    <Navigator className={'block flex items-center'} url={'/pages/articles/detail_h5?url=' + data.outerLink}>
+                    <Navigator className={'block flex items-center'} url={'/pages/articles/detail_h5?url=' + encodeURIComponent(data.outerLink)}>
                         <FallbackImage mode={'aspectFill'} className={'rounded block w-20 h-20 flex-none mr-2'} src={data.preview}/>
                         <View className={'flex-1 h-20 flex flex-col justify-between'}>
                             <View className={'font-bold text-lg'}>{data.title}</View>
