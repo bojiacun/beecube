@@ -102,7 +102,7 @@ public class AppWxOpenController {
         WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
 
         WxOpenResult result = wxOpenMaService.undoCodeAudit();
-        publish.setStatus(1);
+        publish.setStatus(0);
         appPublishService.updateById(publish);
         return Result.OK(publish);
     }
