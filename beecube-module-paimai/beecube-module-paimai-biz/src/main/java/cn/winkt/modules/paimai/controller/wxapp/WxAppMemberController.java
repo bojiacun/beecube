@@ -687,8 +687,14 @@ public class WxAppMemberController {
     @PostMapping("/invites")
     public Result<Boolean> inviteJoin(@RequestBody PerformanceInvite invite, @RequestParam String id) {
         Performance performance = performanceService.getById(id);
-        if(performance == null || performance.getState() == 0 || (performance.getEndTime() != null && new Date().after(performance.getEndTime())) || performance.getState() >= 2) {
-            throw new JeecgBootException("找不到专场，或者专场已结束或下架");
+        if(performance == null){
+            throw new JeecgBootException("找不到专场");
+        }
+        if(performance.getType() == 1 && performance.getEndTime().before(new Date())) {
+            throw new JeecgBootException("专场已结束");
+        }
+        if(performance.getType() == 1 && performance.getState() >= 2) {
+            throw new JeecgBootException("专场已结束");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppMemberVO member = appApi.getMemberById(loginUser.getId());
