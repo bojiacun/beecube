@@ -84,7 +84,28 @@ public class AppWxOpenController {
         String url = wxOpenService.getWxOpenComponentService().getPreAuthUrl(String.format("%s%s", jeecgBaseConfig.getDomainUrl().getPc(), "/app/wxopen/auth"), "2", null);
         return Result.OK("", url);
     }
+    @PostMapping("/auth/cancel")
+    public Result<?> cancelAudit(@RequestBody AppPublish publish) throws WxErrorException {
+        App app = appService.getById(AppContext.getApp());
+        if(app == null) {
+            throw new JeecgBootException("找不到APP");
+        }
+        if(!app.getAuthStatus().equals("authorized") || StringUtils.isEmpty(app.getAuthorizerRefreshToken())) {
+            throw new JeecgBootException("无法获取刷新令牌");
+        }
+        wxOpenService.getWxOpenConfigStorage().setAuthorizerRefreshToken(app.getAuthorizerAppid(), app.getAuthorizerRefreshToken());
 
+        String appAccessToken = wxOpenService.getWxOpenComponentService().getAuthorizerAccessToken(app.getAuthorizerAppid(), false);
+        WxMaDefaultConfigImpl wxMaDefaultConfig = new WxMaDefaultConfigImpl();
+        wxMaDefaultConfig.setAppid(app.getAuthorizerAppid());
+        wxMaDefaultConfig.setAccessToken(appAccessToken);
+        WxOpenMaService wxOpenMaService = new WxOpenMaServiceImpl(wxOpenService.getWxOpenComponentService(), app.getAuthorizerAppid(), wxMaDefaultConfig);
+
+        WxOpenResult result = wxOpenMaService.undoCodeAudit();
+        publish.setStatus(1);
+        appPublishService.updateById(publish);
+        return Result.OK(publish);
+    }
     @PostMapping("/auth/release")
     public Result<?> releasePublic(@RequestBody AppPublish publish) throws WxErrorException {
         App app = appService.getById(AppContext.getApp());

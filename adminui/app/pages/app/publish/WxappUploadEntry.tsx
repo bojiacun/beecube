@@ -9,6 +9,7 @@ export default function WxappUploadEntry(props: any) {
     const [publishing, setPublishing] = useState<boolean>(false);
     const [uploading, setUploading] = useState<boolean>(false);
     const [releasing, setReleasing] = useState<boolean>(false);
+    const [canceling, setCanceling] = useState<boolean>(false);
     const submitFetcher = useFetcher();
     const publicFetcher = useFetcher();
     const releaseFetcher = useFetcher();
@@ -40,7 +41,7 @@ export default function WxappUploadEntry(props: any) {
 
     useEffect(() => {
         if (cancelFetcher.data && cancelFetcher.type === 'done') {
-            setReleasing(false);
+            setCanceling(false);
             handleResult(cancelFetcher.data, '撤销成功！');
             setCurrentPublish(cancelFetcher.data.result);
         }
@@ -59,7 +60,7 @@ export default function WxappUploadEntry(props: any) {
         releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/release'});
     }
     const cancelCheck = () => {
-        setReleasing(true);
+        setCanceling(true);
         releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/cancel'});
     }
 
@@ -121,7 +122,7 @@ export default function WxappUploadEntry(props: any) {
                         {(currentPublish.status == 2) &&
                             <Button variant={'success'} disabled={releasing} onClick={release}>{releasing ? '发布中...' : '发布上线'}</Button>}
                         {(currentPublish.status == 1) && <Button variant={'light'} disabled={true}>审核中</Button>}
-                        {(currentPublish.status == 1) && <Button variant={'danger'} style={{marginLeft: 20}} disabled={true} onClick={cancelCheck}>撤销审核</Button>}
+                        {(currentPublish.status == 1) && <Button variant={'danger'} style={{marginLeft: 20}} disabled={canceling} onClick={cancelCheck}>撤销审核</Button>}
                     </div>
                 </>
             }
