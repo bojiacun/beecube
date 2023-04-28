@@ -935,11 +935,13 @@ public class WxAppMemberController {
         String productImageUrl = goods.getImages().split(",")[0];
         String title = goods.getTitle();
         String content = goods.getSubTitle();
+        int canvasHeight = 680;
+        int canvasWidth = 390;
 
 //        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 375, 812, ZoomMode.Height,  OutputFormat.JPEG);
-        ImageCombiner combiner = new ImageCombiner( 390, 670, Color.WHITE,  OutputFormat.JPEG);
+        ImageCombiner combiner = new ImageCombiner( canvasWidth, canvasHeight, Color.WHITE,  OutputFormat.JPEG);
         int baseX = 20;
-        int baseY = 390;
+        int baseY = 391;
 
         //商品图（设置坐标、宽高和缩放模式，若按宽度缩放，则高度按比例自动计算）
         combiner.addImageElement(productImageUrl, 0, 0, 0, 375, ZoomMode.Height)
@@ -952,9 +954,9 @@ public class WxAppMemberController {
 //        combiner.setCanvasRoundCorner(0); //设置整图圆角（输出格式必须为PNG）
         combiner.setQuality(1f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
         //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
-        combiner.addTextElement(title, Font.BOLD, 24, baseX, baseY)
+        TextElement titleElement = combiner.addTextElement(title, Font.BOLD, 24, baseX, baseY)
                 .setSpace(.1f)
-                .setAutoFitWidth(335);
+                .setAutoBreakLine(335, 2, 30);
 //                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
 //                .setAlpha(.8f)          //透明度（0.0~1.0）
 //                .setRotate(45)          //旋转（0~360）
@@ -962,16 +964,19 @@ public class WxAppMemberController {
 //                .setDirection(Direction.RightLeft) //绘制方向（从右到左，用于需要右对齐场景）
 //                .setAutoFitWidth(720);  //自适应最大宽度（超出则自动缩小字体）
 
-        baseY += 40;
+        baseY += titleElement.getBreakLineElements().size() * 30;
+
         if(content != null) {
+            baseY+=16;
             //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
             combiner.addTextElement(content, 16, baseX, baseY)
                     .setSpace(.1f)
                     .setColor(Color.gray)
                     .setAutoFitWidth(335);
+            baseY+=16;
         }
 
-        baseY += 36;
+        baseY += 16;
         //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
 //        combiner.addTextElement(content,  Font.BOLD, 40, 150, 600)
 //                .setSpace(.5f)                      //字间距
@@ -984,7 +989,7 @@ public class WxAppMemberController {
         textPrice.setColor(Color.red);          //红色
         combiner.addElement(textPrice);         //加入待绘制集合
 
-        baseY += 70;
+
 
 
 
@@ -1008,6 +1013,9 @@ public class WxAppMemberController {
 //                .setBorderSize(5);      //设置border大小就是空心，不设置就是实心
 
         //二维码（强制按指定宽度、高度缩放）
+        //这里重新计算二维码的高度坐标从底部开始算起
+        baseY = canvasHeight - 16 - 110;
+
         combiner.addImageElement(qrCode, baseX, baseY, 110, 110, ZoomMode.WidthHeight);
         baseX += 125;
         baseY += 25;
