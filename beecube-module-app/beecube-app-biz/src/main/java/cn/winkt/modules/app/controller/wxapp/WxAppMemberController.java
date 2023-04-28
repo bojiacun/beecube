@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.controller.wxapp;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
@@ -74,7 +75,7 @@ public class WxAppMemberController {
     public void getMemberQrcode(HttpServletResponse response) throws WxErrorException, IOException {
         WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        File file = wxMaService.getQrcodeService().createWxaCode("/pages/index/index?mid="+sysUser.getId(), 375);
+        File file = wxMaService.getQrcodeService().createWxaCode("/pages/index/index?mid="+sysUser.getId(), "release", 430, false, new WxMaCodeLineColor("0","0","0"), false);
         OutputStream os = null;
         try {
 //        读取图片

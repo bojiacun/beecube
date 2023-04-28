@@ -925,33 +925,21 @@ public class WxAppMemberController {
 
     @GetMapping("/share/goods")
     public void generateGoodsShareAdv(@RequestParam String id, HttpServletResponse response) throws Exception {
-        LambdaQueryWrapper<GoodsCommonDesc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsCommonDesc::getDescKey, "shareBg");
-        GoodsCommonDesc commonDesc = goodsCommonDescService.getOne(queryWrapper);
-        if (commonDesc == null) {
-            throw new JeecgBootException("没有设置海报背景图，无法生成海报");
-        }
         Goods goods = goodsService.getById(id);
         if (goods == null) {
             throw new JeecgBootException("找不到商品");
         }
-
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-
-        String bgImageUrl = commonDesc.getDescValue();
-        ByteArrayInputStream qrCodeStream = new ByteArrayInputStream(appApi.getMemberQrcode("/pages/goods/detail?id=" + id + "&mid=" + loginUser.getId()));
+        ByteArrayInputStream qrCodeStream = new ByteArrayInputStream(appApi.getMemberQrcode("/pages/goods/detail"+(goods.getType()==1?"":"2")+"?id=" + id + "&mid=" + loginUser.getId()));
         BufferedImage qrCode = ImageIO.read(qrCodeStream);
         String productImageUrl = goods.getImages().split(",")[0];
-        String avatarUrl = appMemberVO.getAvatar();
         String title = goods.getTitle();
         String content = goods.getSubTitle();
 
-
 //        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 375, 812, ZoomMode.Height,  OutputFormat.JPEG);
-        ImageCombiner combiner = new ImageCombiner( 375, 700, Color.WHITE,  OutputFormat.JPEG);
+        ImageCombiner combiner = new ImageCombiner( 390, 670, Color.WHITE,  OutputFormat.JPEG);
         int baseX = 20;
-        int baseY = 395;
+        int baseY = 390;
 
         //商品图（设置坐标、宽高和缩放模式，若按宽度缩放，则高度按比例自动计算）
         combiner.addImageElement(productImageUrl, 0, 0, 0, 375, ZoomMode.Height)
@@ -965,7 +953,7 @@ public class WxAppMemberController {
         combiner.setQuality(1f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
         //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
         combiner.addTextElement(title, Font.BOLD, 24, baseX, baseY)
-                .setSpace(.5f)
+                .setSpace(.1f)
                 .setAutoFitWidth(335);
 //                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
 //                .setAlpha(.8f)          //透明度（0.0~1.0）
@@ -974,10 +962,11 @@ public class WxAppMemberController {
 //                .setDirection(Direction.RightLeft) //绘制方向（从右到左，用于需要右对齐场景）
 //                .setAutoFitWidth(720);  //自适应最大宽度（超出则自动缩小字体）
 
-        baseY += 44;
+        baseY += 40;
         //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
-        combiner.addTextElement(content,  18, baseX, baseY)
-                .setSpace(.5f)
+        combiner.addTextElement(content,  16, baseX, baseY)
+                .setSpace(.1f)
+                .setColor(Color.gray)
                 .setAutoFitWidth(335);
 
         baseY += 36;
@@ -988,12 +977,12 @@ public class WxAppMemberController {
 //                .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）
 
         //价格（元素对象也可以直接new，然后手动加入待绘制列表）
-        TextElement textPrice = new TextElement("￥"+goods.getStartPrice(), 24, baseX, baseY);
+        TextElement textPrice = new TextElement("￥ "+goods.getStartPrice(), 32, baseX, baseY);
         textPrice.setLineHeight(36);
         textPrice.setColor(Color.red);          //红色
         combiner.addElement(textPrice);         //加入待绘制集合
 
-        baseY += 80;
+        baseY += 70;
 
 
 
@@ -1017,18 +1006,22 @@ public class WxAppMemberController {
 //                .setBorderSize(5);      //设置border大小就是空心，不设置就是实心
 
         //二维码（强制按指定宽度、高度缩放）
-        combiner.addImageElement(qrCode, baseX, baseY, 130, 130, ZoomMode.WidthHeight);
-        baseX += 170;
-        baseY += 30;
-        String notice = "长按识别二维码";
-        String notice2 = "分享给好友";
+        combiner.addImageElement(qrCode, baseX, baseY, 110, 110, ZoomMode.WidthHeight);
+        baseX += 125;
+        baseY += 25;
+        //获取后台设置的小程序名称
+        LambdaQueryWrapper<GoodsCommonDesc> commonDescLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        commonDescLambdaQueryWrapper.eq(GoodsCommonDesc::getDescKey, "wxAppName");
+        GoodsCommonDesc desc = goodsCommonDescService.getOne(commonDescLambdaQueryWrapper);
+        String wxAppName = desc == null ? "蜜蜂魔方" : desc.getDescValue();
+        String notice = "长按识别小程序 立即购买";
+        String notice2 = "分享自"+wxAppName;
         combiner.addTextElement(notice,  18, baseX, baseY)
-                .setSpace(.5f)
-                .setAutoFitWidth(185);
+                .setSpace(.1f);
         baseY += 36;
         combiner.addTextElement(notice2,  18, baseX, baseY)
-                .setSpace(.5f)
-                .setAutoFitWidth(185);
+                .setSpace(.1f)
+                .setAutoFitWidth(205);
         //执行图片合并
         combiner.combine();
 

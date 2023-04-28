@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.controller.api;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.config.WxMiniappServices;
@@ -127,13 +128,12 @@ public class AppApiController {
     /**
      * 生成用户二维码
      * @throws WxErrorException
-     * @throws IOException
      */
     @GetMapping(value = "/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
-    public byte[] getMemberQrcode(@RequestParam String userPath) throws WxErrorException, IOException {
+    public byte[] getMemberQrcode(@RequestParam String userPath) throws WxErrorException {
         WxMaService wxMaService = wxMiniappServices.getService(AppContext.getApp());
-        File file = wxMaService.getQrcodeService().createWxaCode(userPath, 375);
+        File file = wxMaService.getQrcodeService().createWxaCode(userPath, "release", 430, false, new WxMaCodeLineColor("0","0","0"), false);
         byte[] res = null;
         try {
 //        读取图片
