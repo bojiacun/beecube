@@ -456,7 +456,6 @@ export default class Index extends Component<any, any> {
         this.options = options;
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
-            this.setState({liveRoom: room});
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
             request.get('/paimai/api/live/room/goods', {params: {roomId: room.id}}).then(res => {
@@ -464,8 +463,9 @@ export default class Index extends Component<any, any> {
                 goodsList.forEach(data=> {
                     data.fields = JSON.parse(data.fields || '[]');
                     data.uprange = JSON.parse(data.uprange);
-                })
+                });
                 this.setState(this.resolveGoods(goodsList));
+                this.setState({liveRoom: room});
             });
         });
     }
