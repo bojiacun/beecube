@@ -82,6 +82,7 @@ export default class Index extends Component<any, any> {
                     tabs={this.state.tabs}
                     defaultActiveKey={'0'}
                     dataFetcher={this.loadData}
+                    showSearch={true}
                 />
             </PageLayout>
         );

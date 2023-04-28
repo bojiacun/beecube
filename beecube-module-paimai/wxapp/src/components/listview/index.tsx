@@ -1,7 +1,7 @@
 import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
-import {Text, View, ScrollView} from "@tarojs/components";
+import {Text, View, ScrollView, Navigator} from "@tarojs/components";
 import classNames from "classnames";
 import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import NoData from "../nodata";
@@ -24,7 +24,9 @@ export interface ListViewProps extends Partial<any> {
     defaultActiveKey?: string | number | null;
     autoRefresh?: boolean;
     fixed?:boolean;
-    appendBottom?: ReactElement
+    appendBottom?: ReactElement,
+    showSearch?: boolean,
+    searchPlaceHolder?: string
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -39,6 +41,8 @@ const ListView: FC<ListViewProps> = (props) => {
         autoRefresh = false,
         fixed = true,
         appendBottom,
+        showSearch = false,
+        searchPlaceHolder = '更多您感兴趣的内容给',
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [data, setData] = useState<any[]>([]);
@@ -111,6 +115,12 @@ const ListView: FC<ListViewProps> = (props) => {
 
     return (
         <>
+            {showSearch &&
+                <Navigator url={'/pages/articles/search'} className={'rounded-full border border-gray-400 px-4 mx-4 py-2 flex space-x-4 block border-solid'}>
+                    <View className={'text-gray-400'}><Text className={'fa fa-search'} /></View>
+                    <Text className='text-gray-300'>{searchPlaceHolder}</Text>
+                </Navigator>
+            }
             {tabStyle == 1 &&
                 <ScrollView
                     scrollX={true}
