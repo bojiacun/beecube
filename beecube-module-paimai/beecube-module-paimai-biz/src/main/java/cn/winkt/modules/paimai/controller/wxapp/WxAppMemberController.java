@@ -963,11 +963,13 @@ public class WxAppMemberController {
 //                .setAutoFitWidth(720);  //自适应最大宽度（超出则自动缩小字体）
 
         baseY += 40;
-        //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
-        combiner.addTextElement(content,  16, baseX, baseY)
-                .setSpace(.1f)
-                .setColor(Color.gray)
-                .setAutoFitWidth(335);
+        if(content != null) {
+            //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
+            combiner.addTextElement(content, 16, baseX, baseY)
+                    .setSpace(.1f)
+                    .setColor(Color.gray)
+                    .setAutoFitWidth(335);
+        }
 
         baseY += 36;
         //内容（设置文本自动换行，需要指定最大宽度（超出则换行）、最大行数（超出则丢弃）、行高）
