@@ -12,6 +12,7 @@ export default function WxappUploadEntry(props: any) {
     const submitFetcher = useFetcher();
     const publicFetcher = useFetcher();
     const releaseFetcher = useFetcher();
+    const cancelFetcher = useFetcher();
 
     useEffect(() => {
         if (submitFetcher.data && submitFetcher.type === 'done') {
@@ -37,6 +38,14 @@ export default function WxappUploadEntry(props: any) {
         }
     }, [releaseFetcher.state]);
 
+    useEffect(() => {
+        if (cancelFetcher.data && cancelFetcher.type === 'done') {
+            setReleasing(false);
+            handleResult(cancelFetcher.data, '撤销成功！');
+            setCurrentPublish(cancelFetcher.data.result);
+        }
+    }, [cancelFetcher.state]);
+
     const submitPreview = () => {
         setUploading(true);
         submitFetcher.submit(newPublish, {method: 'post', action: '/app/wxopen/upload'})
@@ -48,6 +57,10 @@ export default function WxappUploadEntry(props: any) {
     const release = () => {
         setReleasing(true);
         releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/release'});
+    }
+    const cancelCheck = () => {
+        setReleasing(true);
+        releaseFetcher.submit(currentPublish, {method: 'post', action: '/app/wxopen/cancel'});
     }
 
     if (!app) return <></>;
@@ -100,7 +113,7 @@ export default function WxappUploadEntry(props: any) {
                         </Alert>
                     }
                     <div>
-                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 &&
+                        {newPublish && compareVersion(currentPublish.version, newPublish.userVersion) < 0 && currentPublish.status != 1 &&
                             <Button variant={'primary'} style={{marginRight: 20}} onClick={submitPreview}
                                     disabled={uploading}>{uploading ? '发布中，请稍后...' : '重新发布'}</Button>}
                         {(currentPublish.status == 0 || currentPublish.status == 3) &&
@@ -108,6 +121,7 @@ export default function WxappUploadEntry(props: any) {
                         {(currentPublish.status == 2) &&
                             <Button variant={'success'} disabled={releasing} onClick={release}>{releasing ? '发布中...' : '发布上线'}</Button>}
                         {(currentPublish.status == 1) && <Button variant={'light'} disabled={true}>审核中</Button>}
+                        {(currentPublish.status == 1) && <Button variant={'danger'} style={{marginLeft: 20}} disabled={true} onClick={cancelCheck}>撤销审核</Button>}
                     </div>
                 </>
             }

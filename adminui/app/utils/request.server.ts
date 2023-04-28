@@ -113,6 +113,7 @@ export const API_APP_WXOPEN_AUTH_CALLBACK = `${BASE_URL}/beecube-app/app/wxopen/
 export const API_APP_WXOPEN_UPLOAD_PREVIEW = `${BASE_URL}/beecube-app/app/wxopen/auth/upload`;
 export const API_APP_WXOPEN_UPLOAD_PUBLIC = `${BASE_URL}/beecube-app/app/wxopen/auth/public`;
 export const API_APP_WXOPEN_UPLOAD_RELEASE = `${BASE_URL}/beecube-app/app/wxopen/auth/release`;
+export const API_APP_WXOPEN_UPLOAD_CANCEL = `${BASE_URL}/beecube-app/app/wxopen/auth/cancel`;
 
 export const API_APP_MODULE_LIST = `${BASE_URL}/beecube-app/app/modules/list`;
 export const API_APP_MODULE_ALL_LIST = `${BASE_URL}/beecube-app/app/modules/all`;

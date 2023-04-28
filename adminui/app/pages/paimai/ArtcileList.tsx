@@ -118,10 +118,10 @@ const ArticleList = (props: any) => {
             text: '文章标题',
             dataField: 'title',
         },
-        {
-            text: '外部链接',
-            dataField: 'outerLink',
-        },
+        // {
+        //     text: '外部链接',
+        //     dataField: 'outerLink',
+        // },
         {
             text: '列表封面图',
             dataField: '',
