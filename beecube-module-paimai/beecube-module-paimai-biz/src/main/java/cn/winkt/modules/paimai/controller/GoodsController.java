@@ -227,9 +227,8 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Goods goods) {
         Goods old = goodsService.getById(goods.getId());
-        Date endTime = goods.getActualEndTime() == null ? goods.getEndTime(): goods.getActualEndTime();
-        if((endTime != null && endTime.before(new Date())) || old.getState() > 1) {
-            throw new JeecgBootException("拍品已结束无法编辑");
+        if(goodsService.isStarted(old)) {
+            throw new JeecgBootException("拍品已经开始竞拍，不能修改");
         }
         if(old.getType() != 2) {
             if (old.getStartTime() != goods.getStartTime() || old.getEndTime() != goods.getEndTime()) {
@@ -237,6 +236,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 goodsUpdateMessage.setGoodsId(goods.getId());
                 goodsUpdateMessage.setStartTime(goods.getStartTime());
                 goodsUpdateMessage.setEndTime(goods.getEndTime());
+                imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             }
         }
         goodsService.updateById(goods);

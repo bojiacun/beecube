@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.common.PaimaiConstant;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.service.im.UserMessageType;
@@ -293,8 +294,8 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     public Result<?> edit(@RequestBody Performance performance) {
         Performance old = performanceService.getById(performance.getId());
         //验证专场是否过了结束时间，如果过了，则不能修改任何信息
-        if(old.getState() > 1 || (old.getEndTime() != null && old.getEndTime().before(new Date()))) {
-            throw new JeecgBootException("专场已过结束时间不能做任何修改");
+        if(performanceService.isStarted(old)) {
+            throw new JeecgBootException("专场已开始不能做任何修改");
         }
         //限时拍修改专场时间也同步更新所有拍品时间
         if(old.getType() == 1) {
@@ -312,6 +313,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
                 goodsService.update(updateWrapper);
             }
         }
+        //专场修改出价配置则更新专场下所有拍品
         if(StringUtils.isNotEmpty(performance.getUprange())) {
             LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.set(Goods::getUprange, performance.getUprange());

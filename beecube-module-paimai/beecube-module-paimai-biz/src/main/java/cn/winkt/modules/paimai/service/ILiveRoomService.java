@@ -1,8 +1,10 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.paimai.entity.LiveRoom;
+import cn.winkt.modules.paimai.entity.Performance;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
+import org.jeecg.common.system.vo.LoginUser;
 
 /**
  * @Description: 直播间表
@@ -12,4 +14,7 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ILiveRoomService extends IService<LiveRoom> {
     void updateRoomViews(String id);
+
+    boolean checkDeposite(LoginUser loginUser, LiveRoom liveRoom);
+    boolean checkDeposite(LoginUser loginUser, String roomId);
 }

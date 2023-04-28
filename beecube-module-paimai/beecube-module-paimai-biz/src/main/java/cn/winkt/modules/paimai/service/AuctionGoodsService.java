@@ -63,56 +63,20 @@ public class AuctionGoodsService {
         if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
+        if(!goodsService.isStarted(goods)) {
+            throw new JeecgBootException("拍品尚未开始竞拍，无法出价");
+        }
+        if(goodsService.isEnded(goods)) {
+            throw new JeecgBootException("该拍品竞拍已结束，无法出价");
+        }
+
         Performance performance = null;
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             performance = performanceService.getById(goods.getPerformanceId());
         }
-        LiveRoom liveRoom = null;
-        if(StringUtils.isNotEmpty(goods.getRoomId())) {
-            liveRoom = liveRoomService.getById(goods.getRoomId());
-        }
 
-        Date nowDate = new Date();
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-        String auctionId = null;
 
-        if (performance != null) {
-            auctionId = performance.getAuctionId();
-            if (performance.getType() == 1) {
-                if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
-                    throw new JeecgBootException("拍品所在专场已结束");
-                }
-                if(goods.getState() > 1) {
-                    throw new JeecgBootException("该拍品已结束拍卖");
-                }
-                if (nowDate.compareTo(performance.getStartTime()) < 0) {
-                    throw new JeecgBootException("拍品所在专场未开始");
-                }
-            } else if (performance.getType() == 2) {
-                if (performance.getState() == 0) {
-                    throw new JeecgBootException("拍品所在专场未开始");
-                } else if (performance.getState() == 2) {
-                    throw new JeecgBootException("拍品所在专场已结束");
-                }
-                if (goods.getState() == 0) {
-                    throw new JeecgBootException("该拍品尚未开始");
-                } else if (goods.getState() == 2) {
-                    throw new JeecgBootException("该拍品已结束拍卖");
-                }
-            }
-        }
-        else if(liveRoom != null) {
-            if (goods.getState() == 0) {
-                throw new JeecgBootException("该拍品尚未开始");
-            } else if (goods.getState() == 2) {
-                throw new JeecgBootException("该拍品已结束拍卖");
-            }
-        }
-        else if (nowDate.compareTo(actualEndTime) >= 0 || goods.getState() > 1) {
-            throw new JeecgBootException("该拍品已结束拍卖");
-        } else if (nowDate.compareTo(goods.getStartTime()) < 0) {
-            throw new JeecgBootException("该拍品尚未开始");
-        }
 
         String lockKey = "OFFER-LOCKER-" + goods.getId();
         if (redissonLockClient.tryLock(lockKey, -1, 300)) {
@@ -132,7 +96,7 @@ public class AuctionGoodsService {
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPerformanceId(goods.getPerformanceId());
             goodsOffer.setRoomId(goods.getRoomId());
-            goodsOffer.setAuctionId(auctionId);
+            goodsOffer.setAuctionId(performance != null ? performance.getAuctionId():null);
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
@@ -203,84 +167,21 @@ public class AuctionGoodsService {
         if (goods == null) {
             throw new JeecgBootException("操作失败找不到拍品");
         }
+        if(!goodsService.isStarted(goods)) {
+            throw new JeecgBootException("拍品尚未开始竞拍，无法出价");
+        }
+        if(goodsService.isEnded(goods)) {
+            throw new JeecgBootException("该拍品竞拍已结束，无法出价");
+        }
+        //检查是否缴纳了保证金
+        if(!goodsService.checkDeposite(loginUser, goods)) {
+            throw new JeecgBootException("请先缴纳保证金再出价");
+        }
         Performance performance = null;
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             performance = performanceService.getById(goods.getPerformanceId());
         }
-        LiveRoom liveRoom = null;
-        if(StringUtils.isNotEmpty(goods.getRoomId())) {
-            liveRoom = liveRoomService.getById(goods.getRoomId());
-        }
-        if (performance != null && performance.getDeposit() != null && performance.getDeposit() > 0) {
-            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
-            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-            queryWrapper.eq(GoodsDeposit::getStatus, 1);
-            if (goodsDepositService.count(queryWrapper) == 0) {
-                return Result.error("未缴纳专场保证金");
-            }
-        }
-        else if(liveRoom != null && liveRoom.getDeposit() != null && liveRoom.getDeposit() > 0) {
-            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsDeposit::getRoomId, liveRoom.getId());
-            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-            queryWrapper.eq(GoodsDeposit::getStatus, 1);
-            if (goodsDepositService.count(queryWrapper) == 0) {
-                return Result.error("未缴纳专场保证金");
-            }
-        }
-        else if (goods.getDeposit() != null && goods.getDeposit() > 0) {
-            LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(GoodsDeposit::getGoodsId, goods.getId());
-            queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-            queryWrapper.eq(GoodsDeposit::getStatus, 1);
-            if (goodsDepositService.count(queryWrapper) == 0) {
-                return Result.error("未缴纳保证金");
-            }
-        }
-
-        Date nowDate = new Date();
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
-        String auctionId = null;
-
-        if (performance != null) {
-            auctionId = performance.getAuctionId();
-            if (performance.getType() == 1) {
-                if (nowDate.compareTo(performance.getEndTime()) > 0 && goods.getActualEndTime() == null) {
-                    throw new JeecgBootException("拍品所在专场已结束");
-                }
-                if(goods.getState() > 1) {
-                    throw new JeecgBootException("该拍品已结束拍卖");
-                }
-                if (nowDate.compareTo(performance.getStartTime()) < 0) {
-                    throw new JeecgBootException("拍品所在专场未开始");
-                }
-            } else if (performance.getType() == 2) {
-                if (performance.getState() == 0) {
-                    throw new JeecgBootException("拍品所在专场未开始");
-                } else if (performance.getState() == 2) {
-                    throw new JeecgBootException("拍品所在专场已结束");
-                }
-                if (goods.getState() == 0) {
-                    throw new JeecgBootException("该拍品尚未开始");
-                } else if (goods.getState() == 2) {
-                    throw new JeecgBootException("该拍品已结束拍卖");
-                }
-            }
-        }
-        else if(liveRoom != null) {
-            if (goods.getState() == 0) {
-                throw new JeecgBootException("该拍品尚未开始");
-            } else if (goods.getState() == 2) {
-                throw new JeecgBootException("该拍品已结束拍卖");
-            }
-        }
-        else if (nowDate.compareTo(actualEndTime) >= 0 || goods.getState() > 1) {
-            throw new JeecgBootException("该拍品已结束拍卖");
-        } else if (nowDate.compareTo(goods.getStartTime()) < 0) {
-            throw new JeecgBootException("该拍品尚未开始");
-        }
-
         String lockKey = "OFFER-LOCKER-" + goods.getId();
         if (redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
@@ -299,7 +200,7 @@ public class AuctionGoodsService {
             goodsOffer.setGoodsId(goods.getId());
             goodsOffer.setPerformanceId(goods.getPerformanceId());
             goodsOffer.setRoomId(goods.getRoomId());
-            goodsOffer.setAuctionId(auctionId);
+            goodsOffer.setAuctionId(performance != null ? performance.getAuctionId():null);
             goodsOffer.setPrice(userOfferPrice.floatValue());
             goodsOffer.setMemberId(memberVO.getId());
             goodsOffer.setMemberAvatar(memberVO.getAvatar());

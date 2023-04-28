@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.common.system.vo.LoginUser;
 
 import java.util.List;
 
@@ -21,4 +22,12 @@ public interface IPerformanceService extends IService<Performance> {
     PerformanceVO getDetail(String id);
     IPage<PerformanceVO> selectPageVO(Page<PerformanceVO> page, QueryWrapper<PerformanceVO> queryWrapper);
     List<PerformanceVO> selectListVO(QueryWrapper<PerformanceVO> queryWrapper);
+
+    boolean isStarted(Performance performance);
+    boolean isStarted(String performanceId);
+    boolean isEnded(String performanceId);
+    boolean isEnded(Performance performance);
+
+    boolean checkDeposite(LoginUser loginUser, Performance performance);
+    boolean checkDeposite(LoginUser loginUser, String performanceId);
 }
