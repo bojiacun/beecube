@@ -101,6 +101,7 @@ public class AuctionRunJobHandler {
         for (MessagePool messagePool : messagePools) {
             //发送模板消息
             Goods g = goodsService.getById(messagePool.getGoodsId());
+            if(g == null) continue;
             Performance performance = performanceService.getById(g.getPerformanceId());
             WxMaSubscribeMessage m = new WxMaSubscribeMessage();
             m.setTemplateId(messagePool.getTemplateId());
@@ -179,6 +180,7 @@ public class AuctionRunJobHandler {
 
         for (MessagePool messagePool : messagePools) {
             Performance p = performanceService.getById(messagePool.getPerformanceId());
+            if(p == null) continue;
             //发送模板消息
             WxMaSubscribeMessage m = new WxMaSubscribeMessage();
             m.setTemplateId(messagePool.getTemplateId());
