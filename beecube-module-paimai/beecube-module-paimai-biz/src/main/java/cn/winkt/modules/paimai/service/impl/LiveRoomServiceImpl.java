@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @Description: 直播间表
@@ -50,6 +51,27 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
 
     @Override
     public boolean checkDeposite(LoginUser loginUser, String roomId) {
-        return false;
+        return checkDeposite(loginUser, getById(roomId));
+    }
+
+    @Override
+    public boolean isStarted(LiveRoom liveRoom) {
+        Date now = new Date();
+        return liveRoom.getStartTime().before(now) && liveRoom.getEndTime().after(now);
+    }
+
+    @Override
+    public boolean isStarted(String roomId) {
+        return isStarted(getById(roomId));
+    }
+
+    @Override
+    public boolean isEnded(String roomId) {
+        return isEnded(getById(roomId));
+    }
+
+    @Override
+    public boolean isEnded(LiveRoom liveRoom) {
+        return liveRoom.getEndTime().before(new Date());
     }
 }

@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.service.impl;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
+import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
@@ -78,16 +79,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     /**
      * 判断拍品是否已经开始竞拍
-     * @param performance
      * @return
      */
     public boolean isStarted(Goods goods) {
         String performanceId = goods.getPerformanceId();
-        if(StringUtils.isEmpty(performanceId)) {
+        String roomId = goods.getRoomId();
+        Date now = new Date();
+        if(StringUtils.isEmpty(performanceId) && StringUtils.isEmpty(roomId)) {
             //如果是独立拍品, 则看拍品本身是否已经开始
-            return new Date().after(goods.getStartTime());
+            return now.after(goods.getStartTime()) && now.before(goods.getEndTime());
         }
-        else {
+        else if(StringUtils.isNotEmpty(performanceId)){
             //如果是专场，必须是专场开始了，并且拍品也开始了
             Performance performance = performanceService.getById(performanceId);
             boolean performanceStarted = performanceService.isStarted(performance);
@@ -101,6 +103,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 return goods.getState() > 0;
             }
         }
+        else if(StringUtils.isNotEmpty(roomId)) {
+            LiveRoom room = liveRoomService.getById(roomId);
+            boolean roomStarted = liveRoomService.isStarted(room);
+            if(!roomStarted) return false;
+            return goods.getState() > 0;
+        }
         return false;
     }
 
@@ -110,12 +118,14 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     public boolean isEnded(Goods goods) {
         String performanceId = goods.getPerformanceId();
-        if(StringUtils.isEmpty(performanceId)) {
+        String roomId = goods.getRoomId();
+        Date now = new Date();
+        if(StringUtils.isEmpty(performanceId) && StringUtils.isEmpty(roomId)) {
             //如果是独立拍品, 则看拍品本身是否已经结束
             Date endTime = goods.getActualEndTime() != null ? goods.getActualEndTime() : goods.getEndTime();
-            return new Date().after(endTime);
+            return now.after(endTime);
         }
-        else {
+        else if(StringUtils.isNotEmpty(performanceId)){
             //如果是专场，专场结束了，拍品也自然结束
             Performance performance = performanceService.getById(performanceId);
             boolean performanceEnded = performanceService.isEnded(performance);
@@ -128,6 +138,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
                 return goods.getState() >= 2;
             }
+        }
+        else if(StringUtils.isNotEmpty(roomId)) {
+            LiveRoom room = liveRoomService.getById(roomId);
+            boolean roomEnded = liveRoomService.isEnded(room);
+            if(roomEnded) return true;
+            return goods.getState() >= 2;
         }
         return false;
     }

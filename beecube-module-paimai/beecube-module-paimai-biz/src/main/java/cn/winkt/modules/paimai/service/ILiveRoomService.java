@@ -17,4 +17,10 @@ public interface ILiveRoomService extends IService<LiveRoom> {
 
     boolean checkDeposite(LoginUser loginUser, LiveRoom liveRoom);
     boolean checkDeposite(LoginUser loginUser, String roomId);
+
+
+    boolean isStarted(LiveRoom liveRoom);
+    boolean isStarted(String roomId);
+    boolean isEnded(String roomId);
+    boolean isEnded(LiveRoom liveRoom);
 }

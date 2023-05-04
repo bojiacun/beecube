@@ -57,8 +57,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
      * @return
      */
     public boolean isStarted(Performance performance) {
+        Date now = new Date();
         if(performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
-            return new Date().after(performance.getStartTime());
+            return now.after(performance.getStartTime()) && now.before(performance.getEndTime());
         }
         else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
             return performance.getState() > 0;
