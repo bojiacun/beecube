@@ -15,7 +15,7 @@ import themeContext from 'themeConfig';
 import Error403Page from "~/components/error-page/403";
 
 export const uint8arrayToBase64 = (value:any) => {
-    // 必须定义 binary 二进制
+    // 必须定义 binary 二进e
     return Buffer.from(value, 'binary').toString('base64');
 }
 
@@ -222,6 +222,9 @@ export function tree2List(tree:any[]):any[] {
     return list;
 }
 export function resolveUrl(path: string) {
+    if(!path) {
+        return '';
+    }
     return path.startsWith('http') || path.startsWith('/')? path : '/'+path;
 }
 
