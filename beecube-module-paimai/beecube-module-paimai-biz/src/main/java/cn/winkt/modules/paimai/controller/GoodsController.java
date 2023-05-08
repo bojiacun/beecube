@@ -87,6 +87,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @Resource
     IGoodsCommonDescService goodsCommonDescService;
 
+    @Resource
+    ILiveRoomService liveRoomService;
+
     /**
      * 分页列表查询
      *
@@ -211,6 +214,13 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 //复制拍品的加价配置
                 goods.setUprange(performance.getUprange());
             }
+        }
+        else if(StringUtils.isNotEmpty(goods.getRoomId())) {
+            LiveRoom liveRoom = liveRoomService.getById(goods.getRoomId());
+            goods.setState(0);
+            goods.setStartTime(liveRoom.getStartTime());
+            goods.setEndTime(liveRoom.getEndTime());
+            goods.setActualEndTime(liveRoom.getEndTime());
         }
         goodsService.save(goods);
         return Result.OK("添加成功！");
