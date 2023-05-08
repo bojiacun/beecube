@@ -5,7 +5,7 @@
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
             p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
-            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,
+            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,r.end_time as room_end_time,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
@@ -19,7 +19,7 @@
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
             p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
-            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,
+            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,r.end_time as room_end_time,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,
@@ -32,7 +32,7 @@
         select
             g.*,p.title as performance_title,p.deposit as performance_deposit,p.start_time as performance_start_time,
             p.end_time as performance_end_time,p.state as performance_state, p.type as performance_type,
-            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,
+            r.title as room_title, r.deposit as room_deposit, r.start_time as room_start_time,r.end_time as room_end_time,
             (select count(*) from paimai_goods_offers go where go.goods_id=g.id) as offer_count,
             (select count(*) from paimai_goods_views gv where gv.goods_id=g.id) as view_count,
             (select count(*) from paimai_goods_follows gf where gf.goods_id=g.id) as follow_count,

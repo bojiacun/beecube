@@ -214,6 +214,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 //复制拍品的加价配置
                 goods.setUprange(performance.getUprange());
             }
+            goods.setDeposit(performance.getDeposit());
         }
         else if(StringUtils.isNotEmpty(goods.getRoomId())) {
             LiveRoom liveRoom = liveRoomService.getById(goods.getRoomId());
@@ -221,6 +222,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goods.setStartTime(liveRoom.getStartTime());
             goods.setEndTime(liveRoom.getEndTime());
             goods.setActualEndTime(liveRoom.getEndTime());
+            goods.setDeposit(liveRoom.getDeposit());
         }
         goodsService.save(goods);
         return Result.OK("添加成功！");

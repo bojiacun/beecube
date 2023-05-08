@@ -7,6 +7,9 @@ import lombok.Data;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 @Data
 public class GoodsVO {
     private java.lang.String id;
@@ -31,6 +34,10 @@ public class GoodsVO {
     private java.lang.Float performanceDeposit;
     private java.util.Date performanceStartTime;
     private java.util.Date performanceEndTime;
+    private Date roomStartTime;
+    private Date roomEndTime;
+    private String roomTitle;
+    private Float roomDeposit;
     private Integer performanceType;
     private Integer performanceState;
     private java.util.Date startTime;
