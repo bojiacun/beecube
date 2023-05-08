@@ -410,21 +410,7 @@ public class WxAppMemberController {
             return Result.OK(false);
         }
         Goods goods = goodsService.getById(id);
-        LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
-            queryWrapper.and(wq -> {
-                wq.eq(GoodsDeposit::getGoodsId, id).or().eq(GoodsDeposit::getPerformanceId, goods.getPerformanceId());
-            });
-        } else {
-            if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
-                return Result.OK(true);
-            }
-            queryWrapper.eq(GoodsDeposit::getGoodsId, id);
-        }
-        queryWrapper.eq(GoodsDeposit::getStatus, 1);
-        log.debug("查询拍品是否缴纳保证金 {}", id);
-        return Result.OK(goodsDepositService.count(queryWrapper) > 0);
+        return Result.OK(goodsService.checkDeposite(loginUser, goods));
     }
 
     /**
