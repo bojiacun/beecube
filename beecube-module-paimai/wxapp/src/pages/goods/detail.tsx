@@ -67,6 +67,7 @@ export default class Index extends Component<any, any> {
         this.onInputPriceChange = this.onInputPriceChange.bind(this);
         this.openShareGoods = this.openShareGoods.bind(this);
         this.handleSaveToPhotoAlbum = this.handleSaveToPhotoAlbum.bind(this);
+        this.clickMask = this.clickMask.bind(this);
         this.offerInputRef = React.createRef();
     }
 
@@ -569,6 +570,14 @@ export default class Index extends Component<any, any> {
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
+        let deposit = goods.deposit;
+        if(goods.performanceId) {
+            deposit = goods.performanceDeposit;
+        }
+        else if(goods.roomId) {
+            deposit = goods.roomDeposit;
+        }
+
         return (
             <PageLayout statusBarProps={{title: '拍品详情'}}>
                 <CustomSwiper list={images} imageMode={'aspectFit'} radius={'0'} height={systemInfo.safeArea.width} onItemClick={this.handlePreview}/>
@@ -643,7 +652,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'py-4 space-y-4'}>
                         <View className={'flex'}>
-                            <View className={'flex-1'}>保证金：￥{numeral(goods.deposit).format('0,0.00')}</View>
+                            <View className={'flex-1'}>保证金：￥{numeral(deposit).format('0,0.00')}</View>
                             <View className={'flex-1'}>加价幅度：<Text className={'text-indigo-400'}
                                                                       onClick={() => this.setState({uprangeShow: true})}>查看详情</Text></View>
                         </View>

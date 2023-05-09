@@ -34,6 +34,7 @@ public class GoodsVO {
     private java.lang.Float performanceDeposit;
     private java.util.Date performanceStartTime;
     private java.util.Date performanceEndTime;
+    private String roomId;
     private Date roomStartTime;
     private Date roomEndTime;
     private String roomTitle;
