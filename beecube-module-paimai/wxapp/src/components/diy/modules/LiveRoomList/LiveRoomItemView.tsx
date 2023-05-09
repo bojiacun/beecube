@@ -28,7 +28,7 @@ const LiveRoomItemView: FC<LiveRoomItemViewProps> = (props) => {
             //直播进行中
             Taro.navigateTo({url: '/pages/live/room?roomId=' + liveRoom.id}).then();
         }
-        else if(endTime.isAfter(nowTime)) {
+        else if(endTime.isBefore(nowTime)) {
             //直播回放
             Taro.navigateTo({url: `/pages/live/history?id=${liveRoom.id}`}).then();
         }
