@@ -87,27 +87,16 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Date now = new Date();
         if(StringUtils.isEmpty(performanceId) && StringUtils.isEmpty(roomId)) {
             //如果是独立拍品, 则看拍品本身是否已经开始
-            return now.after(goods.getStartTime()) && now.before(goods.getEndTime());
+            return now.after(goods.getStartTime());
         }
         else if(StringUtils.isNotEmpty(performanceId)){
             //如果是专场，必须是专场开始了，并且拍品也开始了
             Performance performance = performanceService.getById(performanceId);
-            boolean performanceStarted = performanceService.isStarted(performance);
-            if(!performanceStarted) {
-                return false;
-            }
-            if(performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
-                return true;
-            }
-            else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
-                return goods.getState() > 0;
-            }
+            return performanceService.isStarted(performance);
         }
         else if(StringUtils.isNotEmpty(roomId)) {
             LiveRoom room = liveRoomService.getById(roomId);
-            boolean roomStarted = liveRoomService.isStarted(room);
-            if(!roomStarted) return false;
-            return goods.getState() > 0;
+            return liveRoomService.isStarted(room);
         }
         return false;
     }
@@ -128,22 +117,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         else if(StringUtils.isNotEmpty(performanceId)){
             //如果是专场，专场结束了，拍品也自然结束
             Performance performance = performanceService.getById(performanceId);
-            boolean performanceEnded = performanceService.isEnded(performance);
-            if(performanceEnded) {
-                return true;
-            }
-            if(performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
-                return false;
-            }
-            else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
-                return goods.getState() >= 2;
-            }
+            return performanceService.isEnded(performance);
         }
         else if(StringUtils.isNotEmpty(roomId)) {
             LiveRoom room = liveRoomService.getById(roomId);
-            boolean roomEnded = liveRoomService.isEnded(room);
-            if(roomEnded) return true;
-            return goods.getState() >= 2;
+            return liveRoomService.isEnded(room);
         }
         return false;
     }
