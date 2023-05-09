@@ -450,7 +450,7 @@ export default class Index extends Component<any, any> {
                 <View>
                     <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
                         <View>交保证金</View>
-                        <View>RMB {numeral(goods.performanceDeposit || goods.deposit).format('0,0.00')}</View>
+                        <View>RMB {numeral(goods.performanceDeposit || goods.roomDeposit || goods.deposit).format('0,0.00')}</View>
                     </Button>
                 </View>
             );
