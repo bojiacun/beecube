@@ -901,6 +901,10 @@ public class WxAppMemberController {
             goodsDeposit.setAuctionId(performance.getAuctionId());
             deposit = performance.getDeposit();
         }
+        if(liveRoom != null) {
+            goods.setRoomId(goods.getRoomId());
+            deposit = liveRoom.getDeposit();
+        }
         goodsDeposit.setPrice(deposit);
         goodsDeposit.setStatus(0);
         boolean result = goodsDepositService.save(goodsDeposit);
