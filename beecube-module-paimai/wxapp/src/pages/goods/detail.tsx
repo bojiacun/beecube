@@ -15,6 +15,7 @@ import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../..
 import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
+import moment from "moment";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -443,7 +444,7 @@ export default class Index extends Component<any, any> {
     renderButton() {
         const {goods, status} = this.state;
         //判断按钮状态
-
+        const now = moment(new Date());
         if ((goods.performanceDeposit || goods.deposit || goods.roomDeposit) && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
             //需要交保证金的情况
             return (
@@ -455,7 +456,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if ((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
+        if ((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (goods.roomId && goods.state == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
             //可以出价的情况
             return (
                 <View>
@@ -465,7 +466,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if ((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || status == TimeCountDownerStatus.NOT_START) {
+        if ((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || (goods.roomId && goods.state == 0) || status == TimeCountDownerStatus.NOT_START) {
             //未开始的情况
             return (
                 <View>
@@ -475,7 +476,7 @@ export default class Index extends Component<any, any> {
                 </View>
             );
         }
-        if ((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
+        if ((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || (goods.roomId && goods.state > 1) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
             //结束的情况
             return (
                 <View>

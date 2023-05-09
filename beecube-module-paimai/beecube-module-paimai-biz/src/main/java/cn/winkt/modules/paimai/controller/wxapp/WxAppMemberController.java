@@ -902,7 +902,7 @@ public class WxAppMemberController {
             deposit = performance.getDeposit();
         }
         if(liveRoom != null) {
-            goods.setRoomId(goods.getRoomId());
+            goodsDeposit.setRoomId(goods.getRoomId());
             deposit = liveRoom.getDeposit();
         }
         goodsDeposit.setPrice(deposit);
