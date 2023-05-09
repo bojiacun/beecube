@@ -630,7 +630,7 @@ export default class Index extends Component<any, any> {
                                 </View>
                             }
                         </View>
-                        {goods.performanceType != 2 && goods.state < 2 &&
+                        {goods.performanceType != 2 && goods.state < 2 && !goods.roomId &&
                             <TimeCountDowner
                                 mode={TimeCountDownerMode.TimeBase}
                                 onStatusChanged={status => {

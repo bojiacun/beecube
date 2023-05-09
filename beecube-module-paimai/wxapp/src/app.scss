@@ -200,3 +200,8 @@ button, button[plain] {
     background-image: linear-gradient(135deg, #fff 25%, transparent 25%), linear-gradient(225deg, #fff 25%, transparent 25%);
     background-position: 0 0;
 }
+.text-cut {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

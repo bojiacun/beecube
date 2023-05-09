@@ -643,9 +643,9 @@ export default class Index extends Component<any, any> {
                         <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
                             <Image className="push-mer-img" mode={'aspectFill'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
-                                <Text className="push-mer-text">{merchandises[pushIndex].title}</Text>
-                                <View className="push-mer-price justify-between">
-                                    <View>
+                                <View className="push-mer-text">{merchandises[pushIndex].title}</View>
+                                <View className="push-mer-price justify-between mt-1">
+                                    <View className={'text-cut flex-1'}>
                                     <Text className={'text-sm'}>¥</Text>
                                     <Text>{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
                                     </View>
