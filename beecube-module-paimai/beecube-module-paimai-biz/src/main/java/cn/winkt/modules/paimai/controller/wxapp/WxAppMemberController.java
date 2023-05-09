@@ -846,6 +846,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("操作失败找不到拍品");
         }
         Performance performance = performanceService.getById(goods.getPerformanceId());
+        LiveRoom liveRoom = liveRoomService.getById(goods.getRoomId());
         if (performance != null) {
             if (performance.getDeposit() == null || performance.getDeposit() <= 0) {
                 throw new JeecgBootException("该拍品无需缴纳保证金");
@@ -854,14 +855,20 @@ public class WxAppMemberController {
             if ((performance.getType() == 1 && performance.getEndTime().before(new Date())) || (performance.getType() == 2 && performance.getState() > 1)) {
                 throw new JeecgBootException("专场已结束无法缴纳保证金");
             }
-        } else {
+        } else if(liveRoom != null){
+            if (liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
+                throw new JeecgBootException("该拍品无需缴纳保证金");
+            }
+            if (liveRoom.getEndTime().before(new Date())) {
+                throw new JeecgBootException("直播已结束无法缴纳保证金");
+            }
+        }else {
             if (goods.getDeposit() == null || goods.getDeposit() <= 0) {
                 throw new JeecgBootException("该拍品无需缴纳保证金");
             }
         }
         //验证拍品是否结束
-        Date endTime = goods.getActualEndTime() != null ? goods.getActualEndTime() : goods.getEndTime();
-        if (goods.getState() > 1 || (endTime != null && endTime.before(new Date()))) {
+        if (goodsService.isEnded(goods)) {
             throw new JeecgBootException("拍品已结束无法缴纳保证金");
         }
 

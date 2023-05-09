@@ -444,7 +444,7 @@ export default class Index extends Component<any, any> {
         const {goods, status} = this.state;
         //判断按钮状态
 
-        if ((goods.performanceDeposit || goods.deposit) && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
+        if ((goods.performanceDeposit || goods.deposit || goods.roomDeposit) && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
             //需要交保证金的情况
             return (
                 <View>
