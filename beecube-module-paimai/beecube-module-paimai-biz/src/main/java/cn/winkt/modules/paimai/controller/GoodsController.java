@@ -200,6 +200,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         //如果拍品所在专场不为空，则复制专场的部分属性供拍品自己使用
         if (StringUtils.isNotEmpty(goods.getPerformanceId())) {
             Performance performance = performanceService.getById(goods.getPerformanceId());
+            if(performanceService.isStarted(performance)) {
+                throw new JeecgBootException("专场开始了不能添加拍品");
+            }
+            if(performanceService.isEnded(performance)) {
+                throw new JeecgBootException("专场结束了不能添加拍品");
+            }
             if (performance.getType() == 1) {
                 //限时拍，同步限时拍时间
                 goods.setStartTime(performance.getStartTime());
@@ -218,6 +224,12 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         }
         else if(StringUtils.isNotEmpty(goods.getRoomId())) {
             LiveRoom liveRoom = liveRoomService.getById(goods.getRoomId());
+            if(liveRoomService.isStarted(liveRoom)) {
+                throw new JeecgBootException("直播开始了不能添加拍品");
+            }
+            if(liveRoomService.isEnded(liveRoom)) {
+                throw new JeecgBootException("直播结束了不能添加拍品");
+            }
             goods.setState(0);
             goods.setStartTime(liveRoom.getStartTime());
             goods.setEndTime(liveRoom.getEndTime());
