@@ -4,7 +4,7 @@
     "directCommit": false,
     "ext": {
         "appId": "1635887827756838913",
-        "siteroot": "https://api.beecube.winkt.cn",
+        "siteroot": "http://localhost:9999",
         "copyright": true
     }
 }

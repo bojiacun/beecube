@@ -28,6 +28,6 @@ public interface IAppMemberProviderApi extends AppMemberProvider {
      * @return LoginUser 用户信息
      */
     @Override
-    @GetMapping("/app/api/getUserByName")
+    @GetMapping("/app/admin/getUserByName")
     LoginUser getUserByName(@RequestParam("username") String username);
 }
