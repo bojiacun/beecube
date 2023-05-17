@@ -1,7 +1,7 @@
 import {Text, View} from "@tarojs/components";
 
 const numeral = require('numeral');
-import Clocker from "clocker-js/Clocker";
+import Clocker from "../../lib/Clocker.js";
 import {FC, ReactElement, useEffect, useMemo, useState} from "react";
 import moment from "moment";
 

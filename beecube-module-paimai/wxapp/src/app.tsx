@@ -112,7 +112,7 @@ class App extends Component<PropsWithChildren> {
     }
 
     componentDidMount() {
-        store.dispatch(setPageLoading(false));
+        store.dispatch(setPageLoading(true));
         store.dispatch(setSiteInfo(siteInfo));
         store.dispatch(setSystemInfo(Taro.getSystemInfoSync()));
     }
