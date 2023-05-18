@@ -36,7 +36,9 @@ const config = {
         postcss: {
             pxtransform: {
                 enable: true,
-                config: {}
+                config: {
+                    selectorBlackList: ['taroify']
+                }
             },
             url: {
                 enable: true,
