@@ -14,7 +14,7 @@ const VerticalNavMenuLink = (props:any) => {
     const {item, startPageLoading} = props;
     const {t} = useTranslation();
     const matches = useMatches();
-    const isActive = matches[0].pathname === ('/'+item.route).replace(/\/\//g, '/');
+    const isActive = matches[matches.length-1].pathname === ('/'+item.route).replace(/\/\//g, '/');
 
 
     const renderItemIcon = (item:any) => {

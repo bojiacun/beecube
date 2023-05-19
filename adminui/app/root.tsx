@@ -1,11 +1,12 @@
 import type {MetaFunction, LinksFunction, LoaderFunction} from "@remix-run/node";
-import React, {CSSProperties, useEffect, useState} from 'react';
+import React, {CSSProperties, FC, useEffect, useState} from 'react';
 import {
+    isRouteErrorResponse,
     Links,
     LiveReload,
     Meta,
     Scripts,
-    ScrollRestoration, useCatch, useLoaderData, useMatches, useOutlet,
+    ScrollRestoration, useCatch, useLoaderData, useMatches, useOutlet, useRouteError,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -97,8 +98,8 @@ export const meta: V2_MetaFunction = () => {
         viewport: "width=device-width,initial-scale=1",
     }];
 }
-
-export function ErrorBoundary({error}: { error: Error }) {
+const Document:FC<any> = (props) => {
+    const data = useLoaderData();
     const [themeContext, setThemeContext] = useState(theme);
     return (
         <html lang="cn">
@@ -107,74 +108,61 @@ export function ErrorBoundary({error}: { error: Error }) {
             <Links/>
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-            <Error500Page />
-        </div>
+        {props.children}
         <ScrollRestoration/>
+        <script
+            dangerouslySetInnerHTML={{
+                __html: `window.ENV = ${JSON.stringify(
+                    data?.ENV
+                )}`,
+            }}
+        />
+        <ToastContainer />
         <Scripts/>
         <LiveReload/>
         </body>
         </html>
     );
 }
-
-export function CatchBoundary() {
+export function ErrorBoundary() {
     const [themeContext, setThemeContext] = useState(theme);
-    const caught = useCatch();
-    const data = useLoaderData()||{data:ServerEnv};
-
-    if (caught.status === 401) {
-        //登录态失效
-        return (
-            <html lang="cn">
-            <head>
-                <Meta/>
-                <Links/>
-            </head>
-            <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-            <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                <Error401Page />
-            </div>
-            <ScrollRestoration/>
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `window.ENV = ${JSON.stringify(
-                        data.ENV
-                    )}`,
-                }}
-            />
-            <Scripts/>
-            <LiveReload/>
-            </body>
-            </html>
-        );
+    const error = useRouteError();
+    if (isRouteErrorResponse(error)) {
+        switch (error.status) {
+            case 401:
+                return (
+                    <Document>
+                        <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
+                            <Error401Page />
+                        </div>
+                    </Document>
+                );
+            case 404:
+                return (
+                    <Document>
+                        <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
+                            <Error404Page />
+                        </div>
+                    </Document>
+                );
+        }
     }
-    else if(caught.status === 404) {
-        return (
-            <html lang="cn">
-            <head>
-                <Meta/>
-                <Links/>
-            </head>
-            <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
+    return (
+        <Document>
             <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                <Error404Page />
+                <Error500Page />
             </div>
-            <ScrollRestoration/>
-            <Scripts/>
-            <LiveReload/>
-            </body>
-            </html>
-        );
-    }
-    throw new Error('未捕获的异常信息');
+        </Document>
+    );
 }
+
 const loaderCss: CSSProperties = {
     position: "absolute",
     left: 'calc(50% - 17.5px)',
     top: 'calc(50% - 17.5px)',
     zIndex: '999999'
 };
+
 export default function App() {
     const data = useLoaderData();
     theme.userInfo = data.userInfo;
@@ -226,38 +214,20 @@ export default function App() {
         //@ts-ignore
         window.theme = theme;
     }
-
     return (
-        <html lang="cn">
-        <head>
-            <Meta/>
-            <Links/>
-        </head>
-        <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
-            <div id='app' className='h-100'>
-                <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
-                    {outlet}
-                </Layout>
-                <ClipLoader
-                    color={'#3366CC'}
-                    loading={loading}
-                    cssOverride={loaderCss}
-                />
-            </div>
-        </ThemeContext.Provider>
-        <ScrollRestoration/>
-        <script
-            dangerouslySetInnerHTML={{
-                __html: `window.ENV = ${JSON.stringify(
-                    data.ENV
-                )}`,
-            }}
-        />
-        <ToastContainer />
-        <Scripts/>
-        <LiveReload/>
-        </body>
-        </html>
+        <Document>
+            <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
+                <div id='app' className='h-100'>
+                    <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
+                        {outlet}
+                    </Layout>
+                    <ClipLoader
+                        color={'#3366CC'}
+                        loading={loading}
+                        cssOverride={loaderCss}
+                    />
+                </div>
+            </ThemeContext.Provider>
+        </Document>
     );
 }
