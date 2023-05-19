@@ -1,5 +1,5 @@
 import Select from "react-select";
-import React, {useContext} from "react";
+import React, {useContext, useId} from "react";
 import themeContext from 'themeConfig';
 import {useHydrated} from "remix-utils";
 
@@ -9,14 +9,14 @@ import {useHydrated} from "remix-utils";
 const ReactSelectThemed = React.forwardRef((props:any, ref) => {
     const {theme:systemTheme} = useContext(themeContext);
     const isHydrated = useHydrated();
-    const {id, ...rest} = props;
+    const {...rest} = props;
+    const newId = useId();
 
     if(!isHydrated) return <></>;
 
     return (
         <Select
             ref={ref}
-            instanceId={id}
             theme={(theme)=>{
                 if(systemTheme.layout.skin === 'dark') {
                     theme.colors.neutral0 = '#161d31';
@@ -31,6 +31,7 @@ const ReactSelectThemed = React.forwardRef((props:any, ref) => {
                 return theme;
             }}
             {...rest}
+            id={newId}
         />
     );
 });

@@ -235,7 +235,6 @@ const UserList = (props: any) => {
                                 </Col>
                                 <Col md={'auto'}>
                                     <ReactSelectThemed
-                                        id={'role-page-size'}
                                         placeholder={'分页大小'}
                                         isSearchable={false}
                                         defaultValue={PageSizeOptions[0]}
