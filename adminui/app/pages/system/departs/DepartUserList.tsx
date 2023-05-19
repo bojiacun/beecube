@@ -112,7 +112,7 @@ const DepartUserList = (props: any) => {
             dataField: 'status',
             headerStyle: {width: 120},
             formatter: (cell: any, row: any) => {
-                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                return row.status == 1 ? <Badge bg={'success'}>{row.status_dictText}</Badge> : <Badge bg={'danger'}>{row.status_dictText}</Badge>
             }
         },
 
@@ -139,17 +139,25 @@ const DepartUserList = (props: any) => {
             <Card>
                 <Row className={'mb-2'}>
                     <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                        <ReactSelectThemed
-                            id={'role-user-page-size'}
-                            placeholder={'分页大小'}
-                            isSearchable={false}
-                            defaultValue={PageSizeOptions[0]}
-                            options={PageSizeOptions}
-                            className={'per-page-selector d-inline-block ml-50 mr-1'}
-                            onChange={handlePageSizeChanged}
-                        />
-                        <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
-                        <Button variant={'secondary'} onClick={() => setUserListShow(true)}><Plus size={16}/>已有用户</Button>
+                        <FormGroup as={Row} className={'align-items-center'}>
+                            <Col md={'auto'}>
+                                <ReactSelectThemed
+                                    id={'role-user-page-size'}
+                                    placeholder={'分页大小'}
+                                    isSearchable={false}
+                                    defaultValue={PageSizeOptions[0]}
+                                    options={PageSizeOptions}
+                                    className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                    onChange={handlePageSizeChanged}
+                                />
+                            </Col>
+                            <Col md={'auto'}>
+                                <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
+                            </Col>
+                            <Col md={'auto'}>
+                                <Button variant={'secondary'} onClick={() => setUserListShow(true)}><Plus size={16}/>已有用户</Button>
+                            </Col>
+                        </FormGroup>
                     </Col>
                     <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                         <searchFetcher.Form action={'/system/departs/users'} className={'form-inline justify-content-end'}
@@ -160,15 +168,13 @@ const DepartUserList = (props: any) => {
                             <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                             <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                            <FormGroup as={Form.Row} className={'mb-0'}>
-                                <FormLabel htmlFor={'username'}>用户账号</FormLabel>
-                                <Col>
+                            <FormGroup as={Row} className={'mb-0'}>
+                                <FormLabel column htmlFor={'username'}>用户账号</FormLabel>
+                                <Col md={'auto'}>
                                     <InputGroup>
                                         <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                      placeholder={'请输入要搜索的内容'}/>
-                                        <InputGroup.Append>
-                                            <Button type={'submit'}>搜索</Button>
-                                        </InputGroup.Append>
+                                        <Button type={'submit'}>搜索</Button>
                                     </InputGroup>
                                 </Col>
                             </FormGroup>
@@ -217,7 +223,7 @@ const DepartUserList = (props: any) => {
                 refreshRoleUsers();
                 setEditModal(null);
             }}/>}
-            {userModel && <DepartUserRoleEditor model={userModel} setAuthModel={setUserModel} department={model} />}
+            {userModel && <DepartUserRoleEditor model={userModel} setAuthModel={setUserModel} department={model}/>}
         </>
     );
 }

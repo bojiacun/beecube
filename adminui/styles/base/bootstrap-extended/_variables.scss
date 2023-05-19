@@ -30,12 +30,10 @@ $orange: #ff9f43 !default; //$warning
 
 $primary: $rexo !default;
 $primary-color: $rexo !default;
-$secondary: #82868b !default;
 $info: $blue !default;
 $warning: $orange !default;
 $light: $gray-50 !default;
 $dark: #4b4b4b !default;
-$danger: $red !default;
 
 $form-group-margin-bottom: 20px;
 //  ---------------------------------------------------------------------------------------------------
@@ -90,6 +88,7 @@ $spacers: map-merge(
 $body-bg: #f8f8f8 !default;
 $body-color: #6b727b !default;
 
+$input-bg: white !default;
 
 // 链接元素样式
 $link-color: $primary !default;
