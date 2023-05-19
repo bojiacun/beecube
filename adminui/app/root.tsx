@@ -5,7 +5,7 @@ import {
     LiveReload,
     Meta,
     Scripts,
-    ScrollRestoration, useCatch, useLoaderData, useMatches, useNavigate, useNavigation, useOutlet,
+    ScrollRestoration, useCatch, useLoaderData, useMatches, useOutlet,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
