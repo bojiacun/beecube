@@ -22,6 +22,7 @@ import TreePermissionList from "~/pages/system/roles/TreePermissionList";
 import UserEdit from "~/pages/system/roles/UserEdit";
 import UserPassword from "~/pages/system/users/UserPassword";
 import UserTrash from "~/pages/system/users/UserTrash";
+import Select from "react-select";
 
 
 const UserList = (props: any) => {
