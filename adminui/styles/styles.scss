@@ -1,16 +1,9 @@
 @import "scss/style";
 @import "base/bootstrap-extended/variables";
 @import "base/components/variables-dark";
-
 //react-awesome-button
-@import "react-awesome-button/src/styles/base/variables";
 $button-primary-color: $primary;
 $button-default-height: 38px;
-@import "react-awesome-button/src/styles/base/custom-properties";
-@import "react-awesome-button/src/styles/base/lists";
-@import "react-awesome-button/src/styles/base/main";
-@import "react-awesome-button/src/styles/base/progress";
-
 @import "sweetalert2/src/sweetalert2";
 
 

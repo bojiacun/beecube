@@ -5,8 +5,6 @@ import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal,
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {AwesomeButton} from "react-awesome-button";
-
 
 const UserSelector = (props: any) => {
     const {show, onHide, selectedApp} = props;
@@ -144,15 +142,13 @@ const UserSelector = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                <FormGroup as={Row} className={'mb-0'}>
                                     <FormLabel htmlFor={'username'}>用户账号</FormLabel>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
@@ -193,7 +189,7 @@ const UserSelector = (props: any) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <AwesomeButton type={'primary'} onPress={handleOnBind} disabled={editFetcher.state === 'submitting'}>确认选择</AwesomeButton>
+                <Button variant={'primary'} onClick={handleOnBind} disabled={editFetcher.state === 'submitting'}>确认选择</Button>
             </Modal.Footer>
         </Modal>
     );

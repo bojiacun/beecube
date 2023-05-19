@@ -2,7 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "sass": "sass --watch --load-path=./node_modules --load-path=./assets styles/:app/styles/",
+    "sass": "sass --watch --load-path=./node_modules --load-path=./assets styles/*.scss:app/styles/",
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build"
@@ -41,7 +41,6 @@
     "rc-tree": "^5.7.3",
     "rc-upload": "^4.3.4",
     "react": "^18.2.0",
-    "react-awesome-button": "^7.0.5",
     "react-bootstrap": "^2.7.4",
     "react-bootstrap-table-next": "^4.0.3",
     "react-checkbox-tree": "^1.8.0",

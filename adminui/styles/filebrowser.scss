@@ -1,7 +1,6 @@
-@import "react-awesome-button/src/styles/base/variables";
+@import "base/bootstrap";
 
 $filebrowser-prefix: 'filebrowser';
-
 .#{$filebrowser-prefix}-modal {
     width: 1000px;
     max-width: 1000px;
