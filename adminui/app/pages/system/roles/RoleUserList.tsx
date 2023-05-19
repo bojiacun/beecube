@@ -109,7 +109,7 @@ const RoleUserList = (props: any) => {
             text: '状态',
             dataField: 'status',
             formatter: (cell: any, row: any) => {
-                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                return row.status == 1 ? <Badge bg={'success'}>{row.status_dictText}</Badge> : <Badge bg={'danger'}>{row.status_dictText}</Badge>
             }
         },
 
@@ -138,17 +138,25 @@ const RoleUserList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <ReactSelectThemed
-                                id={'role-user-page-size'}
-                                placeholder={'分页大小'}
-                                isSearchable={false}
-                                defaultValue={PageSizeOptions[0]}
-                                options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                onChange={handlePageSizeChanged}
-                            />
-                            <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
-                            <Button variant={'secondary'} onClick={()=>setUserListShow(true)}><Plus size={16}/>已有用户</Button>
+                            <FormGroup as={Row} className={'align-items-center'}>
+                                <Col md={'auto'}>
+                                    <ReactSelectThemed
+                                        id={'role-user-page-size'}
+                                        placeholder={'分页大小'}
+                                        isSearchable={false}
+                                        defaultValue={PageSizeOptions[0]}
+                                        options={PageSizeOptions}
+                                        className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                        onChange={handlePageSizeChanged}
+                                    />
+                                </Col>
+                                <Col md={'auto'}>
+                                    <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
+                                </Col>
+                                <Col md={'auto'}>
+                                    <Button variant={'secondary'} onClick={() => setUserListShow(true)}><Plus size={16}/>已有用户</Button>
+                                </Col>
+                            </FormGroup>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form action={'/system/roles/users'} className={'form-inline justify-content-end'}
@@ -159,13 +167,13 @@ const RoleUserList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup className={'mb-0'}>
-                                    <FormLabel htmlFor={'username'}>用户账号</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'username'}>用户账号</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'请输入要搜索的内容'}/>
-                                                <Button type={'submit'}>搜索</Button>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
@@ -187,22 +195,22 @@ const RoleUserList = (props: any) => {
                 />
 
                 {list.records.length > 0 &&
-                <div className={'mx-2 mb-2 mt-1'}>
-                    <Row>
-                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                    <div className={'mx-2 mb-2 mt-1'}>
+                        <Row>
+                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
                         <span
                             className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list.size + 1} 至 {list?.current * list.size > list.total ? list.total : list?.current * list.size} 条</span>
-                        </Col>
-                        <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
-                            <SinglePagination
-                                forcePage={searchState.pageNo - 1}
-                                className={'mb-0'}
-                                pageCount={list?.pages}
-                                onPageChange={handlePageChanged}
-                            />
-                        </Col>
-                    </Row>
-                </div>
+                            </Col>
+                            <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-end'}>
+                                <SinglePagination
+                                    forcePage={searchState.pageNo - 1}
+                                    className={'mb-0'}
+                                    pageCount={list?.pages}
+                                    onPageChange={handlePageChanged}
+                                />
+                            </Col>
+                        </Row>
+                    </div>
                 }
             </Card>
             <UserListSelector
@@ -211,10 +219,10 @@ const RoleUserList = (props: any) => {
                 selectedRole={selectedRole}
                 refreshRoleUsers={refreshRoleUsers}
             />
-            {editModal && <UserEdit model={editModal} selectedRole={selectedRole} onHide={()=>{
+            {editModal && <UserEdit model={editModal} selectedRole={selectedRole} onHide={() => {
                 refreshRoleUsers();
                 setEditModal(null);
-            }} />}
+            }}/>}
         </>
     );
 }
