@@ -20,7 +20,7 @@ import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
 import {Eye, HelpCircle} from "react-feather";
 
-import {useLoaderData, useTransition, Form as RemixForm} from "@remix-run/react";
+import {useLoaderData, useTransition, Form as RemixForm, useNavigation} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
 import classNames from "classnames";
 import {LOGIN_SUCCESS_URL, LOGIN_URL} from "~/utils/request.server";
@@ -56,7 +56,7 @@ const LoginPage = () => {
     const {theme} = useContext(ThemeContext);
     const loaderData = useLoaderData<LoaderData>();
     const [captchaKey, setCaptchaKey] = useState<string>();
-    const transition = useTransition();
+    const transition = useNavigation();
     const [validated, setValidated] = useState<boolean>(false);
 
     let sideImageUrl = lightSideImageUrl;
@@ -150,7 +150,7 @@ const LoginPage = () => {
                             {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey} />}
                             <Row>
                                 <Col className={'d-grid'}>
-                                    <Button className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
+                                    <Button className='mt-1' variant={'primary'} type={'submit'} disabled={transition.state === 'submitting'}>{transition.state === 'submitting'? '登录中...':'登 录'}</Button>
                                 </Col>
                             </Row>
                         </RemixForm>

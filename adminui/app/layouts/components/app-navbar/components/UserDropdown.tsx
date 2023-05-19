@@ -34,7 +34,6 @@ const UserDropdown = () => {
         logoutFetcher.submit({}, {action: window.ENV.LOGOUT_URL, method: 'post'});
     }
     const navigateToAccountSettings = () => {
-        console.log('navigate');
         navigate('/account/settings');
     }
     const backToPlatform = () => {

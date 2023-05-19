@@ -1,18 +1,15 @@
 import {MinusSquare, PlusSquare} from "react-feather";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
-import {isRouteErrorResponse, useCatch, useRouteError} from "@remix-run/react";
-import {useOutletContext} from "react-router";
+import {Fetcher, isRouteErrorResponse, useRouteError} from "@remix-run/react";
 import React, {useContext, useEffect} from "react";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import Error500Page from "~/components/error-page/500";
-import {FormControl, FormGroup, FormLabel} from "react-bootstrap";
-import {Field} from "formik";
-import classNames from "classnames";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import themeContext from 'themeConfig';
-import Error403Page from "~/components/error-page/403";
+//@ts-ignore
+import {Navigation} from "@remix-run/router";
 
 export const uint8arrayToBase64 = (value:any) => {
     // 必须定义 binary 二进e
@@ -292,4 +289,113 @@ export function compareVersion(v1:any, v2:any){
 
 export function nl2br(str:string) {
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>$2');
+}
+export enum FetcherState{
+    DONE,
+    LOADING,
+    SUBMITTING,
+    RELOADING,
+    REDIRECTED,
+    LOADER_SUBMITTING,
+    UNKNOW
+}
+export enum NavigationState{
+    LOADER_REDIRECTED,
+    LOADING,
+    SUBMITTING,
+    RELOADING,
+    REDIRECTED,
+    LOADER_SUBMITTING,
+    UNKNOW
+}
+export function getFetcherState(fetcher: Fetcher): FetcherState {
+    let isDone =
+        fetcher.state === "idle" && fetcher.data != null;
+
+    if(isDone) return FetcherState.DONE;
+    // fetcher.type === "actionSubmission"
+    let isActionSubmission = fetcher.state === "submitting";
+    if(isActionSubmission) return FetcherState.SUBMITTING;
+
+    // fetcher.type === "actionReload"
+    let isActionReload =
+        fetcher.state === "loading" &&
+        fetcher.formMethod != null &&
+        // @ts-ignore
+        fetcher.formMethod != "GET" &&
+        // If we returned data, we must be reloading
+        fetcher.data != null;
+
+    if(isActionReload) return FetcherState.RELOADING;
+    // fetcher.type === "actionRedirect"
+    let isActionRedirect =
+        fetcher.state === "loading" &&
+        fetcher.formMethod != null &&
+        // @ts-ignore
+        fetcher.formMethod != 'GET' &&
+        // If we have no data we must have redirected
+        fetcher.data == null;
+    if(isActionRedirect) return FetcherState.REDIRECTED;
+
+    // fetcher.type === "loaderSubmission"
+    let isLoaderSubmission =
+        fetcher.state === "loading" &&
+        // @ts-ignore
+        fetcher.formMethod === "GET";
+    if(isLoaderSubmission) return FetcherState.LOADER_SUBMITTING;
+
+    // fetcher.type === "normalLoad"
+    let isNormalLoad =
+        fetcher.state === "loading" &&
+        fetcher.formMethod == null;
+    if(isNormalLoad) return FetcherState.LOADING;
+
+    return FetcherState.UNKNOW;
+}
+export function getNavigationState(navigation: Navigation): NavigationState{
+    // transition.type === "actionSubmission"
+    let isActionSubmission =
+        navigation.state === "submitting";
+
+    if(isActionSubmission) return NavigationState.SUBMITTING;
+
+    // transition.type === "actionReload"
+    let isActionReload =
+        navigation.state === "loading" &&
+        navigation.formMethod != null &&
+        navigation.formMethod != "get" &&
+        // We had a submission navigation and are loading the submitted location
+        navigation.formAction === navigation.pathname;
+
+    if(isActionReload) return NavigationState.RELOADING;
+
+    // transition.type === "actionRedirect"
+    let isActionRedirect =
+        navigation.state === "loading" &&
+        navigation.formMethod != null &&
+        navigation.formMethod != "get" &&
+        // We had a submission navigation and are now navigating to different location
+        navigation.formAction !== navigation.pathname;
+
+    if(isActionRedirect) return NavigationState.REDIRECTED;
+
+    // transition.type === "loaderSubmission"
+    let isLoaderSubmission =
+        navigation.state === "loading" &&
+        navigation.state.formMethod === "get" &&
+        // We had a loader submission and are navigating to the submitted location
+        navigation.formAction === navigation.pathname;
+
+    if(isLoaderSubmission) return NavigationState.LOADER_SUBMITTING;
+
+    // transition.type === "loaderSubmissionRedirect"
+    let isLoaderSubmissionRedirect =
+        navigation.state === "loading" &&
+        navigation.state.formMethod === "get" &&
+        // We had a loader submission and are navigating to a new location
+        navigation.formAction !== navigation.pathname;
+
+    if(isLoaderSubmissionRedirect) return NavigationState.LOADER_REDIRECTED;
+
+    return NavigationState.UNKNOW;
 }
