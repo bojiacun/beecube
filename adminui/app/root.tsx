@@ -5,7 +5,7 @@ import {
     LiveReload,
     Meta,
     Scripts,
-    ScrollRestoration, useCatch, useLoaderData, useNavigate, useOutlet,
+    ScrollRestoration, useCatch, useLoaderData, useMatches, useNavigate, useNavigation, useOutlet,
 } from "@remix-run/react";
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
@@ -17,8 +17,7 @@ import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-ver
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
 import _ from 'lodash';
-import {json} from "@remix-run/node";
-import {AnimatePresence, motion} from "framer-motion";
+import {json, V2_MetaFunction} from "@remix-run/node";
 import {useLocation} from "react-router";
 import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import datepickerStyle from 'react-datepicker/dist/react-datepicker.min.css';
@@ -91,11 +90,13 @@ export const links: LinksFunction = () => {
     ];
 }
 
-export const meta: MetaFunction = () => ({
-    charset: "utf-8",
-    title: "蜜蜂魔方",
-    viewport: "width=device-width,initial-scale=1",
-});
+export const meta: V2_MetaFunction = () => {
+    return [{
+        charset: "utf-8",
+        title: "蜜蜂魔方",
+        viewport: "width=device-width,initial-scale=1",
+    }];
+}
 
 export function ErrorBoundary({error}: { error: Error }) {
     const [themeContext, setThemeContext] = useState(theme);
@@ -178,8 +179,8 @@ export default function App() {
     const data = useLoaderData();
     theme.userInfo = data.userInfo;
     const [themeContext, setThemeContext] = useState(theme);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigation = useNavigation();
+    const matches = useMatches();
     const [loading, setLoading] = useState(false);
     const outlet = useOutlet();
 
@@ -191,8 +192,9 @@ export default function App() {
     }
     const excludeAdminPaths = ['/login', '/console','/app/diy'];
 
+    console.log(matches);
     let Layout: any;
-    if (_.indexOf(excludeAdminPaths, location.pathname) > -1) {
+    if (_.indexOf(excludeAdminPaths, matches[0].pathname) > -1) {
         Layout = LayoutFull;
     } else {
         Layout = LayoutVertical;
@@ -202,7 +204,7 @@ export default function App() {
         //@ts-ignore
         window.theme = theme;
         //@ts-ignore
-        window.navigate = navigate;
+        window.navigate = navigation;
     }, []);
 
 
@@ -237,16 +239,6 @@ export default function App() {
         <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
             <div id='app' className='h-100'>
                 <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
-                    {/*<AnimatePresence mode={'wait'} initial={false}>*/}
-                    {/*    <motion.div*/}
-                    {/*        key={location.pathname}*/}
-                    {/*        initial={{opacity: 0}}*/}
-                    {/*        animate={{opacity: 1}}*/}
-                    {/*        exit={{opacity: 0}}*/}
-                    {/*    >*/}
-                    {/*        {outlet}*/}
-                    {/*    </motion.div>*/}
-                    {/*</AnimatePresence>*/}
                     {outlet}
                 </Layout>
                 <ClipLoader

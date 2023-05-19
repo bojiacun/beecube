@@ -4,8 +4,7 @@ import {Badge, NavLink} from "react-bootstrap";
 import {Circle} from 'react-feather';
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useLocation} from "react-router";
-import {Link} from "@remix-run/react";
+import {Link, useMatches} from "@remix-run/react";
 
 
 const feather = require('feather-icons');
@@ -14,8 +13,8 @@ const feather = require('feather-icons');
 const VerticalNavMenuLink = (props:any) => {
     const {item, startPageLoading} = props;
     const {t} = useTranslation();
-    const location = useLocation();
-    const isActive = location.pathname === ('/'+item.route).replace(/\/\//g, '/');
+    const matches = useMatches();
+    const isActive = matches[0].pathname === ('/'+item.route).replace(/\/\//g, '/');
 
 
     const renderItemIcon = (item:any) => {
