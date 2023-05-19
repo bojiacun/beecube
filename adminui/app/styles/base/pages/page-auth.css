@@ -54,9 +54,8 @@
   max-width: 400px;
 }
 .auth-wrapper .brand-logo {
+  width: auto;
   display: flex;
-  justify-content: center;
-  margin: 1rem 0 2rem 0;
 }
 .auth-wrapper .brand-logo .brand-text {
   font-weight: 600;
