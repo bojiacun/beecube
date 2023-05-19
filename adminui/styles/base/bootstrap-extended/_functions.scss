@@ -10,3 +10,6 @@
 
   @return $string;
 }
+@function theme-color($color) {
+  @return $primary;
+}
