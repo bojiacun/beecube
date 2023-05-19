@@ -32,12 +32,7 @@
   color: #fff;
   padding: 0.7rem 0.95rem;
   border-radius: 0.5rem;
-}
-@media (max-width: 575.98px) {
-  .aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbCurrent],
-.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbTotal] {
-    margin: 0 0.4rem;
-  }
+  margin: 0 0.4rem;
 }
 .aggrid .ag-paging-panel .ag-paging-button {
   background-color: #dae1e7;
@@ -46,12 +41,8 @@
   margin: 0 0.5rem;
   color: #6b727b !important;
   min-width: 34px;
-}
-@media (max-width: 575.98px) {
-  .aggrid .ag-paging-panel .ag-paging-button {
-    margin-left: 0;
-    margin-right: 0.4rem;
-  }
+  margin-left: 0;
+  margin-right: 0.4rem;
 }
 .aggrid .ag-paging-panel .ag-paging-button .ag-icon {
   color: #6b727b !important;
@@ -60,10 +51,8 @@
 .aggrid .ag-paging-panel .ag-paging-button.ag-disabled {
   opacity: 0.5 !important;
 }
-@media (max-width: 575.98px) {
-  .aggrid .ag-paging-panel .ag-paging-button:last-child {
-    margin-right: 0;
-  }
+.aggrid .ag-paging-panel .ag-paging-button:last-child {
+  margin-right: 0;
 }
 .aggrid .ag-paging-panel span[ref=lbCurrent] {
   background-color: #3366CC;

@@ -274,30 +274,29 @@
     position: absolute;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
   .file-manager-application .view-container .file-manager-item {
     flex: 47%;
   }
 }
-@media (max-width: 575.98px) {
-  .file-manager-application .content-area-wrapper .file-manager-main-content .file-manager-content-header {
-    padding-left: 0.5rem;
-  }
-  .file-manager-application .content-area-wrapper .file-manager-main-content .file-manager-content-header .file-actions .dropdown {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-  .file-manager-application .content-area-wrapper .view-container .file-manager-item {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  .file-manager-application .content-area-wrapper .view-container.list-view .file-date,
+.file-manager-application .content-area-wrapper .file-manager-main-content .file-manager-content-header {
+  padding-left: 0.5rem;
+}
+.file-manager-application .content-area-wrapper .file-manager-main-content .file-manager-content-header .file-actions .dropdown {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.file-manager-application .content-area-wrapper .view-container .file-manager-item {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.file-manager-application .content-area-wrapper .view-container.list-view .file-date,
 .file-manager-application .content-area-wrapper .view-container.list-view .file-last-modified,
 .file-manager-application .content-area-wrapper .view-container.list-view .file-size,
 .file-manager-application .content-area-wrapper .view-container.list-view .file-item-size {
-    display: none !important;
-  }
+  display: none !important;
 }
+
 .file-manager-application .view-container .file-manager-item {
   flex: 0 0 47%;
   max-width: 50%;

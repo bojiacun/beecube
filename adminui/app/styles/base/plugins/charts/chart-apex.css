@@ -28,7 +28,7 @@
 .apexcharts-canvas .apexcharts-tooltip-text,
 .apexcharts-canvas .apexcharts-datalabel-label,
 .apexcharts-canvas .apexcharts-datalabel {
-  font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+  font-family: var(--bs-font-sans-serif) !important;
   fill: #6b727b;
   font-weight: 400;
   filter: none;

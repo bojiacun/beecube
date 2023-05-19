@@ -200,14 +200,14 @@
   box-shadow: 0 2px 4px 0 rgba(0, 207, 232, 0.4);
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
   .ecommerce-application .swiper-responsive-breakpoints.swiper-container .swiper-slide {
     padding: 1rem;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
   .ecommerce-application .app-ecommerce-details .ratings-list-item svg,
-.ecommerce-application .app-ecommerce-details .ratings-list-item i {
+  .ecommerce-application .app-ecommerce-details .ratings-list-item i {
     font-size: 1rem;
     height: 1rem;
     width: 1rem;

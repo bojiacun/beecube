@@ -15296,7 +15296,7 @@
   justify-content: space-between;
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 767.98px) {
   .email-application .content-area-wrapper .sidebar-left {
     position: relative;
   }
@@ -15324,46 +15324,45 @@
     border-radius: 0.357rem;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
   .email-application #compose-mail .ql-editor {
     min-height: 150px;
   }
 }
-@media (max-width: 575.98px) {
-  .email-application .email-detail-head .mail-meta-item {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 4rem;
-  }
-  .email-application .email-detail-head .mail-meta-item .mail-date,
+.email-application .email-detail-head .mail-meta-item {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 4rem;
+}
+.email-application .email-detail-head .mail-meta-item .mail-date,
 .email-application .email-detail-head .mail-meta-item .mail-time {
-    margin: 1rem 0.75rem 0 0;
-  }
-  .email-application .content-area-wrapper .content-right .email-app-details .email-scroll-area {
-    padding: 0 1rem;
-  }
-  .email-application .content-area-wrapper .content-right .email-app-details .email-detail-header {
-    padding: 0.5rem 1rem;
-  }
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details {
-    display: block;
-  }
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-items {
-    width: 70%;
-    display: inline-grid;
-  }
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item {
-    width: 15%;
-    position: absolute;
-    right: 1rem;
-    top: 1.5rem;
-  }
-  .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item i,
+  margin: 1rem 0.75rem 0 0;
+}
+.email-application .content-area-wrapper .content-right .email-app-details .email-scroll-area {
+  padding: 0 1rem;
+}
+.email-application .content-area-wrapper .content-right .email-app-details .email-detail-header {
+  padding: 0.5rem 1rem;
+}
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details {
+  display: block;
+}
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-items {
+  width: 70%;
+  display: inline-grid;
+}
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item {
+  width: 15%;
+  position: absolute;
+  right: 1rem;
+  top: 1.5rem;
+}
+.email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item i,
 .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item svg,
 .email-application .content-area-wrapper .email-user-list .email-media-list li .mail-details .mail-meta-item .bullet {
-    display: none;
-  }
+  display: none;
 }
+
 @media (max-width: 359.98px) {
   .email-application .content-area-wrapper .sidebar .email-app-sidebar {
     width: 230px;

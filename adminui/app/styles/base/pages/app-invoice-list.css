@@ -14,7 +14,7 @@
 .invoice-list-wrapper .dataTables_wrapper .invoice-list-table tbody .control:before {
   background-color: #3366CC;
   line-height: 1rem;
-  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  font-family: var(--bs-font-sans-serif);
 }
 .invoice-list-wrapper .dataTables_wrapper .invoice-list-table tbody .col-actions a:not(.dropdown-item) {
   color: #6b727b;

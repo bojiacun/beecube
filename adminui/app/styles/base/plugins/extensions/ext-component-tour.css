@@ -1,6 +1,7 @@
 .shepherd-element {
   border-radius: 0.357rem;
   width: 350px;
+  width: 300px;
 }
 .shepherd-element[data-popper-placement=bottom] {
   margin-top: 1rem !important;
@@ -47,11 +48,6 @@
 }
 .shepherd-element .shepherd-content .shepherd-footer .shepherd-button {
   padding: 0.5rem 1.3rem;
-}
-@media (max-width: 575.98px) {
-  .shepherd-element {
-    width: 300px;
-  }
 }
 
 .dark-layout .shepherd-element {

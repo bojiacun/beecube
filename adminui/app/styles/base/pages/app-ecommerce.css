@@ -359,7 +359,7 @@
   }
 }
 
-@media (max-width: 1199.98px) {
+@media (max-width: 991.98px) {
   .ecommerce-application .ecommerce-header-items .btn-group {
     align-items: center;
   }
@@ -389,7 +389,7 @@
     z-index: 999 !important;
   }
 }
-@media (max-width: 991.98px) {
+@media (max-width: 767.98px) {
   .ecommerce-application .sidebar-left .sidebar .card {
     border-radius: 0;
     margin: 0;
@@ -415,7 +415,7 @@
     display: none;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
   .ecommerce-application .grid-view.wishlist-items {
     grid-template-columns: 1fr 1fr;
   }
@@ -430,11 +430,9 @@
     border: none;
   }
 }
-@media (max-width: 575.98px) {
-  .ecommerce-application .grid-view,
+.ecommerce-application .grid-view,
 .ecommerce-application .grid-view.wishlist-items {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: 1fr;
 }
 
 /*# sourceMappingURL=app-ecommerce.css.map */
