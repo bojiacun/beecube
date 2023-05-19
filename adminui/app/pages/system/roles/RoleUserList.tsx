@@ -159,15 +159,13 @@ const RoleUserList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                <FormGroup className={'mb-0'}>
                                     <FormLabel htmlFor={'username'}>用户账号</FormLabel>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'username'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
                                                 <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
