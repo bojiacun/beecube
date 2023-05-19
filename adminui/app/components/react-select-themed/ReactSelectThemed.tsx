@@ -1,13 +1,17 @@
 import Select from "react-select";
 import React, {useContext} from "react";
 import themeContext from 'themeConfig';
+import {useHydrated} from "remix-utils";
 
 
 
 
 const ReactSelectThemed = React.forwardRef((props:any, ref) => {
     const {theme:systemTheme} = useContext(themeContext);
+    const isHydrated = useHydrated();
     const {id, ...rest} = props;
+
+    if(!isHydrated) return <></>;
 
     return (
         <Select
