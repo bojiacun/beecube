@@ -64,8 +64,8 @@
     position: fixed;
     right: 0;
     margin: #{$floating-nav-margin} #{$content-padding} 0;
-    width: calc(100vw - (100vw - 100%) - calc(#{$content-padding} * 2) - #{$menu-expanded-width});
     border-radius: $card-border-radius;
+    width: calc(100% - 260px - 2.4rem);
     z-index: 12;
   }
 
@@ -591,7 +591,7 @@
 @include media-breakpoint-down(xs) {
   .header-navbar {
     &.floating-nav {
-      margin-left: 1rem;
+      margin-left: 260px;
       margin-right: 1.2rem;
     }
 

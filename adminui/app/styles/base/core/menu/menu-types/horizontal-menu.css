@@ -33,7 +33,6 @@
   min-height: auto;
 }
 .horizontal-menu .header-navbar.navbar-horizontal.floating-nav {
-  width: calc(100vw - (100vw - 100%) - (2rem * 2));
   background: #fff;
 }
 .horizontal-menu .header-navbar .navbar-container {

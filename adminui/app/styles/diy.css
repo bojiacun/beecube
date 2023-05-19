@@ -12771,8 +12771,8 @@ input[type=number]::-webkit-outer-spin-button {
   position: fixed;
   right: 0;
   margin: 1.3rem 2rem 0;
-  width: calc(100vw - (100vw - 100%) - calc(2rem * 2) - 260px);
   border-radius: 0.428rem;
+  width: calc(100% - 260px - 2.4rem);
   z-index: 12;
 }
 .header-navbar.navbar-static-top {
@@ -13122,7 +13122,7 @@ input[type=number]::-webkit-outer-spin-button {
   }
 }
 .header-navbar.floating-nav {
-  margin-left: 1rem;
+  margin-left: 260px;
   margin-right: 1.2rem;
 }
 .header-navbar .navbar-container ul.navbar-nav li .selected-language {
