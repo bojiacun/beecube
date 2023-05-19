@@ -173,17 +173,25 @@ const RoleList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">角色管理</h4>
-                            <ReactSelectThemed
-                                id={'role-page-size'}
-                                placeholder={'分页大小'}
-                                isSearchable={false}
-                                defaultValue={PageSizeOptions[0]}
-                                options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
-                                onChange={handlePageSizeChanged}
-                            />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建角色</Button>
+                            <FormGroup as={Row} className={'align-items-center'}>
+                                <Col md={'auto'}>
+                                    <h4 className="mb-0">角色管理</h4>
+                                </Col>
+                                <Col md={'auto'}>
+                                    <ReactSelectThemed
+                                        id={'role-page-size'}
+                                        placeholder={'分页大小'}
+                                        isSearchable={false}
+                                        defaultValue={PageSizeOptions[0]}
+                                        options={PageSizeOptions}
+                                        className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                        onChange={handlePageSizeChanged}
+                                    />
+                                </Col>
+                                <Col md={'auto'}>
+                                    <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建角色</Button>
+                                </Col>
+                            </FormGroup>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -192,9 +200,9 @@ const RoleList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup className={'mb-0'}>
-                                    <FormLabel htmlFor={'roleName'}>角色名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'roleName'}>角色名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'roleName'} onChange={handleOnRoleNameChanged} placeholder={'请输入要搜索的内容'}/>
                                             <Button type={'submit'}>搜索</Button>
@@ -279,9 +287,10 @@ const RoleList = (props: any) => {
                 }
             </Modal>
 
-            <TreePermissionList setAuthModel={setAuthModel} model={authModel} />
+            <TreePermissionList setAuthModel={setAuthModel} model={authModel}/>
         </>
-    );
+    )
+        ;
 }
 
 export default RoleList;
