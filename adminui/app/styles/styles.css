@@ -2023,6 +2023,10 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-end, body.swal2-toast-shown
   border-bottom: 1px solid #ebe9f1 !important;
 }
 
+a {
+  text-decoration: none;
+}
+
 body.dark-layout .react-datepicker {
   background-color: #283046 !important;
   color: #b4b7bd !important;

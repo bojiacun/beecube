@@ -555,7 +555,6 @@
   .header-navbar {
     // 浮动导航宽度
     &.floating-nav {
-      width: calc(100vw - (100vw - 100%) - calc(#{$content-padding} * 2));
     }
     &.navbar-static-top {
       left: 0;
@@ -592,9 +591,6 @@
 @include media-breakpoint-down(xs) {
   .header-navbar {
     &.floating-nav {
-      width: calc(
-        100vw - (100vw - 100%) - calc(#{$content-padding} + 0.4rem)
-      ) !important; // SM 屏幕（移动端）计算更新的宽度
       margin-left: 1rem;
       margin-right: 1.2rem;
     }

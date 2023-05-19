@@ -24,7 +24,9 @@ $button-default-height: 38px;
   background-color: $table-head-bg !important;
   border-bottom: 1px solid $table-border-color !important;
 }
-
+a {
+  text-decoration: none;
+}
 
 
 //暗黑主题
