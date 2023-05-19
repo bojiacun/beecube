@@ -126,28 +126,18 @@ const LoginPage = () => {
                             </div>
                         </Alert>}
                         <RemixForm noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated':'')} method='post' onSubmit={handleOnSubmit}>
-                            <Form.Group>
+                            <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'username'}>用户名</Form.Label>
                                 <Form.Control name='username' placeholder={'邮箱或者手机号'} required  />
                             </Form.Group>
-                            <Form.Group>
-                                <div className="d-flex justify-content-between">
-                                    <Form.Label htmlFor="password">密码</Form.Label>
-                                    <NavLink href="forgot-password">
-                                        <small>忘记密码?</small>
-                                    </NavLink>
-                                </div>
+                            <Form.Group className={'mb-1'}>
+                                <Form.Label htmlFor="password">密码</Form.Label>
                                 <InputGroup className="input-group-merge">
                                     <Form.Control name='password' type='password' className='form-control-merge'
                                                   placeholder={'abc123'} required  />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text>
-                                            <Eye className='cursor-pointer' size={14}/>
-                                        </InputGroup.Text>
-                                    </InputGroup.Append>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Row>
+                            <Row>
                                 <Form.Group as={Col}>
                                     <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
                                     <Form.Control name='captcha' placeholder={'验证码'} required  />
@@ -156,9 +146,13 @@ const LoginPage = () => {
                                     <Form.Label>&nbsp;</Form.Label>
                                     {captchaKey && <Image onClick={handleCaptchaClick} src={`/captcha.png?_t=${captchaKey}`} className='cursor-pointer' alt='验证码' style={{display: 'block'}} />}
                                 </Form.Group>
-                            </Form.Row>
+                            </Row>
                             {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey} />}
-                            <Button block className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
+                            <Row>
+                                <Col className={'d-grid'}>
+                                    <Button className='mt-1' variant={'primary'} type={'submit'} disabled={!!transition.submission}>{transition.submission? '登录中...':'登 录'}</Button>
+                                </Col>
+                            </Row>
                         </RemixForm>
                     </Col>
                 </Col>

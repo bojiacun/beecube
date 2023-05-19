@@ -179,7 +179,6 @@ export default function App() {
     const data = useLoaderData();
     theme.userInfo = data.userInfo;
     const [themeContext, setThemeContext] = useState(theme);
-    const navigation = useNavigation();
     const matches = useMatches();
     const [loading, setLoading] = useState(false);
     const outlet = useOutlet();
@@ -193,7 +192,7 @@ export default function App() {
     const excludeAdminPaths = ['/login', '/console','/app/diy'];
 
     let Layout: any;
-    if (_.indexOf(excludeAdminPaths, matches[0].pathname) > -1) {
+    if (_.indexOf(excludeAdminPaths, matches[matches.length-1].pathname) > -1) {
         Layout = LayoutFull;
     } else {
         Layout = LayoutVertical;
@@ -203,7 +202,7 @@ export default function App() {
         //@ts-ignore
         window.theme = theme;
         //@ts-ignore
-        window.navigate = navigation;
+        // window.navigate = navigation;
     }, []);
 
 
