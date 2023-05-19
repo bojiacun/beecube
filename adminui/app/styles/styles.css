@@ -1,10 +1,10 @@
 /* Error: Undefined variable.
  *    ,
- * 26 | $theme-dark-box-shadow: 0 4px 24px 0 rgba($black, 0.24);
- *    |                                           ^^^^^^
+ * 38 | $primary: $blue;
+ *    |           ^^^^^
  *    '
- *   styles\base\components\_variables-dark.scss 26:43  @import
- *   styles\entry\styles.scss 2:9                       root stylesheet */
+ *   styles\base\bootstrap-extended\_variables.scss 38:11  @import
+ *   styles\entry\styles.scss 2:9                          root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a    \2577 \a 26 \2502  $theme-dark-box-shadow: 0 4px 24px 0 rgba($black, 0.24);\d\a    \2502                                            ^^^^^^\a    \2575 \a   styles\\base\\components\\_variables-dark.scss 26:43  @import\a   styles\\entry\\styles.scss 2:9                       root stylesheet";
+  content: "Error: Undefined variable.\a    \2577 \a 38 \2502  $primary: $blue;\d\a    \2502            ^^^^^\a    \2575 \a   styles\\base\\bootstrap-extended\\_variables.scss 38:11  @import\a   styles\\entry\\styles.scss 2:9                          root stylesheet";
 }
