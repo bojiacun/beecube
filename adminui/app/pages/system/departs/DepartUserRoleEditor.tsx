@@ -1,8 +1,7 @@
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
-import {AwesomeButton} from "react-awesome-button";
 import {defaultTreeIcons, showToastSuccess} from "~/utils/utils";
 import themeConfig from "../../../../themeConfig";
 
@@ -96,15 +95,14 @@ const DepartUserRoleEditor = (props: any) => {
                 />
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton
+                <Button
                     key={'submit'}
-                    type={'primary'}
-                    containerProps={{type: 'submit'}}
-                    onPress={handleOnSave}
+                    variant={'primary'}
+                    onClick={handleOnSave}
                     disabled={savePermissionFetcher.state === 'submitting'}
                 >
                     保存
-                </AwesomeButton>
+                </Button>
             </Modal.Footer>
         </Modal>
     );

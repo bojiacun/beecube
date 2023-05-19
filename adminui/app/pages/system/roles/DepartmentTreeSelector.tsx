@@ -1,8 +1,7 @@
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {useFetcher} from "@remix-run/react";
 import CheckboxTree from 'react-checkbox-tree';
-import {AwesomeButton} from "react-awesome-button";
 import {defaultTreeIcons, showToastSuccess, tree2List} from "~/utils/utils";
 import themeConfig from "../../../../themeConfig";
 //@ts-ignore
@@ -71,14 +70,13 @@ const DepartmentTreeSelector = (props: any) => {
                 />
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton
+                <Button
                     key={'submit'}
-                    type={'primary'}
-                    containerProps={{type: 'submit'}}
-                    onPress={handleOnSave}
+                    variant={'primary'}
+                    onClick={handleOnSave}
                 >
                     确认选择
-                </AwesomeButton>
+                </Button>
             </Modal.Footer>
         </Modal>
     );

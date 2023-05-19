@@ -5,7 +5,6 @@ import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal,
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {AwesomeButton} from "react-awesome-button";
 
 
 const PerformanceListSelector = (props: any) => {
@@ -196,7 +195,7 @@ const PerformanceListSelector = (props: any) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton type={'primary'} onPress={handleOnAddPerformances} disabled={editFetcher.state === 'submitting'}>确认选择</AwesomeButton>
+                <Button variant={'primary'} onClick={handleOnAddPerformances} disabled={editFetcher.state === 'submitting'}>确认选择</Button>
             </Modal.Footer>
         </Modal>
     );

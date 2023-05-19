@@ -1,7 +1,6 @@
 import {Modal, FormGroup, FormLabel, Button, Col, Row, FormControl} from "react-bootstrap";
 import {Field, useFormik, Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
-import {AwesomeButton} from "react-awesome-button";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
