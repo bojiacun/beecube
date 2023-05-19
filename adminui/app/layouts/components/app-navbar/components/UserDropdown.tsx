@@ -34,6 +34,7 @@ const UserDropdown = () => {
         logoutFetcher.submit({}, {action: window.ENV.LOGOUT_URL, method: 'post'});
     }
     const navigateToAccountSettings = () => {
+        console.log('navigate');
         navigate('/account/settings');
     }
     const backToPlatform = () => {
@@ -46,17 +47,17 @@ const UserDropdown = () => {
                 {dropdownTitle}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                <Dropdown.Item key={'user-settings'} onSelect={navigateToAccountSettings} className={'d-flex align-items-center'}>
+                <Dropdown.Item key={'user-settings'} onClick={navigateToAccountSettings} className={'d-flex align-items-center'}>
                     <Settings className={'mr-50'} size={16}/>
                     <span>用户设置</span>
                 </Dropdown.Item>
                 {rootLoaderData.from === 'platform' &&
-                    <Dropdown.Item key={'user-back'} onSelect={backToPlatform} className={'d-flex align-items-center'}>
+                    <Dropdown.Item key={'user-back'} onClick={backToPlatform} className={'d-flex align-items-center'}>
                         <ArrowLeft className={'mr-50'} size={16}/>
                         <span>返回平台</span>
                     </Dropdown.Item>
                 }
-                <Dropdown.Item key={'logout'} onSelect={logout} className={'d-flex align-items-center'}>
+                <Dropdown.Item key={'logout'} onClick={logout} className={'d-flex align-items-center'}>
                     <LogOut className={'mr-50'} size={16}/>
                     <span>退出登录</span>
                 </Dropdown.Item>
