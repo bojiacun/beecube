@@ -29,12 +29,14 @@ $orange: #ff9f43 !default; //$warning
 $red: #ea5455 !default; //$danger
 
 $primary: $rexo !default;
+$primary-color: $rexo !default;
 $secondary: #82868b !default;
 $info: $blue !default;
 $warning: $orange !default;
 $light: $gray-50 !default;
 $dark: #4b4b4b !default;
 
+$form-group-margin-bottom: 20px;
 //  ---------------------------------------------------------------------------------------------------
 // 通过修改以下变量来自定义大多数 Bootstrap 元素的默认样式。可以向 $spacers 添加更多条目来控制所有元素样式。
 //  ---------------------------------------------------------------------------------------------------
@@ -150,6 +152,7 @@ $blockquote-small-color: $text-muted !default;
 
 // 表格
 $table-cell-padding: 0.72rem !default;
+$table-cell-padding-sm: 0.56rem !default;
 
 $table-accent-bg: #fafafc !default;
 $table-hover-bg: #f6f6f9 !default;
@@ -218,6 +221,7 @@ $input-placeholder-color: $text-muted !default;
 $input-plaintext-color: $body-color !default;
 
 $input-height: 2.714rem !default;
+$input-height-inner: 2.714rem !default;
 $input-height-sm: 2.142rem !default;
 $input-height-lg: 3.2857rem !default;
 
@@ -233,10 +237,12 @@ $custom-checkbox-indicator-icon-checked: url("data:image/svg+xml;charset=utf8,%3
 
 $custom-checkbox-indicator-icon-indeterminate: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$custom-checkbox-indicator-indeterminate-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-minus'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
 
+$custom-control-indicator-checked-bg: rgb(0,0,0);
 $custom-control-indicator-checked-disabled-bg: rgba($primary, 0.65);
 
 $custom-radio-indicator-icon-checked: none;
 
+$custom-file-height: $input-height-inner !default;
 $custom-file-height-inner: $input-height !default;
 
 $custom-select-indicator-padding: 1rem !default; // 带有背景图像的指示器的额外填充

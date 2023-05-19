@@ -51,7 +51,7 @@
         &.swal2-active-progress-step {
           ~ .swal2-progress-step-line,
           ~ .swal2-progress-step {
-            background-color: lighten(theme-color('primary'), 15%);
+            background-color: lighten($primary, 15%);
           }
         }
       }

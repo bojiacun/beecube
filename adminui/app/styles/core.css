@@ -1,13 +1,12 @@
-/* Error: Undefined mixin.
+/* Error: $color: theme-color("primary") is not a color.
  *    ,
- * 20 | /   @include hover() {
- * 21 | |     color: inherit;
- * 22 | |     text-decoration: none;
- * 23 | \   }
+ * 23 |   'lighten-5': lighten(theme-color('primary'), 25%),
+ *    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  *    '
- *   styles\base\bootstrap-extended\_reboot.scss 20:3  @import
- *   styles\base\bootstrap-extended.scss 17:9          @import
- *   styles\core.scss 3:9                              root stylesheet */
+ *   styles\base\core\colors\palette-variables.scss 23:16  @import
+ *   styles\react\bootstrap-vue\_avatar.scss 2:9           @import
+ *   styles\react\bootstrap-vue\_index.scss 4:9            @import
+ *   styles\core.scss 19:9                                 root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -17,5 +16,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 20 \2502  \250c    @include hover() {\a 21 \2502  \2502      color: inherit;\a 22 \2502  \2502      text-decoration: none;\a 23 \2502  \2514    }\a    \2575 \a   styles\\base\\bootstrap-extended\\_reboot.scss 20:3  @import\a   styles\\base\\bootstrap-extended.scss 17:9          @import\a   styles\\core.scss 3:9                              root stylesheet";
+  content: "Error: $color: theme-color(\"primary\") is not a color.\a    \2577 \a 23 \2502    'lighten-5': lighten(theme-color('primary'), 25%),\d\a    \2502                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles\\base\\core\\colors\\palette-variables.scss 23:16  @import\a   styles\\react\\bootstrap-vue\\_avatar.scss 2:9           @import\a   styles\\react\\bootstrap-vue\\_index.scss 4:9            @import\a   styles\\core.scss 19:9                                 root stylesheet";
 }
