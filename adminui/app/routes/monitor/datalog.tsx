@@ -124,8 +124,7 @@ const DataLogPages = () => {
         <Card>
             <div className={'m-2'}>
                <Row>
-                   <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                       <h4 className="mb-0">数据日志</h4>
+                   <Col md={4} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                        <ReactSelectThemed
                            placeholder={'分页大小'}
                            isSearchable={false}
@@ -135,27 +134,22 @@ const DataLogPages = () => {
                            onChange={handlePageSizeChanged}
                        />
                    </Col>
-                   <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                   <Col md={8} className={''}>
                        <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                            <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                            <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                            <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                            <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
-
-                           <FormGroup as={Form.Row} className={'mb-0 mr-2'}>
-                               <FormLabel htmlFor={'dataTable'}>表名</FormLabel>
-                               <Col>
+                           <FormGroup as={Row} className={'mb-0'}>
+                               <FormLabel md={2} column htmlFor={'dataTable'}>表名</FormLabel>
+                               <Col md={4}>
                                    <FormControl name={'dataTable'} placeholder={'请输入要搜索的内容'} onChange={handleOnDataTableChanged} />
                                </Col>
-                           </FormGroup>
-                           <FormGroup as={Form.Row} className={'mb-0'}>
-                               <FormLabel htmlFor={'dataId'}>数据ID</FormLabel>
-                               <Col>
+                               <FormLabel md={2} column htmlFor={'dataId'}>数据ID</FormLabel>
+                               <Col md={4}>
                                    <InputGroup>
                                        <FormControl name={'dataId'} onChange={handleOnDataIdChanged} placeholder={'请输入要搜索的内容'}/>
-                                       <InputGroup.Append>
-                                           <Button type={'submit'}>搜索</Button>
-                                       </InputGroup.Append>
+                                       <Button type={'submit'}>搜索</Button>
                                    </InputGroup>
                                </Col>
                            </FormGroup>
