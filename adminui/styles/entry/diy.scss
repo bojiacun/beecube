@@ -1,11 +1,11 @@
-@import 'base/bootstrap';
-@import 'base/bootstrap-extended';
-@import 'base/colors';
-@import 'base/components';
+@import '../base/bootstrap';
+@import '../base/bootstrap-extended';
+@import '../base/colors';
+@import '../base/components';
 
 // 模板主题
-@import 'base/themes/dark-layout.scss';
-@import 'base/themes/semi-dark-layout.scss';
+@import '../base/themes/dark-layout.scss';
+@import '../base/themes/semi-dark-layout.scss';
 
 @import "rc-collapse/assets/index.css";
 

@@ -1,11 +1,9 @@
-@import "scss/style";
-@import "base/bootstrap-extended/variables";
-@import "base/components/variables-dark";
-//react-awesome-button
+@import "../../assets/scss/style";
+@import "../base/bootstrap-extended/variables";
+@import "../base/components/variables-dark";
 $button-primary-color: $primary;
 $button-default-height: 38px;
 @import "sweetalert2/src/sweetalert2";
-
 
 .react-datepicker {
   font-family: inherit !important;
@@ -16,6 +14,7 @@ $button-default-height: 38px;
 .react-datepicker__header {
   background-color: $table-head-bg !important;
   border-bottom: 1px solid $table-border-color !important;
+
 }
 a {
   text-decoration: none;
