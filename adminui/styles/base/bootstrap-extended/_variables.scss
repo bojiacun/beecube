@@ -26,6 +26,7 @@ $rexo: #3366CC !default; //$primary
 $green: #28c76f !default; //$success
 $blue: #00cfe8 !default; //$info
 $orange: #ff9f43 !default; //$warning
+$red: #ea5455 !default; //$danger
 
 $primary: $rexo !default;
 $primary-color: $rexo !default;
@@ -34,6 +35,7 @@ $info: $blue !default;
 $warning: $orange !default;
 $light: $gray-50 !default;
 $dark: #4b4b4b !default;
+$danger: $red !default;
 
 $form-group-margin-bottom: 20px;
 //  ---------------------------------------------------------------------------------------------------
@@ -42,11 +44,11 @@ $form-group-margin-bottom: 20px;
 
 // 容器最大宽度
 $container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1440px // Custom xxl size
+        sm: 540px,
+        md: 720px,
+        lg: 960px,
+        xl: 1140px,
+        xxl: 1440px // Custom xxl size
 ) !default;
 
 // stylelint-disable
@@ -54,34 +56,34 @@ $spacer: 1rem !default;
 $spacers: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $spacers: map-merge(
-  (
-    0: 0,
-    25: (
-      $spacer * 0.25
-    ),
-    50: (
-      $spacer * 0.5
-    ),
-    75: (
-      $spacer * 0.75
-    ),
-    1: (
-      $spacer
-    ),
-    2: (
-      $spacer * 1.5
-    ),
-    3: (
-      $spacer * 3
-    ),
-    4: (
-      $spacer * 3.5
-    ),
-    5: (
-      $spacer * 4
-    )
-  ),
-  $spacers
+                (
+                        0: 0,
+                        25: (
+                                $spacer * 0.25
+                        ),
+                        50: (
+                                $spacer * 0.5
+                        ),
+                        75: (
+                                $spacer * 0.75
+                        ),
+                        1: (
+                                $spacer
+                        ),
+                        2: (
+                                $spacer * 1.5
+                        ),
+                        3: (
+                                $spacer * 3
+                        ),
+                        4: (
+                                $spacer * 3.5
+                        ),
+                        5: (
+                                $spacer * 4
+                        )
+                ),
+                $spacers
 );
 
 // '<body>'元素样式
