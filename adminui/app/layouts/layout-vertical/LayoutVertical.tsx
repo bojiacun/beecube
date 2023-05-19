@@ -1,5 +1,5 @@
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import borderedLayoutStyleUrl from "~/styles/base/themes/bordered-layout.css";
+import borderedLayoutStyleUrl from "~/styles/bordered-layout.css";
 import classNames from "classnames";
 import React, {FC, useContext, useEffect} from "react";
 import ThemeContext from "../../../themeConfig";

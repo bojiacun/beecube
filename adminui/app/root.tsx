@@ -10,7 +10,7 @@ import {
 } from "@remix-run/react";
 import SSRProvider from 'react-bootstrap/SSRProvider';
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
-import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
+import featherStyleUrl from '~/styles/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
 import stylesUrl from '~/styles/styles.css';
 import loaderStyleUrl from '~/styles/loader.css';
@@ -20,7 +20,6 @@ import LayoutFull from "~/layouts/layout-full/LayoutFull";
 //@ts-ignore
 import _ from 'lodash';
 import {json, V2_MetaFunction} from "@remix-run/node";
-import {useLocation} from "react-router";
 import reactBootstrapTable2Style from 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import datepickerStyle from 'react-datepicker/dist/react-datepicker.min.css';
 import toastStyle from 'react-toastify/dist/ReactToastify.min.css';
@@ -30,7 +29,7 @@ import {ToastContainer} from "react-toastify";
 import Error500Page from "~/components/error-page/500";
 import Error404Page from "~/components/error-page/404";
 import Error401Page from "~/components/error-page/401";
-import pageMiscStyle from '~/styles/react/pages/page-misc.css';
+import pageMiscStyle from '~/styles/page-misc.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import {sessionStorage} from "~/utils/auth.server";
 //字体设置

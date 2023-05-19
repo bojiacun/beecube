@@ -1,11 +1,8 @@
 import { Col, Row } from "react-bootstrap";
-import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
+import vueSelectStyleUrl from '~/styles/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {
-    API_ROLE_LIST,
     API_SYSDEPART_MY_LIST,
-    API_SYSDEPART_QUERYTREELIST,
-    API_USER_DEPARTMENT_LIST_ALL,
     requestWithToken
 } from "~/utils/request.server";
 import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
@@ -14,7 +11,6 @@ import {useEffect, useState} from "react";
 import {
     DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, handleSaveResult,
 } from "~/utils/utils";
-import * as Yup from 'yup';
 import _ from 'lodash';
 import querystring from 'querystring';
 import {requireAuthenticated} from "~/utils/auth.server";

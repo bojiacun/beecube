@@ -1,9 +1,9 @@
 $options-padding-x: 20px;
 $options-padding-y: 7px;
 
-@import '../../base/bootstrap-extended/include';
+@import '../base/bootstrap-extended/include';
 // 重写用户变量
-@import '../../base/components/include';
+@import '../base/components/include';
 //@import 'vue-select/src/scss/global/_variables.scss';
 
 // 全局组件变量

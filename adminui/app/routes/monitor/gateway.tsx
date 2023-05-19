@@ -8,7 +8,7 @@ import {
     FormLabel,
     Button, Row, Dropdown, Badge,
 } from "react-bootstrap";
-import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
+import vueSelectStyleUrl from '~/styles/vue-select.css';
 import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {
     API_CRONJOB_LIST,

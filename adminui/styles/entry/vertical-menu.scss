@@ -8,11 +8,11 @@
 //  官网：http://www.rexotech.cn/
 // ================================================================================================
 
-@import '../../../bootstrap-extended/include';
-@import '../../../components/include';
+@import '../base/bootstrap-extended/include';
+@import '../base/components/include';
 
 // 导入第一个导航主菜单混入
-@import '../../mixins/main-menu-mixin';
+@import '../base/core/mixins/main-menu-mixin';
 
 // 垂直导航菜单
 .vertical-layout {
@@ -290,4 +290,4 @@
   }
 }
 // 导入垂直导航模式小屏幕（移动端）默认为折叠
-@import 'vertical-overlay-menu.scss';
+@import '../base/core/menu/menu-types/vertical-overlay-menu.scss';

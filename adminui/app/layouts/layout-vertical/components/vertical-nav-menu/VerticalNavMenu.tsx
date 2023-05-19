@@ -4,14 +4,12 @@ import useAppConfig from "~/config";
 import useVerticalNavMenu from "~/layouts/layout-vertical/components/vertical-nav-menu/useVerticalNavMenu";
 import classNames from "classnames";
 import {Image, NavLink} from "react-bootstrap";
-import {X, Disc} from 'react-feather'
 import {LinksFunction} from "@remix-run/node";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import perfectScrollbarStyleUrl from 'react-perfect-scrollbar/dist/css/styles.css';
-import verticalMenuStyleUrl from "~/styles/base/core/menu/menu-types/vertical-menu.css";
+import verticalMenuStyleUrl from "~/styles/vertical-menu.css";
 import VerticalNavMenuItems
     from "~/layouts/layout-vertical/components/vertical-nav-menu/components/vertical-nav-menu-items/VerticalNavMenuItems";
-import navMenuItems from '~/navigation/vertical'
 import {useLoaderData} from "@remix-run/react";
 
 export const links: LinksFunction = () => {

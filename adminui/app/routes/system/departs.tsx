@@ -1,5 +1,5 @@
 import {Col, Row} from "react-bootstrap";
-import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
+import vueSelectStyleUrl from '~/styles/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_SYSDEPART_QUERYTREELIST, requestWithToken} from "~/utils/request.server";
 import {useFetcher, useLoaderData} from "@remix-run/react";

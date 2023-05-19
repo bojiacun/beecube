@@ -1,5 +1,5 @@
 import {ActionFunction, json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import loginPageStyleUrl from 'app/styles/react/pages/page-auth.css';
+import loginPageStyleUrl from 'app/styles/page-auth.css';
 import {
     Row,
     NavLink,

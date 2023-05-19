@@ -8,7 +8,7 @@ import {
     FormLabel,
     Button, Row, Tabs, Tab,
 } from "react-bootstrap";
-import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
+import vueSelectStyleUrl from '~/styles/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_DATALOG_LIST, API_LOG_LIST, requestWithToken} from "~/utils/request.server";
 import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";

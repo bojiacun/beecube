@@ -8,7 +8,7 @@ import {
     FormLabel,
     Button, Row,
 } from "react-bootstrap";
-import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
+import vueSelectStyleUrl from '~/styles/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {API_DATALOG_LIST, requestWithToken} from "~/utils/request.server";
 import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
@@ -21,9 +21,6 @@ import _ from 'lodash';
 import querystring from 'querystring';
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import {requireAuthenticated} from "~/utils/auth.server";
-import Error500Page from "~/components/error-page/500";
-import Error401Page from "~/components/error-page/401";
-import Error404Page from "~/components/error-page/404";
 
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: vueSelectStyleUrl}];
