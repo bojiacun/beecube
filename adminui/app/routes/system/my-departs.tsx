@@ -18,14 +18,7 @@ import * as Yup from 'yup';
 import _ from 'lodash';
 import querystring from 'querystring';
 import {requireAuthenticated} from "~/utils/auth.server";
-import Error500Page from "~/components/error-page/500";
-import Error401Page from "~/components/error-page/401";
-import Error404Page from "~/components/error-page/404";
-import RoleList from "~/pages/system/roles/RoleList";
-import RoleUserList from "~/pages/system/roles/RoleUserList";
-import {useOutletContext} from "react-router";
 import DepartTreeList from "~/pages/system/departs/DepartTreeList";
-import DepartDetail from "~/pages/system/departs/DepartDetail";
 import DepartUserRoleDetail from "~/pages/system/departs/DepartUserRoleDetail";
 
 

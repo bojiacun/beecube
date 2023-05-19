@@ -46,7 +46,7 @@ const PermissionList = () => {
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get', action: '/system/permissions'});
     }
-    const doDelete = (model:any) => {
+    const doDelete = (model: any) => {
         deleteFetcher.submit({id: model.id}, {method: 'delete', action: `/system/permissions/delete?id=${model.id}`, replace: true});
     }
 
@@ -76,10 +76,9 @@ const PermissionList = () => {
             text: '所属模块',
             dataField: 'componentName',
             formatter: (cell: any, row: any) => {
-                if(row.componentName) {
+                if (row.componentName) {
                     return row.componentName;
-                }
-                else {
+                } else {
                     return '系统';
                 }
             }
@@ -155,7 +154,8 @@ const PermissionList = () => {
         renderer: (row: any) => {
             return (
                 <div style={{paddingLeft: 60}}>
-                    <ChildPermissionList list={row.children} onShowRule={(row:any)=>setSelectedPermission(row)} onEdit={(model:any)=>setEditModal(model)} onDelete={(model:any)=>doDelete(model)} />
+                    <ChildPermissionList list={row.children} onShowRule={(row: any) => setSelectedPermission(row)} onEdit={(model: any) => setEditModal(model)}
+                                         onDelete={(model: any) => doDelete(model)}/>
                 </div>
             );
         },
@@ -178,8 +178,14 @@ const PermissionList = () => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">菜单管理</h4>
-                            <Button className={'ml-1'} onClick={handleOnAdd}><i className={'feather icon-plus'}/>新增菜单</Button>
+                            <FormGroup as={Row} className={'align-items-center'}>
+                                <Col md={'auto'}>
+                                    <h4 className="mb-0">菜单管理</h4>
+                                </Col>
+                                <Col md={'auto'}>
+                                    <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新增菜单</Button>
+                                </Col>
+                            </FormGroup>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -188,14 +194,12 @@ const PermissionList = () => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>菜单名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'name'}>菜单名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleKeywordChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
@@ -211,14 +215,14 @@ const PermissionList = () => {
                     keyField={'id'}
                 />
             </Card>
-            {editModal &&  <PermissionEdit menus={list} model={editModal} onHide={()=>{
+            {editModal && <PermissionEdit menus={list} model={editModal} onHide={() => {
                 loadData();
                 setEditModal(null);
-            }} /> }
-            {selectedPermission && <RuleList show={!!selectedPermission} onHide={()=>{
+            }}/>}
+            {selectedPermission && <RuleList show={!!selectedPermission} onHide={() => {
                 loadData();
                 setSelectedPermission(null);
-            }} selectedPermission={selectedPermission} />}
+            }} selectedPermission={selectedPermission}/>}
         </>
     );
 }

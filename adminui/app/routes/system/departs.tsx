@@ -1,23 +1,14 @@
-import { Col, Row } from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import vueSelectStyleUrl from '~/styles/react/libs/vue-select.css';
 import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
-import {API_ROLE_LIST, API_SYSDEPART_QUERYTREELIST, API_USER_DEPARTMENT_LIST_ALL, requestWithToken} from "~/utils/request.server";
-import {useCatch, useFetcher, useLoaderData} from "@remix-run/react";
+import {API_SYSDEPART_QUERYTREELIST, requestWithToken} from "~/utils/request.server";
+import {useFetcher, useLoaderData} from "@remix-run/react";
 import {withPageLoading} from "~/utils/components";
 import {useEffect, useState} from "react";
-import {
-    DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, handleSaveResult,
-} from "~/utils/utils";
-import * as Yup from 'yup';
+import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary, FetcherState, getFetcherState,} from "~/utils/utils";
 import _ from 'lodash';
 import querystring from 'querystring';
 import {requireAuthenticated} from "~/utils/auth.server";
-import Error500Page from "~/components/error-page/500";
-import Error401Page from "~/components/error-page/401";
-import Error404Page from "~/components/error-page/404";
-import RoleList from "~/pages/system/roles/RoleList";
-import RoleUserList from "~/pages/system/roles/RoleUserList";
-import {useOutletContext} from "react-router";
 import DepartTreeList from "~/pages/system/departs/DepartTreeList";
 import DepartDetail from "~/pages/system/departs/DepartDetail";
 
@@ -59,7 +50,7 @@ const DepartsPage = (props: any) => {
     }
 
     useEffect(()=>{
-        if (reloadFetcher.type === 'done' && reloadFetcher.data) {
+        if (getFetcherState(reloadFetcher) === FetcherState.DONE) {
             setDepartments(reloadFetcher.data);
         }
     }, [reloadFetcher.state]);

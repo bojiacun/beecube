@@ -8,6 +8,7 @@ import {
     Scripts,
     ScrollRestoration, useCatch, useLoaderData, useMatches, useOutlet, useRouteError,
 } from "@remix-run/react";
+import SSRProvider from 'react-bootstrap/SSRProvider';
 import ThemeContext, {theme, themeBreakpoints, themeColors} from 'themeConfig';
 import featherStyleUrl from '~/styles/fonts/feather/iconfont.css';
 import coreStyleUrl from '~/styles/core.css';
@@ -33,8 +34,8 @@ import pageMiscStyle from '~/styles/react/pages/page-misc.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import {sessionStorage} from "~/utils/auth.server";
 //字体设置
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {fas} from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons';
 import {requireAuthenticated} from "~/utils/auth.server";
 import ServerEnv from "~/env";
@@ -56,17 +57,16 @@ setDefaultLocale('zh-cn');
 i18n.changeLanguage('cn').then();
 
 
-export async function loader({request}:any) {
+export async function loader({request}: any) {
     let userInfo = await requireAuthenticated(request, false);
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
     //处理用户菜单，过滤非系统菜单
-    if(userInfo) {
-        if(session.has("APPID")) {
+    if (userInfo) {
+        if (session.has("APPID")) {
             //如果有APPID，则说明要进去应用控制台
             userInfo.perms = session.get("APP_MENUS");
-        }
-        else {
-            userInfo.perms = userInfo.perms?.filter((p:any)=>!p.componentName || (p.header && p.componentName=='app'));
+        } else {
+            userInfo.perms = userInfo.perms?.filter((p: any) => !p.componentName || (p.header && p.componentName == 'app'));
         }
     }
     return json({
@@ -98,7 +98,7 @@ export const meta: V2_MetaFunction = () => {
         viewport: "width=device-width,initial-scale=1",
     }];
 }
-const Document:FC<any> = (props) => {
+const Document: FC<any> = (props) => {
     const data = useLoaderData();
     const [themeContext, setThemeContext] = useState(theme);
     return (
@@ -117,13 +117,14 @@ const Document:FC<any> = (props) => {
                 )}`,
             }}
         />
-        <ToastContainer />
+        <ToastContainer/>
         <Scripts/>
         <LiveReload/>
         </body>
         </html>
     );
 }
+
 export function ErrorBoundary() {
     const error = useRouteError();
     if (isRouteErrorResponse(error)) {
@@ -132,7 +133,7 @@ export function ErrorBoundary() {
                 return (
                     <Document>
                         <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                            <Error401Page />
+                            <Error401Page/>
                         </div>
                     </Document>
                 );
@@ -140,7 +141,7 @@ export function ErrorBoundary() {
                 return (
                     <Document>
                         <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                            <Error404Page />
+                            <Error404Page/>
                         </div>
                     </Document>
                 );
@@ -149,7 +150,7 @@ export function ErrorBoundary() {
     return (
         <Document>
             <div id='app' className='h-100 d-flex align-items-center justify-content-center'>
-                <Error500Page />
+                <Error500Page/>
             </div>
         </Document>
     );
@@ -176,10 +177,10 @@ export default function App() {
     const stopPageLoading = () => {
         setLoading(false);
     }
-    const excludeAdminPaths = ['/login', '/console','/app/diy'];
+    const excludeAdminPaths = ['/login', '/console', '/app/diy'];
 
     let Layout: any;
-    if (_.indexOf(excludeAdminPaths, matches[matches.length-1].pathname) > -1) {
+    if (_.indexOf(excludeAdminPaths, matches[matches.length - 1].pathname) > -1) {
         Layout = LayoutFull;
     } else {
         Layout = LayoutVertical;
@@ -215,18 +216,20 @@ export default function App() {
     }
     return (
         <Document>
-            <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
-                <div id='app' className='h-100'>
-                    <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
-                        {outlet}
-                    </Layout>
-                    <ClipLoader
-                        color={'#3366CC'}
-                        loading={loading}
-                        cssOverride={loaderCss}
-                    />
-                </div>
-            </ThemeContext.Provider>
+            <SSRProvider>
+                <ThemeContext.Provider value={{theme: themeContext, updateThemeContext, startPageLoading, stopPageLoading, pageLoading: loading}}>
+                    <div id='app' className='h-100'>
+                        <Layout startPageLoading={startPageLoading} stopPageLoading={stopPageLoading}>
+                            {outlet}
+                        </Layout>
+                        <ClipLoader
+                            color={'#3366CC'}
+                            loading={loading}
+                            cssOverride={loaderCss}
+                        />
+                    </div>
+                </ThemeContext.Provider>
+            </SSRProvider>
         </Document>
     );
 }
