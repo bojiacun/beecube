@@ -125,7 +125,6 @@ const Document:FC<any> = (props) => {
     );
 }
 export function ErrorBoundary() {
-    const [themeContext, setThemeContext] = useState(theme);
     const error = useRouteError();
     if (isRouteErrorResponse(error)) {
         switch (error.status) {

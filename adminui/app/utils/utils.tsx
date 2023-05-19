@@ -1,9 +1,9 @@
 import {MinusSquare, PlusSquare} from "react-feather";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
-import {useCatch} from "@remix-run/react";
+import {isRouteErrorResponse, useCatch, useRouteError} from "@remix-run/react";
 import {useOutletContext} from "react-router";
-import {useContext, useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import Error401Page from "~/components/error-page/401";
 import Error404Page from "~/components/error-page/404";
 import Error500Page from "~/components/error-page/500";
@@ -153,33 +153,22 @@ export function handleSaveResult(result: any, successMessage = '保存成功') {
 }
 
 export function defaultRouteCatchBoundary() {
-    const caught = useCatch();
-    const {stopPageLoading} = useContext(themeContext);
-
-    useEffect(()=>{
-        stopPageLoading();
-    }, []);
-
-    if (caught.status === 401) {
-        return <Error401Page/>
-    } else if (caught.status === 404) {
-        return <Error404Page/>
-    }
-    else if(caught.status === 403) {
-        return <Error403Page />
-    }
-    return <Error500Page/>
 }
 
 export function defaultRouteErrorBoundary() {
     const {stopPageLoading} = useContext(themeContext);
-
-
+    const error = useRouteError();
     useEffect(()=>{
         stopPageLoading();
     }, []);
-
-
+    if (isRouteErrorResponse(error)) {
+        switch (error.status) {
+            case 401:
+                return <Error401Page />;
+            case 404:
+                return <Error404Page />;
+        }
+    }
     return <Error500Page/>;
 }
 
