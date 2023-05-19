@@ -8,7 +8,7 @@ const UserDropdown = () => {
     const rootLoaderData = useLoaderData();
     const logoutFetcher = useFetcher();
     const navigate = useNavigate();
-    const userData = rootLoaderData.userInfo.userInfo;
+    const userData = rootLoaderData.userInfo?.userInfo;
 
     useEffect(() => {
         if (logoutFetcher.data && logoutFetcher.type === 'done') {

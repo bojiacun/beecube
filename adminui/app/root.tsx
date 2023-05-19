@@ -192,7 +192,6 @@ export default function App() {
     }
     const excludeAdminPaths = ['/login', '/console','/app/diy'];
 
-    console.log(matches);
     let Layout: any;
     if (_.indexOf(excludeAdminPaths, matches[0].pathname) > -1) {
         Layout = LayoutFull;
