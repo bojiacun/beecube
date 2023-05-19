@@ -1,18 +1,19 @@
 import {Heart} from 'react-feather'
+import {Col, Row} from "react-bootstrap";
 
 
 const AppFooter = () => {
     return (
-        <p className={'clearfix mb-0'}>
-            <span className="float-md-left d-block d-md-inline-block mt-25">
+        <div className={'d-flex justify-content-between'}>
+            <div>
                 COPYRIGHT  © 2022 - {new Date().getFullYear()}
                 <a className={'ml-25'} href={'http://www.qukuailian888.com'} target={'_blank'}>蜜蜂魔方</a>
                 <span className="d-none d-sm-inline-block">, 设计开发 & 版权所有</span>
-            </span>
-            <span className={"float-md-right d-none d-md-block"}>
+            </div>
+            <div>
                 蜜蜂魔方管理后台 <Heart size={21} className={'text-danger stroke-current'} />
-            </span>
-        </p>
+            </div>
+        </div>
     );
 }
 
