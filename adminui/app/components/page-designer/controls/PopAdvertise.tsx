@@ -93,7 +93,7 @@ const PopAdvertiseAttributeView : React.FC<any> = (props) => {
                                             </div>);
                                         }}
                                     </BootstrapFormList>
-                                    <Button block onClick={handleOnAdd}><Plus size={14} />增加一个广告图</Button>
+                                    <Button onClick={handleOnAdd}><Plus size={14} />增加一个广告图</Button>
                                 </Form>
                             );
                         }

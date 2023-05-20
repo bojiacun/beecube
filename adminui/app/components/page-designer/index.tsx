@@ -273,7 +273,7 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                 }
                             </ul>
                             {!lockPage &&
-                                <Button style={{borderRadius: 40}} type="primary" block
+                                <Button style={{borderRadius: 40}} variant="primary"
                                         onClick={() => setNewPageVisible(true)}>新建自定义页面</Button>
                             }
                         </div>

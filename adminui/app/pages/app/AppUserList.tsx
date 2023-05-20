@@ -11,10 +11,8 @@ import {
 import {useFetcher} from "@remix-run/react";
 import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import {Plus, XCircle} from "react-feather";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import UserListSelector from "~/pages/system/roles/UserListSelector";
 import UserEdit from "~/pages/system/roles/UserEdit";
 import UserSelector from "~/pages/app/UserSelector";
 

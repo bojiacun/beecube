@@ -49,7 +49,6 @@ const AppMemberList = (props: any) => {
     const searchFetcher = useFetcher();
     const parentFetcher = useFetcher();
     const deleteFetcher = useFetcher();
-    const location = useLocation();
 
 
     useEffect(() => {
@@ -169,8 +168,8 @@ const AppMemberList = (props: any) => {
                 return (
                     <div style={{textAlign: 'center'}}>
                         <div>
-                            {row.isAgent == 1 ? <Badge variant={'success'}>是</Badge> :
-                                <Badge variant={'danger'}>否</Badge>}
+                            {row.isAgent == 1 ? <Badge bg={'success'}>是</Badge> :
+                                <Badge bg={'danger'}>否</Badge>}
                         </div>
                         <div><Link to={'/app/members/' + row.id}>下级用户</Link></div>
                     </div>
@@ -186,13 +185,13 @@ const AppMemberList = (props: any) => {
                 return (
                     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         <div style={{marginBottom: 5}}>
-                            {row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> :
-                                <Badge variant={'danger'}>{row.status_dictText}</Badge>}
+                            {row.status == 1 ? <Badge bg={'success'}>{row.status_dictText}</Badge> :
+                                <Badge bg={'danger'}>{row.status_dictText}</Badge>}
                         </div>
                         <div>
-                            {row.authStatus == 2 && <Badge variant={'success'}>{row.authStatus_dictText}</Badge>}
-                            {row.authStatus == 1 && <Badge variant={'warning'}>{row.authStatus_dictText}</Badge>}
-                            {row.authStatus == 0 && <Badge variant={'light'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 2 && <Badge bg={'success'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 1 && <Badge bg={'warning'}>{row.authStatus_dictText}</Badge>}
+                            {row.authStatus == 0 && <Badge bg={'dark'}>{row.authStatus_dictText}</Badge>}
                         </div>
                     </div>
                 );
@@ -230,11 +229,11 @@ const AppMemberList = (props: any) => {
         //设置分页为1
         setSearchState({...searchState, pageNo: 1});
     }
-    const handleOnAuthStatusChange = (e:any) => {
-        setSearchState({...searchState, authStatus: e.target.checked ? 'on': null});
+    const handleOnAuthStatusChange = (e: any) => {
+        setSearchState({...searchState, authStatus: e.target.checked ? 'on' : null});
     }
-    const handleOnIsAgentChange = (e:any) => {
-        setSearchState({...searchState, isAgent: e.target.checked?'on': null});
+    const handleOnIsAgentChange = (e: any) => {
+        setSearchState({...searchState, isAgent: e.target.checked ? 'on' : null});
     }
     const handleOnUsernameChanged = (e: any) => {
         setSearchState({...searchState, keywords: e.target.value});
@@ -253,7 +252,7 @@ const AppMemberList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={2} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">{isChildren ? (parent?.nickname || parent?.realname) + '下级用户' : '会员管理'}</h4>
+                            <h4 className="mb-0 me-1">{isChildren ? (parent?.nickname || parent?.realname) + '下级用户' : '会员管理'}</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -265,7 +264,7 @@ const AppMemberList = (props: any) => {
                             />
                             {isChildren && <Link to={'/app/members'}>返回列表</Link>}
                         </Col>
-                        <Col md={10} className={'d-flex align-items-center justify-content-end'}>
+                        <Col md={10}>
                             <searchFetcher.Form className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
@@ -273,41 +272,41 @@ const AppMemberList = (props: any) => {
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
-                                <FormControl name={'startDate'} value={moment(startDate).isValid() ? moment(startDate).format('YYYY-MM-DD'):''} type={'hidden'}/>
-                                <FormControl name={'endDate'} value={moment(endDate).isValid()?moment(endDate).format('YYYY-MM-DD'):''} type={'hidden'}/>
-                                <FormGroup className={'mr-2'}>
-                                    <FormLabel>注册时间：</FormLabel>
-                                    <Form.Row>
-                                    <DatePicker
-                                        selectsRange={true}
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        className={'form-control'}
-                                        dateFormat={'yyyy-MM-dd'}
-                                        onChange={(update:any) => {
-                                            setDateRange(update);
-                                        }}
-                                        isClearable={true}
-                                    />
-                                    </Form.Row>
+                                <FormControl name={'startDate'} value={moment(startDate).isValid() ? moment(startDate).format('YYYY-MM-DD') : ''} type={'hidden'}/>
+                                <FormControl name={'endDate'} value={moment(endDate).isValid() ? moment(endDate).format('YYYY-MM-DD') : ''} type={'hidden'}/>
+                                <FormGroup as={Row} className={'align-items-center justify-content-end'}>
+                                    <FormLabel column md={'auto'}>注册时间：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <DatePicker
+                                            selectsRange={true}
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            className={'form-control'}
+                                            dateFormat={'yyyy-MM-dd'}
+                                            onChange={(update: any) => {
+                                                setDateRange(update);
+                                            }}
+                                            isClearable={true}
+                                        />
+                                    </Col>
+                                    <FormLabel column md={'auto'}>是否分销商：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Switch name={'isAgent'} id={'isAgent'} onChange={handleOnIsAgentChange}/>
+                                    </Col>
+                                    <FormLabel column md={'auto'}>待审核：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Switch name={'authStatus'} id={'authStatus'} onChange={handleOnAuthStatusChange}/>
+                                    </Col>
+                                    <FormLabel column htmlFor={'keywords'} md={'auto'}>关键字：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <FormControl name={'keywords'} onChange={handleOnUsernameChanged}
+                                                     placeholder={'会员昵称、真实姓名、手机号、ID等'}/>
+                                    </Col>
+                                    <Col md={'auto'}>
+                                        <Button type={'submit'}>搜索</Button>
+                                    </Col>
                                 </FormGroup>
 
-                                <FormGroup className={'mr-2'}>
-                                    <FormLabel>是否分销商：</FormLabel>
-                                    <Form.Switch name={'isAgent'} id={'isAgent'} onChange={handleOnIsAgentChange} />
-                                </FormGroup>
-
-                                <FormGroup className={'mr-2'}>
-                                    <FormLabel>待审核：</FormLabel>
-                                    <Form.Switch name={'authStatus'} id={'authStatus'} onChange={handleOnAuthStatusChange} />
-                                </FormGroup>
-
-                                <FormGroup className={'mb-0 mr-2'}>
-                                    <FormLabel htmlFor={'keywords'}>关键字：</FormLabel>
-                                    <FormControl name={'keywords'} onChange={handleOnUsernameChanged}
-                                                 placeholder={'会员昵称、真实姓名、手机号、ID等'}/>
-                                </FormGroup>
-                                <Button type={'submit'}>搜索</Button>
                             </searchFetcher.Form>
                         </Col>
                     </Row>

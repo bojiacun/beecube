@@ -119,7 +119,7 @@ const MenusModuleAttribute = (props: any) => {
                                             </div>);
                                         }}
                                     </BootstrapFormList>
-                                    <Button block onClick={handleOnAdd}><Plus size={14} />增加一个菜单</Button>
+                                    <Button onClick={handleOnAdd}><Plus size={14} />增加一个菜单</Button>
                                 </Form>
                             );
                         }

@@ -95,9 +95,7 @@ const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
                     value={value}
                     {...rest}
                 />
-                <InputGroup.Append>
-                    <Button onClick={() => setModalVisible(true)}>选择链接</Button>
-                </InputGroup.Append>
+                <Button onClick={() => setModalVisible(true)}>选择链接</Button>
             </InputGroup>
             <Modal
                 centered={true}

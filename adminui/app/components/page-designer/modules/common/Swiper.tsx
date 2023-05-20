@@ -106,7 +106,7 @@ const SwiperModuleAttribute = (props: any) => {
                                             </div>);
                                         }}
                                     </BootstrapFormList>
-                                    <Button block onClick={handleOnAdd}><Plus size={14} />增加一个轮播图</Button>
+                                    <Button onClick={handleOnAdd}><Plus size={14} />增加一个轮播图</Button>
                                 </Form>
                             );
                         }

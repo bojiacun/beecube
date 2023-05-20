@@ -103,7 +103,7 @@ const WithdrawList = (props: any) => {
             dataField: 'status',
             headerStyle: {width: 100},
             formatter: (cell:any, row:any) => {
-                return row.status == 1 ? <Badge variant={'success'}>已处理</Badge> : <Badge variant={'danger'}>待处理</Badge>
+                return row.status == 1 ? <Badge bg={'success'}>已处理</Badge> : <Badge bg={'danger'}>待处理</Badge>
             }
         },
         {
@@ -152,14 +152,12 @@ const WithdrawList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'memberName'}>用户昵称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'memberName'}>用户昵称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'memberName'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
