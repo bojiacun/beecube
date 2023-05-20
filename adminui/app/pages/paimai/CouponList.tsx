@@ -7,6 +7,7 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import AuctionEditor from "~/pages/paimai/AuctionEditor";
 import CouponTicketList from "~/pages/paimai/CouponTicketList";
+import CouponEditor from "~/pages/paimai/CouponEditor";
 
 
 const CouponList = (props: any) => {
@@ -24,7 +25,7 @@ const CouponList = (props: any) => {
     }
 
     useEffect(() => {
-        if (getFetcherState(searchFetcher.data) === FetcherState.DONE) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
@@ -230,7 +231,7 @@ const CouponList = (props: any) => {
             {selectedRow && <CouponTicketList show={true} selectedRow={selectedRow} onHide={()=>{
                 setSelectedRow(null);
             }} />}
-            {editModal && <CouponList model={editModal} onHide={()=>{
+            {editModal && <CouponEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}

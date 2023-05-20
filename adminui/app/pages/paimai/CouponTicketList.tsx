@@ -65,6 +65,10 @@ const CouponTicketList = (props: any) => {
             dataField: 'createTime',
         },
         {
+            text: '失效时间',
+            dataField: 'endTime',
+        },
+        {
             text: '使用状态',
             dataField: 'status_dictText',
         },
