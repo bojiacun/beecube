@@ -109,6 +109,10 @@ const BuyoutList = (props: any) => {
             dataField: 'title',
         },
         {
+            text: '型号',
+            dataField: 'spec',
+        },
+        {
             text: '预览图',
             dataField: '',
             isDummyField: true,

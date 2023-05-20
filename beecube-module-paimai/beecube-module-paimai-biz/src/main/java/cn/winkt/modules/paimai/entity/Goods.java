@@ -39,6 +39,9 @@ public class Goods {
 	@Excel(name = "主标题", width = 15)
     @ApiModelProperty(value = "主标题")
 	private java.lang.String title;
+	private String spec;
+	private String homeCover;
+	private String listCover;
 	/**副标题*/
 	@Excel(name = "副标题", width = 15)
     @ApiModelProperty(value = "副标题")

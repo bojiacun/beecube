@@ -20,6 +20,7 @@ import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
+//一口价编辑器
 const BuyoutEditor = (props: any) => {
     const {model, onHide} = props;
     const [goodsClassOptions, setGoodsClassOptions] = useState<any[]>([]);
@@ -30,6 +31,9 @@ const BuyoutEditor = (props: any) => {
 
     const GoodsSchema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
+        spec: Yup.string().required('必填字段'),
+        homeCover: Yup.string().required('必填字段'),
+        listCover: Yup.string().required('必填字段'),
         startPrice: Yup.number().required('必填字段'),
         images: Yup.string().required('必填字段'),
         classId: Yup.number().required('必填字段'),
@@ -96,12 +100,21 @@ const BuyoutEditor = (props: any) => {
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapSelect name={'classId'} label={'分类'} options={goodsClassOptions}/>
                                     <BootstrapInput label={'标题'} name={'title'}/>
+                                    <BootstrapInput label={'型号'} name={'spec'}/>
                                     <BootstrapInput label={'副标题'} name={'subTitle'}/>
                                     <BootstrapInput label={'分销佣金'} name={'commission'} placeholder={'分销佣金百分比'}/>
                                     <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
                                     <BootstrapInput label={'基础销量'} name={'baseSales'} placeholder={'基础销量'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
+                                        <FormLabel htmlFor={'homeCover'}>首页封面</FormLabel>
+                                        <FileBrowserInput name={'homeCover'} type={1} multi={false} />
+                                    </FormGroup>
+                                    <FormGroup className={'mb-1'}>
+                                        <FormLabel htmlFor={'listCover'}>列表封面</FormLabel>
+                                        <FileBrowserInput name={'listCover'} type={1} multi={false} />
+                                    </FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'images'}>拍品图片</FormLabel>
                                         <FileBrowserInput name={'images'} type={1} multi={true}/>
                                     </FormGroup>
