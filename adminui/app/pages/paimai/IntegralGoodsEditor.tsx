@@ -13,7 +13,7 @@ import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import TinymceEditor from "~/components/tinymce-editor";
 
 
-const CLASS_LIST = '/paimai/integral/classes';
+const CLASS_LIST = '/paimai/integral/classes/all';
 const ADD_URL = '/paimai/integral/goods/add';
 const EDIT_URL = '/paimai/integral/goods/edit';
 
@@ -30,9 +30,6 @@ const IntegralGoodsEditor = (props: any) => {
     const goodsClassFetcher = useFetcher();
     const postFetcher = useFetcher();
     const formikRef = useRef<any>();
-
-
-
 
     const handleOnSubmit = (values: any) => {
         values.type = 1;

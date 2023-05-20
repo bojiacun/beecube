@@ -9,12 +9,11 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import cn.winkt.modules.paimai.entity.IntegralOrder;
-import cn.winkt.modules.paimai.service.IIntegralOrderService;
+import cn.winkt.modules.paimai.entity.IntegralSetting;
+import cn.winkt.modules.paimai.service.IIntegralSettingService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,67 +36,66 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 积分商品分类
+ * @Description: 积分商城设置
  * @Author: jeecg-boot
  * @Date:   2023-05-20
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="积分商品分类")
+@Api(tags="积分商城设置")
 @RestController
-@RequestMapping("/integral/orders")
-public class IntegralOrderController extends JeecgController<IntegralOrder, IIntegralOrderService> {
+@RequestMapping("/integral/settings")
+public class IntegralSettingController extends JeecgController<IntegralSetting, IIntegralSettingService> {
 	@Autowired
-	private IIntegralOrderService integralOrderService;
+	private IIntegralSettingService integralSettingService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param integralOrder
+	 * @param integralSetting
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-分页列表查询")
-	@ApiOperation(value="积分商品分类-分页列表查询", notes="积分商品分类-分页列表查询")
+	@AutoLog(value = "积分商城设置-分页列表查询")
+	@ApiOperation(value="积分商城设置-分页列表查询", notes="积分商城设置-分页列表查询")
 	@GetMapping(value = "/list")
-	@AutoDict
-	public Result<?> queryPageList(IntegralOrder integralOrder,
+	public Result<?> queryPageList(IntegralSetting integralSetting,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<IntegralOrder> queryWrapper = QueryGenerator.initQueryWrapper(integralOrder, req.getParameterMap());
-		Page<IntegralOrder> page = new Page<IntegralOrder>(pageNo, pageSize);
-		IPage<IntegralOrder> pageList = integralOrderService.page(page, queryWrapper);
+		QueryWrapper<IntegralSetting> queryWrapper = QueryGenerator.initQueryWrapper(integralSetting, req.getParameterMap());
+		Page<IntegralSetting> page = new Page<IntegralSetting>(pageNo, pageSize);
+		IPage<IntegralSetting> pageList = integralSettingService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 * 添加
 	 *
-	 * @param integralOrder
+	 * @param integralSetting
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-添加")
-	@ApiOperation(value="积分商品分类-添加", notes="积分商品分类-添加")
+	@AutoLog(value = "积分商城设置-添加")
+	@ApiOperation(value="积分商城设置-添加", notes="积分商城设置-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody IntegralOrder integralOrder) {
-		integralOrderService.save(integralOrder);
+	public Result<?> add(@RequestBody IntegralSetting integralSetting) {
+		integralSettingService.save(integralSetting);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param integralOrder
+	 * @param integralSetting
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-编辑")
-	@ApiOperation(value="积分商品分类-编辑", notes="积分商品分类-编辑")
+	@AutoLog(value = "积分商城设置-编辑")
+	@ApiOperation(value="积分商城设置-编辑", notes="积分商城设置-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody IntegralOrder integralOrder) {
-		integralOrderService.updateById(integralOrder);
+	public Result<?> edit(@RequestBody IntegralSetting integralSetting) {
+		integralSettingService.updateById(integralSetting);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -107,11 +105,11 @@ public class IntegralOrderController extends JeecgController<IntegralOrder, IInt
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-通过id删除")
-	@ApiOperation(value="积分商品分类-通过id删除", notes="积分商品分类-通过id删除")
+	@AutoLog(value = "积分商城设置-通过id删除")
+	@ApiOperation(value="积分商城设置-通过id删除", notes="积分商城设置-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		integralOrderService.removeById(id);
+		integralSettingService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -121,11 +119,11 @@ public class IntegralOrderController extends JeecgController<IntegralOrder, IInt
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-批量删除")
-	@ApiOperation(value="积分商品分类-批量删除", notes="积分商品分类-批量删除")
+	@AutoLog(value = "积分商城设置-批量删除")
+	@ApiOperation(value="积分商城设置-批量删除", notes="积分商城设置-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.integralOrderService.removeByIds(Arrays.asList(ids.split(",")));
+		this.integralSettingService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功！");
 	}
 	
@@ -135,23 +133,23 @@ public class IntegralOrderController extends JeecgController<IntegralOrder, IInt
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "积分商品分类-通过id查询")
-	@ApiOperation(value="积分商品分类-通过id查询", notes="积分商品分类-通过id查询")
+	@AutoLog(value = "积分商城设置-通过id查询")
+	@ApiOperation(value="积分商城设置-通过id查询", notes="积分商城设置-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		IntegralOrder integralOrder = integralOrderService.getById(id);
-		return Result.OK(integralOrder);
+		IntegralSetting integralSetting = integralSettingService.getById(id);
+		return Result.OK(integralSetting);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param integralOrder
+   * @param integralSetting
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, IntegralOrder integralOrder) {
-      return super.exportXls(request, integralOrder, IntegralOrder.class, "积分商品分类");
+  public ModelAndView exportXls(HttpServletRequest request, IntegralSetting integralSetting) {
+      return super.exportXls(request, integralSetting, IntegralSetting.class, "积分商城设置");
   }
 
   /**
@@ -163,7 +161,7 @@ public class IntegralOrderController extends JeecgController<IntegralOrder, IInt
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, IntegralOrder.class);
+      return super.importExcel(request, response, IntegralSetting.class);
   }
 
 }

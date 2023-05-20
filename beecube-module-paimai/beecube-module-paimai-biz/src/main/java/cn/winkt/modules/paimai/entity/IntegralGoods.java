@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -75,6 +76,7 @@ public class IntegralGoods {
 	/**状态0下架1上架*/
 	@Excel(name = "状态0下架1上架", width = 15)
     @ApiModelProperty(value = "状态0下架1上架")
+	@Dict(dicCode = "paimai_show_status")
 	private java.lang.Integer status;
 	/**商品简介*/
 	@Excel(name = "商品简介", width = 15)
