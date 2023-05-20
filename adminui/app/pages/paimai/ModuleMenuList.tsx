@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DefaultListSearchParams, defaultSelectRowConfig, FetcherState, getFetcherState, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import {Button, Col, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
@@ -7,23 +7,23 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import ModuleMenuEditor from "~/pages/paimai/ModuleMenuEditor";
 
 
-const LIST_URL = '/app/module/menus';
-const DELETE_URL = '/app/module/menus/delete';
+const LIST_URL = '/app/modules/menus';
+const DELETE_URL = '/app/modules/menus/delete';
 
 const ModuleMenuList = (props: any) => {
-    const {show, onHide, selectedRoom, startPageLoading, stopPageLoading} = props;
+    const {show, onHide, selectedRow, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, moduleId: selectedRoom?.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, moduleId: selectedRow?.id});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [editModal, setEditModal] = useState<any>();
     const searchFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
     useEffect(() => {
-        if (show && selectedRoom) {
+        if (show && selectedRow) {
             searchFetcher.submit(searchState, {method: 'get', action: LIST_URL});
         }
-    }, [show, selectedRoom]);
+    }, [show, selectedRow]);
 
 
     useEffect(() => {
@@ -99,8 +99,9 @@ const ModuleMenuList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        {row.state == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>}
-                        {row.state == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>}
+                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
                     </div>
                 );
             },
@@ -138,11 +139,12 @@ const ModuleMenuList = (props: any) => {
                 show={show}
                 onHide={() => onHide(false)}
                 centered
+                size={'lg'}
                 backdrop={'static'}
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-modal'}> 模块【{selectedRoom?.name }】权限</Modal.Title>
+                    <Modal.Title id={'edit-modal'}> 模块【{selectedRow?.name }】权限</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className={'m-2'}>
@@ -154,7 +156,7 @@ const ModuleMenuList = (props: any) => {
                                 <searchFetcher.Form action={LIST_URL} className={'form-inline justify-content-end'}
                                                     onSubmit={handleOnSearchSubmit}>
                                     <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                                    <FormControl name={'room_id'} value={selectedRoom?.id} type={'hidden'}/>
+                                    <FormControl name={'room_id'} value={selectedRow?.id} type={'hidden'}/>
                                     <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                     <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                     <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
@@ -202,7 +204,7 @@ const ModuleMenuList = (props: any) => {
                     </div>
                 </Modal.Body>
             </Modal>
-            {editModal && <ModuleMenuEditor model={editModal} selectedRoom={selectedRoom} onHide={()=>{
+            {editModal && <ModuleMenuEditor model={editModal} selectedRow={selectedRow} onHide={()=>{
                 setEditModal(null);
                 searchFetcher.submit(searchState, {method: 'get', action: LIST_URL});
             }} />}

@@ -15,6 +15,9 @@ const formSchema = Yup.object().shape({
     menuName: Yup.string().required('必填字段'),
 });
 
+const ADD_URL = '/app/modules/menus/add';
+const EDIT_URL = '/app/modules/menus/edit';
+
 const ModuleMenuEditor = (props: any) => {
     const {model, onHide} = props;
     const postFetcher = useFetcher();
@@ -23,9 +26,9 @@ const ModuleMenuEditor = (props: any) => {
 
     const handleOnSubmit = (values: any) => {
         if (values.id) {
-            postFetcher.submit(values, {method: 'post', action: '/app/module/menu/edit'});
+            postFetcher.submit(values, {method: 'post', action: EDIT_URL});
         } else {
-            postFetcher.submit(values, {method: 'post', action: '/app/module/menu/add'});
+            postFetcher.submit(values, {method: 'post', action: ADD_URL});
         }
     }
 

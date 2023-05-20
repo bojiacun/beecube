@@ -84,15 +84,17 @@ const AppModuleList = () => {
                                     <div>
                                         {m.status != 1 && <Button onClick={()=>handleOnInstall(m)} disabled={installFetcher.state === 'submitting'} variant={'primary'} size={'sm'}>安装</Button>}
                                         {m.status == 1 && <Button onClick={()=>handleOnUnInstall(m)} disabled={uninstallFetcher.state === 'submitting'} variant={'danger'} size={'sm'}>卸载</Button>}
-                                        <Button onClick={()=>handleShowModuleMenu(m)}>模块权限</Button>
-                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button onClick={()=>handleOnUpgrade(m)} className={'ml-1'} disabled={upgradeFetcher.state === 'submitting'} variant={'warning'} size={'sm'}>升级</Button>}
+                                        <Button onClick={()=>handleShowModuleMenu(m)} size={'sm'} className={'ms-1'}>模块权限</Button>
+                                        {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button onClick={()=>handleOnUpgrade(m)} className={'ms-1'} disabled={upgradeFetcher.state === 'submitting'} variant={'warning'} size={'sm'}>升级</Button>}
                                     </div>
                                 </div>
                             </Col>
                         );
                     })}
                 </Row>
-                {module && <ModuleMenuList selectedRow={module} />}
+                {module && <ModuleMenuList selectedRow={module} show={true} onHide={()=>{
+                    setModule(null);
+                }} />}
             </Card.Body>
             <Card.Footer>
                 <Row>
