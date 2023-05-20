@@ -1,13 +1,7 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {
-    DefaultListSearchParams,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
-} from "~/utils/utils";
-import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -34,7 +28,7 @@ const IntegralGoodsList = (props: any) => {
     }
 
     useEffect(() => {
-        if (searchFetcher.data) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
