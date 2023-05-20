@@ -11,13 +11,6 @@ import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import FigureImage from "react-bootstrap/FigureImage";
-import AuctionEditor from "~/pages/paimai/AuctionEditor";
-import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
-import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
-import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
-import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
-import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
 import {User} from "react-feather";
 import LiveRoomStreamEditor from "~/pages/paimai/LiveRoomStreamEditor";
 

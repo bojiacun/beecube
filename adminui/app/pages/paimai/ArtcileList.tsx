@@ -160,12 +160,12 @@ const ArticleList = (props: any) => {
             dataField: 'postFlag',
             formatter(cell:number, row: any) {
                 if(row.postFlag == 0) {
-                    return <Badge variant={'light'}>否</Badge>
+                    return <Badge bg={'light'}>否</Badge>
                 }
                 else if(row.postFlag == 1) {
-                    return <Badge variant={'success'}>是</Badge>
+                    return <Badge bg={'success'}>是</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -173,12 +173,12 @@ const ArticleList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -264,14 +264,12 @@ const ArticleList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'title'}>文章标题</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'title'}>文章标题</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'title'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

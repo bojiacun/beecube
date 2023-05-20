@@ -136,7 +136,7 @@ const AppUserList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <Button className={'mr-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
+                            <Button className={'me-1'} onClick={handleOnAdd}><Plus size={16}/>新建用户</Button>
                             <Button variant={'secondary'} onClick={()=>setUserListShow(true)}><Plus size={16}/>已有用户</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
@@ -147,15 +147,12 @@ const AppUserList = (props: any) => {
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
-
-                                <FormGroup as={Form.Row} className={'mb-0'}>
+                                <FormGroup as={Row} className={'mb-0'}>
                                     <Col>
                                         <InputGroup>
                                             <FormControl name={'username'} style={{width: 140}} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'搜索账号名称'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

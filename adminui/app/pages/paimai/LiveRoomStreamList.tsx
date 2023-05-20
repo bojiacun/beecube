@@ -128,12 +128,12 @@ const LiveRoomStreamList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>不显示</Badge>
+                    return <Badge bg={'light'}>不显示</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>显示</Badge>
+                    return <Badge bg={'success'}>显示</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {

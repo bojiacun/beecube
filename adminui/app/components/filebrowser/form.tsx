@@ -120,9 +120,7 @@ const FileBrowserInput: FC<FileBrowserInputProps> = React.forwardRef<any, FileBr
                         value={multi?'':value}
                         {...rest}
                     />
-                    <InputGroup.Append>
-                        <Button onClick={() => setModalVisible(true)}>浏览</Button>
-                    </InputGroup.Append>
+                    <Button onClick={() => setModalVisible(true)}>浏览</Button>
                 </InputGroup>
             }
             {formik.errors[name]&&<FormControl.Feedback type={'invalid'} style={{display: 'block'}}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}

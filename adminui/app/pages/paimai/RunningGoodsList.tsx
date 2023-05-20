@@ -160,14 +160,12 @@ const RunningGoodsList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'title'}>拍品名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'title'}>拍品名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'title'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

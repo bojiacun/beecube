@@ -56,7 +56,7 @@ const BootstrapSelect: FC<BootstrapSelectProps> = (props) => {
     }
 
     return (
-        <FormGroup>
+        <FormGroup className={'mb-1'}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <ReactSelectThemed
                 id={name}

@@ -104,15 +104,15 @@ const DepositList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 2) {
-                    return <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'danger'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -151,7 +151,7 @@ const DepositList = (props: any) => {
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
                                 options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block me-1'}
                                 onChange={handlePageSizeChanged}
                             />
                         </Col>
@@ -164,15 +164,13 @@ const DepositList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'memberName'}>用户昵称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'memberName'}>用户昵称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'memberName'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

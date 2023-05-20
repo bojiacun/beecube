@@ -5,7 +5,6 @@ import {Button, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal,
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {AwesomeButton} from "react-awesome-button";
 
 
 const GoodsListSelector = (props: any) => {
@@ -135,7 +134,7 @@ const GoodsListSelector = (props: any) => {
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
                                 options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block ml-50 me-1'}
                                 onChange={handlePageSizeChanged}
                             />
                         </Col>
@@ -148,15 +147,13 @@ const GoodsListSelector = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'title'}>拍品名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'title'}>拍品名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'title'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                          placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
@@ -194,7 +191,7 @@ const GoodsListSelector = (props: any) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <AwesomeButton type={'primary'} onPress={handleOnAddGoods} disabled={editFetcher.state === 'submitting'}>确认选择</AwesomeButton>
+                <Button variant={'primary'} onClick={handleOnAddGoods} disabled={editFetcher.state === 'submitting'}>确认选择</Button>
             </Modal.Footer>
         </Modal>
     );

@@ -132,7 +132,7 @@ const AppList = (props: any) => {
             dataField: 'authStatus_dictText',
             headerStyle: {width: 120},
             formatter: (cell:any, row:any) => {
-                return row.authStatus == 'unauthorized' ? <Badge variant={'danger'}>{row.authStatus_dictText}</Badge> : <Badge variant={'success'}>{row.authStatus_dictText}</Badge>
+                return row.authStatus == 'unauthorized' ? <Badge bg={'danger'}>{row.authStatus_dictText}</Badge> : <Badge bg={'success'}>{row.authStatus_dictText}</Badge>
             }
         },
         {
@@ -140,7 +140,7 @@ const AppList = (props: any) => {
             dataField: 'status_dictText',
             headerStyle: {width: 100},
             formatter: (cell:any, row:any) => {
-                return row.status == 1 ? <Badge variant={'success'}>{row.status_dictText}</Badge> : <Badge variant={'danger'}>{row.status_dictText}</Badge>
+                return row.status == 1 ? <Badge bg={'success'}>{row.status_dictText}</Badge> : <Badge bg={'danger'}>{row.status_dictText}</Badge>
             }
         },
         {
@@ -192,17 +192,16 @@ const AppList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">所有应用</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
                                 options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block ml-50 me-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd} className={'mr-1'}><i className={'feather icon-plus'} />新建应用</Button>
+                            <Button onClick={handleOnAdd} className={'me-1'}><i className={'feather icon-plus'} />新建应用</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -211,14 +210,12 @@ const AppList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>应用名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'name'}>应用名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnUsernameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

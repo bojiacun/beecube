@@ -21,7 +21,7 @@ const BootstrapInput: FC<BootstrapInputProps> = (props) => {
 
 
     return (
-        <FormGroup>
+        <FormGroup className={'mb-1'}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <FormControl
                 id={name}

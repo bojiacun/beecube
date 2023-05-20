@@ -16,7 +16,6 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {Field, Formik, Form as FormikForm} from "formik";
 import classNames from "classnames";
-import {AwesomeButton} from "react-awesome-button";
 import * as Yup from "yup";
 import TreePermissionList from "~/pages/system/roles/TreePermissionList";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
@@ -109,12 +108,12 @@ const BuyoutClassList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -171,14 +170,12 @@ const BuyoutClassList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>分类名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'name'}>分类名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>

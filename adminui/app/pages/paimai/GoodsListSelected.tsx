@@ -5,7 +5,6 @@ import {Badge, Button, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, I
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import {AwesomeButton} from "react-awesome-button";
 import SyncGoodsEditor from "~/pages/paimai/SyncGoodsEditor";
 import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 import OfferList from "~/pages/paimai/OfferList";
@@ -165,21 +164,21 @@ const GoodsListSelected = (props: any) => {
             hidden: selectedPerformance.type !=2,
             formatter(cell:number, row: any) {
                 if(row.state == 0) {
-                    return <Badge variant={'light'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 1) {
-                    return <Badge variant={'success'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 2) {
-                    return <Badge variant={'warning'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'warning'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 3) {
-                    return <Badge variant={'info'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'info'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 4) {
-                    return <Badge variant={'dark'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'dark'}>{row.state_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -188,15 +187,15 @@ const GoodsListSelected = (props: any) => {
             hidden: selectedPerformance.type !=1,
             formatter(cell:number, row: any) {
                 if(row.state == 0) {
-                    return <Badge variant={'light'}>未成交</Badge>
+                    return <Badge bg={'light'}>未成交</Badge>
                 }
                 else if(row.state == 3) {
-                    return <Badge variant={'success'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.state_dictText}</Badge>
                 }
                 else if(row.state == 4) {
-                    return <Badge variant={'dark'}>{row.state_dictText}</Badge>
+                    return <Badge bg={'dark'}>{row.state_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -204,12 +203,12 @@ const GoodsListSelected = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -347,15 +346,13 @@ const GoodsListSelected = (props: any) => {
                                     <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                     <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                    <FormGroup as={Form.Row} className={'mb-0'}>
-                                        <FormLabel htmlFor={'title'}>拍品名称</FormLabel>
-                                        <Col>
+                                    <FormGroup as={Row} className={'mb-0'}>
+                                        <FormLabel column htmlFor={'title'}>拍品名称</FormLabel>
+                                        <Col md={'auto'}>
                                             <InputGroup>
                                                 <FormControl name={'title'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
                                                              placeholder={'请输入要搜索的内容'}/>
-                                                <InputGroup.Append>
-                                                    <Button type={'submit'}>搜索</Button>
-                                                </InputGroup.Append>
+                                                <Button type={'submit'}>搜索</Button>
                                             </InputGroup>
                                         </Col>
                                     </FormGroup>

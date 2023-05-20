@@ -154,12 +154,12 @@ const GoodsList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -244,14 +244,13 @@ const GoodsList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">独立拍品管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
                                 options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block me-1'}
                                 onChange={handlePageSizeChanged}
                             />
                             <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建拍品</Button>
@@ -263,14 +262,12 @@ const GoodsList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>拍品名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'name'}>拍品名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
@@ -293,7 +290,7 @@ const GoodsList = (props: any) => {
                                 placeholder={'操作方式'}
                                 isSearchable={false}
                                 options={[{label: '下架', value: '0'}, {label:'上架', value:'1'}]}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block me-1'}
                                 onChange={handleOnOperateValueChanged}
                             />
                             <Button className={'btn btn-danger'} disabled={selectedRows.length == 0 || !operateValue} onClick={operateBatch}><i className={'feather icon-trash'}/>批量操作</Button>

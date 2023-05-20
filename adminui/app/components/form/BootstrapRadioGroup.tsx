@@ -15,7 +15,7 @@ const BootstrapRadioGroup: FC<BootstrapRadioGroupProps> = (props) => {
     const {t} = useTranslation();
 
     return (
-        <FormGroup>
+        <FormGroup className={'mb-1'}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <Row>
                 <Col>

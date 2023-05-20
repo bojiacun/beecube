@@ -85,7 +85,7 @@ const AppEdit = (props: any) => {
                                 <Form method={'post'}>
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapInput label={'应用名称'} readOnly={model?.id} name={'name'}/>
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'logo'}>LOGO</FormLabel>
                                             <FileBrowserInput name={'logo'} type={1} multi={false} />
                                         </FormGroup>
@@ -99,7 +99,7 @@ const AppEdit = (props: any) => {
                                             isMulti={false}
                                             isDisabled={model?.id}
                                         />
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'endTime'}>过期日期</FormLabel>
                                             <DateTimePicker inputName={'endTime'} />
                                         </FormGroup>

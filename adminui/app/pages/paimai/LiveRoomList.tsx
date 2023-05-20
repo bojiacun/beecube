@@ -12,16 +12,9 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
-import AuctionEditor from "~/pages/paimai/AuctionEditor";
-import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
-import GoodsListSelected from "~/pages/paimai/GoodsListSelected";
-import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
-import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
 import LiveRoomEditor from "~/pages/paimai/LiveRoomEditor";
-import {User} from "react-feather";
 import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
 import RoomGoodsListSelected from "~/pages/paimai/RoomGoodsListSelected";
-import PerformanceDepositList from "~/pages/paimai/PerformanceDepositList";
 import LiveRoomDepositList from "~/pages/paimai/LiveRoomDepositList";
 import LiveRoomOnLineList from "~/pages/paimai/LiveRoomOnLineList";
 
@@ -174,12 +167,12 @@ const LiveRoomList = (props: any) => {
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
                 if(row.status == 0) {
-                    return <Badge variant={'light'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'light'}>{row.status_dictText}</Badge>
                 }
                 else if(row.status == 1) {
-                    return <Badge variant={'success'}>{row.status_dictText}</Badge>
+                    return <Badge bg={'success'}>{row.status_dictText}</Badge>
                 }
-                return <Badge variant={'dark'}>未知</Badge>
+                return <Badge bg={'dark'}>未知</Badge>
             }
         },
         {
@@ -224,14 +217,13 @@ const LiveRoomList = (props: any) => {
                 <div className={'m-2'}>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">直播间管理</h4>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
                                 isSearchable={false}
                                 defaultValue={PageSizeOptions[0]}
                                 options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 mr-1'}
+                                className={'per-page-selector d-inline-block ml-50 me-1'}
                                 onChange={handlePageSizeChanged}
                             />
                             <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建直播间</Button>
@@ -243,14 +235,12 @@ const LiveRoomList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
-                                <FormGroup as={Form.Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'name'}>直播间名称</FormLabel>
-                                    <Col>
+                                <FormGroup as={Row} className={'mb-0'}>
+                                    <FormLabel column htmlFor={'name'}>直播间名称</FormLabel>
+                                    <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <InputGroup.Append>
-                                                <Button type={'submit'}>搜索</Button>
-                                            </InputGroup.Append>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
