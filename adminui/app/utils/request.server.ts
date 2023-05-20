@@ -192,6 +192,7 @@ export const API_PAIMAI_GOODS_TOGGLE_SHOW= `${BASE_URL}/paimai/goods/toggle-show
 export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/goods/deal`;
 
 export const API_PAIMAI_INTEGRAL_GOODS_LIST = `${BASE_URL}/paimai/integral/goods/list`;
+export const API_PAIMAI_INTEGRAL_GOODS_TOGGLE_SHOW= `${BASE_URL}/paimai/integral/goods/toggle-show`;
 
 export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;
 export const API_PAIMAI_PERFORMANCE_TOGGLE_SHOW= `${BASE_URL}/paimai/performances/toggle-show`;
@@ -266,6 +267,7 @@ export const API_PAIMAI_ORDER_AFTER_PASS = `${BASE_URL}/paimai/orders/afters/pas
 export const API_PAIMAI_ORDER_AFTER_DENY = `${BASE_URL}/paimai/orders/afters/deny`;
 
 export const API_PAIMAI_SETTING_LIST = `${BASE_URL}/paimai/settings/all`;
+export const API_PAIMAI_INTEGRAL_SETTING_LIST = `${BASE_URL}/paimai/integral/settings/all`;
 export const API_PAIMAI_SETTINGS_UPDATE = `${BASE_URL}/paimai/settings/updateAll`;
 
 export const API_PAIMAI_GOODS_CLASS_LIST = `${BASE_URL}/paimai/goods/class/list`;

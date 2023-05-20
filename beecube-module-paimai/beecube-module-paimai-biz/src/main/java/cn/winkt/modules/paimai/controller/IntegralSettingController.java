@@ -70,7 +70,12 @@ public class IntegralSettingController extends JeecgController<IntegralSetting, 
 		IPage<IntegralSetting> pageList = integralSettingService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 @AutoLog(value = "积分商城设置-所有")
+	 @ApiOperation(value="积分商城设置-所有", notes="积分商城设置-所有")
+	 @GetMapping(value = "/all")
+	 public Result<?> allPageList() {
+		 return Result.OK(integralSettingService.list());
+	 }
 	/**
 	 * 添加
 	 *

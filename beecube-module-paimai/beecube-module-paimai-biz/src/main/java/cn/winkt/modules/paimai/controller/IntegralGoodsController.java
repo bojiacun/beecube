@@ -8,6 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.vo.PostToggleInfo;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -142,7 +146,16 @@ public class IntegralGoodsController extends JeecgController<IntegralGoods, IInt
 		IntegralGoods integralGoods = integralGoodsService.getById(id);
 		return Result.OK(integralGoods);
 	}
-
+	 @AutoLog(value = "积分商品-批量上架/下架")
+	 @ApiOperation(value = "积分商品-批量上架/下架", notes = "积分商品-批量上架/下架")
+	 @DeleteMapping(value = "/toggle-show")
+	 public Result<?> toggleShow(@RequestBody PostToggleInfo postToggleInfo) {
+		 LambdaUpdateWrapper<IntegralGoods> updateWrapper = new LambdaUpdateWrapper<>();
+		 updateWrapper.set(IntegralGoods::getStatus, postToggleInfo.getStatus());
+		 updateWrapper.in(IntegralGoods::getId, Arrays.asList(postToggleInfo.getRows().split(",")));
+		 integralGoodsService.update(updateWrapper);
+		 return Result.OK("批量操作成功！");
+	 }
   /**
    * 导出excel
    *
