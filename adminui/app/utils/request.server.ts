@@ -151,6 +151,7 @@ export const API_APP_PUBLISH_NEW = `${BASE_URL}/beecube-app/app/publishes/new`;
 export const API_APP_DETAIL = `${BASE_URL}/beecube-app/app/queryById`;
 export const API_APP_MODULE_DETAIL = `${BASE_URL}/beecube-app/app/modules/queryById`;
 export const API_APP_MENU_LIST = `${BASE_URL}/beecube-app/app/menus/all`;
+export const API_APP_MENU_PAGE_LIST = `${BASE_URL}/beecube-app/app/menus/list`;
 export const API_APP_USER_LIST = `${BASE_URL}/beecube-app/app/users/list`;
 export const API_APP_USER_BIND = `${BASE_URL}/beecube-app/app/users/bind`;
 export const API_APP_USER_DELETE = `${BASE_URL}/beecube-app/app/users/delete`;

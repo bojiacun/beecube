@@ -4,6 +4,7 @@ import {useFetcher, useLoaderData} from "@remix-run/react";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {DefaultListSearchParams, handleSaveResult} from "~/utils/utils";
 import FigureImage from "react-bootstrap/FigureImage";
+import ModuleMenuList from "~/pages/paimai/ModuleMenuList";
 
 const semver = require("semver");
 
@@ -11,6 +12,7 @@ const semver = require("semver");
 const AppModuleList = () => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
+    const [module, setModule] = useState<any>();
     const searchFetcher = useFetcher();
     const installFetcher = useFetcher();
     const uninstallFetcher = useFetcher();
@@ -61,6 +63,9 @@ const AppModuleList = () => {
         upgradeFetcher.submit({}, {method: "put", action: "/app/upgrade/"+m.id});
     }
 
+    const handleShowModuleMenu = (module:any) => {
+        setModule(module);
+    }
 
     return (
         <Card>
@@ -79,6 +84,7 @@ const AppModuleList = () => {
                                     <div>
                                         {m.status != 1 && <Button onClick={()=>handleOnInstall(m)} disabled={installFetcher.state === 'submitting'} variant={'primary'} size={'sm'}>安装</Button>}
                                         {m.status == 1 && <Button onClick={()=>handleOnUnInstall(m)} disabled={uninstallFetcher.state === 'submitting'} variant={'danger'} size={'sm'}>卸载</Button>}
+                                        <Button onClick={()=>handleShowModuleMenu(m)}>模块权限</Button>
                                         {m.status == 1 && semver.gt(m.newVersion, m.version) && <Button onClick={()=>handleOnUpgrade(m)} className={'ml-1'} disabled={upgradeFetcher.state === 'submitting'} variant={'warning'} size={'sm'}>升级</Button>}
                                     </div>
                                 </div>
@@ -86,6 +92,7 @@ const AppModuleList = () => {
                         );
                     })}
                 </Row>
+                {module && <ModuleMenuList selectedRow={module} />}
             </Card.Body>
             <Card.Footer>
                 <Row>

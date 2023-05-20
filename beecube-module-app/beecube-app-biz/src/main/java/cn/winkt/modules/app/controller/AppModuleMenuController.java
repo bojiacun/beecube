@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.entity.App;
+import cn.winkt.modules.app.entity.AppModule;
 import cn.winkt.modules.app.entity.AppModuleMenu;
 import cn.winkt.modules.app.service.IAppModuleMenuService;
+import cn.winkt.modules.app.service.IAppModuleService;
 import cn.winkt.modules.app.service.IAppService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
@@ -56,6 +58,9 @@ public class AppModuleMenuController extends JeecgController<AppModuleMenu, IApp
 
 	@Resource
 	private IAppService appService;
+
+	@Resource
+	private IAppModuleService moduleService;
 	
 	/**
 	 * 分页列表查询
