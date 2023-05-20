@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -41,8 +42,9 @@ public class AppMemberScoreRecord {
     @ApiModelProperty(value = "变动积分")
 	private java.lang.Double score;
 	/**记录类型（1支出、2收入、3充值、4提现）*/
-	@Excel(name = "记录类型（1支出、2收入、3充值、4提现）", width = 15)
-    @ApiModelProperty(value = "记录类型（1支出、2收入、3充值、4提现）")
+	@Excel(name = "记录类型（1支出、2收入）", width = 15)
+    @ApiModelProperty(value = "记录类型（1支出、2收入）")
+	@Dict(dicCode = "app_member_score_type")
 	private java.lang.Integer type;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)

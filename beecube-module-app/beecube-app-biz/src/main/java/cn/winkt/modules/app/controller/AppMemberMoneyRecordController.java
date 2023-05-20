@@ -13,6 +13,7 @@ import cn.winkt.modules.app.vo.WithdrawDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -65,6 +66,7 @@ public class AppMemberMoneyRecordController extends JeecgController<AppMemberMon
 	@AutoLog(value = "应用会员余额记录表-分页列表查询")
 	@ApiOperation(value="应用会员余额记录表-分页列表查询", notes="应用会员余额记录表-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(AppMemberMoneyRecord appMemberMoneyRecord,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,

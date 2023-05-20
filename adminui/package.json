@@ -32,6 +32,7 @@
     "isbot": "^3.6.10",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "numeral": "^2.0.6",
     "plupload": "^2.3.9",
     "qs": "^6.11.2",
     "quill": "^1.3.7",
@@ -67,6 +68,7 @@
   "devDependencies": {
     "@remix-run/dev": "^1.16.1",
     "@remix-run/eslint-config": "^1.16.1",
+    "@types/numeral": "^2.0.2",
     "@types/plupload": "^2.0.10",
     "@types/react": "^18.2.6",
     "@types/react-bootstrap-table-next": "^4.0.19",

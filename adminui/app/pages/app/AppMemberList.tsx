@@ -27,13 +27,10 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import {User} from "react-feather";
 import AppMemberEdit from "~/pages/app/AppMemberEdit";
 import WalletRecordList from "~/pages/app/WalletRecordList";
-import {useLocation} from "react-router";
-import BootstrapSwitch from "~/components/form/BootstrapSwitch";
-import BootstrapDateTime from "~/components/form/BootstrapDateTime";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
-import classNames from "classnames";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import numeral from 'numeral';
+import ScoreRecordList from "~/pages/app/ScoreRecordList";
 
 
 const AppMemberList = (props: any) => {
@@ -46,6 +43,7 @@ const AppMemberList = (props: any) => {
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
     const [walletShow, setWalletShow] = useState<boolean>(false);
+    const [scoreShow, setScoreShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const parentFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -88,6 +86,10 @@ const AppMemberList = (props: any) => {
             case 'wallet':
                 setSelectedRow(row);
                 setWalletShow(true);
+                break;
+            case 'score':
+                setSelectedRow(row);
+                setScoreShow(true);
                 break;
             case 'edit':
                 setEditModal(row);
@@ -155,9 +157,13 @@ const AppMemberList = (props: any) => {
             headerStyle: {width: 150},
         },
         {
-            text: '余额',
+            text: '余额/积分',
             dataField: 'money',
             headerStyle: {width: 120},
+            isDummyField: true,
+            formatter(cell: number, row: any) {
+                return `￥${numeral(row.money).format('0,0.00')}/${numeral(row.score).format('0.00')}`;
+            },
         },
         {
             text: '分销商',
@@ -216,6 +222,8 @@ const AppMemberList = (props: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         <a href={'#'} onClick={() => handleOnAction(row, 'wallet')}> 资金流水 </a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'score')}> 积分流水 </a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}> 编辑 </a>
                         <span className={'divider'}/>
@@ -345,6 +353,12 @@ const AppMemberList = (props: any) => {
                 <WalletRecordList show={walletShow} selectedRow={selectedRow} onHide={() => {
                     setEditModal(null);
                     setWalletShow(false);
+                }}/>
+            }
+            {selectedRow && scoreShow &&
+                <ScoreRecordList show={true} selectedRow={selectedRow} onHide={() => {
+                    setEditModal(null);
+                    setScoreShow(false);
                 }}/>
             }
         </>

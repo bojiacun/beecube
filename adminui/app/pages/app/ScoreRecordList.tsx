@@ -8,13 +8,7 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import {Delete, Edit, Eye, MoreVertical, User} from "react-feather";
 
-const types:any = {
-    1: '支出',
-    2: "收入",
-    3: '充值',
-    4: '提现'
-}
-const WalletRecordList = (props: any) => {
+const ScoreRecordList = (props: any) => {
     const {show, onHide, selectedRow, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, memberId: selectedRow.id});
@@ -23,7 +17,7 @@ const WalletRecordList = (props: any) => {
 
     useEffect(() => {
         if (show) {
-            searchFetcher.submit(searchState, {method: 'get', action: '/app/money/records'});
+            searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
         }
     }, [show]);
 
@@ -49,12 +43,12 @@ const WalletRecordList = (props: any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/app/money/records'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/app/money/records'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
     }
     const handleOnSearchNameChanged = (e: any) => {
         setSearchState({...searchState, memberName: e.target.value});
@@ -97,7 +91,7 @@ const WalletRecordList = (props: any) => {
             aria-labelledby={'edit-modal'}
         >
             <Modal.Header closeButton>
-                <Modal.Title id={'edit-modal'}>{selectedRow?.nickname}资金流水</Modal.Title>
+                <Modal.Title id={'edit-modal'}>{selectedRow?.nickname}积分流水</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className={'m-2'}>
@@ -162,14 +156,10 @@ const WalletRecordList = (props: any) => {
                         </Col>
                     </Row>
                 </div>
-
-
             </Modal.Body>
 
-            <Modal.Footer>
-            </Modal.Footer>
         </Modal>
     );
 }
 
-export default WalletRecordList;
+export default ScoreRecordList;
