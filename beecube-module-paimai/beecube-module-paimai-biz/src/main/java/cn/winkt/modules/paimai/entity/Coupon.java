@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -47,10 +48,12 @@ public class Coupon {
 	/**目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户*/
 	@Excel(name = "目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户", width = 15)
     @ApiModelProperty(value = "目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户")
+	@Dict(dicCode = "paimai_coupon_rule_member")
 	private java.lang.Integer ruleMember;
 	/**适用商品：1按分类、2按商品、3全部商品*/
 	@Excel(name = "适用商品：1按分类、2按商品、3全部商品", width = 15)
     @ApiModelProperty(value = "适用商品：1按分类、2按商品、3全部商品")
+	@Dict(dicCode = "paimai_coupon_rule_goods")
 	private java.lang.Integer ruleGoods;
 	/**最低消费*/
 	@Excel(name = "最低消费", width = 15)
@@ -75,6 +78,7 @@ public class Coupon {
 	/**status*/
 	@Excel(name = "status", width = 15)
     @ApiModelProperty(value = "status")
+	@Dict(dicCode = "paimai_show_status")
 	private java.lang.Integer status;
 	/**createTime*/
     @ApiModelProperty(value = "createTime")

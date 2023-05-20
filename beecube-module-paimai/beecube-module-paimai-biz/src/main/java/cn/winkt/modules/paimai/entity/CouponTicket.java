@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -46,6 +47,7 @@ public class CouponTicket {
 	/**适用状态0未使用1已使用*/
 	@Excel(name = "适用状态0未使用1已使用", width = 15)
     @ApiModelProperty(value = "适用状态0未使用1已使用")
+	@Dict(dicCode = "paimai_coupon_ticket_staus")
 	private java.lang.Integer status;
 	/**适用时间*/
     @ApiModelProperty(value = "适用时间")

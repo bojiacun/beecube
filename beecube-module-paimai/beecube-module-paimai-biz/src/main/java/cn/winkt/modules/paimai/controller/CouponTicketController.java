@@ -9,6 +9,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -61,6 +62,7 @@ public class CouponTicketController extends JeecgController<CouponTicket, ICoupo
 	@AutoLog(value = "优惠券票据-分页列表查询")
 	@ApiOperation(value="优惠券票据-分页列表查询", notes="优惠券票据-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(CouponTicket couponTicket,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
