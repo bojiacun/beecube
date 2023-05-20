@@ -1,32 +1,20 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {
-    DefaultListSearchParams,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
-} from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import FigureImage from "react-bootstrap/FigureImage";
 import AuctionEditor from "~/pages/paimai/AuctionEditor";
-import PerformanceListSelector from "~/pages/paimai/PerformanceListSelector";
-import PerformancesListSelected from "~/pages/paimai/PerformanceListSelected";
+import CouponTicketList from "~/pages/paimai/CouponTicketList";
 
 
-
-
-const AuctionList = (props: any) => {
+const CouponList = (props: any) => {
     const {startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
+    const [selectedRow, setSelectedRow] = useState<any>();
     const [editModal, setEditModal] = useState<any>();
-    const [selectedAuction, setSelectedAuction] = useState<any>();
-    const [performanceListShow, setPerformanceListShow] = useState<boolean>(false);
-    const [selectedListShow, setSelectedListShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -36,7 +24,7 @@ const AuctionList = (props: any) => {
     }
 
     useEffect(() => {
-        if (searchFetcher.data) {
+        if (getFetcherState(searchFetcher.data) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
@@ -66,13 +54,8 @@ const AuctionList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'selected':
-                setSelectedAuction(row);
-                setSelectedListShow(true);
-                break;
-            case 'select':
-                setSelectedAuction(row);
-                setPerformanceListShow(true);
+            case 'tickets':
+                setSelectedRow(row);
                 break;
             case 'edit':
                 //编辑
@@ -82,7 +65,7 @@ const AuctionList = (props: any) => {
                 //删除按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/auctions/delete?id=${row.id}`, replace: true});
+                    deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/coupons/delete?id=${row.id}`, replace: true});
                 });
                 break;
         }
@@ -104,29 +87,44 @@ const AuctionList = (props: any) => {
             dataField: 'id',
         },
         {
-            text: '拍卖会名称',
+            text: '标题',
             dataField: 'title',
         },
         {
-            text: '预览图',
-            dataField: '',
+            text: '满减',
+            dataField: 'minPrice',
             isDummyField: true,
-            formatter: (cell:any, row:any) => {
-                let previewUrl = row.preview;
-                return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
+            formatter(cell: number, row:any) {
+                return `满${row.minPrice}减${row.amount}`;
             }
         },
         {
-            text: '拍卖地点',
-            dataField: 'address',
+            text: '有效期',
+            dataField: 'endDays',
+            isDummyField: true,
+            formatter(cell: number, row:any) {
+                return `领取后${row.startDays}天生效，之后${row.endDays}天后失效`;
+            }
         },
         {
-            text: '拍卖时间',
-            dataField: 'timeRange',
+            text: '适用人群',
+            dataField: 'ruleMember_dictText',
         },
         {
-            text: '专场数',
-            dataField: 'performanceCount',
+            text: '适用商品',
+            dataField: 'ruleGoods_dictText',
+        },
+        {
+            text: '库存',
+            dataField: 'maxCount',
+        },
+        {
+            text: '已领取',
+            dataField: 'takedCount',
+        },
+        {
+            text: '每人限领',
+            dataField: 'perCount',
         },
         {
             text: '显示状态',
@@ -148,9 +146,7 @@ const AuctionList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'select')}>选择专场</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'selected')}>已选专场</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'tickets')}>领取记录</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -186,7 +182,7 @@ const AuctionList = (props: any) => {
                                 className={'per-page-selector d-inline-block ml-50 me-1'}
                                 onChange={handlePageSizeChanged}
                             />
-                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建拍卖会</Button>
+                            <Button onClick={handleOnAdd}><i className={'feather icon-plus'} />新建优惠券模板</Button>
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
@@ -196,10 +192,10 @@ const AuctionList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Row} className={'mb-0'}>
-                                    <FormLabel column htmlFor={'name'}>拍卖会名称</FormLabel>
+                                    <FormLabel column htmlFor={'title'}>标题</FormLabel>
                                     <Col md={'auto'}>
                                         <InputGroup>
-                                            <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <FormControl name={'title'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
                                             <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
@@ -231,23 +227,10 @@ const AuctionList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            <PerformanceListSelector
-                show={performanceListShow}
-                setPerformanceListShow={()=>{
-                    loadData();
-                    setPerformanceListShow(false);
-                }}
-                selectedAuction={selectedAuction}
-            />
-            <PerformancesListSelected
-                show={selectedListShow}
-                selectedAuction={selectedAuction}
-                setSelectedListShow={()=>{
-                    loadData();
-                    setSelectedListShow(false);
-                }}
-            />
-            {editModal && <AuctionEditor model={editModal} onHide={()=>{
+            {selectedRow && <CouponTicketList show={true} selectedRow={selectedRow} onHide={()=>{
+                setSelectedRow(null);
+            }} />}
+            {editModal && <CouponList model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}
@@ -255,4 +238,4 @@ const AuctionList = (props: any) => {
     );
 }
 
-export default AuctionList;
+export default CouponList;

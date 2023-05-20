@@ -36,10 +36,13 @@ public class CouponTicket {
 	@Excel(name = "couponId", width = 15)
     @ApiModelProperty(value = "couponId")
 	private java.lang.String couponId;
+	private String couponTitle;
 	/**memberId*/
 	@Excel(name = "memberId", width = 15)
     @ApiModelProperty(value = "memberId")
 	private java.lang.String memberId;
+	private String memberAvatar;
+	private String memberName;
 	/**适用状态0未使用1已使用*/
 	@Excel(name = "适用状态0未使用1已使用", width = 15)
     @ApiModelProperty(value = "适用状态0未使用1已使用")
