@@ -45,7 +45,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="优惠券")
 @RestController
-@RequestMapping("/paimai/coupons")
+@RequestMapping("/coupons")
 public class CouponController extends JeecgController<Coupon, ICouponService> {
 	@Autowired
 	private ICouponService couponService;
