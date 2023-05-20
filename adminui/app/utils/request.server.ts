@@ -191,6 +191,7 @@ export const API_PAIMAI_GOODS_DELETE = `${BASE_URL}/paimai/goods/delete`;
 export const API_PAIMAI_GOODS_TOGGLE_SHOW= `${BASE_URL}/paimai/goods/toggle-show`;
 export const API_PAIMAI_GOODSOFFER_DEAL = `${BASE_URL}/paimai/goods/deal`;
 
+export const API_PAIMAI_INTEGRAL_GOODS_LIST = `${BASE_URL}/paimai/integral/goods/list`;
 
 export const API_PAIMAI_PERFORMANCE_LIST = `${BASE_URL}/paimai/performances/list`;
 export const API_PAIMAI_PERFORMANCE_TOGGLE_SHOW= `${BASE_URL}/paimai/performances/toggle-show`;
