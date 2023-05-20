@@ -274,6 +274,8 @@ export const API_PAIMAI_GOODS_CLASS_ADD = `${BASE_URL}/paimai/goods/class/add`;
 export const API_PAIMAI_GOODS_CLASS_EDIT = `${BASE_URL}/paimai/goods/class/edit`;
 export const API_PAIMAI_GOODS_CLASS_DELETE = `${BASE_URL}/paimai/goods/class/delete`;
 
+export const API_PAIMAI_INTEGRAL_GOODS_CLASS_LIST = `${BASE_URL}/paimai/integral/classes/list`;
+
 export const API_PAIMAI_BUYOUT_CLASS_LIST = `${BASE_URL}/paimai/buyout/classes/list`;
 export const API_PAIMAI_BUYOUT_CLASS_ALLLIST = `${BASE_URL}/paimai/buyout/classes/all`;
 export const API_PAIMAI_BUYOUT_CLASS_ADD = `${BASE_URL}/paimai/buyout/classes/add`;
