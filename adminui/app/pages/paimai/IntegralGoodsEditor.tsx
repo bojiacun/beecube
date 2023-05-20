@@ -19,6 +19,9 @@ const EDIT_URL = '/paimai/integral/goods/edit';
 
 const GoodsSchema = Yup.object().shape({
     title: Yup.string().required('必填字段'),
+    spec: Yup.string().required('必填字段'),
+    homeCover: Yup.string().required('必填字段'),
+    listCover: Yup.string().required('必填字段'),
     integral: Yup.number().required('必填字段'),
     images: Yup.string().required('必填字段'),
     classId: Yup.number().required('必填字段'),
@@ -105,11 +108,11 @@ const IntegralGoodsEditor = (props: any) => {
 
                                     <BootstrapInput label={'积分'} name={'integral'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'description'}>商品简介</FormLabel>
                                         <TinymceEditor name={'description'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'detail'}>商品详情</FormLabel>
                                         <TinymceEditor name={'detail'}/>
                                     </FormGroup>

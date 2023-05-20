@@ -12,10 +12,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
-import {Delete, Edit, Eye, MoreVertical} from "react-feather";
-import ViewList from "~/pages/paimai/ViewList";
-import FollowList from "~/pages/paimai/FollowList";
-import BuyoutEditor from "~/pages/paimai/BuyoutEditor";
+import IntegralGoodsEditor from "~/pages/paimai/IntegralGoodsEditor";
 
 const LIST_URL = '/paimai/integral/goods';
 const DELETE_URL = '/paimai/integral/goods/delete';
@@ -265,7 +262,7 @@ const IntegralGoodsList = (props: any) => {
                 </div>
             </Card>
 
-            {editModal && <BuyoutEditor model={editModal} onHide={() => {
+            {editModal && <IntegralGoodsEditor model={editModal} onHide={() => {
                 setEditModal(null);
                 loadData();
             }}/>}
