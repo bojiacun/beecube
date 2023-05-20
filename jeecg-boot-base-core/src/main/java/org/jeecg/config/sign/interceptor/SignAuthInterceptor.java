@@ -39,6 +39,9 @@ public class SignAuthInterceptor implements HandlerInterceptor {
         //对参数进行签名验证
         String headerSign = request.getHeader(CommonConstant.X_SIGN);
         String xTimestamp = request.getHeader(CommonConstant.X_TIMESTAMP);
+        if(xTimestamp == null) {
+            return true;
+        }
         //客户端时间
         Long clientTimestamp = Long.parseLong(xTimestamp);
 

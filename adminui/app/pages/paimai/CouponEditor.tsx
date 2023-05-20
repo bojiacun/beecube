@@ -26,7 +26,7 @@ const CouponEditor = (props: any) => {
     },[]);
     useEffect(() => {
         if (getFetcherState(dictFetcher1) === FetcherState.DONE) {
-            setRuleGoodsOptions(dictFetcher1.data.map((item:any)=>({value: item.value, label: item.text})));
+            setRuleMemberOptions(dictFetcher1.data.map((item:any)=>({value: item.value, label: item.text})));
         }
     }, [dictFetcher1.state]);
     useEffect(() => {

@@ -7,7 +7,7 @@ export const LOGIN_SUCCESS_URL =  ServerEnv.LOGIN_SUCCESS_URL || '/';
 export const LOGIN_URL = ServerEnv.LOGIN_URL || '/login';
 export const LOGOUT_URL = ServerEnv.LOGOUT_URL || '/auth/logout';
 export const USER_INFO_URL = ServerEnv.USER_INFO_URL || '/auth/user';
-export const API_SYS_DICTS = `${BASE_URL}/jeecg-system/sys/getDictItems`;
+export const API_SYS_DICTS = `${BASE_URL}/jeecg-system/sys/dict/getDictItems`;
 export const API_LOGIN = `${BASE_URL}/jeecg-system/sys/login`;
 export const API_CAPTCHA = `${BASE_URL}/jeecg-system/sys/randomImage`;
 export const API_ROLE_LIST = `${BASE_URL}/jeecg-system/sys/role/list`;
@@ -221,6 +221,7 @@ export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/remove`;
 
 export const API_PAIMAI_COUPON_LIST = `${BASE_URL}/paimai/coupons/list`;
+export const API_PAIMAI_COUPON_TICKET_LIST = `${BASE_URL}/paimai/coupons/tickets/list`;
 export const API_PAIMAI_COUPON_ADD = `${BASE_URL}/paimai/coupons/add`;
 export const API_PAIMAI_COUPON_EDIT = `${BASE_URL}/paimai/coupons/edit`;
 export const API_PAIMAI_COUPON_DELETE = `${BASE_URL}/paimai/coupons/delete`;

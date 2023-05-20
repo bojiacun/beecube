@@ -21,7 +21,7 @@ const CouponTicketList = (props: any) => {
     }, [show, selectedRow]);
 
     useEffect(() => {
-        if (getFetcherState(searchFetcher.data) === FetcherState.DONE) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
