@@ -58,7 +58,7 @@ const ModuleMenuEditor = (props: any) => {
                     <Modal.Title id={'edit-user-model'}>{model?.id ? '编辑' : '新建'}模块权限</Modal.Title>
                 </Modal.Header>
                 {model &&
-                    <Formik innerRef={formikRef} initialValues={{status: 1, sortNum: 0, ...model}}
+                    <Formik innerRef={formikRef} initialValues={{...model}}
                             validationSchema={formSchema} onSubmit={handleOnSubmit}>
                         {(formik) => {
                             return (

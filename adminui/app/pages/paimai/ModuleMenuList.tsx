@@ -130,7 +130,7 @@ const ModuleMenuList = (props: any) => {
         onSelectAll: handleOnRowSelectAll,
     }
     const handleOnAdd = () => {
-        setEditModal({});
+        setEditModal({moduleId: selectedRow.id, moduleName: selectedRow.name});
     }
 
     return (
