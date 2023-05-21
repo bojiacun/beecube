@@ -14,10 +14,7 @@ import {connect} from "react-redux";
         settings: state.context.settings,
         context: state.context
     }
-), (dispatch) => {
-    return {
-    }
-})
+))
 export default class Index extends Component<any, any> {
     state: any = {
         list: [],

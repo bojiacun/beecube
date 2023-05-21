@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Input, Navigator, ScrollView, Text, View} from "@tarojs/components";
+import {Input, Navigator, Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import styles from './center.module.scss';
 import Taro from "@tarojs/taro";
@@ -10,7 +10,6 @@ import PageLoading from "../../components/pageloading";
 import numeral from 'numeral';
 import {Button} from "@taroify/core";
 import utils from "../../lib/utils";
-import moment from "moment";
 import request from "../../lib/request";
 // @ts-ignore
 @connect((state: any) => (
@@ -57,7 +56,7 @@ export default class Index extends Component<any, any> {
 
     handleSubmit() {
         this.setState({posting: true});
-        request.post('/app/api/members/scores/withdraw', {amount: this.state.amount}).then(res=>{
+        request.post('/app/api/members/scores/withdraw', {amount: this.state.amount}).then(()=>{
             utils.showSuccess(true, '申请成功，等待审核');
         });
     }
