@@ -3,7 +3,7 @@
 <mapper namespace="cn.winkt.modules.app.mapper.MemberSignInMapper">
     <select id="selectLatestCycleList" resultType="cn.winkt.modules.app.entity.MemberSignIn">
         select * from beecube_app_member_signins ams
-                 where ams.create_time >= (select create_time from beecube_app_member_signins where day_index = 1 order by create_time desc limit 1)
+                 where ams.member_id = #{memberId} and ams.create_time >= (select create_time from beecube_app_member_signins where member_id = #{memberId} and day_index = 1 order by create_time desc limit 1)
         order by ams.create_time asc
     </select>
 </mapper>

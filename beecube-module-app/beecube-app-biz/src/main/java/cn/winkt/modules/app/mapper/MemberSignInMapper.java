@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface MemberSignInMapper extends BaseMapper<MemberSignIn> {
-    List<MemberSignIn> selectLatestCycleList();
+    List<MemberSignIn> selectLatestCycleList(@Param("memberId") String memberId);
 }

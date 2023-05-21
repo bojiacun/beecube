@@ -21,7 +21,7 @@ public class MemberSignInServiceImpl extends ServiceImpl<MemberSignInMapper, Mem
     @Resource
     private MemberSignInMapper memberSignInMapper;
     @Override
-    public List<MemberSignIn> selectLatestCycleList() {
-        return memberSignInMapper.selectLatestCycleList();
+    public List<MemberSignIn> selectLatestCycleList(String memberId) {
+        return memberSignInMapper.selectLatestCycleList(memberId);
     }
 }

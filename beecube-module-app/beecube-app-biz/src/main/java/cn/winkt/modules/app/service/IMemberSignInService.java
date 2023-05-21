@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface IMemberSignInService extends IService<MemberSignIn> {
 
-    List<MemberSignIn> selectLatestCycleList();
+    List<MemberSignIn> selectLatestCycleList(String memberId);
 }
