@@ -101,8 +101,8 @@ export default class Index extends Component<any, any> {
                                 if(signin.active) {
                                     return (
                                         <View className={'flex flex-col items-center justify-center'}>
-                                            <View className={'bg-orange-100 flex flex-col items-center relative py-2 px-1 rounded text-red-600'}>
-                                                <Text className={'font-bold text-lg'}>{signin.integral}</Text>
+                                            <View style={{width: 40, height: 60}} className={'bg-orange-100 flex flex-col items-center justify-center relative rounded text-red-600'}>
+                                                <Text className={'font-bold'}>{signin.integral}</Text>
                                                 <Text className={'text-sm'}>积分</Text>
                                                 <Text className={'fa fa-check-circle absolute'} style={{right: 3, top: 3}}/>
                                             </View>
@@ -112,7 +112,7 @@ export default class Index extends Component<any, any> {
                                 }
                                 return (
                                     <View className={'flex flex-col items-center justify-center'}>
-                                        <View className={'bg-stone-200 flex flex-col items-center relative py-2 px-1 rounded text-stone-600'}>
+                                        <View style={{width: 40, height: 60}} className={'bg-stone-200 flex flex-col items-center justify-center relative rounded text-stone-600'}>
                                             <Text className={'font-bold text-lg'}>{signin.integral}</Text>
                                             <Text className={'text-sm'}>积分</Text>
                                         </View>

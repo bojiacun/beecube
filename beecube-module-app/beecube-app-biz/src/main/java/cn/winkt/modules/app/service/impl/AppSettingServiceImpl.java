@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class AppSettingServiceImpl extends ServiceImpl<AppSettingMapper, AppSetting> implements IAppSettingService {
 
+    @Resource
     AppSettingMapper appSettingMapper;
 
     @Override

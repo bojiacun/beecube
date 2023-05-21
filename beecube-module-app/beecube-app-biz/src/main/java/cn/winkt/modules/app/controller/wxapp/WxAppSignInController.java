@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,7 @@ public class WxAppSignInController {
         if(memberSignIns.size() == 0) {
             return Result.OK(Collections.emptyList());
         }
-        Date distDate = DateUtils.addDays(memberSignIns.get(0).getCreateTime(), memberSignIns.size());
+        Date distDate = DateUtils.addDays(memberSignIns.get(0).getCreateTime(), memberSignIns.size()-1);
         if(DateUtils.isSameDay(distDate, new Date())) {
             return Result.OK(memberSignIns);
         }
@@ -59,18 +61,19 @@ public class WxAppSignInController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppMember appMember = appMemberService.getById(loginUser.getId());
         List<MemberSignIn> memberSignIns = memberSignInService.selectLatestCycleList(loginUser.getId());
-
+        Date latestTime = memberSignIns.get(memberSignIns.size()-1).getCreateTime();
+        if(DateUtils.isSameDay(latestTime, new Date())) {
+            throw new JeecgBootException("今日已签到");
+        }
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
-
         int cycle = memberSetting.getSigninCycle().split(",").length;
-
-
         MemberSignIn memberSignIn = new MemberSignIn();
         memberSignIn.setMemberId(loginUser.getId());
         memberSignIn.setDayIndex(memberSignIns.size() >= cycle ? 1 : memberSignIns.size()+1);
         memberSignIn.setMemberName(StringUtils.getIfEmpty(appMember.getRealname(), appMember::getNickname));
         memberSignIn.setMemberAvatar(appMember.getRealname());
         memberSignInService.save(memberSignIn);
+        appMemberService.inScore(loginUser.getId(), new BigDecimal(memberSetting.getSigninCycle().split(",")[memberSignIn.getDayIndex()-1]), "签到获取积分");
         return Result.OK(memberSignInService.selectLatestCycleList(loginUser.getId()));
     }
 }
