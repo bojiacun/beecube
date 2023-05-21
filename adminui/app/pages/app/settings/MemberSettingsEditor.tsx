@@ -39,6 +39,8 @@ const MemberSettingsEditor = (props:any) => {
                     <Card.Body>
                         <BootstrapInput label={'新用户赠送积分'} name={'newMemberIntegral'} placeholder={'新用户赠送积分'} />
                         <BootstrapInput label={'分享积分'} name={'shareIntegral'} placeholder={'分享积分'} />
+                        <BootstrapInput label={'实名认证送积分'} name={'authRealIntegral'} placeholder={'实名认证送积分'} />
+                        <BootstrapInput label={'每日充值送积分'} name={'rechargeIntegral'} placeholder={'每日首次充值赠送积分'} />
                         <BootstrapInput label={'单日分享最高积分'} name={'shareMaxIntegral'} placeholder={'单日分享最高积分'} />
                         <BootstrapInput label={'签到周期'} name={'signinCycle'} placeholder={'签到周期赠送的积分，例如100,200,300,400,500'} />
                         <BootstrapSwitch label={'消费送积分'} name={'consumeIntegral'} />

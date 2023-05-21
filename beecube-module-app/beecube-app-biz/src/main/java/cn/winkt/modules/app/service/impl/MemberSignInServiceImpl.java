@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.util.List;
+
 /**
  * @Description: 会员签到
  * @Author: jeecg-boot
@@ -15,5 +17,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  */
 @Service
 public class MemberSignInServiceImpl extends ServiceImpl<MemberSignInMapper, MemberSignIn> implements IMemberSignInService {
-
+    private MemberSignInMapper memberSignInMapper;
+    @Override
+    public List<MemberSignIn> selectLatestCycleList() {
+        return memberSignInMapper.selectLatestCycleList();
+    }
 }

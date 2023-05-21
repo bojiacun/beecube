@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.winkt.modules.app.mapper.MemberSignInMapper">
-
+    <select id="selectLatestCycleList" resultType="cn.winkt.modules.app.entity.MemberSignIn">
+        select * from beecube_app_member_signins ams
+                 where ams.create_time >= (select creat_time from beecube_app_member_signins where day_index = 1 order by create_time desc limit 1)
+        order by ams.create_time asc
+    </select>
 </mapper>
