@@ -31,6 +31,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import numeral from 'numeral';
 import ScoreRecordList from "~/pages/app/ScoreRecordList";
+import SigninList from "~/pages/app/SigninList";
 
 
 const AppMemberList = (props: any) => {
@@ -44,6 +45,7 @@ const AppMemberList = (props: any) => {
     const [startDate, endDate] = dateRange;
     const [walletShow, setWalletShow] = useState<boolean>(false);
     const [scoreShow, setScoreShow] = useState<boolean>(false);
+    const [singinShow, setSigninShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
     const parentFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -86,6 +88,10 @@ const AppMemberList = (props: any) => {
             case 'wallet':
                 setSelectedRow(row);
                 setWalletShow(true);
+                break;
+            case 'signin':
+                setSelectedRow(row);
+                setSigninShow(true);
                 break;
             case 'score':
                 setSelectedRow(row);
@@ -217,10 +223,12 @@ const AppMemberList = (props: any) => {
             text: '操作',
             dataField: 'operation',
             isDummyField: true,
-            headerStyle: {width: 230},
+            headerStyle: {width: 300},
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'signin')}> 签到记录 </a>
+                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'wallet')}> 资金流水 </a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'score')}> 积分流水 </a>
@@ -359,6 +367,12 @@ const AppMemberList = (props: any) => {
                 <ScoreRecordList show={true} selectedRow={selectedRow} onHide={() => {
                     setEditModal(null);
                     setScoreShow(false);
+                }}/>
+            }
+            {selectedRow && singinShow &&
+                <SigninList show={true} selectedRow={selectedRow} onHide={() => {
+                    setEditModal(null);
+                    setSigninShow(false);
                 }}/>
             }
         </>

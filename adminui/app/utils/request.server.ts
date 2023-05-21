@@ -141,6 +141,7 @@ export const API_APP_NAV_DELETE = `${BASE_URL}/beecube-app/app/navs/delete`;
 
 export const API_APP_MEMBER_MONEY_RECORDS_LIST = `${BASE_URL}/beecube-app/app/money/records/list`;
 export const API_APP_MEMBER_SCORE_RECORDS_LIST = `${BASE_URL}/beecube-app/app/score/records/list`;
+export const API_APP_MEMBER_SIGNIN_LIST = `${BASE_URL}/beecube-app/app/signins/list`;
 
 
 export const API_APP_DIY_PAGE_LIST = `${BASE_URL}/beecube-app/app/diy/pages/all`;

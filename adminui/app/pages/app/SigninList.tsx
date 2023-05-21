@@ -105,27 +105,6 @@ const SigninList = (props: any) => {
                                 onChange={handlePageSizeChanged}
                             />
                         </Col>
-                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/app/signins'} className={'form-inline justify-content-end'}
-                                                onSubmit={handleOnSearchSubmit}>
-                                <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                                <FormControl name={'memberId'} value={selectedRow.id} type={'hidden'}/>
-                                <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
-                                <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
-                                <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
-
-                                <FormGroup as={Row} className={'mb-0'}>
-                                    <FormLabel column htmlFor={'description'}>关键字</FormLabel>
-                                    <Col md={'auto'}>
-                                        <InputGroup>
-                                            <FormControl name={'description'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
-                                                         placeholder={'请输入要搜索的内容'}/>
-                                            <Button type={'submit'}>搜索</Button>
-                                        </InputGroup>
-                                    </Col>
-                                </FormGroup>
-                            </searchFetcher.Form>
-                        </Col>
                     </Row>
                 </div>
 
