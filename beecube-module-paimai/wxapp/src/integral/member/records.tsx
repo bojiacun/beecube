@@ -30,14 +30,14 @@ export default class Index extends Component<any, any> {
     onLoad() {
         this.setState({loading: true});
         const newList = this.refreshingRef.current ? [] : this.state.list;
-        request.get('/app/api/members/scores/records', {params: {pageNo: this.state.page, pageSize: 10}}).then(res=>{
+        request.get('/app/api/members/scores/records', {params: {pageNo: this.state.page, pageSize: 20}}).then(res=>{
             // @ts-ignore
             this.refreshingRef.current = false;
             let list = res.data.result.records;
             list.forEach((item:any)=>{
                 newList.push(item);
             });
-            this.setState({list: newList, loading: false, hasMore: list.length < 10});
+            this.setState({list: newList, loading: false, hasMore: list.length == 20});
         });
     }
     onRefresh() {
