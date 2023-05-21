@@ -24,7 +24,7 @@ const BootstrapSwitch: FC<BootstrapSwitchProps> = (props) => {
     }
 
     return (
-        <FormGroup>
+        <FormGroup className={'mb-1'}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <Form.Switch id={name} name={name} checked={formik.values[name]} onChange={handleOnChange} {...rest} />
         </FormGroup>

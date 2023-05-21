@@ -1,12 +1,13 @@
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, FormGroup, FormLabel} from "react-bootstrap";
 import {Form, Formik} from "formik";
 import {FetcherState, getFetcherState, handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
+import TinymceEditor from "~/components/tinymce-editor";
 
 
 const SettingsSchema = Yup.object().shape({
@@ -41,6 +42,11 @@ const MemberSettingsEditor = (props:any) => {
                         <BootstrapInput label={'单日分享最高积分'} name={'shareMaxIntegral'} placeholder={'单日分享最高积分'} />
                         <BootstrapInput label={'每日登录送积分'} name={'loginDayIntegral'} placeholder={'每日登录送积分'} />
                         <BootstrapSwitch label={'消费送积分'} name={'consumeIntegral'} />
+                        <BootstrapSwitch label={'提现金额'} name={'minWithdrawIntegral'} />
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel htmlFor={'integralRule'}>积分规则</FormLabel>
+                            <TinymceEditor name={'integralRule'} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}>

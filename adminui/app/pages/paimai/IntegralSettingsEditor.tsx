@@ -47,7 +47,6 @@ const IntegralSettingsEditor = (props:any) => {
                         <Card.Title>积分商城设置</Card.Title>
                     </Card.Header>
                     <Card.Body>
-                        <BootstrapInput label={'新用户积分'} name={'newMemberIntegral'} placeholder={'新用户赠送积分'} />
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
