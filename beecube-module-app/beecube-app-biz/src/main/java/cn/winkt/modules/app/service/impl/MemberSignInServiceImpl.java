@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Service
 public class MemberSignInServiceImpl extends ServiceImpl<MemberSignInMapper, MemberSignIn> implements IMemberSignInService {
+    @Resource
     private MemberSignInMapper memberSignInMapper;
     @Override
     public List<MemberSignIn> selectLatestCycleList() {
