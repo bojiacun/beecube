@@ -75,6 +75,10 @@ const SigninList = (props: any) => {
             }
         },
         {
+            text: '第几天',
+            dataField: 'dayIndex',
+        },
+        {
             text: '签到时间',
             dataField: 'createTime',
         },

@@ -40,9 +40,11 @@ const MemberSettingsEditor = (props:any) => {
                         <BootstrapInput label={'新用户赠送积分'} name={'newMemberIntegral'} placeholder={'新用户赠送积分'} />
                         <BootstrapInput label={'分享积分'} name={'shareIntegral'} placeholder={'分享积分'} />
                         <BootstrapInput label={'单日分享最高积分'} name={'shareMaxIntegral'} placeholder={'单日分享最高积分'} />
-                        <BootstrapInput label={'每日登录送积分'} name={'loginDayIntegral'} placeholder={'每日登录送积分'} />
+                        <BootstrapInput label={'签到周期'} name={'signinCycle'} placeholder={'签到周期赠送的积分，例如100,200,300,400,500'} />
                         <BootstrapSwitch label={'消费送积分'} name={'consumeIntegral'} />
-                        <BootstrapSwitch label={'提现金额'} name={'minWithdrawIntegral'} />
+                        <BootstrapInput label={'提现金额'} name={'minWithdrawIntegral'} placeholder={'最小提现金额'} />
+                        <BootstrapInput label={'提现比例'} name={'integralToMoney'} placeholder={'提现比例，例如100积分兑换1元设置为100:1'} />
+
                         <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'integralRule'}>积分规则</FormLabel>
                             <TinymceEditor name={'integralRule'} />

@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Navigator, Text, View} from "@tarojs/components";
+import {Image, Navigator, Text, View} from "@tarojs/components";
 import classNames from "classnames";
 import styles from './center.module.scss';
 import Taro from "@tarojs/taro";
@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {setUserInfo} from "../../store/actions";
 import PageLoading from "../../components/pageloading";
 import numeral from 'numeral';
+import {ReactSVG} from "react-svg";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -48,6 +49,15 @@ export default class Index extends Component<any, any> {
                         <View className={'flex justify-between items-center'}>
                             <View className={'font-bold text-lg'}>签到赚积分</View>
                             <View className={''}>已签2/7</View>
+                        </View>
+                        <View className={'flex justify-around items-center'}>
+                            <View className={'flex flex-col items-center justify-center'}>
+                                <View className={'bg-orange-100 flex flex-col items-center relative p-4 rounded text-red-600'}>
+                                    <Text className={'font-bold text-lg'}>100</Text>
+                                    <Text className={'text-sm'}>积分</Text>
+                                </View>
+                                <View className={'mt-2'}>第1天</View>
+                            </View>
                         </View>
                     </View>
                     <View className={'rounded-md bg-white text-gray-800 mt-2 p-4'}>

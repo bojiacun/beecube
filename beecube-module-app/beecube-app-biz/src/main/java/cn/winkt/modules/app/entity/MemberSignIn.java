@@ -51,4 +51,6 @@ public class MemberSignIn {
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")
 	private java.lang.String appId;
+
+	private Integer dayIndex;
 }
