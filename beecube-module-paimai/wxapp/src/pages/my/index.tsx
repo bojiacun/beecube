@@ -126,7 +126,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </Navigator>
                         </View>
                     </View>
-
                 </View>
                 <View className={'mt-4 bg-white divide-y divide-gray-100 text-gray-600'}>
                     <View>

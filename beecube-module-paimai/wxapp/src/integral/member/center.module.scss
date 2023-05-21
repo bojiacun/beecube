@@ -1,0 +1,23 @@
+.userProfile {
+    position: relative;
+    z-index: 0;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+    &:after {
+        width: 140%;
+        height: calc(100% - 20px);
+        position: absolute;
+        left: -20%;
+        z-index: -1;
+        top: 0;
+        content: '';
+        border-radius: 0 0 50% 50%;
+        background: linear-gradient(180deg, #DC2626 0%, #EF4444 100%);
+    }
+}
+
+.profile {
+    position: absolute;
+    top: 0;
+}
