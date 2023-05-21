@@ -70,6 +70,6 @@ public class AppMemberWithdraw {
 	@Excel(name = "交易单号", width = 15)
     @ApiModelProperty(value = "交易单号")
 	private java.lang.String transactionId;
-
 	private Float amount;
+	private Integer from;
 }
