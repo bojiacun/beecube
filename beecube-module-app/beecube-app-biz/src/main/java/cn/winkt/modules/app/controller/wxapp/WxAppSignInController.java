@@ -61,9 +61,11 @@ public class WxAppSignInController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppMember appMember = appMemberService.getById(loginUser.getId());
         List<MemberSignIn> memberSignIns = memberSignInService.selectLatestCycleList(loginUser.getId());
-        Date latestTime = memberSignIns.get(memberSignIns.size()-1).getCreateTime();
-        if(DateUtils.isSameDay(latestTime, new Date())) {
-            throw new JeecgBootException("今日已签到");
+        if(memberSignIns.size() > 0) {
+            Date latestTime = memberSignIns.get(memberSignIns.size() - 1).getCreateTime();
+            if (DateUtils.isSameDay(latestTime, new Date())) {
+                throw new JeecgBootException("今日已签到");
+            }
         }
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
         int cycle = memberSetting.getSigninCycle().split(",").length;

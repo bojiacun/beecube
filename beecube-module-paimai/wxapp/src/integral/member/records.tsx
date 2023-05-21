@@ -42,6 +42,7 @@ export default class Index extends Component<any, any> {
     }
     onRefresh() {
         // @ts-ignore
+        this.setState({page: 1});
         this.refreshingRef.current = true;
         this.setState({loading: false});
         this.onLoad();
