@@ -144,15 +144,20 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
 
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-zhuanzhang'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>转账记录</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
+                    <View>
+                        <Navigator url={'/integral/member/center'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
+                                <View>积分中心</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'font-bold'}>
+                                    {userInfo.score}
+                                </View>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
 
 
                     <View>

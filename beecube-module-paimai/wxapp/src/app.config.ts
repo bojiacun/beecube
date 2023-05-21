@@ -62,7 +62,12 @@ export default defineAppConfig({
         navigationBarTextStyle: 'black',
         navigationStyle: 'custom',
     },
-
+    subPackages: [{
+        root: 'integral',
+        pages: [
+            'member/center'
+        ],
+    }],
     tabBar: {
         list: [
             {
