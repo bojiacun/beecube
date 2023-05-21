@@ -29,6 +29,7 @@ import moment from "moment";
 export default class Index extends Component<any, any> {
     state:any = {
         signins: null,
+        posting: false,
     }
 
     constructor(props) {
@@ -54,7 +55,15 @@ export default class Index extends Component<any, any> {
     }
 
     handleSignin() {
-
+        this.setState({posting: true});
+        request.post('/app/api/signin').then(res=>{
+            const {settings} = this.props;
+            let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
+            res.data.result.forEach((msignin: any) => {
+                cycles[msignin.dayIndex - 1].active = true;
+            });
+            this.setState({signins: cycles, posting: false});
+        }).catch(()=>this.setState({posting: false}));
     }
 
     render() {
@@ -117,7 +126,7 @@ export default class Index extends Component<any, any> {
                             {signInToday ?
                                 <Button color={'danger'} shape={'round'} disabled>今日已签到</Button>
                                 :
-                                <Button color={'danger'} shape={'round'} onClick={this.handleSignin} block>签到获得积分</Button>
+                                <Button color={'danger'} shape={'round'} onClick={this.handleSignin} block loading={this.state.posting}>签到获得积分</Button>
                             }
                             <View className={'text-stone-400'}>签到7天为一个周期，断签重新开始</View>
                         </View>

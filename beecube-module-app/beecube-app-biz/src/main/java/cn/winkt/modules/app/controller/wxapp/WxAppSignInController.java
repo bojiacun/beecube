@@ -4,7 +4,10 @@ package cn.winkt.modules.app.controller.wxapp;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.MemberSignIn;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppSettingService;
 import cn.winkt.modules.app.service.IMemberSignInService;
+import cn.winkt.modules.app.vo.MemberSetting;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +32,9 @@ public class WxAppSignInController {
 
     @Resource
     private IAppMemberService appMemberService;
+
+    @Resource
+    private IAppSettingService appSettingService;
 
     /**
      * 获取当前用户的签到数据，如果断签则为空，没有断签则返回整个周期内的签到数据
@@ -48,15 +55,20 @@ public class WxAppSignInController {
         return Result.OK(Collections.emptyList());
     }
     @PostMapping
-    public Result<List<MemberSignIn>> signinToday() {
+    public Result<List<MemberSignIn>> signinToday() throws InvocationTargetException, IllegalAccessException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppMember appMember = appMemberService.getById(loginUser.getId());
         List<MemberSignIn> memberSignIns = memberSignInService.selectLatestCycleList(loginUser.getId());
 
+        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+
+        int cycle = memberSetting.getSigninCycle().split(",").length;
+
+
         MemberSignIn memberSignIn = new MemberSignIn();
         memberSignIn.setMemberId(loginUser.getId());
-        memberSignIn.setDayIndex(memberSignIns.size()+1);
-        memberSignIn.setMemberName(appMember.getRealname());
+        memberSignIn.setDayIndex(memberSignIns.size() >= cycle ? 1 : memberSignIns.size()+1);
+        memberSignIn.setMemberName(StringUtils.getIfEmpty(appMember.getRealname(), appMember::getNickname));
         memberSignIn.setMemberAvatar(appMember.getRealname());
         memberSignInService.save(memberSignIn);
         return Result.OK(memberSignInService.selectLatestCycleList(loginUser.getId()));
