@@ -6,7 +6,7 @@
     box-sizing: border-box;
     &:after {
         width: 140%;
-        height: calc(100% - 60px);
+        height: calc(100% - 120px);
         position: absolute;
         left: -20%;
         z-index: -1;

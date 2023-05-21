@@ -65,7 +65,8 @@ export default defineAppConfig({
     subPackages: [{
         root: 'integral',
         pages: [
-            'member/center'
+            'member/center',
+            'member/records',
         ],
     }],
     tabBar: {
