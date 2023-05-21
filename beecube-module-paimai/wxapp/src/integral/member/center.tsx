@@ -86,7 +86,7 @@ export default class Index extends Component<any, any> {
                         积分中心
                         <Text className={'fa fa-chevron-left absolute left-0'} onClick={() => utils.navigateBack()}/>
                     </View>
-                    <View className={classNames('flex flex-col items-center justify-center space-x-2')}>
+                    <View className={classNames('mt-6 flex flex-col items-center justify-center space-x-2')}>
                         <View className={'text-6xl text-center'}>{numeral(userInfo.score).format('0.00')}</View>
                         <Navigator url={'records'}>积分明细</Navigator>
                     </View>
@@ -133,7 +133,7 @@ export default class Index extends Component<any, any> {
                     </View>
 
                 </View>
-                <View className={'rounded-md bg-white text-gray-800 mt-2 p-4 mx-4 space-y-4'}>
+                <View className={'rounded-md bg-white text-gray-800 p-4 m-4 space-y-4'}>
                     <View className={'flex justify-between items-center'}>
                         <View className={'font-bold text-lg'}>做任务赚积分</View>
                     </View>
