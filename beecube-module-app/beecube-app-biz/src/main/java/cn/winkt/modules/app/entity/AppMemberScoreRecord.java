@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -40,7 +41,7 @@ public class AppMemberScoreRecord {
 	/**变动积分*/
 	@Excel(name = "变动积分", width = 15)
     @ApiModelProperty(value = "变动积分")
-	private java.lang.Double score;
+	private BigDecimal score;
 	/**记录类型（1支出、2收入、3充值、4提现）*/
 	@Excel(name = "记录类型（1支出、2收入）", width = 15)
     @ApiModelProperty(value = "记录类型（1支出、2收入）")

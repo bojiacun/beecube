@@ -1,7 +1,10 @@
 package cn.winkt.modules.app.service;
 
 import cn.winkt.modules.app.entity.AppSetting;
+import cn.winkt.modules.app.vo.MemberSetting;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @Description: 应用配置表
@@ -11,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IAppSettingService extends IService<AppSetting> {
 
+    MemberSetting queryMemberSettings() throws InvocationTargetException, IllegalAccessException;
 }

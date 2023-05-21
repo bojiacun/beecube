@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -78,7 +79,7 @@ public class AppMember {
 	/**用户积分*/
 	@Excel(name = "用户积分", width = 15)
     @ApiModelProperty(value = "用户积分")
-	private java.lang.Float score;
+	private BigDecimal score;
 	/**用户手机号*/
 	@Excel(name = "用户手机号", width = 15)
     @ApiModelProperty(value = "用户手机号")

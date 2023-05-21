@@ -28,7 +28,7 @@ import moment from "moment";
 })
 export default class Index extends Component<any, any> {
     state:any = {
-        signins: [],
+        signins: null,
     }
 
     constructor(props) {
@@ -36,17 +36,21 @@ export default class Index extends Component<any, any> {
         this.handleSignin = this.handleSignin.bind(this);
     }
 
+    componentDidUpdate(prevProps: Readonly<any>) {
+        if(prevProps.settings?.signinCycle && !this.state.signins) {
+            request.get('/app/api/signin/info').then(res=>{
+                const {settings} = this.props;
+                let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
+                res.data.result.forEach((msignin: any) => {
+                    cycles[msignin.dayIndex - 1].active = true;
+                });
+                this.setState({signins: cycles});
+            });
+        }
+    }
 
     componentDidMount() {
         Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
-        request.get('/app/api/signin/info').then(res=>{
-            const {settings} = this.props;
-            let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
-            res.data.result.forEach((msignin: any) => {
-                cycles[msignin.dayIndex - 1].active = true;
-            });
-            this.setState({signins: cycles});
-        });
     }
 
     handleSignin() {
@@ -56,7 +60,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
-        if (userInfo == null) return <PageLoading/>;
+        if (userInfo == null || !this.state.signins) return <PageLoading/>;
 
 
         const barTop = systemInfo.statusBarHeight;
@@ -65,6 +69,7 @@ export default class Index extends Component<any, any> {
         const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2;
         const signins = this.state.signins.filter(s => s.active);
         const signInToday = signins.length > 0 && moment(signins[signins.length - 1].createTime).day() == moment().day();
+
         return (
             <PageLayout showStatusBar={false}>
                 <View className={classNames('text-white flex flex-col px-4', styles.userProfile)} style={{paddingTop: barTop}}>
@@ -79,7 +84,7 @@ export default class Index extends Component<any, any> {
                     <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
                         <View className={'flex justify-between items-center mb-4'}>
                             <View className={'font-bold text-lg'}>签到赚积分</View>
-                            <View className={''}>已签2/7</View>
+                            <View className={''}>已签{signins.length}/{this.state.signins.length}</View>
                         </View>
                         <ScrollView scrollX={true} type={'custom'}>
                         <View className={'grid grid-cols-7 gap-2'}>

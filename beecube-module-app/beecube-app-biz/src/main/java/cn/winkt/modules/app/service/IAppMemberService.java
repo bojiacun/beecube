@@ -4,6 +4,8 @@ import cn.winkt.modules.app.entity.AppMember;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.system.vo.LoginUser;
 
+import java.math.BigDecimal;
+
 /**
  * @Description: 应用会员表
  * @Author: jeecg-boot
@@ -12,4 +14,7 @@ import org.jeecg.common.system.vo.LoginUser;
  */
 public interface IAppMemberService extends IService<AppMember> {
     LoginUser getEncodeUserInfo(String username);
+
+    void inScore(String memberId, BigDecimal amount, String description);
+    void outScore(String memberId, BigDecimal amount, String description);
 }
