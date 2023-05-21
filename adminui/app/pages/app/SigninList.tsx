@@ -8,7 +8,7 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import {Delete, Edit, Eye, MoreVertical, User} from "react-feather";
 
-const ScoreRecordList = (props: any) => {
+const SigninList = (props: any) => {
     const {show, onHide, selectedRow, startPageLoading, stopPageLoading} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, memberId: selectedRow.id});
@@ -17,7 +17,7 @@ const ScoreRecordList = (props: any) => {
 
     useEffect(() => {
         if (show) {
-            searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
+            searchFetcher.submit(searchState, {method: 'get', action: '/app/signins'});
         }
     }, [show]);
 
@@ -43,12 +43,12 @@ const ScoreRecordList = (props: any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/signins'});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/app/score/records'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/signins'});
     }
     const handleOnSearchNameChanged = (e: any) => {
         setSearchState({...searchState, memberName: e.target.value});
@@ -59,24 +59,23 @@ const ScoreRecordList = (props: any) => {
     }
     const columns: any[] = [
         {
-            text: '操作类型',
-            dataField: 'type_dictText',
+            text: '签到人',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 200},
+            formatter: (cell: any, row: any) => {
+                let previewUrl = row.memberAvatar;
+                return (
+                    <div className={'d-flex align-items-center'}>
+                        {!previewUrl ? <User size={40}/> :
+                            <Image src={previewUrl} roundedCircle={true} width={40} height={40} className={'badge-minimal'}/>}
+                        <span className={'me-1'}>{row.memberName}</span>
+                    </div>
+                );
+            }
         },
         {
-            text: '金额',
-            dataField: 'money',
-        },
-        {
-            text: '描述信息',
-            dataField: 'description',
-        },
-        {
-            text: '交易单号',
-            dataField: 'transactionId',
-            style: {wordBreak: 'break-all', wordWrap: 'break-word'}
-        },
-        {
-            text: '创建时间',
+            text: '签到时间',
             dataField: 'createTime',
         },
     ]
@@ -107,7 +106,7 @@ const ScoreRecordList = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/app/score/records'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/app/signins'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'memberId'} value={selectedRow.id} type={'hidden'}/>
@@ -162,4 +161,4 @@ const ScoreRecordList = (props: any) => {
     );
 }
 
-export default ScoreRecordList;
+export default SigninList;
