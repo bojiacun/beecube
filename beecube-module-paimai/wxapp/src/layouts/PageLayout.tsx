@@ -46,6 +46,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
             style = {},
             className,
             containerClassName = '',
+            containerStyle = {},
             loading,
             statusBarProps = {},
             enableReachBottom = false,
@@ -71,7 +72,7 @@ class PageLayout extends Component<PayLayoutProps, any> {
         return (
             <View className={classNames(styles.page, className)} style={{ ...style, ...pageStyle}}>
                 {showStatusBar && <StatusBar {...statusBarProps} />}
-                <View className={containerClassName}>
+                <View className={containerClassName} style={containerStyle}>
                     {children}
                     {copyright && <Copyright />}
                     {showTabBar && <TabBar/>}
@@ -88,6 +89,8 @@ export interface PayLayoutProps extends Partial<any> {
     showStatusBar?: boolean;
     showTabBar?: boolean;
     enableReachBottom?: boolean;
+    containerClassName?: string;
+    containerStyle?: any;
 }
 
 

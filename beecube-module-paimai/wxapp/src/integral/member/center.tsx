@@ -37,21 +37,21 @@ export default class Index extends Component<any, any> {
         this.handleSignin = this.handleSignin.bind(this);
     }
 
-    componentDidUpdate(prevProps: Readonly<any>) {
-        if(prevProps.settings?.signinCycle && !this.state.signins) {
-            request.get('/app/api/signin/info').then(res=>{
-                const {settings} = this.props;
+    componentDidUpdate() {
+    }
+
+    componentDidMount() {
+        const {settings} = this.props;
+        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
+        request.get('/app/api/signin/info').then(res=>{
+            setTimeout(()=>{
                 let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
                 res.data.result.forEach((msignin: any) => {
                     cycles[msignin.dayIndex - 1].active = true;
                 });
                 this.setState({signins: cycles});
-            });
-        }
-    }
-
-    componentDidMount() {
-        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
+            }, 100);
+        });
     }
 
     handleSignin() {
@@ -81,14 +81,18 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout showStatusBar={false}>
-                <View className={classNames('text-white flex flex-col px-4', styles.userProfile)} style={{paddingTop: barTop}}>
+                <View className={classNames('text-white flex flex-col px-4 relative', styles.userProfile)} style={{paddingTop: barTop}}>
                     <View className={'flex items-center justify-center text-lg relative'} style={{height: barHeight}}>
                         积分中心
                         <Text className={'fa fa-chevron-left absolute left-0'} onClick={() => utils.navigateBack()}/>
                     </View>
-                    <View className={classNames('mt-6 flex flex-col items-center justify-center space-x-2')}>
+                    <View className={classNames('mt-6 relative flex flex-col items-center justify-center space-x-2')}>
                         <View className={'text-6xl text-center'}>{numeral(userInfo.score).format('0.00')}</View>
                         <Navigator url={'records'}>积分明细</Navigator>
+                    </View>
+                    <View className={'absolute'} style={{right: 0, top: 100}}>
+                        <Navigator className={'bg-gradient-to-r from-yellow-500 p-2 rounded-l-full'} url={'rules'}>规则明细</Navigator>
+                        <Navigator className={'bg-gradient-to-r from-yellow-500 p-2 rounded-l-full mt-2'} url={'withdraw'}>积分提现</Navigator>
                     </View>
                     <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
                         <View className={'flex justify-between items-center mb-4'}>

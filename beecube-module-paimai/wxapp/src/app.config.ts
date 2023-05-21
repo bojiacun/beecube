@@ -67,6 +67,8 @@ export default defineAppConfig({
         pages: [
             'member/center',
             'member/records',
+            'member/rules',
+            'member/withdraw',
         ],
     }],
     tabBar: {
