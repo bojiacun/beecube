@@ -9,6 +9,7 @@ import {setUserInfo} from "../../store/actions";
 import PageLoading from "../../components/pageloading";
 import numeral from 'numeral';
 import {ReactSVG} from "react-svg";
+import {Button} from "@taroify/core";
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -46,7 +47,7 @@ export default class Index extends Component<any, any> {
                         <Navigator url={'records'}>积分明细</Navigator>
                     </View>
                     <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
-                        <View className={'flex justify-between items-center'}>
+                        <View className={'flex justify-between items-center mb-4'}>
                             <View className={'font-bold text-lg'}>签到赚积分</View>
                             <View className={''}>已签2/7</View>
                         </View>
@@ -55,18 +56,29 @@ export default class Index extends Component<any, any> {
                                 <View className={'bg-orange-100 flex flex-col items-center relative p-4 rounded text-red-600'}>
                                     <Text className={'font-bold text-lg'}>100</Text>
                                     <Text className={'text-sm'}>积分</Text>
+                                    <Text className={'fa fa-check-circle absolute'} style={{right: 3, top: 3}} />
                                 </View>
                                 <View className={'mt-2'}>第1天</View>
                             </View>
+                            <View className={'flex flex-col items-center justify-center'}>
+                                <View className={'bg-stone-200 flex flex-col items-center relative p-4 rounded text-stone-600'}>
+                                    <Text className={'font-bold text-lg'}>100</Text>
+                                    <Text className={'text-sm'}>积分</Text>
+                                </View>
+                                <View className={'mt-2'}>第2天</View>
+                            </View>
+                        </View>
+                        <View className={'mt-4'}>
+                            <Button>今日已签到</Button>
                         </View>
                     </View>
-                    <View className={'rounded-md bg-white text-gray-800 mt-2 p-4'}>
-                        <View className={'flex justify-between items-center'}>
-                            <View className={'font-bold text-lg'}>做任务赚积分</View>
-                        </View>
+
+                </View>
+                <View className={'rounded-md bg-white text-gray-800 mt-2 p-4 mx-4'}>
+                    <View className={'flex justify-between items-center'}>
+                        <View className={'font-bold text-lg'}>做任务赚积分</View>
                     </View>
                 </View>
-
             </PageLayout>
         );
     }
