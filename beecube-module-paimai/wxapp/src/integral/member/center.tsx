@@ -40,16 +40,23 @@ export default class Index extends Component<any, any> {
             <PageLayout showStatusBar={false}>
                 <View className={classNames('text-white flex flex-col px-4', styles.userProfile)} style={{paddingTop: barTop}}>
                     <View className={'text-center text-lg'} style={{height: barHeight}}>积分中心</View>
-                    <View className={classNames('flex items-center justify-between space-x-2')}>
-                        <View>{numeral(userInfo.score).format('0.00')}</View>
+                    <View className={classNames('flex flex-col items-center justify-center space-x-2')}>
+                        <View className={'text-6xl text-center'}>{numeral(userInfo.score).format('0.00')}</View>
+                        <Navigator url={'records'}>积分明细</Navigator>
                     </View>
-                    <View className={'rounded-md bg-white text-gray-800 mt-2 p-4 shadow-lg'}>
+                    <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
                         <View className={'flex justify-between items-center'}>
                             <View className={'font-bold text-lg'}>签到赚积分</View>
                             <View className={''}>已签2/7</View>
                         </View>
                     </View>
+                    <View className={'rounded-md bg-white text-gray-800 mt-2 p-4'}>
+                        <View className={'flex justify-between items-center'}>
+                            <View className={'font-bold text-lg'}>做任务赚积分</View>
+                        </View>
+                    </View>
                 </View>
+
             </PageLayout>
         );
     }
