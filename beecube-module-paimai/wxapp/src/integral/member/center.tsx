@@ -27,7 +27,7 @@ import moment from "moment";
     }
 })
 export default class Index extends Component<any, any> {
-    state:any = {
+    state: any = {
         signins: null,
         posting: false,
     }
@@ -41,29 +41,28 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        const {settings} = this.props;
         Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
-        request.get('/app/api/signin/info').then(res=>{
-            setTimeout(()=>{
-                let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
-                res.data.result.forEach((msignin: any) => {
-                    cycles[msignin.dayIndex - 1].active = true;
-                });
-                this.setState({signins: cycles});
-            }, 100);
+        request.get('/app/api/signin/info').then(res => {
+            const {settings} = this.props;
+            let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
+            res.data.result.forEach((msignin: any) => {
+                cycles[msignin.dayIndex - 1].active = true;
+                cycles[msignin.dayIndex -1].createTime = msignin.createTime;
+            });
+            this.setState({signins: cycles});
         });
     }
 
     handleSignin() {
         this.setState({posting: true});
-        request.post('/app/api/signin').then(res=>{
+        request.post('/app/api/signin').then(res => {
             const {settings} = this.props;
             let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
             res.data.result.forEach((msignin: any) => {
                 cycles[msignin.dayIndex - 1].active = true;
             });
             this.setState({signins: cycles, posting: false});
-        }).catch(()=>this.setState({posting: false}));
+        }).catch(() => this.setState({posting: false}));
     }
 
     render() {
@@ -78,7 +77,6 @@ export default class Index extends Component<any, any> {
         const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2;
         const signins = this.state.signins.filter(s => s.active);
         const signInToday = signins.length > 0 && moment(signins[signins.length - 1].createTime).day() == moment().day();
-
         return (
             <PageLayout showStatusBar={false}>
                 <View className={classNames('text-white flex flex-col px-4 relative', styles.userProfile)} style={{paddingTop: barTop}}>
@@ -100,31 +98,33 @@ export default class Index extends Component<any, any> {
                             <View className={''}>已签{signins.length}/{this.state.signins.length}</View>
                         </View>
                         <ScrollView scrollX={true} type={'custom'}>
-                        <View className={'grid grid-cols-7 gap-2'}>
-                            {this.state.signins.map((signin:any, index) => {
-                                if(signin.active) {
+                            <View className={'grid grid-cols-7 gap-2'}>
+                                {this.state.signins.map((signin: any, index) => {
+                                    if (signin.active) {
+                                        return (
+                                            <View className={'flex flex-col items-center justify-center'}>
+                                                <View style={{width: 40, height: 60}}
+                                                      className={'bg-orange-100 flex flex-col items-center justify-center relative rounded text-red-600'}>
+                                                    <Text className={'font-bold'}>{signin.integral}</Text>
+                                                    <Text className={'text-sm'}>积分</Text>
+                                                    <Text className={'fa fa-check-circle absolute'} style={{right: 3, top: 3}}/>
+                                                </View>
+                                                <View className={'mt-2'}>第{index + 1}天</View>
+                                            </View>
+                                        );
+                                    }
                                     return (
                                         <View className={'flex flex-col items-center justify-center'}>
-                                            <View style={{width: 40, height: 60}} className={'bg-orange-100 flex flex-col items-center justify-center relative rounded text-red-600'}>
-                                                <Text className={'font-bold'}>{signin.integral}</Text>
+                                            <View style={{width: 40, height: 60}}
+                                                  className={'bg-stone-200 flex flex-col items-center justify-center relative rounded text-stone-600'}>
+                                                <Text className={'font-bold text-lg'}>{signin.integral}</Text>
                                                 <Text className={'text-sm'}>积分</Text>
-                                                <Text className={'fa fa-check-circle absolute'} style={{right: 3, top: 3}}/>
                                             </View>
-                                            <View className={'mt-2'}>第{index+1}天</View>
+                                            <View className={'mt-2'}>第{index + 1}天</View>
                                         </View>
                                     );
-                                }
-                                return (
-                                    <View className={'flex flex-col items-center justify-center'}>
-                                        <View style={{width: 40, height: 60}} className={'bg-stone-200 flex flex-col items-center justify-center relative rounded text-stone-600'}>
-                                            <Text className={'font-bold text-lg'}>{signin.integral}</Text>
-                                            <Text className={'text-sm'}>积分</Text>
-                                        </View>
-                                        <View className={'mt-2'}>第{index+1}天</View>
-                                    </View>
-                                );
-                            })}
-                        </View>
+                                })}
+                            </View>
                         </ScrollView>
                         <View className={'mt-4 flex flex-col justify-center items-center space-y-4'}>
                             {signInToday ?

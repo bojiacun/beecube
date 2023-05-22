@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/signin")
@@ -50,11 +48,12 @@ public class WxAppSignInController {
         if(memberSignIns.size() == 0) {
             return Result.OK(Collections.emptyList());
         }
-        Date distDate = DateUtils.addDays(memberSignIns.get(0).getCreateTime(), memberSignIns.size()-1);
-        if(DateUtils.isSameDay(distDate, new Date())) {
-            return Result.OK(memberSignIns);
+
+        Date latestTime = memberSignIns.get(memberSignIns.size() - 1).getCreateTime();
+        if(!isContinue(latestTime)) {
+            return Result.OK(Collections.emptyList());
         }
-        return Result.OK(Collections.emptyList());
+        return Result.OK(memberSignIns);
     }
     @PostMapping
     public Result<List<MemberSignIn>> signinToday() throws InvocationTargetException, IllegalAccessException {
@@ -65,6 +64,9 @@ public class WxAppSignInController {
             Date latestTime = memberSignIns.get(memberSignIns.size() - 1).getCreateTime();
             if (DateUtils.isSameDay(latestTime, new Date())) {
                 throw new JeecgBootException("今日已签到");
+            }
+            if(!isContinue(latestTime)) {
+                memberSignIns = new ArrayList<>();
             }
         }
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
@@ -77,5 +79,12 @@ public class WxAppSignInController {
         memberSignInService.save(memberSignIn);
         appMemberService.inScore(loginUser.getId(), new BigDecimal(memberSetting.getSigninCycle().split(",")[memberSignIn.getDayIndex()-1]), "签到获取积分");
         return Result.OK(memberSignInService.selectLatestCycleList(loginUser.getId()));
+    }
+
+    private boolean isContinue(Date latestDate) {
+        if(DateUtils.isSameDay(latestDate, new Date())) {
+            return true;
+        }
+        return DateUtils.isSameDay(DateUtils.addDays(latestDate, 1), new Date());
     }
 }
