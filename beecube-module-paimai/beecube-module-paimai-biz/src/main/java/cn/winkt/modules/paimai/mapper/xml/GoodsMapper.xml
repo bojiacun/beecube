@@ -56,4 +56,8 @@
         left join paimai_orders o on og.order_id = o.id
         where o.status = 3 and og.goods_id = #{goods_id}
     </select>
+
+    <select id="selectPagedMallGoods" resultType="cn.winkt.modules.paimai.entity.Goods">
+        select title, spec, home_cover, list_cover, description, tags from paimai_goods where type = 2 and ${ew.customSqlSegment} group by title, spec, home_cover, list_cover, description, tags, sub_title
+    </select>
 </mapper>
