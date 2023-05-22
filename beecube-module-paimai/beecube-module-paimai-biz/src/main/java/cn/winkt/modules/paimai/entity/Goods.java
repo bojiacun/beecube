@@ -150,6 +150,7 @@ public class Goods {
 
 	private String roomId;
 
+	private Integer maxIntegralPercent;
 	/**
 	 * 拍品控制状态，0为未开始、1为已经开始、2为已结束、3为已成交、4为已流拍
 	 */

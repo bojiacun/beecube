@@ -54,10 +54,6 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapInput label={'小程序名称'} name={'wxAppName'} placeholder={'设置小程序名称'} />
                         <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
                         <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
-                        {/*<FormGroup>*/}
-                        {/*    <FormLabel>分享海报背景</FormLabel>*/}
-                        {/*    <FileBrowserInput type={1} name={'shareBg'} multi={false} />*/}
-                        {/*</FormGroup>*/}
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
                         <BootstrapInput label={'图文类文章标题'} name={'articleNormalIndexTitle'} placeholder={'图文类文章频道首页标题'} />
@@ -70,6 +66,8 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel>文章频道广告链接地址</FormLabel>
                             <BootstrapLinkSelector links={links} name={'articleNormalAdvLink'} initValue={settings.articleNormalAdvLink}  />
                         </FormGroup>
+
+                        <BootstrapInput label={'积分兑换比例'} name={'integralRatio'} placeholder={'1元相当于多少积分'} />
 
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
