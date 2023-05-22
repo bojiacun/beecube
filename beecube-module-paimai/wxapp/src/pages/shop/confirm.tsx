@@ -2,10 +2,11 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
-import {Button, Text, View, Navigator} from "@tarojs/components";
+import {Button, Text, View, Navigator, Input} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
+import {Cell} from "@taroify/core";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -106,12 +107,21 @@ export default class Index extends Component<any, any> {
         const {goodsList, address} = this.state;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
+        const barTop = systemInfo.statusBarHeight;
+        const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+        // 获取导航栏高度
+        const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2;
+
 
         return (
-            <PageLayout statusBarProps={{title: '确认商城订单'}}>
-                <View className={'grid grid-cols-1 divide-y divide-gray-100 bg-white'}>
-                    <View className={'p-4'}>
-                        <View className={'font-bold text-lg'}>选择收货地址</View>
+            <PageLayout showStatusBar={false}>
+                <View className={'px-4 flex flex-col relative head-bg'} style={{paddingTop: barTop}}>
+                    <View className={'flex items-center justify-center text-lg relative text-white'} style={{height: barHeight}}>
+                        确认订单
+                        <Text className={'fa fa-chevron-left absolute left-0'} onClick={() => utils.navigateBack()}/>
+                    </View>
+                    <View className={'bg-white p-4 rounded-lg mt-6'}>
+                        <View className={'font-bold text-lg item-title mb-2'}>收货地址</View>
                         <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                             <View className={'flex-1 space-y-2'}>
                                 <View className={'font-bold space-x-2'}>
@@ -124,33 +134,46 @@ export default class Index extends Component<any, any> {
                             </View>
                         </Navigator>
                     </View>
-                    <View className={'p-4'}>
-                        <View className={'font-bold text-lg'}>商品信息</View>
-                        {goodsList.map((item) => {
-                            return (
-                                <View className={'bg-white relative py-4 overflow-hidden flex items-center'}>
-                                    <View className={'flex-1 flex space-x-2'}>
-                                        <FallbackImage mode={'aspectFit'} src={utils.resolveUrl(item.images.split(',')[0])}
-                                                       style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>
-                                        <View>
-                                            <View className={'text-lg'}>{item.title}</View>
-                                            <View className={'text-red-500'}>￥{numeral(item.startPrice).format('0,0.00')}</View>
-                                        </View>
+                </View>
+                <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
+                    <View className={'font-bold text-lg item-title'}>商品信息</View>
+                    {goodsList.map((item) => {
+                        return (
+                            <View className={'relative py-4 overflow-hidden flex items-center text-lg'}>
+                                <View className={'flex-1 flex space-x-2'}>
+                                    <FallbackImage mode={'aspectFill'} src={utils.resolveUrl(item.images.split(',')[0])}
+                                                   style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>
+                                    <View className={'flex flex-col justify-between'}>
+                                        <View className={'font-bold'}>{item.title}</View>
+                                        <View className={'text-red-500 font-bold'}>￥{numeral(item.startPrice).format('0,0.00')}</View>
                                     </View>
-                                    <View className={'w-20 flex items-center justify-center'}> X {item.count} </View>
                                 </View>
-                            );
-                        })}
+                                <View className={'w-20 flex items-center justify-center'}> X {item.count} </View>
+                            </View>
+                        );
+                    })}
+                    <View className={'flex justify-between items-center'}>
+                        <View className={'font-bold'}>售后免邮</View>
+                        <View className={'text-stone-400'}>官方赠送</View>
                     </View>
-
+                    <View className={'flex justify-between items-center'}>
+                        <View className={'font-bold'}>配送方式</View>
+                        <View className={'text-stone-400'}>快递配送</View>
+                    </View>
+                    <View className={'flex items-center'}>
+                        <View className={'font-bold'}>买家留言</View>
+                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'}/></View>
+                    </View>
+                </View>
+                <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
+                    <View className={'font-bold text-lg item-title'}>结算信息</View>
                 </View>
 
-
                 <View style={{height: Taro.pxTransform(124)}}/>
-                <View className={'bg-white flex items-center fixed px-4 w-full bottom-0'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
+                <View className={'bg-white flex items-center fixed px-4 py-2 w-full bottom-0'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
                     <View className={'flex-1 flex items-center'}>
                         <Text className={'ml-4 font-bold text-red-500'}>总计：</Text>
-                        <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
+                        <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
                         <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'}
