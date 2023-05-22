@@ -6,7 +6,7 @@ import {Button, Text, View, Navigator, Input} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import {Cell} from "@taroify/core";
+import {Cell, Radio} from "@taroify/core";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -49,6 +49,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
+        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
         //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
         const address = Taro.getStorageSync('ADDRESS');
         if (address) {
@@ -101,7 +102,12 @@ export default class Index extends Component<any, any> {
         }
         return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
     }
-
+    get totalPrice() {
+        if (this.state.goodsList.length == 0) {
+            return 0;
+        }
+        return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
+    }
     render() {
         const {systemInfo} = this.props;
         const {goodsList, address} = this.state;
@@ -167,6 +173,30 @@ export default class Index extends Component<any, any> {
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
                     <View className={'font-bold text-lg item-title'}>结算信息</View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'font-bold'}>商品总价</View>
+                        <View>￥{numeral(this.totalPrice).format('0,0.00')}</View>
+                    </View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'font-bold'}>优惠券</View>
+                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'} /></View>
+                    </View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'font-bold'}>积分</View>
+                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'} /></View>
+                    </View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'font-bold'}>运费</View>
+                        <View className={''}>+￥500</View>
+                    </View>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'font-bold'}>支付方式</View>
+                        <View className={'space-x-2'}>
+                            <Radio.Group defaultValue={'1'} size={16} className={'radio-red-color'}>
+                                <Radio name={'1'}>微信支付</Radio>
+                            </Radio.Group>
+                        </View>
+                    </View>
                 </View>
 
                 <View style={{height: Taro.pxTransform(124)}}/>

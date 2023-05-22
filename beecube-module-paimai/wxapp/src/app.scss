@@ -224,15 +224,19 @@ button, button[plain] {
     }
 }
 .item-title {
-    text-indent: 10px;
+    text-indent: 12px;
     position: relative;
     &:before {
         content: ' ';
         position: absolute;
         left: 0;
-        top: 15%;
+        top: 12%;
         height: 70%;
         width: 5px;
         background-color: #b91c1c;
     }
+}
+.radio-red-color {
+    --radio-checked-icon-background-color: #ee0a24;
+    --radio-checked-icon-border-color: #ee0a24;
 }
