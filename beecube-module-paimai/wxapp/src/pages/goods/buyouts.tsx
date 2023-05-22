@@ -8,7 +8,7 @@ import styles from "../../flow.module.scss";
 import {Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-import {Popup, Tag} from "@taroify/core";
+import {Popup, Stepper, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 
@@ -25,6 +25,7 @@ export default class Index extends Component<any, any> {
         tabs: [],
         openSettle: false,
         settles: [],
+        settleId: null,
     }
 
     constructor(props) {
@@ -32,6 +33,7 @@ export default class Index extends Component<any, any> {
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
         this.joinCart = this.joinCart.bind(this);
+        this.changeSettle = this.changeSettle.bind(this);
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -45,9 +47,17 @@ export default class Index extends Component<any, any> {
     joinCart(e, id) {
         e.stopPropagation();
         e.preventDefault();
-        request.get('/paimai/api/goods/settles', {params: {id: id}}).then(res=>{
-            this.setState({openSettle: true, settles: res.data.result});
+        request.get('/paimai/api/goods/settles', {params: {id: id}}).then(res => {
+            this.setState({openSettle: true, settles: res.data.result, settleId: id});
         });
+    }
+
+    changeSettle(id) {
+        this.setState({settleId: id});
+    }
+
+    getCurrentSettle() {
+        return this.state.settles.filter((s: any) => s.id == this.state.settleId)[0];
     }
 
     gotoDetail(e, url) {
@@ -74,8 +84,9 @@ export default class Index extends Component<any, any> {
                         <View>
                             <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl font-bold'}>{numeral(data.startPrice).format('0,0.00')}</Text>
                         </View>
-                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'} style={{width: 24, height: 24}}>
-                            <Text className={'iconfont icon-gouwuche'} />
+                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'}
+                              style={{width: 24, height: 24}}>
+                            <Text className={'iconfont icon-gouwuche'}/>
                         </View>
                     </View>
                 </View>
@@ -100,12 +111,46 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
+        const {openSettle, settles} = this.state;
+        let currentSettle;
+        if (openSettle) {
+            currentSettle = this.getCurrentSettle();
+        }
 
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
-                <Popup style={{height: '30%'}} open={this.state.openSettle} rounded placement={'bottom'} onClose={()=>this.setState({openSettle: false})}>
-                    <Popup.Close />
+                <Popup style={{height: 300}} open={openSettle} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
+                    <View className={'text-2xl'}>
+                        <Popup.Close />
+                    </View>
+                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{height: 190}}>
+                        <View className={'space-y-4'}>
+                            {currentSettle && <View className={'flex items-center'}>
+                                <View className={'flex-none'}>
+                                    <FallbackImage style={{width: 60, height: 60}} src={currentSettle.listCover ? currentSettle.listCover : currentSettle.images.split(',')[0]}/>
+                                </View>
+                                <View className={'flex-1 ml-2'}>
+                                    <View className={'text-lg font-bold'}>{currentSettle.title}</View>
+                                    <View className={'text-red-600 font-bold text-xl'}>￥{currentSettle.startPrice}</View>
+                                </View>
+                            </View>}
+                            <View className={'space-x-2'}>
+                                {settles.map((item: any) => {
+                                    return (
+                                        <Tag size={'large'} onClick={() => this.changeSettle(item.id)} color={currentSettle?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
+                                             shape={'rounded'}>{item.spec}</Tag>
+                                    );
+                                })}
+                            </View>
+                        </View>
+                        <View className={'flex items-center justify-between mb-4'}>
+                            <View>数量</View>
+                            <View>
+                                <Stepper shape={'circular'} size={22}/>
+                            </View>
+                        </View>
+                    </View>
                 </Popup>
             </PageLayout>
         );
