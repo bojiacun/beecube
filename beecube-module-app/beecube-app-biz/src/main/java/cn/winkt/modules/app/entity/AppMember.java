@@ -75,7 +75,7 @@ public class AppMember {
 	/**用户余额*/
 	@Excel(name = "用户余额", width = 15)
     @ApiModelProperty(value = "用户余额")
-	private java.lang.Float money;
+	private BigDecimal money;
 	/**用户积分*/
 	@Excel(name = "用户积分", width = 15)
     @ApiModelProperty(value = "用户积分")

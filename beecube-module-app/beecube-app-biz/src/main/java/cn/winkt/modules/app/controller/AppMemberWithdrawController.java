@@ -1,5 +1,6 @@
 package cn.winkt.modules.app.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -14,8 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberMoneyRecord;
-import cn.winkt.modules.app.service.IAppMemberMoneyRecordService;
-import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.entity.AppMemberScoreRecord;
+import cn.winkt.modules.app.service.*;
+import cn.winkt.modules.app.vo.MemberSetting;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
@@ -24,7 +26,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.app.entity.AppMemberWithdraw;
-import cn.winkt.modules.app.service.IAppMemberWithdrawService;
+
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -66,6 +68,12 @@ public class AppMemberWithdrawController extends JeecgController<AppMemberWithdr
 
 	@Resource
 	private IAppMemberMoneyRecordService appMemberMoneyRecordService;
+
+	@Resource
+	private IAppMemberScoreRecordService appMemberScoreRecordService;
+
+	@Resource
+	private IAppSettingService appSettingService;
 	
 	/**
 	 * 分页列表查询
@@ -113,28 +121,47 @@ public class AppMemberWithdrawController extends JeecgController<AppMemberWithdr
 	@ApiOperation(value="用户提现申请表-编辑", notes="用户提现申请表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	@Transactional(rollbackFor = Exception.class)
-	public Result<?> edit(@RequestBody AppMemberWithdraw appMemberWithdraw) {
+	public Result<?> edit(@RequestBody AppMemberWithdraw appMemberWithdraw) throws InvocationTargetException, IllegalAccessException {
 		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
 		if(appMemberWithdraw.getStatus() == 1) {
 			AppMember member = appMemberService.getById(appMemberWithdraw.getMemberId());
-			if(member.getMoney() < appMemberWithdraw.getAmount()) {
-				throw new JeecgBootException("余额不足");
-			}
+			MemberSetting memberSetting = appSettingService.queryMemberSettings();
+
 			//处理了
 			appMemberWithdraw.setResolver(loginUser.getUsername());
 			appMemberWithdraw.setResolveTime(new Date());
 
-			//这里还得给用户减去余额
-			AppMemberMoneyRecord record = new AppMemberMoneyRecord();
-			record.setType(4);
-			record.setStatus(1);
-			record.setMoney(appMemberWithdraw.getAmount().doubleValue());
-			record.setMemberId(appMemberWithdraw.getMemberId());
-			record.setDescription("用户提现");
-			member.setMoney(BigDecimal.valueOf(member.getMoney()).subtract(BigDecimal.valueOf(appMemberWithdraw.getAmount())).setScale(2, RoundingMode.CEILING).floatValue());
-			appMemberService.updateById(member);
-			appMemberMoneyRecordService.save(record);
+			if(appMemberWithdraw.getType() == 1) {
+				if(member.getMoney().compareTo(appMemberWithdraw.getAmount()) < 0) {
+					throw new JeecgBootException("余额不足");
+				}
+				//这里还得给用户减去余额
+				AppMemberMoneyRecord record = new AppMemberMoneyRecord();
+				record.setType(4);
+				record.setStatus(1);
+				record.setMoney(appMemberWithdraw.getAmount().doubleValue());
+				record.setMemberId(appMemberWithdraw.getMemberId());
+				record.setDescription("用户提现");
+				member.setMoney(member.getMoney().subtract(appMemberWithdraw.getAmount()).setScale(2, RoundingMode.CEILING));
+				appMemberService.updateById(member);
+				appMemberMoneyRecordService.save(record);
+			}
+			else if(appMemberWithdraw.getType() == 2) {
+				String ratio = memberSetting.getIntegralToMoney();
+				BigDecimal subScore = appMemberWithdraw.getAmount().multiply(new BigDecimal(ratio.split(":")[0])).setScale(2, RoundingMode.CEILING);
+				if(member.getScore().compareTo(subScore) < 0) {
+					throw new JeecgBootException("积分不足");
+				}
+				AppMemberScoreRecord record = new AppMemberScoreRecord();
+				record.setType(1);
+				record.setDescription("用户提现");
+				record.setScore(appMemberWithdraw.getAmount());
+				record.setMemberId(appMemberWithdraw.getMemberId());
+				member.setScore(member.getScore().subtract(subScore));
+				appMemberService.updateById(member);
+				appMemberScoreRecordService.save(record);
+			}
 		}
 		appMemberWithdrawService.updateById(appMemberWithdraw);
 		return Result.OK("编辑成功!");

@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -70,6 +71,6 @@ public class AppMemberWithdraw {
 	@Excel(name = "交易单号", width = 15)
     @ApiModelProperty(value = "交易单号")
 	private java.lang.String transactionId;
-	private Float amount;
-	private Integer from;
+	private BigDecimal amount;
+	private Integer type;
 }

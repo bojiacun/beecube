@@ -68,35 +68,31 @@ public class WxAppMemberScoreController {
 
     @PostMapping("/withdraw")
     public Result<?> withdraw(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException {
-        float amount = data.getFloatValue("amount");
-        if(amount < 0.01) {
-            throw new JeecgBootException("提现金额太小");
-        }
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
-        AppMember member = appMemberService.getById(loginUser.getId());
-        if(amount < Float.parseFloat(memberSetting.getMinWithdrawIntegral())) {
+        BigDecimal amount = BigDecimal.valueOf(data.getFloatValue("amount"));
+        if(amount.compareTo(new BigDecimal(memberSetting.getMinWithdrawIntegral())) < 0) {
             throw new JeecgBootException(String.format("最低%s起步，才可提现", memberSetting.getMinWithdrawIntegral()));
         }
-        if(member.getScore().compareTo(BigDecimal.valueOf(amount)) < 0) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        AppMember member = appMemberService.getById(loginUser.getId());
+        if(member.getScore().compareTo(amount) < 0) {
             throw new JeecgBootException("您没有这么多的额度");
         }
         LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AppMemberWithdraw::getMemberId, loginUser.getId());
         queryWrapper.eq(AppMemberWithdraw::getStatus, 0);
-
         long exits = appMemberWithdrawService.count(queryWrapper);
         if(exits > 0) {
             throw new JeecgBootException("已申请提现");
         }
         AppMemberWithdraw appMemberWithdraw = new AppMemberWithdraw();
         appMemberWithdraw.setMemberId(loginUser.getId());
-        appMemberWithdraw.setAmount(amount);
+        appMemberWithdraw.setAmount(amount.setScale(2, RoundingMode.CEILING).divide(BigDecimal.valueOf(100), RoundingMode.CEILING));
         appMemberWithdraw.setMemberId(member.getId());
         appMemberWithdraw.setMemberPhone(member.getPhone());
         appMemberWithdraw.setMemberName(StringUtils.getIfEmpty(member.getRealname(), member::getNickname));
         appMemberWithdraw.setAppId(AppContext.getApp());
-        appMemberWithdraw.setFrom(2);
+        appMemberWithdraw.setType(2);
         appMemberWithdrawService.save(appMemberWithdraw);
         return Result.OK("申请成功");
     }
