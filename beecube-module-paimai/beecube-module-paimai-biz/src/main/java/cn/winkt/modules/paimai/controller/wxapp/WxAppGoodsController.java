@@ -62,6 +62,13 @@ public class WxAppGoodsController {
         IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
         return Result.OK(pageList);
     }
+    @GetMapping("/settles")
+    public Result<List<Goods>> getGoodsSettles(@RequestParam String id) {
+        Goods distGoods = goodsService.getById(id);
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Goods::getTitle, distGoods.getTitle());
+        return Result.OK(goodsService.list(queryWrapper));
+    }
     @AutoLog(value = "拍品表-分页列表查询")
     @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
     @GetMapping(value = "/list")

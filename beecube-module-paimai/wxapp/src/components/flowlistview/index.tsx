@@ -137,7 +137,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
         }
     });
     let tabStyles:any = {
-        overflowY: 'hidden', overflowX: 'auto', zIndex: 9999
+        overflowY: 'hidden', overflowX: 'auto', zIndex: 99
     }
     if(fixed) {
         tabStyles.top = utils.calcPageHeaderHeight(systemInfo)

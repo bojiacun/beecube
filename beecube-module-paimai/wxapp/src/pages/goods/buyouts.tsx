@@ -5,10 +5,10 @@ import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
-import {Navigator, Text, View} from "@tarojs/components";
+import {Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-import {Tag} from "@taroify/core";
+import {Popup, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 
@@ -23,6 +23,8 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
+        openSettle: false,
+        settles: [],
     }
 
     constructor(props) {
@@ -40,10 +42,12 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/goods/mall/list', {params: params});
     }
 
-    joinCart(e) {
+    joinCart(e, id) {
         e.stopPropagation();
         e.preventDefault();
-
+        request.get('/paimai/api/goods/settles', {params: {id: id}}).then(res=>{
+            this.setState({openSettle: true, settles: res.data.result});
+        });
     }
 
     gotoDetail(e, url) {
@@ -56,7 +60,7 @@ export default class Index extends Component<any, any> {
         const imgUrl = data.listCover ? data.listCover : data.images.split(',')[0];
         const tags = data.tags?.split(',') || [];
         return (
-            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
+            <View className={classNames('bg-white rounded-lg overflow-hidden shadow-lg', styles.flow)}>
                 <View onClick={event => this.gotoDetail(event, '/pages/goods/detail2?id=' + data.id)}>
                     <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={imgUrl}/>
                     {tags.length > 0 && <View className={'p-2 space-x-2'}>{tags.map((item: any) => {
@@ -70,7 +74,7 @@ export default class Index extends Component<any, any> {
                         <View>
                             <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl font-bold'}>{numeral(data.startPrice).format('0,0.00')}</Text>
                         </View>
-                        <View onClick={this.joinCart} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'} style={{width: 24, height: 24}}>
+                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'} style={{width: 24, height: 24}}>
                             <Text className={'iconfont icon-gouwuche'} />
                         </View>
                     </View>
@@ -100,6 +104,9 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
+                <Popup style={{height: '30%'}} open={this.state.openSettle} rounded placement={'bottom'} onClose={()=>this.setState({openSettle: false})}>
+                    <Popup.Close />
+                </Popup>
             </PageLayout>
         );
     }
