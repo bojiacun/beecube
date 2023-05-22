@@ -116,6 +116,14 @@ public class GoodsOrder {
 	@ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;
 
+
+	private String couponId;
+	private String couponTitle;
+	private String usedIntegral;
+
 	@TableField(exist = false)
 	private List<OrderGoods> orderGoods;
+
+	@TableField(exist = false)
+	private List<GoodsOrderSettlement> settlements;
 }
