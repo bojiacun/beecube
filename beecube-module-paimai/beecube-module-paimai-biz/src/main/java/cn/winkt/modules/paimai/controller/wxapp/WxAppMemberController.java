@@ -605,7 +605,7 @@ public class WxAppMemberController {
 
             BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
             for (GoodsVO vo : postOrderVO.getGoodsList()) {
-                BigDecimal totalPrice = BigDecimal.valueOf(vo.getStartPrice()).setScale(2, RoundingMode.CEILING).multiply(BigDecimal.valueOf(vo.getCount()));
+                BigDecimal totalPrice = vo.getStartPrice().setScale(2, RoundingMode.CEILING).multiply(BigDecimal.valueOf(vo.getCount()));
                 payAmount = payAmount.add(totalPrice);
             }
             //创建订单

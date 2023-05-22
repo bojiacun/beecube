@@ -60,6 +60,7 @@ public class CouponTicket {
     @ApiModelProperty(value = "createTime")
 	private java.util.Date createTime;
 	private java.util.Date endTime;
+	private java.util.Date startTime;
 	/**appId*/
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")

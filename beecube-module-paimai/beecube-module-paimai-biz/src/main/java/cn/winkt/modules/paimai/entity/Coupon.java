@@ -55,6 +55,11 @@ public class Coupon {
     @ApiModelProperty(value = "适用商品：1按分类、2按商品、3全部商品")
 	@Dict(dicCode = "paimai_coupon_rule_goods")
 	private java.lang.Integer ruleGoods;
+
+	@Dict(dicCode = "id", dictTable = "paimai_buyout_goods_classes", dicText = "name")
+	private String ruleGoodsClassId;
+	@Dict(dicCode = "id,type=2", dictTable = "paimai_goods", dicText = "name")
+	private String ruleGoodsId;
 	/**最低消费*/
 	@Excel(name = "最低消费", width = 15)
     @ApiModelProperty(value = "最低消费")

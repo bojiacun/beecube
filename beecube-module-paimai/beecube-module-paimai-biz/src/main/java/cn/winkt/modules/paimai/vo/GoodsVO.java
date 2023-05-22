@@ -17,8 +17,8 @@ public class GoodsVO {
     private java.lang.String title;
     private java.lang.String subTitle;
     private java.lang.Integer type;
-    private java.lang.Float deposit;
-    private java.lang.Float startPrice;
+    private BigDecimal deposit;
+    private BigDecimal startPrice;
     private java.lang.Object uprange;
     private java.lang.Integer delayTime;
     private java.lang.Object commission;
