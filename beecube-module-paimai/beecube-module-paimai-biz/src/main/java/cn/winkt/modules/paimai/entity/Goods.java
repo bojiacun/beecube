@@ -47,7 +47,7 @@ public class Goods {
     @ApiModelProperty(value = "副标题")
 	private java.lang.String subTitle;
 	/**拍品类型（1普通拍品、2一口价）*/
-	@Excel(name = "拍品类型（1普通拍品、2一口价、3同步拍品）", width = 15)
+	@Excel(name = "拍品类型（1普通拍品、2一口价）", width = 15)
     @ApiModelProperty(value = "拍品类型（1普通拍品、2一口价）")
 	@Dict(dicCode = "paimai_goods_type")
 	private java.lang.Integer type;

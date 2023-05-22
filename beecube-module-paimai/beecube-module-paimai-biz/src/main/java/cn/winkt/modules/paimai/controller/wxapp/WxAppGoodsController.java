@@ -51,6 +51,19 @@ public class WxAppGoodsController {
 
     @AutoLog(value = "拍品表-分页列表查询")
     @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
+    @GetMapping(value = "/mall/list")
+    public Result<?> queryBuyoutPageList(Goods goods,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                   HttpServletRequest req) {
+        QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+        queryWrapper.eq("type", 2);
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+        IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+    @AutoLog(value = "拍品表-分页列表查询")
+    @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(Goods goods,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
