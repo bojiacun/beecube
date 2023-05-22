@@ -236,6 +236,13 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goods.setActualEndTime(liveRoom.getEndTime());
             goods.setDeposit(liveRoom.getDeposit());
         }
+        //查询商品名称是否重复
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Goods::getTitle, goods.getTitle());
+        queryWrapper.eq(Goods::getSpec, goods.getSpec());
+        if(goodsService.count(queryWrapper) > 0) {
+            throw new JeecgBootException("已有同名同型号的商品");
+        }
         goodsService.save(goods);
         return Result.OK("添加成功！");
     }
@@ -251,10 +258,10 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
     @RequestMapping(value = "/edit", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<?> edit(@RequestBody Goods goods) {
         Goods old = goodsService.getById(goods.getId());
-        if(goodsService.isStarted(old)) {
-            throw new JeecgBootException("拍品已经开始竞拍，不能修改");
-        }
         if(old.getType() != 2) {
+            if(goodsService.isStarted(old)) {
+                throw new JeecgBootException("拍品已经开始竞拍，不能修改");
+            }
             if (old.getStartTime() != goods.getStartTime() || old.getEndTime() != goods.getEndTime()) {
                 GoodsUpdateMessage goodsUpdateMessage = new GoodsUpdateMessage();
                 goodsUpdateMessage.setGoodsId(goods.getId());
@@ -262,6 +269,13 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 goodsUpdateMessage.setEndTime(goods.getEndTime());
                 imClientService.sendAppMessage(goodsUpdateMessage, UserMessageType.GOODS_UPDATE);
             }
+        }
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Goods::getTitle, goods.getTitle());
+        queryWrapper.eq(Goods::getSpec, goods.getSpec());
+        queryWrapper.ne(Goods::getId, old.getId());
+        if(goodsService.count(queryWrapper) > 0) {
+            throw new JeecgBootException("已有同名同型号的商品");
         }
         goodsService.updateById(goods);
         return Result.OK("编辑成功!");

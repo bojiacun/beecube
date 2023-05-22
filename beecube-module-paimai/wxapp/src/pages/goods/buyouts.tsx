@@ -28,11 +28,11 @@ export default class Index extends Component<any, any> {
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
-        let params: any = {type: 2, column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
+        let params: any = {column: 'create_time', orderBy: 'desc', pageNo: pageIndex};
         if (tab.id) {
             params.classId = tab.id;
         }
-        return request.get('/paimai/api/goods/list', {params: params});
+        return request.get('/paimai/api/goods/mall/list', {params: params});
     }
 
     renderTemplate(data: any) {
