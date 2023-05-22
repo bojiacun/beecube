@@ -172,7 +172,7 @@ export default class Index extends Component<any, any> {
                 <View style={{height: Taro.pxTransform(124)}}/>
                 <View className={'bg-white flex items-center fixed px-4 py-2 w-full bottom-0'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
                     <View className={'flex-1 flex items-center'}>
-                        <Text className={'ml-4 font-bold text-red-500'}>总计：</Text>
+                        <Text className={'ml-4 font-bold'}>总计：</Text>
                         <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
