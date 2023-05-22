@@ -1,14 +1,9 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.entity.GoodsOrder;
-import cn.winkt.modules.paimai.entity.GoodsOrderAfter;
-import cn.winkt.modules.paimai.entity.OrderGoods;
-import cn.winkt.modules.paimai.service.IGoodsOrderAfterService;
-import cn.winkt.modules.paimai.service.IGoodsOrderService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.IOrderGoodsService;
+import cn.winkt.modules.paimai.entity.*;
+import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsOrderAfterVO;
+import cn.winkt.modules.paimai.vo.GoodsSettings;
 import cn.winkt.modules.paimai.vo.OrderBadge;
 import cn.winkt.modules.paimai.vo.OrderVo;
 import com.alibaba.fastjson.JSONObject;
@@ -27,6 +22,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/orders")
 @RestController
@@ -38,22 +34,27 @@ public class WxAppOrderController {
 
     @Resource
     IGoodsService goodsService;
-
-
+    @Resource
+    ICouponTicketService couponTicketService;
     @Resource
     IGoodsOrderService goodsOrderService;
 
-
+    @Resource
+    IGoodsCommonDescService goodsCommonDescService;
     @Resource
     IGoodsOrderAfterService goodsOrderAfterService;
 
+    @Resource
+    ICouponService couponService;
 
     /**
      * 计算订单实际支付费用
      * @param orderVo
      * @return
      */
+    @PutMapping("/price/calc")
     public Result<?> calcOrderPrice(@RequestBody OrderVo orderVo) {
+        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
         orderVo.setDeliveryPrice(BigDecimal.ZERO);
         BigDecimal totalPrice = BigDecimal.ZERO;
         for(OrderGoods orderGoods : orderVo.getOrderGoods()){
@@ -61,7 +62,22 @@ public class WxAppOrderController {
         };
         orderVo.setTotalPrice(totalPrice);
 
+        //计算真实价格
+        BigDecimal actualPrice = BigDecimal.valueOf(totalPrice.floatValue());
+        if(StringUtils.isNotEmpty(orderVo.getCouponId())) {
+            Coupon coupon = couponService.getById(orderVo.getCouponId());
+            actualPrice = actualPrice.subtract(coupon.getAmount());
+        }
+        if(orderVo.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
+            actualPrice = actualPrice.subtract(orderVo.getUseIntegral());
+        }
+        orderVo.setPayedPrice(actualPrice);
         return Result.OK(orderVo);
+    }
+
+    @PutMapping("/coupons")
+    public Result<?> getCouponsByOrder(@RequestBody OrderVo orderVo) {
+        return Result.OK(couponTicketService.getAvailableTickets(Arrays.stream(orderVo.getOrderGoods()).map(OrderGoods::getGoodsId).collect(Collectors.toList())));
     }
 
 

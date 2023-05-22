@@ -31,6 +31,6 @@ public class OrderVo implements Serializable {
     private java.lang.String appId;
     private OrderGoods[] orderGoods;
     private String couponId;
-    private String useIntegral;
+    private BigDecimal useIntegral;
     private BigDecimal deliveryPrice;
 }

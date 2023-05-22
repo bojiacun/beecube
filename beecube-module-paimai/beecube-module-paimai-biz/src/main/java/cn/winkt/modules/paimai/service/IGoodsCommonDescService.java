@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
+import cn.winkt.modules.paimai.vo.GoodsSettings;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsCommonDescService extends IService<GoodsCommonDesc> {
 
+    GoodsSettings queryGoodsSettings();
 }

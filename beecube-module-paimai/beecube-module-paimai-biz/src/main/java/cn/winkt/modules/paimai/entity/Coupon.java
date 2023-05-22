@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -67,7 +68,7 @@ public class Coupon {
 	/**面额*/
 	@Excel(name = "面额", width = 15)
     @ApiModelProperty(value = "面额")
-	private java.lang.Float amount;
+	private BigDecimal amount;
 	/**最大发放数量*/
 	@Excel(name = "最大发放数量", width = 15)
     @ApiModelProperty(value = "最大发放数量")
