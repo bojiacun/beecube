@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.*;
@@ -158,7 +159,7 @@ public class Goods {
 	private java.lang.Integer state;
 
 	//成交价
-	private Float dealPrice;
+	private BigDecimal dealPrice;
 
 	private Integer baseSales;
 

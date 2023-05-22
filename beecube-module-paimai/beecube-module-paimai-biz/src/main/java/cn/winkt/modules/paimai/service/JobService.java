@@ -179,7 +179,7 @@ public class JobService {
             goodsUpdateMessage.setGoodsId(goods.getId());
             goodsUpdateMessage.setStartTime(goods.getStartTime());
 
-            if(maxOfferRow == null || BigDecimal.valueOf(maxOfferRow.getPrice()).compareTo(minPrice) < 0) {
+            if(maxOfferRow == null || maxOfferRow.getPrice().compareTo(minPrice) < 0) {
                 //流拍了,将拍品状态改为流拍，并将拍品所有出价改为流拍
                 log.debug("拍品 {} 流拍了", goods.getId());
                 goods.setState(4);
@@ -298,7 +298,7 @@ public class JobService {
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
                 data3.setName("amount4");
-                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.CEILING).toString());
+                data3.setValue(goodsOffer.getPrice().setScale(2, RoundingMode.CEILING).toString());
                 data.add(data3);
 
 

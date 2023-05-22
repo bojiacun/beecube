@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -53,7 +54,7 @@ public class GoodsOffer {
 	/**出价*/
 	@Excel(name = "出价", width = 15)
     @ApiModelProperty(value = "出价")
-	private java.lang.Float price;
+	private BigDecimal price;
 
 	@Dict(dicCode = "paimai_offer_status")
 	private Integer status;

@@ -45,7 +45,7 @@ public class CommissionService {
                         Goods goods = goodsService.getById(orderGoods.getGoodsId());
                         if(goods.getCommission() != null) {
                             //计算分佣返点
-                            BigDecimal goodsTotalPrice = BigDecimal.valueOf(orderGoods.getGoodsPrice()).multiply(BigDecimal.valueOf(orderGoods.getGoodsCount()));
+                            BigDecimal goodsTotalPrice = orderGoods.getGoodsPrice().multiply(BigDecimal.valueOf(orderGoods.getGoodsCount()));
                             amount = amount.add(BigDecimal.valueOf(goods.getCommission()).multiply(goodsTotalPrice).divide(BigDecimal.valueOf(100), 4, RoundingMode.CEILING)).setScale(2, RoundingMode.CEILING);
                         }
                     }

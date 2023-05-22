@@ -418,7 +418,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
                 commission = BigDecimal.valueOf(goods.getCommission()).divide(BigDecimal.valueOf(100),4, RoundingMode.HALF_DOWN);
             }
 
-            BigDecimal price = BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN);
+            BigDecimal price = goodsOffer.getPrice().setScale(2, RoundingMode.HALF_DOWN);
             BigDecimal newPrice = price.multiply(commission).add(price).setScale(2, RoundingMode.HALF_DOWN);
 
             //生成成交订单
@@ -543,7 +543,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
 
                 WxMaSubscribeMessage.MsgData data3 = new WxMaSubscribeMessage.MsgData();
                 data3.setName("amount4");
-                data3.setValue(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.CEILING).toString());
+                data3.setValue(goodsOffer.getPrice().setScale(2, RoundingMode.CEILING).toString());
                 data.add(data3);
 
 
