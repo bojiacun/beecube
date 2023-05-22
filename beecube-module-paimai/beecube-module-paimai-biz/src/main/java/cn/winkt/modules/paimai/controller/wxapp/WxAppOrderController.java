@@ -10,6 +10,7 @@ import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.GoodsOrderAfterVO;
 import cn.winkt.modules.paimai.vo.OrderBadge;
+import cn.winkt.modules.paimai.vo.OrderVo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping("/api/orders")
@@ -43,6 +46,23 @@ public class WxAppOrderController {
 
     @Resource
     IGoodsOrderAfterService goodsOrderAfterService;
+
+
+    /**
+     * 计算订单实际支付费用
+     * @param orderVo
+     * @return
+     */
+    public Result<?> calcOrderPrice(@RequestBody OrderVo orderVo) {
+        orderVo.setDeliveryPrice(BigDecimal.ZERO);
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for(OrderGoods orderGoods : orderVo.getOrderGoods()){
+            totalPrice = totalPrice.add(orderGoods.getGoodsPrice().multiply(BigDecimal.valueOf(orderGoods.getGoodsCount())));
+        };
+        orderVo.setTotalPrice(totalPrice);
+
+        return Result.OK(orderVo);
+    }
 
 
     @GetMapping("/badges")
