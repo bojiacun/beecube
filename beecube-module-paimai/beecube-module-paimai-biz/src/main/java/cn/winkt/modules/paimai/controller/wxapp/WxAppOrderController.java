@@ -2,10 +2,7 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
-import cn.winkt.modules.paimai.vo.GoodsOrderAfterVO;
-import cn.winkt.modules.paimai.vo.GoodsSettings;
-import cn.winkt.modules.paimai.vo.OrderBadge;
-import cn.winkt.modules.paimai.vo.OrderVo;
+import cn.winkt.modules.paimai.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -49,27 +46,28 @@ public class WxAppOrderController {
 
     /**
      * 计算订单实际支付费用
-     * @param orderVo
+     * @param postOrderVO
      * @return
      */
     @PutMapping("/price/calc")
-    public Result<?> calcOrderPrice(@RequestBody OrderVo orderVo) {
+    public Result<?> calcOrderPrice(@RequestBody PostOrderVO postOrderVO) {
+        OrderVo orderVo = new OrderVo();
         GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
         orderVo.setDeliveryPrice(BigDecimal.ZERO);
         BigDecimal totalPrice = BigDecimal.ZERO;
-        for(OrderGoods orderGoods : orderVo.getOrderGoods()){
-            totalPrice = totalPrice.add(orderGoods.getGoodsPrice().multiply(BigDecimal.valueOf(orderGoods.getGoodsCount())));
+        for(GoodsVO orderGoods : postOrderVO.getGoodsList()){
+            totalPrice = totalPrice.add(orderGoods.getStartPrice().multiply(BigDecimal.valueOf(orderGoods.getCount())));
         };
         orderVo.setTotalPrice(totalPrice);
 
         //计算真实价格
         BigDecimal actualPrice = BigDecimal.valueOf(totalPrice.floatValue());
-        if(StringUtils.isNotEmpty(orderVo.getCouponId())) {
-            Coupon coupon = couponService.getById(orderVo.getCouponId());
+        if(StringUtils.isNotEmpty(postOrderVO.getCouponId())) {
+            Coupon coupon = couponService.getById(postOrderVO.getCouponId());
             actualPrice = actualPrice.subtract(coupon.getAmount());
         }
-        if(orderVo.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
-            actualPrice = actualPrice.subtract(orderVo.getUseIntegral());
+        if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
+            actualPrice = actualPrice.subtract(postOrderVO.getUseIntegral());
         }
         orderVo.setPayedPrice(actualPrice);
         return Result.OK(orderVo);

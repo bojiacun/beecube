@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.vo;
 
 import cn.winkt.modules.paimai.entity.OrderGoods;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class OrderVo implements Serializable {
     private java.lang.String updateBy;
     private java.lang.String appId;
     private OrderGoods[] orderGoods;
-    private String couponId;
-    private BigDecimal useIntegral;
+    @TableField(exist = false)
     private BigDecimal deliveryPrice;
+
 }

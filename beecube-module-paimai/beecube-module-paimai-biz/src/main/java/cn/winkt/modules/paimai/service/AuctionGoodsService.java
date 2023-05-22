@@ -97,7 +97,7 @@ public class AuctionGoodsService {
             goodsOffer.setPerformanceId(goods.getPerformanceId());
             goodsOffer.setRoomId(goods.getRoomId());
             goodsOffer.setAuctionId(performance != null ? performance.getAuctionId():null);
-            goodsOffer.setPrice(userOfferPrice.floatValue());
+            goodsOffer.setPrice(userOfferPrice);
             goodsOffer.setMemberId(loginUser.getId());
             goodsOffer.setMemberAvatar(loginUser.getAvatar());
             goodsOffer.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getNickname));
@@ -140,7 +140,7 @@ public class AuctionGoodsService {
                 offerMessage.setUserAvatar(loginUser.getAvatar());
                 offerMessage.setUserId(loginUser.getId());
                 offerMessage.setUserName(goodsOffer.getMemberName());
-                offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
+                offerMessage.setPrice(goodsOffer.getPrice().setScale(2, RoundingMode.HALF_DOWN));
                 offerMessage.setOfferTime(new Date());
                 SensitiveInfoUtil.handlerObject(offerMessage, true);
                 imClientService.sendAppMessage(offerMessage, UserMessageType.OFFER);
@@ -201,7 +201,7 @@ public class AuctionGoodsService {
             goodsOffer.setPerformanceId(goods.getPerformanceId());
             goodsOffer.setRoomId(goods.getRoomId());
             goodsOffer.setAuctionId(performance != null ? performance.getAuctionId():null);
-            goodsOffer.setPrice(userOfferPrice.floatValue());
+            goodsOffer.setPrice(userOfferPrice);
             goodsOffer.setMemberId(memberVO.getId());
             goodsOffer.setMemberAvatar(memberVO.getAvatar());
             goodsOffer.setMemberName(StringUtils.getIfEmpty(memberVO.getRealname(), memberVO::getNickname));
@@ -244,7 +244,7 @@ public class AuctionGoodsService {
                 offerMessage.setUserAvatar(memberVO.getAvatar());
                 offerMessage.setUserId(memberVO.getId());
                 offerMessage.setUserName(goodsOffer.getMemberName());
-                offerMessage.setPrice(BigDecimal.valueOf(goodsOffer.getPrice()).setScale(2, RoundingMode.HALF_DOWN));
+                offerMessage.setPrice(goodsOffer.getPrice().setScale(2, RoundingMode.HALF_DOWN));
                 offerMessage.setOfferTime(new Date());
                 SensitiveInfoUtil.handlerObject(offerMessage, true);
                 imClientService.sendAppMessage(offerMessage, UserMessageType.OFFER);
