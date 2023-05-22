@@ -43,16 +43,17 @@ export default class Index extends Component<any, any> {
 
     handleRemove(item, index) {
         item.count--;
-        if(item.count == 0) {
-            utils.showMessage('要移除该商品吗?', () => {
+        if(item.count <= 0) {
+            return utils.showMessage('要移除该商品吗?', () => {
                 this.state.cart.splice(index, 1);
                 this.setState({cart: this.state.cart});
-            }).then(() =>{});
+                Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
+            }, true).then(() =>{});
         }
         else {
             this.setState({cart: this.state.cart});
+            Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
         }
-        Taro.setStorageSync("CART", JSON.stringify(this.state.cart));
     }
     handleCheckChanged(e) {
         let values = e.detail.value;
@@ -113,7 +114,7 @@ export default class Index extends Component<any, any> {
                             return (
                                 <View className={'bg-white py-4 px-4 relative overflow-hidden flex items-center'}>
                                     <View><Checkbox value={item.id} checked={item.selected} /></View>
-                                    <View className={'flex-1 flex space-x-2'}>
+                                    <View className={'flex-1 flex space-x-2 text-lg'}>
                                         <FallbackImage mode={'aspectFit'} src={utils.resolveUrl(item.images.split(',')[0])}
                                                        style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>
                                         <View>
@@ -122,9 +123,9 @@ export default class Index extends Component<any, any> {
                                         </View>
                                     </View>
                                     <View className={'w-20 flex items-center justify-center'}>
-                                        <View className={'flex text-lg text-gray-400 w-full items-center justify-between'}>
+                                        <View className={'flex text-xl text-gray-400 w-full items-center justify-between'}>
                                             <Text className={'fa fa-minus-circle'} onClick={()=>this.handleRemove(item, index)}/>
-                                            <Text className={'flex-1 text-center'}>{item.count}</Text>
+                                            <Text className={'flex-1 text-lg text-center'}>{item.count}</Text>
                                             <Text className={'fa fa-plus-circle'} onClick={()=>this.handleAdd(item)}/>
                                         </View>
                                     </View>
@@ -136,12 +137,12 @@ export default class Index extends Component<any, any> {
 
                 <View style={{height: Taro.pxTransform(124)}}/>
                 {cart.length > 0 &&
-                    <View className={'bg-white flex items-center fixed px-4 w-full'} style={{bottom: Taro.pxTransform(56 + safeBottom)}}>
+                    <View className={'bg-white flex items-center fixed py-2 px-4 w-full text-lg'} style={{bottom: Taro.pxTransform(56 + safeBottom)}}>
                         <View className={'flex-1 flex items-center'}>
                             <Checkbox id={'all'} value={'all'} checked={this.isCheckedAll} onClick={this.toggleCheckAll}/>
                             <Label for={'all'} onClick={this.toggleCheckAll}>全选</Label>
                             <Text className={'ml-4 font-bold text-red-500'}>总计：</Text>
-                            <Text className={'text-red-500 font-bold text-lg'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
+                            <Text className={'text-red-500 font-bold'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                         </View>
                         <View>
                             <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}

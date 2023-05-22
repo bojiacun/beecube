@@ -8,7 +8,7 @@ import styles from "../../flow.module.scss";
 import {Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
-import {Popup, Stepper, Tag} from "@taroify/core";
+import {Button, Popup, Stepper, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 
@@ -34,6 +34,8 @@ export default class Index extends Component<any, any> {
         this.loadData = this.loadData.bind(this);
         this.joinCart = this.joinCart.bind(this);
         this.changeSettle = this.changeSettle.bind(this);
+        this.handleChangeCount = this.handleChangeCount.bind(this);
+        this.doJoinCart = this.doJoinCart.bind(this);
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -51,7 +53,34 @@ export default class Index extends Component<any, any> {
             this.setState({openSettle: true, settles: res.data.result, settleId: id});
         });
     }
+    doJoinCart() {
+        const currentSettle:any = this.getCurrentSettle();
+        currentSettle.count = currentSettle.count || 1;
+        let cartGoods = JSON.parse(Taro.getStorageSync('CART') || '[]');
+        let goods = currentSettle;
+        goods.selected = true;
+        let existsIndex = -1;
+        cartGoods.forEach((item, index) => {
+            if (goods.id == item.id) {
+                existsIndex = index;
+            }
+        });
+        if (existsIndex > -1) {
+            cartGoods[existsIndex].count++;
+        } else {
+            cartGoods.push(goods);
+        }
+        Taro.setStorageSync('CART', JSON.stringify(cartGoods));
+        utils.showSuccess(false, '加入成功');
+        this.setState({openSettle:false});
+    }
 
+
+    handleChangeCount(value:string) {
+        const settle:any = this.getCurrentSettle();
+        settle.count = value;
+        this.setState({settles: [...this.state.settles]});
+    }
     changeSettle(id) {
         this.setState({settleId: id});
     }
@@ -120,11 +149,11 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
-                <Popup style={{height: 300}} open={openSettle} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
+                <Popup style={{height: 330}} open={openSettle} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
                     <View className={'text-2xl'}>
                         <Popup.Close />
                     </View>
-                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{height: 190}}>
+                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                         <View className={'space-y-4'}>
                             {currentSettle && <View className={'flex items-center'}>
                                 <View className={'flex-none'}>
@@ -144,12 +173,13 @@ export default class Index extends Component<any, any> {
                                 })}
                             </View>
                         </View>
-                        <View className={'flex items-center justify-between mb-4'}>
+                        <View className={'flex items-center justify-between'}>
                             <View>数量</View>
                             <View>
-                                <Stepper shape={'circular'} size={22}/>
+                                <Stepper shape={'circular'} value={currentSettle?.count??1} size={22} onChange={this.handleChangeCount} />
                             </View>
                         </View>
+                        <View><Button color={'danger'} block onClick={()=>this.doJoinCart()}>加入购物车</Button></View>
                     </View>
                 </Popup>
             </PageLayout>
