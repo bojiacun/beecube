@@ -184,7 +184,7 @@ public class AppApiController {
         if(appMember == null) {
             return false;
         }
-        appMember.setMoney(BigDecimal.valueOf(appMember.getMoney()).add(BigDecimal.valueOf(amount)).floatValue());
+        appMember.setMoney(appMember.getMoney().add(BigDecimal.valueOf(amount)));
         AppMemberMoneyRecord appMemberMoneyRecord = new AppMemberMoneyRecord();
         appMemberMoneyRecord.setType(2);
         appMemberMoneyRecord.setDescription(description);

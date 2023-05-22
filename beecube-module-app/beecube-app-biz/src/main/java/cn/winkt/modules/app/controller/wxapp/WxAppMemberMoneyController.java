@@ -117,13 +117,13 @@ public class WxAppMemberMoneyController {
 
     @PostMapping("/withdraw")
     public Result<?> withdraw(@RequestBody JSONObject data) {
-        float amount = data.getFloatValue("amount");
-        if(amount < 0.01) {
+        BigDecimal amount = BigDecimal.valueOf(data.getFloatValue("amount"));
+        if(amount.compareTo(BigDecimal.valueOf(0.01)) < 0) {
             throw new JeecgBootException("提现金额太小");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         AppMember member = appMemberService.getById(loginUser.getId());
-        if(BigDecimal.valueOf(member.getMoney()).compareTo(BigDecimal.valueOf(amount)) < 0) {
+        if(member.getMoney().compareTo(amount) < 0) {
             throw new JeecgBootException("您没有这么多的额度");
         }
         LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();

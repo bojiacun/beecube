@@ -70,7 +70,7 @@ public class WxAppNotifyController {
         appMemberMoneyRecordService.updateById(record);
 
         AppMember appMember = appMemberService.getById(record.getMemberId());
-        appMember.setMoney(BigDecimal.valueOf(appMember.getMoney()).add(BigDecimal.valueOf(record.getMoney())).floatValue());
+        appMember.setMoney(appMember.getMoney().add(BigDecimal.valueOf(record.getMoney())));
         appMemberService.updateById(appMember);
         return WxPayNotifyResponse.success("成功");
     }
