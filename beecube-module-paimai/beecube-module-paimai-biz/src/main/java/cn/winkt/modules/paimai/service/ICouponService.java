@@ -3,6 +3,8 @@ package cn.winkt.modules.paimai.service;
 import cn.winkt.modules.paimai.entity.Coupon;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 优惠券
  * @Author: jeecg-boot

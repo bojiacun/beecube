@@ -3,6 +3,8 @@ package cn.winkt.modules.paimai.service;
 import cn.winkt.modules.paimai.entity.CouponTicket;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 优惠券票据
  * @Author: jeecg-boot
@@ -11,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICouponTicketService extends IService<CouponTicket> {
 
+    List<CouponTicket> getAvailableTickets(List<String> goodsIds);
 }

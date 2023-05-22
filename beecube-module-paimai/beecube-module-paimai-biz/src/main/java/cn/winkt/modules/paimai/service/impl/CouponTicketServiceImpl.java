@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.util.List;
+
 /**
  * @Description: 优惠券票据
  * @Author: jeecg-boot
@@ -16,4 +18,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 @Service
 public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, CouponTicket> implements ICouponTicketService {
 
+    @Override
+    public List<CouponTicket> getAvailableTickets(List<String> goodsIds) {
+        return null;
+    }
 }
