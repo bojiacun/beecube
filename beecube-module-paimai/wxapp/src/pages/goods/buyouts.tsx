@@ -8,6 +8,10 @@ import styles from "../../flow.module.scss";
 import {Navigator, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
+import {Tag} from "@taroify/core";
+import utils from "../../lib/utils";
+import Taro from "@tarojs/taro";
+
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -25,6 +29,7 @@ export default class Index extends Component<any, any> {
         super(props);
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.joinCart = this.joinCart.bind(this);
     }
 
     loadData(pageIndex: number, tab: ListViewTabItem) {
@@ -35,16 +40,41 @@ export default class Index extends Component<any, any> {
         return request.get('/paimai/api/goods/mall/list', {params: params});
     }
 
+    joinCart(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+    }
+
+    gotoDetail(e, url) {
+        e.stopPropagation();
+        e.preventDefault();
+        Taro.navigateTo({url: url}).then();
+    }
+
     renderTemplate(data: any) {
+        const imgUrl = data.listCover ? data.listCover : data.images.split(',')[0];
+        const tags = data.tags?.split(',') || [];
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer', styles.flow)}>
-                <Navigator url={'/pages/goods/detail2?id=' + data.id}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={data.images.split(',')[0]}/>
-                    <View className={'px-2 mt-2'}>{data.title}</View>
-                    <View className={'px-2 mb-2 text-sm'}>
-                        一口价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                <View onClick={event => this.gotoDetail(event, '/pages/goods/detail2?id=' + data.id)}>
+                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={imgUrl}/>
+                    {tags.length > 0 && <View className={'p-2 space-x-2'}>{tags.map((item: any) => {
+                        return (
+                            <Tag shape={'rounded'} color={'danger'} variant={'outlined'}>{item}</Tag>
+                        );
+                    })}</View>}
+                    <View className={'px-2 text-lg font-bold'}>{data.title}</View>
+                    <View className={'px-2 text-stone-400'}>{utils.delHtml(data.subTitle)}</View>
+                    <View className={'px-2 mb-2 flex justify-between items-center'}>
+                        <View>
+                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl font-bold'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                        </View>
+                        <View onClick={this.joinCart} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'} style={{width: 24, height: 24}}>
+                            <Text className={'iconfont icon-gouwuche'} />
+                        </View>
                     </View>
-                </Navigator>
+                </View>
             </View>
         );
     }
@@ -68,7 +98,7 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
 
         return (
-            <PageLayout statusBarProps={{title: settings.buyoutListTitle||'一口价'}} enableReachBottom={true} showTabBar={true}>
+            <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
             </PageLayout>
         );

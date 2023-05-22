@@ -164,4 +164,6 @@ public class Goods {
 
 	@TableField(exist = false)
 	private Integer sales;
+
+	private Integer recommend;
 }
