@@ -145,6 +145,7 @@ export default class Index extends Component<any, any> {
         utils.showLoading('发起支付中');
         let data = this.state.postOrderInfo;
         data.address = this.state.address;
+        data.payedPrice = data.payedPrice.toFixed(2);
         //支付宝保证金
         request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
