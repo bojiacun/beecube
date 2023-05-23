@@ -13,4 +13,5 @@ public class PostOrderVO {
     private BigDecimal useIntegral;
     private BigDecimal deliveryPrice;
     private BigDecimal payedPrice;
+    private Integer payType;
 }

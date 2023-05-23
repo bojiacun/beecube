@@ -9,7 +9,6 @@ import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {ConfigProvider, Popup, Radio, Tabs} from "@taroify/core";
 import './confirm.scss';
-import goodsList from "../../components/diy/modules/GoodsList";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -27,8 +26,9 @@ export default class Index extends Component<any, any> {
         address: null,
         posting: false,
         openCoupon: false,
+        openIntegral: false,
         coupons: null,
-        postOrderInfo: {useIntegral: 0, ticketId: null, payedPrice: 0, goodsList: null, ticketAmount: 0},
+        postOrderInfo: {useIntegral: 0, ticketId: null, payedPrice: 0, goodsList: null, ticketAmount: 0, address: null, payType: 1},
         selectedTicketId: null,
     }
 
@@ -39,6 +39,8 @@ export default class Index extends Component<any, any> {
         this.useCoupon = this.useCoupon.bind(this);
         this.handleSelectCoupon = this.handleSelectCoupon.bind(this);
         this.fetchPrice = this.fetchPrice.bind(this);
+        this.openIntegral = this.openIntegral.bind(this);
+        this.handleIntegralChange = this.handleIntegralChange.bind(this);
     }
 
 
@@ -75,6 +77,18 @@ export default class Index extends Component<any, any> {
     handleSelectCoupon(value:string) {
         this.setState({selectedTicketId: value});
     }
+    handleIntegralChange(value) {
+        const postOrderInfo = this.state.postOrderInfo;
+        if(value == '1') {
+            postOrderInfo.useIntegral = this.calcAvailableIntegral;
+        }
+        else {
+            //不使用积分
+            postOrderInfo.useIntegral = 0;
+        }
+        this.setState({postOrderInfo: postOrderInfo});
+        this.fetchPrice(postOrderInfo);
+    }
     useCoupon() {
         const postOrderInfo = this.state.postOrderInfo;
         postOrderInfo.ticketId = this.state.selectedTicketId;
@@ -82,6 +96,9 @@ export default class Index extends Component<any, any> {
         this.fetchPrice(postOrderInfo);
     }
 
+    openIntegral() {
+        this.setState({openIntegral: true});
+    }
     openCoupon() {
         //获取用户可用优惠券
         const postOrderInfo = this.state.postOrderInfo;
@@ -109,7 +126,8 @@ export default class Index extends Component<any, any> {
     pay() {
         this.setState({posting: true});
         utils.showLoading('发起支付中');
-        let data = {goodsList: this.state.goodsList, address: this.state.address};
+        let data = this.state.postOrderInfo;
+        data.address = this.state.address;
         //支付宝保证金
         request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
@@ -152,9 +170,25 @@ export default class Index extends Component<any, any> {
         return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
     }
 
+    get calcAvailableIntegral() {
+        const integralRatio = parseInt(this.props.settings.integralRatio) || 100;
+        const userInfo = this.props.context.userInfo;
+        //计算商品可抵扣的总金额
+        let totalIntegralPrice = 0;
+        this.state.goodsList.forEach(g => {
+            if(g.maxIntegralPercent) {
+                totalIntegralPrice += g.startPrice * g.maxIntegralPercent/100;
+            }
+        });
+        let integral = Math.min(totalIntegralPrice*integralRatio, userInfo.score);
+        return integral / integralRatio;
+    }
+
     render() {
-        const {systemInfo} = this.props;
-        const {goodsList, address, openCoupon, coupons, postOrderInfo} = this.state;
+        const {systemInfo, context, settings} = this.props;
+        const {userInfo} = context;
+        const {goodsList, address, openCoupon, coupons, postOrderInfo, openIntegral} = this.state;
+        const integralRatio = parseInt(settings.integralRatio) || 100;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         const barTop = systemInfo.statusBarHeight;
@@ -230,9 +264,9 @@ export default class Index extends Component<any, any> {
                             <Text className={'fa fa-angle-right text-stone-400'}/>
                         </View>
                     </View>
-                    <View className={'flex items-center justify-between'}>
+                    <View className={'flex items-center justify-between'} onClick={this.openIntegral}>
                         <View className={'font-bold'}>积分</View>
-                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
+                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>运费</View>
@@ -261,6 +295,7 @@ export default class Index extends Component<any, any> {
                 </View>
 
 
+                {/*优惠券*/}
                 <ConfigProvider theme={{
                     tabsNavBackgroundColor: 'transparent',
                 }}>
@@ -344,6 +379,32 @@ export default class Index extends Component<any, any> {
                         </View>
                     </Popup>
                 </ConfigProvider>
+
+
+
+                {/*积分*/}
+                <ConfigProvider theme={{
+                    tabsNavBackgroundColor: 'transparent',
+                }}>
+                    <Popup style={{height: 330}} className={'!bg-gray-100'} open={openIntegral} rounded placement={'bottom'} onClose={() => this.setState({openIntegral: false})}>
+                        <View className={'text-2xl'}>
+                            <View className={'flex py-4 items-center justify-center text-xl font-bold'}>积分抵扣</View>
+                            <Popup.Close/>
+                        </View>
+                        <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                            <Radio.Group defaultValue={"0"} onChange={this.handleIntegralChange}>
+                                <Radio className={'radio-red-color'} name={'1'}>
+                                    当前有<Text className={'text-red-600'}>{userInfo.score}</Text>积分，
+                                    消耗<Text className={'text-red-600'}>{this.calcAvailableIntegral * integralRatio}</Text>积分，
+                                    可抵扣<Text className={'text-red-600'}>{this.calcAvailableIntegral}</Text>元
+                                </Radio>
+                                <Radio className={'radio-red-color'} name={'0'} >不使用积分抵扣</Radio>
+                            </Radio.Group>
+                        </View>
+                    </Popup>
+                </ConfigProvider>
+
+
             </PageLayout>
         );
     }

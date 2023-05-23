@@ -589,6 +589,10 @@ public class WxAppMemberController {
         if (postOrderVO.getAddress() == null) {
             throw new JeecgBootException("请选择有效的收货地址");
         }
+        //检测用户使用积分
+        //检测用户使用的优惠券
+        //检测客户端计算的价格是否正确
+
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
         String lock = "BUYOUT-" + AppContext.getApp();

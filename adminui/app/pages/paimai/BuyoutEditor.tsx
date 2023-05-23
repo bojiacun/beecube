@@ -103,6 +103,7 @@ const BuyoutEditor = (props: any) => {
                                     <BootstrapInput label={'型号'} name={'spec'}/>
                                     <BootstrapInput label={'副标题'} name={'subTitle'}/>
                                     <BootstrapInput label={'分销佣金'} name={'commission'} placeholder={'分销佣金百分比'}/>
+                                    <BootstrapInput label={'积分抵扣比例'} name={'maxIntegralPercent'} placeholder={'积分抵扣比例，50%填50，1%填1'}/>
                                     <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>
                                     <BootstrapInput label={'基础销量'} name={'baseSales'} placeholder={'基础销量'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>

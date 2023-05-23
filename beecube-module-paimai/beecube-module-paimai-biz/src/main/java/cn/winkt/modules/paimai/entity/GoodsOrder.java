@@ -82,6 +82,7 @@ public class GoodsOrder {
 	private java.lang.String deliveryId;
 	private String deliveryNo;
 	private String deliveryCode;
+	private Integer payType;
 	/**订单创建时间*/
     @ApiModelProperty(value = "订单创建时间")
 	private java.util.Date createTime;
