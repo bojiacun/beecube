@@ -64,12 +64,12 @@ export default class Index extends Component<any, any> {
                     {list.map((item) => {
                         let radius = 0;
                         return (
-                            <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white shadow-outer p-4'}
+                            <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white rounded-lg shadow-lg p-4 space-x-4'}
                                        style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <View className={'w-30'}>
-                                    <FallbackImage mode={'aspectFill'} src={item.goods.listCover ? item.goods.listCover: item.goods.images.split(',')[0]} />
+                                <View className={'w-20 h-20'}>
+                                    <FallbackImage className={'w-full h-full'} mode={'aspectFill'} src={item.goods.listCover ? item.goods.listCover: item.goods.images.split(',')[0]} />
                                 </View>
-                                <View className={'flex-1'}>
+                                <View className={'flex-1 flex flex-col'}>
                                     <View className={'text-lg font-bold flex-1'}>{item.goodsName}</View>
                                     <View className={'text-gray-400 text-sm'}>
                                         出价时间：{item.offerTime}
