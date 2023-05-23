@@ -130,7 +130,32 @@ public class WxAppMemberController {
         IPage<GoodsOrderAfterVO> pageList = goodsOrderAfterService.selectPageVO(page, queryWrapper);
         return Result.OK(pageList);
     }
+    @GetMapping(value = "/coupons")
+    public Result<?> queryCouponList(CouponTicket couponTicket, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
+        QueryWrapper<CouponTicket> queryWrapper = QueryGenerator.initQueryWrapper(couponTicket, req.getParameterMap());
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        queryWrapper.eq("member_id", loginUser.getId());
+        Integer type = Integer.parseInt(req.getParameter("type"));
+        switch (type) {
+            case 1:
+                queryWrapper.eq("status", 0);
+                break;
+            case 2:
+                queryWrapper.eq("status", 1);
+                break;
+            case 3:
+                queryWrapper.lt("end_time", new Date());
+                break;
+        }
 
+        Page<CouponTicket> page = new Page<>(pageNo, pageSize);
+        IPage<CouponTicket> pageList = couponTicketService.page(page, queryWrapper);
+        pageList.getRecords().forEach(couponTicket1 -> {
+            Coupon coupon = couponService.getById(couponTicket1.getCouponId());
+            couponTicket1.setCoupon(coupon);
+        });
+        return Result.OK(pageList);
+    }
 
     @AutoLog(value = "订单表-支付订单")
     @ApiOperation(value = "订单表-支付订单", notes = "订单表-支付订单")
@@ -217,6 +242,7 @@ public class WxAppMemberController {
         goodsOrderService.updateById(order);
         return Result.OK("取消成功", order);
     }
+
 
 
     @AutoLog(value = "订单表-分页列表查询")

@@ -39,6 +39,7 @@ export default defineAppConfig({
         'pages/my/addresses',
         'pages/my/newaddress',
         'pages/my/deposits',
+        'pages/my/coupons',
         'pages/my/offers',
         'pages/my/orders',
         'pages/my/orders/detail',

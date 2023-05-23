@@ -158,6 +158,18 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
 
+                    <View>
+                        <Navigator url={'coupons'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
+                                <View>我的优惠券</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
+
 
                     <View>
                         <Navigator url={'addresses'} className={'flex items-center justify-between p-4'}>
