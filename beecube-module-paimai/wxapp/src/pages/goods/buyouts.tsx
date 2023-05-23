@@ -23,9 +23,9 @@ const numeral = require('numeral');
 export default class Index extends Component<any, any> {
     state = {
         tabs: [],
-        openSettle: false,
-        settles: [],
-        settleId: null,
+        openSpec: false,
+        specs: [],
+        specId: null,
     }
 
     constructor(props) {
@@ -49,12 +49,12 @@ export default class Index extends Component<any, any> {
     joinCart(e, id) {
         e.stopPropagation();
         e.preventDefault();
-        request.get('/paimai/api/goods/settles', {params: {id: id}}).then(res => {
+        request.get('/paimai/api/goods/specs', {params: {id: id}}).then(res => {
             this.setState({openSettle: true, settles: res.data.result, settleId: id});
         });
     }
     doJoinCart() {
-        const currentSettle:any = this.getCurrentSettle();
+        const currentSettle:any = this.getCurrentSpec();
         currentSettle.count = currentSettle.count || 1;
         let cartGoods = JSON.parse(Taro.getStorageSync('CART') || '[]');
         let goods = currentSettle;
@@ -77,16 +77,16 @@ export default class Index extends Component<any, any> {
 
 
     handleChangeCount(value:string) {
-        const settle:any = this.getCurrentSettle();
+        const settle:any = this.getCurrentSpec();
         settle.count = value;
-        this.setState({settles: [...this.state.settles]});
+        this.setState({settles: [...this.state.specs]});
     }
     changeSettle(id) {
         this.setState({settleId: id});
     }
 
-    getCurrentSettle() {
-        return this.state.settles.filter((s: any) => s.id == this.state.settleId)[0];
+    getCurrentSpec() {
+        return this.state.specs.filter((s: any) => s.id == this.state.specId)[0];
     }
 
     gotoDetail(e, url) {
@@ -140,34 +140,34 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
-        const {openSettle, settles} = this.state;
-        let currentSettle;
-        if (openSettle) {
-            currentSettle = this.getCurrentSettle();
+        const {openSpec, specs} = this.state;
+        let currentSpec;
+        if (openSpec) {
+            currentSpec = this.getCurrentSpec();
         }
 
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
-                <Popup style={{height: 330}} open={openSettle} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
+                <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
                     <View className={'text-2xl'}>
                         <Popup.Close />
                     </View>
                     <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                         <View className={'space-y-4'}>
-                            {currentSettle && <View className={'flex items-center'}>
+                            {currentSpec && <View className={'flex items-center'}>
                                 <View className={'flex-none'}>
-                                    <FallbackImage style={{width: 60, height: 60}} src={currentSettle.listCover ? currentSettle.listCover : currentSettle.images.split(',')[0]}/>
+                                    <FallbackImage style={{width: 60, height: 60}} src={currentSpec.listCover ? currentSpec.listCover : currentSpec.images.split(',')[0]}/>
                                 </View>
                                 <View className={'flex-1 ml-2'}>
-                                    <View className={'text-lg font-bold'}>{currentSettle.title}</View>
-                                    <View className={'text-red-600 font-bold text-xl'}>￥{currentSettle.startPrice}</View>
+                                    <View className={'text-lg font-bold'}>{currentSpec.title}</View>
+                                    <View className={'text-red-600 font-bold text-xl'}>￥{currentSpec.startPrice}</View>
                                 </View>
                             </View>}
                             <View className={'space-x-2'}>
-                                {settles.map((item: any) => {
+                                {specs.map((item: any) => {
                                     return (
-                                        <Tag size={'large'} onClick={() => this.changeSettle(item.id)} color={currentSettle?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
+                                        <Tag size={'large'} onClick={() => this.changeSettle(item.id)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
                                              shape={'rounded'}>{item.spec}</Tag>
                                     );
                                 })}
@@ -176,7 +176,7 @@ export default class Index extends Component<any, any> {
                         <View className={'flex items-center justify-between'}>
                             <View>数量</View>
                             <View>
-                                <Stepper shape={'circular'} value={currentSettle?.count??1} size={22} onChange={this.handleChangeCount} />
+                                <Stepper shape={'circular'} value={currentSpec?.count??1} size={22} onChange={this.handleChangeCount} />
                             </View>
                         </View>
                         <View><Button color={'danger'} block onClick={()=>this.doJoinCart()}>加入购物车</Button></View>
