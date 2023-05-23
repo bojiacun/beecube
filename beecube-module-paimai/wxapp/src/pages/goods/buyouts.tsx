@@ -33,7 +33,7 @@ export default class Index extends Component<any, any> {
         this.renderTemplate = this.renderTemplate.bind(this);
         this.loadData = this.loadData.bind(this);
         this.joinCart = this.joinCart.bind(this);
-        this.changeSettle = this.changeSettle.bind(this);
+        this.changeSpec = this.changeSpec.bind(this);
         this.handleChangeCount = this.handleChangeCount.bind(this);
         this.doJoinCart = this.doJoinCart.bind(this);
     }
@@ -50,7 +50,7 @@ export default class Index extends Component<any, any> {
         e.stopPropagation();
         e.preventDefault();
         request.get('/paimai/api/goods/specs', {params: {id: id}}).then(res => {
-            this.setState({openSettle: true, settles: res.data.result, settleId: id});
+            this.setState({openSpec: true, specs: res.data.result, specId: id});
         });
     }
     doJoinCart() {
@@ -72,17 +72,17 @@ export default class Index extends Component<any, any> {
         }
         Taro.setStorageSync('CART', JSON.stringify(cartGoods));
         utils.showSuccess(false, '加入成功');
-        this.setState({openSettle:false});
+        this.setState({openSpec:false});
     }
 
 
     handleChangeCount(value:string) {
-        const settle:any = this.getCurrentSpec();
-        settle.count = value;
-        this.setState({settles: [...this.state.specs]});
+        const specs:any = this.getCurrentSpec();
+        specs.count = value;
+        this.setState({specs: [...this.state.specs]});
     }
-    changeSettle(id) {
-        this.setState({settleId: id});
+    changeSpec(id) {
+        this.setState({specId: id});
     }
 
     getCurrentSpec() {
@@ -149,7 +149,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
-                <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSettle: false})}>
+                <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>
                         <Popup.Close />
                     </View>
@@ -167,7 +167,7 @@ export default class Index extends Component<any, any> {
                             <View className={'space-x-2'}>
                                 {specs.map((item: any) => {
                                     return (
-                                        <Tag size={'large'} onClick={() => this.changeSettle(item.id)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
+                                        <Tag size={'large'} onClick={() => this.changeSpec(item.id)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
                                              shape={'rounded'}>{item.spec}</Tag>
                                     );
                                 })}

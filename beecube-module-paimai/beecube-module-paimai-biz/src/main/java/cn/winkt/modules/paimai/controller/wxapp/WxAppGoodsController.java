@@ -62,8 +62,8 @@ public class WxAppGoodsController {
         IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
         return Result.OK(pageList);
     }
-    @GetMapping("/settles")
-    public Result<List<Goods>> getGoodsSettles(@RequestParam String id) {
+    @GetMapping("/specs")
+    public Result<List<Goods>> getGoodsSpecs(@RequestParam String id) {
         Goods distGoods = goodsService.getById(id);
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Goods::getTitle, distGoods.getTitle());
