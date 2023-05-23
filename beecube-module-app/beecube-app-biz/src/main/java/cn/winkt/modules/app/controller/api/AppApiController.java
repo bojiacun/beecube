@@ -103,7 +103,7 @@ public class AppApiController {
     public AppMember queryAppMember(@RequestParam("id") String id) {
         return appMemberService.getById(id);
     }
-    @GetMapping("/getMembersByType")
+    @GetMapping("/findMembersByType")
     public List<AppMember> queryMembersByType(@RequestParam("type") Integer type) {
         LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
 
