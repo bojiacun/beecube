@@ -97,6 +97,12 @@ const CouponEditor = (props: any) => {
                                     <BootstrapInput label={'每人限领'} name={'perCount'} placeholder={'每人限制领取多少张'}/>
                                     <BootstrapRadioGroup options={ruleMemberOptions} name={'ruleMember'} label={'适用人群'} />
                                     <BootstrapRadioGroup options={ruleGoodsOptions} name={'ruleGoods'} label={'适用商品'} />
+                                    {formik.values.ruleGoods == 1 &&
+                                    <BootstrapInput label={'商品分类ID'} name={'ruleGoodsClassId'} placeholder={'此分类下的所有商品可用'}/>
+                                    }
+                                    {formik.values.ruleGoods == 2 &&
+                                    <BootstrapInput label={'商品ID'} name={'ruleGoodsId'} placeholder={'此商品可用'}/>
+                                    }
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>

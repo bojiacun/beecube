@@ -88,8 +88,9 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 		return Result.OK("添加成功！");
 	}
 
-	@PutMapping("/grant")
-	public Result<?> grantTickets() {
+	@DeleteMapping("/grant")
+	public Result<?> grantTickets(@RequestParam String id) {
+		couponService.grantTickets(id);
 		return Result.OK("发放成功");
 	}
 	/**

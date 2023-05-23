@@ -5,7 +5,6 @@ import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, InputGroup,
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import AuctionEditor from "~/pages/paimai/AuctionEditor";
 import CouponTicketList from "~/pages/paimai/CouponTicketList";
 import CouponEditor from "~/pages/paimai/CouponEditor";
 
@@ -19,6 +18,7 @@ const CouponList = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+    const grantFetcher = useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
@@ -52,7 +52,17 @@ const CouponList = (props: any) => {
             }
         }
     }, [deleteFetcher.state]);
-
+    useEffect(() => {
+        if (getFetcherState(grantFetcher) === FetcherState.DONE) {
+            if (grantFetcher.data.success) {
+                stopPageLoading();
+                showToastSuccess('发放成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+            } else {
+                showToastError(grantFetcher.data.message);
+            }
+        }
+    }, [grantFetcher.state]);
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'tickets':
@@ -68,6 +78,13 @@ const CouponList = (props: any) => {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/coupons/delete?id=${row.id}`, replace: true});
                 });
+                break;
+            case 'grant':
+                //删除按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    grantFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/coupons/grant?id=${row.id}`, replace: true});
+                }, '确定要立即发放给满足条件的用户优惠券吗', '确认发放');
                 break;
         }
     }
@@ -147,6 +164,8 @@ const CouponList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'grant')}>立即发放</a>
+                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'tickets')}>领取记录</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>

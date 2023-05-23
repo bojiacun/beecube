@@ -227,6 +227,7 @@ export const API_PAIMAI_COUPON_TICKET_LIST = `${BASE_URL}/paimai/coupon/tickets/
 export const API_PAIMAI_COUPON_ADD = `${BASE_URL}/paimai/coupons/add`;
 export const API_PAIMAI_COUPON_EDIT = `${BASE_URL}/paimai/coupons/edit`;
 export const API_PAIMAI_COUPON_DELETE = `${BASE_URL}/paimai/coupons/delete`;
+export const API_PAIMAI_COUPON_GRANT = `${BASE_URL}/paimai/coupons/grant`;
 
 export const API_PAIMAI_LIVEROOM_LIST = `${BASE_URL}/paimai/rooms/list`;
 export const API_PAIMAI_LIVEROOM_ONLINE_LIST = `${BASE_URL}/paimai/rooms/online/users`;
