@@ -21,6 +21,8 @@ public interface AppApi {
     @PutMapping("/app/admin/money/in")
     boolean addMemberMoney(@RequestParam("member_id") String memberId, @RequestParam("description") String description, @RequestParam("amount") Float amount);
 
+    @PutMapping("/app/admin/score/change")
+    boolean reduceMemberScore(@RequestBody ChangeMemberScore changeMemberScore);
     @GetMapping("/app/modules/queryByIdentify")
     boolean moduleIsRegistered(@RequestParam(value = "identify") String identify);
 

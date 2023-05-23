@@ -90,4 +90,18 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
         userTickets.put("unAvailable", unAvailable);
         return userTickets;
     }
+
+    @Override
+    public boolean canTicketUseful(String ticketId, List<GoodsVO> goodsList) {
+        Map<String, List<CouponTicket>> coupons = getAvailableTickets(goodsList);
+        List<CouponTicket> available = coupons.get("available");
+        boolean canUse = false;
+        for (CouponTicket ticket :available) {
+            if(Objects.equals(ticket.getId(), ticketId)) {
+                canUse = true;
+                break;
+            }
+        }
+        return canUse;
+    }
 }

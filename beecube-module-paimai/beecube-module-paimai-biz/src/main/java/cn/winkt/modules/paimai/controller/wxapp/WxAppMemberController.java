@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.controller.wxapp;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.app.vo.ChangeMemberScore;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
@@ -23,6 +24,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.log.Log;
@@ -70,7 +72,8 @@ public class WxAppMemberController {
     IMessagePoolService messagePoolService;
     @Resource
     IGoodsViewService goodsViewService;
-
+    @Resource
+    ICouponTicketService couponTicketService;
     @Resource
     ILiveRoomService liveRoomService;
     @Resource
@@ -83,10 +86,13 @@ public class WxAppMemberController {
     IPerformanceService performanceService;
     @Resource
     IGoodsCommonDescService goodsCommonDescService;
-
+    @Resource
+    ICouponService couponService;
     @Resource
     JeecgBaseConfig jeecgBaseConfig;
 
+    @Resource
+    IGoodsOrderSettlementService goodsOrderSettlementService;
     @Resource
     MiniappServices miniappServices;
 
@@ -584,14 +590,45 @@ public class WxAppMemberController {
      * @throws WxPayException
      */
     @PostMapping("/goods/buy")
-    @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional(rollbackFor = Exception.class)
     public Result<?> payGoodsDeposit(@RequestBody PostOrderVO postOrderVO) throws InvocationTargetException, IllegalAccessException, WxPayException {
         if (postOrderVO.getAddress() == null) {
             throw new JeecgBootException("请选择有效的收货地址");
         }
+        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
+        BigDecimal integralRatio = new BigDecimal(StringUtils.getIfEmpty(goodsSettings.getIntegralRatio(), ()->"100"));
         //检测用户使用积分
+        BigDecimal integralPrice = BigDecimal.ZERO;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal payedPrice = BigDecimal.ZERO;
+        for (GoodsVO goodsVO1 : postOrderVO.getGoodsList()) {
+            Goods goods = goodsService.getById(goodsVO1.getId());
+            if (goods.getMaxIntegralPercent() != null) {
+                integralPrice = integralPrice.add(BigDecimal.valueOf(goodsVO1.getCount()).multiply(BigDecimal.valueOf(goods.getMaxIntegralPercent()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING).multiply(goods.getStartPrice())));
+            }
+            totalPrice = totalPrice.add(BigDecimal.valueOf(goodsVO1.getCount()).multiply(goods.getStartPrice()));
+        }
+        if(integralPrice.compareTo(postOrderVO.getUseIntegral()) < 0) {
+            throw new JeecgBootException("价格计算有误");
+        }
         //检测用户使用的优惠券
-        //检测客户端计算的价格是否正确
+        CouponTicket ticket = null;
+        Coupon coupon = null;
+        if(StringUtils.isNotEmpty(postOrderVO.getTicketId())) {
+            ticket = couponTicketService.getById(postOrderVO.getTicketId());
+            coupon = couponService.getById(ticket.getCouponId());
+            if(!couponTicketService.canTicketUseful(postOrderVO.getTicketId(), Arrays.asList(postOrderVO.getGoodsList()))) {
+                throw new JeecgBootException("优惠券无法使用");
+            }
+            payedPrice = totalPrice.subtract(coupon.getAmount());
+        }
+        if(postOrderVO.getUseIntegral() != null) {
+            payedPrice = totalPrice.subtract(postOrderVO.getUseIntegral());
+        }
+
+        if(payedPrice.compareTo(postOrderVO.getPayedPrice()) != 0) {
+            throw new JeecgBootException("价格计算错误, 无法支付");
+        }
 
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
@@ -607,11 +644,7 @@ public class WxAppMemberController {
                 goodsService.updateById(goods);
             });
 
-            BigDecimal payAmount = BigDecimal.ZERO.setScale(2, RoundingMode.CEILING);
-            for (GoodsVO vo : postOrderVO.getGoodsList()) {
-                BigDecimal totalPrice = vo.getStartPrice().setScale(2, RoundingMode.CEILING).multiply(BigDecimal.valueOf(vo.getCount()));
-                payAmount = payAmount.add(totalPrice);
-            }
+            BigDecimal payAmount = payedPrice.setScale(2, RoundingMode.CEILING);
             //创建订单
             GoodsOrder goodsOrder = new GoodsOrder();
             goodsOrder.setType(2);
@@ -626,12 +659,60 @@ public class WxAppMemberController {
             goodsOrder.setDeliveryCity(postOrderVO.getAddress().getCity());
             goodsOrder.setDeliveryDistrict(postOrderVO.getAddress().getDistrict());
             goodsOrder.setDeliveryProvince(postOrderVO.getAddress().getProvince());
-
+            goodsOrder.setUsedIntegral(postOrderVO.getUseIntegral());
+            if(ticket != null) {
+                goodsOrder.setUsedCouponTicketId(ticket.getId());
+            }
             goodsOrder.setPayedPrice(payAmount.floatValue());
             goodsOrder.setTotalPrice(payAmount.floatValue());
             goodsOrder.setStatus(0);
 
             goodsOrderService.save(goodsOrder);
+
+            ticket.setStatus(1);
+            ticket.setUsedTime(new Date());
+            ticket.setUseOrderId(goodsOrder.getId());
+            couponTicketService.updateById(ticket);
+
+            //settle
+            GoodsOrderSettlement settlement = new GoodsOrderSettlement();
+            settlement.setSortNum(0);
+            settlement.setAmount("+ "+totalPrice);
+            settlement.setDescription("商品总价");
+            settlement.setOrderId(goodsOrder.getId());
+            goodsOrderSettlementService.save(settlement);
+
+            if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
+                settlement = new GoodsOrderSettlement();
+                settlement.setSortNum(1);
+                settlement.setAmount("- " + postOrderVO.getUseIntegral());
+                settlement.setDescription("积分抵扣");
+                settlement.setOrderId(goodsOrder.getId());
+                goodsOrderSettlementService.save(settlement);
+            }
+
+            if(ticket != null && coupon != null) {
+                settlement = new GoodsOrderSettlement();
+                settlement.setSortNum(2);
+                settlement.setAmount("- " + coupon.getAmount());
+                settlement.setDescription("优惠券抵扣");
+                settlement.setOrderId(goodsOrder.getId());
+                goodsOrderSettlementService.save(settlement);
+            }
+
+            settlement = new GoodsOrderSettlement();
+            settlement.setSortNum(3);
+            settlement.setAmount("+ " + postOrderVO.getDeliveryPrice());
+            settlement.setDescription("运费");
+            settlement.setOrderId(goodsOrder.getId());
+            goodsOrderSettlementService.save(settlement);
+
+            //扣除用户积分
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setAmount(postOrderVO.getUseIntegral().multiply(integralRatio).negate());
+            changeMemberScore.setDescription(String.format("下单消费，订单号为：%s", goodsOrder.getId()));
+            changeMemberScore.setMemberId(loginUser.getId());
+            appApi.reduceMemberScore(changeMemberScore);
 
             //增加订单商品
             Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {

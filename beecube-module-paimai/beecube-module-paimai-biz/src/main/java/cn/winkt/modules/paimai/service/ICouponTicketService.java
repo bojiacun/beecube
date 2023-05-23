@@ -17,8 +17,9 @@ public interface ICouponTicketService extends IService<CouponTicket> {
 
     /**
      * 获取对应商品的用户优惠券
-     * @param goodsIds
      * @return
      */
     Map<String, List<CouponTicket>> getAvailableTickets(List<GoodsVO> goodsList);
+
+    boolean canTicketUseful(String ticketId, List<GoodsVO> goodsList);
 }

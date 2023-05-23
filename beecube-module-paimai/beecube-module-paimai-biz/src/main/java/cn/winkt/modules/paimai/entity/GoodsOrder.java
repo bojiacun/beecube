@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +84,8 @@ public class GoodsOrder {
 	private String deliveryNo;
 	private String deliveryCode;
 	private Integer payType;
+	private BigDecimal usedIntegral;
+	private String usedCouponTicketId;
 	/**订单创建时间*/
     @ApiModelProperty(value = "订单创建时间")
 	private java.util.Date createTime;
@@ -120,7 +123,6 @@ public class GoodsOrder {
 
 	private String couponId;
 	private String couponTitle;
-	private String usedIntegral;
 
 	@TableField(exist = false)
 	private List<OrderGoods> orderGoods;
