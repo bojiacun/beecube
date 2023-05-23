@@ -177,7 +177,7 @@ export default class Index extends Component<any, any> {
         let totalIntegralPrice = 0;
         this.state.goodsList.forEach(g => {
             if(g.maxIntegralPercent) {
-                totalIntegralPrice += g.startPrice * g.maxIntegralPercent/100;
+                totalIntegralPrice += g.startPrice * g.maxIntegralPercent/100 * g.count;
             }
         });
         let integral = Math.min(totalIntegralPrice*integralRatio, userInfo.score);
