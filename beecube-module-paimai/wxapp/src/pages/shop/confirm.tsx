@@ -3,6 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
 import {Button, Text, View, Navigator, Input} from "@tarojs/components";
+import {Button as TaroifyButton} from '@taroify/core';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
@@ -254,32 +255,40 @@ export default class Index extends Component<any, any> {
                                             </View>
                                         );
                                     })}
-
+                                    <View className={'m-4'}><TaroifyButton color={'danger'} block>确定</TaroifyButton></View>
                                 </Tabs.TabPane>
                                 <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
-                                    <View className={'mt-4 space-y-4'}>
+                                    <View className={'mt-4'}>
+                                        <Radio.Group className={'space-y-4'}>
                                         {coupons?.unAvailable.map((item: any) => {
                                             return (
                                                 <View>
-                                                    <View className={'text-white'}>
-                                                        <View className={'rounded-t-lg bg-red-700'}>
+                                                    <View className={'text-white flex'}>
+                                                        <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
+                                                              style={{width: 100, height: 80}}>
                                                             <View className={'font-bold'}>
                                                                 <Text>￥</Text>
-                                                                <Text className={'text-2xl'}>
+                                                                <Text className={'text-4xl'}>
                                                                     {item.coupon.amount}
                                                                 </Text>
                                                             </View>
+                                                            <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
                                                         </View>
-                                                        <View className={'rounded-t-lg bg-red-700'}>
-
+                                                        <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
+                                                            <View className={'flex-1'}>
+                                                                <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
+                                                                <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
+                                                            </View>
+                                                            <View className={'w-10'}><Radio name={item.id} /></View>
                                                         </View>
                                                     </View>
-                                                    <View className={'bg-white rounded-b-lg p-4'}>
-                                                        {item.description}
+                                                    <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
+                                                        {item.coupon.description}
                                                     </View>
                                                 </View>
                                             );
                                         })}
+                                        </Radio.Group>
                                     </View>
                                 </Tabs.TabPane>
                             </Tabs>

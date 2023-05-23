@@ -8,6 +8,7 @@ import {useEffect, useRef, useState} from "react";
 import _ from 'lodash';
 import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
+import BootstrapTextarea from "~/components/form/BootstrapTextarea";
 
 
 const CouponEditor = (props: any) => {
@@ -89,6 +90,7 @@ const CouponEditor = (props: any) => {
                             <Form method={'post'}>
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapInput label={'标题'} name={'title'} />
+                                    <BootstrapTextarea label={'描述信息'} name={'description'} />
                                     <BootstrapInput label={'最低消费'} name={'minPrice'} />
                                     <BootstrapInput label={'面额'} name={'amount'} />
                                     <BootstrapInput label={'生效时间'} name={'startDays'} placeholder={'领取后多少天生效'} />
