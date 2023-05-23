@@ -1,6 +1,7 @@
 package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.paimai.entity.CouponTicket;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface ICouponTicketService extends IService<CouponTicket> {
      * @param goodsIds
      * @return
      */
-    Map<String, List<CouponTicket>> getAvailableTickets(List<String> goodsIds);
+    Map<String, List<CouponTicket>> getAvailableTickets(List<GoodsVO> goodsList);
 }

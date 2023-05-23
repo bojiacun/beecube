@@ -6,7 +6,7 @@ import {Button, Text, View, Navigator, Input} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import {Cell, Radio} from "@taroify/core";
+import {Popup, Radio, Tabs} from "@taroify/core";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -23,11 +23,14 @@ export default class Index extends Component<any, any> {
         goodsList: [],
         address: null,
         posting: false,
+        openCoupon: false,
+        coupons: null,
     }
 
     constructor(props) {
         super(props);
         this.pay = this.pay.bind(this);
+        this.openCoupon = this.openCoupon.bind(this);
     }
 
 
@@ -45,9 +48,15 @@ export default class Index extends Component<any, any> {
             let cart = JSON.parse(Taro.getStorageSync("CART") || '[]');
             this.setState({goodsList: cart.filter(item => item.selected)});
         }
-
+        //获取用户可用优惠券
+        request.put('/paimai/api/orders/coupons', {orderGoods: this.state.goodsList}).then(res=>{
+            this.setState({coupons: res.data.result});
+        });
     }
 
+    openCoupon() {
+        this.setState({openCoupon: true});
+    }
     componentDidShow() {
         Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
         //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
@@ -110,7 +119,7 @@ export default class Index extends Component<any, any> {
     }
     render() {
         const {systemInfo} = this.props;
-        const {goodsList, address} = this.state;
+        const {goodsList, address, openCoupon} = this.state;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         const barTop = systemInfo.statusBarHeight;
@@ -177,7 +186,7 @@ export default class Index extends Component<any, any> {
                         <View className={'font-bold'}>商品总价</View>
                         <View>￥{numeral(this.totalPrice).format('0,0.00')}</View>
                     </View>
-                    <View className={'flex items-center justify-between'}>
+                    <View className={'flex items-center justify-between'} onClick={this.openCoupon}>
                         <View className={'font-bold'}>优惠券</View>
                         <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'} /></View>
                     </View>
@@ -210,6 +219,22 @@ export default class Index extends Component<any, any> {
                                 onClick={this.pay}>立即支付</Button>
                     </View>
                 </View>
+
+
+                <Popup style={{height: 330}} open={openCoupon} rounded placement={'bottom'} onClose={() => this.setState({openCoupon: false})}>
+                    <View className={'text-2xl'} >
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>优惠券</View>
+                        <Popup.Close />
+                    </View>
+                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                        <Tabs defaultValue={'available'}>
+                            <Tabs.TabPane value={'available'} title={'可用优惠券'}>
+                            </Tabs.TabPane>
+                            <Tabs.TabPane value={'unAvailable'} title={'不可用优惠券'}>
+                            </Tabs.TabPane>
+                        </Tabs>
+                    </View>
+                </Popup>
             </PageLayout>
         );
     }

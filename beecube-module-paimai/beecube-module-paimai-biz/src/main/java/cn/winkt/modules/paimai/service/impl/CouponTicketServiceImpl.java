@@ -7,6 +7,7 @@ import cn.winkt.modules.paimai.mapper.CouponMapper;
 import cn.winkt.modules.paimai.mapper.CouponTicketMapper;
 import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.service.ICouponTicketService;
+import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -37,7 +39,7 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
     private GoodsMapper goodsMapper;
 
     @Override
-    public Map<String, List<CouponTicket>> getAvailableTickets(List<String> goodsIds) {
+    public Map<String, List<CouponTicket>> getAvailableTickets(List<GoodsVO> goodsList) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         QueryWrapper<CouponTicket> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("member_id", loginUser.getId());
@@ -55,18 +57,24 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
             }
             else {
                 boolean isValid = false;
-                for (String goodsId : goodsIds) {
-                    Goods goods = goodsMapper.selectById(goodsId);
-                    if (Objects.equals(goods.getClassId(), coupon.getRuleGoodsClassId())) {
+                BigDecimal totalPrice = BigDecimal.ZERO;
+                for (GoodsVO goodsVO: goodsList) {
+                    if (Objects.equals(goodsVO.getClassId(), coupon.getRuleGoodsClassId())) {
                         isValid = true;
                     }
-                    else if(Objects.equals(goods.getId(), coupon.getRuleGoodsId())) {
+                    else if(Objects.equals(goodsVO.getId(), coupon.getRuleGoodsId())) {
                         isValid = true;
                     }
                     else if(coupon.getRuleGoods() == 3) {
                         isValid = true;
                     }
+                    totalPrice = totalPrice.add(goodsVO.getStartPrice().multiply(BigDecimal.valueOf(goodsVO.getCount())));
                 }
+                //计算订单总价是否满足优惠券的满减规则
+                if(totalPrice.compareTo(coupon.getMinPrice()) < 0) {
+                    isValid = false;
+                }
+
                 if(isValid) {
                     available.add(couponTicket);
                 }
@@ -74,6 +82,7 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
                     unAvailable.add(couponTicket);
                 }
             }
+            couponTicket.setCoupon(coupon);
         });
 
 

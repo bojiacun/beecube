@@ -62,7 +62,7 @@ public class Goods {
 	/**起拍价*/
 	@Excel(name = "起拍价", width = 15)
     @ApiModelProperty(value = "起拍价")
-	private java.lang.Float startPrice;
+	private BigDecimal startPrice;
 
 	private String evaluatePrice;
 	private Float minPrice;

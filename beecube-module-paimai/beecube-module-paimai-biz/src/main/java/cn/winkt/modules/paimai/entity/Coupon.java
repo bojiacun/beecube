@@ -64,7 +64,7 @@ public class Coupon {
 	/**最低消费*/
 	@Excel(name = "最低消费", width = 15)
     @ApiModelProperty(value = "最低消费")
-	private java.lang.Float minPrice;
+	private BigDecimal minPrice;
 	/**面额*/
 	@Excel(name = "面额", width = 15)
     @ApiModelProperty(value = "面额")

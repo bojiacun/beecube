@@ -74,8 +74,8 @@ public class WxAppOrderController {
     }
 
     @PutMapping("/coupons")
-    public Result<?> getCouponsByOrder(@RequestBody OrderVo orderVo) {
-        return Result.OK(couponTicketService.getAvailableTickets(Arrays.stream(orderVo.getOrderGoods()).map(OrderGoods::getGoodsId).collect(Collectors.toList())));
+    public Result<?> getCouponsByOrder(@RequestBody PostOrderVO postOrderVO) {
+        return Result.OK(couponTicketService.getAvailableTickets(Arrays.asList(postOrderVO.getGoodsList())));
     }
 
 

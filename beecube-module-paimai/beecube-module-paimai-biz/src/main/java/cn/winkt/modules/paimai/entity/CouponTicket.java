@@ -38,6 +38,8 @@ public class CouponTicket {
     @ApiModelProperty(value = "couponId")
 	private java.lang.String couponId;
 	private String couponTitle;
+	@TableField(exist = false)
+	private Coupon coupon;
 	/**memberId*/
 	@Excel(name = "memberId", width = 15)
     @ApiModelProperty(value = "memberId")

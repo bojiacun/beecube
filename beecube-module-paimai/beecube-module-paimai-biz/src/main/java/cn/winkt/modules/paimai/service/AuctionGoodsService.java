@@ -81,7 +81,7 @@ public class AuctionGoodsService {
         String lockKey = "OFFER-LOCKER-" + goods.getId();
         if (redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
-            if (userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
+            if (userOfferPrice.compareTo(goods.getStartPrice()) < 0) {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("出价不得低于起拍价");
             }
@@ -185,7 +185,7 @@ public class AuctionGoodsService {
         String lockKey = "OFFER-LOCKER-" + goods.getId();
         if (redissonLockClient.tryLock(lockKey, -1, 300)) {
             BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
-            if (userOfferPrice.compareTo(BigDecimal.valueOf(goods.getStartPrice())) < 0) {
+            if (userOfferPrice.compareTo(goods.getStartPrice()) < 0) {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("出价不得低于起拍价");
             }
