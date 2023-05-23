@@ -60,6 +60,10 @@ export default class Index extends Component<any, any> {
             this.setState({goodsList: goodsList, postOrderInfo: this.state.postOrderInfo});
         }
         this.fetchPrice(this.state.postOrderInfo);
+        //获取可用的优惠券
+        request.put('/paimai/api/orders/coupons', this.state.postOrderInfo).then(res => {
+            this.setState({coupons: res.data.result});
+        });
     }
 
     fetchPrice(postOrderInfo:any) {
@@ -221,7 +225,7 @@ export default class Index extends Component<any, any> {
                         <View className={'font-bold'}>优惠券</View>
                         <View className={'space-x-2'}>
                             {postOrderInfo.ticketAmount > 0 && <Text className={'text-red-600'}>-￥{numeral(postOrderInfo.ticketAmount).format('0,0.00')}</Text>}
-                            {(postOrderInfo.ticketAmount == 0 && coupons?.available.length > 0) && <Text className={'text-red-600'}>有可用优惠券{coupons.available.length}张</Text>}
+                            {(postOrderInfo.ticketAmount == 0 && coupons?.available.length > 0) && <Text className={'text-red-600'}>{coupons.available.length}张</Text>}
                             {(postOrderInfo.ticketAmount == 0 && !coupons?.available.length) && <Text className={'text-gray-600'}>无可用优惠券</Text>}
                             <Text className={'fa fa-angle-right text-stone-400'}/>
                         </View>
