@@ -38,6 +38,7 @@ public class Coupon {
 	@Excel(name = "标题", width = 15)
     @ApiModelProperty(value = "标题")
 	private java.lang.String title;
+	private String description;
 	/**领取后多少天以后生效*/
 	@Excel(name = "领取后多少天以后生效", width = 15)
     @ApiModelProperty(value = "领取后多少天以后生效")

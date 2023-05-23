@@ -6,7 +6,8 @@ import {Button, Text, View, Navigator, Input} from "@tarojs/components";
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import {Popup, Radio, Tabs} from "@taroify/core";
+import {ConfigProvider, Popup, Radio, Tabs} from "@taroify/core";
+import './confirm.scss';
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -48,15 +49,17 @@ export default class Index extends Component<any, any> {
             let cart = JSON.parse(Taro.getStorageSync("CART") || '[]');
             this.setState({goodsList: cart.filter(item => item.selected)});
         }
-        //获取用户可用优惠券
-        request.put('/paimai/api/orders/coupons', {orderGoods: this.state.goodsList}).then(res=>{
-            this.setState({coupons: res.data.result});
-        });
+
     }
 
     openCoupon() {
+        //获取用户可用优惠券
+        request.put('/paimai/api/orders/coupons', {goodsList: this.state.goodsList}).then(res => {
+            this.setState({coupons: res.data.result});
+        });
         this.setState({openCoupon: true});
     }
+
     componentDidShow() {
         Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
         //获取用户默认地址, 优先读取本地存储的地址信息，没有则读取远程服务器信息
@@ -111,15 +114,17 @@ export default class Index extends Component<any, any> {
         }
         return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
     }
+
     get totalPrice() {
         if (this.state.goodsList.length == 0) {
             return 0;
         }
         return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
     }
+
     render() {
         const {systemInfo} = this.props;
-        const {goodsList, address, openCoupon} = this.state;
+        const {goodsList, address, openCoupon, coupons} = this.state;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         const barTop = systemInfo.statusBarHeight;
@@ -188,11 +193,11 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openCoupon}>
                         <View className={'font-bold'}>优惠券</View>
-                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'} /></View>
+                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>积分</View>
-                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'} /></View>
+                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>运费</View>
@@ -221,20 +226,66 @@ export default class Index extends Component<any, any> {
                 </View>
 
 
-                <Popup style={{height: 330}} open={openCoupon} rounded placement={'bottom'} onClose={() => this.setState({openCoupon: false})}>
-                    <View className={'text-2xl'} >
-                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>优惠券</View>
-                        <Popup.Close />
-                    </View>
-                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{paddingBottom: 84}}>
-                        <Tabs defaultValue={'available'}>
-                            <Tabs.TabPane value={'available'} title={'可用优惠券'}>
-                            </Tabs.TabPane>
-                            <Tabs.TabPane value={'unAvailable'} title={'不可用优惠券'}>
-                            </Tabs.TabPane>
-                        </Tabs>
-                    </View>
-                </Popup>
+                <ConfigProvider theme={{
+                    tabsNavBackgroundColor: 'transparent',
+                }}>
+                    <Popup style={{height: 530}} className={'!bg-gray-100'} open={openCoupon} rounded placement={'bottom'} onClose={() => this.setState({openCoupon: false})}>
+                        <View className={'text-2xl'}>
+                            <View className={'flex py-4 items-center justify-center text-xl font-bold'}>优惠券</View>
+                            <Popup.Close/>
+                        </View>
+                        <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                            <Tabs sticky defaultValue={'available'}>
+                                <Tabs.TabPane value={'available'} title={'可用优惠券'}>
+                                    {coupons?.available.map((item: any) => {
+                                        return (
+                                            <View>
+                                                <View>
+                                                    <View className={'rounded-t-lg bg-red-700'}>
+                                                        {item.coupon.amount}
+                                                    </View>
+                                                    <View className={'rounded-t-lg bg-red-700'}>
+
+                                                    </View>
+                                                </View>
+                                                <View className={'bg-white rounded-b-lg p-4'}>
+                                                    {item.description}
+                                                </View>
+                                            </View>
+                                        );
+                                    })}
+
+                                </Tabs.TabPane>
+                                <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
+                                    <View className={'mt-4 space-y-4'}>
+                                        {coupons?.unAvailable.map((item: any) => {
+                                            return (
+                                                <View>
+                                                    <View className={'text-white'}>
+                                                        <View className={'rounded-t-lg bg-red-700'}>
+                                                            <View className={'font-bold'}>
+                                                                <Text>￥</Text>
+                                                                <Text className={'text-2xl'}>
+                                                                    {item.coupon.amount}
+                                                                </Text>
+                                                            </View>
+                                                        </View>
+                                                        <View className={'rounded-t-lg bg-red-700'}>
+
+                                                        </View>
+                                                    </View>
+                                                    <View className={'bg-white rounded-b-lg p-4'}>
+                                                        {item.description}
+                                                    </View>
+                                                </View>
+                                            );
+                                        })}
+                                    </View>
+                                </Tabs.TabPane>
+                            </Tabs>
+                        </View>
+                    </Popup>
+                </ConfigProvider>
             </PageLayout>
         );
     }
