@@ -238,39 +238,13 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '订单详情'}}>
-                <View className={'space-y-4 p-4'}>
-                    <View className={'bg-white p-4 rounded space-y-4'}>
-                        <View className={'font-bold'}>商品信息</View>
-                        <View className={'space-y-4'}>
-                            {detail.orderGoods.map((item: any) => {
-                                return (
-                                    <View className={'flex space-x-2 items-center'}>
-                                        <View className={'flex-none'}>
-                                            <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
-                                                           src={utils.resolveUrl(item.goodsImage)}/>
-                                        </View>
-                                        <View className={'flex-1'}>
-                                            <View>{item.goodsName}</View>
-                                            <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
-                                        </View>
-                                        <View className={'flex flex-col space-y-2 items-center'}>
-                                            <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
-                                            {item.isAfter == 0 && detail.status > 1 && detail.type == 2 &&
-                                                <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
-                                                           url={`after?ogid=${item.id}&oid=${item.orderId}`}>
-                                                    <View>申请售后</View>
-                                                </Navigator>
-                                            }
-                                        </View>
-                                    </View>
-                                );
-                            })}
-                        </View>
-                        <View className={'text-right font-bold text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
+                <View className={'space-y-4 p-4 head-bg'}>
+                    <View className={'text-white mt-4'}>
+                        <View className={'text-3xl'}> {ORDER_STATUS[detail.status]} </View>
+                        <View></View>
                     </View>
-
-                    <View className={'bg-white p-4 rounded space-y-4'}>
-                        <View className={'font-bold'}>收货信息</View>
+                    <View className={'bg-white p-4 rounded-lg space-y-4'}>
+                        <View className={'font-bold item-title text-lg'}>收货地址</View>
                         <View className={'space-y-4'}>
                             {detail.status == 0 && !detail.deliveryId &&
                                 <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
@@ -299,76 +273,129 @@ export default class Index extends Component<any, any> {
                             }
                         </View>
                     </View>
-                    {detail?.status == 2 &&
-                        <View className={'bg-white p-4 rounded space-y-4'}>
-                            <View className={'font-bold'}>快递信息</View>
-                            <View className={'space-y-4'}>
-                                <View className={'flex items-center justify-between'}>
-                                    <View className={'text-gray-400'}>快递类型</View>
-                                    <View>{detail.deliveryCode}</View>
+                </View>
+                <View className={'bg-white p-4 rounded-lg mx-4 space-y-4'}>
+                    <View className={'font-bold text-lg item-title'}>商品信息</View>
+                    <View className={'space-y-4'}>
+                        {detail.orderGoods.map((item: any) => {
+                            return (
+                                <View className={'flex space-x-2 items-center'}>
+                                    <View className={'flex-none'}>
+                                        <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
+                                                       src={utils.resolveUrl(item.goodsImage)}/>
+                                    </View>
+                                    <View className={'flex-1'}>
+                                        <View>{item.goodsName}</View>
+                                        <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
+                                    </View>
+                                    <View className={'flex flex-col space-y-2 items-center'}>
+                                        <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
+                                        {item.isAfter == 0 && detail.status > 1 && detail.type == 2 &&
+                                            <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
+                                                       url={`after?ogid=${item.id}&oid=${item.orderId}`}>
+                                                <View>申请售后</View>
+                                            </Navigator>
+                                        }
+                                    </View>
                                 </View>
-                                <View className={'flex items-center justify-between'}>
-                                    <View className={'text-gray-400'}>快递单号</View>
-                                    <View>{detail.deliveryNo}</View>
-                                </View>
-                            </View>
-                        </View>
-                    }
-                    <View className={'bg-white p-4 rounded space-y-4'}>
-                        <View className={'font-bold'}>订单信息</View>
+                            );
+                        })}
+                    </View>
+                    <View className={'text-right font-bold text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
+                </View>
+
+                {detail?.status == 2 &&
+                    <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                        <View className={'font-bold text-lg item-title'}>快递信息</View>
                         <View className={'space-y-4'}>
                             <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>订单类型</View>
-                                <View>{ORDER_TYPES[detail.type]}</View>
+                                <View className={'text-gray-400'}>快递类型</View>
+                                <View>{detail.deliveryCode}</View>
                             </View>
                             <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>订单号</View>
-                                <View>{detail.id}</View>
-                            </View>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>下单时间</View>
-                                <View>{detail.createTime}</View>
-                            </View>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>支付时间</View>
-                                <View>{detail.payTime}</View>
-                            </View>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>交易单号</View>
-                                <View>{detail.transactionId}</View>
-                            </View>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>订单状态</View>
-                                <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>
+                                <View className={'text-gray-400'}>快递单号</View>
+                                <View>{detail.deliveryNo}</View>
                             </View>
                         </View>
                     </View>
-                    {detail.status == 4 &&
-                        <View className={'bg-white p-4 rounded space-y-4'}>
-                            <View className={'font-bold'}>售后信息</View>
-                            <View className={'space-y-4'}>
-                                {afters?.map((item: any) => {
-                                    return (
-                                        <View className={'flex space-x-2 items-center'}>
-                                            <View className={'flex-none'}>
-                                                <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
-                                                               src={utils.resolveUrl(item.goodsImage)}/>
-                                            </View>
-                                            <View className={'flex-1'}>
-                                                <View>{item.goodsName}</View>
-                                                <View>{item.description}</View>
-                                            </View>
-                                            <View className={'flex flex-col space-y-2 items-center'}>
-                                                <Button onClick={() => this.cancelAfter(item)} style={{padding: 5, fontSize: 12}}
-                                                        className={'btn btn-outline'}>取消售后</Button>
-                                            </View>
-                                        </View>
-                                    );
-                                })}
-                            </View>
+                }
+                <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                    <View className={'font-bold text-lg item-title'}>订单信息</View>
+                    <View className={'space-y-4'}>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>订单类型</View>
+                            <View>{ORDER_TYPES[detail.type]}</View>
                         </View>
-                    }
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>订单号</View>
+                            <View>{detail.id}</View>
+                        </View>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>下单时间</View>
+                            <View>{detail.createTime}</View>
+                        </View>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>支付时间</View>
+                            <View>{detail.payTime}</View>
+                        </View>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>交易单号</View>
+                            <View>{detail.transactionId}</View>
+                        </View>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>买家留言</View>
+                            <View>{detail.note}</View>
+                        </View>
+                        {/*<View className={'flex items-center justify-between'}>*/}
+                        {/*    <View className={'text-gray-400'}>订单状态</View>*/}
+                        {/*    <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>*/}
+                        {/*</View>*/}
+                    </View>
                 </View>
+                {detail.status == 4 &&
+                    <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                        <View className={'font-bold text-lg item-title'}>售后信息</View>
+                        <View className={'space-y-4'}>
+                            {afters?.map((item: any) => {
+                                return (
+                                    <View className={'flex space-x-2 items-center'}>
+                                        <View className={'flex-none'}>
+                                            <FallbackImage style={{width: 50, height: 50}} className={'rounded block'}
+                                                           src={utils.resolveUrl(item.goodsImage)}/>
+                                        </View>
+                                        <View className={'flex-1'}>
+                                            <View>{item.goodsName}</View>
+                                            <View>{item.description}</View>
+                                        </View>
+                                        <View className={'flex flex-col space-y-2 items-center'}>
+                                            <Button onClick={() => this.cancelAfter(item)} style={{padding: 5, fontSize: 12}}
+                                                    className={'btn btn-outline'}>取消售后</Button>
+                                        </View>
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </View>
+                }
+
+                <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                    <View className={'font-bold text-lg item-title'}>结算信息</View>
+                    <View className={'space-y-4'}>
+                        {detail.settlements.map((item:any)=>{
+                            return (
+                                <View className={'flex items-center justify-between'}>
+                                    <View className={'text-gray-400'}>{item.description}</View>
+                                    <View className={'font-bold'}>{item.amount}</View>
+                                </View>
+                            );
+                        })}
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>实际支付</View>
+                            <View className={'font-bold text-lg'}>￥{numeral(detail.payedPrice).format('0,0.00')}</View>
+                        </View>
+                    </View>
+                </View>
+
                 <View style={{height: 100}}></View>
                 {this.renderButton()}
             </PageLayout>

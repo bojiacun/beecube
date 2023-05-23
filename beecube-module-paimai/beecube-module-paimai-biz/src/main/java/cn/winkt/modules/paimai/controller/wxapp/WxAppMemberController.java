@@ -248,6 +248,12 @@ public class WxAppMemberController {
         LambdaQueryWrapper<OrderGoods> qw = new LambdaQueryWrapper<>();
         qw.eq(OrderGoods::getOrderId, order.getId());
         order.setOrderGoods(orderGoodsService.list(qw));
+
+        //获取settle
+        LambdaQueryWrapper<GoodsOrderSettlement> settlementLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        settlementLambdaQueryWrapper.eq(GoodsOrderSettlement::getOrderId, id);
+        settlementLambdaQueryWrapper.orderByAsc(GoodsOrderSettlement::getSortNum);
+        order.setSettlements(goodsOrderSettlementService.list(settlementLambdaQueryWrapper));
         return Result.OK(order);
     }
 
@@ -649,6 +655,7 @@ public class WxAppMemberController {
             //创建订单
             GoodsOrder goodsOrder = new GoodsOrder();
             goodsOrder.setType(2);
+            goodsOrder.setNote(postOrderVO.getNote());
             goodsOrder.setMemberId(loginUser.getId());
             goodsOrder.setMemberName(StringUtils.getIfEmpty(loginUser.getRealname(), loginUser::getPhone));
             goodsOrder.setMemberAvatar(loginUser.getAvatar());

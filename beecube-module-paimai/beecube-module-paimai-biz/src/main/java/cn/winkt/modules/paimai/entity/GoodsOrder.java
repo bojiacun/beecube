@@ -56,7 +56,7 @@ public class GoodsOrder {
 	@ApiModelProperty(value = "订单类型（1拍卖订单、2一口价订单")
 	@Dict(dicCode = "paimai_order_type")
 	private Integer type;
-
+	private String note;
 	private String transactionId;
 	/**会员ID*/
 	@Excel(name = "会员ID", width = 15)
