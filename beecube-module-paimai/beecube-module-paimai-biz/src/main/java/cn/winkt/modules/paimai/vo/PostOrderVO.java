@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class PostOrderVO {
     private GoodsVO[] goodsList;
     private AddressVO address;
-    private String couponId;
+    private String ticketId;
     private BigDecimal useIntegral;
     private BigDecimal deliveryPrice;
 }

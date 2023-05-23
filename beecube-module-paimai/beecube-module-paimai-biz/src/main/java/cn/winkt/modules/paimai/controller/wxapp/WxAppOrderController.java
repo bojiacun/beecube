@@ -62,8 +62,9 @@ public class WxAppOrderController {
 
         //计算真实价格
         BigDecimal actualPrice = BigDecimal.valueOf(totalPrice.floatValue());
-        if(StringUtils.isNotEmpty(postOrderVO.getCouponId())) {
-            Coupon coupon = couponService.getById(postOrderVO.getCouponId());
+        if(StringUtils.isNotEmpty(postOrderVO.getTicketId())) {
+            CouponTicket ticket = couponTicketService.getById(postOrderVO.getTicketId());
+            Coupon coupon = couponService.getById(ticket.getCouponId());
             actualPrice = actualPrice.subtract(coupon.getAmount());
         }
         if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {

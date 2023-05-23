@@ -27,12 +27,16 @@ export default class Index extends Component<any, any> {
         posting: false,
         openCoupon: false,
         coupons: null,
+        postOrderInfo: null,
+        selectedTicketId: null,
     }
 
     constructor(props) {
         super(props);
         this.pay = this.pay.bind(this);
         this.openCoupon = this.openCoupon.bind(this);
+        this.useCoupon = this.useCoupon.bind(this);
+        this.handleSelectCoupon = this.handleSelectCoupon.bind(this);
     }
 
 
@@ -53,9 +57,22 @@ export default class Index extends Component<any, any> {
 
     }
 
+    handleSelectCoupon(value:string) {
+        this.setState({selectedTicketId: value});
+    }
+    useCoupon() {
+        this.state.postOrderInfo.ticketId = this.state.selectedTicketId;
+        this.setState({postOrderInfo: this.state.postOrderInfo, openCoupon: false});
+        request.put('/paimai/api/orders/price/calc', this.state.postOrderInfo).then(res=>{
+            console.log(res);
+        });
+    }
+
     openCoupon() {
         //获取用户可用优惠券
-        request.put('/paimai/api/orders/coupons', {goodsList: this.state.goodsList}).then(res => {
+        let postOrderInfo = {goodsList: this.state.goodsList};
+        this.setState({postOrderInfo: postOrderInfo});
+        request.put('/paimai/api/orders/coupons', postOrderInfo).then(res => {
             this.setState({coupons: res.data.result});
         });
         this.setState({openCoupon: true});
@@ -238,31 +255,46 @@ export default class Index extends Component<any, any> {
                         <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                             <Tabs sticky defaultValue={'available'}>
                                 <Tabs.TabPane value={'available'} title={'可用优惠券'}>
-                                    {coupons?.available.map((item: any) => {
-                                        return (
-                                            <View>
-                                                <View>
-                                                    <View className={'rounded-t-lg bg-red-700'}>
-                                                        {item.coupon.amount}
+                                    <View className={'mt-4'}>
+                                        <Radio.Group className={'space-y-4'} onChange={this.handleSelectCoupon}>
+                                            {coupons?.available.map((item: any) => {
+                                                return (
+                                                    <View>
+                                                        <View className={'text-white flex'}>
+                                                            <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
+                                                                  style={{width: 100, height: 80}}>
+                                                                <View className={'font-bold'}>
+                                                                    <Text>￥</Text>
+                                                                    <Text className={'text-4xl'}>
+                                                                        {item.coupon.amount}
+                                                                    </Text>
+                                                                </View>
+                                                                <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
+                                                            </View>
+                                                            <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
+                                                                <View className={'flex-1'}>
+                                                                    <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
+                                                                    <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
+                                                                </View>
+                                                                <View className={'w-10'}><Radio name={item.id} /></View>
+                                                            </View>
+                                                        </View>
+                                                        <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
+                                                            {item.coupon.description}
+                                                        </View>
                                                     </View>
-                                                    <View className={'rounded-t-lg bg-red-700'}>
-
-                                                    </View>
-                                                </View>
-                                                <View className={'bg-white rounded-b-lg p-4'}>
-                                                    {item.description}
-                                                </View>
-                                            </View>
-                                        );
-                                    })}
-                                    <View className={'m-4'}><TaroifyButton color={'danger'} block>确定</TaroifyButton></View>
+                                                );
+                                            })}
+                                        </Radio.Group>
+                                    </View>
+                                    <View className={'m-4'}><TaroifyButton color={'danger'} onClick={this.useCoupon} block>确定</TaroifyButton></View>
                                 </Tabs.TabPane>
                                 <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
                                     <View className={'mt-4'}>
                                         <Radio.Group className={'space-y-4'}>
                                         {coupons?.unAvailable.map((item: any) => {
                                             return (
-                                                <View>
+                                                <View style={{filter: 'grayscale(100%)'}}>
                                                     <View className={'text-white flex'}>
                                                         <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
                                                               style={{width: 100, height: 80}}>
@@ -279,7 +311,7 @@ export default class Index extends Component<any, any> {
                                                                 <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
                                                                 <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
                                                             </View>
-                                                            <View className={'w-10'}><Radio name={item.id} /></View>
+                                                            <View className={'w-10'}><Radio disabled name={item.id} /></View>
                                                         </View>
                                                     </View>
                                                     <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
