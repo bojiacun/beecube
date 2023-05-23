@@ -19,7 +19,7 @@ const numeral = require('numeral');
         settings: state.context.settings,
         context: state.context
     }
-),(dispatch) => {
+), (dispatch) => {
     return {
         updateUserInfo(userInfo) {
             dispatch(setUserInfo(userInfo));
@@ -75,27 +75,28 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    fetchPrice(postOrderInfo:any) {
-        request.put('/paimai/api/orders/price/calc', postOrderInfo).then(res=>{
+    fetchPrice(postOrderInfo: any) {
+        request.put('/paimai/api/orders/price/calc', postOrderInfo).then(res => {
             this.setState({postOrderInfo: res.data.result});
         });
     }
 
-    handleSelectCoupon(value:string) {
+    handleSelectCoupon(value: string) {
         this.setState({selectedTicketId: value});
     }
+
     handleIntegralChange(value) {
         const postOrderInfo = this.state.postOrderInfo;
-        if(value == '1') {
+        if (value == '1') {
             postOrderInfo.useIntegral = this.calcAvailableIntegral;
-        }
-        else {
+        } else {
             //不使用积分
             postOrderInfo.useIntegral = 0;
         }
         this.setState({postOrderInfo: postOrderInfo});
         this.fetchPrice(postOrderInfo);
     }
+
     useCoupon() {
         const postOrderInfo = this.state.postOrderInfo;
         postOrderInfo.ticketId = this.state.selectedTicketId;
@@ -109,6 +110,7 @@ export default class Index extends Component<any, any> {
             this.props.updateUserInfo(res.data.result);
         });
     }
+
     openCoupon() {
         //获取用户可用优惠券
         const postOrderInfo = this.state.postOrderInfo;
@@ -186,11 +188,11 @@ export default class Index extends Component<any, any> {
         //计算商品可抵扣的总金额
         let totalIntegralPrice = 0;
         this.state.goodsList.forEach(g => {
-            if(g.maxIntegralPercent) {
-                totalIntegralPrice += g.startPrice * g.maxIntegralPercent/100 * g.count;
+            if (g.maxIntegralPercent) {
+                totalIntegralPrice += g.startPrice * g.maxIntegralPercent / 100 * g.count;
             }
         });
-        let integral = Math.min(totalIntegralPrice*integralRatio, userInfo.score);
+        let integral = Math.min(totalIntegralPrice * integralRatio, userInfo.score);
         return integral / integralRatio;
     }
 
@@ -270,14 +272,15 @@ export default class Index extends Component<any, any> {
                         <View className={'space-x-2'}>
                             {postOrderInfo.ticketAmount > 0 && <Text className={'text-red-600'}>-￥{numeral(postOrderInfo.ticketAmount).format('0,0.00')}</Text>}
                             {(postOrderInfo.ticketAmount == 0 && coupons?.available.length > 0) && <Text className={'text-red-600'}>{coupons.available.length}张</Text>}
-                            {(postOrderInfo.ticketAmount == 0 && !coupons?.available.length) && <Text className={'text-gray-600'}>无可用优惠券</Text>}
+                            {(postOrderInfo.ticketAmount == 0 && !coupons?.available.length) && <Text className={'text-stone-400'}>无可用优惠券</Text>}
                             <Text className={'fa fa-angle-right text-stone-400'}/>
                         </View>
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openIntegral}>
                         <View className={'font-bold'}>积分</View>
                         <View className={'space-x-2'}>
-                            {userInfo.score > 0 && <Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text>}
+                            {(userInfo.score > 0 && postOrderInfo.useIntegral > 0) && <Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text>}
+                            {(userInfo.score > 0 && postOrderInfo.useIntegral <= 0) && <Text className={'text-red-600'}>有可用积分</Text>}
                             {userInfo.score <= 0 && <Text className={'text-stone-400'}>无可用积分</Text>}
                             <Text className={'fa fa-angle-right text-stone-400'}/>
                         </View>
@@ -314,50 +317,49 @@ export default class Index extends Component<any, any> {
                     tabsNavBackgroundColor: 'transparent',
                 }}>
                     <Popup style={{height: 530}} className={'!bg-gray-100'} open={openCoupon} rounded placement={'bottom'} onClose={() => this.setState({openCoupon: false})}>
-                        <View className={'text-2xl'}>
+                        <View className={'text-2xl sticky top-0 !bg-gray-100 z-100'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>优惠券</View>
                             <Popup.Close/>
                         </View>
-                        <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
-                            <Tabs sticky defaultValue={'available'}>
-                                <Tabs.TabPane value={'available'} title={'可用优惠券'}>
-                                    <View className={'mt-4'}>
-                                        <Radio.Group className={'space-y-4'} onChange={this.handleSelectCoupon}>
-                                            {coupons?.available.map((item: any) => {
-                                                return (
-                                                    <View>
-                                                        <View className={'text-white flex'}>
-                                                            <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
-                                                                  style={{width: 100, height: 80}}>
-                                                                <View className={'font-bold'}>
-                                                                    <Text>￥</Text>
-                                                                    <Text className={'text-4xl'}>
-                                                                        {item.coupon.amount}
-                                                                    </Text>
-                                                                </View>
-                                                                <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
+                        <Tabs sticky defaultValue={'available'}>
+                            <Tabs.TabPane value={'available'} title={'可用优惠券'}>
+                                <View className={'m-4'} style={{paddingBottom: 80}}>
+                                    <Radio.Group className={'space-y-4'} onChange={this.handleSelectCoupon}>
+                                        {coupons?.available.map((item: any) => {
+                                            return (
+                                                <View>
+                                                    <View className={'text-white flex'}>
+                                                        <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
+                                                              style={{width: 100, height: 80}}>
+                                                            <View className={'font-bold'}>
+                                                                <Text>￥</Text>
+                                                                <Text className={'text-4xl'}>
+                                                                    {item.coupon.amount}
+                                                                </Text>
                                                             </View>
-                                                            <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
-                                                                <View className={'flex-1'}>
-                                                                    <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
-                                                                    <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
-                                                                </View>
-                                                                <View className={'w-10'}><Radio name={item.id} /></View>
-                                                            </View>
+                                                            <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
                                                         </View>
-                                                        <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
-                                                            {item.coupon.description}
+                                                        <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
+                                                            <View className={'flex-1'}>
+                                                                <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
+                                                                <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
+                                                            </View>
+                                                            <View className={'w-10'}><Radio className={'radio-red-color'} name={item.id}/></View>
                                                         </View>
                                                     </View>
-                                                );
-                                            })}
-                                        </Radio.Group>
-                                    </View>
-                                    <View className={'m-4'}><TaroifyButton color={'danger'} onClick={this.useCoupon} block>确定</TaroifyButton></View>
-                                </Tabs.TabPane>
-                                <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
-                                    <View className={'mt-4'}>
-                                        <Radio.Group className={'space-y-4'}>
+                                                    <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
+                                                        {item.coupon.description}
+                                                    </View>
+                                                </View>
+                                            );
+                                        })}
+                                    </Radio.Group>
+                                    <View className={'my-4'}><TaroifyButton color={'danger'} onClick={this.useCoupon} block>确定</TaroifyButton></View>
+                                </View>
+                            </Tabs.TabPane>
+                            <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
+                                <View className={'m-4'} style={{paddingBottom: 80}}>
+                                    <Radio.Group className={'space-y-4'}>
                                         {coupons?.unAvailable.map((item: any) => {
                                             return (
                                                 <View style={{filter: 'grayscale(100%)'}}>
@@ -377,7 +379,7 @@ export default class Index extends Component<any, any> {
                                                                 <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
                                                                 <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
                                                             </View>
-                                                            <View className={'w-10'}><Radio disabled name={item.id} /></View>
+                                                            <View className={'w-10'}><Radio disabled name={item.id}/></View>
                                                         </View>
                                                     </View>
                                                     <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
@@ -386,14 +388,12 @@ export default class Index extends Component<any, any> {
                                                 </View>
                                             );
                                         })}
-                                        </Radio.Group>
-                                    </View>
-                                </Tabs.TabPane>
-                            </Tabs>
-                        </View>
+                                    </Radio.Group>
+                                </View>
+                            </Tabs.TabPane>
+                        </Tabs>
                     </Popup>
                 </ConfigProvider>
-
 
 
                 {/*积分*/}
@@ -412,7 +412,7 @@ export default class Index extends Component<any, any> {
                                     消耗<Text className={'text-red-600'}>{this.calcAvailableIntegral * integralRatio}</Text>积分，
                                     可抵扣<Text className={'text-red-600'}>{this.calcAvailableIntegral}</Text>元
                                 </Radio>
-                                <Radio className={'radio-red-color'} name={'0'} >不使用积分抵扣</Radio>
+                                <Radio className={'radio-red-color'} name={'0'}>不使用积分抵扣</Radio>
                             </Radio.Group>
                         </View>
                     </Popup>
