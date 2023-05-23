@@ -9,6 +9,7 @@ import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {ConfigProvider, Popup, Radio, Tabs} from "@taroify/core";
 import './confirm.scss';
+import {setUserInfo} from "../../store/actions";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -18,7 +19,13 @@ const numeral = require('numeral');
         settings: state.context.settings,
         context: state.context
     }
-))
+),(dispatch) => {
+    return {
+        updateUserInfo(userInfo) {
+            dispatch(setUserInfo(userInfo));
+        }
+    }
+})
 export default class Index extends Component<any, any> {
     state: any = {
         id: null,
@@ -98,6 +105,9 @@ export default class Index extends Component<any, any> {
 
     openIntegral() {
         this.setState({openIntegral: true});
+        request.get('/app/api/members/profile').then(res => {
+            this.props.updateUserInfo(res.data.result);
+        });
     }
     openCoupon() {
         //获取用户可用优惠券
@@ -266,7 +276,11 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openIntegral}>
                         <View className={'font-bold'}>积分</View>
-                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
+                        <View className={'space-x-2'}>
+                            {userInfo.score > 0 && <Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text>}
+                            {userInfo.score <= 0 && <Text className={'text-stone-400'}>无可用积分</Text>}
+                            <Text className={'fa fa-angle-right text-stone-400'}/>
+                        </View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>运费</View>
@@ -393,7 +407,7 @@ export default class Index extends Component<any, any> {
                         </View>
                         <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                             <Radio.Group defaultValue={"0"} onChange={this.handleIntegralChange}>
-                                <Radio className={'radio-red-color'} name={'1'}>
+                                <Radio className={'radio-red-color'} name={'1'} disabled={userInfo.score <= 0}>
                                     当前有<Text className={'text-red-600'}>{userInfo.score}</Text>积分，
                                     消耗<Text className={'text-red-600'}>{this.calcAvailableIntegral * integralRatio}</Text>积分，
                                     可抵扣<Text className={'text-red-600'}>{this.calcAvailableIntegral}</Text>元

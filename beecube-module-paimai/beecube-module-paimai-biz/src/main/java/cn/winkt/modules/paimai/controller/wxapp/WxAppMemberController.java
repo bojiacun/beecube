@@ -611,6 +611,7 @@ public class WxAppMemberController {
         if(integralPrice.compareTo(postOrderVO.getUseIntegral()) < 0) {
             throw new JeecgBootException("价格计算有误");
         }
+        payedPrice = BigDecimal.valueOf(totalPrice.doubleValue());
         //检测用户使用的优惠券
         CouponTicket ticket = null;
         Coupon coupon = null;
@@ -620,10 +621,10 @@ public class WxAppMemberController {
             if(!couponTicketService.canTicketUseful(postOrderVO.getTicketId(), Arrays.asList(postOrderVO.getGoodsList()))) {
                 throw new JeecgBootException("优惠券无法使用");
             }
-            payedPrice = totalPrice.subtract(coupon.getAmount());
+            payedPrice = payedPrice.subtract(coupon.getAmount());
         }
         if(postOrderVO.getUseIntegral() != null) {
-            payedPrice = totalPrice.subtract(postOrderVO.getUseIntegral());
+            payedPrice = payedPrice.subtract(postOrderVO.getUseIntegral());
         }
 
         if(payedPrice.compareTo(postOrderVO.getPayedPrice()) != 0) {
@@ -664,7 +665,7 @@ public class WxAppMemberController {
                 goodsOrder.setUsedCouponTicketId(ticket.getId());
             }
             goodsOrder.setPayedPrice(payAmount.floatValue());
-            goodsOrder.setTotalPrice(payAmount.floatValue());
+            goodsOrder.setTotalPrice(totalPrice.floatValue());
             goodsOrder.setStatus(0);
 
             goodsOrderService.save(goodsOrder);
