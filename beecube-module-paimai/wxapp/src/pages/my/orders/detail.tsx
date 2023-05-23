@@ -391,7 +391,7 @@ export default class Index extends Component<any, any> {
                         })}
                         <View className={'flex items-center justify-between'}>
                             <View className={'text-gray-400'}>实际支付</View>
-                            <View className={'font-bold text-lg'}>￥{numeral(detail.payedPrice).format('0,0.00')}</View>
+                            <View className={'font-bold text-lg text-red-600'}>￥{numeral(detail.payedPrice).format('0,0.00')}</View>
                         </View>
                     </View>
                 </View>
