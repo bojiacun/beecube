@@ -6,6 +6,7 @@ import {View, Navigator} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
+import {Tag} from "@taroify/core";
 
 const numeral = require('numeral');
 
@@ -84,9 +85,16 @@ export default class Index extends Component<any, any> {
                                     <View className={'text-gray-400 text-sm'}>
                                         交易时间：{item.createTime}
                                     </View>
+                                    <View className={'text-gray-400 text-sm'}>
+                                        退款时间：{item.refundTime}
+                                    </View>
                                 </View>
-                                <View className={'font-bold flex items-center justify-center'}>
-                                    ￥{numeral(item.price).format('0,0.00')}
+                                <View className={'font-bold flex flex-col items-center justify-around'}>
+                                    {item.status == 1 && <Tag variant={'contained'} color={'success'}>已付款</Tag>}
+                                    {item.status == 2 && <Tag variant={'contained'} color={'info'}>已退款</Tag>}
+                                    <View className={'text-red-600 font-bold'}>
+                                        ￥{numeral(item.price).format('0,0.00')}
+                                    </View>
                                 </View>
                             </Navigator>
                         );

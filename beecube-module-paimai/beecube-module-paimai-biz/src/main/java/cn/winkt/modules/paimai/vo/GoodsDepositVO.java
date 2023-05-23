@@ -1,6 +1,9 @@
 package cn.winkt.modules.paimai.vo;
 
+import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.Performance;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -38,4 +41,8 @@ public class GoodsDepositVO {
 
     @Dict(dicCode = "paimai_deposit_status")
     private java.lang.Integer status;
+    @TableField(exist = false)
+    private Goods goods;
+    @TableField(exist = false)
+    private Performance performance;
 }

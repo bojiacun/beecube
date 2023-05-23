@@ -71,6 +71,7 @@ public class GoodsDeposit {
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private java.util.Date createTime;
+	private java.util.Date refundTime;
 	/**创建人*/
 	@Excel(name = "创建人", width = 15)
     @ApiModelProperty(value = "创建人")
@@ -82,4 +83,10 @@ public class GoodsDeposit {
 	@ApiModelProperty(value = "状态（0未支付1已支付2为已退款）")
 	@Dict(dicCode = "paimai_deposit_status")
 	private java.lang.Integer status;
+
+
+	@TableField(exist = false)
+	private Goods goods;
+	@TableField(exist = false)
+	private Performance performance;
 }

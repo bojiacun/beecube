@@ -293,6 +293,14 @@ public class WxAppMemberController {
         queryWrapper.eq("gd.member_id", loginUser.getId());
         Page<GoodsDeposit> page = new Page<GoodsDeposit>(pageNo, pageSize);
         IPage<GoodsDepositVO> pageList = goodsDepositService.selectPageVO(page, queryWrapper);
+        pageList.getRecords().forEach(goodsDepositVO -> {
+            if(StringUtils.isNotEmpty(goodsDepositVO.getGoodsId())) {
+                goodsDepositVO.setGoods(goodsService.getById(goodsDepositVO.getGoodsId()));
+            }
+            if(StringUtils.isNotEmpty(goodsDepositVO.getPerformanceId())) {
+                goodsDepositVO.setPerformance(performanceService.getById(goodsDepositVO.getPerformanceId()));
+            }
+        });
         return Result.OK(pageList);
     }
 
@@ -305,6 +313,9 @@ public class WxAppMemberController {
         queryWrapper.eq("gof.member_id", loginUser.getId());
         Page<GoodsOffer> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOfferVO> pageList = goodsOfferService.selectPageVO(page, queryWrapper);
+        pageList.getRecords().forEach(goodsOfferVO -> {
+            goodsOfferVO.setGoods(goodsService.getById(goodsOfferVO.getGoodsId()));
+        });
         return Result.OK(pageList);
     }
 

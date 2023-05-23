@@ -59,7 +59,12 @@ export default class Index extends Component<any, any> {
                 res.data.result.count = 1;
                 this.state.goodsList.push(res.data.result);
                 this.state.postOrderInfo.goodsList = this.state.goodsList;
-                this.setState({goodsList: this.state.goodsList, postOrderInfo: this.state.posting});
+                this.setState({goodsList: this.state.goodsList, postOrderInfo: this.state.postOrderInfo});
+                this.fetchPrice(this.state.postOrderInfo);
+                //获取可用的优惠券
+                request.put('/paimai/api/orders/coupons', this.state.postOrderInfo).then(res => {
+                    this.setState({coupons: res.data.result});
+                });
             });
         } else {
             //从购物车获取商品信息
@@ -67,12 +72,12 @@ export default class Index extends Component<any, any> {
             let goodsList = cart.filter(item => item.selected);
             this.state.postOrderInfo.goodsList = goodsList;
             this.setState({goodsList: goodsList, postOrderInfo: this.state.postOrderInfo});
+            this.fetchPrice(this.state.postOrderInfo);
+            //获取可用的优惠券
+            request.put('/paimai/api/orders/coupons', this.state.postOrderInfo).then(res => {
+                this.setState({coupons: res.data.result});
+            });
         }
-        this.fetchPrice(this.state.postOrderInfo);
-        //获取可用的优惠券
-        request.put('/paimai/api/orders/coupons', this.state.postOrderInfo).then(res => {
-            this.setState({coupons: res.data.result});
-        });
     }
 
     fetchPrice(postOrderInfo: any) {

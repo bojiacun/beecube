@@ -6,6 +6,7 @@ import {View, Navigator} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
+import FallbackImage from "../../components/FallbackImage";
 
 const numeral = require('numeral');
 
@@ -65,6 +66,9 @@ export default class Index extends Component<any, any> {
                         return (
                             <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white shadow-outer p-4'}
                                        style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <View className={'w-30'}>
+                                    <FallbackImage mode={'aspectFill'} src={item.goods.listCover ? item.goods.listCover: item.goods.images.split(',')[0]} />
+                                </View>
                                 <View className={'flex-1'}>
                                     <View className={'text-lg font-bold flex-1'}>{item.goodsName}</View>
                                     <View className={'text-gray-400 text-sm'}>

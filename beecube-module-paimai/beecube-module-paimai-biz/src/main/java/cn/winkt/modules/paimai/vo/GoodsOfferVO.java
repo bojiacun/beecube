@@ -1,6 +1,8 @@
 package cn.winkt.modules.paimai.vo;
 
+import cn.winkt.modules.paimai.entity.Goods;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,4 +31,7 @@ public class GoodsOfferVO {
     private String goodsName;
     private Float goodsMaxOfferPrice;
     private Integer status;
+
+    @TableField(exist = false)
+    private Goods goods;
 }
