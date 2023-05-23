@@ -63,8 +63,8 @@ const ScoreRecordList = (props: any) => {
             dataField: 'type_dictText',
         },
         {
-            text: '金额',
-            dataField: 'money',
+            text: '积分',
+            dataField: 'score',
         },
         {
             text: '描述信息',

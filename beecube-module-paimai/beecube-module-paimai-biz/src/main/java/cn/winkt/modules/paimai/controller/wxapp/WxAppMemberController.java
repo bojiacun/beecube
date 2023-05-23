@@ -659,7 +659,7 @@ public class WxAppMemberController {
             goodsOrder.setDeliveryCity(postOrderVO.getAddress().getCity());
             goodsOrder.setDeliveryDistrict(postOrderVO.getAddress().getDistrict());
             goodsOrder.setDeliveryProvince(postOrderVO.getAddress().getProvince());
-            goodsOrder.setUsedIntegral(postOrderVO.getUseIntegral());
+            goodsOrder.setUsedIntegral(postOrderVO.getUseIntegral().multiply(integralRatio));
             if(ticket != null) {
                 goodsOrder.setUsedCouponTicketId(ticket.getId());
             }
@@ -669,10 +669,6 @@ public class WxAppMemberController {
 
             goodsOrderService.save(goodsOrder);
 
-            ticket.setStatus(1);
-            ticket.setUsedTime(new Date());
-            ticket.setUseOrderId(goodsOrder.getId());
-            couponTicketService.updateById(ticket);
 
             //settle
             GoodsOrderSettlement settlement = new GoodsOrderSettlement();
@@ -692,6 +688,10 @@ public class WxAppMemberController {
             }
 
             if(ticket != null && coupon != null) {
+                ticket.setStatus(1);
+                ticket.setUsedTime(new Date());
+                ticket.setUseOrderId(goodsOrder.getId());
+                couponTicketService.updateById(ticket);
                 settlement = new GoodsOrderSettlement();
                 settlement.setSortNum(2);
                 settlement.setAmount("- " + coupon.getAmount());
@@ -708,11 +708,15 @@ public class WxAppMemberController {
             goodsOrderSettlementService.save(settlement);
 
             //扣除用户积分
-            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
-            changeMemberScore.setAmount(postOrderVO.getUseIntegral().multiply(integralRatio).negate());
-            changeMemberScore.setDescription(String.format("下单消费，订单号为：%s", goodsOrder.getId()));
-            changeMemberScore.setMemberId(loginUser.getId());
-            appApi.reduceMemberScore(changeMemberScore);
+            if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
+                ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+                changeMemberScore.setAmount(postOrderVO.getUseIntegral().multiply(integralRatio).negate());
+                changeMemberScore.setDescription(String.format("下单消费，订单号为：%s", goodsOrder.getId()));
+                changeMemberScore.setMemberId(loginUser.getId());
+                if(!appApi.reduceMemberScore(changeMemberScore)) {
+                    throw new JeecgBootException("积分不足");
+                }
+            }
 
             //增加订单商品
             Arrays.stream(postOrderVO.getGoodsList()).forEach(goodsVO -> {

@@ -9,6 +9,7 @@ import cn.winkt.modules.app.entity.*;
 import cn.winkt.modules.app.service.*;
 import cn.winkt.modules.app.utils.AppTokenUtils;
 import cn.winkt.modules.app.vo.AppVO;
+import cn.winkt.modules.app.vo.ChangeMemberScore;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -147,6 +148,22 @@ public class AppApiController {
         queryWrapper.eq(AppSetting::getAppId, appId);
         queryWrapper.eq(AppSetting::getGroupKey, groupKey);
         return appSettingService.list(queryWrapper);
+    }
+
+    @PutMapping("/score/change")
+    public boolean changeMemberScore(@RequestBody ChangeMemberScore changeMemberScore) {
+        try {
+            if (changeMemberScore.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                appMemberService.outScore(changeMemberScore.getMemberId(), changeMemberScore.getAmount().negate(), changeMemberScore.getDescription());
+            } else {
+                appMemberService.inScore(changeMemberScore.getMemberId(), changeMemberScore.getAmount(), changeMemberScore.getDescription());
+            }
+        }
+        catch (Exception exception){
+            log.error(exception.getMessage(), exception);
+            return false;
+        }
+        return true;
     }
 
     /**
