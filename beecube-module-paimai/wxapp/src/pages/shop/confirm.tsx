@@ -9,6 +9,7 @@ import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {ConfigProvider, Popup, Radio, Tabs} from "@taroify/core";
 import './confirm.scss';
+import goodsList from "../../components/diy/modules/GoodsList";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -27,7 +28,7 @@ export default class Index extends Component<any, any> {
         posting: false,
         openCoupon: false,
         coupons: null,
-        postOrderInfo: null,
+        postOrderInfo: {useIntegral: 0, ticketId: null, payedPrice: 0, goodsList: null, ticketAmount: 0},
         selectedTicketId: null,
     }
 
@@ -37,6 +38,7 @@ export default class Index extends Component<any, any> {
         this.openCoupon = this.openCoupon.bind(this);
         this.useCoupon = this.useCoupon.bind(this);
         this.handleSelectCoupon = this.handleSelectCoupon.bind(this);
+        this.fetchPrice = this.fetchPrice.bind(this);
     }
 
 
@@ -47,30 +49,39 @@ export default class Index extends Component<any, any> {
             request.get('/paimai/api/goods/detail', {params: {id: options.id}}).then(res => {
                 res.data.result.count = 1;
                 this.state.goodsList.push(res.data.result);
-                this.setState({goodsList: this.state.goodsList});
+                this.state.postOrderInfo.goodsList = this.state.goodsList;
+                this.setState({goodsList: this.state.goodsList, postOrderInfo: this.state.posting});
             });
         } else {
             //从购物车获取商品信息
             let cart = JSON.parse(Taro.getStorageSync("CART") || '[]');
-            this.setState({goodsList: cart.filter(item => item.selected)});
+            let goodsList = cart.filter(item => item.selected);
+            this.state.postOrderInfo.goodsList = goodsList;
+            this.setState({goodsList: goodsList, postOrderInfo: this.state.postOrderInfo});
         }
+        this.fetchPrice(this.state.postOrderInfo);
+    }
 
+    fetchPrice(postOrderInfo:any) {
+        request.put('/paimai/api/orders/price/calc', postOrderInfo).then(res=>{
+            this.setState({postOrderInfo: res.data.result});
+        });
     }
 
     handleSelectCoupon(value:string) {
         this.setState({selectedTicketId: value});
     }
     useCoupon() {
-        this.state.postOrderInfo.ticketId = this.state.selectedTicketId;
-        this.setState({postOrderInfo: this.state.postOrderInfo, openCoupon: false});
-        request.put('/paimai/api/orders/price/calc', this.state.postOrderInfo).then(res=>{
-            console.log(res);
-        });
+        const postOrderInfo = this.state.postOrderInfo;
+        postOrderInfo.ticketId = this.state.selectedTicketId;
+        this.setState({postOrderInfo: postOrderInfo, openCoupon: false});
+        this.fetchPrice(postOrderInfo);
     }
 
     openCoupon() {
         //获取用户可用优惠券
-        let postOrderInfo = {goodsList: this.state.goodsList};
+        const postOrderInfo = this.state.postOrderInfo;
+        postOrderInfo.goodsList = this.state.goodsList;
         this.setState({postOrderInfo: postOrderInfo});
         request.put('/paimai/api/orders/coupons', postOrderInfo).then(res => {
             this.setState({coupons: res.data.result});
@@ -127,10 +138,7 @@ export default class Index extends Component<any, any> {
     }
 
     get calcCartPrice() {
-        if (this.state.goodsList.length == 0) {
-            return 0;
-        }
-        return this.state.goodsList.map(item => item.startPrice * item.count).reduce((n, m) => n + m);
+        return this.state.postOrderInfo.payedPrice;
     }
 
     get totalPrice() {
@@ -142,7 +150,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {systemInfo} = this.props;
-        const {goodsList, address, openCoupon, coupons} = this.state;
+        const {goodsList, address, openCoupon, coupons, postOrderInfo} = this.state;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         const barTop = systemInfo.statusBarHeight;
@@ -211,7 +219,12 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openCoupon}>
                         <View className={'font-bold'}>优惠券</View>
-                        <View className={'space-x-2'}><Text className={'text-red-600'}>-￥500</Text><Text className={'fa fa-angle-right text-stone-400'}/></View>
+                        <View className={'space-x-2'}>
+                            {postOrderInfo.ticketAmount > 0 && <Text className={'text-red-600'}>-￥{numeral(postOrderInfo.ticketAmount).format('0,0.00')}</Text>}
+                            {(postOrderInfo.ticketAmount == 0 && coupons?.available.length > 0) && <Text className={'text-red-600'}>有可用优惠券{coupons.available.length}张</Text>}
+                            {(postOrderInfo.ticketAmount == 0 && !coupons?.available.length) && <Text className={'text-gray-600'}>无可用优惠券</Text>}
+                            <Text className={'fa fa-angle-right text-stone-400'}/>
+                        </View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>积分</View>
@@ -219,7 +232,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>运费</View>
-                        <View className={''}>+￥500</View>
+                        <View className={''}>+ ￥{numeral(postOrderInfo.deliveryPrice).format('0,0.00')}</View>
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>支付方式</View>

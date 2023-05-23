@@ -9,6 +9,8 @@ public class PostOrderVO {
     private GoodsVO[] goodsList;
     private AddressVO address;
     private String ticketId;
+    private BigDecimal ticketAmount;
     private BigDecimal useIntegral;
     private BigDecimal deliveryPrice;
+    private BigDecimal payedPrice;
 }

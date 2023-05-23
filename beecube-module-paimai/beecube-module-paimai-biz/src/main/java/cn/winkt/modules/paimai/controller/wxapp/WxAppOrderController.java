@@ -51,27 +51,24 @@ public class WxAppOrderController {
      */
     @PutMapping("/price/calc")
     public Result<?> calcOrderPrice(@RequestBody PostOrderVO postOrderVO) {
-        OrderVo orderVo = new OrderVo();
-        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
-        orderVo.setDeliveryPrice(BigDecimal.ZERO);
+        postOrderVO.setDeliveryPrice(BigDecimal.ZERO);
         BigDecimal totalPrice = BigDecimal.ZERO;
         for(GoodsVO orderGoods : postOrderVO.getGoodsList()){
             totalPrice = totalPrice.add(orderGoods.getStartPrice().multiply(BigDecimal.valueOf(orderGoods.getCount())));
         };
-        orderVo.setTotalPrice(totalPrice);
-
         //计算真实价格
         BigDecimal actualPrice = BigDecimal.valueOf(totalPrice.floatValue());
         if(StringUtils.isNotEmpty(postOrderVO.getTicketId())) {
             CouponTicket ticket = couponTicketService.getById(postOrderVO.getTicketId());
             Coupon coupon = couponService.getById(ticket.getCouponId());
             actualPrice = actualPrice.subtract(coupon.getAmount());
+            postOrderVO.setTicketAmount(coupon.getAmount());
         }
-        if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
+        if(postOrderVO.getUseIntegral() != null && postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
             actualPrice = actualPrice.subtract(postOrderVO.getUseIntegral());
         }
-        orderVo.setPayedPrice(actualPrice);
-        return Result.OK(orderVo);
+        postOrderVO.setPayedPrice(actualPrice);
+        return Result.OK(postOrderVO);
     }
 
     @PutMapping("/coupons")
