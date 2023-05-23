@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,8 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
 
     @Override
     @Async
-    public void grantTickets(String couponId) {
+    public void grantTickets(String couponId, String appId) {
+        AppContext.setApp(appId);
         Coupon coupon = couponMapper.selectById(couponId);
         //找出合适的会员来
         Integer ruleMember = coupon.getRuleMember();
