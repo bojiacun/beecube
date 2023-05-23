@@ -13,4 +13,9 @@ import java.util.List;
  */
 public interface ICouponService extends IService<Coupon> {
 
+    /**
+     * 发放优惠券
+     */
+    void grantTickets(String couponId);
+
 }

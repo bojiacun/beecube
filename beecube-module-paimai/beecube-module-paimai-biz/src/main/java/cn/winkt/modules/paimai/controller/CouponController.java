@@ -28,6 +28,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -86,7 +87,11 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 		couponService.save(coupon);
 		return Result.OK("添加成功！");
 	}
-	
+
+	@PutMapping("/grant")
+	public Result<?> grantTickets() {
+		return Result.OK("发放成功");
+	}
 	/**
 	 * 编辑
 	 *

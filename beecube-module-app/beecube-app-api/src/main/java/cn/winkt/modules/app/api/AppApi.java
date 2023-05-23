@@ -4,6 +4,7 @@ import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.vo.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.models.auth.In;
 import org.jeecg.common.api.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -30,6 +31,9 @@ public interface AppApi {
 
     @GetMapping("/app/admin/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
+
+    @GetMapping("/app/admin/findMembersByType")
+    List<AppMemberVO> findMembersByType(@RequestParam("type") Integer type);
 
     @GetMapping("/app/admin/getAppById")
     AppVO getAppById(@RequestParam String id);

@@ -8,9 +8,11 @@ import org.jeecg.common.constant.GlobalConstants;
 import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication(scanBasePackages = {"org.jeecg", "cn.winkt"})
 @EnableFeignClients
+@EnableAsync
 public class BeecubePaimaiCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

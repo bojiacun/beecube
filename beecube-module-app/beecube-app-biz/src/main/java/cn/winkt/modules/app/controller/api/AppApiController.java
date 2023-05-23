@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
@@ -101,6 +102,39 @@ public class AppApiController {
     @GetMapping("/getMemberById")
     public AppMember queryAppMember(@RequestParam("id") String id) {
         return appMemberService.getById(id);
+    }
+    @GetMapping("/getMembersByType")
+    public List<AppMember> queryMembersByType(@RequestParam("type") Integer type) {
+        LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();
+
+        Date distDate = DateUtils.addDays(new Date(), -30);
+        switch (type) {
+            case 1:
+                //30天之内的新用户
+                queryWrapper.gt(AppMember::getCreateTime, distDate);
+                break;
+            case 2:
+                //30天之外的老用户
+                queryWrapper.lt(AppMember::getCreateTime, distDate);
+                break;
+            case 3:
+                //已认证用户
+                queryWrapper.eq(AppMember::getAuthStatus, 1);
+                break;
+            case 4:
+                //已完善信息的用户
+                queryWrapper.isNotNull(AppMember::getNickname);
+                queryWrapper.isNotNull(AppMember::getAvatar);
+                queryWrapper.isNotNull(AppMember::getPhone);
+                break;
+            case 5:
+                queryWrapper.eq(AppMember::getIsAgent, 1);
+                break;
+            case 6:
+                return appMemberService.list();
+        }
+
+        return appMemberService.list(queryWrapper);
     }
 
     @GetMapping("/getAppById")

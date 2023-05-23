@@ -122,6 +122,7 @@ const GoodsEditor = (props: any) => {
                                     <BootstrapInput label={'保底价'} name={'minPrice'} />
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'佣金'} name={'commission'} placeholder={'佣金百分比, 50%填50，1%填1'}/>
+                                    <BootstrapInput label={'积分抵扣比例'} name={'maxIntegralPercent'} placeholder={'积分抵扣比例，50%填50，1%填1'}/>
                                     <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
@@ -165,6 +166,7 @@ const GoodsEditor = (props: any) => {
                                         <FormLabel htmlFor={'descDeposit'}>保证金说明</FormLabel>
                                         <TinymceEditor name={'descDeposit'}/>
                                     </FormGroup>
+                                    <BootstrapRadioGroup options={[{label: '不推荐', value: '0'}, {label: '推荐', value: '1'}]} name={'recommend'} label={'是否推荐'}/>
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>
