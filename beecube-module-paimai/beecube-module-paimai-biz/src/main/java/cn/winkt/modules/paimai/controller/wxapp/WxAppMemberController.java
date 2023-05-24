@@ -643,7 +643,7 @@ public class WxAppMemberController {
         //检测用户使用积分
         BigDecimal integralPrice = BigDecimal.ZERO;
         BigDecimal totalPrice = BigDecimal.ZERO;
-        BigDecimal payedPrice = BigDecimal.ZERO;
+        BigDecimal payedPrice;
         for (GoodsVO goodsVO1 : postOrderVO.getGoodsList()) {
             Goods goods = goodsService.getById(goodsVO1.getId());
             if (goods.getMaxIntegralPercent() != null) {
@@ -651,7 +651,7 @@ public class WxAppMemberController {
             }
             totalPrice = totalPrice.add(BigDecimal.valueOf(goodsVO1.getCount()).multiply(goods.getStartPrice()));
         }
-        if(integralPrice.compareTo(postOrderVO.getUseIntegral()) < 0) {
+        if(postOrderVO.getUseIntegral() != null && integralPrice.compareTo(postOrderVO.getUseIntegral()) < 0) {
             throw new JeecgBootException("价格计算有误");
         }
         payedPrice = BigDecimal.valueOf(totalPrice.doubleValue());
