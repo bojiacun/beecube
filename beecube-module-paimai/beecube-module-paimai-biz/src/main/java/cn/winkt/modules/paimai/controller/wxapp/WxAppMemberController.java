@@ -638,6 +638,9 @@ public class WxAppMemberController {
         if (postOrderVO.getAddress() == null) {
             throw new JeecgBootException("请选择有效的收货地址");
         }
+        if(postOrderVO.getPayedPrice() == null) {
+            postOrderVO.setPayedPrice(BigDecimal.ZERO);
+        }
         GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
         BigDecimal integralRatio = new BigDecimal(StringUtils.getIfEmpty(goodsSettings.getIntegralRatio(), ()->"100"));
         //检测用户使用积分
