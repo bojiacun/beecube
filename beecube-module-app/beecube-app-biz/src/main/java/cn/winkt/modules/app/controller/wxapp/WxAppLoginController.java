@@ -6,6 +6,8 @@ import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.vo.MemberSetting;
 import com.apifan.common.random.RandomSource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/wxapp/login")
@@ -32,6 +35,9 @@ public class WxAppLoginController {
     WxMiniappServices wxMiniappServices;
     @Resource
     IAppMemberService appMemberService;
+
+    @Resource
+    IAppSettingService appSettingService;
 
     @Resource
     RedisUtil redisUtil;
@@ -58,6 +64,23 @@ public class WxAppLoginController {
             appMember.setShareId(mid);
             appMemberService.save(appMember);
             log.debug("新用户刚建立ID：{}，分享人ID：{}", appMember.getId(), mid);
+            try {
+                //新用户赠送积分
+                MemberSetting memberSetting = appSettingService.queryMemberSettings();
+                BigDecimal newMemberIntegral = new BigDecimal(memberSetting.getNewMemberIntegral());
+                if(newMemberIntegral.compareTo(BigDecimal.ZERO) > 0) {
+                    appMemberService.inScore(appMember.getId(), newMemberIntegral, "新用户赠送积分");
+                }
+                BigDecimal shareIntegral = new BigDecimal(memberSetting.getShareIntegral());
+                BigDecimal maxShareIntegral = new BigDecimal(memberSetting.getShareMaxIntegral());
+                if(shareIntegral.compareTo(BigDecimal.ZERO) > 0) {
+                    appMemberService.inScore(mid, shareIntegral, "分享用户获得积分");
+                }
+            }
+            catch (Exception ex){
+                log.error(ex.getMessage(), ex);
+            }
+
         }
         //执行登录操作
         if(appMember.getStatus() == 0) {

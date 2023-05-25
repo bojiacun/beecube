@@ -8,6 +8,8 @@ import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
 import cn.winkt.modules.app.service.IAppMemberAddressService;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.vo.MemberSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -50,6 +53,9 @@ public class WxAppMemberController {
 
     @Resource
     WxMiniappServices wxMiniappServices;
+
+    @Resource
+    IAppSettingService appSettingService;
 
     //    获取当前用户信息
     @GetMapping("/profile")
@@ -114,11 +120,24 @@ public class WxAppMemberController {
                 .set(AppMember::getCardFace, appMember.getCardFace())
                 .set(AppMember::getCardBack, appMember.getCardBack())
                 .set(AppMember::getIdCard, appMember.getIdCard())
-                .set(AppMember::getAuthStatus, 1)
+                .set(AppMember::getAuthStatus, 0)
                 .eq(AppMember::getId, old.getId());
 
 
         appMemberService.update(lambdaUpdateWrapper);
+
+        try {
+            //完善用户信息
+            MemberSetting memberSetting = appSettingService.queryMemberSettings();
+            BigDecimal newMemberIntegral = new BigDecimal(memberSetting.getAuthRealIntegral());
+            if(newMemberIntegral.compareTo(BigDecimal.ZERO) > 0) {
+                appMemberService.inScore(appMember.getId(), newMemberIntegral, "新用户赠送积分");
+            }
+        }
+        catch (Exception ex){
+            log.error(ex.getMessage(), ex);
+        }
+
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
 
