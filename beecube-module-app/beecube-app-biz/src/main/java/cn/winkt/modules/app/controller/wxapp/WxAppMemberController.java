@@ -125,19 +125,6 @@ public class WxAppMemberController {
 
 
         appMemberService.update(lambdaUpdateWrapper);
-
-        try {
-            //完善用户信息
-            MemberSetting memberSetting = appSettingService.queryMemberSettings();
-            BigDecimal newMemberIntegral = new BigDecimal(memberSetting.getAuthRealIntegral());
-            if(newMemberIntegral.compareTo(BigDecimal.ZERO) > 0) {
-                appMemberService.inScore(appMember.getId(), newMemberIntegral, "新用户赠送积分");
-            }
-        }
-        catch (Exception ex){
-            log.error(ex.getMessage(), ex);
-        }
-
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
 
