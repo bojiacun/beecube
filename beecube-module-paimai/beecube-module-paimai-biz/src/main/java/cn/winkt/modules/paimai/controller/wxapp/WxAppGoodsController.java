@@ -58,6 +58,7 @@ public class WxAppGoodsController {
                                    HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
         queryWrapper.eq("type", 2);
+        queryWrapper.eq("status", 1);
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
         return Result.OK(pageList);
