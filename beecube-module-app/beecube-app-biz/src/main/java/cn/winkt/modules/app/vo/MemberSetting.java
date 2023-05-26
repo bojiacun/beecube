@@ -14,5 +14,5 @@ public class MemberSetting {
     private String minWithdrawIntegral;
     private String integralToMoney;
     private String integralRule;
-
+    private String readIntegral;
 }
