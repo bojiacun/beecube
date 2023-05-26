@@ -18,6 +18,7 @@ import BootstrapDateTime from "~/components/form/BootstrapDateTime";
 import TinymceEditor from "~/components/tinymce-editor";
 import UprangConfiger from "~/pages/paimai/UprangConfiger";
 import DescListConfiger from "~/pages/paimai/DescListConfiger";
+import BootstrapSwitch from "~/components/form/BootstrapSwitch";
 
 
 //一口价编辑器
@@ -125,6 +126,7 @@ const BuyoutEditor = (props: any) => {
                                         <TinymceEditor name={'description'}/>
                                     </FormGroup>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
+                                    <BootstrapSwitch label={'是否推荐'} name={'recommend'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>
