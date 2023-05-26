@@ -53,6 +53,7 @@ public class LiveRoom {
 	/**直播结束时间*/
     @ApiModelProperty(value = "直播结束时间")
 	private java.util.Date endTime;
+	private Integer state;
 	/**观看人次*/
 	@Excel(name = "观看人次", width = 15)
     @ApiModelProperty(value = "观看人次")
