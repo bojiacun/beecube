@@ -6,8 +6,11 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.app.api.SystemApi;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -51,7 +54,9 @@ import io.swagger.annotations.ApiOperation;
 public class CouponController extends JeecgController<Coupon, ICouponService> {
 	@Autowired
 	private ICouponService couponService;
-	
+
+	@Resource
+	private SystemApi systemApi;
 	/**
 	 * 分页列表查询
 	 *
@@ -73,6 +78,11 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 		Page<Coupon> page = new Page<Coupon>(pageNo, pageSize);
 		IPage<Coupon> pageList = couponService.page(page, queryWrapper);
 		return Result.OK(pageList);
+	}
+
+	@GetMapping("/dicts")
+	public Result<?> queryDictItems(@RequestParam String dictCode) {
+		return Result.OK(systemApi.getDictItems(dictCode));
 	}
 	
 	/**

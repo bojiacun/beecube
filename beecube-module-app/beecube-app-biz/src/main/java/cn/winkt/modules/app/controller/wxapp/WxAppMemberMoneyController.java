@@ -104,7 +104,7 @@ public class WxAppMemberMoneyController {
         BigDecimal payAmount = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_DOWN);
 
         WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder()
-                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/api/notify/charge/" + AppContext.getApp())
+                .notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/app/api/notify/charge/" + AppContext.getApp())
                 .openid(member.getWxappOpenid()).outTradeNo(payLog.getId())
                 .body("用户充值")
                 .spbillCreateIp("127.0.0.1")
