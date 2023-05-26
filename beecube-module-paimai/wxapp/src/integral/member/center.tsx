@@ -189,6 +189,18 @@ export default class Index extends Component<any, any> {
                     }
                     <View className={'flex items-center space-x-2'}>
                         <View style={{width: 50, height: 50}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-3xl'}>
+                            <Text className={'fa fa-video-camera'}/>
+                        </View>
+                        <View className={'space-y-2 flex-1'}>
+                            <View className={'font-bold'}>学习公开课</View>
+                            <View className={'text-stone-400 text-sm'}>每日首次观看公开课，积分<Text className={'text-red-600 font-bold'}>+{settings.readIntegral}</Text></View>
+                        </View>
+                        <View onClick={() => Taro.navigateTo({url: '/pages/index/index'})}>
+                            <Button color={'danger'} size={'small'} shape={'round'}>去观看</Button>
+                        </View>
+                    </View>
+                    <View className={'flex items-center space-x-2'}>
+                        <View style={{width: 50, height: 50}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-3xl'}>
                             <Text className={'fa fa-id-card-o'}/>
                         </View>
                         <View className={'space-y-2 flex-1'}>
