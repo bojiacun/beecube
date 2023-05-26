@@ -65,6 +65,14 @@ export default class Index extends Component<any, any> {
         }).catch(() => this.setState({posting: false}));
     }
 
+    onShareAppMessage() {
+        let mid = this.props.context?.userInfo?.id || '';
+        let settings = this.props.settings;
+        return {
+            title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
+            path: '/pages/index/index?mid=' + mid
+        }
+    }
     render() {
         const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
@@ -150,7 +158,7 @@ export default class Index extends Component<any, any> {
                             <View className={'text-stone-400 text-sm'}>成功邀请1位新用户，积分<Text className={'text-red-600 font-bold'}>+{settings.newMemberIntegral}</Text></View>
                         </View>
                         <View>
-                            <Button color={'danger'} size={'small'} shape={'round'}>邀请好友</Button>
+                            <Button color={'danger'} size={'small'} shape={'round'} openType={'share'}>邀请好友</Button>
                         </View>
                     </View>
                     <View className={'flex items-center space-x-2'}>
