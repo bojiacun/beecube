@@ -224,6 +224,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 			stream.setPushAddress(pushAddress);
 			stream.setPlayAddress(playAddress);
+			if(n == 0) {
+				stream.setStatus(1);
+			}
 			liveRoomStreamService.updateById(stream);
 		});
 
