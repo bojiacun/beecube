@@ -88,6 +88,7 @@ export default defineAppConfig({
                 'pages/room',
                 'pages/history',
                 'pages/list',
+                'pages/detail',
             ]
         }
     ],
