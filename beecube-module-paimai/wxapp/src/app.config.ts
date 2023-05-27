@@ -27,6 +27,9 @@ export default defineAppConfig({
         'pages/my/profile/nickname',
         'pages/my/profile/email',
         'pages/my/profile/auth',
+
+        '/pages/performance/list',
+        '/pages/goods/list',
     ],
     window: {
         backgroundTextStyle: 'light',
