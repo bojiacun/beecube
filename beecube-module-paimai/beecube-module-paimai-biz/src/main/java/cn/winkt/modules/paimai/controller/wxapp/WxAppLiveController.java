@@ -80,8 +80,11 @@ public class WxAppLiveController {
         if ("1".equals(source)) {
             //进行中
             queryWrapper.gt(LiveRoom::getEndTime, nowDate);
+            queryWrapper.ne(LiveRoom::getState, 2);
         } else if ("2".equals(source)) {
-            queryWrapper.lt(LiveRoom::getEndTime, nowDate);
+            queryWrapper.and(qw -> {
+                qw.lt(LiveRoom::getEndTime, nowDate).or().eq(LiveRoom::getState, 2);
+            });
         }
         String key = req.getParameter("key");
         if(StringUtils.isNotEmpty(key)) {
