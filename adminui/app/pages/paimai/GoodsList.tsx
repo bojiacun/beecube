@@ -13,11 +13,11 @@ import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import GoodsEditor from "~/pages/paimai/GoodsEditor";
 import FigureImage from "react-bootstrap/FigureImage";
-import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 import OfferList from "~/pages/paimai/OfferList";
 import DepositList from "~/pages/paimai/DepositList";
 import ViewList from "~/pages/paimai/ViewList";
 import FollowList from "~/pages/paimai/FollowList";
+import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 
 
 const GoodsList = (props: any) => {
@@ -179,16 +179,16 @@ const GoodsList = (props: any) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item eventKey={'views'}>
-                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>围观记录</div>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'me-1'}/>围观记录</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'follows'}>
-                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'mr-1'}/>关注记录</div>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'me-1'}/>关注记录</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'edit'}>
-                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'mr-1'}/>编辑</div>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'me-1'}/>编辑</div>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey={'delete'}>
-                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'mr-1'}/>删除</div>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'me-1'}/>删除</div>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -276,10 +276,12 @@ const GoodsList = (props: any) => {
                     </Row>
                 </div>
 
+                <div style={{overflowY: 'visible'}}>
                 <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
                                 data={list?.records}
                                 selectRow={selectedRowConfig}
                                 keyField={'id'}/>
+                </div>
 
 
                 <div className={'mx-2 mb-2 mt-1'}>

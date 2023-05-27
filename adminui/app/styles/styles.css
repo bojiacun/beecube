@@ -1176,7 +1176,8 @@ span.divider {
 }
 
 .react-bootstrap-table {
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .table {

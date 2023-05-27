@@ -71,7 +71,8 @@ span.divider {
   overflow-wrap: break-word;
 }
 .react-bootstrap-table {
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 .table-scroll{
 }

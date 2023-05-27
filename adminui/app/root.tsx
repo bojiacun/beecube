@@ -103,23 +103,23 @@ export const meta: V2_MetaFunction = () => {
 const Document: FC<any> = withEmotionCache(({ children, title }, emotionCache) => {
     const data = useLoaderData();
     const [themeContext, setThemeContext] = useState(theme);
-    // const clientStyleData = React.useContext(ClientStyleContext);
-    //
-    // // Only executed on client
-    // useEnhancedEffect(() => {
-    //     // re-link sheet container
-    //     emotionCache.sheet.container = document.head;
-    //     // re-inject tags
-    //     const tags = emotionCache.sheet.tags;
-    //     emotionCache.sheet.flush();
-    //     tags.forEach((tag) => {
-    //         // eslint-disable-next-line no-underscore-dangle
-    //         (emotionCache.sheet as any)._insertTag(tag);
-    //     });
-    //     // reset cache to reapply global styles
-    //     clientStyleData.reset();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    const clientStyleData = React.useContext(ClientStyleContext);
+
+    // Only executed on client
+    useEnhancedEffect(() => {
+        // re-link sheet container
+        emotionCache.sheet.container = document.head;
+        // re-inject tags
+        const tags = emotionCache.sheet.tags;
+        emotionCache.sheet.flush();
+        tags.forEach((tag) => {
+            // eslint-disable-next-line no-underscore-dangle
+            (emotionCache.sheet as any)._insertTag(tag);
+        });
+        // reset cache to reapply global styles
+        clientStyleData.reset();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     return (
