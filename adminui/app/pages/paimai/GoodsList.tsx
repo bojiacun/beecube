@@ -276,12 +276,10 @@ const GoodsList = (props: any) => {
                     </Row>
                 </div>
 
-                <div style={{overflowY: 'visible'}}>
                 <BootstrapTable classes={'table-layout-fixed position-relative b-table'} striped hover columns={columns} bootstrap4
                                 data={list?.records}
                                 selectRow={selectedRowConfig}
                                 keyField={'id'}/>
-                </div>
 
 
                 <div className={'mx-2 mb-2 mt-1'}>

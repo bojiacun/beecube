@@ -71,10 +71,9 @@ span.divider {
   overflow-wrap: break-word;
 }
 .react-bootstrap-table {
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: visible;
-}
-.table-scroll{
+  min-height: 400px;
 }
 
 .table {
@@ -87,6 +86,9 @@ span.divider {
 
 .table-wrap td, .table-wrap th {
   white-space: normal;
+}
+.badge-light {
+  color: #0c1d2f !important;
 }
 
 
@@ -118,7 +120,7 @@ fieldset {
   }
   border-top: 1px solid $border-color;
 }
-.badge-light {
+.badge.bg-light {
   color: #2a2e30 !important;
 }
 .alert {
@@ -129,4 +131,10 @@ fieldset {
 }
 .form-text {
   color: #ccc;
+}
+.mr-1 {
+  margin-right: 1rem !important;
+}
+.ml-1 {
+  margin-left: 1rem !important;
 }
