@@ -83,7 +83,7 @@ const LiveRoomEditor = (props: any) => {
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
-                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>
+                                    <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true} disabled={model?.id} isClearable={!model?.id} />
                                     <BootstrapInput label={'主播ID'} name={'mainAnchor'} placeholder={'主播的用户ID'}/>
                                     <BootstrapRadioGroup options={[{label: '布局一', value: '1'}, {label: '布局二', value: '2'}, {label: '布局三', value: '3'}]} name={'streamLayout'} label={'布局方式'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>

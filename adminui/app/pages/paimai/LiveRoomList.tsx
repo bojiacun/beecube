@@ -195,7 +195,7 @@ const LiveRoomList = (props: any) => {
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-goods')}>直播拍品</a>
                         <span className={'divider'}/>
                         {row.state == 1 && <a href={'#'} onClick={() => handleOnAction(row, 'end-now')}>立即结束</a>}
-                        {row.state == 0 && <a href={'#'} onClick={() => handleOnAction(row, 'start-now')}>立即开播</a>}
+                        {!row.state && <a href={'#'} onClick={() => handleOnAction(row, 'start-now')}>立即开播</a>}
                         <span className={'divider'}/>
                         <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
                             <Dropdown.Toggle as={'span'} className={'noafter'}>

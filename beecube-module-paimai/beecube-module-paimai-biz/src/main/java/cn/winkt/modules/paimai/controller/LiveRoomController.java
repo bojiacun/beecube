@@ -166,6 +166,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
 		}
+		if(liveRoom.getEndTime().before(liveRoom.getStartTime())) {
+			throw new JeecgBootException("开始时间不得在结束时间之后");
+		}
         liveRoomService.save(liveRoom);
         List<AppTencentConfigItemVO> configItemVOS = appApi.tencentConfigs();
         Map<String, String> configMap = new HashMap<>();
@@ -286,6 +289,9 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			}
 			liveRoom.setSubAnchorName(StringUtils.getIfEmpty(appMemberVO.getNickname(),appMemberVO::getRealname));
 			liveRoom.setSubAnchorAvatar(appMemberVO.getAvatar());
+		}
+		if(liveRoom.getEndTime().before(liveRoom.getStartTime())) {
+			throw new JeecgBootException("开始时间不得在结束时间之后");
 		}
 		liveRoomService.updateById(liveRoom);
 		return Result.OK("编辑成功!");

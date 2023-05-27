@@ -153,6 +153,7 @@ public class LiveRoomStreamController extends JeecgController<LiveRoomStream, IL
         List<LiveRoomStream> streams = liveRoomStreamService.list(queryWrapper);
         roomStreamChangedMessage.setNewStreams(streams);
         roomStreamChangedMessage.setRoomId(stream.getLiveId());
+        roomStreamChangedMessage.setAppId(AppContext.getApp());
         imClientService.sendRoomMessage(stream.getLiveId(), roomStreamChangedMessage, UserMessageType.ROOM_STREAM_CHANGED);
         return Result.OK("设置成功!");
     }
@@ -167,6 +168,7 @@ public class LiveRoomStreamController extends JeecgController<LiveRoomStream, IL
         List<LiveRoomStream> streams = liveRoomStreamService.list(queryWrapper);
         roomStreamChangedMessage.setNewStreams(streams);
         roomStreamChangedMessage.setRoomId(stream.getLiveId());
+        roomStreamChangedMessage.setAppId(AppContext.getApp());
         imClientService.sendRoomMessage(stream.getLiveId(), roomStreamChangedMessage, UserMessageType.ROOM_STREAM_CHANGED);
         return Result.OK("设置成功!");
     }
