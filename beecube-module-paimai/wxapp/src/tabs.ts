@@ -1,8 +1,8 @@
 
 export default [
     '/pages/index/index',
-    '/performance/pages/list',
-    '/goods/pages/buyouts',
+    '/pages/performance/list',
+    '/pages/goods/buyouts',
     '/pages/shop/cart',
     '/pages/my/index'
 ]
