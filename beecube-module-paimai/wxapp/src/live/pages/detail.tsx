@@ -41,7 +41,6 @@ export default class Index extends Component<any, any> {
 
     constructor(props) {
         super(props);
-        this.payDeposit = this.payDeposit.bind(this);
         this.noticeMe = this.noticeMe.bind(this);
         this.onMessageReceived = this.onMessageReceived.bind(this);
     }
@@ -49,17 +48,17 @@ export default class Index extends Component<any, any> {
 
     loadData(id, page: number, clear = false) {
         const {settings} = this.props;
-        return request.get('/paimai/api/goods/list', {params: {performanceId: id, pageNo: page}}).then(res => {
+        return request.get('/paimai/api/live/room/goods', {params: {roomId: id, pageNo: page}}).then(res => {
             if (clear) {
-                let newGoodsList = res.data.result.records;
+                let newGoodsList = res.data.result;
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
                 } else {
-                    if(parseInt(settings.isDealCommission) == 1) {
-                        newGoodsList.forEach(item=>{
-                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                    if (parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item => {
+                            if (parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //落槌价显示佣金
-                                const commission = item.commission/100;
+                                const commission = item.commission / 100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
@@ -68,15 +67,15 @@ export default class Index extends Component<any, any> {
                 }
             } else {
                 let goodsList = this.state.goodsList;
-                let newGoodsList = res.data.result.records;
+                let newGoodsList = res.data.result;
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false});
                 } else {
-                    if(parseInt(settings.isDealCommission) == 1) {
-                        newGoodsList.forEach(item=>{
-                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                    if (parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item => {
+                            if (parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //落槌价显示佣金
-                                const commission = item.commission/100;
+                                const commission = item.commission / 100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
@@ -86,19 +85,9 @@ export default class Index extends Component<any, any> {
             }
         });
     }
+
     onMessageReceived(message) {
-        console.log('performance detail received a message', message);
-        const {detail, goodsList} = this.state;
-        if (detail.id == message.performanceId) {
-            switch (message.type) {
-                case MessageType.PERFORMANCE_UPDATE:
-                    detail.state = message.state;
-                    detail.startTime = message.startTime;
-                    detail.endTime = message.endTime;
-                    break;
-            }
-            this.setState({detail: detail});
-        }
+        const {goodsList} = this.state;
         if (!goodsList) return;
         goodsList?.forEach(g => {
             if (g.id == message.goodsId) {
@@ -115,18 +104,19 @@ export default class Index extends Component<any, any> {
             }
         });
     }
+
     componentDidShow() {
-        if(this.state.id) {
-            //查询是否需要缴纳保证金
-            return request.get('/paimai/api/members/deposited/performance', {params: {id: this.state.id}}).then(res => {
-                this.setState({deposited: res.data.result});
-            });
-        }
+        // if(this.state.id) {
+        //     //查询是否需要缴纳保证金
+        //     return request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.id}}).then(res => {
+        //         this.setState({deposited: res.data.result});
+        //     });
+        // }
     }
 
     onLoad(options) {
         this.setState({id: options.id});
-        request.get('/paimai/api/performances/detail', {params: {id: options.id}}).then(res => {
+        request.get('/paimai/api/live/rooms/' + options.id, {params: {id: options.id}}).then(res => {
             let detail = res.data.result;
             this.setState({detail: detail});
             this.loadData(detail.id, 1, true).then();
@@ -134,6 +124,7 @@ export default class Index extends Component<any, any> {
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
     }
+
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
         return {
@@ -146,9 +137,10 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.detail?.title,
-            path: '/performance/pages/detail2?id=' + this.state.id +'&mid='+mid
+            path: '/live/pages/detail?id=' + this.state.id + '&mid=' + mid
         }
     }
+
     onReachBottom() {
         this.setState({loadingMore: true, noMore: false});
         this.loadData(this.state.id, this.state.page + 1, false).then(() => {
@@ -162,33 +154,33 @@ export default class Index extends Component<any, any> {
         this.setState({page: 1});
     }
 
-    async payDeposit() {
-        const {preOffered} = this.state;
-        if(!preOffered) {
-            let checkResult = await request.get('/paimai/api/members/check');
-            if (!checkResult.data.result) {
-                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
-                    Taro.navigateTo({url: '/pages/my/profile'}).then();
-                });
-            }
-            this.setState({preOffered: true});
-        }
-        this.setState({posting: true});
-        //支付宝保证金
-        request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res => {
-            let data = res.data.result;
-            data.package = data.packageValue;
-            Taro.requestPayment(data).then(() => {
-                //支付已经完成，提醒支付成功并返回上一页面
-                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-                    let detail = this.state.detail;
-                    detail.deposited = true;
-                    this.setState({detail: detail});
-                });
-                this.setState({posting: false});
-            }).catch(() => this.setState({posting: false}));
-        })
-    }
+    // async payDeposit() {
+    //     const {preOffered} = this.state;
+    //     if(!preOffered) {
+    //         let checkResult = await request.get('/paimai/api/members/check');
+    //         if (!checkResult.data.result) {
+    //             return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+    //                 Taro.navigateTo({url: '/pages/my/profile'}).then();
+    //             });
+    //         }
+    //         this.setState({preOffered: true});
+    //     }
+    //     this.setState({posting: true});
+    //     //支付宝保证金
+    //     request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res => {
+    //         let data = res.data.result;
+    //         data.package = data.packageValue;
+    //         Taro.requestPayment(data).then(() => {
+    //             //支付已经完成，提醒支付成功并返回上一页面
+    //             Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+    //                 let detail = this.state.detail;
+    //                 detail.deposited = true;
+    //                 this.setState({detail: detail});
+    //             });
+    //             this.setState({posting: false});
+    //         }).catch(() => this.setState({posting: false}));
+    //     })
+    // }
 
     noticeMe() {
         let type = 0;
@@ -198,7 +190,7 @@ export default class Index extends Component<any, any> {
             type = 2;
         }
         if (type > 0) {
-            request.put('/paimai/api/members/messages/toggle', {type: type, performanceId: this.state.detail.id}).then(res => {
+            request.put('/paimai/api/members/messages/toggle', {type: type, roomId: this.state.detail.id}).then(res => {
                 this.setState({message: res.data.result});
             });
         }
@@ -212,39 +204,40 @@ export default class Index extends Component<any, any> {
     render() {
         const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
         const {systemInfo} = this.props;
-
-
         if (!detail) return <PageLoading/>
+
+
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
-
         return (
-            <PageLayout statusBarProps={{title: '同步拍专场详情'}} enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: '直播间详情'}} enableReachBottom={true}>
                 <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
-                    <View><FallbackImage src={utils.resolveUrl(detail.preview)} mode={'widthFix'} className={'block w-full box-border'} /></View>
+                    <View><FallbackImage src={utils.resolveUrl(detail.preview)} mode={'widthFix'} className={'block w-full box-border'}/></View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'text-sm text-red-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
                             className={'py-1 px-2 border border-1 border-solid border-red-500 rounded'}>{item}</Text>)}</View>
                         {detail.state == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
-                        {detail.state == 1 && <View className={'text-red-600 font-bold'}>进行中</View>}
+                        {detail.state == 1 && <View className={'text-red-600 font-bold'}>直播中</View>}
                         {detail.state == 2 && <View className={'text-gray-400 font-bold'}>已结束</View>}
                     </View>
                     <View className={'font-bold text-lg'}>{detail.title}</View>
                     <View className={'space-x-4'}>
-                        <Text className={'font-bold'}>拍卖地点</Text>
-                        <Text>{detail.auctionAddress}</Text>
+                        <Text className={'font-bold'}>开始时间</Text>
+                        <Text>{detail.startTime}</Text>
                     </View>
                     <View className={'space-x-4'}>
-                        <Text className={'font-bold'}>拍卖时间</Text>
-                        <Text>{detail.auctionTimeRange || detail.startTime}</Text>
+                        <Text className={'font-bold'}>结束时间</Text>
+                        <Text>{detail.endTime}</Text>
+                    </View>
+                    <View className={'space-x-4'}>
+                        <Text className={'font-bold'}>主播</Text>
+                        <Text>{detail.mainAnchorName}</Text>
                     </View>
 
                     <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
-                        <Text>拍品{detail.goodsCount}件</Text>
-                        <Text>围观{detail.viewCount}人</Text>
-                        <Text>报名{detail.depositCount}人</Text>
-                        <Text>出价{detail.offerCount}次</Text>
+                        <Text>拍品{goodsList.length}件</Text>
+                        <Text>围观{detail.views}人</Text>
                     </View>
                 </View>
                 <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
@@ -299,17 +292,24 @@ export default class Index extends Component<any, any> {
                 {goodsList.length == 0 && <NoData/>}
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View style={{height: Taro.pxTransform(124)}}/>
-                {!deposited && detail.state < 2 &&
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
-                        <View>
-                            <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
-                                <View>交保证金</View>
-                                <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
-                            </Button>
-                        </View>
-                    </View>
-                }
+                <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
+                      style={{paddingBottom: safeBottom}}>
+                    {detail.state == 0 &&
+                        <Button disabled={true} className={'btn btn-info w-56'}>
+                            <View>直播尚未开始</View>
+                        </Button>
+                    }
+                    {detail.state == 1 &&
+                        <Button onClick={()=>Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className={'btn btn-success w-56'}>
+                            <View>直播中，点击观看</View>
+                        </Button>
+                    }
+                    {detail.state == 2 &&
+                        <Button onClick={()=>Taro.navigateTo({url: `/live/pages/history?roomId=${detail.id}`})} className={'btn btn-primary w-56'}>
+                            <View>直播已结束，观看回放</View>
+                        </Button>
+                    }
+                </View>
             </PageLayout>
         );
     }

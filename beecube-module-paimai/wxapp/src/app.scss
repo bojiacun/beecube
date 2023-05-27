@@ -70,6 +70,9 @@ button, button[plain] {
     &.btn-danger {
         @apply from-red-400 to-red-600 bg-gradient-to-r text-white;
     }
+    &.btn-success {
+        @apply from-green-400 to-green-600 bg-gradient-to-r text-white;
+    }
     &.btn-warning {
         @apply from-amber-400 to-amber-600 bg-gradient-to-r text-white;
     }

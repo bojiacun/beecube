@@ -7,7 +7,7 @@ let ServerEnv = {
     SESSION_SECRET: 'bojinhong',
     COOKIE_NAME: 'RSESSIONID',
     API_BASE_URL: 'http://47.93.52.187:9999',
-    AXIOS_BASE_URL: 'http://localhost:3000',
+    AXIOS_BASE_URL: 'http://localhost:3001',
 };
 
 if (process.env.NODE_ENV === 'development') {
