@@ -7,7 +7,7 @@ import {
     showToastError,
     showToastSuccess
 } from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -17,6 +17,7 @@ import LiveRoomStreamList from "~/pages/paimai/LiveRoomStreamList";
 import RoomGoodsListSelected from "~/pages/paimai/RoomGoodsListSelected";
 import LiveRoomDepositList from "~/pages/paimai/LiveRoomDepositList";
 import LiveRoomOnLineList from "~/pages/paimai/LiveRoomOnLineList";
+import {Delete, Edit, Eye, MoreVertical} from "react-feather";
 
 
 
@@ -186,15 +187,28 @@ const LiveRoomList = (props: any) => {
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'show-goods')}>直播拍品</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'show-onlines')}>在线用户</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'deposits')}>保证金记录</a>
-                        <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'end-now')}>立即结束</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
-                        <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'delete')}>删除</a>
+                        <Dropdown as={'span'} onSelect={(e) => handleOnAction(row, e)}>
+                            <Dropdown.Toggle as={'span'} className={'noafter'}>
+                                <MoreVertical size={16} style={{marginTop: -2}}/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={'deposits'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'me-1'}/>保证金记录</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'show-onlines'}>
+                                    <div className={'d-flex align-items-center'}><Eye size={16} className={'me-1'}/>在线用户</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'edit'}>
+                                    <div className={'d-flex align-items-center'}><Edit size={16} className={'me-1'}/>编辑</div>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey={'delete'}>
+                                    <div className={'d-flex align-items-center'}><Delete size={16} className={'me-1'}/>删除</div>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                     </div>
                 );
             }

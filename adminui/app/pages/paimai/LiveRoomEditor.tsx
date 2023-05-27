@@ -54,7 +54,7 @@ const LiveRoomEditor = (props: any) => {
     }, [postFetcher.state]);
     if (!model) return <></>
 
-    const newModel = {status: 0, type: 1, endTime: '', images: '', ...model};
+    const newModel = {status: 0, type: 1, endTime: '', images: '', streamLayout: 1, ...model};
 
     return (
         <>
@@ -76,7 +76,7 @@ const LiveRoomEditor = (props: any) => {
                                 <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                     <BootstrapInput label={'标题'} name={'title'}/>
                                     <BootstrapInput label={'公告'} name={'notice'} type={'textarea'} />
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>

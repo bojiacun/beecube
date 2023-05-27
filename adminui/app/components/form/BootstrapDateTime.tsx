@@ -20,7 +20,7 @@ const BootstrapDateTime : FC<BootstrapDateTimeProps> = (props) => {
     }
 
     return (
-        <FormGroup>
+        <FormGroup className={'mb-1'}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <DateTimePicker
                 inputName={name}
