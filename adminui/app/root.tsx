@@ -17,6 +17,7 @@ import loaderStyleUrl from '~/styles/loader.css';
 import i18n from '~/libs/i18n/index';
 import LayoutVertical, {links as layoutVerticalLinks} from "~/layouts/layout-vertical/LayoutVertical";
 import LayoutFull from "~/layouts/layout-full/LayoutFull";
+import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/material';
 //@ts-ignore
 import _ from 'lodash';
 import {json, V2_MetaFunction} from "@remix-run/node";
@@ -39,6 +40,8 @@ import {far} from '@fortawesome/free-regular-svg-icons';
 import {requireAuthenticated} from "~/utils/auth.server";
 import ServerEnv from "~/env";
 import {setLocale} from "yup";
+import {withEmotionCache} from "@emotion/react";
+import ClientStyleContext from "~/ClientStyleContext";
 
 setLocale({
     number: {
@@ -97,9 +100,28 @@ export const meta: V2_MetaFunction = () => {
         viewport: "width=device-width,initial-scale=1",
     }];
 }
-const Document: FC<any> = (props) => {
+const Document: FC<any> = withEmotionCache(({ children, title }, emotionCache) => {
     const data = useLoaderData();
     const [themeContext, setThemeContext] = useState(theme);
+    // const clientStyleData = React.useContext(ClientStyleContext);
+    //
+    // // Only executed on client
+    // useEnhancedEffect(() => {
+    //     // re-link sheet container
+    //     emotionCache.sheet.container = document.head;
+    //     // re-inject tags
+    //     const tags = emotionCache.sheet.tags;
+    //     emotionCache.sheet.flush();
+    //     tags.forEach((tag) => {
+    //         // eslint-disable-next-line no-underscore-dangle
+    //         (emotionCache.sheet as any)._insertTag(tag);
+    //     });
+    //     // reset cache to reapply global styles
+    //     clientStyleData.reset();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
+
+
     return (
         <html lang="cn">
         <head>
@@ -107,7 +129,7 @@ const Document: FC<any> = (props) => {
             <Links/>
         </head>
         <body className={themeContext?.layout?.skin == 'dark' ? 'dark-layout' : ''} style={{overflowY: 'auto'}}>
-        {props.children}
+        {children}
         <ScrollRestoration/>
         <script
             dangerouslySetInnerHTML={{
@@ -122,7 +144,7 @@ const Document: FC<any> = (props) => {
         </body>
         </html>
     );
-}
+})
 
 export function ErrorBoundary() {
     const error = useRouteError();
