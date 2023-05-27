@@ -94,7 +94,7 @@
     },
     {
       "label": "专场列表（所有专场）",
-      "url": "/performance/pages/list",
+      "url": "/pages/performance/list",
       "tab": true
     },
     {
@@ -189,7 +189,7 @@
     },
     {
       "label": "一口价分类列表",
-      "url": "/goods/pages/buyouts",
+      "url": "/pages/goods/buyouts",
       "urlSuffix": {
         "label": "标签",
         "value": "class_id"

@@ -28,8 +28,8 @@ export default defineAppConfig({
         'pages/my/profile/email',
         'pages/my/profile/auth',
 
-        '/pages/performance/list',
-        '/pages/goods/list',
+        'pages/performance/list',
+        'pages/goods/buyouts',
     ],
     window: {
         backgroundTextStyle: 'light',
@@ -50,7 +50,6 @@ export default defineAppConfig({
         {
             root: 'goods',
             pages: [
-                'pages/buyouts',
                 'pages/auctions',
                 'pages/detail',
                 'pages/detail2',
@@ -79,7 +78,6 @@ export default defineAppConfig({
                 'pages/detail2',
                 'pages/deadline',
                 'pages/public',
-                'pages/list',
                 'pages/sync',
                 'pages/invite',
                 'pages/invited',
