@@ -17,15 +17,15 @@
     },
     {
       "label": "图文类文章频道页",
-      "url": "/pages/articles/index_normal"
+      "url": "/article/pages/index_normal"
     },
     {
       "label": "视频类文章频道页",
-      "url": "/pages/articles/index_video"
+      "url": "/article/pages/index_video"
     },
     {
       "label": "图文类文章列表(按分类)",
-      "url": "/pages/articles/normal",
+      "url": "/article/pages/normal",
       "urlSuffix": {
         "label": "分类ID",
         "value": "id"
@@ -34,7 +34,7 @@
     },
     {
       "label": "视频类文章列表(按分类)",
-      "url": "/pages/articles/video",
+      "url": "/article/pages/video",
       "urlSuffix": {
         "label": "分类ID",
         "value": "id"
@@ -43,11 +43,11 @@
     },
     {
       "label": "服务指南列表",
-      "url": "/pages/articles/services"
+      "url": "/article/pages/services"
     },
     {
       "label": "文章详情页",
-      "url": "/pages/articles/detail",
+      "url": "/article/pages/detail",
       "urlSuffix": {
         "label": "文章ID",
         "value": "id"
@@ -56,7 +56,7 @@
     },
     {
       "label": "文章详情页(视频类)",
-      "url": "/pages/articles/detail2",
+      "url": "/article/pages/detail2",
       "urlSuffix": {
         "label": "文章ID",
         "value": "id"
@@ -74,18 +74,18 @@
       "suffixOptions": "输入要搜索的标签"
     },
     {
-      "label": "直播间",
-      "url": "/pages/live/room",
+      "label": "直播间详情页",
+      "url": "/live/pages/detail",
       "urlSuffix": {
         "label": "直播间ID",
-        "value": "roomId"
+        "value": "id"
       },
       "suffixOptions": "输入直播间的ID"
     },
 
     {
       "label": "专场列表（按标签筛选）",
-      "url": "/pages/performance/public",
+      "url": "/performance/pages/public",
       "urlSuffix": {
         "label": "标签",
         "value": "tag"
@@ -94,12 +94,12 @@
     },
     {
       "label": "专场列表（所有专场）",
-      "url": "/pages/performance/list",
+      "url": "/performance/pages/list",
       "tab": true
     },
     {
       "label": "限时拍专场列表",
-      "url": "/pages/performance/deadline",
+      "url": "/performance/pages/deadline",
       "urlSuffix": {
         "label": "选择时间",
         "value": "source"
@@ -117,7 +117,7 @@
     },
     {
       "label": "同步拍专场列表",
-      "url": "/pages/performance/sync",
+      "url": "/performance/pages/sync",
       "urlSuffix": {
         "label": "选择时间",
         "value": "source"
@@ -135,7 +135,7 @@
     },
     {
       "label": "专场详情页（同步拍）",
-      "url": "/pages/performance/detail2",
+      "url": "/performance/pages/detail2",
       "urlSuffix": {
         "label": "专场ID",
         "value": "id"
@@ -144,7 +144,7 @@
     },
     {
       "label": "专场详情页（限时拍）",
-      "url": "/pages/performance/detail",
+      "url": "/performance/pages/detail",
       "urlSuffix": {
         "label": "专场ID",
         "value": "id"
@@ -171,7 +171,7 @@
     },
     {
       "label": "拍品分类列表",
-      "url": "/pages/goods/auctions",
+      "url": "/goods/pages/auctions",
       "urlSuffix": {
         "label": "分类",
         "value": "class_id"
@@ -180,7 +180,7 @@
     },
     {
       "label": "拍品详情",
-      "url": "/pages/goods/detail",
+      "url": "/goods/pages/detail",
       "urlSuffix": {
         "label": "ID",
         "value": "id"
@@ -189,7 +189,7 @@
     },
     {
       "label": "一口价分类列表",
-      "url": "/pages/goods/buyouts",
+      "url": "/goods/pages/buyouts",
       "urlSuffix": {
         "label": "标签",
         "value": "class_id"
@@ -199,7 +199,7 @@
     },
     {
       "label": "一口价拍品详情",
-      "url": "/pages/goods/detail2",
+      "url": "/goods/pages/detail2",
       "urlSuffix": {
         "label": "ID",
         "value": "id"
