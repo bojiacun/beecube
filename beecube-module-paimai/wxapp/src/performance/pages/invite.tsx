@@ -41,7 +41,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: '您的朋友邀请您一起参加'+this.state.detail.title,
-            path: '/pages/performance/invite?id=' + this.state.detail.id + '&mid=' + mid
+            path: '/performance/pages/invite?id=' + this.state.detail.id + '&mid=' + mid
         }
     }
     handleOnDateChange(e) {
@@ -84,7 +84,7 @@ export default class Index extends Component<any, any> {
                 this.setState({saving: false});
                 utils.showSuccess(false, '预约成功');
                 setTimeout(()=>{
-                    Taro.navigateTo({url: '/pages/performance/invited?id='+this.state.detail.id}).then();
+                    Taro.navigateTo({url: '/performance/pages/invited?id='+this.state.detail.id}).then();
                 }, 1000);
             }
         }).catch(()=>this.setState({saving: false}));
@@ -141,7 +141,7 @@ export default class Index extends Component<any, any> {
                         </View>
                         <View className={'border-t-1 pt-4 border-gray-200'}>
                             <Navigator className={'flex justify-between items-center'}
-                                       url={'/pages/performance/detail' + (detail.type == 2 ? '2' : '') + '?id=' + detail.id}>
+                                       url={'/performance/pages/detail' + (detail.type == 2 ? '2' : '') + '?id=' + detail.id}>
                                 <View className={'title1'}>
                                     <Text>线上同步拍专场</Text>
                                 </View>
@@ -198,7 +198,7 @@ export default class Index extends Component<any, any> {
                 }
                 {invited != null &&
                     <View className={'m-4'}>
-                        <Button className={'btn btn-info block w-full'} onClick={()=>Taro.navigateTo({url: `/pages/performance/invited?id=${detail.id}`}).then()}>您已预约成功，点击进入核销页面</Button>
+                        <Button className={'btn btn-info block w-full'} onClick={()=>Taro.navigateTo({url: `/performance/pages/invited?id=${detail.id}`}).then()}>您已预约成功，点击进入核销页面</Button>
                     </View>
                 }
             </PageLayout>

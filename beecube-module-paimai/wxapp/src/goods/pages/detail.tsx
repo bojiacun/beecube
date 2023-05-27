@@ -421,7 +421,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.goods?.title,
-            path: '/pages/goods/detail?id=' + this.state.id + '&mid=' + mid
+            path: '/goods/pages/detail?id=' + this.state.id + '&mid=' + mid
         }
     }
 

@@ -163,7 +163,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.detail?.title,
-            path: '/pages/performance/detail?id=' + this.state.id +'&mid='+mid
+            path: '/performance/pages/detail?id=' + this.state.id +'&mid='+mid
         }
     }
     async payDeposit() {
@@ -322,7 +322,7 @@ export default class Index extends Component<any, any> {
                         let radius = 0;
                         return (
                             <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <Navigator url={'/pages/goods/detail?id=' + item.id}>
+                                <Navigator url={'/goods/pages/detail?id=' + item.id}>
                                     <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
                                         <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
                                                        className={'absolute z-0 inset-0 block w-full h-full'}

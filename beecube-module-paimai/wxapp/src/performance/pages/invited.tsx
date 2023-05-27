@@ -39,7 +39,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: '您的朋友邀请您一起参加'+this.state.detail.title,
-            path: '/pages/performance/invite?id=' + this.state.detail.id + '&mid=' + mid
+            path: '/performance/pages/invite?id=' + this.state.detail.id + '&mid=' + mid
         }
     }
     render() {
@@ -68,7 +68,7 @@ export default class Index extends Component<any, any> {
                         </View>
                         <View className={'p-4 border-gray-200 bg-red-100 rounded-lg'}>
                             <Navigator className={'flex justify-between items-center'}
-                                       url={'/pages/performance/detail' + (detail.type == 2 ? '2' : '') + '?id=' + detail.id}>
+                                       url={'/performance/pages/detail' + (detail.type == 2 ? '2' : '') + '?id=' + detail.id}>
                                 <View className={'title1'}>
                                     <Text>线上同步拍专场</Text>
                                 </View>

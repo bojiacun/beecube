@@ -48,11 +48,11 @@ export default class Index extends Component<any, any> {
             return utils.showError('直播尚未开始');
         } else if (startTime.isBefore(nowTime) && endTime.isAfter(nowTime)) {
             //直播进行中
-            Taro.navigateTo({url: '/pages/live/room?roomId=' + liveRoom.id}).then();
+            Taro.navigateTo({url: '/live/pages/room?roomId=' + liveRoom.id}).then();
             return;
         } else if (endTime.isBefore(nowTime)) {
             //直播回放
-            Taro.navigateTo({url: `/pages/live/history?id=${liveRoom.id}`}).then();
+            Taro.navigateTo({url: `/live/pages/history?id=${liveRoom.id}`}).then();
             return;
         }
     }

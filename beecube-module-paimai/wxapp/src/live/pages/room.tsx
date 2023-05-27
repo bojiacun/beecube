@@ -540,7 +540,7 @@ export default class Index extends Component<any, any> {
         let settings = this.props.settings;
         return {
             title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
-            path: '/pages/live/room?mid=' + mid + '&roomId='+this.state.liveRoom.id
+            path: '/live/pages/room?mid=' + mid + '&roomId='+this.state.liveRoom.id
         }
     }
 
@@ -590,7 +590,7 @@ export default class Index extends Component<any, any> {
                                 <ScrollView className="merchandise-list" showScrollbar={false} scrollY={true} scrollX={false} type={'list'}>
                                     {merchandises.map((item) => {
                                         return (
-                                            <Navigator url={'/pages/goods/detail?id=' + item.id}
+                                            <Navigator url={'/goods/pages/detail?id=' + item.id}
                                                        className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden mt-2'}>
                                                 <View className={'relative w-28 h-28'}>
                                                     <FallbackImage
@@ -640,7 +640,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     {pushIndex >= 0 &&
-                        <View onClick={()=>Taro.navigateTo({url: `/pages/goods/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
+                        <View onClick={()=>Taro.navigateTo({url: `/goods/pages/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
                             <Image className="push-mer-img" mode={'aspectFill'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
                                 <View className="push-mer-text">{merchandises[pushIndex].title}</View>

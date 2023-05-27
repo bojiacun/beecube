@@ -17,7 +17,7 @@ const SyncPerformanceItemView: FC<PerformanceItemViewProps> = (props) => {
 
     return (
         <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-            <Navigator url={'/pages/performance/detail2?id=' + item.id}>
+            <Navigator url={'/performance/pages/detail2?id=' + item.id}>
                 <View className={'relative'} style={{width: '100%'}}>
                     <FallbackImage mode={'widthFix'} className={'block w-full'} src={utils.resolveUrl(item.preview)}/>
                     {item.state == 0 && item.startTime != null &&

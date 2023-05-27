@@ -14,7 +14,7 @@ const GoodsItemView:FC<GoodsItemViewProps> = (props) => {
     const {radius = 0, item} = props;
     return (
         <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-            <Navigator url={'/pages/goods/detail?id='+item.id}>
+            <Navigator url={'/goods/pages/detail?id='+item.id}>
                 <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
                     <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}} className={'absolute z-0 inset-0 block w-full h-full'} src={utils.resolveUrl(item.images.split(',')[0])}/>
                 </View>

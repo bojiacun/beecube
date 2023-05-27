@@ -229,7 +229,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
 
                     <View>
-                        <Navigator url={'/pages/articles/services'} className={'flex items-center justify-between p-4'}>
+                        <Navigator url={'/articles/pages/services'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>
                                 <View>帮助中心</View>
@@ -254,7 +254,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
                     {/*{this.state.liveRoom &&*/}
                     {/*    <View>*/}
-                    {/*        <Navigator url={`/pages/live/room?roomId=${this.state.liveRoom.id}&loginType=anchor&roomName=${this.state.liveRoom.title}`} className={'flex items-center justify-between p-4'}>*/}
+                    {/*        <Navigator url={`/live/pages/room?roomId=${this.state.liveRoom.id}&loginType=anchor&roomName=${this.state.liveRoom.title}`} className={'flex items-center justify-between p-4'}>*/}
                     {/*            <View className={'flex items-center space-x-2'}>*/}
                     {/*                <View className={'fa fa-video-camera'} style={{fontSize: 18}}/>*/}
                     {/*                <View>{this.state.liveRoom.title}</View>*/}

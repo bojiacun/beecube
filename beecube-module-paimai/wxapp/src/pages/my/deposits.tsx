@@ -65,13 +65,13 @@ export default class Index extends Component<any, any> {
                         let radius = 0;
                         let link;
                         if(item.performanceType == 1) {
-                            link = `/pages/performance/detail?id=${item.performanceId}`;
+                            link = `/performance/pages/detail?id=${item.performanceId}`;
                         }
                         else if(item.performanceType == 2) {
-                            link = `/pages/performance/detail2?id=${item.performanceId}`;
+                            link = `/performance/pages/detail2?id=${item.performanceId}`;
                         }
                         else {
-                            link = `/pages/goods/detail?id=${item.goodsId}`;
+                            link = `/goods/pages/detail?id=${item.goodsId}`;
                         }
                         return (
                             <Navigator

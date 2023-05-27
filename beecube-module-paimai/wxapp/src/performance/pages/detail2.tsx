@@ -146,7 +146,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.detail?.title,
-            path: '/pages/performance/detail2?id=' + this.state.id +'&mid='+mid
+            path: '/performance/pages/detail2?id=' + this.state.id +'&mid='+mid
         }
     }
     onReachBottom() {
@@ -250,7 +250,7 @@ export default class Index extends Component<any, any> {
                 <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
                     {goodsList.map((item: any) => {
                         return (
-                            <Navigator url={'/pages/goods/detail?id=' + item.id}
+                            <Navigator url={'/goods/pages/detail?id=' + item.id}
                                        className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
                                 <View className={'relative w-28 h-28'}>
                                     <FallbackImage

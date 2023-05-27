@@ -26,11 +26,11 @@ const LiveRoomItemView: FC<LiveRoomItemViewProps> = (props) => {
         }
         else if(startTime.isBefore(nowTime) && endTime.isAfter(nowTime)) {
             //直播进行中
-            Taro.navigateTo({url: '/pages/live/room?roomId=' + liveRoom.id}).then();
+            Taro.navigateTo({url: '/live/pages/room?roomId=' + liveRoom.id}).then();
         }
         else if(endTime.isBefore(nowTime)) {
             //直播回放
-            Taro.navigateTo({url: `/pages/live/history?id=${liveRoom.id}`}).then();
+            Taro.navigateTo({url: `/live/pages/history?id=${liveRoom.id}`}).then();
         }
     }
 

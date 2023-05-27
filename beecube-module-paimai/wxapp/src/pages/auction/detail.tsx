@@ -84,10 +84,10 @@ export default class Index extends Component<any, any> {
                         let radius = 8;
                         let link;
                         if(item.type == 1) {
-                            link = '/pages/performance/detail?id='+item.id;
+                            link = '/performance/pages/detail?id='+item.id;
                         }
                         else {
-                            link = '/pages/performance/detail2?id='+item.id;
+                            link = '/performance/pages/detail2?id='+item.id;
                         }
                         return (
                             <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>

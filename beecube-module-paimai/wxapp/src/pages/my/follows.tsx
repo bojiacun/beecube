@@ -67,7 +67,7 @@ export default class Index extends Component<any, any> {
                             let radius = 8;
                             return (
                                 <View className={'bg-white relative overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                    <Navigator url={(item.type == 1 ? '/pages/goods/detail?id=':'/pages/goods/detail2?id=')+item.id}>
+                                    <Navigator url={(item.type == 1 ? '/goods/pages/detail?id=':'/goods/pages/detail2?id=')+item.id}>
                                         <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
                                             <FallbackImage mode={'aspectFill'} className={'absolute z-0 inset-0 block w-full h-full'} src={utils.resolveUrl(item.images.split(',')[0])}/>
                                         </View>

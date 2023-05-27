@@ -100,7 +100,7 @@ export default class Index extends Component<any, any> {
         const tags = data.tags?.split(',') || [];
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-lg', styles.flow)}>
-                <View onClick={event => this.gotoDetail(event, '/pages/goods/detail2?id=' + data.id)}>
+                <View onClick={event => this.gotoDetail(event, '/goods/pages/detail2?id=' + data.id)}>
                     <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={imgUrl}/>
                     {tags.length > 0 && <View className={'p-2 space-x-2'}>{tags.map((item: any) => {
                         return (

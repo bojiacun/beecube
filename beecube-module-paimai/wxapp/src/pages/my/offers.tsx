@@ -64,7 +64,7 @@ export default class Index extends Component<any, any> {
                     {list.map((item) => {
                         let radius = 0;
                         return (
-                            <Navigator url={`/pages/goods/detail?id=${item.goodsId}`} className={'flex bg-white rounded-lg shadow-lg p-4 space-x-4'}
+                            <Navigator url={`/goods/pages/detail?id=${item.goodsId}`} className={'flex bg-white rounded-lg shadow-lg p-4 space-x-4'}
                                        style={{borderRadius: Taro.pxTransform(radius)}}>
                                 <View className={'w-20 h-20'}>
                                     <FallbackImage className={'w-full h-full'} mode={'aspectFill'} src={item.goods.listCover ? item.goods.listCover: item.goods.images.split(',')[0]} />

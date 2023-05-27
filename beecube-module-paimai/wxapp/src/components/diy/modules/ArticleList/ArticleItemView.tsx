@@ -18,10 +18,10 @@ const ArticleItemView: FC<AuctionItemViewProps> = (props) => {
     const jump2Detail = () =>{
         if(item.type == 2){
             //跳转到视频播放页面
-            Taro.navigateTo({url: '/pages/articles/detail2?id='+item.id});
+            Taro.navigateTo({url: '/articles/pages/detail2?id='+item.id});
         }
         else {
-            Taro.navigateTo({url: '/pages/articles/detail?id='+item.id});
+            Taro.navigateTo({url: '/articles/pages/detail?id='+item.id});
         }
     }
 

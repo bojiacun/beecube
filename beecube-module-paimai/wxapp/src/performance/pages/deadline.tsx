@@ -17,7 +17,7 @@ const tabs: ListViewTabItem[] = [
             let radius = 0;
             return (
                 <View className={'bg-white relative overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                    <Navigator url={'/pages/performance/detail?id=' + data.id}>
+                    <Navigator url={'/performance/pages/detail?id=' + data.id}>
                         <View className={'relative'} style={{width: '100%'}}>
                             <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
@@ -48,7 +48,7 @@ const tabs: ListViewTabItem[] = [
             let radius = 0;
             return (
                 <View className={'bg-white overflow-hidden shadow-outer'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                    <Navigator url={'/pages/performance/detail?id=' + data.id}>
+                    <Navigator url={'/performance/pages/detail?id=' + data.id}>
                         <View className={'relative'} style={{width: '100%'}}>
                             <FallbackImage mode={'widthFix'}
                                            className={'block w-full'} src={utils.resolveUrl(data.preview)}/>
