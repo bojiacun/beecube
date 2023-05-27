@@ -21,6 +21,7 @@ import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
+import cn.winkt.modules.paimai.service.im.message.RoomStateMessage;
 import cn.winkt.modules.paimai.util.TencentLiveTool;
 import cn.winkt.modules.paimai.vo.AppConfigItemVO;
 import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
@@ -42,6 +43,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -224,7 +226,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 
 			stream.setPushAddress(pushAddress);
 			stream.setPlayAddress(playAddress);
-			if(n == 0) {
+			if(n == 1) {
 				stream.setStatus(1);
 			}
 			liveRoomStreamService.updateById(stream);
@@ -237,9 +239,28 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	public Result<?> endNow(@RequestParam String id) {
 		LiveRoom liveRoom = liveRoomService.getById(id);
 		liveRoom.setEndTime(new Date());
+		liveRoom.setState(2);
 		liveRoomService.updateById(liveRoom);
+		RoomStateMessage stateMessage = new RoomStateMessage();
+		stateMessage.setState(2);
+		stateMessage.setAppId(AppContext.getApp());
+		stateMessage.setRoomId(liveRoom.getId());
+		imClientService.sendRoomMessage(liveRoom.getId(), stateMessage, UserMessageType.ROOM_STATE_CHANGED);
 		return Result.OK(true);
 	}
+	 @PutMapping("/start")
+	 public Result<?> startNow(@RequestParam String id) {
+		 LiveRoom liveRoom = liveRoomService.getById(id);
+		 liveRoom.setStartTime(new Date());
+		 liveRoom.setState(1);
+		 liveRoomService.updateById(liveRoom);
+		 RoomStateMessage stateMessage = new RoomStateMessage();
+		 stateMessage.setState(1);
+		 stateMessage.setAppId(AppContext.getApp());
+		 stateMessage.setRoomId(liveRoom.getId());
+		 imClientService.sendRoomMessage(liveRoom.getId(), stateMessage, UserMessageType.ROOM_STATE_CHANGED);
+		 return Result.OK(true);
+	 }
 	/**
 	 * 编辑
 	 *
