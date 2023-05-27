@@ -3,32 +3,8 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/index/search',
         'pages/index/test',
-        'pages/articles/detail',
-        'pages/articles/detail2',
-        'pages/articles/services',
-        'pages/articles/normal',
-        'pages/articles/video',
-        'pages/articles/detail_h5',
-        'pages/articles/index_normal',
-        'pages/articles/index_video',
-        'pages/articles/search',
-
-        'pages/goods/buyouts',
-        'pages/goods/auctions',
-        'pages/goods/detail',
-        'pages/goods/detail2',
-        'pages/goods/offers',
-        'pages/goods/confirm',
         'pages/shop/cart',
         'pages/shop/confirm',
-        'pages/performance/detail',
-        'pages/performance/detail2',
-        'pages/performance/deadline',
-        'pages/performance/public',
-        'pages/performance/list',
-        'pages/performance/sync',
-        'pages/performance/invite',
-        'pages/performance/invited',
         'pages/auction/detail',
         'pages/auction/list',
         'pages/my/index',
@@ -51,10 +27,6 @@ export default defineAppConfig({
         'pages/my/profile/nickname',
         'pages/my/profile/email',
         'pages/my/profile/auth',
-
-        'pages/live/room',
-        'pages/live/history',
-        'pages/live/list'
     ],
     window: {
         backgroundTextStyle: 'light',
@@ -71,7 +43,54 @@ export default defineAppConfig({
             'member/rules',
             'member/withdraw',
         ],
-    }],
+    },
+        {
+            root: 'goods',
+            pages: [
+                'pages/buyouts',
+                'pages/auctions',
+                'pages/detail',
+                'pages/detail2',
+                'pages/offers',
+                'pages/confirm',
+            ],
+        },
+        {
+            root: 'article',
+            pages: [
+                'pages/detail',
+                'pages/detail2',
+                'pages/services',
+                'pages/normal',
+                'pages/video',
+                'pages/detail_h5',
+                'pages/index_normal',
+                'pages/index_video',
+                'pages/search',
+            ]
+        },
+        {
+            root: 'performance',
+            pages: [
+                'pages/detail',
+                'pages/detail2',
+                'pages/deadline',
+                'pages/public',
+                'pages/list',
+                'pages/sync',
+                'pages/invite',
+                'pages/invited',
+            ],
+        },
+        {
+            root: 'live',
+            pages: [
+                'pages/room',
+                'pages/history',
+                'pages/list',
+            ]
+        }
+    ],
     tabBar: {
         list: [
             {
