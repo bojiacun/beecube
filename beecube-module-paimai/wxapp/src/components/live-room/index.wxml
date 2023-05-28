@@ -4,8 +4,9 @@
     <view wx:if="{{streams.length == 1}}">
         <video
             wx:if="{{streams[0]}}"
-            id="{{streams[0].id}}"
+            id="layout-1-{{streams[0].id}}"
             controls="false"
+            is-live="true"
             show-progress="false"
             show-fullscreen-btn="false"
             show-center-play-btn="false"
@@ -24,6 +25,7 @@
     <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
         <video wx:if="{{streams[0]}}" id="layout-1-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"
+               is-live="true"
                bindnetstatus="onPlayNetStateChange"
                controls="{{false}}"
                show-progress="{{false}}"
@@ -37,6 +39,7 @@
         ></video>
         <video wx:if="{{streams[1]}}" id="layout-1-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"
+               is-live="true"
                bindnetstatus="onPlayNetStateChange"
                controls="{{false}}"
                show-progress="{{false}}"
@@ -52,6 +55,7 @@
     <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
         <video wx:if="{{streams[0]}}" id="layout-2-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange"
+               is-live="true"
                bindnetstatus="onPlayNetStateChange"
                controls="{{false}}"
                show-progress="{{false}}"
@@ -66,6 +70,7 @@
         <video wx:if="{{streams[1]}}" id="layout-2-{{streams[1].id}}" src="{{streams[1].playAddress}}" object-fit="{{streams[1].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}" bindstatechange="onPlayStateChange"
                bindnetstatus="onPlayNetStateChange"
+               is-live="true"
                controls="{{false}}"
                show-progress="{{false}}"
                show-fullscreen-btn="{{false}}"

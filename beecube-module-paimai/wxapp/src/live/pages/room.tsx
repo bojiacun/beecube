@@ -38,6 +38,7 @@ export default class Index extends Component<any, any> {
         offers: [],
         deposited: undefined,
         nextPrice: null,
+        playError: false,
     }
 
     options: any;
@@ -68,6 +69,14 @@ export default class Index extends Component<any, any> {
         this.onInputPriceChange = this.onInputPriceChange.bind(this);
         this.offerInputRef = React.createRef();
         this.randomStr = utils.randomString(6);
+        this.handleReplay = this.handleReplay.bind(this);
+    }
+
+    handleReplay(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.setState({playError: false});
+        this.liveRoom.replay();
     }
 
     onMessageReceived(message) {
@@ -194,6 +203,12 @@ export default class Index extends Component<any, any> {
                 }
                 break;
             }
+            case 'playError':
+                this.setState({playError: true});
+                break;
+            case 'playWaiting':
+                this.setState({playError: true});
+                break;
             default: {
                 // console.log('onRoomEvent default: ', e);
                 break;
@@ -450,6 +465,7 @@ export default class Index extends Component<any, any> {
 
     onLoad(options) {
         this.options = options;
+        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'});
         request.get('/paimai/api/live/rooms/' + options.roomId).then(res => {
             let room = res.data.result;
             //注册全局事件
@@ -536,7 +552,7 @@ export default class Index extends Component<any, any> {
         let settings = this.props.settings;
         return {
             title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
-            path: '/live/pages/room?mid=' + mid + '&roomId='+this.state.liveRoom.id
+            path: '/live/pages/detail?mid=' + mid + '&roomId='+this.state.liveRoom.id
         }
     }
 
@@ -549,6 +565,7 @@ export default class Index extends Component<any, any> {
             merchandises,
             pushIndex,
             merBot,
+            playError,
         } = this.state;
         const {systemInfo, context, settings} = this.props;
         const barTop = systemInfo.statusBarHeight;
@@ -573,6 +590,11 @@ export default class Index extends Component<any, any> {
                         onRoomEvent={this.onRoomEvent}
                         bindRoomEvent
                     />
+                    {playError && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-center'}>
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                        <View className={'text-white text-lg z-1 mb-4'}>网络开小差了~~</View>
+                        <Button className={'btn btn-primary z-1'} onClick={this.handleReplay}>点击重试</Button>
+                    </View>}
                     <View className="modals modals-bottom-dialog" hidden={hideModal}>
                         <View className="bottom-dialog-body bottom-pos" animation={animationData}>
                             <View className="merchandise-container">

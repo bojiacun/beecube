@@ -131,6 +131,7 @@ Component({
         cancelText: '拒绝',
         kitoutUser: ''
     },
+    video: null,
     created: function () {
         const sysInfo = wx.getSystemInfoSync();
         if (sysInfo.model && iphones.some(item => sysInfo.model.indexOf(item) > -1)) {
@@ -325,7 +326,6 @@ Component({
             });
         },
         showMerchandise() {
-            console.log('showMerchandise');
             this.triggerEvent('RoomEvent', {
                 tag: 'onMerchandise',
                 content: '',
@@ -480,9 +480,6 @@ Component({
             }
 
         },
-        onNetworkStatus() {
-
-        },
         bindMessageInput: function (e) {
             this.data.inputMessage = e.detail.value;
             if (this.data.inputMessage !== '') {
@@ -553,11 +550,24 @@ Component({
                 self.cancelJoin()
             }
         },
+        replay() {
+            let video = wx.createVideoContext('layout-1-'+this.data.streams[0].id);
+            // video.play();
+        },
+        onNetworkStatus(e) {
+            console.log(e);
+        },
         onPlayError(e) {
             console.log('play error', e);
+            let video = wx.createVideoContext(e.target.id);
+            video.stop();
+            // this.triggerEvent('RoomEvent', {tag: 'playError', e});
         },
         onWaiting(e) {
             console.log('waiting', e);
+            let video = wx.createVideoContext(e.target.id);
+            video.stop();
+            // this.triggerEvent('RoomEvent', {tag: 'playWaiting', e});
         }
     }
 });
