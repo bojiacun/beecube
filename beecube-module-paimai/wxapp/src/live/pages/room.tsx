@@ -159,6 +159,23 @@ export default class Index extends Component<any, any> {
                     utils.navigateBack();
                 }).then();
                 break;
+            case MessageType.ROOM_STATE_CHANGED:
+                let state = message.state;
+                let roomId = message.roomId;
+                let liveRoom = this.state.liveRoom;
+                if(roomId == liveRoom.id) {
+                    if(state == 1) {
+                        this.liveRoom.init();
+                        this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
+                        //查询是否需要缴纳保证金
+                        request.get('/paimai/api/members/deposited/liveroom', {params: {id: liveRoom.id}}).then(res => {
+                            this.setState({deposited: res.data.result});
+                        });
+                    }
+                    liveRoom.state = state;
+                    this.setState({liveRoom: liveRoom});
+                }
+                break;
             default:
                 break;
         }

@@ -276,9 +276,14 @@ public class ServerEventListenerImpl implements ServerEventListener
 					sendLeaveRoom(roomId, from_user_id, "房间不可用");
 					return false;
 				}
-				if(liveRoom.getStartTime().after(new Date())) {
+				if(liveRoom.getState() == 0) {
 					log.debug("直播尚未开始，无法加入房间 {}, {}", roomId, from_user_id);
 					sendLeaveRoom(roomId, from_user_id, "直播尚未开始");
+					return false;
+				}
+				if(liveRoom.getState() == 2) {
+					log.debug("直播已结束，无法加入房间 {}, {}", roomId, from_user_id);
+					sendLeaveRoom(roomId, from_user_id, "直播已结束");
 					return false;
 				}
 				AppVO appVO = appApi.getAppById(AppContext.getApp());
