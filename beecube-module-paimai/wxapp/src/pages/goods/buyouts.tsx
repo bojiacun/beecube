@@ -6,12 +6,12 @@ import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
 import {Navigator, Text, View} from "@tarojs/components";
-import {Swiper} from '@taroify/core';
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
 import {Button, Popup, Stepper, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
+import CustomSwiper from "../../components/swiper";
 
 const numeral = require('numeral');
 
@@ -28,6 +28,7 @@ export default class Index extends Component<any, any> {
         specs: [],
         specId: null,
         swipers: [],
+        tabClassName: 'bg-none',
     }
 
     constructor(props) {
@@ -135,7 +136,7 @@ export default class Index extends Component<any, any> {
             tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
             this.setState({tabs: tabs});
         });
-        request.get('/paimai/api/goods/swipers/list').then(res=>{
+        request.get('/paimai/api/goods/swiper/list').then(res=>{
             this.setState({swipers: res.data.result});
         });
     }
@@ -143,10 +144,18 @@ export default class Index extends Component<any, any> {
     onPullDownRefresh() {
 
     }
+    onPageScroll(e) {
+        if(e.scrollTop >= 180) {
+            this.setState({tabClassName: 'bg-white'});
+        }
+        else {
+            this.setState({tabClassName: 'bg-none'});
+        }
+    }
 
     render() {
         const {settings} = this.props;
-        const {openSpec, specs,swipers} = this.state;
+        const {openSpec, specs,swipers,tabClassName} = this.state;
         let currentSpec;
         if (openSpec) {
             currentSpec = this.getCurrentSpec();
@@ -161,21 +170,8 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
-                {swipers.length > 0 &&
-                    <Swiper>
-                        <Swiper.Indicator />
-                        {swipers.map((item:any)=>{
-                            return (
-                                <Swiper.Item>
-                                    <Navigator url={item.url}>
-                                        <FallbackImage src={item.image} />
-                                    </Navigator>
-                                </Swiper.Item>
-                            );
-                        })}
-                    </Swiper>
-                }
-                <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
+                {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} />}
+                <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
                 <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>
                         <Popup.Close />

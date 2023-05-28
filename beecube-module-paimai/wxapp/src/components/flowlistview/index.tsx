@@ -25,6 +25,8 @@ export interface ListViewProps extends Partial<any> {
     defaultActiveKey?: string|number|null;
     autoRefresh?: boolean;
     fixed?:boolean;
+    tabClassName?: string;
+    className?: string;
 }
 
 const FlowListView: FC<ListViewProps> = (props) => {
@@ -32,7 +34,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
         tabs, onTabChanged = () => {}, dataFetcher,
         tabStyle = 1,
         defaultActiveKey = null,
-        className,
+        className= '',
+        tabClassName = 'bg-white',
         autoRefresh = false,
         fixed = true,
     } = props;
@@ -144,7 +147,7 @@ const FlowListView: FC<ListViewProps> = (props) => {
     }
     return (
         <>
-            {tabStyle == 1 && tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'')}
+            {tabStyle == 1 && tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'', tabClassName)}
                   style={tabStyles}>
                 {tabs.map((tab, index) => {
                     return (
