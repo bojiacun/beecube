@@ -173,12 +173,14 @@ export default class Index extends Component<any, any> {
         if (!this.liveRoom && userInfo && liveRoom) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
-            this.liveRoom.init();
-            this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
-            //查询是否需要缴纳保证金
-            request.get('/paimai/api/members/deposited/liveroom', {params: {id: liveRoom.id}}).then(res => {
-                this.setState({deposited: res.data.result});
-            });
+            if(liveRoom.state == 1) {
+                this.liveRoom.init();
+                this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
+                //查询是否需要缴纳保证金
+                request.get('/paimai/api/members/deposited/liveroom', {params: {id: liveRoom.id}}).then(res => {
+                    this.setState({deposited: res.data.result});
+                });
+            }
         }
     }
 
@@ -586,7 +588,7 @@ export default class Index extends Component<any, any> {
                         isNative={false}
                         liveRoom={liveRoom}
                         streams={liveRoom?.streams || []}
-                        isImReady={context.isImReady && liveRoom}
+                        isImReady={context.isImReady && liveRoom && liveRoom.state == 1}
                         navBarHeight={barTop}
                         settings={this.props.settings}
                         onRoomEvent={this.onRoomEvent}
@@ -597,6 +599,25 @@ export default class Index extends Component<any, any> {
                         <View className={'text-white text-lg z-1 mb-4'}>网络开小差了~~</View>
                         <Button className={'btn btn-primary z-1'} onClick={this.handleReplay}>点击重试</Button>
                     </View>}
+                    {/*直播结束*/}
+                    {liveRoom?.state == 2&& <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                        <View className={'text-white z-1 text-center'}>
+                            <View className={'text-2xl mb-2'}>直播已结束</View>
+                            <View className={'text-sm'}>{liveRoom.views}人看过</View>
+                        </View>
+                        <Button className={'btn btn-primary z-1'} onClick={()=>utils.navigateBack()}>点击返回</Button>
+                    </View>}
+                    {/*直播尚未开始*/}
+                    {liveRoom?.state == 0 && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                        <View className={'text-white z-1 text-center'}>
+                            <View className={'text-2xl mb-2'}>直播未开始</View>
+                            <View className={'text-sm'}>预计开播时间：{liveRoom.startTime}</View>
+                        </View>
+                        <Button className={'btn btn-primary z-1'} onClick={()=>utils.navigateBack()}>点击返回</Button>
+                    </View>}
+
                     <View className="modals modals-bottom-dialog" hidden={hideModal}>
                         <View className="bottom-dialog-body bottom-pos" animation={animationData}>
                             <View className="merchandise-container">

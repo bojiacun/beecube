@@ -134,7 +134,7 @@
     </view>
     <view class="modal-hide" bind:tap="clickFull"></view>
     <view class="bot-bg" style="height:{{meBot}}rpx"></view>
-    <view wx:if="{{!showBeauty}}" class="mmprise" style="bottom:{{mmBot}}rpx">
+    <view wx:if="{{!showBeauty && liveRoom.state == 1}}" class="mmprise" style="bottom:{{mmBot}}rpx">
         <view wx:if="{{preInputShow}}" class="mmprise-con">
             <view class='input-button' catchtap="showInput">
                 说点什么...

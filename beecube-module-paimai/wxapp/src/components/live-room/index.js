@@ -221,7 +221,6 @@ Component({
             // 构建消息的通信协议包（这是SDK底层传输数据的原始数据包对象）
             let p = wx.MBProtocalFactory.createCommonDataSimple(JSON.stringify(message), wx.IMSDK.getLoginInfo().loginUserId, "0", MessageType.JOIN_ROOM);
             // 将消息通过websocket发送出去
-            console.log('执行登录房间操作，发送消息', p);
             wx.IMSDK.sendData(p);
         },
         //输入聚焦
