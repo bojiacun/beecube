@@ -26,6 +26,11 @@
                 {
                     "name": "积分中心",
                     "pathName": "/integral/member/center"
+                },
+                {
+                    "name": "测试直播间",
+                    "pathName": "/live/pages/room",
+                    "query": "roomId=1662498545942417410"
                 }
             ]
         }

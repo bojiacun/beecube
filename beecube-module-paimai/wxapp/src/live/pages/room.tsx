@@ -159,21 +159,17 @@ export default class Index extends Component<any, any> {
     async componentDidUpdate(_prevProps: Readonly<any>, _prevState) {
         const {page} = getCurrentInstance();
         const {userInfo} = this.props.context;
-        const pushIndex = this.state.pushIndex;
-        if (!this.liveRoom && userInfo) {
+        const {liveRoom} = this.state;
+        if (!this.liveRoom && userInfo && liveRoom) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
             this.liveRoom.init();
             this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
             //查询是否需要缴纳保证金
-            request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.liveRoom.id}}).then(res => {
+            request.get('/paimai/api/members/deposited/liveroom', {params: {id: liveRoom.id}}).then(res => {
                 this.setState({deposited: res.data.result});
             });
         }
-        // if(pushIndex != prevState.pushIndex) {
-        //     let addBot = (pushIndex > - 1 ? 130:0)
-        //     this.liveRoom?.setData({meBot: this.state.merBot + addBot, newBot: this.state.newBot + addBot});
-        // }
     }
 
     onRoomEvent(ev) {
