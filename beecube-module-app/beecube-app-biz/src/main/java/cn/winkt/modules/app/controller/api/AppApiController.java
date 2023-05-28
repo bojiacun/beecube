@@ -10,6 +10,7 @@ import cn.winkt.modules.app.service.*;
 import cn.winkt.modules.app.utils.AppTokenUtils;
 import cn.winkt.modules.app.vo.AppVO;
 import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.Date;
@@ -148,6 +150,11 @@ public class AppApiController {
         queryWrapper.eq(AppSetting::getAppId, appId);
         queryWrapper.eq(AppSetting::getGroupKey, groupKey);
         return appSettingService.list(queryWrapper);
+    }
+
+    @GetMapping("/settings/member")
+    public MemberSetting queryMemberSettings() throws InvocationTargetException, IllegalAccessException {
+        return appSettingService.queryMemberSettings();
     }
 
     @PutMapping("/score/change")

@@ -1,23 +1,33 @@
 package cn.winkt.modules.paimai.controller.wxapp;
 
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import cn.winkt.modules.paimai.entity.Article;
 import cn.winkt.modules.paimai.entity.ArticleClass;
+import cn.winkt.modules.paimai.entity.DayTask;
 import cn.winkt.modules.paimai.service.IArticleClassService;
 import cn.winkt.modules.paimai.service.IArticleService;
+import cn.winkt.modules.paimai.service.IDayTaskService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.CommonUtils;
+import org.jeecg.common.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +56,11 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    @Resource
    private IArticleClassService articleClassService;
 
+   @Resource
+   private AppApi appApi;
+
+   @Resource
+   private IDayTaskService dayTaskService;
    /**
     * 分页列表查询
     *
@@ -92,6 +108,7 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    @AutoLog(value = "文章表-通过id查询")
    @ApiOperation(value="文章表-通过id查询", notes="文章表-通过id查询")
    @GetMapping(value = "/queryById")
+   @GlobalTransactional
    public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
        Article article = articleService.getById(id);
        //增加阅读量
@@ -100,6 +117,29 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
 
 
        //每日阅读送积分
+       LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+       MemberSetting memberSetting = appApi.queryMemberSettings();
+       if(loginUser != null && StringUtils.isNotEmpty(memberSetting.getReadIntegral())) {
+           LambdaQueryWrapper<DayTask> queryWrapper = new LambdaQueryWrapper<>();
+           queryWrapper.eq(DayTask::getMemberId, loginUser.getId());
+           queryWrapper.ge(DayTask::getCreateTime, DateUtils.todayZeroTime());
+           queryWrapper.le(DayTask::getCreateTime, DateUtils.todayEndTime());
+           queryWrapper.eq(DayTask::getType, 1);
+           if(dayTaskService.count(queryWrapper) == 0) {
+               ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+               changeMemberScore.setAmount(new BigDecimal(memberSetting.getReadIntegral()));
+               changeMemberScore.setMemberId(loginUser.getId());
+               changeMemberScore.setDescription("每日阅读送积分");
+               appApi.reduceMemberScore(changeMemberScore);
+
+               DayTask dayTask = new DayTask();
+               dayTask.setType(1);
+               dayTask.setMemberId(loginUser.getId());
+               dayTask.setMemberName(loginUser.getRealname());
+               dayTask.setMemberAvatar(loginUser.getAvatar());
+               dayTaskService.save(dayTask);
+           }
+       }
 
        return Result.OK(article);
    }

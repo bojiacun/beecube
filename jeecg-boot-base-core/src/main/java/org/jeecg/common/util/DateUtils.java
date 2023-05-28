@@ -225,6 +225,33 @@ public class DateUtils extends PropertyEditorSupport {
     }
 
     /**
+     * 今天零点时间
+     * @return
+     */
+    public static Date todayZeroTime() {
+        Calendar calendar = getCalendar();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 今天最后时间
+     * @return
+     */
+    public static Date todayEndTime() {
+        Calendar calendar = getCalendar();
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
+    }
+
+
+    /**
      * 日期转换为字符串
      *
      * @param format 日期格式
