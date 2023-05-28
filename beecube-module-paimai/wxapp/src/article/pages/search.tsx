@@ -31,7 +31,7 @@ export default class Index extends Component<any, any> {
     renderVideos(data) {
         return (
             <View className={''}>
-                <Navigator className={'block space-y-2'} url={'/articles/pages/detail2?id=' + data.id}>
+                <Navigator className={'block space-y-2'} url={'/article/pages/detail2?id=' + data.id}>
                     <View className={'rounded-lg overflow-hidden relative'} style={{height: '55vw'}}>
                         <FallbackImage mode={'aspectFill'} className={'w-full h-full'} src={data.preview} />
                         <View className={'absolute z-10 top-0 bottom-0 w-full h-full flex items-center justify-center text-white text-4xl'} style={{backgroundColor: 'rgb(0,0,0,0.3)'}}>

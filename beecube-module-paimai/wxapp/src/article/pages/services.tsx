@@ -79,7 +79,7 @@ export default class Index extends Component<any, any> {
                     {list.map((item) => {
                         return (
                             <View>
-                                <Navigator url={`/articles/pages/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
+                                <Navigator url={`/article/pages/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
                                     <View className={'flex-1 font-bold'}>
                                         {item.title}
                                     </View>

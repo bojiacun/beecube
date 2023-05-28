@@ -142,10 +142,10 @@ export default class Index extends Component<any, any> {
     }
 
     onReachBottom() {
-        this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.id, this.state.page + 1, false).then(() => {
-        });
-        this.setState({page: this.state.page + 1});
+        // this.setState({loadingMore: true, noMore: false});
+        // this.loadData(this.state.id, this.state.page + 1, false).then(() => {
+        // });
+        // this.setState({page: this.state.page + 1});
     }
 
     onPullDownRefresh() {
@@ -290,7 +290,7 @@ export default class Index extends Component<any, any> {
                     })}
                 </View>
                 {goodsList.length == 0 && <NoData/>}
-                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
+                {/*{goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}*/}
                 <View style={{height: Taro.pxTransform(124)}}/>
                 <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
                       style={{paddingBottom: safeBottom}}>

@@ -77,7 +77,7 @@ export default class Index extends Component<any, any> {
                     {list.map((item) => {
                         return (
                             <View>
-                                <Navigator url={`/articles/pages/detail?id=${item.id}`} className={'bg-white space-x-4 py-4 flex items-center'}>
+                                <Navigator url={`/article/pages/detail?id=${item.id}`} className={'bg-white space-x-4 py-4 flex items-center'}>
                                     <View style={{height: 60, width: 60}} className={'overflow-hidden'}>
                                         <FallbackImage mode={'aspectFill'} src={utils.resolveUrl(item.preview)} style={{width: 60, height: 60}} />
                                     </View>

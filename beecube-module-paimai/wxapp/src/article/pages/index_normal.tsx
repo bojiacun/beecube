@@ -40,7 +40,7 @@ export default class Index extends Component<any, any> {
         if(data.outerLink) {
             return (
                 <View className={classNames('py-4', styles.articleItem)}>
-                    <Navigator className={'block flex items-center'} url={'/articles/pages/detail_h5?url=' + encodeURIComponent(data.outerLink)}>
+                    <Navigator className={'block flex items-center'} url={'/article/pages/detail_h5?url=' + encodeURIComponent(data.outerLink)}>
                         <FallbackImage mode={'aspectFill'} className={'rounded block w-24 h-24 flex-none mr-4'} src={data.preview}/>
                         <View className={'flex-1 h-24 flex flex-col justify-between'}>
                             <View className={'font-bold text-lg'}>{data.title}</View>
@@ -52,7 +52,7 @@ export default class Index extends Component<any, any> {
         }
         return (
             <View className={classNames('py-4', styles.articleItem)}>
-                <Navigator className={'block flex items-center'} url={'/articles/pages/detail?id=' + data.id}>
+                <Navigator className={'block flex items-center'} url={'/article/pages/detail?id=' + data.id}>
                     <FallbackImage mode={'aspectFill'} className={'rounded block w-24 h-24 flex-none mr-2'} src={data.preview}/>
                     <View className={'flex-1 h-24 flex flex-col justify-between'}>
                         <View className={'font-bold text-lg'}>{data.title}</View>
