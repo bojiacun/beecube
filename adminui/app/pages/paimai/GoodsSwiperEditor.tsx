@@ -27,7 +27,7 @@ const GoodsSwiperEditor = (props: any) => {
 
 
     useEffect(()=>{
-        searchFetcher.load("/paimai/goods/swipers");
+        searchFetcher.load("/app/links");
     }, []);
 
     useEffect(() => {

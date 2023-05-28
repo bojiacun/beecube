@@ -1,10 +1,11 @@
-import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
+import {Button, FormControl, FormGroup, FormLabel, FormText, InputGroup, Modal} from "react-bootstrap";
 import React, {FC, useEffect, useState} from "react";
 import {useFormikContext} from "formik";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import _ from 'lodash';
 import querystring from "querystring";
+import {useTranslation} from "react-i18next";
 
 export interface LinkItem {
     label: string;
@@ -25,7 +26,7 @@ const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
     const [value, setValue] = useState<string>(name?formik.values[name]:initValue);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedLinkItem, setSelectedLinkItem] = useState<LinkItem>();
-
+    const {t} = useTranslation();
 
     useEffect(() => {
         if(name) {
@@ -86,7 +87,8 @@ const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
         return <></>
     }
     return (
-        <>
+        <FormGroup className={'mb-1'}>
+            <FormLabel htmlFor={name}>{label}</FormLabel>
             <InputGroup>
                 <FormControl
                     name={name}
@@ -97,6 +99,8 @@ const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
                 />
                 <Button onClick={() => setModalVisible(true)}>选择链接</Button>
             </InputGroup>
+            {placeholder && <FormText>{placeholder}</FormText>}
+            {formik.errors[name]&&<FormControl.Feedback type={'invalid'} style={{display: 'block'}}>{t(formik.errors[name]!.toString())}</FormControl.Feedback>}
             <Modal
                 centered={true}
                 size={'lg'}
@@ -119,7 +123,7 @@ const BootstrapLinkSelector : FC<BootstrapLinkSelectProps> = (props: any) => {
                     {renderFooter()}
                 </Modal.Footer>
             </Modal>
-        </>
+        </FormGroup>
     );
 }
 

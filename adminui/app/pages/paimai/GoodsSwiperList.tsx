@@ -76,11 +76,13 @@ const GoodsSwiperList = (props: any) => {
         {
             text: 'ID',
             dataField: 'id',
+            headerStyle: {width: 200},
         },
         {
             text: '图片',
             dataField: 'image',
             isDummyField: true,
+            headerStyle: {width: 200},
             formatter: (cell:any, row:any) => {
                 let previewUrl = row.image;
                 return <FigureImage src={previewUrl} style={{width: 60, height: 60}} />
@@ -89,7 +91,6 @@ const GoodsSwiperList = (props: any) => {
         {
             text: '链接地址',
             dataField: 'url',
-            headerStyle: {width: 100},
         },
         {
             text: '操作',

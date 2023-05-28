@@ -7,9 +7,6 @@ import utils from "../../lib/utils";
 import LineTitle from "../../components/LineTitle";
 import Taro from "@tarojs/taro";
 import FallbackImage from "../../components/FallbackImage";
-import listStyle from "../performance/list.module.scss";
-import classNames from "classnames";
-import TimeCountDowner, {TimeCountDownerMode} from "../../components/TimeCountDowner";
 import NoData from "../../components/nodata";
 
 const numeral = require('numeral');
@@ -49,7 +46,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'px-2 mt-2'}>{item.title}</View>
                     <View className={'px-2 mb-2 text-sm'}>
-                        起拍价 <Text className={'text-red-500'}>RMB</Text> <Text className={'text-red-500 text-lg'}>{numeral(item.startPrice).format('0,0.00')}</Text>
+                        <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-lg'}>{numeral(item.startPrice).format('0,0.00')}</Text>
                     </View>
                 </Navigator>
             </View>

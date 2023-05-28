@@ -49,6 +49,16 @@ public class WxAppGoodsController {
     @Resource
     IGoodsOfferService goodsOfferService;
 
+    @Resource
+    IGoodsSwiperService goodsSwiperService;
+
+
+    @GetMapping(value = "/swiper/list")
+    public Result<List<GoodsSwiper>> goodsSwiperList() {
+        LambdaQueryWrapper<GoodsSwiper> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByAsc(GoodsSwiper::getSortNum);
+        return Result.OK(goodsSwiperService.list(queryWrapper));
+    }
 
     @AutoLog(value = "拍品表-分页列表查询")
     @ApiOperation(value = "拍品表-分页列表查询", notes = "拍品表-分页列表查询")
