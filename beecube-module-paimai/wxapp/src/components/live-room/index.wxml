@@ -1,7 +1,7 @@
 <!-- components/live-room/index.wxml -->
 <wxs src="../lib/stringUtil.wxs" module="stringUtil"/>
 <view class="live-room-container">
-    <view wx:if="{{streams.length == 1}}">
+    <view wx:if="{{liveRoom.state == 1 && streams.length == 1}}">
         <video
             wx:if="{{streams[0]}}"
             id="layout-1-{{streams[0].id}}"
@@ -22,7 +22,7 @@
         >
         </video>
     </view>
-    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
+    <view wx:elif="{{liveRoom.state == 1 && streams.length == 2 && liveRoom.streamLayout == 1}}" class="layout-1">
         <video wx:if="{{streams[0]}}" id="layout-1-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"
                is-live="true"
@@ -52,7 +52,7 @@
                bindwaiting="onWaiting"
         ></video>
     </view>
-    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
+    <view wx:elif="{{liveRoom.state == 1 && streams.length == 2 && liveRoom.streamLayout == 2}}" class="layout-2">
         <video wx:if="{{streams[0]}}" id="layout-2-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"  bindstatechange="onPlayStateChange"
                is-live="true"
@@ -82,7 +82,7 @@
                bindwaiting="onWaiting"
         ></video>
     </view>
-    <view wx:elif="{{streams.length == 2 && liveRoom.streamLayout == 3}}" class="layout-3">
+    <view wx:elif="{{liveRoom.state == 1 && streams.length == 2 && liveRoom.streamLayout == 3}}" class="layout-3">
         <video wx:if="{{streams[0]}}" id="layout-3-{{streams[0].id}}" src="{{streams[0].playAddress}}" object-fit="{{streams[0].objectFit}}"
                picture-in-picture-mode="{{pictureInPictureMode}}"
                bindnetstatus="onPlayNetStateChange"

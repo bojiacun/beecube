@@ -550,9 +550,9 @@ Component({
                 self.cancelJoin()
             }
         },
-        replay() {
-            let video = wx.createVideoContext('layout-1-'+this.data.streams[0].id);
-            // video.play();
+        replay(e) {
+            let video = wx.createVideoContext(e.target.id);
+            video.play();
         },
         onNetworkStatus(e) {
             console.log(e);
@@ -561,13 +561,13 @@ Component({
             console.log('play error', e);
             let video = wx.createVideoContext(e.target.id);
             video.stop();
-            // this.triggerEvent('RoomEvent', {tag: 'playError', e});
+            this.triggerEvent('RoomEvent', {tag: 'playError', e});
         },
         onWaiting(e) {
             console.log('waiting', e);
             let video = wx.createVideoContext(e.target.id);
             video.stop();
-            // this.triggerEvent('RoomEvent', {tag: 'playWaiting', e});
+            this.triggerEvent('RoomEvent', {tag: 'playWaiting', e});
         }
     }
 });

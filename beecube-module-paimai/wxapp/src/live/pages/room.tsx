@@ -10,6 +10,7 @@ import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
 import classNames from "classnames";
+import PageLoading from "../../components/pageloading";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -75,8 +76,8 @@ export default class Index extends Component<any, any> {
     handleReplay(e) {
         e.stopPropagation();
         e.preventDefault();
-        this.setState({playError: false});
-        this.liveRoom.replay();
+        this.setState({playError: false, liveRoom: {...this.state.liveRoom}});
+        this.liveRoom.replay(e);
     }
 
     onMessageReceived(message) {
@@ -572,6 +573,7 @@ export default class Index extends Component<any, any> {
         let rect = Taro.getMenuButtonBoundingClientRect();
         let gap = rect.top - systemInfo.statusBarHeight; //动态计算每台手机状态栏到胶囊按钮间距
         let navBarHeight = gap + rect.bottom;
+
         // @ts-ignore
         return (
             <>
