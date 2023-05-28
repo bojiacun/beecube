@@ -147,8 +147,15 @@ export default class Index extends Component<any, any> {
             currentSpec = this.getCurrentSpec();
         }
 
+        const title = (
+            <View onClick={()=>Taro.navigateTo({url: 'search'})}>
+                <Text className={'mr-1'}>{settings.buyoutListTitle || '一口价'}</Text>
+                <Text className={'fa fa-search'} />
+            </View>
+        );
+
         return (
-            <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价'}} enableReachBottom={true} showTabBar={true}>
+            <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
                 <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>

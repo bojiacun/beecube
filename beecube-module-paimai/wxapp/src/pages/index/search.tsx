@@ -32,7 +32,7 @@ export default class Index extends Component<any, any> {
     doSearch(key: string) {
         utils.showLoading();
         Promise.all([
-            request.get('/paimai/api/goods/list', {params: {key:key}}),
+            request.get('/paimai/api/goods/list', {params: {key:key, type: 1}}),
             request.get('/paimai/api/performances/list', {params: {key:key}})
         ]).then((reses:any)=>{
             utils.hideLoading();

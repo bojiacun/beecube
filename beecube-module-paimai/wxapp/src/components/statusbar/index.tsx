@@ -1,6 +1,6 @@
 import {Image, Text, View} from "@tarojs/components";
 import Taro, {useDidShow} from '@tarojs/taro';
-import React, {useState} from "react";
+import React, {ReactElement, useState} from "react";
 import styles from './index.module.scss';
 import {useSelector} from "react-redux";
 import classNames from "classnames";
@@ -10,7 +10,7 @@ import utils from "../../lib/utils";
 
 export declare interface StatusbarProps {
     isFixed?: boolean;
-    title?: string;
+    title?: string|ReactElement;
     titleCenter?: boolean;
     button?: React.ReactElement;
     hide?: boolean;
@@ -65,6 +65,13 @@ const StatusBar = (props: StatusbarProps): any => {
 
     if(isFixed) navigatorBarStyle.position = 'fixed';
 
+    const renderTitle = () => {
+        if(React.isValidElement(title)) {
+            return title;
+        }
+        return <Text>{title}</Text>
+    }
+
     return (
         <View className={classNames(styles.status_bar, className)} style={{...navigatorBarStyle, ...style}}>
             {barTop > 0 && <View style={{height: barTop, width: '100%'}}></View>}
@@ -76,7 +83,7 @@ const StatusBar = (props: StatusbarProps): any => {
                     <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
                         <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
                     </View>}
-                {!logo && <Text>{title}</Text>}
+                {!logo && renderTitle()}
                 {logo && <Image src={utils.resolveUrl(logo)} style={{height: '90%'}} mode={'heightFix'} className={'inline-block box-border'}/>}
             </View>
         </View>
