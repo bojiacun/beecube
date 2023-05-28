@@ -261,7 +261,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 		 stateMessage.setState(1);
 		 stateMessage.setAppId(AppContext.getApp());
 		 stateMessage.setRoomId(liveRoom.getId());
-		 imClientService.sendRoomMessage(liveRoom.getId(), stateMessage, UserMessageType.ROOM_STATE_CHANGED);
+		 imClientService.sendAppMessage(stateMessage, UserMessageType.ROOM_STATE_CHANGED);
 		 return Result.OK(true);
 	 }
 	/**
