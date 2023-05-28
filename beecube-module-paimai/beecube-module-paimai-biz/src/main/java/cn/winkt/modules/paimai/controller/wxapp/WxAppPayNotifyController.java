@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.controller.wxapp;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/notify")
@@ -110,15 +112,17 @@ public class WxAppPayNotifyController {
         goodsOrderService.updateById(goodsOrder);
 
         //设置赠送积分
-        ChangeMemberScore changeMemberScore = new ChangeMemberScore();
-        changeMemberScore.setDescription(String.format("消费送积分, 金额%s", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING)));
-        changeMemberScore.setMemberId(goodsOrder.getMemberId());
-        changeMemberScore.setAmount(BigDecimal.valueOf(goodsOrder.getPayedPrice()));
-        try {
-            appApi.reduceMemberScore(changeMemberScore);
-        }
-        catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+        MemberSetting memberSetting = appApi.queryMemberSettings();
+        if(memberSetting != null && Objects.equals(memberSetting.getConsumeIntegral(), "1")) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setDescription(String.format("消费送积分, 金额%s", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING)));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setAmount(BigDecimal.valueOf(goodsOrder.getPayedPrice()));
+            try {
+                appApi.reduceMemberScore(changeMemberScore);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
         return WxPayNotifyResponse.success("成功");
     }

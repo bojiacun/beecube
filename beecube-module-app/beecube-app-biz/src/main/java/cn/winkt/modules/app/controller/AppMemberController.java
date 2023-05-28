@@ -1,5 +1,7 @@
 package cn.winkt.modules.app.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -7,9 +9,13 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.service.IAppSettingService;
+import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jeecg.common.api.vo.Result;
@@ -54,6 +60,9 @@ import io.swagger.annotations.ApiOperation;
 public class AppMemberController extends JeecgController<AppMember, IAppMemberService> {
 	@Autowired
 	private IAppMemberService appMemberService;
+
+	@Resource
+	private IAppSettingService appSettingService;
 	
 	/**
 	 * 分页列表查询
@@ -126,7 +135,16 @@ public class AppMemberController extends JeecgController<AppMember, IAppMemberSe
 	@AutoLog(value = "应用会员表-编辑")
 	@ApiOperation(value="应用会员表-编辑", notes="应用会员表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-	public Result<?> edit(@RequestBody AppMember appMember) {
+	public Result<?> edit(@RequestBody AppMember appMember) throws InvocationTargetException, IllegalAccessException {
+		AppMember old = appMemberService.getById(appMember.getId());
+		//判断是不是通过实名认证
+		if(old.getAuthStatus() != 2 && appMember.getAuthStatus() == 2) {
+			//实名认证赠送积分
+			MemberSetting memberSetting = appSettingService.queryMemberSettings();
+			if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getAuthRealIntegral())) {
+				appMemberService.inScore(appMember.getId(), new BigDecimal(memberSetting.getAuthRealIntegral()), "实名认证送积分");
+			}
+		}
 		appMemberService.updateById(appMember);
 		return Result.OK("编辑成功!");
 	}

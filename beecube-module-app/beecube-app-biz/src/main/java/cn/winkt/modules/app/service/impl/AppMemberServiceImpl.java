@@ -71,6 +71,9 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
     @Transactional(rollbackFor = Exception.class)
     @JLock(lockKey = AppConstant.APP_MEMBER_SCORE_LOCK)
     public void inScore(String memberId, BigDecimal amount, String description) {
+        if(amount.compareTo(BigDecimal.ZERO) <=0 ) {
+            return;
+        }
         AppMemberScoreRecord record = new AppMemberScoreRecord();
         record.setType(1);
         record.setMemberId(memberId);
@@ -86,6 +89,9 @@ public class AppMemberServiceImpl extends ServiceImpl<AppMemberMapper, AppMember
     @Transactional(rollbackFor = Exception.class)
     @JLock(lockKey = AppConstant.APP_MEMBER_SCORE_LOCK)
     public void outScore(String memberId, BigDecimal amount, String description) {
+        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
         AppMember appMember = appMemberMapper.selectById(memberId);
         if(appMember.getScore().compareTo(amount) < 0) {
             throw new JeecgBootException("积分不足");
