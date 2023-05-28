@@ -5,7 +5,8 @@ import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
-import {Text, View} from "@tarojs/components";
+import {Navigator, Text, View} from "@tarojs/components";
+import {Swiper} from '@taroify/core';
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
 import {Button, Popup, Stepper, Tag} from "@taroify/core";
@@ -26,6 +27,7 @@ export default class Index extends Component<any, any> {
         openSpec: false,
         specs: [],
         specId: null,
+        swipers: [],
     }
 
     constructor(props) {
@@ -133,6 +135,9 @@ export default class Index extends Component<any, any> {
             tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
             this.setState({tabs: tabs});
         });
+        request.get('/paimai/api/goods/swipers/list').then(res=>{
+            this.setState({swipers: res.data.result});
+        });
     }
 
     onPullDownRefresh() {
@@ -141,7 +146,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
-        const {openSpec, specs} = this.state;
+        const {openSpec, specs,swipers} = this.state;
         let currentSpec;
         if (openSpec) {
             currentSpec = this.getCurrentSpec();
@@ -156,6 +161,20 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
+                {swipers.length > 0 &&
+                    <Swiper>
+                        <Swiper.Indicator />
+                        {swipers.map((item:any)=>{
+                            return (
+                                <Swiper.Item>
+                                    <Navigator url={item.url}>
+                                        <FallbackImage src={item.image} />
+                                    </Navigator>
+                                </Swiper.Item>
+                            );
+                        })}
+                    </Swiper>
+                }
                 <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData}/>
                 <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>
