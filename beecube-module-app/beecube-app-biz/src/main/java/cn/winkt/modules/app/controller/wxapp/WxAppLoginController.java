@@ -72,7 +72,6 @@ public class WxAppLoginController {
                     appMemberService.inScore(appMember.getId(), newMemberIntegral, "新用户赠送积分");
                 }
                 BigDecimal shareIntegral = new BigDecimal(memberSetting.getShareIntegral());
-                BigDecimal maxShareIntegral = new BigDecimal(memberSetting.getShareMaxIntegral());
                 if(shareIntegral.compareTo(BigDecimal.ZERO) > 0) {
                     appMemberService.inScore(mid, shareIntegral, "分享用户获得积分");
                 }

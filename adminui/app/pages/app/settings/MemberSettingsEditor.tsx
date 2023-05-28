@@ -43,7 +43,6 @@ const MemberSettingsEditor = (props:any) => {
                         <BootstrapInput label={'每日阅读送积分'} name={'readIntegral'} placeholder={'每日阅读送积分'} />
                         <BootstrapInput label={'每日首单送积分'} name={'buyIntegral'} placeholder={'每日首单送积分'} />
                         <BootstrapInput label={'每日充值送积分'} name={'rechargeIntegral'} placeholder={'每日首次充值赠送积分'} />
-                        <BootstrapInput label={'单日分享最高积分'} name={'shareMaxIntegral'} placeholder={'单日分享最高积分'} />
                         <BootstrapInput label={'签到周期'} name={'signinCycle'} placeholder={'签到周期赠送的积分，例如100,200,300,400,500'} />
                         <BootstrapSwitch label={'消费送积分'} name={'consumeIntegral'} />
                         <BootstrapInput label={'提现金额'} name={'minWithdrawIntegral'} placeholder={'最小提现金额'} />
