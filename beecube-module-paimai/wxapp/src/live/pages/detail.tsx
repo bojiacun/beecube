@@ -5,7 +5,6 @@ import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import {Button, Navigator, Text, View} from "@tarojs/components";
-import LoadMore from "../../components/loadmore";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import './detail.scss';
@@ -89,20 +88,29 @@ export default class Index extends Component<any, any> {
     onMessageReceived(message) {
         const {goodsList} = this.state;
         if (!goodsList) return;
-        goodsList?.forEach(g => {
-            if (g.id == message.goodsId) {
-                switch (message.type) {
-                    case MessageType.GOODS_UPDATE:
+        switch (message.type) {
+            case MessageType.GOODS_UPDATE:
+                goodsList?.forEach(g => {
+                    if (g.id == message.goodsId) {
                         g.startTime = message.startTime;
                         g.endTime = message.endTime;
                         g.actualEndTime = message.actualEndTime;
                         g.dealPrice = message.dealPrice;
                         g.state = message.state;
-                        break;
+                        this.setState({goodsList: goodsList});
+                    }
+                });
+                break;
+            case MessageType.ROOM_STATE_CHANGED:
+                let state = message.state;
+                let roomId = message.roomId;
+                let detail = this.state.detail;
+                if(roomId == detail.id) {
+                    detail.state = state;
+                    this.setState({detail: detail});
                 }
-                this.setState({goodsList: goodsList});
-            }
-        });
+                break;
+        }
     }
 
     componentDidShow() {
@@ -149,9 +157,9 @@ export default class Index extends Component<any, any> {
     }
 
     onPullDownRefresh() {
-        utils.showLoading();
-        this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
-        this.setState({page: 1});
+        // utils.showLoading();
+        // this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
+        // this.setState({page: 1});
     }
 
     // async payDeposit() {
@@ -202,7 +210,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
+        const {detail, goodsList} = this.state;
         const {systemInfo} = this.props;
         if (!detail) return <PageLoading/>
 
@@ -300,12 +308,12 @@ export default class Index extends Component<any, any> {
                         </Button>
                     }
                     {detail.state == 1 &&
-                        <Button onClick={()=>Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className={'btn btn-success w-56'}>
+                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className={'btn btn-success w-56'}>
                             <View>直播中，点击观看</View>
                         </Button>
                     }
                     {detail.state == 2 &&
-                        <Button onClick={()=>Taro.navigateTo({url: `/live/pages/history?roomId=${detail.id}`})} className={'btn btn-primary w-56'}>
+                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?roomId=${detail.id}`})} className={'btn btn-primary w-56'}>
                             <View>直播已结束，观看回放</View>
                         </Button>
                     }
