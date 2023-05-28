@@ -129,6 +129,7 @@ export default class Index extends Component<any, any> {
             let tabs = classes.map((cls) => {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
             });
+            tabs.unshift({label: '推荐', id: "-1", template: this.renderTemplate});
             tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
             this.setState({tabs: tabs});
         });

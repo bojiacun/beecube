@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/goods")
@@ -57,6 +58,11 @@ public class WxAppGoodsController {
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+        if(Objects.equals(req.getParameter("classId"), "-1")) {
+            //查询推荐产品
+            queryWrapper.clear();
+            queryWrapper.eq("recommend", 1);
+        }
         queryWrapper.eq("type", 2);
         queryWrapper.eq("status", 1);
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
