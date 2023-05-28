@@ -97,6 +97,10 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        //增加阅读量
        article.setViews(article.getViews()+1);
        articleService.updateById(article);
+
+
+       //每日阅读送积分
+
        return Result.OK(article);
    }
 
