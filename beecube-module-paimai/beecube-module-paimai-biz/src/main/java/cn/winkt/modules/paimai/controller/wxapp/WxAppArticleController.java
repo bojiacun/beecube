@@ -108,7 +108,7 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
    @AutoLog(value = "文章表-通过id查询")
    @ApiOperation(value="文章表-通过id查询", notes="文章表-通过id查询")
    @GetMapping(value = "/queryById")
-   @GlobalTransactional
+   @GlobalTransactional(rollbackFor = Exception.class)
    public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
        Article article = articleService.getById(id);
        //增加阅读量
@@ -120,24 +120,13 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
        MemberSetting memberSetting = appApi.queryMemberSettings();
        if(loginUser != null && StringUtils.isNotEmpty(memberSetting.getReadIntegral())) {
-           LambdaQueryWrapper<DayTask> queryWrapper = new LambdaQueryWrapper<>();
-           queryWrapper.eq(DayTask::getMemberId, loginUser.getId());
-           queryWrapper.ge(DayTask::getCreateTime, DateUtils.todayZeroTime());
-           queryWrapper.le(DayTask::getCreateTime, DateUtils.todayEndTime());
-           queryWrapper.eq(DayTask::getType, 1);
-           if(dayTaskService.count(queryWrapper) == 0) {
+           if(!dayTaskService.todayTasked(1)) {
                ChangeMemberScore changeMemberScore = new ChangeMemberScore();
                changeMemberScore.setAmount(new BigDecimal(memberSetting.getReadIntegral()));
                changeMemberScore.setMemberId(loginUser.getId());
                changeMemberScore.setDescription("每日阅读送积分");
                appApi.reduceMemberScore(changeMemberScore);
-
-               DayTask dayTask = new DayTask();
-               dayTask.setType(1);
-               dayTask.setMemberId(loginUser.getId());
-               dayTask.setMemberName(loginUser.getRealname());
-               dayTask.setMemberAvatar(loginUser.getAvatar());
-               dayTaskService.save(dayTask);
+               dayTaskService.saveTask(1);
            }
        }
 

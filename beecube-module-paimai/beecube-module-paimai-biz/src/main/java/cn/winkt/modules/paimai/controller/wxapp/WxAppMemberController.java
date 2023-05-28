@@ -4,6 +4,7 @@ package cn.winkt.modules.paimai.controller.wxapp;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
@@ -78,6 +79,10 @@ public class WxAppMemberController {
     ILiveRoomService liveRoomService;
     @Resource
     AppApi appApi;
+
+    @Resource
+    private IDayTaskService dayTaskService;
+
     @Resource
     IPayLogService payLogService;
     @Resource
@@ -735,7 +740,7 @@ public class WxAppMemberController {
                 goodsOrderSettlementService.save(settlement);
             }
 
-            if(ticket != null && coupon != null) {
+            if(ticket != null) {
                 ticket.setStatus(1);
                 ticket.setUsedTime(new Date());
                 ticket.setUseOrderId(goodsOrder.getId());
@@ -779,12 +784,26 @@ public class WxAppMemberController {
             });
 
 
+            //每日首次下单送积分
+            MemberSetting memberSetting = appApi.queryMemberSettings();
+            if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral()) && !dayTaskService.todayTasked(2)) {
+                ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+                changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
+                changeMemberScore.setMemberId(loginUser.getId());
+                changeMemberScore.setDescription("每日下单送积分");
+                appApi.reduceMemberScore(changeMemberScore);
+                dayTaskService.saveTask(2);
+            }
+
+
             PayLog payLog = getPayLog(goodsOrder.getId());
             AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
 
             WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付一口价订单").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";"))).build();
             WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
             redissonLockClient.unlock(lock);
+
+
             return Result.OK("", wxPayService.createOrder(request));
         } else {
             return Result.error("下单失败");

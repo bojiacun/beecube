@@ -11,4 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDayTaskService extends IService<DayTask> {
 
+    boolean todayTasked(int type);
+
+    void saveTask(int type);
 }
