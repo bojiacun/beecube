@@ -57,7 +57,7 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
     @Override
     public boolean isStarted(LiveRoom liveRoom) {
         Date now = new Date();
-        return liveRoom.getStartTime().before(now);
+        return liveRoom.getStartTime().before(now) || liveRoom.getState() == 1;
     }
 
     @Override
@@ -72,6 +72,6 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
 
     @Override
     public boolean isEnded(LiveRoom liveRoom) {
-        return liveRoom.getEndTime().before(new Date());
+        return liveRoom.getEndTime().before(new Date()) || liveRoom.getState() == 2;
     }
 }
