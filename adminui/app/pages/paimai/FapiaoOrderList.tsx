@@ -6,6 +6,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import {User} from "react-feather";
+import FapiaoDeliveryConfirmEditor from "~/pages/paimai/FapiaoDeliveryConfirmEditor";
 
 
 const ORDER_STATUS_COLORS:any = {
