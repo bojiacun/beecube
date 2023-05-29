@@ -1,18 +1,10 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {
-    DefaultListSearchParams,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
-} from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, Image, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
-import FigureImage from "react-bootstrap/FigureImage";
-import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
 import {User} from "react-feather";
 
 
@@ -36,15 +28,15 @@ const OrderList = (props: any) => {
     }
 
     useEffect(() => {
-        if (searchFetcher.data) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
 
     useEffect(() => {
-        if (editFetcher.data && editFetcher.type === 'done') {
+        if (getFetcherState(editFetcher) === FetcherState.DONE) {
             if (editFetcher.data.success) {
-                showToastSuccess(editModal.id ? '修改成功' : '新建成功');
+                showToastSuccess(editModal.id ? '处理成功' : '处理成功');
                 searchFetcher.submit(searchState, {method: 'get'});
                 setEditModal(null);
             } else {
@@ -52,11 +44,12 @@ const OrderList = (props: any) => {
             }
         }
     }, [editFetcher.state]);
+
     useEffect(() => {
-        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+        if (getFetcherState(deleteFetcher) === FetcherState.DONE) {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
-                showToastSuccess('确认成功');
+                showToastSuccess('拒绝成功');
                 searchFetcher.submit(searchState, {method: 'get'});
             } else {
                 showToastError(deleteFetcher.data.message);
@@ -66,7 +59,7 @@ const OrderList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
-            case 'delivery':
+            case 'pass':
                 //编辑
                 setEditModal(row);
                 break;
@@ -227,7 +220,7 @@ const OrderList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            {editModal && <DeliveryConfirmEditor model={editModal} onHide={()=>{
+            {editModal && <FapiaoDeliveryConfirmEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}
