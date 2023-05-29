@@ -176,6 +176,10 @@ const OrderList = (props: any) => {
             dataField: 'type_dictText',
         },
         {
+            text: '是否开票',
+            dataField: 'fapiaoStatus_dictText',
+        },
+        {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 180},

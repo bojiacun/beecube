@@ -122,7 +122,7 @@ public class GoodsOrder {
 
 	@Excel(name = "发票状态（0未申请、1申请中、2已开票）", width = 15)
 	@ApiModelProperty(value = "发票状态（0未申请、1申请中、2已开票")
-	@Dict(dicCode = "paimai_fapiao_order_status")
+	@Dict(dicCode = "paimai_order_fapiao_status")
 	private Integer fapiaoStatus;
 
 	private String couponId;
