@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -48,6 +49,26 @@ public class FapiaoOrder {
 	@Excel(name = "申请人头像", width = 15)
     @ApiModelProperty(value = "申请人头像")
 	private java.lang.String memberAvatar;
+
+	@Excel(name = "申请人邮箱", width = 15)
+	@ApiModelProperty(value = "申请人邮箱")
+	private java.lang.String memberEmail;
+
+
+	private java.lang.String deliveryInfo;
+	private java.lang.String deliveryUsername;
+	private java.lang.String deliveryPhone;
+	private java.lang.String deliveryProvince;
+	private java.lang.String deliveryCity;
+	private java.lang.String deliveryDistrict;
+	private java.lang.String deliveryAddress;
+	private java.lang.String deliveryId;
+	private String deliveryNo;
+	private String deliveryCode;
+
+	private String title;
+	private String taxCode;
+
 	/**开票订单ID集合*/
 	@Excel(name = "开票订单ID集合", width = 15)
     @ApiModelProperty(value = "开票订单ID集合")
@@ -62,7 +83,13 @@ public class FapiaoOrder {
 	/**申请状态0为拒绝、1为审核中、2为已开票*/
 	@Excel(name = "申请状态0为拒绝、1为审核中、2为已开票", width = 15)
     @ApiModelProperty(value = "申请状态0为拒绝、1为审核中、2为已开票")
+	@Dict(dicCode = "winkt_fapiao_order_status")
 	private java.lang.Integer status;
+
+	@Excel(name = "开票种类1为个人，2为企业", width = 15)
+	@ApiModelProperty(value = "开票种类1为个人，2为企业")
+	@Dict(dicCode = "winkt_fapiao_order_type")
+	private java.lang.Integer type;
 	/**appId*/
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")

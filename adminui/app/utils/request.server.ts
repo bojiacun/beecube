@@ -273,6 +273,13 @@ export const API_PAIMAI_DEPOSIT_LIST = `${BASE_URL}/paimai/deposits/list`;
 export const API_PAIMAI_DEPOSIT_REFUND = `${BASE_URL}/paimai/deposits/refund`;
 export const API_PAIMAI_FOLLOW_LIST = `${BASE_URL}/paimai/follows/list`;
 
+
+export const API_PAIMAI_FAPIAO_ORDER_LIST = `${BASE_URL}/paimai/fapiao/orders/list`;
+export const API_PAIMAI_FAPIAO_ORDER_ADD = `${BASE_URL}/paimai/fapiao/orders/add`;
+export const API_PAIMAI_FAPIAO_ORDER_EDIT = `${BASE_URL}/paimai/fapiao/orders/edit`;
+export const API_PAIMAI_FAPIAO_ORDER_DELETE = `${BASE_URL}/paimai/fapiao/orders/delete`;
+
+
 export const API_PAIMAI_ORDER_LIST = `${BASE_URL}/paimai/orders/list`;
 export const API_PAIMAI_INTEGRAL_ORDER_LIST = `${BASE_URL}/paimai/integral/orders/list`;
 export const API_PAIMAI_ORDER_DELIVERY = `${BASE_URL}/paimai/orders/delivery`;
