@@ -84,12 +84,11 @@ public class GoodsVO {
 
     private java.util.Date actualEndTime;
     /**图片*/
-
     private java.lang.String images;
     /**状态（0下架1上架）*/
     @Dict(dicCode = "paimai_goods_status")
     private java.lang.Integer status;
-
+    private Integer maxIntegralPercent;
     private Integer count;
     private Integer viewCount;
     private Integer offerCount;
