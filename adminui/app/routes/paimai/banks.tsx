@@ -3,7 +3,7 @@ import {requireAuthenticated} from "~/utils/auth.server";
 import _ from "lodash";
 import querystring from "querystring";
 import {DefaultListSearchParams, defaultRouteCatchBoundary, defaultRouteErrorBoundary} from "~/utils/utils";
-import {API_PAIMAI_COUPON_LIST, requestWithToken} from "~/utils/request.server";
+import {API_PAIMAI_BANK_LIST, requestWithToken} from "~/utils/request.server";
 import {withPageLoading} from "~/utils/components";
 import BankList from "~/pages/paimai/BankList";
 export const ErrorBoundary = defaultRouteErrorBoundary;
@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({request}) => {
     else {
         queryString = '?' + url.searchParams.toString();
     }
-    const result = await requestWithToken(request)(API_PAIMAI_COUPON_LIST+ queryString);
+    const result = await requestWithToken(request)(API_PAIMAI_BANK_LIST+ queryString);
     return json(result.result);
 }
 
