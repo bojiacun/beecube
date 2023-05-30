@@ -1,13 +1,7 @@
 import {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {
-    DefaultListSearchParams,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
-} from "~/utils/utils";
-import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Modal, Row} from "react-bootstrap";
+import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, Image, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
@@ -15,7 +9,10 @@ import FigureImage from "react-bootstrap/FigureImage";
 import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
 import {User} from "react-feather";
 
-
+const PAY_TYPE_COLORS :any = {
+    '1': 'primary',
+    '2': 'warning',
+}
 const ORDER_STATUS_COLORS:any = {
     '-1': 'light',
     '0': 'light',
@@ -39,13 +36,13 @@ const OrderList = (props: any) => {
     }
 
     useEffect(() => {
-        if (searchFetcher.data) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setList(searchFetcher.data);
         }
     }, [searchFetcher.state]);
 
     useEffect(() => {
-        if (editFetcher.data && editFetcher.type === 'done') {
+        if (getFetcherState(editFetcher) === FetcherState.DONE) {
             if (editFetcher.data.success) {
                 showToastSuccess(editModal.id ? '修改成功' : '新建成功');
                 searchFetcher.submit(searchState, {method: 'get'});
@@ -55,8 +52,9 @@ const OrderList = (props: any) => {
             }
         }
     }, [editFetcher.state]);
+
     useEffect(() => {
-        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+        if (getFetcherState(deleteFetcher) === FetcherState.DONE) {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
                 showToastSuccess('确认成功');
@@ -150,12 +148,26 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
+            text: '支付方式',
+            dataField: 'payType_dictText',
+            formatter(cell:number, row: any) {
+                return <Badge bg={PAY_TYPE_COLORS[row.status]}>{row.payType_dictText}</Badge>
+            }
+        },
+        {
             text: '支付金额',
             dataField: 'payedPrice',
         },
         {
             text: '支付时间',
             dataField: 'payTime',
+        },
+        {
+            text: '支付凭证',
+            dataField: 'payImage',
+            formatter(cell:number, row:any) {
+                return <a href={row.payImage} target={'_blank'}><Image src={row.payImage} width={60} height={60} /></a>
+            }
         },
         {
             text: '下单时间',

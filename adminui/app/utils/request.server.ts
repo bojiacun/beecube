@@ -228,6 +228,12 @@ export const API_PAIMAI_AUCTION_EDIT = `${BASE_URL}/paimai/auctions/edit`;
 export const API_PAIMAI_AUCTION_DELETE = `${BASE_URL}/paimai/auctions/delete`;
 export const API_PAIMAI_AUCTION_DELETEPERFORMANCES = `${BASE_URL}/paimai/auctions/performances/remove`;
 
+
+export const API_PAIMAI_BANK_LIST = `${BASE_URL}/paimai/banks/list`;
+export const API_PAIMAI_BANK_ADD = `${BASE_URL}/paimai/banks/add`;
+export const API_PAIMAI_BANK_EDIT = `${BASE_URL}/paimai/banks/edit`;
+export const API_PAIMAI_BANK_DELETE = `${BASE_URL}/paimai/banks/delete`;
+
 export const API_PAIMAI_COUPON_LIST = `${BASE_URL}/paimai/coupons/list`;
 export const API_PAIMAI_COUPON_TICKET_LIST = `${BASE_URL}/paimai/coupon/tickets/list`;
 export const API_PAIMAI_COUPON_ADD = `${BASE_URL}/paimai/coupons/add`;
