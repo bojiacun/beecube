@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.paimai.entity.CouponTicket;
+import cn.winkt.modules.paimai.service.ICouponTicketService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -33,6 +36,7 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -54,6 +58,9 @@ import io.swagger.annotations.ApiOperation;
 public class CouponController extends JeecgController<Coupon, ICouponService> {
 	@Autowired
 	private ICouponService couponService;
+
+	@Resource
+	private ICouponTicketService couponTicketService;
 
 	@Resource
 	private SystemApi systemApi;
@@ -127,23 +134,14 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 	@AutoLog(value = "优惠券-通过id删除")
 	@ApiOperation(value="优惠券-通过id删除", notes="优惠券-通过id删除")
 	@DeleteMapping(value = "/delete")
+	@Transactional(rollbackFor = Exception.class)
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
+		//删除已经发放的优惠券
+		LambdaQueryWrapper<CouponTicket> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(CouponTicket::getCouponId, id);
 		couponService.removeById(id);
+		couponTicketService.remove(queryWrapper);
 		return Result.OK("删除成功!");
-	}
-	
-	/**
-	 * 批量删除
-	 *
-	 * @param ids
-	 * @return
-	 */
-	@AutoLog(value = "优惠券-批量删除")
-	@ApiOperation(value="优惠券-批量删除", notes="优惠券-批量删除")
-	@DeleteMapping(value = "/deleteBatch")
-	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.couponService.removeByIds(Arrays.asList(ids.split(",")));
-		return Result.OK("批量删除成功！");
 	}
 	
 	/**
