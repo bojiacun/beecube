@@ -32,7 +32,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                 images_upload_url: UPLOAD_URL,
                 images_upload_credentials: true,
                 lineheight_formats: "1 1.2 1.5 1.8 2 2.5 3 3.5 4 4.5",
-                images_upload_handler: (blobInfo, success, failure, progress: any) => {
+                images_upload_handler: (blobInfo, progress: any) => new Promise((resolve, reject)=> {
                     let xhr: any, formData;
 
                     xhr = new XMLHttpRequest();
@@ -46,25 +46,28 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                     };
 
                     xhr.onload = function () {
-                        var json;
-
                         if (xhr.status === 403) {
-                            failure('HTTP Error: ' + xhr.status, {remove: true});
+                            reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
                             return;
                         }
 
                         if (xhr.status < 200 || xhr.status >= 300) {
-                            failure('HTTP Error: ' + xhr.status);
+                            reject('HTTP Error: ' + xhr.status);
                             return;
                         }
 
-                        json = JSON.parse(xhr.responseText);
+                        const json = JSON.parse(xhr.responseText);
 
-                        success(json.data);
+                        if (!json || typeof json.data != 'string') {
+                            reject('Invalid JSON: ' + xhr.responseText);
+                            return;
+                        }
+
+                        resolve(json.data);
                     };
 
                     xhr.onerror = function () {
-                        failure('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+                        reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
                     };
 
                     formData = new FormData();
@@ -75,17 +78,12 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
                     formData.append('type', '1');
 
                     xhr.send(formData);
-                },
-                plugins: [
-                    'advlist autolink lists link image',
-                    'charmap print preview anchor help',
-                    'searchreplace visualblocks code',
-                    'insertdatetime media table paste wordcount'
-                ],
+                }),
+                plugins: 'advlist autolink lists link image charmap preview anchor help searchreplace visualblocks code insertdatetime media table wordcount',
                 toolbar:
                     'undo redo | formatselect | bold italic | \
-            alignleft aligncenter alignright | image | \
-            bullist numlist outdent indent lineheight| help'
+                    alignleft aligncenter alignright | image | \
+                    bullist numlist outdent indent lineheight| help'
             }}
             {...rest}
         />
