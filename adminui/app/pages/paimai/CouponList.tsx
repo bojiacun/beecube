@@ -31,7 +31,7 @@ const CouponList = (props: any) => {
     }, [searchFetcher.state]);
 
     useEffect(() => {
-        if (editFetcher.data && editFetcher.type === 'done') {
+        if (getFetcherState(editFetcher) === FetcherState.DONE) {
             if (editFetcher.data.success) {
                 showToastSuccess(editModal.id ? '修改成功' : '新建成功');
                 searchFetcher.submit(searchState, {method: 'get'});
@@ -42,7 +42,7 @@ const CouponList = (props: any) => {
         }
     }, [editFetcher.state]);
     useEffect(() => {
-        if (deleteFetcher.data && deleteFetcher.type === 'done') {
+        if (getFetcherState(deleteFetcher) === FetcherState.DONE) {
             if (deleteFetcher.data.success) {
                 stopPageLoading();
                 showToastSuccess('删除成功');
@@ -77,7 +77,7 @@ const CouponList = (props: any) => {
                 showDeleteAlert(function () {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/coupons/delete?id=${row.id}`, replace: true});
-                });
+                }, '删除优惠券模板将删除对应已发放的优惠券,确定要删除吗？', '确认删除');
                 break;
             case 'grant':
                 //删除按钮
