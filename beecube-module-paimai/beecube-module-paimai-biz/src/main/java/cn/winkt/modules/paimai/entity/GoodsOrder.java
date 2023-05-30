@@ -83,6 +83,9 @@ public class GoodsOrder {
 	private java.lang.String deliveryId;
 	private String deliveryNo;
 	private String deliveryCode;
+	@Excel(name = "支付类型（1微信支付、2线下支付）", width = 15)
+	@ApiModelProperty(value = "支付类型（1微信支付、2线下支付）")
+	@Dict(dicCode = "paimai_order_pay_type")
 	private Integer payType;
 	private BigDecimal usedIntegral;
 	private String usedCouponTicketId;
