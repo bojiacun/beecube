@@ -36,7 +36,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class AuctionService {
+public class AuctionHelpService {
 
     @Resource
     private IGoodsDepositService goodsDepositService;

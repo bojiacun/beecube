@@ -60,7 +60,7 @@ public class AuctionJobService {
 
 
     @Resource
-    AuctionService auctionService;
+    AuctionHelpService auctionHelpService;
     /**
      * 定时任务提醒
      * @return
@@ -263,7 +263,7 @@ public class AuctionJobService {
             log.debug("开始处理App {} 的保证金退款", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
-                auctionService.refundDeposit(appVO.getId(), params);
+                auctionHelpService.refundDeposit(appVO.getId(), params);
             }
             catch (Exception exception) {
                 log.error(exception.getMessage(), exception);
@@ -287,7 +287,7 @@ public class AuctionJobService {
             log.debug("开始处理App {} 的拍品数据", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
-                auctionService.resolveGoods();
+                auctionHelpService.resolveGoods();
             }
             catch (Exception e) {
                 log.error(e.getMessage(), e);

@@ -23,6 +23,7 @@ export default defineAppConfig({
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
+        'pages/my/tax',
         'pages/my/profile/phone',
         'pages/my/profile/nickname',
         'pages/my/profile/email',
