@@ -303,18 +303,23 @@ public class AuctionJobService {
      */
     @XxlJob(value = "GOODS_ORDER_CANCEL")
     public void autoCancelGoodsOrders() {
-        QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 0);
-        queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -5));
-        List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
-
-        goodsOrders.forEach(goodsOrder -> {
-            try {
-                goodsOrderService.cancel(goodsOrder);
-            }
-            catch (Exception exception) {
-                log.error(exception.getMessage(), exception);
-            }
+        log.debug("开始处理过期未支付的订单");
+        List<AppVO> apps = appApi.allApps();
+        apps.forEach(appVO -> {
+            log.debug("处理应用{}未处理订单", appVO.getId());
+            AppContext.setApp(appVO.getId());
+            QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("status", 0);
+            queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -5));
+            List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
+            goodsOrders.forEach(goodsOrder -> {
+                try {
+                    goodsOrderService.cancel(goodsOrder);
+                }
+                catch (Exception exception) {
+                    log.error(exception.getMessage(), exception);
+                }
+            });
         });
     }
 
