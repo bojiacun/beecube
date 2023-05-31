@@ -9,7 +9,6 @@ import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.service.im.UserMessageType;
 import cn.winkt.modules.paimai.service.im.message.GoodsUpdateMessage;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
@@ -37,7 +36,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class JobService {
+public class AuctionService {
 
     @Resource
     private IGoodsDepositService goodsDepositService;

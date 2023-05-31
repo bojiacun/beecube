@@ -15,12 +15,14 @@ import cn.winkt.modules.paimai.service.IGoodsOrderService;
 import cn.winkt.modules.paimai.vo.GoodsSettings;
 import cn.winkt.modules.paimai.vo.OrderVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.exception.JeecgBootException;
@@ -34,6 +36,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 /**
  * @Description: 订单表
@@ -63,6 +66,17 @@ public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderMapper, GoodsOr
     @Resource
     private ICouponService couponService;
 
+
+    /**
+     * 自动取消订单
+     */
+    @XxlJob(value = "GOODS_ORDER_CANCEL")
+    public void autoCancelGoodsOrders() {
+        QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 0);
+        List<GoodsOrder> goodsOrders = goodsOrderMapper.selectList(queryWrapper);
+
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

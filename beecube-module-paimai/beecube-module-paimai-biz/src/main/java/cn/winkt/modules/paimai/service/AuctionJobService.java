@@ -22,7 +22,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class AuctionRunJobHandler {
+public class AuctionJobService {
     @Resource
     private IGoodsService goodsService;
 
@@ -59,7 +59,7 @@ public class AuctionRunJobHandler {
 
 
     @Resource
-    JobService jobService;
+    AuctionService auctionService;
     /**
      * 定时任务提醒
      * @return
@@ -262,7 +262,7 @@ public class AuctionRunJobHandler {
             log.debug("开始处理App {} 的保证金退款", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
-                jobService.refundDeposit(appVO.getId(), params);
+                auctionService.refundDeposit(appVO.getId(), params);
             }
             catch (Exception exception) {
                 log.error(exception.getMessage(), exception);
@@ -272,9 +272,11 @@ public class AuctionRunJobHandler {
     }
 
 
-
-
-
+    /**
+     * 定时任务处理拍卖流程
+     * @param params
+     * @return
+     */
     @XxlJob(value = "RUN_AUCTION")
     public ReturnT<String> runningAuction(String params) {
         log.debug("我是定时任务【处理拍品】，我执行了哦");
@@ -284,7 +286,7 @@ public class AuctionRunJobHandler {
             log.debug("开始处理App {} 的拍品数据", appVO.getId());
             AppContext.setApp(appVO.getId());
             try{
-                jobService.resolveGoods();
+                auctionService.resolveGoods();
             }
             catch (Exception e) {
                 log.error(e.getMessage(), e);
