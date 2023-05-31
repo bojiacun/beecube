@@ -8,6 +8,7 @@ import cn.winkt.modules.paimai.config.MiniappServices;
 import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
@@ -297,5 +298,23 @@ public class AuctionJobService {
 
 
 
+    /**
+     * 自动取消订单
+     */
+    @XxlJob(value = "GOODS_ORDER_CANCEL")
+    public void autoCancelGoodsOrders() {
+        QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 0);
+        List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
+
+        goodsOrders.forEach(goodsOrder -> {
+            try {
+                goodsOrderService.cancel(goodsOrder);
+            }
+            catch (Exception exception) {
+                log.error(exception.getMessage(), exception);
+            }
+        });
+    }
 
 }

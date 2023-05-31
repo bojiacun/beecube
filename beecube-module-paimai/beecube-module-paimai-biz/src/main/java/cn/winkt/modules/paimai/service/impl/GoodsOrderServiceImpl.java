@@ -67,16 +67,6 @@ public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderMapper, GoodsOr
     private ICouponService couponService;
 
 
-    /**
-     * 自动取消订单
-     */
-    @XxlJob(value = "GOODS_ORDER_CANCEL")
-    public void autoCancelGoodsOrders() {
-        QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 0);
-        List<GoodsOrder> goodsOrders = goodsOrderMapper.selectList(queryWrapper);
-
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
