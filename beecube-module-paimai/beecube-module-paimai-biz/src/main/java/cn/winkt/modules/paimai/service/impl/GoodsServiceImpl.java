@@ -133,6 +133,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Override
     public boolean checkDeposite(LoginUser loginUser, Goods goods) {
+        if(goods == null) {
+            return true;
+        }
         String performanceId = goods.getPerformanceId();
         String roomId = goods.getRoomId();
         if(StringUtils.isNotEmpty(performanceId)) {

@@ -36,7 +36,7 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
 
     @Override
     public boolean checkDeposite(LoginUser loginUser, LiveRoom liveRoom) {
-        if(liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
+        if(liveRoom == null || liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
             return true;
         }
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();

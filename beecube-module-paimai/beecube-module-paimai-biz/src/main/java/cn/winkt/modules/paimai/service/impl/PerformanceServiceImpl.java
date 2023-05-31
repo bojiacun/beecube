@@ -83,7 +83,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Override
     public boolean checkDeposite(LoginUser loginUser, Performance performance) {
-        if(performance.getDeposit() == null || performance.getDeposit() <= 0) {
+        if(performance == null || performance.getDeposit() == null || performance.getDeposit() <= 0) {
             return true;
         }
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
