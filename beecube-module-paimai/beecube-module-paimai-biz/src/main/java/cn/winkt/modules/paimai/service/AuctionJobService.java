@@ -302,7 +302,7 @@ public class AuctionJobService {
      * 自动取消订单
      */
     @XxlJob(value = "GOODS_ORDER_CANCEL")
-    public void autoCancelGoodsOrders() {
+    public ReturnT<String> autoCancelGoodsOrders(String params) {
         log.debug("开始处理过期未支付的订单");
         List<AppVO> apps = appApi.allApps();
         apps.forEach(appVO -> {
@@ -321,6 +321,7 @@ public class AuctionJobService {
                 }
             });
         });
+        return ReturnT.SUCCESS;
     }
 
 }
