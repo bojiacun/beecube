@@ -17,18 +17,13 @@ export default defineAppConfig({
         'pages/my/deposits',
         'pages/my/coupons',
         'pages/my/offers',
-        'pages/my/orders',
-        'pages/my/orders/detail',
-        'pages/my/orders/after',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
-        'pages/my/tax',
         'pages/my/profile/phone',
         'pages/my/profile/nickname',
         'pages/my/profile/email',
         'pages/my/profile/auth',
-
         'pages/performance/list',
         'pages/goods/buyouts',
         'pages/goods/search',
@@ -92,6 +87,17 @@ export default defineAppConfig({
                 'pages/history',
                 'pages/list',
                 'pages/detail',
+            ]
+        },
+        {
+            root: 'order',
+            pages: [
+                'pages/orders',
+                'pages/taxs',
+                'pages/taxs/create',
+                'pages/taxs/history',
+                'pages/orders/detail',
+                'pages/orders/after',
             ]
         }
     ],
