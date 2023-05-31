@@ -22,4 +22,6 @@ public interface ICouponTicketService extends IService<CouponTicket> {
     Map<String, List<CouponTicket>> getAvailableTickets(List<GoodsVO> goodsList);
 
     boolean canTicketUseful(String ticketId, List<GoodsVO> goodsList);
+
+    void reset(CouponTicket ticket);
 }

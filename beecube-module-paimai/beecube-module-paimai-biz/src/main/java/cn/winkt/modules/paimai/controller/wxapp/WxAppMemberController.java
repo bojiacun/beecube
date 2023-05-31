@@ -221,30 +221,13 @@ public class WxAppMemberController {
     @AutoLog(value = "订单表-取消订单")
     @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")
     @PostMapping(value = "/orders/cancel")
-    @Transactional(rollbackFor = Exception.class)
     public Result<?> cancelOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsOrder::getId, id);
         GoodsOrder order = goodsOrderService.getOne(queryWrapper);
-
-        if (order.getStatus() != 1 && order.getStatus() != 0) {
-            throw new JeecgBootException("订单状态异常，无法取消");
-        }
-
-        if (order.getTransactionId() != null) {
-            Integer refundAmount = BigDecimal.valueOf(order.getPayedPrice()).setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(100)).intValue();
-            log.debug("原路返回支付金额 {}", refundAmount);
-            WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder().transactionId(order.getTransactionId()).outRefundNo(order.getId()).totalFee(refundAmount).refundFee(refundAmount).build();
-            WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-            WxPayRefundResult result = wxPayService.refund(refundRequest);
-            if (!"SUCCESS".equals(result.getReturnCode()) || !"SUCCESS".equals(result.getResultCode())) {
-                throw new JeecgBootException("退款失败");
-            }
-        }
-        order.setStatus(-1);
-        goodsOrderService.updateById(order);
+        goodsOrderService.cancel(order);
         return Result.OK("取消成功", order);
     }
 

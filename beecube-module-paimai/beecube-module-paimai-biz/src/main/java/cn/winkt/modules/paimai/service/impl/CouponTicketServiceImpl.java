@@ -104,4 +104,9 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
         }
         return canUse;
     }
+
+    @Override
+    public void reset(CouponTicket ticket) {
+        couponTicketMapper.resetTicket(ticket.getId());
+    }
 }

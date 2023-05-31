@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface CouponTicketMapper extends BaseMapper<CouponTicket> {
-
+    void resetTicket(@Param("id") String id);
 }
