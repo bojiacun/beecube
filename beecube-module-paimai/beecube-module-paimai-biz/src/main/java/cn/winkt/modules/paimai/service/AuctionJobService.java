@@ -305,6 +305,7 @@ public class AuctionJobService {
     public void autoCancelGoodsOrders() {
         QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 0);
+        queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -5));
         List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
 
         goodsOrders.forEach(goodsOrder -> {
