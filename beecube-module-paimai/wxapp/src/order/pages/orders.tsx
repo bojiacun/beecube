@@ -62,7 +62,7 @@ export default class Index extends Component<any, any> {
     renderTemplate(data: any) {
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-outer p-4 relative')}>
-                <Navigator url={'/pages/my/orders/detail?id=' + data.id} className={'space-y-4'}>
+                <Navigator url={'/order/pages/orders/detail?id=' + data.id} className={'space-y-4'}>
                     <View className={'text-sm flex items-center justify-between'}>
                         <View className={'text-gray-400'}>
                             单号：{data.id}

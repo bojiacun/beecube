@@ -101,26 +101,26 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     </View>
                     <View className={'rounded-md bg-white mt-2 text-red-600 py-4 shadow-lg'}>
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
-                            <Navigator url={'orders?status=0'} className={'relative'}>
+                            <Navigator url={'/order/pages/orders?status=0'} className={'relative'}>
                                 <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待结算</View>
                                 {badges?.payCount?<Text className={'badge'}>{badges.payCount}</Text>:<></>}
                             </Navigator>
-                            <Navigator url={'orders?status=1'} className={'relative'}>
+                            <Navigator url={'/order/pages/orders?status=1'} className={'relative'}>
                                 <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待发货</View>
                                 {badges?.deliveryCount?<Text className={'badge'}>{badges.deliveryCount}</Text>:<></>}
                             </Navigator>
-                            <Navigator url={'orders?status=2'} className={'relative'}>
+                            <Navigator url={'/order/pages/orders?status=2'} className={'relative'}>
                                 <View className={'iconfont icon-daishouhuo'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>待收货</View>
                                 {badges?.confirmDeliveryCount?<Text className={'badge'}>{badges.confirmDeliveryCount}</Text>:<></>}
                             </Navigator>
-                            <Navigator url={'orders?status=3'}>
+                            <Navigator url={'/order/pages/orders?status=3'}>
                                 <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>已完成</View>
                             </Navigator>
-                            <Navigator url={'orders?status='} className={'border-l-1 border-gray-100'}>
+                            <Navigator url={'/order/pages/orders?status='} className={'border-l-1 border-gray-100'}>
                                 <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
                                 <View className={'text-gray-500 mt-1'}>全部</View>
                             </Navigator>
@@ -183,7 +183,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
                     <View>
-                        <Navigator url={'tax'} className={'flex items-center justify-between p-4'}>
+                        <Navigator url={'/order/pages/taxs'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'fa fa-ticket'} style={{fontSize: 24}}/>
                                 <View>发票申请</View>
