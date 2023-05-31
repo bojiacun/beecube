@@ -182,7 +182,17 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </Navigator>
                     </View>
-
+                    <View>
+                        <Navigator url={'tax'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'fa fa-ticket'} style={{fontSize: 24}}/>
+                                <View>发票申请</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
                     <View>
                         <Navigator url={'qrcode'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
@@ -194,40 +204,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </Navigator>
                     </View>
-
-
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-shangchuan'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>我的送拍</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-kaipiaoxinxi'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>开具发票</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
-
-                    {/*<View className={'flex items-center justify-between p-4'}>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-zhanghu'} style={{fontSize: 24}}/>*/}
-                    {/*        <View>公司账户</View>*/}
-                    {/*    </View>*/}
-                    {/*    <View className={'flex items-center space-x-2'}>*/}
-                    {/*        <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
-
-
                     <View>
                         <Navigator url={'/article/pages/services'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>

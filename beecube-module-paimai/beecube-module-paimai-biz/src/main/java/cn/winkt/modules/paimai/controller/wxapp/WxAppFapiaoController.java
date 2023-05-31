@@ -4,8 +4,10 @@ import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.FapiaoOrder;
 import cn.winkt.modules.paimai.entity.GoodsOrder;
+import cn.winkt.modules.paimai.entity.OrderGoods;
 import cn.winkt.modules.paimai.service.IFapiaoOrderService;
 import cn.winkt.modules.paimai.service.IGoodsOrderService;
+import cn.winkt.modules.paimai.service.IOrderGoodsService;
 import cn.winkt.modules.paimai.vo.PostFapiaoOrderVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -30,6 +32,9 @@ public class WxAppFapiaoController {
     IGoodsOrderService goodsOrderService;
 
     @Resource
+    IOrderGoodsService orderGoodsService;
+
+    @Resource
     AppApi appApi;
 
     @Resource
@@ -52,6 +57,11 @@ public class WxAppFapiaoController {
 
         Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOrder> pageList = goodsOrderService.page(page, goodsOrderLambdaQueryWrapper);
+        pageList.getRecords().forEach(goodsOrder -> {
+            LambdaQueryWrapper<OrderGoods> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(OrderGoods::getOrderId, goodsOrder.getId());
+            goodsOrder.setOrderGoods(orderGoodsService.list(queryWrapper));
+        });
         return Result.OK(pageList);
     }
 

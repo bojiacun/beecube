@@ -2,19 +2,31 @@ import React, {Component} from "react";
 import PageLoading from "../../components/pageloading";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
-import {View} from "@tarojs/components";
-import {Cell, List, Loading, PullRefresh} from "@taroify/core";
+import {Text, View} from "@tarojs/components";
+import {Button, List, Loading, PullRefresh, Checkbox} from "@taroify/core";
+import numeral from 'numeral';
+import Taro from "@tarojs/taro";
+import {connect} from "react-redux";
+import utils from "../../lib/utils";
 
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context
+    }
+))
 export default class Index extends Component<any, any> {
-    state:any = {
-        list: [],
+    state: any = {
+        list: null,
         loading: false,
         hasMore: true,
         scrollTop: 0,
         reachTop: true,
         page: 1,
-        pageSize: 10,
+        pageSize: 20,
+        selected: [],
     }
     refreshingRef = React.createRef<boolean>();
 
@@ -22,52 +34,140 @@ export default class Index extends Component<any, any> {
         super(props);
         this.onLoad = this.onLoad.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.onPageScroll = this.onPageScroll.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+        this.toggleCheckAll = this.toggleCheckAll.bind(this);
     }
 
+    onPageScroll({scrollTop}) {
+        this.setState({scrollTop});
+    }
 
     componentDidMount() {
 
     }
-    onLoad () {
+
+    onLoad() {
         this.setState({loading: true});
-        const newList = this.refreshingRef.current ? [] : this.state.list;
-        request.get('/paimai/api/member/fapiao/orders', {params: {status: 0, pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res=>{
+        const newList = this.state.list || [];
+        request.get('/paimai/api/members/fapiao/orders', {params: {status: 0, pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
             this.refreshingRef.current = false;
             let records = res.data.result.records;
-            records.forEach(item=>newList.push(item));
-            this.setState({list:newList, loading: false, hasMore: records.length >= this.state.pageSize});
+            records.forEach(item => newList.push(item));
+            this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
         });
     }
+
     onRefresh() {
-        this.refreshingRef.current = true
-        this.setState({loading: false});
-        this.onLoad();
+        this.refreshingRef.current = true;
+        this.setState({loading: true, page: 1});
+        const newList = [];
+        request.get('/paimai/api/members/fapiao/orders', {params: {status: 0, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+            this.refreshingRef.current = false;
+            let records = res.data.result.records;
+            records.forEach(item => newList.push(item));
+            this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
+        });
     }
+
+    toggleCheckAll() {
+        if (this.isCheckedAll) {
+            this.setState({selected: []});
+        } else {
+            this.setState({selected: this.state.list.map(item => item.id)});
+        }
+    }
+
+    get isCheckedAll() {
+        let selected = this.state.selected;
+        if (selected.length == 0) return false;
+        return selected.length == this.state.list.length;
+    }
+
+    get calcCartPrice() {
+        let totalPrice = 0;
+        this.state.list.forEach(item => {
+            if (utils.indexOf(this.state.selected, item.id)) {
+                totalPrice += item.payedPrice;
+            }
+        })
+        return totalPrice;
+    }
+
+    handleSelect(values) {
+        this.setState({selected: values});
+    }
+
     render() {
-        const {list, reachTop, scrollTop, hasMore, loading} = this.state;
-        if(list.length == 0) return <PageLoading />;
+        const {list, reachTop, scrollTop, hasMore, loading, selected} = this.state;
+        const {systemInfo} = this.props;
+        if (!list) return <PageLoading/>;
 
         const refreshingRef = this.refreshingRef;
-
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
 
         return (
-            <PageLayout statusBarProps={{title: '发票中心'}}>
-                <View></View>
-                <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
-                    <List loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
-                        {
-                            list.map((item) => (
-                                <Cell key={item}>{item}</Cell>
-                            ))
-                        }
-                        {!refreshingRef.current && (
-                            <List.Placeholder>
-                                {loading && <Loading>加载中...</Loading>}
-                                {!hasMore && "没有更多了"}
-                            </List.Placeholder>
-                        )}
-                    </List>
-                </PullRefresh>
+            <PageLayout statusBarProps={{title: '发票中心'}} containerClassName={'p-4'}>
+                <Checkbox.Group onChange={this.handleSelect} value={this.state.selected}>
+                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} onClick={() => Taro.navigateTo({url: 'tax_records'})}>开票记录</Button></View>
+                    <View className={'item-title text-lg mb-4'}>待开票记录</View>
+                    <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
+                        <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
+                            {
+                                list.map((item) => {
+                                    return (
+                                        <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
+                                            <View className={'flex-none'}><Checkbox name={item.id}/></View>
+                                            <View className={'flex-1'}>
+                                                <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
+                                                <View className={'flex mt-2'}>
+                                                    {
+                                                        item.orderGoods.map(item => {
+                                                            return (
+                                                                <View className={'space-y-1'}>
+                                                                    <View>{item.goodsName}</View>
+                                                                    <View>{item.goodsPrice} X {item.goodsCount}</View>
+                                                                </View>
+                                                            );
+                                                        })
+                                                    }
+                                                </View>
+                                            </View>
+                                            <View className={'text-xl font-bold text-red-600 flex-none'}>
+                                                ￥{numeral(item.payedPrice).format('0,0.00')}
+                                            </View>
+                                        </View>
+                                    );
+                                })
+                            }
+                            {!refreshingRef.current && (
+                                <List.Placeholder>
+                                    {loading && <Loading>加载中...</Loading>}
+                                    {!hasMore && "没有更多了"}
+                                </List.Placeholder>
+                            )}
+                            <View style={{height: safeBottom + 56}} />
+                        </List>
+                    </PullRefresh>
+                </Checkbox.Group>
+
+                <View className={'bg-white flex items-center fixed py-2 px-4 w-full text-lg bottom-0 left-0'} style={{paddingBottom: safeBottom}}>
+                    <View className={'flex-1 flex items-center space-x-4'}>
+                        <View className={'flex flex-col items-center'}>
+                            <Checkbox id={'all'} checked={this.isCheckedAll} onClick={this.toggleCheckAll}/>
+                            <View>全选</View>
+                        </View>
+                        <View className={'flex-1'}>
+                            共<Text className={'font-bold text-red-600'}>{this.state.selected.length}</Text>个订单 <Text
+                            className={'text-red-600 font-bold'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>元
+                        </View>
+                    </View>
+                    <View className={'flex-none'}>
+                        <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}
+                                onClick={() => Taro.navigateTo({url: 'tax_create'})}>去开票</Button>
+                    </View>
+                </View>
             </PageLayout>
         );
     }
