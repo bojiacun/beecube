@@ -93,6 +93,9 @@ public class WxAppFapiaoController {
             throw new JeecgBootException("请选择要开票的订单");
         }
         FapiaoOrder fapiaoOrder = new FapiaoOrder();
+        fapiaoOrder.setTitle(postFapiaoOrderVO.getTitle());
+        fapiaoOrder.setTaxCode(postFapiaoOrderVO.getTaxCode());
+        fapiaoOrder.setType(postFapiaoOrderVO.getType());
         fapiaoOrder.setDeliveryId(postFapiaoOrderVO.getAddress().getId());
         fapiaoOrder.setDeliveryAddress(postFapiaoOrderVO.getAddress().getAddress());
         fapiaoOrder.setDeliveryPhone(postFapiaoOrderVO.getAddress().getPhone());
@@ -101,6 +104,7 @@ public class WxAppFapiaoController {
         fapiaoOrder.setDeliveryDistrict(postFapiaoOrderVO.getAddress().getDistrict());
         fapiaoOrder.setDeliveryProvince(postFapiaoOrderVO.getAddress().getProvince());
         fapiaoOrder.setDeliveryInfo(String.format("%s %s %s %s %s %s", postFapiaoOrderVO.getAddress().getUsername(), postFapiaoOrderVO.getAddress().getPhone(), postFapiaoOrderVO.getAddress().getProvince(), postFapiaoOrderVO.getAddress().getCity(), postFapiaoOrderVO.getAddress().getDistrict(), postFapiaoOrderVO.getAddress().getAddress()));
+        fapiaoOrder.setOrderIds(postFapiaoOrderVO.getOrderIds());
 
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (String orderId : postFapiaoOrderVO.getOrderIds().split(",")) {
@@ -109,6 +113,8 @@ public class WxAppFapiaoController {
                 throw new JeecgBootException("所选订单中已经开票");
             }
             totalPrice = totalPrice.add(BigDecimal.valueOf(goodsOrder.getPayedPrice()));
+            goodsOrder.setFapiaoStatus(1);
+            goodsOrderService.updateById(goodsOrder);
         }
         fapiaoOrder.setAmount(totalPrice.setScale(2, RoundingMode.CEILING).floatValue());
         fapiaoOrder.setStatus(1);

@@ -4,6 +4,7 @@ import {BaseEventOrig, FormProps, Navigator, Text, View} from "@tarojs/component
 import {Button, ConfigProvider, Form, Input, Radio} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import request from "../../../lib/request";
+import utils from "../../../lib/utils";
 
 
 export default class Index extends Component<any, any> {
@@ -30,7 +31,16 @@ export default class Index extends Component<any, any> {
     }
 
     onSubmit(event: BaseEventOrig<FormProps.onSubmitEventDetail>) {
-
+        const values = event.detail.value || {};
+        values.orderIds = Taro.getStorageSync("TAX_ORDERS").join(',');
+        values.address = this.state.address;
+        if(!values.address) {
+           return utils.showMessage('请选择收货地址');
+        }
+        request.post('/paimai/api/members/fapiao/create', values).then(res=>{
+            Taro.removeStorageSync("TAX_ORDERS");
+            utils.showSuccess(true, '申请成功');
+        });
     }
 
     render() {
@@ -60,6 +70,12 @@ export default class Index extends Component<any, any> {
                                 <Form.Label>税号</Form.Label>
                                 <Form.Control>
                                     <Input placeholder="填写发票税号"/>
+                                </Form.Control>
+                            </Form.Item>
+                            <Form.Item name="memberEmail">
+                                <Form.Label>邮箱</Form.Label>
+                                <Form.Control>
+                                    <Input placeholder="填写邮箱"/>
                                 </Form.Control>
                             </Form.Item>
                         </View>

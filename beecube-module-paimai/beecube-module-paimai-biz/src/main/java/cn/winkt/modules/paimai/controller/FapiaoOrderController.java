@@ -6,9 +6,12 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.paimai.entity.GoodsOrder;
+import cn.winkt.modules.paimai.service.IGoodsOrderService;
 import javafx.geometry.Pos;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -31,6 +34,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -52,6 +56,9 @@ import io.swagger.annotations.ApiOperation;
 public class FapiaoOrderController extends JeecgController<FapiaoOrder, IFapiaoOrderService> {
     @Autowired
     private IFapiaoOrderService fapiaoOrderService;
+
+    @Resource
+    private IGoodsOrderService goodsOrderService;
 
     /**
      * 分页列表查询
@@ -120,12 +127,21 @@ public class FapiaoOrderController extends JeecgController<FapiaoOrder, IFapiaoO
     @AutoLog(value = "发票申请表-通过id处理")
     @ApiOperation(value = "发票申请表-通过id处理", notes = "发票申请表-通过id处理")
     @DeleteMapping(value = "/resolve")
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> resolve(@RequestParam(name = "id", required = true) String id, @RequestParam Integer status, @RequestBody FapiaoOrder post) {
         FapiaoOrder fapiaoOrder = fapiaoOrderService.getById(id);
         fapiaoOrder.setStatus(status);
         if(post != null) {
             fapiaoOrder.setDeliveryCode(post.getDeliveryCode());
             fapiaoOrder.setDeliveryNo(post.getDeliveryNo());
+        }
+        if(fapiaoOrder.getStatus() == 0) {
+            //审核不通过
+            Arrays.stream(fapiaoOrder.getOrderIds().split(",")).forEach(oid -> {
+                GoodsOrder goodsOrder = goodsOrderService.getById(oid);
+                goodsOrder.setFapiaoStatus(0);
+                goodsOrderService.updateById(goodsOrder);
+            });
         }
         fapiaoOrderService.save(fapiaoOrder);
         return Result.OK("处理成功!");

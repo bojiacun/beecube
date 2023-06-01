@@ -7,7 +7,7 @@ const Error401Page = () => {
     const logoutFetcher = useFetcher();
     const handleRelogin = () => {
         //@ts-ignore
-        logoutFetcher.submit({}, {action: window.ENV.LOGOUT_URL, method: 'post'});
+        logoutFetcher.submit({}, {action: window.ENV?.LOGOUT_URL || '/auth/logout', method: 'post'});
     }
     return (
         <div className={'misc-wrapper'}>

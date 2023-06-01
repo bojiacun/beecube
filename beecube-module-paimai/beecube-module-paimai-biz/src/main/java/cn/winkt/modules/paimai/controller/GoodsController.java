@@ -243,9 +243,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         if(goodsService.count(queryWrapper) > 0) {
             throw new JeecgBootException("已有同名同型号的商品");
         }
-        if(StringUtils.length(goods.getDescription()) > 800) {
-            throw new JeecgBootException("商品简介字数超出限制，必须在800字以内");
-        }
+
         goodsService.save(goods);
         return Result.OK("添加成功！");
     }
@@ -280,9 +278,7 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
         if(goodsService.count(queryWrapper) > 0) {
             throw new JeecgBootException("已有同名同型号的商品");
         }
-        if(StringUtils.length(goods.getDescription()) > 800) {
-            throw new JeecgBootException("商品简介字数超出限制，必须在800字以内");
-        }
+
         goodsService.updateById(goods);
         return Result.OK("编辑成功!");
     }

@@ -107,6 +107,10 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
+            text: '邮箱',
+            dataField: 'memberEmail',
+        },
+        {
             text: '开票种类',
             dataField: 'type_dictText',
         },
@@ -144,6 +148,7 @@ const OrderList = (props: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
                         {row.status == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'pass')}>确认开票</a>}
+                        <span className={'divider'}/>
                         {row.status == 1  && <a href={'#'} onClick={() => handleOnAction(row, 'reject')}>拒绝申请</a>}
                     </div>
                 );
