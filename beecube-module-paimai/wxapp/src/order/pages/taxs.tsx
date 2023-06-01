@@ -44,14 +44,14 @@ export default class Index extends Component<any, any> {
         this.setState({scrollTop});
     }
 
-    componentDidMount() {
-
+    componentDidShow() {
+        this.onRefresh(false);
     }
 
     onLoad() {
         this.setState({loading: true});
         const newList = this.state.list || [];
-        request.get('/paimai/api/members/fapiao/orders', {params: {status: 0, pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/paimai/api/members/fapiao/orders', {params: {status: 3, pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
             this.refreshingRef.current = false;
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));
@@ -59,11 +59,11 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    onRefresh() {
+    onRefresh(showLoading = true) {
         this.refreshingRef.current = true;
-        this.setState({loading: true, page: 1});
+        this.setState({loading: showLoading, page: 1});
         const newList = [];
-        request.get('/paimai/api/members/fapiao/orders', {params: {status: 0, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/paimai/api/members/fapiao/orders', {params: {status: 3, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
             this.refreshingRef.current = false;
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));

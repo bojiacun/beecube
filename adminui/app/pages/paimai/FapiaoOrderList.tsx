@@ -107,6 +107,15 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
+            text: '物流信息',
+            dataField: '',
+            isDummyField: true,
+            headerStyle: {width: 200},
+            formatter(cell: number, row:any) {
+                return <div>{row.deliveryCode} {row.deliveryNo}</div>;
+            }
+        },
+        {
             text: '邮箱',
             dataField: 'memberEmail',
         },

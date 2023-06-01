@@ -72,7 +72,7 @@ export default class Index extends Component<any, any> {
                                     <Input placeholder="填写发票税号"/>
                                 </Form.Control>
                             </Form.Item>
-                            <Form.Item name="memberEmail">
+                            <Form.Item name="email">
                                 <Form.Label>邮箱</Form.Label>
                                 <Form.Control>
                                     <Input placeholder="填写邮箱"/>

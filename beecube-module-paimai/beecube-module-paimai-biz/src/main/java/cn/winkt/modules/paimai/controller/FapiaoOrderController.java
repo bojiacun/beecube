@@ -126,7 +126,7 @@ public class FapiaoOrderController extends JeecgController<FapiaoOrder, IFapiaoO
 
     @AutoLog(value = "发票申请表-通过id处理")
     @ApiOperation(value = "发票申请表-通过id处理", notes = "发票申请表-通过id处理")
-    @DeleteMapping(value = "/resolve")
+    @PutMapping(value = "/resolve")
     @Transactional(rollbackFor = Exception.class)
     public Result<?> resolve(@RequestParam(name = "id", required = true) String id, @RequestParam Integer status, @RequestBody FapiaoOrder post) {
         FapiaoOrder fapiaoOrder = fapiaoOrderService.getById(id);
@@ -143,7 +143,15 @@ public class FapiaoOrderController extends JeecgController<FapiaoOrder, IFapiaoO
                 goodsOrderService.updateById(goodsOrder);
             });
         }
-        fapiaoOrderService.save(fapiaoOrder);
+        else if(fapiaoOrder.getStatus() == 2) {
+            //审核通过
+            Arrays.stream(fapiaoOrder.getOrderIds().split(",")).forEach(oid -> {
+                GoodsOrder goodsOrder = goodsOrderService.getById(oid);
+                goodsOrder.setFapiaoStatus(2);
+                goodsOrderService.updateById(goodsOrder);
+            });
+        }
+        fapiaoOrderService.updateById(fapiaoOrder);
         return Result.OK("处理成功!");
     }
 

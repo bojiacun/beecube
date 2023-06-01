@@ -1,23 +1,12 @@
-import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {handleSaveResult} from "~/utils/utils";
+import {FetcherState, getFetcherState, handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 //@ts-ignore
 import _ from 'lodash';
-import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
-import FileBrowserInput from "~/components/filebrowser/form";
-import DateTimePicker from "~/components/date-time-picker/DateTimePicker";
 import BootstrapInput from "~/components/form/BootstrapInput";
-import BootstrapSelect from "~/components/form/BootstrapSelect";
-import {API_DUPLICATE_CEHCK} from "~/utils/request.server";
-import {usePromise} from "react-use";
-import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
-import BootstrapDateTime from "~/components/form/BootstrapDateTime";
-import TinymceEditor from "~/components/tinymce-editor";
-import UprangConfiger from "~/pages/paimai/UprangConfiger";
-import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 
 const FapiaoDeliveryConfirmEditor = (props: any) => {
@@ -38,7 +27,7 @@ const FapiaoDeliveryConfirmEditor = (props: any) => {
 
 
     useEffect(() => {
-        if (postFetcher.type === 'done' && postFetcher.data) {
+        if (getFetcherState(postFetcher) === FetcherState.DONE) {
             formikRef.current!.setSubmitting(false);
             handleSaveResult(postFetcher.data);
             if (postFetcher.data.success) {
@@ -63,7 +52,7 @@ const FapiaoDeliveryConfirmEditor = (props: any) => {
                 aria-labelledby={'edit-modal'}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={'edit-user-model'}>确认发货</Modal.Title>
+                    <Modal.Title id={'edit-user-model'}>确认开票并邮寄</Modal.Title>
                 </Modal.Header>
                 <Formik innerRef={formikRef} initialValues={{}}  validationSchema={GoodsSchema}
                         onSubmit={handleOnSubmit}>
