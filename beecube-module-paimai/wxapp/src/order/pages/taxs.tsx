@@ -37,6 +37,7 @@ export default class Index extends Component<any, any> {
         this.onPageScroll = this.onPageScroll.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.toggleCheckAll = this.toggleCheckAll.bind(this);
+        this.handleToCreate = this.handleToCreate.bind(this);
     }
 
     onPageScroll({scrollTop}) {
@@ -98,6 +99,11 @@ export default class Index extends Component<any, any> {
         this.setState({selected: values});
     }
 
+    handleToCreate() {
+        Taro.setStorageSync("TAX_ORDERS", this.state.selected);
+        Taro.navigateTo({url: 'taxs/create'});
+    }
+
     render() {
         const {list, reachTop, scrollTop, hasMore, loading, selected} = this.state;
         const {systemInfo} = this.props;
@@ -110,7 +116,7 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '发票中心'}} containerClassName={'p-4'}>
                 <Checkbox.Group onChange={this.handleSelect} value={this.state.selected}>
-                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} onClick={() => Taro.navigateTo({url: 'tax_records'})}>开票记录</Button></View>
+                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
                     <View className={'item-title text-lg mb-4'}>待开票记录</View>
                     <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                         <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
@@ -159,13 +165,13 @@ export default class Index extends Component<any, any> {
                             <View>全选</View>
                         </View>
                         <View className={'flex-1'}>
-                            共<Text className={'font-bold text-red-600'}>{this.state.selected.length}</Text>个订单 <Text
+                            共<Text className={'font-bold text-red-600'}>{selected.length}</Text>个订单 <Text
                             className={'text-red-600 font-bold'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>元
                         </View>
                     </View>
                     <View className={'flex-none'}>
                         <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}
-                                onClick={() => Taro.navigateTo({url: 'tax_create'})}>去开票</Button>
+                                onClick={this.handleToCreate}>去开票</Button>
                     </View>
                 </View>
             </PageLayout>
