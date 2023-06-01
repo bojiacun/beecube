@@ -12,6 +12,7 @@ import cn.winkt.modules.paimai.vo.PostFapiaoOrderVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/members/fapiao")
@@ -65,6 +68,23 @@ public class WxAppFapiaoController {
         return Result.OK(pageList);
     }
 
+    /**
+     * 已开票申请
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/history")
+    public Result<?> kaipiaoHistoryList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        LambdaQueryWrapper<FapiaoOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(FapiaoOrder::getCreateTime);
+
+        Page<FapiaoOrder> page = new Page<>(pageNo, pageSize);
+        IPage<FapiaoOrder> pageList = fapiaoOrderService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
     @PostMapping("/create")
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> create(@RequestBody PostFapiaoOrderVO postFapiaoOrderVO) {
