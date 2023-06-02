@@ -2,12 +2,11 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
-import {Button, Text, View, Navigator, Input} from "@tarojs/components";
-import {Button as TaroifyButton} from '@taroify/core';
+import {Button, Input, Navigator, Text, View} from "@tarojs/components";
+import {Button as TaroifyButton, ConfigProvider, Popup, Radio, Tabs, Uploader} from '@taroify/core';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
-import {ConfigProvider, Popup, Radio, Tabs} from "@taroify/core";
 import './confirm.scss';
 import {setUserInfo} from "../../store/actions";
 
@@ -37,6 +36,11 @@ export default class Index extends Component<any, any> {
         coupons: null,
         postOrderInfo: {useIntegral: 0, ticketId: null, payedPrice: 0, goodsList: null, ticketAmount: 0, address: null, payType: 1},
         selectedTicketId: null,
+        payType: 1,
+        openNetPay: false,
+        openUploadPay: false,
+        banks: [],
+        file: null,
     }
 
     constructor(props) {
@@ -48,6 +52,9 @@ export default class Index extends Component<any, any> {
         this.fetchPrice = this.fetchPrice.bind(this);
         this.openIntegral = this.openIntegral.bind(this);
         this.handleIntegralChange = this.handleIntegralChange.bind(this);
+        this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
+        this.onUpload = this.onUpload.bind(this);
+        this.setUploadFile = this.setUploadFile.bind(this);
     }
 
 
@@ -78,6 +85,11 @@ export default class Index extends Component<any, any> {
                 this.setState({coupons: res.data.result});
             });
         }
+
+        //加载银行信息
+        request.get('/paimai/api/banks').then(res => {
+            this.setState({banks: res.data.result});
+        });
     }
 
     fetchPrice(postOrderInfo: any) {
@@ -139,42 +151,75 @@ export default class Index extends Component<any, any> {
             })
         }
     }
+    setUploadFile(file) {
+        this.setState({file: file});
+    }
+    onUpload() {
+        Taro.chooseImage({
+            count: 1,
+            sizeType: ["original", "compressed"],
+            sourceType: ["album", "camera"],
+        }).then(({ tempFiles }) => {
+            this.setState({file:{
+                url: tempFiles[0].path,
+                type: tempFiles[0].type,
+                name: tempFiles[0].originalFileObj?.name,
+            }});
+        })
+    }
+    showUploadNetPay() {
+        this.setState({openNetPay: false, openUploadPay: true});
+    }
+
+    handlePayTypeChanged(value) {
+        this.setState({payType: value});
+    }
 
     pay() {
         this.setState({posting: true});
         utils.showLoading('发起支付中');
         let data = this.state.postOrderInfo;
+        data.payType = parseInt(this.state.payType);
         data.address = this.state.address;
         data.payedPrice = data.payedPrice.toFixed(2);
-        //支付宝保证金
-        request.post('/paimai/api/members/goods/buy', data).then(res => {
-            let data = res.data.result;
-            data.package = data.packageValue;
-            Taro.requestPayment(data).then(() => {
-                //支付已经完成，提醒支付成功并返回上一页面
-                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-                    //清空购物车
-                    let cart = JSON.parse(Taro.getStorageSync("CART"));
-                    let newCart: any[] = [];
-                    cart.forEach((item: any) => {
-                        this.state.goodsList.forEach(g => {
-                            if (item.id != g.id) {
-                                newCart.push(item);
-                            }
+
+
+        if (data.payType == 1) {
+            //发起支付
+            request.post('/paimai/api/members/goods/buy', data).then(res => {
+                let data = res.data.result;
+                data.package = data.packageValue;
+                Taro.requestPayment(data).then(() => {
+                    //支付已经完成，提醒支付成功并返回上一页面
+                    Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+                        //清空购物车
+                        let cart = JSON.parse(Taro.getStorageSync("CART"));
+                        let newCart: any[] = [];
+                        cart.forEach((item: any) => {
+                            this.state.goodsList.forEach(g => {
+                                if (item.id != g.id) {
+                                    newCart.push(item);
+                                }
+                            });
                         });
+                        Taro.setStorageSync("CART", JSON.stringify(newCart));
+                        setTimeout(() => {
+                            utils.hideLoading();
+                            Taro.navigateBack().then();
+                        }, 2000);
                     });
-                    Taro.setStorageSync("CART", JSON.stringify(newCart));
+                    this.setState({posting: false});
+                }).catch(() => {
+                    this.setState({posting: false})
                     setTimeout(() => {
-                        utils.hideLoading();
+                        utils.showError('取消支付');
                         Taro.navigateBack().then();
                     }, 2000);
                 });
-                this.setState({posting: false});
-            }).catch(() => {
-                this.setState({posting: false})
-                utils.hideLoading()
-            });
-        })
+            })
+        } else {
+            //网银支付
+        }
     }
 
     get calcCartPrice() {
@@ -205,7 +250,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
-        const {goodsList, address, openCoupon, coupons, postOrderInfo, openIntegral} = this.state;
+        const {goodsList, address, openCoupon, coupons, postOrderInfo, openIntegral, openNetPay, openUploadPay, banks} = this.state;
         const integralRatio = parseInt(settings.integralRatio) || 100;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
@@ -298,8 +343,9 @@ export default class Index extends Component<any, any> {
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>支付方式</View>
                         <View className={'space-x-2'}>
-                            <Radio.Group defaultValue={'1'} size={16} className={'radio-red-color'}>
+                            <Radio.Group defaultValue={'1'} size={16} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
                                 <Radio name={'1'}>微信支付</Radio>
+                                <Radio name={'2'}>网银转账</Radio>
                             </Radio.Group>
                         </View>
                     </View>
@@ -311,10 +357,7 @@ export default class Index extends Component<any, any> {
                         <Text className={'ml-4 font-bold'}>总计：</Text>
                         <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
-                    <View>
-                        <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'}
-                                onClick={this.pay}>立即支付</Button>
-                    </View>
+                    <View> <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'} onClick={this.pay}>立即支付</Button> </View>
                 </View>
 
 
@@ -424,6 +467,45 @@ export default class Index extends Component<any, any> {
                     </Popup>
                 </ConfigProvider>
 
+
+                <Popup style={{height: 330}} className={'!bg-gray-100'} open={openNetPay} rounded placement={'bottom'} onClose={() => this.setState({openNetPay: false})}>
+                    <View className={'text-2xl'}>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <Popup.Close/>
+                    </View>
+                    <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                        <View className={'font-bold text-lg'}>平台对公银行账户:</View>
+                        <View className={'divide-y'}>
+                            {banks.map((item: any) => {
+                                return (
+                                    <View className={'flex'}>
+                                        <View className={'flex-1 space-y-2'}>
+                                            <View>{item.bankName}</View>
+                                            <View>{item.bankAddress}</View>
+                                            <View>{item.bankCode}</View>
+                                        </View>
+                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'}>复制</Button></View>
+                                    </View>
+                                );
+                            })}
+                        </View>
+                        <View><Button className={'btn btn-primary'} onClick={this.showUploadNetPay}>上传转账凭证</Button></View>
+                    </View>
+                </Popup>
+
+                <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
+                    <View className={'text-2xl'}>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <Popup.Close/>
+                    </View>
+                    <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                        <View className={''}><Text className={'font-bold text-lg'}>转账截图:</Text><Text className={'text-stone-400'}>图片大小不能超过5M</Text>:</View>
+                        <View className={''}>
+                            <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file} />
+                        </View>
+                        <View><Button className={'btn btn-primary'}>确定</Button></View>
+                    </View>
+                </Popup>
 
             </PageLayout>
         );
