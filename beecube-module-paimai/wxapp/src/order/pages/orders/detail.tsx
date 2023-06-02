@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import PageLayout from "../../../layouts/PageLayout";
 import PageLoading from "../../../components/pageloading";
 import utils from "../../../lib/utils";
-import request from "../../../lib/request";
+import request, {API_URL} from "../../../lib/request";
 import FallbackImage from "../../../components/FallbackImage";
 import Taro from "@tarojs/taro";
 import {Popup, Uploader} from "@taroify/core";
@@ -61,8 +61,25 @@ export default class Index extends Component<any, any> {
         this.confirmUpload = this.confirmUpload.bind(this);
     }
 
-    confirmUpload() {
-
+    async confirmUpload() {
+        const res = await request.get('/app/api/members/tmptoken');
+        const token = res.data.result;
+        let file = this.state.file;
+        Taro.uploadFile({
+            url: API_URL + '/sys/oss/file/upload',
+            name: 'file',
+            filePath: file,
+            header: {
+                "X-Access-Token": token,
+                "Authorization": token,
+                "Content-Type": 'application/json'
+            }
+        }).then(async (res: any) => {
+            let result = JSON.parse(res.data);
+            let url = result.result.url;
+            await request.put('/paimai/api/orders/netpay', {payImage: url});
+            utils.showSuccess(false, '上传成功');
+        });
     }
     copyBank(bank) {
         let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
@@ -166,18 +183,22 @@ export default class Index extends Component<any, any> {
         if (!this.state.address) {
             return utils.showError("请选择收货地址");
         }
-
-        this.setState({posting: true});
-        //支付宝保证金
-        request.post('/paimai/api/members/orders/pay', this.state.address, {params: {id: this.state.detail.id}}).then(res => {
-            let data = res.data.result;
-            data.package = data.packageValue;
-            Taro.requestPayment(data).then(() => {
-                //支付已经完成，提醒支付成功并返回上一页面
-                this.setState({posting: false});
-                utils.showSuccess(true, '支付成功');
-            }).catch(() => this.setState({posting: false}));
-        });
+        if(this.state.detail.payType == 1) {
+            this.setState({posting: true});
+            //支付宝保证金
+            request.post('/paimai/api/members/orders/pay', this.state.address, {params: {id: this.state.detail.id}}).then(res => {
+                let data = res.data.result;
+                data.package = data.packageValue;
+                Taro.requestPayment(data).then(() => {
+                    //支付已经完成，提醒支付成功并返回上一页面
+                    this.setState({posting: false});
+                    utils.showSuccess(true, '支付成功');
+                }).catch(() => this.setState({posting: false}));
+            });
+        }
+        else {
+            this.setState({openNetPay: true});
+        }
     }
 
     cancel() {
@@ -212,7 +233,7 @@ export default class Index extends Component<any, any> {
                                 <View>取消订单</View>
                             </Button>
                             <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
-                                <View>立即支付</View>
+                                <View>{detail.payType == 1 ? '立即支付':'上传转账凭证'}</View>
                             </Button>
                         </View>
                     </View>
