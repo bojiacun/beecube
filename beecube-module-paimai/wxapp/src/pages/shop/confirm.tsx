@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
 import {Button, Input, Navigator, Text, View} from "@tarojs/components";
-import {Button as TaroifyButton, ConfigProvider, Popup, Radio, Tabs, Uploader} from '@taroify/core';
+import {Button as TaroifyButton, ConfigProvider, Popup, Radio, Tabs} from '@taroify/core';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
@@ -53,8 +53,6 @@ export default class Index extends Component<any, any> {
         this.openIntegral = this.openIntegral.bind(this);
         this.handleIntegralChange = this.handleIntegralChange.bind(this);
         this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
-        this.onUpload = this.onUpload.bind(this);
-        this.setUploadFile = this.setUploadFile.bind(this);
         this.confirmNetPay = this.confirmNetPay.bind(this);
         this.copyBank = this.copyBank.bind(this);
     }
@@ -275,7 +273,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
-        const {goodsList, address, openCoupon, coupons, postOrderInfo, openIntegral, openNetPay, openUploadPay, banks} = this.state;
+        const {goodsList, address, openCoupon, coupons, postOrderInfo, openIntegral, openNetPay, banks} = this.state;
         const integralRatio = parseInt(settings.integralRatio) || 100;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
