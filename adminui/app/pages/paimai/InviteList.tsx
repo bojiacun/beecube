@@ -104,7 +104,7 @@ const InviteList = (props: any) => {
             </Modal.Header>
             <Modal.Body>
                 <div className={'m-2'}>
-                    <h4>小程序地址页面:/pages/performance/invite?id={selectedRow.id}</h4>
+                    <h4>小程序地址页面:/performance/pages/invite?id={selectedRow.id}</h4>
                     <Row>
                         <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <ReactSelectThemed
