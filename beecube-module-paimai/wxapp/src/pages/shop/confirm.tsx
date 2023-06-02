@@ -55,8 +55,18 @@ export default class Index extends Component<any, any> {
         this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
         this.onUpload = this.onUpload.bind(this);
         this.setUploadFile = this.setUploadFile.bind(this);
+        this.confirmNetPay = this.confirmNetPay.bind(this);
+        this.copyBank = this.copyBank.bind(this);
     }
 
+    copyBank(bank) {
+        let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
+        Taro.setClipboardData({data: data}).then(res=>{
+            utils.showSuccess(false, '复制成功');
+        }).catch(()=>{
+            utils.showError('复制失败');
+        });
+    }
 
     onLoad(options) {
         if (options.id) {
@@ -170,7 +180,38 @@ export default class Index extends Component<any, any> {
     showUploadNetPay() {
         this.setState({openNetPay: false, openUploadPay: true});
     }
-
+    confirmNetPay() {
+        this.setState({posting: true});
+        utils.showLoading('发起支付中');
+        let data = this.state.postOrderInfo;
+        data.payType = parseInt(this.state.payType);
+        data.address = this.state.address;
+        data.payedPrice = data.payedPrice.toFixed(2);
+        request.post('/paimai/api/members/goods/buy', data).then(res => {
+            let data = res.data.result;
+            if(data) {
+                //支付已经完成，提醒支付成功并返回上一页面
+                Taro.showToast({title: '下单成功', duration: 2000}).then(() => {
+                    //清空购物车
+                    let cart = JSON.parse(Taro.getStorageSync("CART"));
+                    let newCart: any[] = [];
+                    cart.forEach((item: any) => {
+                        this.state.goodsList.forEach(g => {
+                            if (item.id != g.id) {
+                                newCart.push(item);
+                            }
+                        });
+                    });
+                    Taro.setStorageSync("CART", JSON.stringify(newCart));
+                    setTimeout(() => {
+                        utils.hideLoading();
+                        Taro.navigateBack().then();
+                    }, 2000);
+                });
+                this.setState({posting: false});
+            }
+        });
+    }
     handlePayTypeChanged(value) {
         this.setState({payType: value});
     }
@@ -219,6 +260,7 @@ export default class Index extends Component<any, any> {
             })
         } else {
             //网银支付
+            this.setState({openNetPay: true});
         }
     }
 
@@ -484,12 +526,12 @@ export default class Index extends Component<any, any> {
                                             <View>{item.bankAddress}</View>
                                             <View>{item.bankCode}</View>
                                         </View>
-                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'}>复制</Button></View>
+                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={()=>this.copyBank(item)}>复制</Button></View>
                                     </View>
                                 );
                             })}
                         </View>
-                        <View><Button className={'btn btn-primary'} onClick={this.showUploadNetPay}>上传转账凭证</Button></View>
+                        <View><Button className={'btn btn-primary'} onClick={this.confirmNetPay}>确认下单</Button></View>
                     </View>
                 </Popup>
 
