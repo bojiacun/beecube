@@ -61,7 +61,7 @@ export default class Index extends Component<any, any> {
 
     copyBank(bank) {
         let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
-        Taro.setClipboardData({data: data}).then(res=>{
+        Taro.setClipboardData({data: data}).then(()=>{
             utils.showSuccess(false, '复制成功');
         }).catch(()=>{
             utils.showError('复制失败');
@@ -161,25 +161,8 @@ export default class Index extends Component<any, any> {
             })
         }
     }
-    setUploadFile(file) {
-        this.setState({file: file});
-    }
-    onUpload() {
-        Taro.chooseImage({
-            count: 1,
-            sizeType: ["original", "compressed"],
-            sourceType: ["album", "camera"],
-        }).then(({ tempFiles }) => {
-            this.setState({file:{
-                url: tempFiles[0].path,
-                type: tempFiles[0].type,
-                name: tempFiles[0].originalFileObj?.name,
-            }});
-        })
-    }
-    showUploadNetPay() {
-        this.setState({openNetPay: false, openUploadPay: true});
-    }
+
+
     confirmNetPay() {
         this.setState({posting: true});
         utils.showLoading('发起支付中');
@@ -399,7 +382,11 @@ export default class Index extends Component<any, any> {
                         <Text className={'ml-4 font-bold'}>总计：</Text>
                         <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
-                    <View> <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'} onClick={this.pay}>立即支付</Button> </View>
+                    <View>
+                        <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'} onClick={this.pay}>
+                            {this.state.payType == 1 ? '立即支付' : '立即下单'}
+                        </Button>
+                    </View>
                 </View>
 
 
@@ -535,19 +522,7 @@ export default class Index extends Component<any, any> {
                     </View>
                 </Popup>
 
-                <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
-                    <View className={'text-2xl'}>
-                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
-                        <Popup.Close/>
-                    </View>
-                    <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
-                        <View className={''}><Text className={'font-bold text-lg'}>转账截图:</Text><Text className={'text-stone-400'}>图片大小不能超过5M</Text>:</View>
-                        <View className={''}>
-                            <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file} />
-                        </View>
-                        <View><Button className={'btn btn-primary'}>确定</Button></View>
-                    </View>
-                </Popup>
+
 
             </PageLayout>
         );

@@ -7,6 +7,7 @@ import utils from "../../../lib/utils";
 import request from "../../../lib/request";
 import FallbackImage from "../../../components/FallbackImage";
 import Taro from "@tarojs/taro";
+import {Popup, Uploader} from "@taroify/core";
 
 const numeral = require('numeral');
 
@@ -37,6 +38,10 @@ export default class Index extends Component<any, any> {
         posting: false,
         address: null,
         afters: [],
+        openNetPay: false,
+        openUploadPay: false,
+        banks: [],
+        file: null,
     }
 
     constructor(props) {
@@ -49,11 +54,32 @@ export default class Index extends Component<any, any> {
         this.loadAfters = this.loadAfters.bind(this);
         this.cancelAfter = this.cancelAfter.bind(this);
         this.refreshData = this.refreshData.bind(this);
+        this.showUploadNetPay = this.showUploadNetPay.bind(this);
+        this.copyBank = this.copyBank.bind(this);
+        this.onUpload = this.onUpload.bind(this);
+        this.setUploadFile = this.setUploadFile.bind(this);
+        this.confirmUpload = this.confirmUpload.bind(this);
     }
 
+    confirmUpload() {
 
+    }
+    copyBank(bank) {
+        let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
+        Taro.setClipboardData({data: data}).then(()=>{
+            utils.showSuccess(false, '复制成功');
+        }).catch(()=>{
+            utils.showError('复制失败');
+        });
+    }
+    showUploadNetPay() {
+        this.setState({openNetPay: false, openUploadPay: true});
+    }
     componentDidMount() {
-
+        //加载银行信息
+        request.get('/paimai/api/banks').then(res => {
+            this.setState({banks: res.data.result});
+        });
     }
 
     onLoad(options) {
@@ -226,13 +252,28 @@ export default class Index extends Component<any, any> {
         }
         return <></>
     }
-
+    setUploadFile(file) {
+        this.setState({file: file});
+    }
+    onUpload() {
+        Taro.chooseImage({
+            count: 1,
+            sizeType: ["original", "compressed"],
+            sourceType: ["album", "camera"],
+        }).then(({ tempFiles }) => {
+            this.setState({file:{
+                    url: tempFiles[0].path,
+                    type: tempFiles[0].type,
+                    name: tempFiles[0].originalFileObj?.name,
+                }});
+        })
+    }
     componentWillUnmount() {
 
     }
 
     render() {
-        const {detail, address, afters} = this.state;
+        const {detail, address, afters, openUploadPay, openNetPay, banks} = this.state;
         if (detail == null) return <PageLoading/>;
 
 
@@ -398,6 +439,44 @@ export default class Index extends Component<any, any> {
 
                 <View style={{height: 100}}></View>
                 {this.renderButton()}
+
+                <Popup style={{height: 330}} className={'!bg-gray-100'} open={openNetPay} rounded placement={'bottom'} onClose={() => this.setState({openNetPay: false})}>
+                    <View className={'text-2xl'}>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <Popup.Close/>
+                    </View>
+                    <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                        <View className={'font-bold text-lg'}>平台对公银行账户:</View>
+                        <View className={'divide-y'}>
+                            {banks.map((item: any) => {
+                                return (
+                                    <View className={'flex'}>
+                                        <View className={'flex-1 space-y-2'}>
+                                            <View>{item.bankName}</View>
+                                            <View>{item.bankAddress}</View>
+                                            <View>{item.bankCode}</View>
+                                        </View>
+                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={()=>this.copyBank(item)}>复制</Button></View>
+                                    </View>
+                                );
+                            })}
+                        </View>
+                        <View><Button className={'btn btn-primary'} onClick={this.showUploadNetPay}>上传转账凭证</Button></View>
+                    </View>
+                </Popup>
+                <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
+                    <View className={'text-2xl'}>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <Popup.Close/>
+                    </View>
+                    <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
+                        <View className={''}><Text className={'font-bold text-lg'}>转账截图:</Text><Text className={'text-stone-400'}>图片大小不能超过5M</Text>:</View>
+                        <View className={''}>
+                            <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file} />
+                        </View>
+                        <View><Button className={'btn btn-primary'} onClick={this.confirmUpload}>确定</Button></View>
+                    </View>
+                </Popup>
             </PageLayout>
         );
     }
