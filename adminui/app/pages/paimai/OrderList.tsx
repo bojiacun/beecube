@@ -148,10 +148,14 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
+            text: '订单备注',
+            dataField: 'note',
+        },
+        {
             text: '支付方式',
             dataField: 'payType_dictText',
             formatter(cell:number, row: any) {
-                return <Badge bg={PAY_TYPE_COLORS[row.status]}>{row.payType_dictText}</Badge>
+                return <Badge bg={PAY_TYPE_COLORS[row.payType]}>{row.payType_dictText}</Badge>
             }
         },
         {
