@@ -3,6 +3,7 @@ import Taro, {getCurrentInstance} from "@tarojs/taro";
 import {connect} from "react-redux";
 import request from "../../lib/request";
 import {Image, Text, View, ScrollView, Navigator, Button, Input} from "@tarojs/components";
+import {Button as TaroifyButton} from '@taroify/core';
 import './room.scss';
 import utils from "../../lib/utils";
 import FallbackImage from "../../components/FallbackImage";
@@ -10,7 +11,8 @@ import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
 import classNames from "classnames";
-import PageLoading from "../../components/pageloading";
+import {Popup} from "@taroify/core";
+
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -87,7 +89,7 @@ export default class Index extends Component<any, any> {
         const msg = message;
         switch (message.type) {
             case MessageType.GOODS_UPDATE:
-                goodsList?.forEach((goods:any) => {
+                goodsList?.forEach((goods: any) => {
                     if (goods.id == message.goodsId) {
                         goods.startTime = message.startTime;
                         goods.endTime = message.endTime;
@@ -98,7 +100,7 @@ export default class Index extends Component<any, any> {
                         if (parseInt(settings.isDealCommission) == 1) {
                             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                                 //落槌价显示佣金
-                                const commission = goods.commission/100;
+                                const commission = goods.commission / 100;
                                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
                             }
                         }
@@ -123,14 +125,14 @@ export default class Index extends Component<any, any> {
                 });
                 break;
             case MessageType.AUCTION_DELAYED:
-                goodsList?.forEach(goods=>{
-                    if(goods.id == message.goodsId) {
+                goodsList?.forEach(goods => {
+                    if (goods.id == message.goodsId) {
                         goods.actualEndTime = message.newTime;
                     }
                 })
                 break;
             case MessageType.OFFER:
-                goodsList?.forEach(goods=> {
+                goodsList?.forEach(goods => {
                     if (goods.id == message.goodsId) {
                         goods.currentPrice = parseFloat(msg.price).toFixed(2);
                         this.setState({goods: goods});
@@ -155,7 +157,7 @@ export default class Index extends Component<any, any> {
                 break;
             case MessageType.KICKOUT_ROOM:
                 //被踢出房间
-                utils.showMessage(message.message, function(){
+                utils.showMessage(message.message, function () {
                     utils.navigateBack();
                 }).then();
                 break;
@@ -163,8 +165,8 @@ export default class Index extends Component<any, any> {
                 let state = message.state;
                 let roomId = message.roomId;
                 let liveRoom = this.state.liveRoom;
-                if(roomId == liveRoom.id) {
-                    if(state == 1) {
+                if (roomId == liveRoom.id) {
+                    if (state == 1) {
                         this.liveRoom.init();
                         this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
                         //查询是否需要缴纳保证金
@@ -190,7 +192,7 @@ export default class Index extends Component<any, any> {
         if (!this.liveRoom && userInfo && liveRoom) {
             // @ts-ignore
             this.liveRoom = page?.selectComponent('#live-room');
-            if(liveRoom.state == 1) {
+            if (liveRoom.state == 1) {
                 this.liveRoom.init();
                 this.setState({merBot: this.liveRoom.getData().meBot, newBot: this.liveRoom.getData().newBot});
                 //查询是否需要缴纳保证金
@@ -235,9 +237,10 @@ export default class Index extends Component<any, any> {
             }
         }
     }
+
     async payDeposit() {
         const {preOffered} = this.state;
-        if(!preOffered) {
+        if (!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
@@ -266,11 +269,11 @@ export default class Index extends Component<any, any> {
         const {userInfo} = context;
         const {preOffered} = this.state;
         const goods = this.state.merchandises[this.state.pushIndex];
-        if(!goods) {
+        if (!goods) {
             utils.showError('当前没有可以出价的拍品');
             return;
         }
-        if(!preOffered) {
+        if (!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
@@ -314,15 +317,16 @@ export default class Index extends Component<any, any> {
 
     }
 
-    onInputPriceChange(e){
+    onInputPriceChange(e) {
         let newPrice = e.detail.value;
         let goods = this.state.customGoods || {...this.state.goods};
         goods.currentPrice = newPrice;
         this.setState({customGoods: goods});
     }
-    subPrice(){
-        if(this.state.pushIndex < 0) return;
-        if(this.offerInputRef.current.value <= this.state.nextPrice) {
+
+    subPrice() {
+        if (this.state.pushIndex < 0) return;
+        if (this.offerInputRef.current.value <= this.state.nextPrice) {
             return;
         }
         let goods = this.state.customGoods || {...this.state.merchandises[this.state.pushIndex]};
@@ -330,21 +334,23 @@ export default class Index extends Component<any, any> {
         goods.offerCount--;
         this.setState({customGoods: goods});
     }
-    addPrice(){
-        if(this.state.pushIndex < 0) return;
+
+    addPrice() {
+        if (this.state.pushIndex < 0) return;
         let goods = this.state.customGoods || {...this.state.merchandises[this.state.pushIndex], currentPrice: this.state.nextPrice};
         goods.offerCount++;
         goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
         this.setState({customGoods: goods});
     }
-    prevPrice(newGoods, update= false) {
+
+    prevPrice(newGoods, update = false) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                 //落槌价显示佣金
-                const commission = goods.commission/100;
+                const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
         }
@@ -364,10 +370,9 @@ export default class Index extends Component<any, any> {
             let min = parseFloat(config.min);
             let priceConfigs = config.price.split(',');
             let price = 0;
-            if(priceConfigs.length == 1) {
+            if (priceConfigs.length == 1) {
                 price = parseFloat(priceConfigs[0]);
-            }
-            else {
+            } else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
                 console.log('mod index is', modIndex, offerCount, priceConfigs.length);
@@ -381,14 +386,15 @@ export default class Index extends Component<any, any> {
         update && this.setState({nextPrice: finalPrice, goods: goods});
         return finalPrice;
     }
-    nextPrice(newGoods, update=true) {
+
+    nextPrice(newGoods, update = true) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                 //落槌价显示佣金
-                const commission = goods.commission/100;
+                const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
         }
@@ -408,10 +414,9 @@ export default class Index extends Component<any, any> {
             let min = parseFloat(config.min);
             let priceConfigs = config.price.split(',');
             let price = 0;
-            if(priceConfigs.length == 1) {
+            if (priceConfigs.length == 1) {
                 price = parseFloat(priceConfigs[0]);
-            }
-            else {
+            } else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
                 price = parseFloat(priceConfigs[modIndex]);
@@ -420,7 +425,7 @@ export default class Index extends Component<any, any> {
                 rangePrice = price;
             }
         }
-        const finalPrice = currentPrice+rangePrice;
+        const finalPrice = currentPrice + rangePrice;
         update && this.setState({nextPrice: finalPrice, goods: goods});
         return finalPrice;
     }
@@ -430,10 +435,12 @@ export default class Index extends Component<any, any> {
         this.setState({hideModal: true});
         this.fadeDown();
     }
+
     hideOffer() {
         this.setState({hideModal: true});
         this.fadeDownOffer();
     }
+
     clickMech(e) {
         const mer = this.state.merchandises.find(item => item.id == e.currentTarget.id)
         if (!mer || !mer.link) return;
@@ -456,6 +463,7 @@ export default class Index extends Component<any, any> {
         const {currentTarget: {dataset: {indx}}} = e;
         console.log('addShoppingCart ', indx);
     }
+
     fadeInOffer() {
         this.animationOffer?.translateY(0).step()
         this.setState({
@@ -469,6 +477,7 @@ export default class Index extends Component<any, any> {
             animationOfferData: this.animationOffer?.export(),
         })
     }
+
     fadeIn() {
         this.animation?.translateY(0).step()
         this.setState({
@@ -492,7 +501,7 @@ export default class Index extends Component<any, any> {
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
             request.get('/paimai/api/live/room/goods', {params: {roomId: room.id}}).then(res => {
                 let goodsList = res.data.result;
-                goodsList.forEach(data=> {
+                goodsList.forEach(data => {
                     data.fields = JSON.parse(data.fields || '[]');
                     data.uprange = JSON.parse(data.uprange);
                 });
@@ -504,20 +513,20 @@ export default class Index extends Component<any, any> {
 
     resolveGoods(goodsList) {
         let currentIndex = -1;
-        goodsList.forEach((item:any, index:number)=>{
-            if(item.state == 1){
+        goodsList.forEach((item: any, index: number) => {
+            if (item.state == 1) {
                 currentIndex = index;
             }
         });
-        if(currentIndex == -1) {
+        if (currentIndex == -1) {
             this.liveRoom?.clickFull();
-        }
-        else {
+        } else {
             let data = goodsList[currentIndex];
             this.nextPrice(data);
         }
         return {merchandises: goodsList, pushIndex: currentIndex};
     }
+
     showModal() {
         this.setState({
             hideModal: false
@@ -530,8 +539,9 @@ export default class Index extends Component<any, any> {
             this.fadeIn(); //调用显示动画
         }, 10);
     }
+
     showOffer(e) {
-        if(e) {
+        if (e) {
             e.stopPropagation();
             e.preventDefault();
         }
@@ -543,7 +553,7 @@ export default class Index extends Component<any, any> {
             duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
             timingFunction: 'linear', //动画的效果 默认值是linear
         });
-        if(this.offerInputRef?.current){
+        if (this.offerInputRef?.current) {
             this.offerInputRef.current.value = this.state.nextPrice;
         }
         setTimeout(() => {
@@ -572,7 +582,7 @@ export default class Index extends Component<any, any> {
         let settings = this.props.settings;
         return {
             title: settings.shareTitle || '超值拍品正在拍卖中，快来围观！',
-            path: '/live/pages/detail?mid=' + mid + '&roomId='+this.state.liveRoom.id
+            path: '/live/pages/detail?mid=' + mid + '&roomId=' + this.state.liveRoom.id
         }
     }
 
@@ -612,27 +622,27 @@ export default class Index extends Component<any, any> {
                         bindRoomEvent
                     />
                     {playError && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-center'}>
-                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'}/>
                         <View className={'text-white text-lg z-1 mb-4'}>网络开小差了~~</View>
                         <Button className={'btn btn-primary z-1'} onClick={this.handleReplay}>点击重试</Button>
                     </View>}
                     {/*直播结束*/}
-                    {liveRoom?.state == 2&& <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
-                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                    {liveRoom?.state == 2 && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'}/>
                         <View className={'text-white z-1 text-center'}>
                             <View className={'text-2xl mb-2'}>直播已结束</View>
                             <View className={'text-sm'}>{liveRoom.views}人看过</View>
                         </View>
-                        <Button className={'btn btn-primary z-1'} onClick={()=>utils.navigateBack()}>点击返回</Button>
+                        <Button className={'btn btn-primary z-1'} onClick={() => utils.navigateBack()}>点击返回</Button>
                     </View>}
                     {/*直播尚未开始*/}
                     {liveRoom?.state == 0 && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
-                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'} />
+                        <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'}/>
                         <View className={'text-white z-1 text-center'}>
                             <View className={'text-2xl mb-2'}>直播未开始</View>
                             <View className={'text-sm'}>预计开播时间：{liveRoom.startTime}</View>
                         </View>
-                        <Button className={'btn btn-primary z-1'} onClick={()=>utils.navigateBack()}>点击返回</Button>
+                        <Button className={'btn btn-primary z-1'} onClick={() => utils.navigateBack()}>点击返回</Button>
                     </View>}
 
                     <View className="modals modals-bottom-dialog" hidden={hideModal}>
@@ -698,50 +708,47 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     {pushIndex >= 0 &&
-                        <View onClick={()=>Taro.navigateTo({url: `/goods/pages/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot+'rpx'}}>
+                        <View onClick={() => Taro.navigateTo({url: `/goods/pages/detail?id=${merchandises[pushIndex].id}`})} className="push-mer" style={{bottom: merBot + 'rpx'}}>
                             <Image className="push-mer-img" mode={'aspectFill'} src={merchandises[pushIndex].images.split(',')[0]}></Image>
                             <View className="push-mer-detail">
                                 <View className="push-mer-text">{merchandises[pushIndex].title}</View>
                                 <View className="push-mer-price justify-between mt-1">
                                     <View className={'text-cut flex-1'}>
-                                    <Text className={'text-sm'}>¥</Text>
-                                    <Text>{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
+                                        <Text className={'text-sm'}>¥</Text>
+                                        <Text>{numeral(merchandises[pushIndex].currentPrice || merchandises[pushIndex].startPrice).format('0,0.00')}</Text>
                                     </View>
                                     <Text onClick={this.showOffer} className={'font-bold'}>出价</Text>
                                 </View>
                             </View>
                         </View>
                     }
-                    {pushIndex >= 0 &&
-                    <View className="modals modals-bottom-dialog" hidden={hideModal}>
-                        <View className="bottom-dialog-body bottom-pos" animation={animationOfferData} style={{height: 200}}>
-                            <View className="merchandise-container">
-                                <View className="merchandise-head">
-                                    <View className="m-t">
-                                        <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
-                                        <View className="m-title">出价拍品</View>
-                                    </View>
-                                    <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideOffer}></Image>
-                                </View>
-                                <View className={'flex flex-col items-center justify-center space-y-4'}>
-                                    <View>当前价：{numeral(merchandises[pushIndex].currentPrice||merchandises[pushIndex].startPrice).format('0,0.00')}</View>
-                                    <View className={'flex items-center text-center'}>
-                                        <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
-                                        <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
-                                        {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />}
-                                        {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}} />}
-                                    </View>
-                                    {this.state.deposited &&
-                                        <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
-                                    }
-                                    {!this.state.deposited &&
-                                        <View><Button className={'btn btn-info'} onClick={this.payDeposit}>缴纳保证金</Button></View>
-                                    }
-                                </View>
-                            </View>
+
+
+                    <Popup style={{height: 300}} placement={'bottom'} rounded open={!hideModal && pushIndex >= 0} onClose={() => this.setState({hideModal: true})}>
+                        <View className={'text-2xl'}>
+                            <View className={'flex py-4 items-center justify-center text-xl font-bold'}>出价拍品</View>
+                            <Popup.Close/>
                         </View>
-                    </View>
-                    }
+                        <View className={'space-y-10 p-4'}>
+                            <View className={'text-lg text-center'}>当前价：{numeral(merchandises[pushIndex]?.currentPrice || merchandises[pushIndex]?.startPrice).format('0,0.00')}</View>
+                            <View className={'flex items-center justify-center'}>
+                                <Text onClick={this.subPrice}
+                                      className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600' : 'text-gray-600')}
+                                      style={{fontSize: 24}}/>
+                                <Input className={'font-bold text-lg w-40 text-center'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef}
+                                       onInput={this.onInputPriceChange}/>
+                                {!!settings.isCustomOffer &&
+                                    <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice}/>}
+                                {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}}/>}
+                            </View>
+                            {this.state.deposited &&
+                                <View className={'text-center'}><TaroifyButton color={'danger'} onClick={this.offer}>确认出价</TaroifyButton></View>
+                            }
+                            {!this.state.deposited &&
+                                <View className={'text-center'}><TaroifyButton color={'primary'} onClick={this.payDeposit}>缴纳保证金</TaroifyButton></View>
+                            }
+                        </View>
+                    </Popup>
                 </View>
             </>
         );
