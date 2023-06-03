@@ -41,6 +41,7 @@ export default class Index extends Component<any, any> {
         openUploadPay: false,
         banks: [],
         file: null,
+        note: '',
     }
 
     constructor(props) {
@@ -55,6 +56,7 @@ export default class Index extends Component<any, any> {
         this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
         this.confirmNetPay = this.confirmNetPay.bind(this);
         this.copyBank = this.copyBank.bind(this);
+        this.handleNoteChanged = this.handleNoteChanged.bind(this);
     }
 
     copyBank(bank) {
@@ -110,6 +112,9 @@ export default class Index extends Component<any, any> {
         this.setState({selectedTicketId: value});
     }
 
+    handleNoteChanged(e) {
+        this.setState({note: e.detail.value});
+    }
     handleIntegralChange(value) {
         const postOrderInfo = this.state.postOrderInfo;
         if (value == '1') {
@@ -163,11 +168,14 @@ export default class Index extends Component<any, any> {
 
     confirmNetPay() {
         this.setState({posting: true});
-        utils.showLoading('发起支付中');
+        utils.showLoading('订单提交中');
         let data = this.state.postOrderInfo;
         data.payType = parseInt(this.state.payType);
         data.address = this.state.address;
-        data.payedPrice = data.payedPrice.toFixed(2);
+        data.payedPrice = parseFloat(data.payedPrice).toFixed(2);
+        data.note = this.state.note;
+
+
         request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
             if(data) {
@@ -199,14 +207,14 @@ export default class Index extends Component<any, any> {
 
     pay() {
         this.setState({posting: true});
-        utils.showLoading('发起支付中');
         let data = this.state.postOrderInfo;
         data.payType = parseInt(this.state.payType);
         data.address = this.state.address;
-        data.payedPrice = data.payedPrice.toFixed(2);
-
+        data.payedPrice = parseFloat(data.payedPrice).toFixed(2);
+        data.note = this.state.note;
 
         if (data.payType == 1) {
+            utils.showLoading('发起支付中');
             //发起支付
             request.post('/paimai/api/members/goods/buy', data).then(res => {
                 let data = res.data.result;
@@ -332,7 +340,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center'}>
                         <View className={'font-bold'}>买家留言</View>
-                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'}/></View>
+                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} onInput={this.handleNoteChanged} /></View>
                     </View>
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
@@ -365,8 +373,8 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center justify-between'}>
                         <View className={'font-bold'}>支付方式</View>
-                        <View className={'space-x-2'}>
-                            <Radio.Group defaultValue={'1'} size={16} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
+                        <View className={'space-x-2 text-sm'}>
+                            <Radio.Group defaultValue={'1'} direction={'horizontal'} size={14} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
                                 <Radio name={'1'}>微信支付</Radio>
                                 <Radio name={'2'}>网银转账</Radio>
                             </Radio.Group>
@@ -516,7 +524,7 @@ export default class Index extends Component<any, any> {
                                 );
                             })}
                         </View>
-                        <View><Button className={'btn btn-primary'} onClick={this.confirmNetPay}>确认下单</Button></View>
+                        <View><TaroifyButton color={'danger'} block onClick={this.confirmNetPay}>确认下单</TaroifyButton></View>
                     </View>
                 </Popup>
 

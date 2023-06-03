@@ -18,8 +18,8 @@ const BankEditor = (props: any) => {
 
     const schema = Yup.object().shape({
         bankName: Yup.string().required('必填字段'),
-        bankAddress: Yup.number().required('必填字段'),
-        bankCode: Yup.number().required('必填字段'),
+        bankAddress: Yup.string().required('必填字段'),
+        bankCode: Yup.string().required('必填字段'),
     });
 
     const handleOnSubmit = (values: any) => {
