@@ -7,7 +7,7 @@ import utils from "../../../lib/utils";
 import request, {API_URL} from "../../../lib/request";
 import FallbackImage from "../../../components/FallbackImage";
 import Taro from "@tarojs/taro";
-import {Popup, Uploader} from "@taroify/core";
+import {Popup, Radio, Uploader, Button as TaroifyButton} from "@taroify/core";
 
 const numeral = require('numeral');
 
@@ -59,16 +59,25 @@ export default class Index extends Component<any, any> {
         this.onUpload = this.onUpload.bind(this);
         this.setUploadFile = this.setUploadFile.bind(this);
         this.confirmUpload = this.confirmUpload.bind(this);
+        this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
     }
 
+    handlePayTypeChanged(value) {
+        this.state.detail.payType = value;
+        this.setState({detail: this.state.detail});
+    }
     async confirmUpload() {
         const res = await request.get('/app/api/members/tmptoken');
         const token = res.data.result;
         let file = this.state.file;
+        if(!file) {
+            return utils.showError('请上传转账凭证');
+        }
+        console.log(file);
         Taro.uploadFile({
             url: API_URL + '/sys/oss/file/upload',
             name: 'file',
-            filePath: file,
+            filePath: file.url,
             header: {
                 "X-Access-Token": token,
                 "Authorization": token,
@@ -408,6 +417,15 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-400'}>买家留言</View>
                             <View>{detail.note}</View>
                         </View>
+                        <View className={'flex items-center justify-between'}>
+                            <View className={'text-gray-400'}>支付方式</View>
+                            <View>
+                                <Radio.Group defaultValue={detail.payType+''} direction={'horizontal'} size={14} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
+                                    <Radio name={'1'}>微信支付</Radio>
+                                    <Radio name={'2'}>网银转账</Radio>
+                                </Radio.Group>
+                            </View>
+                        </View>
                         {/*<View className={'flex items-center justify-between'}>*/}
                         {/*    <View className={'text-gray-400'}>订单状态</View>*/}
                         {/*    <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>*/}
@@ -482,7 +500,7 @@ export default class Index extends Component<any, any> {
                                 );
                             })}
                         </View>
-                        <View><Button className={'btn btn-primary'} onClick={this.showUploadNetPay}>上传转账凭证</Button></View>
+                        <View><TaroifyButton color={'primary'} block onClick={this.showUploadNetPay}>上传转账凭证</TaroifyButton></View>
                     </View>
                 </Popup>
                 <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
@@ -495,7 +513,7 @@ export default class Index extends Component<any, any> {
                         <View className={''}>
                             <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file} />
                         </View>
-                        <View><Button className={'btn btn-primary'} onClick={this.confirmUpload}>确定</Button></View>
+                        <View><TaroifyButton block color={'danger'} onClick={this.confirmUpload}>确定</TaroifyButton></View>
                     </View>
                 </Popup>
             </PageLayout>
