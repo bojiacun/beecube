@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, Image, Input, Navigator, Text, View} from "@tarojs/components";
+import {Button, Input, Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -15,7 +15,7 @@ import TimeCountDowner, {TimeCountDownerMode, TimeCountDownerStatus} from "../..
 import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
-import moment from "moment";
+import {Popup} from "@taroify/core";
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -80,17 +80,19 @@ export default class Index extends Component<any, any> {
             duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
             timingFunction: 'linear', //动画的效果 默认值是linear
         });
-        if(this.offerInputRef?.current){
+        if (this.offerInputRef?.current) {
             this.offerInputRef.current.value = this.state.nextPrice;
         }
         setTimeout(() => {
             this.fadeIn(); //调用显示动画
         }, 10);
     }
+
     hideModal() {
         this.setState({hideModal: true});
         this.fadeDown();
     }
+
     fadeIn() {
         this.animation.translateY(0).step()
         this.setState({
@@ -104,6 +106,7 @@ export default class Index extends Component<any, any> {
             animationData: this.animation.export(),
         })
     }
+
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
         const {context} = this.props;
@@ -184,7 +187,7 @@ export default class Index extends Component<any, any> {
                 if (parseInt(settings.isDealCommission) == 1) {
                     if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                         //落槌价显示佣金
-                        const commission = goods.commission/100;
+                        const commission = goods.commission / 100;
                         goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
                     }
                 }
@@ -210,7 +213,7 @@ export default class Index extends Component<any, any> {
 
     async payDeposit() {
         const {preOffered} = this.state;
-        if(!preOffered) {
+        if (!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
@@ -240,7 +243,7 @@ export default class Index extends Component<any, any> {
         const {context, settings} = this.props;
         const {userInfo} = context;
         const {goods, preOffered} = this.state;
-        if(!preOffered) {
+        if (!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (!checkResult.data.result) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)后再出价", function () {
@@ -284,14 +287,15 @@ export default class Index extends Component<any, any> {
 
     }
 
-    onInputPriceChange(e){
+    onInputPriceChange(e) {
         let newPrice = e.detail.value;
         let goods = this.state.customGoods || {...this.state.goods};
         goods.currentPrice = newPrice;
         this.setState({customGoods: goods});
     }
-    subPrice(){
-        if(this.offerInputRef.current.value <= this.state.nextPrice) {
+
+    subPrice() {
+        if (this.offerInputRef.current.value <= this.state.nextPrice) {
             return;
         }
         let goods = this.state.customGoods || {...this.state.goods};
@@ -299,20 +303,22 @@ export default class Index extends Component<any, any> {
         goods.offerCount--;
         this.setState({customGoods: goods});
     }
-    addPrice(){
+
+    addPrice() {
         let goods = this.state.customGoods || {...this.state.goods, currentPrice: this.state.nextPrice};
         goods.offerCount++;
         goods.currentPrice = this.offerInputRef.current.value = this.nextPrice(goods, false);
         this.setState({customGoods: goods});
     }
-    prevPrice(newGoods, update= false) {
+
+    prevPrice(newGoods, update = false) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                 //落槌价显示佣金
-                const commission = goods.commission/100;
+                const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
         }
@@ -332,10 +338,9 @@ export default class Index extends Component<any, any> {
             let min = parseFloat(config.min);
             let priceConfigs = config.price.split(',');
             let price = 0;
-            if(priceConfigs.length == 1) {
+            if (priceConfigs.length == 1) {
                 price = parseFloat(priceConfigs[0]);
-            }
-            else {
+            } else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
                 console.log('mod index is', modIndex, offerCount, priceConfigs.length);
@@ -348,14 +353,15 @@ export default class Index extends Component<any, any> {
         update && this.setState({nextPrice: currentPrice - rangePrice, goods: goods});
         return currentPrice - rangePrice;
     }
-    nextPrice(newGoods, update=true) {
+
+    nextPrice(newGoods, update = true) {
         let goods = newGoods;
         let upgradeConfig = goods.uprange;
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
                 //落槌价显示佣金
-                const commission = goods.commission/100;
+                const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
         }
@@ -375,10 +381,9 @@ export default class Index extends Component<any, any> {
             let min = parseFloat(config.min);
             let priceConfigs = config.price.split(',');
             let price = 0;
-            if(priceConfigs.length == 1) {
+            if (priceConfigs.length == 1) {
                 price = parseFloat(priceConfigs[0]);
-            }
-            else {
+            } else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
                 price = parseFloat(priceConfigs[modIndex]);
@@ -444,7 +449,6 @@ export default class Index extends Component<any, any> {
     renderButton() {
         const {goods, status} = this.state;
         //判断按钮状态
-        const now = moment(new Date());
         if ((goods.performanceDeposit || goods.deposit || goods.roomDeposit) && !goods.deposited && goods.state < 2 && status != TimeCountDownerStatus.ENDED) {
             //需要交保证金的情况
             return (
@@ -489,25 +493,27 @@ export default class Index extends Component<any, any> {
         return <></>;
     }
 
-    clickMask(){
+    clickMask() {
         this.setState({hideModal: true, loadingShareAdv: false});
         this.fadeDown();
     }
-    openShareGoods(){
-        this.setState({hideModal: false, loadingShareAdv:true});
-        request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res:any)=>{
+
+    openShareGoods() {
+        this.setState({hideModal: false, loadingShareAdv: true});
+        request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res: any) => {
             let data = Taro.arrayBufferToBase64(res.data);
             this.setState({shareAdv: data});
         });
     }
+
     handleSaveToPhotoAlbum() {
         const token = Taro.getStorageSync("TOKEN");
         Taro.downloadFile({
-            url: API_URL+'/paimai/api/members/share/goods?id='+this.state.goods.id,
+            url: API_URL + '/paimai/api/members/share/goods?id=' + this.state.goods.id,
             header: {'X-Access-Token': token, 'Authorization': token, 'X-App-Id': APP_ID},
-        }).then(res=>{
-            Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(()=>{
-                utils.showSuccess(false,'保存成功');
+        }).then(res => {
+            Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(() => {
+                utils.showSuccess(false, '保存成功');
                 this.clickMask();
             });
         })
@@ -560,7 +566,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {goods, message, hideModal,animationData} = this.state;
+        const {goods, message, hideModal} = this.state;
         const {systemInfo, settings} = this.props;
         settings.isCustomOffer = parseInt(settings.isCustomOffer);
         if (goods == null) return <PageLoading/>;
@@ -572,10 +578,9 @@ export default class Index extends Component<any, any> {
         if (safeBottom > 10) safeBottom -= 10;
 
         let deposit = goods.deposit;
-        if(goods.performanceId) {
+        if (goods.performanceId) {
             deposit = goods.performanceDeposit;
-        }
-        else if(goods.roomId) {
+        } else if (goods.roomId) {
             deposit = goods.roomDeposit;
         }
 
@@ -716,40 +721,36 @@ export default class Index extends Component<any, any> {
                     </View>
                     {this.renderButton()}
                 </View>
-                <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods} />
+                <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
 
-                <View className="modals modals-bottom-dialog" hidden={hideModal}>
-                    <View className="bottom-dialog-body bottom-pos" animation={animationData} style={{height: 200}}>
-                        <View className="merchandise-container">
-                            <View className="merchandise-head">
-                                <View className="m-t">
-                                    <Image className="m-list-png" src="../../assets/images/m-list.png"></Image>
-                                    <View className="m-title">出价拍品</View>
-                                </View>
-                                <Image className="m-close-png" src="../../assets/images/m-close.png" onClick={this.hideModal}></Image>
-                            </View>
-                            <View className={'flex flex-col items-center justify-center space-y-4'}>
-                                <View>当前价：{numeral(goods.currentPrice||goods.startPrice).format('0,0.00')}</View>
-                                <View className={'flex items-center text-center'}>
-                                    <Text onClick={this.subPrice} className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600':'text-gray-600')} style={{fontSize: 24}} />
-                                    <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef} onInput={this.onInputPriceChange} />
-                                    {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice} />}
-                                    {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}} />}
-                                </View>
-                                <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
-                            </View>
-                        </View>
+                <Popup rounded placement={'bottom'} open={!hideModal} style={{height: 330}}>
+                    <View className={'text-2xl'}>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>出价拍品</View>
+                        <Popup.Close/>
                     </View>
-                </View>
-                <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} onClick={this.clickMask} />
+                    <View className={'flex flex-col items-center justify-center space-y-4'}>
+                        <View>当前价：{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</View>
+                        <View className={'flex items-center text-center'}>
+                            <Text onClick={this.subPrice}
+                                  className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600' : 'text-gray-600')}
+                                  style={{fontSize: 24}}/>
+                            <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef}
+                                   onInput={this.onInputPriceChange}/>
+                            {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice}/>}
+                            {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}}/>}
+                        </View>
+                        <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                    </View>
+                </Popup>
+
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
                     <View className={'flex flex-col items-center'} style={{height: '70%'}}>
-                    {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,'+this.state.shareAdv} mode={'aspectFit'} />}
-                    {!this.state.shareAdv && <PageLoading style={{height: 500}} />}
-                    <View className={'space-x-4 mt-4 flex-none'}>
-                        <Button openType={'share'} className={'btn btn-info'}>发给好友</Button>
-                        <Button onClick={this.handleSaveToPhotoAlbum} className={'btn btn-warning'}>保存到相册</Button>
-                    </View>
+                        {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,' + this.state.shareAdv} mode={'aspectFit'}/>}
+                        {!this.state.shareAdv && <PageLoading style={{height: 500}}/>}
+                        <View className={'space-x-4 mt-4 flex-none'}>
+                            <Button openType={'share'} className={'btn btn-info'}>发给好友</Button>
+                            <Button onClick={this.handleSaveToPhotoAlbum} className={'btn btn-warning'}>保存到相册</Button>
+                        </View>
                     </View>
                 </View>}
             </PageLayout>

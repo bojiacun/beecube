@@ -1,5 +1,5 @@
-import Modal from "../../../components/modal";
 import {View} from "@tarojs/components";
+import {Popup} from "@taroify/core";
 const numeral = require('numeral');
 
 
@@ -7,7 +7,11 @@ const Uprange = (props:any) => {
     const {uprangeShow, onClose, goods} = props;
 
     return (
-        <Modal show={uprangeShow} showMask={true} onClose={onClose}>
+        <Popup open={uprangeShow} onClose={onClose}>
+            <View className={'text-2xl'}>
+                <View className={'flex py-4 items-center justify-center text-xl font-bold'}>加价幅度</View>
+                <Popup.Close/>
+            </View>
             <View className={'bg-indigo-200 text-gray-600 font-bold text-center flex py-2'}>
                 <View className={'flex-1'}>区间开始</View>
                 <View className={'flex-1'}>区间结束</View>
@@ -22,7 +26,7 @@ const Uprange = (props:any) => {
                     </View>
                 );
             })}
-        </Modal>
+        </Popup>
     );
 }
 
