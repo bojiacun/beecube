@@ -57,7 +57,10 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
-        // this.setState({userInfo: this.getEditUser()});
+        const userInfo = this.getEditUser();
+        this.setState({userInfo: userInfo});
+        // @ts-ignore
+        this.formRef?.current?.setFieldsValue(userInfo);
     }
 
     saveEditUser(newUserInfo: any) {
@@ -126,11 +129,10 @@ export default class Index extends Component<any, any> {
 
 
     handleSubmit(e) {
-
         let userInfo = this.state.userInfo;
         let values = e.detail.value;
         userInfo.nickname = values.nickname;
-
+        userInfo.sex = values.sex;
         if (!userInfo.avatar || userInfo.avatar == '') {
             return utils.showError("请完善头像信息");
         }
@@ -176,7 +178,7 @@ export default class Index extends Component<any, any> {
         if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
             return (
                 <>
-                    <Form.Item name={'avatar'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                    <Form.Item className={'items-center'} rightIcon={<ArrowRight/>}>
                         <Form.Label className={'font-bold'}>头像</Form.Label>
                         <Form.Control>
                             <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
@@ -185,10 +187,10 @@ export default class Index extends Component<any, any> {
                             </Button>
                         </Form.Control>
                     </Form.Item>
-                    <Form.Item className={'items-center'} rightIcon={<ArrowRight/>}>
+                    <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
                         <Form.Label className={'font-bold'}>昵称</Form.Label>
                         <Form.Control>
-                            <Input type={'nickname'} className={'text-right'}  />
+                            <Input type={'nickname'} className={'text-right'} />
                         </Form.Control>
                     </Form.Item>
                 </>
@@ -196,13 +198,13 @@ export default class Index extends Component<any, any> {
         }
         return (
             <>
-                <Form.Item name={'avatar'} className={'items-center'} onClick={this.handleChooseAvatar}>
+                <Form.Item className={'items-center'} onClick={this.handleChooseAvatar}>
                     <Form.Label>头像</Form.Label>
                     <Form.Control>
                         <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 30, height: 30}}/>
                     </Form.Control>
                 </Form.Item>
-                <Form.Item name={'nickname'} onClick={()=>Taro.navigateTo({url: 'profile/nickname'})} className={'items-center'} rightIcon={<ArrowRight/>}>
+                <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/nickname'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                     <Form.Label className={'font-bold'}>昵称</Form.Label>
                     <Form.Control>
                         <View>{userInfo?.nickname}</View>
@@ -213,8 +215,6 @@ export default class Index extends Component<any, any> {
     }
     render() {
         const {userInfo} = this.state;
-
-
         return (
             <PageLayout statusBarProps={{title: '个人资料'}}>
                 <Form onSubmit={this.handleSubmit} controlAlign={'right'} ref={this.formRef}>
@@ -233,7 +233,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'bg-white mt-4 text-gray-600'}>
                         <View className={'font-bold text-lg p-4 pb-0'}>实名资料</View>
-                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/phone'})} name={'mobile'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/phone'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                             <Form.Label className={'font-bold'}>手机号</Form.Label>
                             <Form.Control>
                                 <View>{userInfo?.phone}</View>
@@ -250,7 +250,7 @@ export default class Index extends Component<any, any> {
                         {/*        </View>*/}
                         {/*    </Navigator>*/}
                         {/*</View>*/}
-                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} name={'auth'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                             <Form.Label className={'font-bold'}>实名认证</Form.Label>
                             <Form.Control>
                                 <View>{userInfo?.authStatus == 2 ? '已认证' : '未认证'}</View>
