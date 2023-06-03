@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
-import {View, Navigator, Picker, Input, Form, Button} from "@tarojs/components";
+import {View, Navigator, Button} from "@tarojs/components";
+import {Form, Radio, Input} from '@taroify/core';
+import {ArrowRight} from '@taroify/icons';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
 import avatarImage from '../../assets/images/avatar.png';
@@ -25,17 +27,11 @@ import request, {API_URL} from "../../lib/request";
     }
 })
 export default class Index extends Component<any, any> {
-    state:any = {
+    state: any = {
         sdkVersion: '',
-        sexes: [
-            {id: 1, name: '男'},
-            {id: 2, name: '女'},
-        ],
         saving: false,
         userInfo: null,
     }
-
-    nicknameInputRef = React.createRef();
 
     constructor(props: any) {
         super(props);
@@ -50,9 +46,7 @@ export default class Index extends Component<any, any> {
         request.get('/app/api/members/profile').then(res => {
             let userInfo = res.data.result;
             this.setState({userInfo: userInfo});
-            setTimeout(()=>{
-                // @ts-ignore
-                this.nicknameInputRef.current.value = userInfo.nickname;
+            setTimeout(() => {
             }, 500);
             Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
         });
@@ -65,9 +59,10 @@ export default class Index extends Component<any, any> {
     saveEditUser() {
         Taro.setStorageSync("EDIT-USER", JSON.stringify(this.state.userInfo));
     }
+
     getEditUser() {
         let editUser = Taro.getStorageSync("EDIT-USER");
-        if(editUser) {
+        if (editUser) {
             return JSON.parse(editUser);
         }
     }
@@ -131,52 +126,38 @@ export default class Index extends Component<any, any> {
         if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
             return (
                 <>
-                    <View className={''}>
-                        <Button style={{border: 'none'}} onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}
-                                className={'p-4 block border-0 flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>我的头像</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 20, height: 20}}/>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Button>
-                    </View>
-                    <View className={'flex items-center justify-between p-4'}>
-                        <View className={'flex items-center space-x-2'}>
-                            <View>昵称</View>
-                        </View>
-                        <View className={'flex items-center space-x-2'}>
-                            <Input ref={this.nicknameInputRef} name={'nickname'} type={'nickname'} className={'text-right'} />
-                            <View className={'iconfont icon-youjiantou_huaban'}/>
-                        </View>
-                    </View>
+                    <Form.Item name={'avatar'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Label className={'font-bold'}>头像</Form.Label>
+                        <Form.Control>
+                            <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
+                                    onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}>
+                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} className={'w-full h-full'}/>
+                            </Button>
+                        </Form.Control>
+                    </Form.Item>
+                    <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Label className={'font-bold'}>昵称</Form.Label>
+                        <Form.Control>
+                            <Input name={'nickname'} type={'nickname'} className={'text-right'}/>
+                        </Form.Control>
+                    </Form.Item>
                 </>
             );
         }
         return (
             <>
-                <View className={'flex items-center justify-between p-4'} onClick={this.handleChooseAvatar}>
-                    <View className={'flex items-center space-x-2'}>
-                        <View>我的头像</View>
-                    </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 20, height: 20}}/>
-                        <View className={'iconfont icon-youjiantou_huaban'}/>
-                    </View>
-                </View>
-                <View className={''}>
-                    <Navigator className={'flex items-center justify-between p-4'} url={'profile/nickname'}>
-                        <View className={'flex items-center space-x-2'}>
-                            <View>昵称</View>
-                        </View>
-                        <View className={'flex items-center space-x-2'}>
-                            <View>{userInfo?.nickname}</View>
-                            <View className={'iconfont icon-youjiantou_huaban'}/>
-                        </View>
-                    </Navigator>
-                </View>
+                <Form.Item name={'avatar'} className={'items-center'} onClick={this.handleChooseAvatar}>
+                    <Form.Label>头像</Form.Label>
+                    <Form.Control>
+                        <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 30, height: 30}}/>
+                    </Form.Control>
+                </Form.Item>
+                <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                    <Form.Label className={'font-bold'}>昵称</Form.Label>
+                    <Form.Control>
+                        <View>{userInfo?.nickname}</View>
+                    </Form.Control>
+                </Form.Item>
             </>
         );
     }
@@ -187,20 +168,20 @@ export default class Index extends Component<any, any> {
         let values = e.detail.value;
         userInfo.nickname = values.nickname;
 
-        if(!userInfo.avatar || userInfo.avatar == '') {
+        if (!userInfo.avatar || userInfo.avatar == '') {
             return utils.showError("请完善头像信息");
         }
-        if(!userInfo.nickname || userInfo.nickname == '') {
+        if (!userInfo.nickname || userInfo.nickname == '') {
             return utils.showError("请完善昵称信息");
         }
-        if(!userInfo.phone || userInfo.phone == '') {
+        if (!userInfo.phone || userInfo.phone == '') {
             return utils.showError("请完善手机信息");
         }
         this.setState({saving: true});
         this.updateUserInfo(userInfo);
         //更新globalData数据
         let app = Taro.getApp();
-        if(!app.globalData) {
+        if (!app.globalData) {
             app.globalData = {};
         }
         app.globalData.userInfo = userInfo;
@@ -225,60 +206,48 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {userInfo} = this.state;
-        const {sexes} = this.state;
-        const userSex = sexes[userInfo?.sex - 1]?.name || '';
 
         return (
-            <PageLayout statusBarProps={{title: '完善您的信息'}}>
-                <Form onSubmit={this.handleSubmit}>
-                    <View className={'bg-white divide-y divide-gray-100 text-gray-600'}>
+            <PageLayout statusBarProps={{title: '个人资料'}}>
+                <Form onSubmit={this.handleSubmit} controlAlign={'right'}>
+                    <View className={'bg-white mt-4 text-gray-600'}>
+                        <View className={'font-bold text-lg p-4 pb-0'}>基本信息</View>
                         {this.renderNicknameAvatar()}
-                        <View className={'p-4'}>
-                            <Picker onChange={this.handleSexChange} range={this.state.sexes} rangeKey={'name'}>
-                                <View className={'flex items-center justify-between'}>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>性别</View>
-                                    </View>
-                                    <View className={'flex items-center space-x-2'}>
-                                        <View>{userSex}</View>
-                                        <View className={'iconfont icon-youjiantou_huaban'}/>
-                                    </View>
-                                </View>
-                            </Picker>
-                        </View>
-                        <View className={''}>
-                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/phone'}>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>手机号</View>
-                                </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo?.phone}</View>
-                                    <View className={'iconfont icon-youjiantou_huaban'}/>
-                                </View>
-                            </Navigator>
-                        </View>
-                        <View className={''}>
-                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>邮箱</View>
-                                </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo?.email}</View>
-                                    <View className={'iconfont icon-youjiantou_huaban'}/>
-                                </View>
-                            </Navigator>
-                        </View>
-                        <View className={''}>
-                            <Navigator className={'flex items-center justify-between p-4'} url={'profile/auth'}>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>实名认证</View>
-                                </View>
-                                <View className={'flex items-center space-x-2'}>
-                                    <View>{userInfo?.authStatus == 2 ? '已认证' : '未认证'}</View>
-                                    <View className={'iconfont icon-youjiantou_huaban'}/>
-                                </View>
-                            </Navigator>
-                        </View>
+                        <Form.Item name={'sex'} className={'items-center'}>
+                            <Form.Label className={'font-bold'}>性别</Form.Label>
+                            <Form.Control>
+                                <Radio.Group direction="horizontal">
+                                    <Radio name="1">男</Radio>
+                                    <Radio name="2">女</Radio>
+                                </Radio.Group>
+                            </Form.Control>
+                        </Form.Item>
+                    </View>
+                    <View className={'bg-white mt-4 text-gray-600'}>
+                        <View className={'font-bold text-lg p-4 pb-0'}>实名资料</View>
+                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/phone'})} name={'mobile'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                            <Form.Label className={'font-bold'}>手机号</Form.Label>
+                            <Form.Control>
+                                <View>{userInfo?.phone}</View>
+                            </Form.Control>
+                        </Form.Item>
+                        {/*<View className={''}>*/}
+                        {/*    <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>*/}
+                        {/*        <View className={'flex items-center space-x-2'}>*/}
+                        {/*            <View>邮箱</View>*/}
+                        {/*        </View>*/}
+                        {/*        <View className={'flex items-center space-x-2'}>*/}
+                        {/*            <View>{userInfo?.email}</View>*/}
+                        {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                        {/*        </View>*/}
+                        {/*    </Navigator>*/}
+                        {/*</View>*/}
+                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} name={'auth'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                            <Form.Label className={'font-bold'}>实名认证</Form.Label>
+                            <Form.Control>
+                                <View>{userInfo?.authStatus == 2 ? '已认证' : '未认证'}</View>
+                            </Form.Control>
+                        </Form.Item>
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
                         <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>
