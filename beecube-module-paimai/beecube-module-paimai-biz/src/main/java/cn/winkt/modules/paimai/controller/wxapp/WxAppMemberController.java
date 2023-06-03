@@ -186,9 +186,8 @@ public class WxAppMemberController {
         order.setDeliveryPhone(addressVO.getPhone());
         order.setDeliveryAddress(addressVO.getAddress());
         order.setDeliveryProvince(addressVO.getProvince());
-
+        order.setPayType(1);
         order.setDeliveryInfo(String.format("%s %s %s %s %s %s", addressVO.getUsername(), addressVO.getPhone(), addressVO.getProvince(), addressVO.getCity(), addressVO.getDistrict(), addressVO.getAddress()));
-
         goodsOrderService.updateById(order);
 
         LambdaQueryWrapper<OrderGoods> orderGoodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
