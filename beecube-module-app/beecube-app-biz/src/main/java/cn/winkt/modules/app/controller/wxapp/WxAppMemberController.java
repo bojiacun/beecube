@@ -110,8 +110,8 @@ public class WxAppMemberController {
         if(old == null) {
             throw new JeecgBootException("更新失败,未找到用户信息");
         }
-        Integer authStatus = 0;
-        if(!StringUtils.isAnyEmpty(appMember.getRealname(), appMember.getIdCard(), appMember.getCardFace(), appMember.getCardBack())) {
+        Integer authStatus = old.getAuthStatus();
+        if(old.getAuthStatus() == 0 && !StringUtils.isAnyEmpty(appMember.getRealname(), appMember.getIdCard(), appMember.getCardFace(), appMember.getCardBack())) {
             authStatus = 1;
         }
         LambdaUpdateWrapper<AppMember> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();

@@ -160,7 +160,9 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>确定</Button>
+                        {userInfo?.authStatus == 0 && <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
+                        {userInfo?.authStatus == 1 && <Button className={'btn btn-warning w-56'} onClick={()=>utils.navigateBack()}>审核中,点击返回</Button>}
+                        {userInfo?.authStatus == 2 && <Button className={'btn btn-success w-56'} onClick={()=>utils.navigateBack()}>已认证通过</Button>}
                     </View>
                 </Form>
             </PageLayout>

@@ -256,7 +256,9 @@ export default class Index extends Component<any, any> {
                         <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                             <Form.Label className={'font-bold'}>实名认证</Form.Label>
                             <Form.Control>
-                                <View>{userInfo?.authStatus == 2 ? '已认证' : '未认证'}</View>
+                                {userInfo?.authStatus == 0 && <View>未认证</View>}
+                                {userInfo?.authStatus == 1 && <View>审核中</View>}
+                                {userInfo?.authStatus == 2 && <View>已认证</View>}
                             </Form.Control>
                         </Form.Item>
                     </View>
