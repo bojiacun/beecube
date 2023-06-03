@@ -5,6 +5,7 @@
     "ext": {
         "appId": "1642464703237378049",
         "siteroot": "http://localhost:9999",
-        "copyright": true
+        "copyright": true,
+        "imServerUrl": "http://localhost:3000/websocket"
     }
 }

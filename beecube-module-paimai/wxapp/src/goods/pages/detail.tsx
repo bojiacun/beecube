@@ -4,6 +4,7 @@ import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Input, Navigator, Text, View} from "@tarojs/components";
+import {Button as TaroifyButton} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -76,16 +77,14 @@ export default class Index extends Component<any, any> {
         this.setState({
             hideModal: false
         });
-        this.animation = Taro.createAnimation({
-            duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
-            timingFunction: 'linear', //动画的效果 默认值是linear
-        });
         if (this.offerInputRef?.current) {
             this.offerInputRef.current.value = this.state.nextPrice;
         }
-        setTimeout(() => {
-            this.fadeIn(); //调用显示动画
-        }, 10);
+        setTimeout(()=>{
+            if (this.offerInputRef?.current) {
+                this.offerInputRef.current.value = this.state.nextPrice;
+            }
+        }, 500);
     }
 
     hideModal() {
@@ -723,23 +722,25 @@ export default class Index extends Component<any, any> {
                 </View>
                 <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
 
-                <Popup rounded placement={'bottom'} open={!hideModal} style={{height: 330}}>
+                <Popup rounded placement={'bottom'} open={!hideModal} style={{height: 300}} onClose={()=>this.setState({hideModal: true})}>
                     <View className={'text-2xl'}>
                         <View className={'flex py-4 items-center justify-center text-xl font-bold'}>出价拍品</View>
                         <Popup.Close/>
                     </View>
-                    <View className={'flex flex-col items-center justify-center space-y-4'}>
-                        <View>当前价：{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</View>
-                        <View className={'flex items-center text-center'}>
+                    <View className={'space-y-10 p-4'}>
+                        <View className={'text-lg text-center'}>当前价：{numeral(goods.currentPrice || goods.startPrice).format('0,0.00')}</View>
+                        <View className={'flex items-center justify-center'}>
                             <Text onClick={this.subPrice}
                                   className={classNames('fa fa-minus-circle mr-2', this.offerInputRef?.current?.value > this.state.nextPrice ? 'text-red-600' : 'text-gray-600')}
                                   style={{fontSize: 24}}/>
-                            <Input className={'font-bold text-lg w-30'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef}
+                            <Input className={'font-bold text-lg w-40 text-center'} disabled={!settings.isCustomOffer} placeholder={'出价价格'} ref={this.offerInputRef}
                                    onInput={this.onInputPriceChange}/>
                             {!!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-red-600'} style={{fontSize: 24}} onClick={this.addPrice}/>}
                             {!settings.isCustomOffer && <Text className={'fa fa-plus-circle ml-2 text-gray-600'} style={{fontSize: 24}}/>}
                         </View>
-                        <View><Button className={'btn btn-danger'} onClick={this.offer}>确认出价</Button></View>
+                        <View className={'text-center'}>
+                            <TaroifyButton color={'danger'} onClick={this.offer}>确认出价</TaroifyButton>
+                        </View>
                     </View>
                 </Popup>
 

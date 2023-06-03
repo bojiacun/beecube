@@ -7,7 +7,7 @@ const Uprange = (props:any) => {
     const {uprangeShow, onClose, goods} = props;
 
     return (
-        <Popup open={uprangeShow} onClose={onClose}>
+        <Popup open={uprangeShow} onClose={onClose} style={{width: '80%'}} rounded>
             <View className={'text-2xl'}>
                 <View className={'flex py-4 items-center justify-center text-xl font-bold'}>加价幅度</View>
                 <Popup.Close/>
