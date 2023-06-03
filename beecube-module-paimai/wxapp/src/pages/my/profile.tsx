@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
-import {View, Navigator, Button} from "@tarojs/components";
+import {View, Button} from "@tarojs/components";
 import {Form, Radio, Input} from '@taroify/core';
 import {ArrowRight} from '@taroify/icons';
 import {connect} from "react-redux";
@@ -11,6 +11,7 @@ import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
 import request, {API_URL} from "../../lib/request";
+import PageLoading from "../../components/pageloading";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -32,32 +33,35 @@ export default class Index extends Component<any, any> {
         saving: false,
         userInfo: null,
     }
+    formRef = React.createRef();
 
     constructor(props: any) {
         super(props);
-        this.handleSexChange = this.handleSexChange.bind(this);
         this.handleChooseAvatar = this.handleChooseAvatar.bind(this);
         this.handleChooseAvatarNative = this.handleChooseAvatarNative.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleValuesChanged = this.handleValuesChanged.bind(this);
+        this.handleNicknameChanged = this.handleNicknameChanged.bind(this);
     }
 
     componentDidMount() {
         this.setState({sdkVersion: Taro.getAppBaseInfo().SDKVersion});
         request.get('/app/api/members/profile').then(res => {
             let userInfo = res.data.result;
+            userInfo.sex = userInfo.sex+'';
             this.setState({userInfo: userInfo});
-            setTimeout(() => {
-            }, 500);
-            Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
+            this.saveEditUser(userInfo);
+            // @ts-ignore
+            this.formRef?.current.setFieldsValue(userInfo);
         });
     }
 
     componentDidShow() {
-        this.setState({userInfo: this.getEditUser()});
+        // this.setState({userInfo: this.getEditUser()});
     }
 
-    saveEditUser() {
-        Taro.setStorageSync("EDIT-USER", JSON.stringify(this.state.userInfo));
+    saveEditUser(newUserInfo: any) {
+        Taro.setStorageSync("EDIT-USER", JSON.stringify(newUserInfo));
     }
 
     getEditUser() {
@@ -87,7 +91,7 @@ export default class Index extends Component<any, any> {
             let userInfo = this.state.userInfo;
             userInfo.avatar = avatar;
             this.setState({userInfo: userInfo});
-            this.saveEditUser();
+            this.saveEditUser(userInfo);
             utils.showSuccess(false, '上传成功');
         });
     }
@@ -114,53 +118,12 @@ export default class Index extends Component<any, any> {
                 let userInfo = this.state.userInfo;
                 userInfo.avatar = avatar;
                 this.setState({userInfo: userInfo});
-                this.saveEditUser();
+                this.saveEditUser(userInfo);
                 utils.showSuccess(false, '上传成功');
             });
         });
     }
 
-    renderNicknameAvatar() {
-        const userInfo = this.state.userInfo;
-
-        if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
-            return (
-                <>
-                    <Form.Item name={'avatar'} className={'items-center'} rightIcon={<ArrowRight/>}>
-                        <Form.Label className={'font-bold'}>头像</Form.Label>
-                        <Form.Control>
-                            <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
-                                    onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}>
-                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} className={'w-full h-full'}/>
-                            </Button>
-                        </Form.Control>
-                    </Form.Item>
-                    <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
-                        <Form.Label className={'font-bold'}>昵称</Form.Label>
-                        <Form.Control>
-                            <Input name={'nickname'} type={'nickname'} className={'text-right'}/>
-                        </Form.Control>
-                    </Form.Item>
-                </>
-            );
-        }
-        return (
-            <>
-                <Form.Item name={'avatar'} className={'items-center'} onClick={this.handleChooseAvatar}>
-                    <Form.Label>头像</Form.Label>
-                    <Form.Control>
-                        <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 30, height: 30}}/>
-                    </Form.Control>
-                </Form.Item>
-                <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
-                    <Form.Label className={'font-bold'}>昵称</Form.Label>
-                    <Form.Control>
-                        <View>{userInfo?.nickname}</View>
-                    </Form.Control>
-                </Form.Item>
-            </>
-        );
-    }
 
     handleSubmit(e) {
 
@@ -187,11 +150,15 @@ export default class Index extends Component<any, any> {
         app.globalData.userInfo = userInfo;
     }
 
-    handleSexChange(e) {
-        const index = e.detail.value;
-        this.state.userInfo.sex = parseInt(index) + 1;
-        this.setState({userInfo: this.state.userInfo});
-        this.saveEditUser();
+    handleValuesChanged(values) {
+        console.log('values changed', values);
+        const newUserInfo = {...this.state.userInfo, ...values};
+        this.setState({userInfo: newUserInfo});
+        this.saveEditUser(newUserInfo);
+    }
+
+    handleNicknameChanged(value) {
+        console.log(value);
     }
 
     updateUserInfo(userInfo) {
@@ -199,17 +166,58 @@ export default class Index extends Component<any, any> {
         saveUserInfo(userInfo).then(res => {
             this.props.updateUserInfo(res.data.result);
             this.setState({saving: false});
-            this.saveEditUser();
+            this.saveEditUser(userInfo);
             utils.showSuccess(true);
         });
     }
 
+    renderNicknameAvatar() {
+        const userInfo = this.state.userInfo;
+        if (utils.compareVersion(this.state.sdkVersion, '2.21.2')) {
+            return (
+                <>
+                    <Form.Item name={'avatar'} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Label className={'font-bold'}>头像</Form.Label>
+                        <Form.Control>
+                            <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
+                                    onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}>
+                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} className={'w-full h-full'}/>
+                            </Button>
+                        </Form.Control>
+                    </Form.Item>
+                    <Form.Item className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Label className={'font-bold'}>昵称</Form.Label>
+                        <Form.Control>
+                            <Input type={'nickname'} className={'text-right'}  />
+                        </Form.Control>
+                    </Form.Item>
+                </>
+            );
+        }
+        return (
+            <>
+                <Form.Item name={'avatar'} className={'items-center'} onClick={this.handleChooseAvatar}>
+                    <Form.Label>头像</Form.Label>
+                    <Form.Control>
+                        <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 30, height: 30}}/>
+                    </Form.Control>
+                </Form.Item>
+                <Form.Item name={'nickname'} onClick={()=>Taro.navigateTo({url: 'profile/nickname'})} className={'items-center'} rightIcon={<ArrowRight/>}>
+                    <Form.Label className={'font-bold'}>昵称</Form.Label>
+                    <Form.Control>
+                        <View>{userInfo?.nickname}</View>
+                    </Form.Control>
+                </Form.Item>
+            </>
+        );
+    }
     render() {
         const {userInfo} = this.state;
 
+
         return (
             <PageLayout statusBarProps={{title: '个人资料'}}>
-                <Form onSubmit={this.handleSubmit} controlAlign={'right'}>
+                <Form onSubmit={this.handleSubmit} controlAlign={'right'} ref={this.formRef}>
                     <View className={'bg-white mt-4 text-gray-600'}>
                         <View className={'font-bold text-lg p-4 pb-0'}>基本信息</View>
                         {this.renderNicknameAvatar()}
