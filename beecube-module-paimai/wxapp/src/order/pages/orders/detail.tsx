@@ -66,14 +66,14 @@ export default class Index extends Component<any, any> {
         this.state.detail.payType = value;
         this.setState({detail: this.state.detail});
     }
+
     async confirmUpload() {
         const res = await request.get('/app/api/members/tmptoken');
         const token = res.data.result;
         let file = this.state.file;
-        if(!file) {
+        if (!file) {
             return utils.showError('请上传转账凭证');
         }
-        console.log(file);
         Taro.uploadFile({
             url: API_URL + '/sys/oss/file/upload',
             name: 'file',
@@ -86,21 +86,24 @@ export default class Index extends Component<any, any> {
         }).then(async (res: any) => {
             let result = JSON.parse(res.data);
             let url = result.result.url;
-            await request.put('/paimai/api/orders/netpay', {payImage: url});
-            utils.showSuccess(false, '上传成功');
+            await request.put('/paimai/api/orders/netpay', {payImage: url, orderId: this.state.detail.id});
+            utils.showSuccess(true, '上传成功,等待审核');
         });
     }
+
     copyBank(bank) {
         let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
-        Taro.setClipboardData({data: data}).then(()=>{
+        Taro.setClipboardData({data: data}).then(() => {
             utils.showSuccess(false, '复制成功');
-        }).catch(()=>{
+        }).catch(() => {
             utils.showError('复制失败');
         });
     }
+
     showUploadNetPay() {
         this.setState({openNetPay: false, openUploadPay: true});
     }
+
     componentDidMount() {
         //加载银行信息
         request.get('/paimai/api/banks').then(res => {
@@ -192,7 +195,7 @@ export default class Index extends Component<any, any> {
         if (!this.state.address) {
             return utils.showError("请选择收货地址");
         }
-        if(this.state.detail.payType == 1) {
+        if (this.state.detail.payType == 1) {
             this.setState({posting: true});
             //支付宝保证金
             request.post('/paimai/api/members/orders/pay', this.state.address, {params: {id: this.state.detail.id}}).then(res => {
@@ -204,8 +207,7 @@ export default class Index extends Component<any, any> {
                     utils.showSuccess(true, '支付成功');
                 }).catch(() => this.setState({posting: false}));
             });
-        }
-        else {
+        } else {
             this.setState({openNetPay: true});
         }
     }
@@ -242,7 +244,7 @@ export default class Index extends Component<any, any> {
                                 <View>取消订单</View>
                             </Button>
                             <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
-                                <View>{detail.payType == 1 ? '立即支付':'上传转账凭证'}</View>
+                                <View>{detail.payType == 1 ? '立即支付' : '上传转账凭证'}</View>
                             </Button>
                         </View>
                     </View>
@@ -282,22 +284,27 @@ export default class Index extends Component<any, any> {
         }
         return <></>
     }
+
     setUploadFile(file) {
         this.setState({file: file});
     }
+
     onUpload() {
         Taro.chooseImage({
             count: 1,
             sizeType: ["original", "compressed"],
             sourceType: ["album", "camera"],
-        }).then(({ tempFiles }) => {
-            this.setState({file:{
+        }).then(({tempFiles}) => {
+            this.setState({
+                file: {
                     url: tempFiles[0].path,
                     type: tempFiles[0].type,
                     name: tempFiles[0].originalFileObj?.name,
-                }});
+                }
+            });
         })
     }
+
     componentWillUnmount() {
 
     }
@@ -417,15 +424,24 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-400'}>买家留言</View>
                             <View>{detail.note}</View>
                         </View>
-                        <View className={'flex items-center justify-between'}>
-                            <View className={'text-gray-400'}>支付方式</View>
-                            <View>
-                                <Radio.Group defaultValue={detail.payType+''} direction={'horizontal'} size={14} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
-                                    <Radio name={'1'}>微信支付</Radio>
-                                    <Radio name={'2'}>网银转账</Radio>
-                                </Radio.Group>
+                        {detail.status == 0 &&
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>支付方式</View>
+                                <View>
+                                    <Radio.Group defaultValue={detail.payType + ''} direction={'horizontal'} size={14} className={'radio-red-color'}
+                                                 onChange={this.handlePayTypeChanged}>
+                                        <Radio name={'1'}>微信支付</Radio>
+                                        <Radio name={'2'}>网银转账</Radio>
+                                    </Radio.Group>
+                                </View>
                             </View>
-                        </View>
+                        }
+                        {detail.status > 0 &&
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>支付方式</View>
+                                <View>{detail.payType == 1 ? '微信支付': '网银转账'}</View>
+                            </View>
+                        }
                         {/*<View className={'flex items-center justify-between'}>*/}
                         {/*    <View className={'text-gray-400'}>订单状态</View>*/}
                         {/*    <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>*/}
@@ -461,7 +477,7 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
                     <View className={'font-bold text-lg item-title'}>结算信息</View>
                     <View className={'space-y-4'}>
-                        {detail.settlements.map((item:any)=>{
+                        {detail.settlements.map((item: any) => {
                             return (
                                 <View className={'flex items-center justify-between'}>
                                     <View className={'text-gray-400'}>{item.description}</View>
@@ -495,7 +511,7 @@ export default class Index extends Component<any, any> {
                                             <View>{item.bankAddress}</View>
                                             <View>{item.bankCode}</View>
                                         </View>
-                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={()=>this.copyBank(item)}>复制</Button></View>
+                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={() => this.copyBank(item)}>复制</Button></View>
                                     </View>
                                 );
                             })}
@@ -511,7 +527,7 @@ export default class Index extends Component<any, any> {
                     <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                         <View className={''}><Text className={'font-bold text-lg'}>转账截图:</Text><Text className={'text-stone-400'}>图片大小不能超过5M</Text>:</View>
                         <View className={''}>
-                            <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file} />
+                            <Uploader onUpload={this.onUpload} onChange={this.setUploadFile} value={this.state.file}/>
                         </View>
                         <View><TaroifyButton block color={'danger'} onClick={this.confirmUpload}>确定</TaroifyButton></View>
                     </View>

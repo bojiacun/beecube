@@ -102,6 +102,19 @@ public class WxAppOrderController {
         return Result.OK(orderBadge);
     }
 
+    @PutMapping("/netpay")
+    public Result<Boolean> netPay(@RequestBody JSONObject post) {
+        String payImage = post.getString("payImage");
+        String orderId = post.getString("orderId");
+        GoodsOrder goodsOrder = goodsOrderService.getById(orderId);
+        if(goodsOrder.getStatus() != 0) {
+            throw new JeecgBootException("订单状态异常无法支付");
+        }
+        goodsOrder.setPayImage(payImage);
+        goodsOrderService.updateById(goodsOrder);
+        return Result.OK(true);
+    }
+
     /**
      * 售后详情
      * @param id

@@ -87,6 +87,7 @@ public class GoodsOrder {
 	@ApiModelProperty(value = "支付类型（1微信支付、2线下支付）")
 	@Dict(dicCode = "paimai_order_pay_type")
 	private Integer payType;
+	private String payImage;
 	private BigDecimal usedIntegral;
 	private String usedCouponTicketId;
 	/**订单创建时间*/
