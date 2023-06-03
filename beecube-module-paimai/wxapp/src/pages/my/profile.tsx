@@ -159,8 +159,11 @@ export default class Index extends Component<any, any> {
         this.saveEditUser(newUserInfo);
     }
 
-    handleNicknameChanged(value) {
-        console.log(value);
+    handleNicknameChanged(e) {
+        const nickname = e.detail.value;
+        const newUserInfo = this.state.userInfo;
+        newUserInfo.nickname = nickname;
+        this.saveEditUser(newUserInfo);
     }
 
     updateUserInfo(userInfo) {
@@ -190,7 +193,7 @@ export default class Index extends Component<any, any> {
                     <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
                         <Form.Label className={'font-bold'}>昵称</Form.Label>
                         <Form.Control>
-                            <Input type={'nickname'} className={'text-right'} />
+                            <Input type={'nickname'} className={'text-right'} onInput={this.handleNicknameChanged} />
                         </Form.Control>
                     </Form.Item>
                 </>

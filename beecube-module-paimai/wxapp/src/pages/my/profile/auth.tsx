@@ -148,14 +148,14 @@ export default class Index extends Component<any, any> {
                             <View className={'flex relative flex-col items-center justify-center bg-gray-200 rounded-lg h-28'}>
                                 {this.state.cardImages[0] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[0]} className={'block w-full h-full'}/>}
                                 {!this.state.cardImages[0] && <View>身份证正面照</View>}
-                                {!this.state.cardImages[0] && <View className={'text-lg'}><Text className={'fa-plus'}/></View>}
+                                {!this.state.cardImages[0] && <View className={'text-lg text-red-600'}><Text className={'fa fa-plus'}/></View>}
                             </View>
                         </View>
                         <View onClick={this.chooseCardBack}>
                             <View className={'flex relative flex-col items-center justify-center bg-gray-200 rounded-lg h-28'}>
                                 {this.state.cardImages[1] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[1]} className={'block w-full h-full'}/>}
                                 {!this.state.cardImages[1] && <View>身份证反面照</View>}
-                                {!this.state.cardImages[1] && <View className={'text-lg'}><Text className={'fa-plus'}/></View>}
+                                {!this.state.cardImages[1] && <View className={'text-lg text-red-600'}><Text className={'fa fa-plus'}/></View>}
                             </View>
                         </View>
                     </View>

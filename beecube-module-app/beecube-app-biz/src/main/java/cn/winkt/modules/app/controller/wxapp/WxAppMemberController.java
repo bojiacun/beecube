@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -109,6 +110,10 @@ public class WxAppMemberController {
         if(old == null) {
             throw new JeecgBootException("更新失败,未找到用户信息");
         }
+        Integer authStatus = 0;
+        if(!StringUtils.isAnyEmpty(appMember.getRealname(), appMember.getIdCard(), appMember.getCardFace(), appMember.getCardBack())) {
+            authStatus = 1;
+        }
         LambdaUpdateWrapper<AppMember> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper
                 .set(AppMember::getNickname, appMember.getNickname())
@@ -120,10 +125,8 @@ public class WxAppMemberController {
                 .set(AppMember::getCardFace, appMember.getCardFace())
                 .set(AppMember::getCardBack, appMember.getCardBack())
                 .set(AppMember::getIdCard, appMember.getIdCard())
-                .set(AppMember::getAuthStatus, 0)
+                .set(AppMember::getAuthStatus, authStatus)
                 .eq(AppMember::getId, old.getId());
-
-
         appMemberService.update(lambdaUpdateWrapper);
         return Result.OK(appMemberService.getById(appMember.getId()));
     }
