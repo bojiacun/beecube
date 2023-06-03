@@ -58,6 +58,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api/members")
@@ -702,7 +703,7 @@ public class WxAppMemberController {
             goodsOrder.setPayedPrice(payAmount.floatValue());
             goodsOrder.setTotalPrice(totalPrice.floatValue());
             goodsOrder.setStatus(0);
-
+            goodsOrder.setPayType(postOrderVO.getPayType());
             goodsOrderService.save(goodsOrder);
 
 
@@ -781,13 +782,17 @@ public class WxAppMemberController {
 
             PayLog payLog = getPayLog(goodsOrder.getId());
             AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());
-
-            WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付一口价订单").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";"))).build();
-            WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
-            redissonLockClient.unlock(lock);
-
-
-            return Result.OK("", wxPayService.createOrder(request));
+            if(goodsOrder.getPayType() == 1) {
+                WxPayUnifiedOrderRequest request = WxPayUnifiedOrderRequest.newBuilder().notifyUrl(jeecgBaseConfig.getDomainUrl().getApp() + "/paimai/api/notify/buyout/" + AppContext.getApp()).openid(appMemberVO.getWxappOpenid()).outTradeNo(payLog.getId()).body("支付一口价订单").spbillCreateIp("127.0.0.1").totalFee(payAmount.multiply(BigDecimal.valueOf(100L)).intValue()).detail(Arrays.stream(postOrderVO.getGoodsList()).map(GoodsVO::getTitle).collect(Collectors.joining(";"))).build();
+                WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
+                Object payResult = wxPayService.createOrder(request);
+                redissonLockClient.unlock(lock);
+                return Result.OK("", payResult);
+            }
+            else {
+                redissonLockClient.unlock(lock);
+                return Result.OK("下单成功");
+            }
         } else {
             return Result.error("下单失败");
         }
