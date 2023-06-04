@@ -36,8 +36,35 @@ const CouponEditor = (props: any) => {
     useEffect(() => {
         dictFetcher1.load('/system/dicts?dictCode=paimai_coupon_rule_member');
         dictFetcher2.load('/system/dicts?dictCode=paimai_coupon_rule_goods');
-        goodsClassFetcher.load('/paimai/goods/classes/all');
+        goodsClassFetcher.load('/paimai/buyout/classes/all');
     }, []);
+
+    useEffect(() => {
+        if (model) {
+            if (model.id) {
+                const newModel = model;
+                const memberIds = newModel.ruleMemberIds?.split(',');
+                const memberNames = newModel.ruleMemberIds_dictText?.split(',') || [];
+                const memberIdsOptions: any[] = [];
+                if(memberIds) {
+                    memberIds.forEach((v: any, i: number) => {
+                        memberIdsOptions.push({value: v, label: memberNames[i]??''});
+                    });
+                }
+                setMemberIds(memberIdsOptions);
+
+                const goodsIds = newModel.ruleGoodsIds?.split(',');
+                const goodsNames = newModel.ruleGoodsIds_dictText?.split(',') || [];
+                const goodsIdsOptions:any[] = [];
+                if(goodsIds) {
+                    goodsIds.forEach((v:any, i:number) => {
+                        goodsIdsOptions.push({value: v, label: goodsNames[i]??''});
+                    });
+                }
+                setGoodsOptions(goodsIdsOptions);
+            }
+        }
+    }, [model]);
 
     useEffect(()=>{
         if(getFetcherState(goodsClassFetcher) === FetcherState.DONE) {

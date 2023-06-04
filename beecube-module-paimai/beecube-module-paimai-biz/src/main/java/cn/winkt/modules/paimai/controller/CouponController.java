@@ -13,8 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.paimai.entity.BuyoutGoodsClass;
 import cn.winkt.modules.paimai.entity.CouponTicket;
+import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.service.IBuyoutGoodsClassService;
 import cn.winkt.modules.paimai.service.ICouponTicketService;
+import cn.winkt.modules.paimai.service.IGoodsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
@@ -72,6 +76,12 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 
 	@Resource
 	private AppApi appApi;
+
+	@Resource
+	private IBuyoutGoodsClassService buyoutGoodsClassService;
+
+	@Resource
+	private IGoodsService goodsService;
 	/**
 	 * 分页列表查询
 	 *
@@ -93,18 +103,31 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 		Page<Coupon> page = new Page<Coupon>(pageNo, pageSize);
 		IPage<Coupon> pageList = couponService.page(page, queryWrapper);
 		pageList.getRecords().forEach(cp -> {
-			List<AppMemberVO> memberVOS = appApi.getMembersByIds(Arrays.asList(cp.getRuleMemberIds().split(",")));
-			cp.setRuleMemberIds_dictText(memberVOS.stream().map(m -> {
-				if(StringUtils.isNotEmpty(m.getRealname())) {
-					return m.getRealname();
-				}
-				else if(StringUtils.isNotEmpty(m.getNickname())) {
-					return m.getNickname();
-				}
-				else {
-					return m.getId();
-				}
-			}).collect(Collectors.joining(",")));
+			if(cp.getRuleMemberIds() != null) {
+				List<AppMemberVO> memberVOS = appApi.getMembersByIds(Arrays.asList(cp.getRuleMemberIds().split(",")));
+				cp.setRuleMemberIds_dictText(memberVOS.stream().map(m -> {
+					if (StringUtils.isNotEmpty(m.getRealname())) {
+						return m.getRealname();
+					} else if (StringUtils.isNotEmpty(m.getNickname())) {
+						return m.getNickname();
+					} else {
+						return m.getId();
+					}
+				}).collect(Collectors.joining(",")));
+			}
+			if(cp.getRuleGoodsClassIds() != null) {
+				List<BuyoutGoodsClass> buyoutGoodsClasses = buyoutGoodsClassService.listByIds(Arrays.asList(cp.getRuleGoodsClassIds().split(",")));
+				cp.setRuleGoodsIds_dictText(buyoutGoodsClasses.stream().map(BuyoutGoodsClass::getName).collect(Collectors.joining(",")));
+			}
+			if(cp.getRuleGoodsIds() != null) {
+				List<Goods> goodsList = goodsService.listByIds(Arrays.asList(cp.getRuleGoodsIds().split(",")));
+				cp.setRuleGoodsIds_dictText(goodsList.stream().map(g -> {
+					if(StringUtils.isNotEmpty(g.getSpec())) {
+						return String.format("%s - %s", g.getTitle(), g.getSpec());
+					}
+					return g.getTitle();
+				}).collect(Collectors.joining(",")));
+			}
 		});
 		return Result.OK(pageList);
 	}
