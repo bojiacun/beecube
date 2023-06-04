@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,13 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         Coupon coupon = couponMapper.selectById(couponId);
         //找出合适的会员来
         Integer ruleMember = coupon.getRuleMember();
-        List<AppMemberVO> members = appApi.findMembersByType(ruleMember);
+        List<AppMemberVO> members;
+        if(ruleMember == 2) {
+            members = appApi.getMembersByIds(Arrays.asList(coupon.getRuleMemberIds().split(",")));
+        }
+        else {
+            members = appApi.findMembersByType(ruleMember);
+        }
         members.forEach(appMemberVO -> {
             grantService.grantTicketToMember(couponId, appMemberVO.getId());
         });

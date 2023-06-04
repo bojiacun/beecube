@@ -61,11 +61,10 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
                 boolean isValid = false;
                 BigDecimal totalPrice = BigDecimal.ZERO;
                 for (GoodsVO goodsVO: goodsList) {
-
-                    if(StringUtils.isNotEmpty(coupon.getRuleGoodsClassIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsClassIds().split(","), goodsVO.getClassId()) >= 0 ) {
+                    if(coupon.getRuleGoods() == 1 && StringUtils.isNotEmpty(coupon.getRuleGoodsClassIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsClassIds().split(","), goodsVO.getClassId()) >= 0 ) {
                         isValid = true;
                     }
-                    else if(StringUtils.isNotEmpty(coupon.getRuleGoodsIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsIds().split(","), goodsVO.getId()) >= 0) {
+                    else if(coupon.getRuleGoods() == 2 && StringUtils.isNotEmpty(coupon.getRuleGoodsIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsIds().split(","), goodsVO.getId()) >= 0) {
                         isValid = true;
                     }
                     else if(coupon.getRuleGoods() == 3) {
