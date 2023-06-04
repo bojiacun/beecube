@@ -8,20 +8,18 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 
 
 const GoodsListSelector = (props: any) => {
-    const {show, setGoodsListShow, selectedPerformance} = props;
+    const {show, onHide, onSelect} = props;
     const [list, setList] = useState<any>({records: []});
-    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance?.id});
+    const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, type: 2});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
     useEffect(()=>{
-        if(show && selectedPerformance) {
-            searchState.perf_id = selectedPerformance?.id;
-            setSearchState({...searchState});
+        if(show) {
             searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/select'});
         }
-    }, [show, selectedPerformance]);
+    }, [show]);
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -32,8 +30,7 @@ const GoodsListSelector = (props: any) => {
     useEffect(() => {
         if (editFetcher.data && editFetcher.type === 'done') {
             if (editFetcher.data.success) {
-                showToastSuccess("保存成功");
-                setGoodsListShow(false);
+                onHide();
             } else {
                 showToastError(editFetcher.data.message);
             }
@@ -59,49 +56,40 @@ const GoodsListSelector = (props: any) => {
     }
     const columns: any[] = [
         {
-            text: '拍品名称',
+            text: '商品名称',
             dataField: 'title',
         },
         {
-            text: '拍品类型',
-            dataField: 'type_dictText',
+            text: '商品型号',
+            dataField: 'spec',
         },
         {
-            text: '起拍价',
+            text: '价格',
             dataField: 'startPrice',
-        },
-        {
-            text: '标的号',
-            dataField: 'sortNum',
         },
     ]
 
     const handleOnRowSelect = (row:any, isSelect:boolean) => {
         if(isSelect) {
-            setSelectedRows([...selectedRows, row.id])
+            setSelectedRows([...selectedRows, row])
         }
         else {
-            let selected = selectedRows.filter(x=> x !== row.id);
+            let selected = selectedRows.filter(x=> x !== row);
             setSelectedRows([...selected]);
         }
     }
     const handleOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
         if(isSelect) {
-            setSelectedRows([...rows.map(x=>x.id)]);
+            setSelectedRows([...rows]);
         }
         else {
             setSelectedRows([]);
         }
     }
     const handleOnAddGoods = () => {
-        if(selectedRows.length > 0) {
-            //添加
-            let data:any = {perfId: selectedPerformance.id, goodsIds: selectedRows.join(',')};
-            editFetcher.submit(data, {method: 'post', action: '/paimai/performances/goods/add'})
-        }
-        else{
-            setGoodsListShow(false);
-        }
+        onSelect(selectedRows);
+        onHide();
+        setSelectedRows([]);
     }
 
     const selectRowConfig = {
@@ -114,15 +102,15 @@ const GoodsListSelector = (props: any) => {
         <Modal
             show={show}
             size={'lg'}
-            onHide={()=>setGoodsListShow(false)}
+            onHide={onHide}
             centered
             backdrop={'static'}
             aria-labelledby={'edit-modal'}
         >
             <Modal.Header closeButton>
                 <Modal.Title id={'edit-modal'}>
-                    <span>选择专场拍品</span>
-                    <span style={{color: 'red', fontSize: 12}}>拍品选择后，拍品的结束时间将统一修改为专场结束时间</span>
+                    <span>选择商品</span>
+                    <span style={{color: 'red', fontSize: 12}}></span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -142,13 +130,12 @@ const GoodsListSelector = (props: any) => {
                             <searchFetcher.Form action={'/paimai/goods/select'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
-                                <FormControl name={'perf_id'} value={selectedPerformance?.id} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Row} className={'mb-0'}>
-                                    <FormLabel column htmlFor={'title'}>拍品名称</FormLabel>
+                                    <FormLabel column htmlFor={'title'}>商品名称</FormLabel>
                                     <Col md={'auto'}>
                                         <InputGroup>
                                             <FormControl name={'title'} autoComplete={'off'} onChange={handleOnSearchNameChanged}

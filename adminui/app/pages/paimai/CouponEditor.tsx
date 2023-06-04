@@ -1,7 +1,7 @@
 import {Button, Col, FormGroup, FormLabel, Modal, Row} from "react-bootstrap";
 import {Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, FetcherState, getFetcherState, handleSaveResult} from "~/utils/utils";
-import {useFetcher, useFetchers} from "@remix-run/react";
+import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
 //@ts-ignore
@@ -10,6 +10,9 @@ import BootstrapInput from "~/components/form/BootstrapInput";
 import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 import BootstrapTextarea from "~/components/form/BootstrapTextarea";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
+import MemberSelector from "~/pages/app/MemberSelector";
+import BootstrapSelect from "~/components/form/BootstrapSelect";
+import GoodsListSelector from "~/pages/paimai/GoodsListSelector";
 
 
 const CouponEditor = (props: any) => {
@@ -17,9 +20,14 @@ const CouponEditor = (props: any) => {
     const [ruleMemberOptions, setRuleMemberOptions] = useState<{ label: string, value: any }[]>([]);
     const [ruleGoodsOptions, setRuleGoodsOptions] = useState<{ label: string, value: any }[]>([]);
     const [memberOptions, setMemberOptions] = useState<any[]>([]);
-    const [memberIds, setMemberIds] = useState<string[]>();
+    const [goodsOptions, setGoodsOptions] = useState<any[]>([]);
+    const [goodsClassOptions, setGoodsClassOpitons] = useState<any[]>([]);
+    const [memberIds, setMemberIds] = useState<any[]>();
+    const [goodsIds, setGoodsIds] = useState<any[]>();
     const [memberSelectorShow, setMemberSelectorShow] = useState<boolean>(false);
+    const [goodsSelectorShow, setGoodsSelectorShow] = useState<boolean>(false);
     const postFetcher = useFetcher();
+    const goodsClassFetcher= useFetcher();
     const dictFetcher1 = useFetcher();
     const dictFetcher2 = useFetcher();
     const formikRef = useRef<any>();
@@ -28,7 +36,15 @@ const CouponEditor = (props: any) => {
     useEffect(() => {
         dictFetcher1.load('/system/dicts?dictCode=paimai_coupon_rule_member');
         dictFetcher2.load('/system/dicts?dictCode=paimai_coupon_rule_goods');
+        goodsClassFetcher.load('/paimai/goods/classes/all');
     }, []);
+
+    useEffect(()=>{
+        if(getFetcherState(goodsClassFetcher) === FetcherState.DONE) {
+            setGoodsClassOpitons(goodsClassFetcher.data.map((item:any)=>({label: item.name, value: item.id})));
+        }
+    }, [goodsClassFetcher.state]);
+
     useEffect(() => {
         if (getFetcherState(dictFetcher1) === FetcherState.DONE) {
             setRuleMemberOptions(dictFetcher1.data.map((item: any) => ({value: item.value, label: item.text})));
@@ -63,10 +79,16 @@ const CouponEditor = (props: any) => {
     }, [postFetcher.state]);
 
     const handleOnMemberSelectChanged = (currentValue: any) => {
-        let data = {name: 'post', value: currentValue.map((item: any) => item.value).join(',')};
+        let data = {name: 'ruleMemberIds', value: currentValue.map((item: any) => item.value).join(',')};
         let e = {currentTarget: data};
         formikRef.current!.handleChange(e);
         setMemberIds(currentValue);
+    }
+    const handleOnGoodsSelectChanged = (currentValue: any) => {
+        let data = {name: 'ruleGoodsIds', value: currentValue.map((item: any) => item.value).join(',')};
+        let e = {currentTarget: data};
+        formikRef.current!.handleChange(e);
+        setGoodsIds(currentValue);
     }
     const handleOnSubmit = (values: any) => {
         if (values.id) {
@@ -75,8 +97,24 @@ const CouponEditor = (props: any) => {
             postFetcher.submit(values, {method: 'post', action: '/paimai/coupons/add'});
         }
     }
+    const handleOnMemberSelect = (rows: any) => {
+        let newOptions = rows.map((x: any) => ({label: x.nickname||x.realname||x.id, value: x.id, key: x.id}));
+        setMemberOptions(_.uniqBy([...memberOptions, ...newOptions], 'key'));
 
+        let data = {name: 'ruleMemberIds', value: newOptions.map((item: any) => item.value).join(',')};
+        let e = {currentTarget: data};
+        formikRef.current!.handleChange(e);
+        setMemberIds(newOptions);
+    }
+    const handleOnGoodsSelect = (rows: any) => {
+        let newOptions = rows.map((x: any) => ({label: x.title+(x.spec ? ('-'+x.spec):''), value: x.id, key: x.id}));
+        setGoodsOptions(_.uniqBy([...goodsOptions, ...newOptions], 'key'));
 
+        let data = {name: 'ruleGoodsIds', value: newOptions.map((item: any) => item.value).join(',')};
+        let e = {currentTarget: data};
+        formikRef.current!.handleChange(e);
+        setGoodsIds(newOptions);
+    }
 
     if (!model) return <></>
 
@@ -136,10 +174,32 @@ const CouponEditor = (props: any) => {
                                     }
                                     <BootstrapRadioGroup options={ruleGoodsOptions} name={'ruleGoods'} label={'适用商品'}/>
                                     {formik.values.ruleGoods == 1 &&
-                                        <BootstrapInput label={'商品分类ID'} name={'ruleGoodsClassId'} placeholder={'此分类下的所有商品可用'}/>
+                                        <BootstrapSelect name={'ruleGoodsClassIds'} label={'商品分类'} options={goodsClassOptions} isMulti={true} isClearable={true} />
                                     }
                                     {formik.values.ruleGoods == 2 &&
-                                        <BootstrapInput label={'商品ID'} name={'ruleGoodsId'} placeholder={'此商品可用'}/>
+                                        <FormGroup className={'mb-1'}>
+                                            <FormLabel htmlFor={'ruleGoodsIds'}>选择商品</FormLabel>
+                                            <Row>
+                                                <Col sm={10}>
+                                                    <ReactSelectThemed
+                                                        id={'ruleGoodsIds'}
+                                                        name={'ruleGoodsIds'}
+                                                        components={{DropdownIndicator: emptyDropdownIndicator, IndicatorSeparator: emptyIndicatorSeparator}}
+                                                        placeholder={'选择商品'}
+                                                        isClearable={true}
+                                                        isSearchable={false}
+                                                        isMulti={true}
+                                                        openMenuOnClick={false}
+                                                        options={goodsOptions}
+                                                        onChange={handleOnGoodsSelectChanged}
+                                                        value={goodsIds}
+                                                    />
+                                                </Col>
+                                                <Col sm={2}>
+                                                    <Button onClick={() => setGoodsSelectorShow(true)}>选择</Button>
+                                                </Col>
+                                            </Row>
+                                        </FormGroup>
                                     }
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
@@ -158,6 +218,8 @@ const CouponEditor = (props: any) => {
 
                 </Formik>
             </Modal>
+            <MemberSelector show={memberSelectorShow} onHide={()=>setMemberSelectorShow(false)} onSelect={handleOnMemberSelect} />
+            <GoodsListSelector show={goodsSelectorShow} onHide={()=>setGoodsSelectorShow(false)} onSelect={handleOnGoodsSelect} />
         </>
     );
 }

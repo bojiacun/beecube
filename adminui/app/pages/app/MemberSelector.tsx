@@ -7,15 +7,15 @@ import BootstrapTable from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 
 const MemberSelector = (props: any) => {
-    const {show, onHide, selectedApp} = props;
+    const {show, onHide, onSelect} = props;
     const [list, setList] = useState<any>({records: []});
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
 
-    useEffect(()=>{
-        if(show) {
+    useEffect(() => {
+        if (show) {
             searchFetcher.submit(searchState, {method: 'get', action: '/app/members'});
         }
     }, [show]);
@@ -38,15 +38,15 @@ const MemberSelector = (props: any) => {
     const handlePageChanged = (e: any) => {
         searchState.pageNo = e.selected + 1;
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/members'});
     }
     const handlePageSizeChanged = (newValue: any) => {
         searchState.pageSize = parseInt(newValue.value);
         setSearchState({...searchState});
-        searchFetcher.submit(searchState, {method: 'get', action: '/system/users'});
+        searchFetcher.submit(searchState, {method: 'get', action: '/app/members'});
     }
     const handleOnSearchNameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
+        setSearchState({...searchState, nickname: e.target.value});
     }
     const handleOnSearchSubmit = () => {
         //设置分页为1
@@ -54,11 +54,15 @@ const MemberSelector = (props: any) => {
     }
     const columns: any[] = [
         {
+            text: 'ID',
+            dataField: 'id',
+        },
+        {
             text: '用户昵称',
             dataField: 'nickname',
         },
         {
-            text: '用户名称',
+            text: '真实姓名',
             dataField: 'realname',
         },
         {
@@ -71,32 +75,25 @@ const MemberSelector = (props: any) => {
         },
     ]
 
-    const handleOnRowSelect = (row:any, isSelect:boolean) => {
-        if(isSelect) {
-            setSelectedRows([...selectedRows, row.id])
-        }
-        else {
-            let selected = selectedRows.filter(x=> x !== row.id);
+    const handleOnRowSelect = (row: any, isSelect: boolean) => {
+        if (isSelect) {
+            setSelectedRows([...selectedRows, row])
+        } else {
+            let selected = selectedRows.filter(x => x !== row);
             setSelectedRows([...selected]);
         }
     }
-    const handleOnRowSelectAll = (isSelect:boolean, rows:any[]) => {
-        if(isSelect) {
-            setSelectedRows([...rows.map(x=>x.id)]);
-        }
-        else {
+    const handleOnRowSelectAll = (isSelect: boolean, rows: any[]) => {
+        if (isSelect) {
+            setSelectedRows([...rows]);
+        } else {
             setSelectedRows([]);
         }
     }
     const handleOnBind = () => {
-        if(selectedRows.length > 0) {
-            //添加
-            let data:any = {appId: selectedApp.id, userIdList: selectedRows};
-            editFetcher.submit(data, {method: 'post', action: '/app/users/bind'})
-        }
-        else{
-            onHide();
-        }
+        onSelect(selectedRows);
+        onHide();
+        setSelectedRows([]);
     }
 
     const selectRowConfig = {
@@ -131,7 +128,7 @@ const MemberSelector = (props: any) => {
                             />
                         </Col>
                         <Col md={6} className={'d-flex align-items-center justify-content-end'}>
-                            <searchFetcher.Form action={'/system/users'} className={'form-inline justify-content-end'}
+                            <searchFetcher.Form action={'/app/members'} className={'form-inline justify-content-end'}
                                                 onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
@@ -139,13 +136,13 @@ const MemberSelector = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Row} className={'mb-0'}>
-                                    <FormLabel htmlFor={'nickname'}>用户账号</FormLabel>
-                                    <Col>
-                                        <InputGroup>
-                                            <FormControl name={'nickname'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
-                                                         placeholder={'请输入要搜索的内容'}/>
-                                            <Button type={'submit'}>搜索</Button>
-                                        </InputGroup>
+                                    <FormLabel column htmlFor={'nickname'}>用户账号</FormLabel>
+                                    <Col md={'auto'}>
+                                    <InputGroup>
+                                        <FormControl name={'nickname'} autoComplete={'off'} onChange={handleOnSearchNameChanged}
+                                                     placeholder={'请输入要搜索的内容'}/>
+                                        <Button type={'submit'}>搜索</Button>
+                                    </InputGroup>
                                     </Col>
                                 </FormGroup>
                             </searchFetcher.Form>
