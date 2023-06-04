@@ -59,7 +59,13 @@ public class Coupon {
 	private java.lang.Integer ruleGoods;
 
 	private String ruleMemberIds;
+	@TableField(exist = false)
+	private String ruleMemberIds_dictText;
+	@Excel(name = "适用商品分类", width = 15)
+	@Dict(dictTable ="paimai_goods_classes",dicText = "name",dicCode = "id")
 	private String ruleGoodsClassIds;
+	@Excel(name = "商品", width = 15)
+	@Dict(dictTable ="paimai_goods",dicText = "title",dicCode = "id")
 	private String ruleGoodsIds;
 	/**最低消费*/
 	@Excel(name = "最低消费", width = 15)

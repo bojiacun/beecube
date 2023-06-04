@@ -10,10 +10,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.api.SystemApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.CouponTicket;
 import cn.winkt.modules.paimai.service.ICouponTicketService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -22,6 +25,8 @@ import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.Coupon;
 import cn.winkt.modules.paimai.service.ICouponService;
 import java.util.Date;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -64,6 +69,9 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 
 	@Resource
 	private SystemApi systemApi;
+
+	@Resource
+	private AppApi appApi;
 	/**
 	 * 分页列表查询
 	 *
@@ -84,6 +92,20 @@ public class CouponController extends JeecgController<Coupon, ICouponService> {
 		QueryWrapper<Coupon> queryWrapper = QueryGenerator.initQueryWrapper(coupon, req.getParameterMap());
 		Page<Coupon> page = new Page<Coupon>(pageNo, pageSize);
 		IPage<Coupon> pageList = couponService.page(page, queryWrapper);
+		pageList.getRecords().forEach(cp -> {
+			List<AppMemberVO> memberVOS = appApi.getMembersByIds(Arrays.asList(cp.getRuleMemberIds().split(",")));
+			cp.setRuleMemberIds_dictText(memberVOS.stream().map(m -> {
+				if(StringUtils.isNotEmpty(m.getRealname())) {
+					return m.getRealname();
+				}
+				else if(StringUtils.isNotEmpty(m.getNickname())) {
+					return m.getNickname();
+				}
+				else {
+					return m.getId();
+				}
+			}).collect(Collectors.joining(",")));
+		});
 		return Result.OK(pageList);
 	}
 

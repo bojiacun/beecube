@@ -106,6 +106,11 @@ public class AppApiController {
     public AppMember queryAppMember(@RequestParam("id") String id) {
         return appMemberService.getById(id);
     }
+
+    @GetMapping("/getMembersByIds")
+    public List<AppMember> queryAppMembers(@RequestParam("ids") List<String> ids) {
+        return appMemberService.listByIds(ids);
+    }
     @GetMapping("/findMembersByType")
     public List<AppMember> queryMembersByType(@RequestParam("type") Integer type) {
         LambdaQueryWrapper<AppMember> queryWrapper = new LambdaQueryWrapper<>();

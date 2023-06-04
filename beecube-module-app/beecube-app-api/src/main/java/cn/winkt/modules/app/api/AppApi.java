@@ -36,6 +36,9 @@ public interface AppApi {
     @GetMapping("/app/admin/getMemberById")
     AppMemberVO getMemberById(@RequestParam("id") String id);
 
+    @GetMapping("/app/admin/getMembersByIds")
+    List<AppMemberVO> getMembersByIds(@RequestParam("ids") List<String> ids);
+
     @GetMapping("/app/admin/findMembersByType")
     List<AppMemberVO> findMembersByType(@RequestParam("type") Integer type);
 
