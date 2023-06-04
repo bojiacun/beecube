@@ -61,7 +61,7 @@ const CouponEditor = (props: any) => {
                         goodsIdsOptions.push({value: v, label: goodsNames[i]??''});
                     });
                 }
-                setGoodsOptions(goodsIdsOptions);
+                setGoodsIds(goodsIdsOptions);
             }
         }
     }, [model]);
