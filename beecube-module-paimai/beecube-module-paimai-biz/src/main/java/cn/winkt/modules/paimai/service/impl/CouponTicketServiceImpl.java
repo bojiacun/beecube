@@ -9,7 +9,9 @@ import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.service.ICouponTicketService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.stereotype.Service;
@@ -59,10 +61,11 @@ public class CouponTicketServiceImpl extends ServiceImpl<CouponTicketMapper, Cou
                 boolean isValid = false;
                 BigDecimal totalPrice = BigDecimal.ZERO;
                 for (GoodsVO goodsVO: goodsList) {
-                    if (Objects.equals(goodsVO.getClassId(), coupon.getRuleGoodsClassId())) {
+
+                    if(StringUtils.isNotEmpty(coupon.getRuleGoodsClassIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsClassIds().split(","), goodsVO.getClassId()) >= 0 ) {
                         isValid = true;
                     }
-                    else if(Objects.equals(goodsVO.getId(), coupon.getRuleGoodsId())) {
+                    else if(StringUtils.isNotEmpty(coupon.getRuleGoodsIds()) && ArrayUtils.indexOf(coupon.getRuleGoodsIds().split(","), goodsVO.getId()) >= 0) {
                         isValid = true;
                     }
                     else if(coupon.getRuleGoods() == 3) {

@@ -48,8 +48,8 @@ public class Coupon {
     @ApiModelProperty(value = "有效期（天）")
 	private java.lang.Integer endDays;
 	/**目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户*/
-	@Excel(name = "目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户", width = 15)
-    @ApiModelProperty(value = "目标人群1新用户、2老用户、3已认证用户、4已完善信息用户、5分销商、6全部用户")
+	@Excel(name = "目标人群1新用户、2指定用户、3全部用户", width = 15)
+    @ApiModelProperty(value = "目标人群1新用户、2指定用户、3全部用户")
 	@Dict(dicCode = "paimai_coupon_rule_member")
 	private java.lang.Integer ruleMember;
 	/**适用商品：1按分类、2按商品、3全部商品*/
@@ -58,10 +58,9 @@ public class Coupon {
 	@Dict(dicCode = "paimai_coupon_rule_goods")
 	private java.lang.Integer ruleGoods;
 
-	@Dict(dicCode = "id", dictTable = "paimai_buyout_goods_classes", dicText = "name")
-	private String ruleGoodsClassId;
-	@Dict(dicCode = "id,type=2", dictTable = "paimai_goods", dicText = "name")
-	private String ruleGoodsId;
+	private String ruleMemberIds;
+	private String ruleGoodsClassIds;
+	private String ruleGoodsIds;
 	/**最低消费*/
 	@Excel(name = "最低消费", width = 15)
     @ApiModelProperty(value = "最低消费")
