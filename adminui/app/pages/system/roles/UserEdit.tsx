@@ -210,7 +210,7 @@ const UserEdit = (props: any) => {
                                         <BootstrapInput label={'用户账号'} readOnly={model?.id} name={'username'}/>
                                         <BootstrapInput label={'用户姓名'} name={'realname'}/>
                                         <BootstrapInput label={'工号'} name={'workNo'}/>
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'post'}>职务</FormLabel>
                                             <Row>
                                                 <Col sm={10}>
@@ -243,7 +243,7 @@ const UserEdit = (props: any) => {
                                             isSearchable={false}
                                             isMulti={true}
                                         />
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'selecteddeparts'}>所属部门</FormLabel>
                                             <Row>
                                                 <Col sm={10}>
@@ -286,11 +286,11 @@ const UserEdit = (props: any) => {
                                         />
                                         <BootstrapRadioGroup  options={[{label: '普通用户', value: '1'},{label: '上级', value: '2'}]} name={'userIdentity'} label={'身份'} />
 
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'avatar'}>头像</FormLabel>
                                             <FileBrowserInput name={'avatar'} type={1} multi={false} />
                                         </FormGroup>
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'birthday'}>生日</FormLabel>
                                             <DateTimePicker inputName={'birthday'} />
                                         </FormGroup>
