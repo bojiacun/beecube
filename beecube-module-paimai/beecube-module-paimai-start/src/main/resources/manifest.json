@@ -16,6 +16,15 @@
       "tab": true
     },
     {
+      "label": "自定义页面",
+      "url": "/pages/index/diy",
+      "urlSuffix": {
+        "label": "标识",
+        "value": "id"
+      },
+      "suffixOptions": "输入页面唯一标识"
+    },
+    {
       "label": "图文类文章频道页",
       "url": "/article/pages/index_normal"
     },

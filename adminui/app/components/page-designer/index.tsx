@@ -18,6 +18,7 @@ import * as Yup from "yup";
 
 export declare interface PageType {
     title: string;
+    identifier: string;
     id: number;
     canDelete: boolean;
     style?: any;
@@ -269,7 +270,7 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
                                         return (
                                             <li key={index}>
                                                 <div
-                                                    style={{color: currentPageIndex == index ? '#3366CC' : '#333'}}>{item.title}{currentPageIndex == index ? '(编辑中)':''}</div>
+                                                    style={{color: currentPageIndex == index ? '#3366CC' : '#333'}}>{item.title}(标识：{item.identifier}){currentPageIndex == index ? '(编辑中)':''}</div>
                                                 <div>
                                                     <Edit2 onClick={() => onPageChanged(item, index)} size={16} className={'anticon'}/>
                                                     {currentPageIndex == index &&
