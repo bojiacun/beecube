@@ -95,11 +95,14 @@ const DiyPage = (props:any) => {
         let data = {...page};
         return axios.post('/app/diy/save', data);
     }
+    const handleOnNewPageSave = (values:any) => {
+        return axios.post('/app/diy/save', values);
+    }
 
     if(loading) return <></>;
 
     return (
-        <PageDesigner pages={pages} lockPage={false} links={links} onDataSaved={handleDataSave} />
+        <PageDesigner pages={pages} lockPage={false} links={links} onDataSaved={handleDataSave} onNewPageSave={handleOnNewPageSave} />
     );
 }
 

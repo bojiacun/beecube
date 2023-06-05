@@ -30,6 +30,7 @@ export declare interface PageDesignerProps extends Partial<any> {
     style?: any;
     backable?: boolean;
     onDataSaved?: (values: any) => Promise<any>;
+    onNewPageSave?: (values: any) => Promise<any>;
     lockPage?: boolean;
 }
 
@@ -207,9 +208,10 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
     };
 
     const handleOnNewPage = (values: any) => {
-        if (values.id) {
-        } else {
-        }
+        values.modules = [];
+        values.style = DEFAULT_PAGE_DATA;
+        values.controls = [];
+        props.onNewPageSave && props.onNewPageSave(values);
     }
 
     return (

@@ -10,7 +10,7 @@ export const action: ActionFunction = async ({request}) => {
     data.controls = JSON.stringify(data.controls);
     delete data.canDelete;
     delete data.style;
-    if(data.id == '') {
+    if(!data.id) {
         return await requestWithToken(request)(API_APP_DIY_PAGE_ADD, postFormInit(JSON.stringify(data)));
     }
     else {

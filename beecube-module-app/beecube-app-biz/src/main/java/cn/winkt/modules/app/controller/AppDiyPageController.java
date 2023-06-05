@@ -8,7 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
@@ -88,6 +91,11 @@ public class AppDiyPageController extends JeecgController<AppDiyPage, IAppDiyPag
 	@ApiOperation(value="应用页面设计表-添加", notes="应用页面设计表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody AppDiyPage appDiyPage) {
+		LambdaQueryWrapper<AppDiyPage> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(AppDiyPage::getIdentifier, appDiyPage.getIdentifier());
+		if(appDiyPageService.count(queryWrapper) > 0) {
+			throw new JeecgBootException("已存在相同标识页面");
+		}
 		appDiyPageService.save(appDiyPage);
 		return Result.OK("添加成功！");
 	}
