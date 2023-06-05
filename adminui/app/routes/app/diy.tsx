@@ -99,7 +99,7 @@ const DiyPage = (props:any) => {
     if(loading) return <></>;
 
     return (
-        <PageDesigner pages={pages} lockPage={true} links={links} onDataSaved={handleDataSave} />
+        <PageDesigner pages={pages} lockPage={false} links={links} onDataSaved={handleDataSave} />
     );
 }
 

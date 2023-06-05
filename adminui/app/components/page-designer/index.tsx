@@ -1,17 +1,20 @@
 import {DragEventHandler, FC, useEffect, useState} from "react";
 import _ from "lodash";
 import {ControlType, getControl, getControls, getModule, getModules, ModuleType} from "~/components/page-designer/component";
-import PageSettings, { DEFAULT_PAGE_DATA } from "~/components/page-designer/page";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import PageSettings, {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
+import {Button, Col, Container, Modal, Row, Form} from "react-bootstrap";
 import classNames from "classnames";
 import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, X} from "react-feather";
 import {handleSaveResult, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
-import { MINI_APP_HEADER } from "./controls/MiniAppHeader";
-import { POP_ADVERTISE } from "./controls/PopAdvertise";
+import {MINI_APP_HEADER} from "./controls/MiniAppHeader";
+import {POP_ADVERTISE} from "./controls/PopAdvertise";
 import {AnimatePresence, motion} from "framer-motion";
 import Collapse from 'rc-collapse';
 import collapseMotion from "~/components/page-designer/motion";
 import {POP_ATTENTION} from "~/components/page-designer/controls/PopAttention";
+import BootstrapInput from "~/components/form/BootstrapInput";
+import {Formik, Form as FormikForm} from "formik";
+import * as Yup from "yup";
 
 export declare interface PageType {
     title: string;
@@ -22,7 +25,7 @@ export declare interface PageType {
     controls?: ControlType[],
 }
 
-export declare interface PageDesignerProps extends Partial<any>{
+export declare interface PageDesignerProps extends Partial<any> {
     pages: PageType[];
     style?: any;
     backable?: boolean;
@@ -30,9 +33,12 @@ export declare interface PageDesignerProps extends Partial<any>{
     lockPage?: boolean;
 }
 
+const newPageSchema = Yup.object().shape({
+    title: Yup.string().required('必填字段'),
+    identifier: Yup.string().required('必填字段')
+});
 
-
-const PageDesigner : FC<PageDesignerProps> = (props) => {
+const PageDesigner: FC<PageDesignerProps> = (props) => {
     const {links, lockPage = false, onDataSaved} = props;
     const [tabIndex, setTabIndex] = useState("module");
     const [pages, setPages] = useState<PageType[]>(props.pages);
@@ -199,23 +205,29 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
         currentPage.modules = _modules;
         refreshPage();
     };
+
+    const handleOnNewPage = (values: any) => {
+        if (values.id) {
+        } else {
+        }
+    }
+
     return (
         <Container id={'diy-container'} fluid>
             <Row style={{backgroundColor: 'white', padding: '0 20px', fontWeight: 'bold', zIndex: 22}}>
                 <Col className={'header'}>
                     <Button variant={'light'} style={{marginRight: 20, display: 'none'}}>预览</Button>
-                    <Button disabled={saving} onClick={()=>{
+                    <Button disabled={saving} onClick={() => {
                         setSaving(true);
-                        if(onDataSaved) {
-                            onDataSaved(currentPage).then((res)=>{
+                        if (onDataSaved) {
+                            onDataSaved(currentPage).then((res) => {
                                 setSaving(false);
-                                if(!res.data.success) {
+                                if (!res.data.success) {
                                     showToastError(res.data.message);
-                                }
-                                else {
+                                } else {
                                     showToastSuccess('保存成功！');
                                 }
-                            }).catch(e=>{
+                            }).catch(e => {
                                 setSaving(false);
                                 showToastError('保存失败');
                             });
@@ -249,7 +261,7 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                         return (
                                             <li key={index}>
                                                 <div
-                                                    style={{color: currentPageIndex == index ? '#3366CC': '#333'}}>{item.title}</div>
+                                                    style={{color: currentPageIndex == index ? '#3366CC' : '#333'}}>{item.title}</div>
                                                 <div>
                                                     <Edit2 onClick={() => onPageChanged(item, index)} size={16} className={'anticon'}/>
                                                     {currentPageIndex == index &&
@@ -273,9 +285,42 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                 }
                             </ul>
                             {!lockPage &&
-                                <Button style={{borderRadius: 40}} variant="primary"
-                                        onClick={() => setNewPageVisible(true)}>新建自定义页面</Button>
+                                <Button style={{borderRadius: 40, width: '100%'}} variant="primary" onClick={() => setNewPageVisible(true)}>新建自定义页面</Button>
                             }
+                            <Modal
+                                onHide={() => setNewPageVisible(false)}
+                                show={newPageVisible}
+                                size={'lg'}
+                                backdrop={'static'}
+                                aria-labelledby={'edit-modal'}
+                                centered
+                            >
+                                <Modal.Header closeButton>
+                                    <Modal.Title>
+                                        新建自定义页面
+                                    </Modal.Title>
+                                </Modal.Header>
+                                <Formik initialValues={{}} validationSchema={newPageSchema} onSubmit={handleOnNewPage}>
+                                    {(formik)=>{
+                                        return (
+                                            <FormikForm method={'post'}>
+                                                <Modal.Body>
+                                                    <BootstrapInput label={'页面标识'} name={'identifier'} placeholder={'页面标识，全局唯一，必填'} />
+                                                    <BootstrapInput label={'页面标题'} name={'title'} />
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <Button
+                                                        variant={'primary'}
+                                                        type={'submit'}
+                                                    >
+                                                        保存
+                                                    </Button>
+                                                </Modal.Footer>
+                                            </FormikForm>
+                                        );
+                                    }}
+                                </Formik>
+                            </Modal>
                         </div>
                         <div className={'control'} style={{display: tabIndex === 'module' ? 'block' : 'none', padding: 0}}>
                             <Collapse accordion={true} openMotion={collapseMotion}>
@@ -352,7 +397,7 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                     setCurrentData({type: 1, dataIndex: index, settings: settings, data: item.data});
                                 }}/>
                             })}
-                            <div className={'module'} style={{marginTop: currentPage.controls![0].data.basic.hide ? 0:50}} onDrop={onModuleContainerDrop}
+                            <div className={'module'} style={{marginTop: currentPage.controls![0].data.basic.hide ? 0 : 50}} onDrop={onModuleContainerDrop}
                                  onDragEnter={onModuleContainerDragEnter} onDragLeave={onModuleContainerDragLeave}
                                  onDragOver={onModuleContainerDragOver}>
                                 {placeholder &&
@@ -391,10 +436,10 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
                                 showTools &&
                                 <ul style={{top: toolTop, padding: 0}} onMouseEnter={() => setShowTools(true)}
                                     onMouseLeave={() => setShowTools(false)} className={'xcxModuleOption'}>
-                                    {activeIndex > 0 && <li onClick={up}><span><ArrowUp size={14} /></span></li>}
-                                    <li onClick={removeModule}><span><X size={14} /></span></li>
-                                    <li onClick={copy}><span><Copy size={14} /></span></li>
-                                    {activeIndex < _modules.length - 1 && <li onClick={down}><span><ArrowDown size={14} /></span></li>}
+                                    {activeIndex > 0 && <li onClick={up}><span><ArrowUp size={14}/></span></li>}
+                                    <li onClick={removeModule}><span><X size={14}/></span></li>
+                                    <li onClick={copy}><span><Copy size={14}/></span></li>
+                                    {activeIndex < _modules.length - 1 && <li onClick={down}><span><ArrowDown size={14}/></span></li>}
                                 </ul>
                             }
                             {_modules.length == 0 && !placeholder &&
@@ -403,25 +448,26 @@ const PageDesigner : FC<PageDesignerProps> = (props) => {
 
                         <AnimatePresence mode={'wait'}>
                             {currentData != null &&
-                            <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'} style={{height: '100%', borderTop: '1px solid #eee'}}>
-                                {SettingsComponent && <SettingsComponent links={links} data={currentData?.data} onUpdate={(data: any) => {
-                                    let itemData = {};
-                                    if (currentData!.type == 1) {
-                                        //控件类型数据
-                                        itemData = currentPage!.controls![currentData!.dataIndex].data;
-                                        itemData = {...itemData, ...data};
-                                        currentPage!.controls![currentData!.dataIndex].data = itemData;
-                                    } else if (currentData!.type == 2) {
-                                        itemData = currentPage!.modules![currentData!.dataIndex].data;
-                                        itemData = {...itemData, ...data};
-                                        currentPage!.modules![currentData!.dataIndex].data = itemData;
-                                    } else if (currentData!.type == 3) {
-                                        itemData = data;
-                                        currentPage.style = itemData;
-                                    }
-                                    refreshPage();
-                                }}/>}
-                            </motion.div>
+                                <motion.div transition={{duration: 0.5}} initial={{right: -400}} animate={{right: 0}} exit={{right: -400}} className={'attributeContainer'}
+                                            style={{height: '100%', borderTop: '1px solid #eee'}}>
+                                    {SettingsComponent && <SettingsComponent links={links} data={currentData?.data} onUpdate={(data: any) => {
+                                        let itemData = {};
+                                        if (currentData!.type == 1) {
+                                            //控件类型数据
+                                            itemData = currentPage!.controls![currentData!.dataIndex].data;
+                                            itemData = {...itemData, ...data};
+                                            currentPage!.controls![currentData!.dataIndex].data = itemData;
+                                        } else if (currentData!.type == 2) {
+                                            itemData = currentPage!.modules![currentData!.dataIndex].data;
+                                            itemData = {...itemData, ...data};
+                                            currentPage!.modules![currentData!.dataIndex].data = itemData;
+                                        } else if (currentData!.type == 3) {
+                                            itemData = data;
+                                            currentPage.style = itemData;
+                                        }
+                                        refreshPage();
+                                    }}/>}
+                                </motion.div>
                             }
                         </AnimatePresence>
 
