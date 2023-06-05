@@ -97,7 +97,7 @@ public class AppDiyPageController extends JeecgController<AppDiyPage, IAppDiyPag
 			throw new JeecgBootException("已存在相同标识页面");
 		}
 		appDiyPageService.save(appDiyPage);
-		return Result.OK("添加成功！");
+		return Result.OK("添加成功！", appDiyPage);
 	}
 	
 	/**

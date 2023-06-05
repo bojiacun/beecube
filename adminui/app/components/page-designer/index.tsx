@@ -4,7 +4,7 @@ import {ControlType, getControl, getControls, getModule, getModules, ModuleType}
 import PageSettings, {DEFAULT_PAGE_DATA} from "~/components/page-designer/page";
 import {Button, Col, Container, Modal, Row, Form} from "react-bootstrap";
 import classNames from "classnames";
-import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, X} from "react-feather";
+import {ArrowDown, ArrowUp, Copy, Delete, Edit2, File, Grid, Layers, PlusCircle, Settings, Trash2, X} from "react-feather";
 import {handleSaveResult, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {MINI_APP_HEADER} from "./controls/MiniAppHeader";
 import {POP_ADVERTISE} from "./controls/PopAdvertise";
@@ -31,6 +31,7 @@ export declare interface PageDesignerProps extends Partial<any> {
     backable?: boolean;
     onDataSaved?: (values: any) => Promise<any>;
     onNewPageSave?: (values: any) => Promise<any>;
+    onDeletePage ?: (values: any) => Promise<any>;
     lockPage?: boolean;
 }
 
@@ -42,7 +43,7 @@ const newPageSchema = Yup.object().shape({
 const PageDesigner: FC<PageDesignerProps> = (props) => {
     const {links, lockPage = false, onDataSaved} = props;
     const [tabIndex, setTabIndex] = useState("module");
-    const [pages, setPages] = useState<PageType[]>(props.pages);
+    const [pages, setPages] = useState<PageType[]>([]);
     const [placeholder, setPlaceholder] = useState<boolean>(false);
     const [saving, setSaving] = useState<boolean>(false);
     const [showTools, setShowTools] = useState<boolean>(false);
@@ -55,8 +56,8 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
     const [newPageVisible, setNewPageVisible] = useState<boolean>(false);
 
     useEffect(() => {
-        if (pages) {
-            pages.forEach(item => {
+        if (props.pages) {
+            props.pages.forEach((item, i) => {
                 let controls = item.controls || [];
                 if (_.findIndex(controls, o => o.key == MINI_APP_HEADER) < 0) {
                     let control = {...getControl(MINI_APP_HEADER)};
@@ -67,10 +68,13 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
                 }
                 item.controls = controls;
                 item.style = {...DEFAULT_PAGE_DATA, ...item?.style};
+                if(i > 0) {
+                    item.canDelete = true;
+                }
             });
-            setPages([...pages]);
+            setPages([...props.pages]);
         }
-    }, []);
+    }, [props.pages]);
 
     const groupedModules: string[] = _.union(getModules().map(item => item.group).sort((a, b) => {
         if (a < b) return -1;
@@ -211,7 +215,9 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
         values.modules = [];
         values.style = DEFAULT_PAGE_DATA;
         values.controls = [];
-        props.onNewPageSave && props.onNewPageSave(values);
+        props.onNewPageSave && props.onNewPageSave(values).then(res=>{
+            setNewPageVisible(false);
+        });
     }
 
     return (
@@ -269,13 +275,14 @@ const PageDesigner: FC<PageDesignerProps> = (props) => {
                                                     {currentPageIndex == index &&
                                                         <Settings style={{marginLeft: 10}} onClick={() => onPageSettings(item, index)} size={16} className={'anticon'}/>}
                                                     {(currentPageIndex != index && item?.canDelete && !lockPage) ?
-                                                        <Delete style={{marginLeft: 10}} className={'anticon'} size={16} onClick={() => {
+                                                        <Trash2 style={{marginLeft: 10}} className={'anticon'} size={16} onClick={() => {
                                                             showDeleteAlert(() => {
                                                                 if (index !== currentPageIndex) {
                                                                     pages.splice(index, 1);
                                                                     setPages([...pages]);
                                                                     setCurrentPageIndex(0);
                                                                     setCurrentPage(pages[0]);
+                                                                    props.onDeletePage && props.onDeletePage(item);
                                                                 }
                                                             })
                                                         }}/>

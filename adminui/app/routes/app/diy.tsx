@@ -96,13 +96,30 @@ const DiyPage = (props:any) => {
         return axios.post('/app/diy/save', data);
     }
     const handleOnNewPageSave = (values:any) => {
-        return axios.post('/app/diy/save', values);
+        return axios.post('/app/diy/save', values).then(res=>{
+            let page = res.data.result;
+            page.controls = JSON.parse(page.controls);
+            page.modules = JSON.parse(page.modules);
+            page.style = JSON.parse(page.styles);
+            page.canDelete = true;
+            setPages([...pages, page]);
+        });
+    }
+    const handleOnDeletePage = (values:any) => {
+        return axios.delete('/app/diy/delete', {params: {id: values.id}});
     }
 
     if(loading) return <></>;
 
     return (
-        <PageDesigner pages={pages} lockPage={false} links={links} onDataSaved={handleDataSave} onNewPageSave={handleOnNewPageSave} />
+        <PageDesigner
+            pages={pages}
+            lockPage={false}
+            links={links}
+            onDataSaved={handleDataSave}
+            onNewPageSave={handleOnNewPageSave}
+            onDeletePage={handleOnDeletePage}
+        />
     );
 }
 

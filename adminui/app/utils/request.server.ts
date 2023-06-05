@@ -147,6 +147,7 @@ export const API_APP_MEMBER_SIGNIN_LIST = `${BASE_URL}/beecube-app/app/signins/l
 export const API_APP_DIY_PAGE_LIST = `${BASE_URL}/beecube-app/app/diy/pages/all`;
 export const API_APP_DIY_PAGE_EDIT = `${BASE_URL}/beecube-app/app/diy/pages/edit`;
 export const API_APP_DIY_PAGE_ADD = `${BASE_URL}/beecube-app/app/diy/pages/add`;
+export const API_APP_DIY_PAGE_DELETE = `${BASE_URL}/beecube-app/app/diy/pages/delete`;
 
 export const API_APP_PUBLISH_LATEST = `${BASE_URL}/beecube-app/app/publishes/latest`;
 export const API_APP_PUBLISH_NEW = `${BASE_URL}/beecube-app/app/publishes/new`;
