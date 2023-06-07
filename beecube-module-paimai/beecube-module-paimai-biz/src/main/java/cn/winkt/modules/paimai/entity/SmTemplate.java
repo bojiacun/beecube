@@ -54,6 +54,8 @@ public class SmTemplate {
 	@Excel(name = "部分用户ID集合", width = 15)
     @ApiModelProperty(value = "部分用户ID集合")
 	private java.lang.String ruleMemberIds;
+	@TableField(exist = false)
+	private String ruleMemberIds_dictText;
 	/**createBy*/
 	@Excel(name = "createBy", width = 15)
     @ApiModelProperty(value = "createBy")

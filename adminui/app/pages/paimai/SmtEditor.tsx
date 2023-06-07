@@ -102,7 +102,7 @@ const SmtEditor = (props: any) => {
 
     if (!model) return <></>
 
-    const newModel = {...model};
+    const newModel = {ruleMember: 2, ...model};
 
     return (
         <>
@@ -127,7 +127,7 @@ const SmtEditor = (props: any) => {
                                     <BootstrapInput label={'变量替换'} name={'vars'} placeholder={'形式如{id}:{id};{xxx}:{xxx}，前面的变量为模板消息中的变量，后面的变量为系统可用变量，系统可用变量有:会员名称：{memberName}'} />
                                     <BootstrapLinkSelector links={links} label={'链接地址'} name={'url'} />
                                     <BootstrapRadioGroup options={ruleMemberOptions} name={'ruleMember'} label={'适用人群'}/>
-                                    {formik.values.ruleMember == 2 &&
+                                    {formik.values.ruleMember == 1 &&
                                         <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'ruleMemberIds'}>选择用户</FormLabel>
                                             <Row>

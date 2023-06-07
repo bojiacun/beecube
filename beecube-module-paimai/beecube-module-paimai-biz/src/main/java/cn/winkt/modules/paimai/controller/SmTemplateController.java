@@ -6,15 +6,23 @@ import java.util.Map;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.SmTemplate;
 import cn.winkt.modules.paimai.service.ISmTemplateService;
 import java.util.Date;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,6 +56,9 @@ import io.swagger.annotations.ApiOperation;
 public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplateService> {
 	@Autowired
 	private ISmTemplateService smTemplateService;
+
+	@Resource
+	private AppApi appApi;
 	
 	/**
 	 * 分页列表查询
@@ -61,6 +72,7 @@ public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplat
 	@AutoLog(value = "营销短信模板表-分页列表查询")
 	@ApiOperation(value="营销短信模板表-分页列表查询", notes="营销短信模板表-分页列表查询")
 	@GetMapping(value = "/list")
+	@AutoDict
 	public Result<?> queryPageList(SmTemplate smTemplate,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
@@ -68,6 +80,20 @@ public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplat
 		QueryWrapper<SmTemplate> queryWrapper = QueryGenerator.initQueryWrapper(smTemplate, req.getParameterMap());
 		Page<SmTemplate> page = new Page<SmTemplate>(pageNo, pageSize);
 		IPage<SmTemplate> pageList = smTemplateService.page(page, queryWrapper);
+		pageList.getRecords().forEach(tmp -> {
+			if(tmp.getRuleMemberIds() != null) {
+				List<AppMemberVO> memberVOS = appApi.getMembersByIds(Arrays.asList(tmp.getRuleMemberIds().split(",")));
+				tmp.setRuleMemberIds_dictText(memberVOS.stream().map(m -> {
+					if (StringUtils.isNotEmpty(m.getRealname())) {
+						return m.getRealname();
+					} else if (StringUtils.isNotEmpty(m.getNickname())) {
+						return m.getNickname();
+					} else {
+						return m.getId();
+					}
+				}).collect(Collectors.joining(",")));
+			}
+		});
 		return Result.OK(pageList);
 	}
 	
