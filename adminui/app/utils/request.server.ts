@@ -235,6 +235,11 @@ export const API_PAIMAI_BANK_ADD = `${BASE_URL}/paimai/banks/add`;
 export const API_PAIMAI_BANK_EDIT = `${BASE_URL}/paimai/banks/edit`;
 export const API_PAIMAI_BANK_DELETE = `${BASE_URL}/paimai/banks/delete`;
 
+export const API_PAIMAI_SMT_LIST = `${BASE_URL}/paimai/smts/list`;
+export const API_PAIMAI_SMT_ADD = `${BASE_URL}/paimai/smts/add`;
+export const API_PAIMAI_SMT_EDIT = `${BASE_URL}/paimai/smts/edit`;
+export const API_PAIMAI_SMT_DELETE = `${BASE_URL}/paimai/smts/delete`;
+
 export const API_PAIMAI_COUPON_LIST = `${BASE_URL}/paimai/coupons/list`;
 export const API_PAIMAI_COUPON_TICKET_LIST = `${BASE_URL}/paimai/coupon/tickets/list`;
 export const API_PAIMAI_COUPON_ADD = `${BASE_URL}/paimai/coupons/add`;

@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.common.aspect.annotation.Dict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -45,8 +46,9 @@ public class SmTemplate {
     @ApiModelProperty(value = "变量替换")
 	private java.lang.String vars;
 	/**目标用户：1为部分用户、2为全部用户*/
-	@Excel(name = "目标用户：1为部分用户、2为全部用户", width = 15)
+	@Excel(name = "目标用户：1为部分用户、2为全部用户", width = 15, dicCode = "winkt_smt_rulemember")
     @ApiModelProperty(value = "目标用户：1为部分用户、2为全部用户")
+	@Dict(dicCode = "winkt_smt_rulemember")
 	private java.lang.Integer ruleMember;
 	/**部分用户ID集合*/
 	@Excel(name = "部分用户ID集合", width = 15)
@@ -63,4 +65,6 @@ public class SmTemplate {
 	@Excel(name = "appId", width = 15)
     @ApiModelProperty(value = "appId")
 	private java.lang.String appId;
+
+	private String url;
 }
