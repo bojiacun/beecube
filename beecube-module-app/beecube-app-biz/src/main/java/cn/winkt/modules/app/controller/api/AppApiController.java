@@ -16,6 +16,7 @@ import cn.winkt.modules.app.vo.MemberSetting;
 import cn.winkt.modules.app.vo.SmtTemplateVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.io.IOUtils;
@@ -92,7 +93,10 @@ public class AppApiController {
     @PostMapping("/sms")
     public Boolean sendSms(@RequestBody SmtTemplateVO smtTemplateVO) {
         TencentSmsService smsService = tencentSmsServices.getService(AppContext.getApp());
-        smsService.send(smtTemplateVO.getPhone(), smtTemplateVO.getTemplateId(), smtTemplateVO.getParams());
+        SendSmsResponse sendSmsResponse = smsService.send(smtTemplateVO.getPhone(), smtTemplateVO.getTemplateId(), smtTemplateVO.getParams());
+        if(sendSmsResponse == null || sendSmsResponse.getSendStatusSet() == null || sendSmsResponse.getSendStatusSet().length == 0 || !sendSmsResponse.getSendStatusSet()[0].getCode().equals("Ok")) {
+            return false;
+        }
         return true;
     }
 
