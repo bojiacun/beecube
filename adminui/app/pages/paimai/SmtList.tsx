@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
 import {Button, Card, Col, Row} from "react-bootstrap";
@@ -8,6 +8,7 @@ import SinglePagination from "~/components/pagination/SinglePagination";
 import BankEditor from "~/pages/paimai/BankEditor";
 import InviteList from "~/pages/paimai/InviteList";
 import SmtRecordList from "~/pages/paimai/SmtRecordList";
+import SmtEditor from "~/pages/paimai/SmtEditor";
 
 
 const SmtList = (props: any) => {
@@ -187,7 +188,7 @@ const SmtList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            {editModal && <BankEditor model={editModal} onHide={()=>{
+            {editModal && <SmtEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}

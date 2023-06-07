@@ -23,6 +23,11 @@ const SmtEditor = (props: any) => {
     useEffect(()=>{
         searchFetcher.load("/app/links");
     }, []);
+    useEffect(() => {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
+            setLinks(searchFetcher.data);
+        }
+    }, [searchFetcher.state]);
     const schema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
         templateId: Yup.string().required('必填字段'),

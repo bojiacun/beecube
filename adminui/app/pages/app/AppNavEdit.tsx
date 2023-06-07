@@ -1,6 +1,6 @@
-import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
+import {Button, FormGroup, FormLabel, Modal} from "react-bootstrap";
 import {Form, Formik} from "formik";
-import {handleSaveResult} from "~/utils/utils";
+import {FetcherState, getFetcherState, handleSaveResult} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
@@ -36,7 +36,7 @@ const AppNavEdit = (props: any) => {
     }, []);
 
     useEffect(() => {
-        if (searchFetcher.type === 'done' && searchFetcher.data) {
+        if (getFetcherState(searchFetcher) === FetcherState.DONE) {
             setLinks(searchFetcher.data);
         }
     }, [searchFetcher.state]);
