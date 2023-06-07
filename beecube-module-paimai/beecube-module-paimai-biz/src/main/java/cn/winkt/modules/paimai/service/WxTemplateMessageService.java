@@ -31,7 +31,7 @@ public class WxTemplateMessageService {
     private MiniappServices miniappServices;
 
     @Async
-    void sendTemplateMessage(String templateId, String params, String page, String memberId, String appId) throws InvocationTargetException, IllegalAccessException, WxErrorException {
+    public void sendTemplateMessage(String templateId, String params, String page, String memberId, String appId) throws InvocationTargetException, IllegalAccessException, WxErrorException {
         AppContext.setApp(appId);
         log.debug("发送模板消息 {}", appId);
         WxMaService wxMaService = miniappServices.getWxMaService(AppContext.getApp());

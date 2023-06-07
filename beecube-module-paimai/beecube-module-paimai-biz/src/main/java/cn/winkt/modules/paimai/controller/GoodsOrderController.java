@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.Goods;
+import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
 import cn.winkt.modules.paimai.entity.OrderGoods;
-import cn.winkt.modules.paimai.service.CommissionService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.IOrderGoodsService;
+import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.OrderVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
@@ -29,15 +29,16 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.GoodsOrder;
-import cn.winkt.modules.paimai.service.IGoodsOrderService;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -79,6 +80,12 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
 
     @Resource
     CommissionService commissionService;
+
+    @Resource
+    private IGoodsCommonDescService goodsCommonDescService;
+
+    @Resource
+    private WxTemplateMessageService wxTemplateMessageService;
 
     /**
      * 分页列表查询
@@ -172,6 +179,33 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
         }
         goodsOrder.setStatus(2);
         goodsOrderService.updateById(goodsOrder);
+
+
+        //发送订单发货模板消息
+        try {
+            List<GoodsCommonDesc> paimaiSettings = goodsCommonDescService.list();
+            String templateId = null;
+            String templateParams = null;
+            for (GoodsCommonDesc s : paimaiSettings) {
+                if (s.getDescKey().equals("orderDeliveryTemplateId")) {
+                    templateId = s.getDescValue();
+                } else if (s.getDescKey().equals("orderDeliveryTemplateArgs")) {
+                    templateParams = s.getDescValue();
+                }
+            }
+
+            if (StringUtils.isNotEmpty(templateId) && StringUtils.isNotEmpty(templateParams)) {
+                templateParams = templateParams.replace("{orderId}", goodsOrder.getId());
+                templateParams = templateParams.replace("{createTime}", DateFormatUtils.format(goodsOrder.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+                templateParams = templateParams.replace("{goodsNames}", goodsOrder.getOrderGoods().stream().map(OrderGoods::getGoodsName).collect(Collectors.joining()));
+                templateParams = templateParams.replace("{deliveryCode}", goodsOrder.getDeliveryNo());
+                wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
+            }
+        }
+        catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
+        }
+
         return Result.OK("编辑成功!");
     }
     /**
