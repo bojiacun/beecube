@@ -58,6 +58,10 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
                         <BootstrapInput label={'图文类文章标题'} name={'articleNormalIndexTitle'} placeholder={'图文类文章频道首页标题'} />
                         <BootstrapInput label={'视频类文章标题'} name={'articleVideoIndexTitle'} placeholder={'视频类文章频道首页标题'} />
+                        <BootstrapInput label={'订单未支付通知模板ID'} name={'orderNotPayTemplateId'} placeholder={'订单未支付通知模板ID'} />
+                        <BootstrapInput label={'订单未支付通知参数'} name={'orderNotPayTemplateArgs'} placeholder={'形式如{id}:{id};{xxx}:{xxx}，前面的变量为模板消息中的变量，后面的变量为系统可用变量，系统可用变量有订单ID：{orderId}、下单时间：{createTime}、下单商品名称:{goodsNames}、支付到期时间:{endPayTime}'} />
+                        <BootstrapInput label={'订单发货通知模板ID'} name={'orderDeliveryTemplateId'} placeholder={'订单发货通知模板ID'} />
+                        <BootstrapInput label={'订单发货通知参数'} name={'orderDeliveryTemplateArgs'} placeholder={'形式如{id}:{id};{xxx}:{xxx}，前面的变量为模板消息中的变量，后面的变量为系统可用变量，系统可用变量有订单ID：{orderId}、下单时间：{createTime}、下单商品名称:{goodsNames}、支付到期时间:{endPayTime}'} />
                         <FormGroup>
                             <FormLabel>文章频道广告</FormLabel>
                             <FileBrowserInput type={1} name={'articleNormalAdv'} multi={false} />
@@ -66,9 +70,7 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel>文章频道广告链接地址</FormLabel>
                             <BootstrapLinkSelector links={links} name={'articleNormalAdvLink'} initValue={settings.articleNormalAdvLink}  />
                         </FormGroup>
-
                         <BootstrapInput label={'积分兑换比例'} name={'integralRatio'} placeholder={'1元相当于多少积分'} />
-
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
                         <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
