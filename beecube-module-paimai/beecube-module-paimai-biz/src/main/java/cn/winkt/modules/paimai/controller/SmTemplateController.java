@@ -124,7 +124,21 @@ public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplat
 		smTemplateService.updateById(smTemplate);
 		return Result.OK("编辑成功!");
 	}
-	
+
+	 /**
+	  * 通过id发送短信
+	  *
+	  * @param id
+	  * @return
+	  */
+	 @AutoLog(value = "营销短信模板表-通过id删除")
+	 @ApiOperation(value="营销短信模板表-通过id删除", notes="营销短信模板表-通过id删除")
+	 @PutMapping(value = "/send")
+	 public Result<?> send(@RequestParam(name="id",required=true) String id) {
+
+		 return Result.OK("发送成功!");
+	 }
+
 	/**
 	 * 通过id删除
 	 *

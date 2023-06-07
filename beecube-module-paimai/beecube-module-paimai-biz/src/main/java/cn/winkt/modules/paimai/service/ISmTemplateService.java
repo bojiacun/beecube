@@ -10,5 +10,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface ISmTemplateService extends IService<SmTemplate> {
-
+    /**
+     * 异步群发短信
+     */
+    void send(String id);
 }

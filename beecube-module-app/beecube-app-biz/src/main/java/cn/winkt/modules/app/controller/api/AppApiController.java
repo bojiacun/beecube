@@ -4,6 +4,7 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
+import cn.winkt.modules.app.config.TencentSmsService;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.*;
 import cn.winkt.modules.app.service.*;
@@ -11,6 +12,7 @@ import cn.winkt.modules.app.utils.AppTokenUtils;
 import cn.winkt.modules.app.vo.AppVO;
 import cn.winkt.modules.app.vo.ChangeMemberScore;
 import cn.winkt.modules.app.vo.MemberSetting;
+import cn.winkt.modules.app.vo.SmtTemplateVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +80,16 @@ public class AppApiController {
 
     @Resource
     private WxMiniappServices wxMiniappServices;
+
+
+    @Resource
+    private TencentSmsService tencentSmsService;
+
+
+    @PostMapping("/sms")
+    public Boolean sendSms(@RequestBody SmtTemplateVO smtTemplateVO) {
+        return true;
+    }
 
     @PutMapping("/token/verify")
     public Boolean appVerifyToken(@RequestParam String appId, @RequestParam String userId, @RequestParam String token) {

@@ -18,6 +18,9 @@ public interface AppApi {
     @PostMapping("/app/modules/register")
     Result<?> registerModule(@RequestBody AppModule module);
 
+    @PostMapping("/app/admin/sms")
+    Boolean sendSms(@RequestBody SmtTemplateVO smtTemplateVO);
+
     @PutMapping("/app/admin/money/in")
     boolean addMemberMoney(@RequestParam("member_id") String memberId, @RequestParam("description") String description, @RequestParam("amount") Float amount);
 
