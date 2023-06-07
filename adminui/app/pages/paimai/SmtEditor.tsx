@@ -29,7 +29,7 @@ const SmtEditor = (props: any) => {
 
     useEffect(()=>{
         searchFetcher.load("/app/links");
-        dictFetcher1.load('/system/dicts?dictCode=winkt_smt_rulemember');
+        dictFetcher1.load('/system/dicts?dictCode=paimai_smt_rule_member');
     }, []);
     useEffect(() => {
         if (model) {

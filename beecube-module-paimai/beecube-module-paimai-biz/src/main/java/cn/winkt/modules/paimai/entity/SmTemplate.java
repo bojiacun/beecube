@@ -48,7 +48,7 @@ public class SmTemplate {
 	/**目标用户：1为部分用户、2为全部用户*/
 	@Excel(name = "目标用户：1为部分用户、2为全部用户", width = 15, dicCode = "winkt_smt_rulemember")
     @ApiModelProperty(value = "目标用户：1为部分用户、2为全部用户")
-	@Dict(dicCode = "winkt_smt_rulemember")
+	@Dict(dicCode = "paimai_smt_rule_member")
 	private java.lang.Integer ruleMember;
 	/**部分用户ID集合*/
 	@Excel(name = "部分用户ID集合", width = 15)
