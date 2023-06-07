@@ -192,7 +192,7 @@ const SmtList = (props: any) => {
                 setEditModal(null);
                 loadData();
             }} />}
-            {recordsRow && <SmtRecordList selectedRow={recordsRow} onHide={()=>{
+            {recordsRow && <SmtRecordList show={recordsRow} selectedRow={recordsRow} onHide={()=>{
                 setRecordsRow(null);
             }} />}
         </>
