@@ -6,6 +6,8 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import BankEditor from "~/pages/paimai/BankEditor";
+import InviteList from "~/pages/paimai/InviteList";
+import SmtRecordList from "~/pages/paimai/SmtRecordList";
 
 
 const SmtList = (props: any) => {
@@ -13,6 +15,7 @@ const SmtList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
+    const [recordsRow, setRecordsRow] = useState<any>();
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -53,6 +56,9 @@ const SmtList = (props: any) => {
 
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
+            case 'records':
+                setRecordsRow(row);
+                break;
             case 'edit':
                 //编辑
                 setEditModal(row);
@@ -63,6 +69,13 @@ const SmtList = (props: any) => {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {method: 'delete', action: `/paimai/smts/delete?id=${row.id}`, replace: true});
                 });
+                break;
+            case 'send':
+                //发送按钮
+                showDeleteAlert(function () {
+                    startPageLoading();
+                    deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/smts/send?id=${row.id}`, replace: true});
+                }, '确定要群发短信吗？','群发短信');
                 break;
         }
     }
@@ -109,6 +122,9 @@ const SmtList = (props: any) => {
             formatter: (cell: any, row: any) => {
                 return (
                     <div className={'d-flex align-items-center'}>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'records')}>发送记录</a>
+                        <span className={'divider'}/>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'send')}>立即发送</a>
                         <span className={'divider'}/>
                         <a href={'#'} onClick={() => handleOnAction(row, 'edit')}>编辑</a>
                         <span className={'divider'}/>
@@ -174,6 +190,9 @@ const SmtList = (props: any) => {
             {editModal && <BankEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
+            }} />}
+            {recordsRow && <SmtRecordList selectedRow={recordsRow} onHide={()=>{
+                setRecordsRow(null);
             }} />}
         </>
     );
