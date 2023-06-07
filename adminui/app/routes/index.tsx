@@ -1,6 +1,7 @@
 import {LoaderFunction, redirect} from "@remix-run/node";
 import {requireAuthenticated, sessionStorage} from "~/utils/auth.server";
 import {
+    API_APP_BADGES,
     API_APP_DETAIL,
     API_APP_MENU_LIST,
     API_APP_MODULE_DETAIL,
@@ -38,17 +39,30 @@ export const loader: LoaderFunction = async ({request}) => {
         const appMenus = result.result;
         const menus = appMenus.map((m:any)=>m.menuId);
         userInfo.perms = userInfo.perms.filter((p:any)=>_.indexOf(menus, p.id)>=0).map((p:any)=>recursiveFilterPerms(p, menus));
+        const perms = userInfo!.perms;
         const appModuleResult = await requestWithToken(request)(API_APP_MODULE_DETAIL+'?id='+app.moduleId);
         const appModule = appModuleResult.result;
         const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+
+        //红点提醒
+        const badgeResult = await requestWithToken(request)(API_APP_BADGES);
+        const appBadges = badgeResult.result;
+        if(appBadges.withdraws) {
+            perms?.forEach(p =>{
+                if(p.route === '/app/withdraws') {
+                    p.badge = appBadges.withdraws;
+                }
+            });
+        }
+
+
         session.set("APPID", appId);
         session.set("APP", JSON.stringify(app));
         session.set("MODULE", appModule.identify);
         session.set("FROM", "login");
-        session.set("APP_MENUS", userInfo.perms);
+        session.set("APP_MENUS", perms);
         await sessionStorage.commitSession(session);
         //取出该应用的菜单跳转到第一个
-        const perms = userInfo!.perms;
         //从用户的可用菜单中取出第一个菜单并重定向到该菜单地址
         redirectUrl = perms == null ? '/': perms[1].route!;
     }

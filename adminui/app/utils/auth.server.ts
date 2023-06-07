@@ -14,6 +14,7 @@ export type MenuPerm = {
     componentName?:string;
     children?: MenuPerm[];
     target: string;
+    badge: number|null,
 }
 
 export type LoginedUser = {
@@ -59,6 +60,7 @@ const translateMenu2MenuPerms = (menu:any): MenuPerm => {
         componentName: menu.meta.componentName,
         children: menu?.children?.filter((item:any)=>!item.hidden).map(translateMenu2MenuPerms) || null,
         target: menu.meta.internalOrExternal ? 'iframe': '',
+        badge: menu.badge,
     }
 }
 

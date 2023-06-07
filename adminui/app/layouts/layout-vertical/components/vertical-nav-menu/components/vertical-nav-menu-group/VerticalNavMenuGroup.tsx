@@ -53,7 +53,7 @@ const VerticalNavMenuGroup = (props:any) => {
                 <Nav.Link className={'d-flex align-items-center'} onClick={()=>updateGroupOpen(!isOpen)}>
                     {renderItemIcon(item)}
                     <span className={'menu-title text-truncate'}>{t(item.title)}</span>
-                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                    {item.badge && <Badge className={'mr-1 ml-auto'} pill={true} color={'primary'}>{item.badge}</Badge>}
                 </Nav.Link>
                 <Collapse in={isOpen} onExited={()=>setMenuOpen(false)}>
                     <ul className={classNames('menu-content')} id={item.title}>

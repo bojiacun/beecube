@@ -153,6 +153,7 @@ export const API_APP_PUBLISH_LATEST = `${BASE_URL}/beecube-app/app/publishes/lat
 export const API_APP_PUBLISH_NEW = `${BASE_URL}/beecube-app/app/publishes/new`;
 
 export const API_APP_DETAIL = `${BASE_URL}/beecube-app/app/queryById`;
+export const API_APP_BADGES = `${BASE_URL}/beecube-app/app/badges`;
 export const API_APP_MODULE_DETAIL = `${BASE_URL}/beecube-app/app/modules/queryById`;
 export const API_APP_MENU_LIST = `${BASE_URL}/beecube-app/app/menus/all`;
 export const API_APP_MENU_ADD = `${BASE_URL}/beecube-app/app/menus/add`;

@@ -35,7 +35,7 @@ const VerticalNavMenuLink = (props:any) => {
                 }}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
-                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                    {item.badge && <Badge className={'ms-1'} color={'danger'}>{item.badge}</Badge>}
                 </Link>
             );
         }
@@ -44,7 +44,7 @@ const VerticalNavMenuLink = (props:any) => {
                 <Link className={'d-flex align-items-center'} to={item.route||item.href} target={'_blank'}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
-                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                    {item.badge && <Badge className={'ms-1'} color={'danger'}>{item.badge}</Badge>}
                 </Link>
             );
         }
@@ -57,7 +57,7 @@ const VerticalNavMenuLink = (props:any) => {
                 }}>
                     {renderItemIcon(item)}
                     <span className="menu-title text-truncate">{t(item.title)}</span>
-                    {item.tag && <Badge className={'mr-1 ml-auto'} pill={true} variant={item.tagVariant||'primary'}>{item.tag}</Badge>}
+                    {item.badge && <Badge className={'ms-1'} color={'danger'}>{item.badge}</Badge>}
                 </Link>
             );
         }
