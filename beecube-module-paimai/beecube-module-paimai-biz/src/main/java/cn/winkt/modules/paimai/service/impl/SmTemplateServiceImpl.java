@@ -11,6 +11,7 @@ import cn.winkt.modules.paimai.service.ISmTemplateService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jodd.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,8 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
 
     @Override
     @Async
-    public void send(String id) {
+    public void send(String id, String appId) {
+        AppContext.setApp(appId);
         SmTemplate smTemplate = smTemplateMapper.selectById(id);
         List<AppMemberVO> members;
         if(smTemplate.getRuleMember() == 1) {

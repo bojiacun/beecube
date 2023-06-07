@@ -13,5 +13,5 @@ public interface ISmTemplateService extends IService<SmTemplate> {
     /**
      * 异步群发短信
      */
-    void send(String id);
+    void send(String id, String appId);
 }
