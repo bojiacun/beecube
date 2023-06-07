@@ -108,7 +108,7 @@ public class TencentSmsService {
         return null;
     }
 
-    public SendSmsResponse send(String mobile, String[] params) {
+    public SendSmsResponse send(String mobile, String tempId, String[] params) {
         try {
             /*
              * 必要步骤： 实例化一个认证对象，入参需要传入腾讯云账户密钥对secretId，secretKey。
@@ -172,7 +172,7 @@ public class TencentSmsService {
             String extendCode = "";
             req.setExtendCode(extendCode);
             /* 模板 ID: 必须填写已审核通过的模板 ID。模板ID可登录 [短信控制台] 查看 */
-            req.setTemplateId(templateId);
+            req.setTemplateId(tempId);
             /*
              * 下发手机号码，采用 E.164 标准，+[国家或地区码][手机号] 示例如：+8613711112222， 其中前面有一个+号
              * ，86为国家码，13711112222为手机号，最多不要超过200个手机号
@@ -180,8 +180,7 @@ public class TencentSmsService {
             String[] phoneNumberSet = { "+86" + mobile };
             req.setPhoneNumberSet(phoneNumberSet);
             /* 模板参数: 若无模板参数，则设置为空 */
-            String[] templateParamSet = params;
-            req.setTemplateParamSet(templateParamSet);
+            req.setTemplateParamSet(params);
             /*
              * 通过 client 对象调用 SendSms 方法发起请求。注意请求方法名与请求对象是对应的 返回的 res 是一个 SendSmsResponse
              * 类的实例，与请求对象对应

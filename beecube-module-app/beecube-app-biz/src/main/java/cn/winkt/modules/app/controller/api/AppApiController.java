@@ -5,6 +5,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import cn.winkt.modules.app.api.SystemApi;
 import cn.winkt.modules.app.config.AppMemberProvider;
 import cn.winkt.modules.app.config.TencentSmsService;
+import cn.winkt.modules.app.config.TencentSmsServices;
 import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.entity.*;
 import cn.winkt.modules.app.service.*;
@@ -85,44 +86,13 @@ public class AppApiController {
 
 
     @Resource
-    private TencentSmsService tencentSmsService;
+    private TencentSmsServices tencentSmsServices;
 
 
     @PostMapping("/sms")
     public Boolean sendSms(@RequestBody SmtTemplateVO smtTemplateVO) {
-        //在新线程中循环 发送短信
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<AppMember> appMembers;
-                if(smtTemplateVO.getRuleMember() == 1) {
-                    appMembers = appMemberService.listByIds(Arrays.asList(smtTemplateVO.getRuleMemberIds().split(",")));
-                }
-                else {
-                    appMembers = appMemberService.list();
-                }
-
-                appMembers.forEach(appMember -> {
-                    if(StringUtils.isNotEmpty(appMember.getPhone())) {
-                        String[] params = new String[0];
-                        List<String> paramsArray = new ArrayList<>();
-                        Arrays.stream(smtTemplateVO.getVars().split(";")).forEach(str -> {
-                            switch (str) {
-                                case "{memberName}":
-                                    paramsArray.add(StringUtils.getIfEmpty(appMember.getRealname(), appMember::getNickname));
-                                    break;
-                                case "{url}":
-                                    paramsArray.add(smtTemplateVO.getUrl());
-                                    break;
-                            }
-                        });
-                        params = paramsArray.toArray(params);
-                        tencentSmsService.send(appMember.getPhone(), params);
-                    }
-                });
-
-            }
-        }).start();
+        TencentSmsService smsService = tencentSmsServices.getService(AppContext.getApp());
+        smsService.send(smtTemplateVO.getPhone(), smtTemplateVO.getTemplateId(), smtTemplateVO.getParams());
         return true;
     }
 
