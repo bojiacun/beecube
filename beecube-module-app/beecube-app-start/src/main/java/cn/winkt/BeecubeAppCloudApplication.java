@@ -10,6 +10,7 @@ import org.jeecg.common.constant.GlobalConstants;
 import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 @SpringBootApplication(scanBasePackages = {"org.jeecg", "cn.winkt"})
 @EnableFeignClients
 @EnableScheduling
+@EnableAsync
 public class BeecubeAppCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

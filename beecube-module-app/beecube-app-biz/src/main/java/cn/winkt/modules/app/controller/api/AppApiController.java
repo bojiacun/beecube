@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.dto.DataLogDTO;
@@ -31,6 +32,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SqlInjectionUtil;
 import org.jeecg.config.AppContext;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,6 +90,39 @@ public class AppApiController {
 
     @PostMapping("/sms")
     public Boolean sendSms(@RequestBody SmtTemplateVO smtTemplateVO) {
+        //在新线程中循环 发送短信
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<AppMember> appMembers;
+                if(smtTemplateVO.getRuleMember() == 1) {
+                    appMembers = appMemberService.listByIds(Arrays.asList(smtTemplateVO.getRuleMemberIds().split(",")));
+                }
+                else {
+                    appMembers = appMemberService.list();
+                }
+
+                appMembers.forEach(appMember -> {
+                    if(StringUtils.isNotEmpty(appMember.getPhone())) {
+                        String[] params = new String[0];
+                        List<String> paramsArray = new ArrayList<>();
+                        Arrays.stream(smtTemplateVO.getVars().split(";")).forEach(str -> {
+                            switch (str) {
+                                case "{memberName}":
+                                    paramsArray.add(StringUtils.getIfEmpty(appMember.getRealname(), appMember::getNickname));
+                                    break;
+                                case "{url}":
+                                    paramsArray.add(smtTemplateVO.getUrl());
+                                    break;
+                            }
+                        });
+                        params = paramsArray.toArray(params);
+                        tencentSmsService.send(appMember.getPhone(), params);
+                    }
+                });
+
+            }
+        }).start();
         return true;
     }
 
