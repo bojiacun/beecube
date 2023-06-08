@@ -16,6 +16,10 @@
       "tab": true
     },
     {
+      "label": "拍品征集",
+      "url": "/goods/pages/collect"
+    },
+    {
       "label": "自定义页面",
       "url": "/pages/index/diy",
       "urlSuffix": {
