@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Button, Form, Input, Popup, Uploader, Picker, Field} from "@taroify/core";
-import {View} from "@tarojs/components";
+import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast, Cell} from "@taroify/core";
+import {Textarea, View} from "@tarojs/components";
 import styles from './collect.module.scss';
 import NativeTextarea from "@taroify/core/textarea/native-textarea";
 import classNames from "classnames";
@@ -16,6 +16,7 @@ export default class Index extends Component<any, any> {
         classOpen: false,
         classes: [],
         classId: null,
+        posting: false,
     }
     constructor(props) {
         super(props);
@@ -59,7 +60,64 @@ export default class Index extends Component<any, any> {
         });
     }
     onSubmit(e) {
-        console.log('submit', e);
+        let values = e.detail.value;
+        values.classId = this.state.classId?.id;
+        values.image = this.state.image?.url;
+        if(!values.name) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请输入拍品名称'
+            });
+        }
+        if(!values.classId) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请选择拍品分类'
+            });
+        }
+        if(!values.image) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请上传拍品照片'
+            });
+        }
+        if(!values.description) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请输入拍品详情'
+            });
+        }
+        if(!values.contactor) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请输入联系人姓名'
+            });
+        }
+        if(!values.phone) {
+            return Toast.open({
+                style: {
+                    textAlign: "left",
+                },
+                message: '请输入联系人手机号'
+            });
+        }
+        this.setState({posting: true});
+
+        request.post('/paimai/api/goods/collects', values).then(res=>{
+            if(res.data.result) {
+                utils.showSuccess(true, '提交成功');
+            }
+        });
     }
     onValidate(errors) {
         console.log(errors);
@@ -69,15 +127,16 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '拍品征集'}} style={{backgroundColor: 'white'}}>
-                <Form onSubmit={this.onSubmit}>
+                <Form onSubmit={this.onSubmit} validateTrigger={'onSubmit'}>
+                    <Toast id={'toast'} />
                     <View className={'p-4 space-y-4'}>
                         <View className={'font-bold text-xl mb-4'}>拍品信息</View>
-                        <Form.Item name={'name'} rules={[{required: true}]} required>
+                        <View>
                             <Form.Label className={'text-lg'}>拍品名称</Form.Label>
-                            <Form.Control>
+                            <Field className={'!p-0'} name={'name'}>
                                 <Input className={styles.collectInput} placeholder={'请输入拍品名称'}/>
-                            </Form.Control>
-                        </Form.Item>
+                            </Field>
+                        </View>
                         <View>
                             <Form.Label className={'text-lg'}>拍品分类</Form.Label>
                             <Input value={classId?.name} onClick={()=>this.setState({classOpen:true})} readonly className={styles.collectInput} placeholder={'请选择拍品分类'} />
@@ -120,14 +179,14 @@ export default class Index extends Component<any, any> {
                         <View>
                             <Form.Label className={'text-lg'}>拍品详细信息</Form.Label>
                             <Field className={'!p-0'} name={'description'}>
-                                <NativeTextarea style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
+                                <Textarea name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-lg'}>拍品照片</Form.Label>
                             <Uploader value={this.state.image} className={'mt-2'} onUpload={this.onUpload} onChange={file=>this.setState({image: file})} />
                         </View>
-                        <Button color={'danger'} shape={'round'} block formType={'submit'}>确定</Button>
+                        <Button color={'danger'} shape={'round'} loading={this.state.posting} block formType={'submit'} disabled={this.state.posting}>确定</Button>
                     </View>
                 </Form>
             </PageLayout>
