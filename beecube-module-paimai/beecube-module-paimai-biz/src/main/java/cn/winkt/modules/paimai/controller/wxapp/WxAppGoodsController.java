@@ -52,7 +52,15 @@ public class WxAppGoodsController {
     @Resource
     IGoodsSwiperService goodsSwiperService;
 
+    @Resource
+    private IGoodsCollectService goodsCollectService;
 
+
+    @PostMapping("/collects")
+    public Result<Boolean> newCollect(@RequestBody GoodsCollect goodsCollect) {
+        goodsCollectService.save(goodsCollect);
+        return Result.OK(true);
+    }
     @GetMapping(value = "/swiper/list")
     public Result<List<GoodsSwiper>> goodsSwiperList() {
         LambdaQueryWrapper<GoodsSwiper> queryWrapper = new LambdaQueryWrapper<>();

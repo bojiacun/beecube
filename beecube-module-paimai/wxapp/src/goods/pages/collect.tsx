@@ -1,9 +1,8 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast, Cell} from "@taroify/core";
 import {Textarea, View} from "@tarojs/components";
 import styles from './collect.module.scss';
-import NativeTextarea from "@taroify/core/textarea/native-textarea";
 import classNames from "classnames";
 import Taro from "@tarojs/taro";
 import request, {API_URL} from "../../lib/request";
