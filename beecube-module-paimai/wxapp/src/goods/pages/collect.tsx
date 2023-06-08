@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast, Cell} from "@taroify/core";
+import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast} from "@taroify/core";
 import {Textarea, View} from "@tarojs/components";
 import styles from './collect.module.scss';
 import classNames from "classnames";
@@ -33,7 +33,6 @@ export default class Index extends Component<any, any> {
     async onUpload() {
         Taro.chooseImage({count: 1, sourceType: ['album', 'camera']}).then(async res => {
             const filePath = res.tempFilePaths[0];
-            const files = res.tempFiles;
             const res1 = await request.get('/app/api/members/tmptoken');
             const token = res1.data.result;
             //upload image
