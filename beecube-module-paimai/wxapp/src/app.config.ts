@@ -50,6 +50,7 @@ export default defineAppConfig({
             pages: [
                 'pages/auctions',
                 'pages/detail',
+                'pages/collect',
                 'pages/detail2',
                 'pages/offers',
                 'pages/confirm',
