@@ -236,6 +236,7 @@ export const API_PAIMAI_BANK_ADD = `${BASE_URL}/paimai/banks/add`;
 export const API_PAIMAI_BANK_EDIT = `${BASE_URL}/paimai/banks/edit`;
 export const API_PAIMAI_BANK_DELETE = `${BASE_URL}/paimai/banks/delete`;
 
+export const API_PAIMAI_COLLECT_LIST = `${BASE_URL}/paimai/collects/list`;
 export const API_PAIMAI_COLLECT_DELETE = `${BASE_URL}/paimai/collects/delete`;
 
 export const API_PAIMAI_SMT_LIST = `${BASE_URL}/paimai/smts/list`;
