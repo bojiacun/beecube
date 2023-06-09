@@ -1,6 +1,6 @@
 import {Component, FC, useState} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Button, Cell, List, Loading, Radio, Tabs} from "@taroify/core";
+import {Button, List, Loading, Tabs} from "@taroify/core";
 import {connect} from "react-redux";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
@@ -13,7 +13,6 @@ const CouponList:FC<any> = (props) => {
     const [page, setPage] = useState<number>(1);
     const [list, setList] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(false)
     const [scrollTop, setScrollTop] = useState(0)
 
     Taro.usePageScroll(({ scrollTop: aScrollTop }) => setScrollTop(aScrollTop));
@@ -24,13 +23,14 @@ const CouponList:FC<any> = (props) => {
             hasMore={hasMore}
             scrollTop={scrollTop}
             onLoad={() => {
-                setLoading(true)
+                setLoading(true);
                 request.get('/paimai/api/members/coupons', {params: {type: props.type, pageSize: 20, pageNo: page}}).then(res=>{
                     let records = res.data.result.records;
                     records.forEach(item => list.push(item));
                     setList([...list]);
                     setHasMore(records.length >= 20);
-                    setLoading(false)
+                    setLoading(false);
+                    setPage(page+1);
                 });
             }}
         >

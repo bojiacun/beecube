@@ -131,7 +131,6 @@ public class WxAppMemberController {
     @AutoLog(value = "拍品表-我的参拍拍品")
     @ApiOperation(value = "拍品表-我的参拍拍品", notes = "拍品表-我的参拍拍品")
     @GetMapping(value = "/goods/my")
-    @AutoDict
     public Result<?> queryRunningPageList(@RequestParam Integer tab,
                                           @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
@@ -146,8 +145,17 @@ public class WxAppMemberController {
             depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
             List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
             queryWrapper.and(qw -> {
-                queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
-                        .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
+                List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+                List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
+                if(goodsIds.size() > 0) {
+                    qw.in("g.id", goodsIds);
+                    if(performanceIds.size() > 0) {
+                        qw.or();
+                    }
+                }
+                if(performanceIds.size() > 0) {
+                    qw.in("g.performance_id", performanceIds);
+                }
             });
             //未开始的拍品
             queryWrapper.and(qw -> {
@@ -163,8 +171,17 @@ public class WxAppMemberController {
             depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
             List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
             queryWrapper.and(qw -> {
-                queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
-                        .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
+                List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+                List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
+                if(goodsIds.size() > 0) {
+                    qw.in("g.id", goodsIds);
+                    if(performanceIds.size() > 0) {
+                        qw.or();
+                    }
+                }
+                if(performanceIds.size() > 0) {
+                    qw.in("g.performance_id", performanceIds);
+                }
             });
             //我的参拍中的拍品
             queryWrapper.and(qw -> {
@@ -183,7 +200,10 @@ public class WxAppMemberController {
             offerLambdaQueryWrapper.eq(GoodsOffer::getMemberId, loginUser.getId());
             offerLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
             List<GoodsOffer> offers = goodsOfferService.list(offerLambdaQueryWrapper);
-            queryWrapper.in("g.id", offers.stream().map(GoodsOffer::getGoodsId).collect(Collectors.toList()));
+            List<String> goodsIds = offers.stream().map(GoodsOffer::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+            if(goodsIds.size() > 0) {
+                queryWrapper.in("g.id", goodsIds);
+            }
         }
         else if(tab == 3) {
             //未获拍
@@ -191,7 +211,10 @@ public class WxAppMemberController {
             offerLambdaQueryWrapper.eq(GoodsOffer::getMemberId, loginUser.getId());
             offerLambdaQueryWrapper.eq(GoodsOffer::getStatus, 2);
             List<GoodsOffer> offers = goodsOfferService.list(offerLambdaQueryWrapper);
-            queryWrapper.in("g.id", offers.stream().map(GoodsOffer::getGoodsId).collect(Collectors.toList()));
+            List<String> goodsIds = offers.stream().map(GoodsOffer::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+            if(goodsIds.size() > 0) {
+                queryWrapper.in("g.id", goodsIds);
+            }
         }
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
