@@ -35,6 +35,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -125,6 +126,63 @@ public class WxAppMemberController {
 
     @Resource
     IPerformanceInviteService performanceInviteService;
+
+
+    @AutoLog(value = "拍品表-我的参拍拍品")
+    @ApiOperation(value = "拍品表-我的参拍拍品", notes = "拍品表-我的参拍拍品")
+    @GetMapping(value = "/goods/my")
+    @AutoDict
+    public Result<?> queryRunningPageList(@RequestParam Integer tab,
+                                          @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        Date nowDate = new Date();
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+        List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
+        queryWrapper.and(qw -> {
+            queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
+                    .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
+        });
+        queryWrapper.eq("g.status", 1);
+        queryWrapper.orderByDesc("g.end_time");
+        if(tab == 0) {
+            //未开始的拍品
+            queryWrapper.and(qw -> {
+                qw.and(qw1 -> {
+                    qw1.eq("p.type", 2).eq("g.state", 0).or(qw2 -> {
+                        qw2.eq("p.type", 1).gt("g.start_time", nowDate);
+                    });
+                });
+            });
+        }
+        else if(tab == 1) {
+            //我的参拍中的拍品
+            queryWrapper.and(qw -> {
+                qw.and(qw1 -> {
+                    qw1.eq("p.type", 2).eq("g.state", 1).or(qw2 -> {
+                        qw2.eq("p.type", 1).lt("g.start_time", nowDate).and(qw3 -> {
+                            qw3.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
+                        });
+                    });
+                });
+            });
+        }
+        else if(tab == 2) {
+            //已获拍，查询出价记录
+
+        }
+        else if(tab == 3) {
+            //未获拍
+
+        }
+        Page<Goods> page = new Page<Goods>(pageNo, pageSize);
+        IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+
 
     @GetMapping("/quotas")
     public Result<?> quotas() {

@@ -118,23 +118,23 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View className={'rounded-md bg-white mt-2 py-4 text-black'}>
                         <View className={'item-title font-bold text-lg ml-4 mb-4'}>我的参拍</View>
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
-                            <Navigator url={'/order/pages/orders?status=0'} className={'relative'}>
+                            <Navigator url={'deposits?status=0'} className={'relative'}>
                                 <View className={'iconfont icon-daikaishi'} style={{fontSize: 24}}/>
                                 <View className={'mt-2'}>待开始</View>
                             </Navigator>
-                            <Navigator url={'/order/pages/orders?status=1'} className={'relative'}>
+                            <Navigator url={'offers?status=1'} className={'relative'}>
                                 <View className={'iconfont icon-canpaizhong1'} style={{fontSize: 24}}/>
                                 <View className={'mt-2'}>参拍中</View>
                             </Navigator>
-                            <Navigator url={'/order/pages/orders?status=2'} className={'relative'}>
+                            <Navigator url={'offers?status=2'} className={'relative'}>
                                 <View className={'iconfont icon-yihuopai1'} style={{fontSize: 24}}/>
                                 <View className={'mt-2'}>已获拍</View>
                             </Navigator>
-                            <Navigator url={'/order/pages/orders?status=3'}>
+                            <Navigator url={'offers?status=3'}>
                                 <View className={'iconfont icon-weihuopai1'} style={{fontSize: 24}}/>
                                 <View className={'mt-2'}>未获拍</View>
                             </Navigator>
-                            <Navigator url={'/order/pages/orders?status='} className={'border-l-1 border-gray-100'}>
+                            <Navigator url={'deposits'} className={'border-l-1 border-gray-100'}>
                                 <View className={'iconfont icon-baozhengjin2'} style={{fontSize: 24}}/>
                                 <View className={'mt-2'}>保证金</View>
                             </Navigator>
