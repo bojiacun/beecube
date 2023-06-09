@@ -59,7 +59,7 @@ export default class Index extends Component<any, any> {
     }
     onSubmit(e) {
         let values = e.detail.value;
-        values.classId = this.state.classId?.id;
+        values.classId = this.state.classId?.name;
         values.image = this.state.image?.url;
         if(!values.name) {
             return Toast.open({
