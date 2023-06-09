@@ -1,11 +1,11 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {Button, List, Loading} from "@taroify/core";
+import {List, Loading} from "@taroify/core";
 import request from "../../lib/request";
 import {Navigator, Text, View} from "@tarojs/components";
-import Taro from "@tarojs/taro";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
+import numeral from 'numeral';
 
 const TABS = {
     "0": "未开始",
@@ -59,8 +59,31 @@ export default class Index extends Component<any, any> {
                                     <View className={'flex-none'} style={{width: 60, height: 60}}>
                                         <FallbackImage mode={'aspectFill'} src={utils.resolveUrl(item.images.split(',')[0])} className={'w-full h-full'}/>
                                     </View>
-                                    <View className={'flex-1 p-4'}>
-                                        <View>{item.title}</View>
+                                    <View className={'flex-1 px-4 py-2'}>
+                                        <View className={'text-lg font-bold'}>{item.title}</View>
+                                        {item.state < 3 &&
+                                            <View className={'text-gray-600 mt-2'}>
+                                                <View className={'space-x-1'}>
+                                                    估价 <Text className={'text-red-500 text-sm font-bold'}>RMB</Text>
+                                                    <Text className={'text-lg font-bold'}>{item.evaluatePrice}</Text>
+                                                </View>
+                                                <View>
+                                                    当前价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                                    className={'text-lg text-red-500 font-bold'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                                </View>
+                                            </View>
+                                        }
+                                        {item.state == 3 &&
+                                            <View className={'text-gray-600 mt-2'}>
+                                                落槌价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                                className={'text-lg text-red-500 font-bold'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                            </View>
+                                        }
+                                        {item.state == 4 &&
+                                            <View className={'text-gray-600 mt-2'}>
+                                                流拍
+                                            </View>
+                                        }
                                     </View>
                                 </View>
                             </Navigator>

@@ -144,55 +144,65 @@ public class WxAppMemberController {
             LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
             depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
             List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
-            queryWrapper.and(qw -> {
-                List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
-                List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
-                if(goodsIds.size() > 0) {
-                    qw.in("g.id", goodsIds);
-                    if(performanceIds.size() > 0) {
-                        qw.or();
+            if(deposits.size() > 0) {
+                queryWrapper.and(qw -> {
+                    List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+                    List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
+                    if (goodsIds.size() > 0) {
+                        qw.in("g.id", goodsIds);
+                        if (performanceIds.size() > 0) {
+                            qw.or();
+                        }
                     }
-                }
-                if(performanceIds.size() > 0) {
-                    qw.in("g.performance_id", performanceIds);
-                }
-            });
-            //未开始的拍品
-            queryWrapper.and(qw -> {
-                qw.and(qw1 -> {
-                    qw1.eq("p.type", 2).eq("g.state", 0).or(qw2 -> {
-                        qw2.eq("p.type", 1).gt("g.start_time", nowDate);
+                    if (performanceIds.size() > 0) {
+                        qw.in("g.performance_id", performanceIds);
+                    }
+                });
+                //未开始的拍品
+                queryWrapper.and(qw -> {
+                    qw.and(qw1 -> {
+                        qw1.eq("p.type", 2).eq("g.state", 0).or(qw2 -> {
+                            qw2.eq("p.type", 1).gt("g.start_time", nowDate);
+                        });
                     });
                 });
-            });
+            }
+            else {
+                queryWrapper.eq("g.id", "0");
+            }
         }
         else if(tab == 1) {
             LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
             depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
             List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
-            queryWrapper.and(qw -> {
-                List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
-                List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
-                if(goodsIds.size() > 0) {
-                    qw.in("g.id", goodsIds);
-                    if(performanceIds.size() > 0) {
-                        qw.or();
+            if(deposits.size() > 0) {
+                queryWrapper.and(qw -> {
+                    List<String> goodsIds = deposits.stream().map(GoodsDeposit::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
+                    List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
+                    if (goodsIds.size() > 0) {
+                        qw.in("g.id", goodsIds);
+                        if (performanceIds.size() > 0) {
+                            qw.or();
+                        }
                     }
-                }
-                if(performanceIds.size() > 0) {
-                    qw.in("g.performance_id", performanceIds);
-                }
-            });
-            //我的参拍中的拍品
-            queryWrapper.and(qw -> {
-                qw.and(qw1 -> {
-                    qw1.eq("p.type", 2).eq("g.state", 1).or(qw2 -> {
-                        qw2.eq("p.type", 1).lt("g.start_time", nowDate).and(qw3 -> {
-                            qw3.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
+                    if (performanceIds.size() > 0) {
+                        qw.in("g.performance_id", performanceIds);
+                    }
+                });
+                //我的参拍中的拍品
+                queryWrapper.and(qw -> {
+                    qw.and(qw1 -> {
+                        qw1.eq("p.type", 2).eq("g.state", 1).or(qw2 -> {
+                            qw2.eq("p.type", 1).lt("g.start_time", nowDate).and(qw3 -> {
+                                qw3.gt("g.end_time", nowDate).or().gt("g.actual_end_time", nowDate);
+                            });
                         });
                     });
                 });
-            });
+            }
+            else {
+                queryWrapper.eq("g.id", "0");
+            }
         }
         else if(tab == 2) {
             //已获拍，查询出价记录
@@ -204,6 +214,9 @@ public class WxAppMemberController {
             if(goodsIds.size() > 0) {
                 queryWrapper.in("g.id", goodsIds);
             }
+            else {
+                queryWrapper.eq("g.id", "0");
+            }
         }
         else if(tab == 3) {
             //未获拍
@@ -214,6 +227,9 @@ public class WxAppMemberController {
             List<String> goodsIds = offers.stream().map(GoodsOffer::getGoodsId).filter(Objects::nonNull).collect(Collectors.toList());
             if(goodsIds.size() > 0) {
                 queryWrapper.in("g.id", goodsIds);
+            }
+            else {
+                queryWrapper.eq("g.id", "0");
             }
         }
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
