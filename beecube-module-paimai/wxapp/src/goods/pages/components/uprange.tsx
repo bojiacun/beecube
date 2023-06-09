@@ -17,10 +17,11 @@ const Uprange = (props:any) => {
                 <View className={'flex-1'}>加价幅度</View>
             </View>
             {goods.uprange.map(item=>{
+                let fudu = item.price.split(',').map(price => utils.numberFormat(price)).join(',');
                 return (
                     <View className={'text-gray-600 text-center flex py-2'}>
-                        <View className={'flex-1'}>{parseFloat(item.min)!=0?utils.numberFormat(item.min):'-'} ~ {parseFloat(item.max)!=0?utils.numberFormat(item.max):'-'}</View>
-                        <View className={'flex-1'}>{item.price.split(',').map(price => utils.numberFormat(price)+',')}</View>
+                        <View className={'flex-1'}>{parseFloat(item.min)!=0?utils.numberFormat(item.min):'0'} ~ {parseFloat(item.max)!=0?utils.numberFormat(item.max):'之上'}</View>
+                        <View className={'flex-1 text-cut'}>{fudu}</View>
                     </View>
                 );
             })}

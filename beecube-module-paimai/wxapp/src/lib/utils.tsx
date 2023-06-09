@@ -176,7 +176,7 @@ export default {
      * @returns
      */
     numberFormat(val) {
-        let num = 10000
+        let num = 1000
         var sizesValue = ''
         /**
          * 判断取哪个单位
