@@ -139,16 +139,16 @@ public class WxAppMemberController {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         Date nowDate = new Date();
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
-        LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
-        List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
-        queryWrapper.and(qw -> {
-            queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
-                    .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
-        });
         queryWrapper.eq("g.status", 1);
         queryWrapper.orderByDesc("g.end_time");
         if(tab == 0) {
+            LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
+            queryWrapper.and(qw -> {
+                queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
+                        .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
+            });
             //未开始的拍品
             queryWrapper.and(qw -> {
                 qw.and(qw1 -> {
@@ -159,6 +159,13 @@ public class WxAppMemberController {
             });
         }
         else if(tab == 1) {
+            LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
+            queryWrapper.and(qw -> {
+                queryWrapper.in("g.id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getGoodsId() != null).collect(Collectors.toList())).or()
+                        .in("g.performance_id", deposits.stream().filter(goodsDeposit -> goodsDeposit.getPerformanceId() != null).collect(Collectors.toList()));
+            });
             //我的参拍中的拍品
             queryWrapper.and(qw -> {
                 qw.and(qw1 -> {
@@ -172,11 +179,19 @@ public class WxAppMemberController {
         }
         else if(tab == 2) {
             //已获拍，查询出价记录
-
+            LambdaQueryWrapper<GoodsOffer> offerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            offerLambdaQueryWrapper.eq(GoodsOffer::getMemberId, loginUser.getId());
+            offerLambdaQueryWrapper.eq(GoodsOffer::getStatus, 1);
+            List<GoodsOffer> offers = goodsOfferService.list(offerLambdaQueryWrapper);
+            queryWrapper.in("g.id", offers.stream().map(GoodsOffer::getGoodsId).collect(Collectors.toList()));
         }
         else if(tab == 3) {
             //未获拍
-
+            LambdaQueryWrapper<GoodsOffer> offerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            offerLambdaQueryWrapper.eq(GoodsOffer::getMemberId, loginUser.getId());
+            offerLambdaQueryWrapper.eq(GoodsOffer::getStatus, 2);
+            List<GoodsOffer> offers = goodsOfferService.list(offerLambdaQueryWrapper);
+            queryWrapper.in("g.id", offers.stream().map(GoodsOffer::getGoodsId).collect(Collectors.toList()));
         }
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
