@@ -190,11 +190,20 @@ export default class Index extends Component<any, any> {
         });
     }
 
-
-    pay() {
+    async subscribeMessage() {
+        const settings = this.props.settings;
+        if(settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
+            await Taro.requestSubscribeMessage({tmplIds: [settings.orderNotPayTemplateId, settings.orderDeliveryTemplateId]});
+        }
+        return true;
+    }
+    async pay() {
         if (!this.state.address) {
             return utils.showError("请选择收货地址");
         }
+        const subs = await this.subscribeMessage();
+        if(!subs) return;
+
         if (this.state.detail.payType == 1) {
             this.setState({posting: true});
             //支付宝保证金

@@ -57,6 +57,7 @@ export default class Index extends Component<any, any> {
         this.confirmNetPay = this.confirmNetPay.bind(this);
         this.copyBank = this.copyBank.bind(this);
         this.handleNoteChanged = this.handleNoteChanged.bind(this);
+        this.subscribeMessage = this.subscribeMessage.bind(this);
     }
 
     copyBank(bank) {
@@ -165,8 +166,18 @@ export default class Index extends Component<any, any> {
         }
     }
 
+    async subscribeMessage() {
+        const settings = this.props.settings;
+        if(settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
+            await Taro.requestSubscribeMessage({tmplIds: [settings.orderNotPayTemplateId, settings.orderDeliveryTemplateId]});
+        }
+        return true;
+    }
 
-    confirmNetPay() {
+    async confirmNetPay() {
+        const subs = await this.subscribeMessage();
+        if(!subs) return;
+
         this.setState({posting: true});
         utils.showLoading('订单提交中');
         let data = this.state.postOrderInfo;
@@ -205,7 +216,9 @@ export default class Index extends Component<any, any> {
         this.setState({payType: value});
     }
 
-    pay() {
+    async pay() {
+        const subs = await this.subscribeMessage();
+        if(!subs) return;
         this.setState({posting: true});
         let data = this.state.postOrderInfo;
         data.payType = parseInt(this.state.payType);
