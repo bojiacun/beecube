@@ -2,6 +2,7 @@ import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
 import {Button, Navigator, Text, View} from "@tarojs/components";
+import {Button as TaroifyButton} from '@taroify/core';
 import {connect} from "react-redux";
 import styles from './index.module.scss';
 import classNames from "classnames";
@@ -10,6 +11,7 @@ import FallbackImage from "../../components/FallbackImage";
 import request from "../../lib/request";
 import {setUserInfo} from "../../store/actions";
 import PageLoading from "../../components/pageloading";
+import numeral from 'numeral';
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -25,7 +27,7 @@ import PageLoading from "../../components/pageloading";
     }
 })
 export default class Index extends Component<PropsWithChildren<any>> {
-    state:any = {
+    state: any = {
         liveRoom: null,
         badges: null
     }
@@ -41,7 +43,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
         request.get('/app/api/members/profile').then(res => {
             this.props.updateUserInfo(res.data.result);
             //刷新订单角标提醒
-            request.get('/paimai/api/orders/badges').then(res=>{
+            request.get('/paimai/api/members/quotas').then(res => {
                 this.setState({badges: res.data.result})
             });
         });
@@ -66,115 +68,112 @@ export default class Index extends Component<PropsWithChildren<any>> {
         return (
             <PageLayout showTabBar={true} showStatusBar={false} copyright={context.copyright}>
                 <View
-                    className={classNames('text-white flex flex-col px-4', styles.userProfile)}
+                    className={classNames('text-white flex flex-col p-4', styles.userProfile)}
                     style={{paddingTop: barTop + barHeight}}
                 >
-                    <View className={classNames('flex items-center justify-between space-x-2')}>
+                    <View className={classNames('flex items-center justify-between space-x-2 mt-4')}>
                         <View className={'flex items-center space-x-2'}>
                             <FallbackImage className={'rounded-full'} src={userInfo?.avatar} errorImage={avatar}
                                            style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                             <View className={'space-y-1 flex flex-col'}>
-                                <Text>{userInfo?.realname || userInfo?.nickname || '微信用户'}</Text>
-                                <Text>{userInfo?.phone}</Text>
+                                <View className={'text-lg'}>{userInfo?.realname || userInfo?.nickname || '微信用户'}</View>
+                                <View className={'text-yellow-400'}><Text className={'iconfont icon-wodejifen1'} />我的积分：{userInfo?.score}</View>
                             </View>
                         </View>
-                        <Navigator url={'profile'} openType={'navigate'}><Text className={'iconfont icon-31shezhi'}
-                                                                               style={{fontSize: 24}}/></Navigator>
-                    </View>
-                    <View className={'grid grid-cols-4 gap-4 text-center mt-4'}>
-                        <Navigator url={'offers'}>
-                            <View className={'iconfont icon-paimai'} style={{fontSize: 24}}/>
-                            <View>我的出价</View>
-                        </Navigator>
-                        <Navigator url={'deposits'}>
-                            <View className={'iconfont icon-baozhengjin'} style={{fontSize: 24}}/>
-                            <View>保证金</View>
-                        </Navigator>
-                        <Navigator url={'follows'}>
-                            <View className={'iconfont icon-31guanzhu1'} style={{fontSize: 24}}/>
-                            <View>关注</View>
-                        </Navigator>
-                        <Navigator url={'views'}>
-                            <View className={'iconfont icon-zuji'} style={{fontSize: 24}}/>
-                            <View>足迹</View>
+                        <Navigator url={'/integral/member/center'} openType={'navigate'}>
+                            <TaroifyButton size={'small'} shape={'round'} style={{ background: "linear-gradient(to right, #e2a786, #d0231c)", color: "#fff", border: 'none' }}>
+                                <Text>
+                                    每日签到
+                                </Text>
+                                <Text className={'iconfont icon-youjiantou_huaban'} />
+                            </TaroifyButton>
                         </Navigator>
                     </View>
-                    <View className={'rounded-md bg-white mt-2 text-red-600 py-4 shadow-lg'}>
+                    <View className={'grid grid-cols-4 my-4 divide-x divide-red-900'}>
+                        <View className={'text-center'}>
+                            <Navigator className={'w-full'} url={'coupons'}>
+                                <View className={'text-xl'}>{badges?.ticketCount}</View>
+                                <View>优惠券</View>
+                            </Navigator>
+                        </View>
+                        <View className={'text-center'}>
+                            <Navigator url={'wallet'}>
+                                <View className={'text-xl'}>{numeral(userInfo?.money).format('0,0.00')}</View>
+                                <View>我的钱包</View>
+                            </Navigator>
+                        </View>
+                        <View className={'text-center'}>
+                            <Navigator url={'follows'}>
+                                <View className={'text-xl'}>{badges?.goodsFollowCount}</View>
+                                <View>收藏</View>
+                            </Navigator>
+                        </View>
+                        <View className={'text-center'}>
+                            <Navigator url={'views'}>
+                                <View className={'text-xl'}>{badges?.goodsViewCount}</View>
+                                <View>浏览足迹</View>
+                            </Navigator>
+                        </View>
+                    </View>
+                    <View className={'rounded-md bg-white mt-2 py-4 text-black'}>
+                        <View className={'item-title font-bold text-lg ml-4 mb-4'}>我的参拍</View>
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
                             <Navigator url={'/order/pages/orders?status=0'} className={'relative'}>
-                                <View className={'iconfont icon-daizhifudingdan'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1'}>待结算</View>
-                                {badges?.payCount?<Text className={'badge'}>{badges.payCount}</Text>:<></>}
+                                <View className={'iconfont icon-daikaishi'} style={{fontSize: 24}}/>
+                                <View className={'mt-2'}>待开始</View>
                             </Navigator>
                             <Navigator url={'/order/pages/orders?status=1'} className={'relative'}>
-                                <View className={'iconfont icon-daifahuo'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1'}>待发货</View>
-                                {badges?.deliveryCount?<Text className={'badge'}>{badges.deliveryCount}</Text>:<></>}
+                                <View className={'iconfont icon-canpaizhong1'} style={{fontSize: 24}}/>
+                                <View className={'mt-2'}>参拍中</View>
                             </Navigator>
                             <Navigator url={'/order/pages/orders?status=2'} className={'relative'}>
-                                <View className={'iconfont icon-daishouhuo'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1'}>待收货</View>
-                                {badges?.confirmDeliveryCount?<Text className={'badge'}>{badges.confirmDeliveryCount}</Text>:<></>}
+                                <View className={'iconfont icon-yihuopai1'} style={{fontSize: 24}}/>
+                                <View className={'mt-2'}>已获拍</View>
                             </Navigator>
                             <Navigator url={'/order/pages/orders?status=3'}>
-                                <View className={'iconfont icon-yiwancheng'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1'}>已完成</View>
+                                <View className={'iconfont icon-weihuopai1'} style={{fontSize: 24}}/>
+                                <View className={'mt-2'}>未获拍</View>
                             </Navigator>
                             <Navigator url={'/order/pages/orders?status='} className={'border-l-1 border-gray-100'}>
-                                <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
-                                <View className={'text-gray-500 mt-1'}>全部</View>
+                                <View className={'iconfont icon-baozhengjin2'} style={{fontSize: 24}}/>
+                                <View className={'mt-2'}>保证金</View>
                             </Navigator>
                         </View>
                     </View>
                 </View>
-                <View className={'mt-4 bg-white divide-y divide-gray-100 text-gray-600'}>
-                    <View>
-                        <Navigator url={'wallet'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
-                                <View>我的余额</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'font-bold'}>
-                                    RMB {userInfo.money}
-                                </View>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
+
+                <View className={'rounded-md bg-white mx-4 py-4'}>
+                    <View className={'item-title font-bold text-lg ml-4 text-black mb-4'}>我的订单</View>
+                    <View className={'grid grid-cols-5 gap-1 text-center'}>
+                        <Navigator url={'/order/pages/orders?status=0'} className={'relative'}>
+                            <View className={'iconfont icon-daifukuan1'} style={{fontSize: 24}}/>
+                            <View className={'mt-2'}>待结算</View>
+                            {badges?.payCount ? <Text className={'badge'}>{badges.payCount}</Text> : <></>}
+                        </Navigator>
+                        <Navigator url={'/order/pages/orders?status=1'} className={'relative'}>
+                            <View className={'iconfont icon-daifahuo2'} style={{fontSize: 24}}/>
+                            <View className={'mt-2'}>待发货</View>
+                            {badges?.deliveryCount ? <Text className={'badge'}>{badges.deliveryCount}</Text> : <></>}
+                        </Navigator>
+                        <Navigator url={'/order/pages/orders?status=2'} className={'relative'}>
+                            <View className={'iconfont icon-daishouhuo2'} style={{fontSize: 24}}/>
+                            <View className={'mt-2'}>待收货</View>
+                            {badges?.confirmDeliveryCount ? <Text className={'badge'}>{badges.confirmDeliveryCount}</Text> : <></>}
+                        </Navigator>
+                        <Navigator url={'/order/pages/orders?status=3'}>
+                            <View className={'iconfont icon-yiwancheng2'} style={{fontSize: 24}}/>
+                            <View className={'mt-2'}>已完成</View>
+                        </Navigator>
+                        <Navigator url={'/order/pages/orders?status='} className={'border-l-1 border-gray-100'}>
+                            <View className={'iconfont icon-quanbudingdan1'} style={{fontSize: 24}}/>
+                            <View className={'mt-2'}>全部</View>
                         </Navigator>
                     </View>
-
-                    <View>
-                        <Navigator url={'/integral/member/center'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
-                                <View>积分中心</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'font-bold'}>
-                                    {userInfo.score}
-                                </View>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-                    </View>
-
-                    <View>
-                        <Navigator url={'coupons'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-qianbao'} style={{fontSize: 24}}/>
-                                <View>我的优惠券</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-                    </View>
-
-
+                </View>
+                <View className={'m-4 bg-white divide-y divide-gray-100 text-black'}>
                     <View>
                         <Navigator url={'addresses'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-dizhiguanli'} style={{fontSize: 24}}/>
                                 <View>地址管理</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
@@ -185,8 +184,17 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View>
                         <Navigator url={'/order/pages/taxs'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <View className={'fa fa-ticket'} style={{fontSize: 24}}/>
-                                <View>发票申请</View>
+                                <View>发票管理</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
+                    <View>
+                        <Navigator url={'/integral/member/center'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>积分中心</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
                                 <View className={'iconfont icon-youjiantou_huaban'}/>
@@ -196,7 +204,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View>
                         <Navigator url={'qrcode'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-quanbu'} style={{fontSize: 24}}/>
                                 <View>我的二维码</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
@@ -207,7 +214,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View>
                         <Navigator url={'/article/pages/services'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-bangzhuzhongxin'} style={{fontSize: 24}}/>
                                 <View>帮助中心</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>
@@ -219,7 +225,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View>
                         <Button plain={true} openType={'contact'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-lianxikefu'} style={{fontSize: 24}}/>
                                 <View>联系客服</View>
                             </View>
                             <View className={'flex items-center space-x-2'}>

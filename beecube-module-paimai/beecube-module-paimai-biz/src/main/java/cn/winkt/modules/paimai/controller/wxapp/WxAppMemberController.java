@@ -163,7 +163,7 @@ public class WxAppMemberController {
         //浏览足迹数量
         LambdaQueryWrapper<GoodsView> viewLambdaQueryWrapper = new LambdaQueryWrapper<>();
         viewLambdaQueryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
-        memberQuota.setGoodsFollowCount(goodsViewService.count(viewLambdaQueryWrapper));
+        memberQuota.setGoodsViewCount(goodsViewService.count(viewLambdaQueryWrapper));
 
         return Result.OK(memberQuota);
     }
