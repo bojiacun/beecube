@@ -95,10 +95,9 @@ export default {
     },
     navigateBack: () => {
         let pageCount = Taro.getCurrentPages().length;
-        if(pageCount > 1) {
+        if (pageCount > 1) {
             Taro.navigateBack().then();
-        }
-        else {
+        } else {
             Taro.reLaunch({url: '/pages/index/index'}).then();
         }
     },
@@ -107,10 +106,9 @@ export default {
         if (autoBack) {
             setTimeout(() => {
                 let pageCount = Taro.getCurrentPages().length;
-                if(pageCount > 1) {
+                if (pageCount > 1) {
                     Taro.navigateBack().then();
-                }
-                else {
+                } else {
                     Taro.reLaunch({url: '/pages/index/index'}).then();
                 }
             }, 1000);
@@ -124,7 +122,7 @@ export default {
     },
     showMessage: (content: string, callback: Function = () => {
     }, showCancel = false, cancelCallback: Function = () => {
-    }, title = '友情提示', confirmText='确定', cancelText = '取消') => {
+    }, title = '友情提示', confirmText = '确定', cancelText = '取消') => {
         return Taro.showModal({title: title, content: content, showCancel: showCancel, confirmText: confirmText, cancelText: cancelText}).then(res => {
             if (res.confirm) {
                 callback();
@@ -147,8 +145,8 @@ export default {
         }
         return pwd;
     },
-    resolveHtmlImageWidth(html:string) {
-        if(html) {
+    resolveHtmlImageWidth(html: string) {
+        if (html) {
             html = html.replace(/style\s*=\s*"[^"]+"/ig, '');
             html = html.replace(/<img /ig, '<img style="max-width:100%;height:auto;display:block;" ');
             html = html.replace(/\n/ig, '<br />');
@@ -157,19 +155,52 @@ export default {
         // html = html.replace(/ /ig, '<span style="margin-left: 8px"></span>');
         return html;
     },
-    calcPageHeaderHeight(systemInfo:any) {
+    calcPageHeaderHeight(systemInfo: any) {
         const barTop = systemInfo.statusBarHeight;
         const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
         // 获取导航栏高度
         const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2
         return barTop + barHeight;
     },
-    calcSafeBottom(systemInfo:any) {
+    calcSafeBottom(systemInfo: any) {
         return systemInfo.safeArea.bottom - systemInfo.safeArea.height;
     },
     delHtml(content) {
-        if(content == null) return '';
+        if (content == null) return '';
         content = content.replace(/<\/?.+?>/g, "");
         return content.replace(/ /g, "");
+    },
+    /**
+     * 数字格式化：万、亿单位
+     * @param {*} val
+     * @returns
+     */
+    numberFormat(val) {
+        let num = 10000
+        var sizesValue = ''
+        /**
+         * 判断取哪个单位
+         */
+        if (val < 1000) {
+            // 如果小于1000则直接返回
+            sizesValue = ''
+            return val;
+        } else if (val > 1000 && val < 9999) {
+            sizesValue = '千'
+        } else if (val > 10000 && val < 99999999) {
+            sizesValue = '万'
+        } else if (val > 100000000) {
+            sizesValue = '亿'
+        }
+        /**
+         * 大于一万则运行下方计算
+         */
+        let i = Math.floor(Math.log(val) / Math.log(num))
+        /**
+         * toFixed(0)看你们后面想要取值多少，我是不取所以填了0，一般都是取2个值
+         */
+        var sizes = ((val / Math.pow(num, i))).toFixed(0)
+        sizes = sizes + sizesValue
+        return sizes;// 输出
     }
 }

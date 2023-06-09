@@ -1,6 +1,6 @@
 import {View} from "@tarojs/components";
 import {Popup} from "@taroify/core";
-const numeral = require('numeral');
+import utils from "../../../lib/utils";
 
 
 const Uprange = (props:any) => {
@@ -13,16 +13,14 @@ const Uprange = (props:any) => {
                 <Popup.Close/>
             </View>
             <View className={'bg-indigo-200 text-gray-600 font-bold text-center flex py-2'}>
-                <View className={'flex-1'}>区间开始</View>
-                <View className={'flex-1'}>区间结束</View>
+                <View className={'flex-1'}>竞价区间</View>
                 <View className={'flex-1'}>加价幅度</View>
             </View>
             {goods.uprange.map(item=>{
                 return (
                     <View className={'text-gray-600 text-center flex py-2'}>
-                        <View className={'flex-1'}>{parseFloat(item.min)!=0?numeral(item.min).format('0,0.00'):'-'}</View>
-                        <View className={'flex-1'}>{parseFloat(item.max)!=0?numeral(item.max).format('0,0.00'):'-'}</View>
-                        <View className={'flex-1'}>{numeral(item.price).format('0,0.00')}</View>
+                        <View className={'flex-1'}>{parseFloat(item.min)!=0?utils.numberFormat(item.min):'-'} ~ {parseFloat(item.max)!=0?utils.numberFormat(item.max):'-'}</View>
+                        <View className={'flex-1'}>{item.price.split(',').map(price => utils.numberFormat(price)+',')}</View>
                     </View>
                 );
             })}
