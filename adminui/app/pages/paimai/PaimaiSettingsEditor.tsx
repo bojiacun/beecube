@@ -66,18 +66,12 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FormLabel>文章频道广告</FormLabel>
                             <FileBrowserInput type={1} name={'articleNormalAdv'} multi={false} />
                         </FormGroup>
-                        <FormGroup className={'mb-1'}>
-                            <FormLabel>文章频道广告链接地址</FormLabel>
-                            <BootstrapLinkSelector links={links} name={'articleNormalAdvLink'} initValue={settings.articleNormalAdvLink}  />
-                        </FormGroup>
+                        <BootstrapLinkSelector label={'文章频道广告链接地址'} links={links} name={'articleNormalAdvLink'} initValue={settings.articleNormalAdvLink}  />
                         <FormGroup className={'mb-1'}>
                             <FormLabel>个人中心广告</FormLabel>
                             <FileBrowserInput type={1} name={'myIndexAdv'} multi={false} />
                         </FormGroup>
-                        <FormGroup className={'mb-1'}>
-                            <FormLabel>个人中心广告链接地址</FormLabel>
-                            <BootstrapLinkSelector links={links} name={'myIndexAdvLink'} initValue={settings.myIndexAdvLink}  />
-                        </FormGroup>
+                        <BootstrapLinkSelector label={'个人中心广告链接地址'} links={links} name={'myIndexAdvLink'} initValue={settings.myIndexAdvLink}  />
                         <BootstrapInput label={'积分兑换比例'} name={'integralRatio'} placeholder={'1元相当于多少积分'} />
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
