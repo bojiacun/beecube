@@ -1,7 +1,7 @@
 import {Component, PropsWithChildren} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
-import {Button, Navigator, Text, View} from "@tarojs/components";
+import {Button, Navigator, Text, View, Image} from "@tarojs/components";
 import {Button as TaroifyButton} from '@taroify/core';
 import {connect} from "react-redux";
 import styles from './index.module.scss';
@@ -53,7 +53,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     render() {
-        const {systemInfo, context} = this.props;
+        const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
         const {badges} = this.state;
 
@@ -115,7 +115,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </Navigator>
                         </View>
                     </View>
-                    <View className={'rounded-md bg-white mt-2 py-4 text-black'}>
+                    <View className={'rounded-lg bg-white mt-2 py-4 text-black'}>
                         <View className={'item-title font-bold text-lg ml-4 mb-4'}>我的参拍</View>
                         <View className={'grid grid-cols-5 gap-1 text-center'}>
                             <Navigator url={'goods?tab=0'} className={'relative'}>
@@ -142,7 +142,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     </View>
                 </View>
 
-                <View className={'rounded-md bg-white mx-4 py-4'}>
+                <View className={'rounded-lg bg-white mx-4 py-4'}>
                     <View className={'item-title font-bold text-lg ml-4 text-black mb-4'}>我的订单</View>
                     <View className={'grid grid-cols-5 gap-1 text-center'}>
                         <Navigator url={'/order/pages/orders?status=0'} className={'relative'}>
@@ -170,7 +170,12 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
                 </View>
-                <View className={'m-4 bg-white divide-y divide-gray-100 text-black'}>
+                {settings.myIndexAdv &&
+                    <View className={'rounded-lg m-4 overflow-hidden'}>
+                        <Image src={settings.myIndexAdv} className={'w-full'} mode={'widthFix'} />
+                    </View>
+                }
+                <View className={'m-4 bg-white divide-y rounded-lg divide-gray-100 text-black'}>
                     <View>
                         <Navigator url={'addresses'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
