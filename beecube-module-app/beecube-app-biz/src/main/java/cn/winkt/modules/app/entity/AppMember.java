@@ -141,4 +141,5 @@ public class AppMember {
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private java.util.Date createTime;
+
 }

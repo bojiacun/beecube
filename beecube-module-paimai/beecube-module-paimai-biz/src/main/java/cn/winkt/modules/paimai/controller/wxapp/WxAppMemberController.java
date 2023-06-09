@@ -126,7 +126,47 @@ public class WxAppMemberController {
     @Resource
     IPerformanceInviteService performanceInviteService;
 
+    @GetMapping("/quotas")
+    public Result<?> quotas() {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        MemberQuota memberQuota = new MemberQuota();
 
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getStatus, 0);
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        memberQuota.setPayCount(goodsOrderService.count(queryWrapper));
+
+        queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getStatus, 1);
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        memberQuota.setDeliveryCount(goodsOrderService.count(queryWrapper));
+
+
+        queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+        queryWrapper.eq(GoodsOrder::getStatus, 2);
+        memberQuota.setConfirmDeliveryCount(goodsOrderService.count(queryWrapper));
+
+
+        //可用优惠券个数
+        LambdaQueryWrapper<CouponTicket> couponTicketLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        couponTicketLambdaQueryWrapper.eq(CouponTicket::getMemberId, loginUser.getId());
+        couponTicketLambdaQueryWrapper.eq(CouponTicket::getStatus, 0);
+        couponTicketLambdaQueryWrapper.gt(CouponTicket::getEndTime, new Date());
+        memberQuota.setTicketCount(couponTicketService.count(couponTicketLambdaQueryWrapper));
+
+        //关注数量
+        LambdaQueryWrapper<GoodsFollow> followLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        followLambdaQueryWrapper.eq(GoodsFollow::getMemberId, loginUser.getId());
+        memberQuota.setGoodsFollowCount(goodsFollowService.count(followLambdaQueryWrapper));
+
+        //浏览足迹数量
+        LambdaQueryWrapper<GoodsView> viewLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        viewLambdaQueryWrapper.eq(GoodsView::getMemberId, loginUser.getId());
+        memberQuota.setGoodsFollowCount(goodsViewService.count(viewLambdaQueryWrapper));
+
+        return Result.OK(memberQuota);
+    }
 
     @AutoLog(value = "订单售后表-分页列表查询")
     @ApiOperation(value = "订单售后表-分页列表查询", notes = "订单售后表-分页列表查询")
@@ -142,10 +182,11 @@ public class WxAppMemberController {
         QueryWrapper<CouponTicket> queryWrapper = QueryGenerator.initQueryWrapper(couponTicket, req.getParameterMap());
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         queryWrapper.eq("member_id", loginUser.getId());
-        Integer type = Integer.parseInt(req.getParameter("type"));
+        int type = Integer.parseInt(req.getParameter("type"));
         switch (type) {
             case 1:
                 queryWrapper.eq("status", 0);
+                queryWrapper.gt("end_time", new Date());
                 break;
             case 2:
                 queryWrapper.eq("status", 1);

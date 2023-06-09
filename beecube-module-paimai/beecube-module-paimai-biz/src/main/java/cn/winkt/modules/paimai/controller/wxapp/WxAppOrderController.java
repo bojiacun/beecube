@@ -19,7 +19,6 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/orders")
 @RestController
@@ -36,8 +35,6 @@ public class WxAppOrderController {
     @Resource
     IGoodsOrderService goodsOrderService;
 
-    @Resource
-    IGoodsCommonDescService goodsCommonDescService;
     @Resource
     IGoodsOrderAfterService goodsOrderAfterService;
 
@@ -77,30 +74,7 @@ public class WxAppOrderController {
     }
 
 
-    @GetMapping("/badges")
-    public Result<?> orderBadges() {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        OrderBadge orderBadge = new OrderBadge();
 
-        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsOrder::getStatus, 0);
-        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
-        orderBadge.setPayCount(goodsOrderService.count(queryWrapper));
-
-        queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsOrder::getStatus, 1);
-        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
-        orderBadge.setDeliveryCount(goodsOrderService.count(queryWrapper));
-
-
-        queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
-        queryWrapper.eq(GoodsOrder::getStatus, 2);
-        orderBadge.setConfirmDeliveryCount(goodsOrderService.count(queryWrapper));
-
-
-        return Result.OK(orderBadge);
-    }
 
     @PutMapping("/netpay")
     public Result<Boolean> netPay(@RequestBody JSONObject post) {
