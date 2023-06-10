@@ -1,7 +1,7 @@
 import {Component} from "react";
 import Taro from '@tarojs/taro';
 import PageLayout from "../../layouts/PageLayout";
-import {Text, View} from "@tarojs/components";
+import {Image, Text, View} from "@tarojs/components";
 import {Button} from '@taroify/core';
 import FallbackImage from "../../components/FallbackImage";
 import request, {API_URL, APP_ID} from "../../lib/request";
@@ -69,7 +69,8 @@ export default class Index extends Component<any, any> {
                     <View className={'flex items-center justify-center mt-4 p-4 bg-gray-200 h-40'}>
                     </View>
                 </View>
-                <View className={'w-full bg-contain z-10 absolute text-center'} style={{backgroundImage: 'url(https://image.winkt.cn/images/sharebg.png)', height: 300, marginTop: -130}}>
+                <View className={'w-full text-center overflow-hidden relative'} style={{height: 300, marginTop: -130}}>
+                    <Image src={'https://image.winkt.cn/images/sharebg.png'} className={'absolute block w-full h-full left-0 bottom-0 z-1'} mode={'widthFix'} />
                     <Button className={'z-20 mt-8'} formType={'button'} shape={'round'} style={{backgroundColor: 'black', color: 'white'}} onClick={this.handleSaveToPhotoAlbum}>保存到手机相册</Button>
                 </View>
             </PageLayout>
