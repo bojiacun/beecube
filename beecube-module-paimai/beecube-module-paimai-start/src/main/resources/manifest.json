@@ -79,7 +79,7 @@
 
     {
       "label": "直播列表（按标签筛选）",
-      "url": "/pages/live/list",
+      "url": "/live/pages/list",
       "urlSuffix": {
         "label": "标签",
         "value": "tag"
