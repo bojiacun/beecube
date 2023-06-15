@@ -88,11 +88,10 @@ public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderMapper, GoodsOr
         //返还积分
         if(goodsOrder.getUsedIntegral() != null && goodsOrder.getUsedIntegral().compareTo(BigDecimal.ZERO) > 0) {
             GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
-            BigDecimal integralRatio = new BigDecimal(StringUtils.getIfEmpty(goodsSettings.getIntegralRatio(), ()->"100"));
             ChangeMemberScore changeMemberScore = new ChangeMemberScore();
             changeMemberScore.setMemberId(goodsOrder.getMemberId());
             changeMemberScore.setDescription("取消订单，返还积分");
-            changeMemberScore.setAmount(integralRatio.multiply(goodsOrder.getUsedIntegral()));
+            changeMemberScore.setAmount(goodsOrder.getUsedIntegral());
             appApi.reduceMemberScore(changeMemberScore);
         }
         //返还优惠券
