@@ -175,32 +175,56 @@ export default {
      * @param {*} val
      * @returns
      */
-    numberFormat(val) {
-        let num = 1000
-        var sizesValue = ''
-        /**
-         * 判断取哪个单位
-         */
-        if (val < 1000) {
-            // 如果小于1000则直接返回
-            sizesValue = ''
-            return val;
-        } else if (val > 1000 && val < 9999) {
-            sizesValue = '千'
-        } else if (val > 10000 && val < 99999999) {
-            sizesValue = '万'
-        } else if (val > 100000000) {
-            sizesValue = '亿'
+    numberFormat(value) {
+        const newValue = ['', '', '']
+        let fr = 1000
+        let num = 3
+        let text1 = ''
+        let fm = 1
+        while (value / fr >= 1) {
+            fr *= 10
+            num += 1
+            // console.log('数字', value / fr, 'num:', num)
         }
-        /**
-         * 大于一万则运行下方计算
-         */
-        let i = Math.floor(Math.log(val) / Math.log(num))
-        /**
-         * toFixed(0)看你们后面想要取值多少，我是不取所以填了0，一般都是取2个值
-         */
-        var sizes = ((val / Math.pow(num, i))).toFixed(0)
-        sizes = sizes + sizesValue
-        return sizes;// 输出
+        if (num <= 4) { // 千
+            newValue[0] = parseInt(value / 1000) + ''
+            newValue[1] = '千'
+        } else if (num <= 8) { // 万
+            text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万'
+            // tslint:disable-next-line:no-shadowed-variable
+            fm = text1 === '万' ? 10000 : 10000000
+            if (value % fm === 0) {
+                newValue[0] = parseInt(value / fm) + ''
+            } else {
+                newValue[0] = parseFloat(value / fm).toFixed(1) + ''
+            }
+            newValue[1] = text1
+        } else if (num <= 16) { // 亿
+            text1 = (num - 8) / 3 > 1 ? '千亿' : '亿'
+            text1 = (num - 8) / 4 > 1 ? '万亿' : text1
+            text1 = (num - 8) / 7 > 1 ? '千万亿' : text1
+            // tslint:disable-next-line:no-shadowed-variable
+            fm = 1
+            if (text1 === '亿') {
+                fm = 100000000
+            } else if (text1 === '千亿') {
+                fm = 100000000000
+            } else if (text1 === '万亿') {
+                fm = 1000000000000
+            } else if (text1 === '千万亿') {
+                fm = 1000000000000000
+            }
+            if (value % fm === 0) {
+                newValue[0] = parseInt(value / fm) + ''
+            } else {
+                newValue[0] = parseFloat(value / fm).toFixed(2) + ''
+            }
+            newValue[1] = text1
+        }
+        if (value < 1000) {
+            newValue[0] = value + ''
+            newValue[1] = ''
+        }
+        return newValue.join('')
     }
 }

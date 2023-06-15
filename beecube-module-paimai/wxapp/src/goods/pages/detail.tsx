@@ -498,7 +498,7 @@ export default class Index extends Component<any, any> {
     }
 
     openShareGoods() {
-        this.setState({hideModal: false, loadingShareAdv: true});
+        this.setState({hideModal: true, loadingShareAdv: true});
         request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res: any) => {
             let data = Taro.arrayBufferToBase64(res.data);
             this.setState({shareAdv: data});
