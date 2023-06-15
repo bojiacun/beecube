@@ -179,6 +179,16 @@ export default class Index extends Component<PropsWithChildren<any>> {
                 }
                 <View className={'m-4 bg-white divide-y rounded-lg divide-gray-100 text-black'}>
                     <View>
+                        <Navigator url={'profile'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>个人资料</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
+                    <View>
                         <Navigator url={'addresses'} className={'flex items-center justify-between p-4'}>
                             <View className={'flex items-center space-x-2'}>
                                 <View>地址管理</View>
