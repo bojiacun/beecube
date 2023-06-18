@@ -53,6 +53,7 @@ const PaimaiSettingsEditor = (props:any) => {
                     <Card.Body>
                         <BootstrapInput label={'小程序名称'} name={'wxAppName'} placeholder={'设置小程序名称'} />
                         <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
+                        <BootstrapSwitch label={'实名认证'} name={'requireRealAuth'} placeholder={'拍卖流程中是否需要实名认证'} />
                         <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
                         <BootstrapInput label={'一口价列表标题'} name={'buyoutListTitle'} placeholder={'一口价列表标题'} />
                         <BootstrapInput label={'所有拍品列表标题'} name={'auctionListTitle'} placeholder={'所有拍品列表标题'} />
