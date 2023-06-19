@@ -11,6 +11,7 @@ import {Field, Form, Input, Picker, Popup, Button} from "@taroify/core";
 import styles from "./index.module.scss";
 import classNames from "classnames";
 import {saveUserInfo} from "./profile/services";
+import PageLoading from "../../components/pageloading";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -50,9 +51,10 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        // request.get('/app/api/members/profile').then(res=>{
-        //     this.setState({userInfo: res.data.result});
-        // })
+        request.get('/app/api/members/profile').then(res=>{
+            let userInfo = res.data.result;
+            this.setState({userInfo, cardImages:[userInfo.cardFace, userInfo.cardBack], cardType: userInfo.cardType});
+        })
     }
 
     handleSendCode() {
@@ -128,12 +130,13 @@ export default class Index extends Component<any, any> {
     }
 
     async handleSubmit(e) {
-        const {settings} = this.props;
+        const {settings, context} = this.props;
+        const {userInfo} = context;
         let values = e.detail.value;
         values.cardType = this.state.cardType;
         values.cardFace = this.state.cardImages[0];
         values.cardBack = this.state.cardImages[1];
-        console.log(values);
+        values.id = userInfo.id;
         if (!values.realname) {
             return utils.showError('请输入真实姓名');
         }
@@ -153,18 +156,18 @@ export default class Index extends Component<any, any> {
             return utils.showError('请上传背面国徽照');
         }
         if(settings.signName) {
-            const res = await request.put("/app/api/sms/check", values);
+            const res = await request.put("/app/api/sms/check", {mobile: values.phone, ...values});
             if (!res.data.result) {
                 return utils.showMessage('验证码不正确').then();
             }
         }
         this.setState({saving: true});
-        saveUserInfo(values).then(res=>{
+        saveUserInfo({...userInfo, ...values}).then(res=>{
             this.props.updateUserInfo(res.data.result);
             this.setState({saving: false});
             this.saveEditUser(res.data.result);
             utils.showSuccess(true);
-        })
+        }).catch(()=>this.setState({saving: false}));
     }
     saveEditUser(newUserInfo: any) {
         Taro.setStorageSync("EDIT-USER", JSON.stringify(newUserInfo));
@@ -173,10 +176,12 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
         const {cardType, cardTypeOpen, cardTypes, userInfo} = this.state;
 
+        if(!userInfo) return <PageLoading />;
+
         return (
             <PageLayout statusBarProps={{title: '实名认证'}} style={{backgroundColor: 'white'}}>
                 {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'}/>}
-                <Form onSubmit={this.handleSubmit} ref={this.formRef}>
+                <Form onSubmit={this.handleSubmit} ref={this.formRef} defaultValues={userInfo}>
                     <View className={'p-4 space-y-4'}>
                         <View>
                             <Form.Label>真实姓名<Text className={'text-red-600'}>*</Text></Form.Label>
@@ -190,7 +195,7 @@ export default class Index extends Component<any, any> {
                                 <Input className={styles.bigInput} placeholder={'常用手机号'}/>
                             </Field>
                             <View className={'flex ittems-center justify-between w-full'}>
-                                <Field className={'!p-0'} name={'vcode'}>
+                                <Field className={'!p-0'} name={'code'}>
                                     <Input className={classNames(styles.bigInput, 'flex-1 !mr-4')} placeholder={'验证码'}/>
                                 </Field>
                                 <View onClick={this.handleSendCode} style={{width: 120, lineHeight: 1}}
@@ -249,13 +254,11 @@ export default class Index extends Component<any, any> {
                                 <Text>如因证件不清晰导致识别不准确，请重新上传，请上传真实有效证件，信息提交后不可更改</Text>
                             </View>
                         </View>
-                    </View>
-
-
-                    <View className={'container mx-auto mt-4 text-center'}>
-                        {!userInfo?.authStatus && <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
-                        {userInfo?.authStatus == 1 && <Button className={'btn btn-warning w-56'} onClick={() => utils.navigateBack()}>审核中,点击返回</Button>}
-                        {userInfo?.authStatus == 2 && <Button className={'btn btn-success w-56'} onClick={() => utils.navigateBack()}>已认证通过</Button>}
+                        <View className={'my-4'}>
+                            {!userInfo?.authStatus && <Button color={'danger'} block formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
+                            {userInfo?.authStatus == 1 && <Button disabled block onClick={() => utils.navigateBack()}>审核中请耐心等待</Button>}
+                            {userInfo?.authStatus == 2 && <Button color={'success'} block onClick={() => utils.navigateBack()}>已认证通过</Button>}
+                        </View>
                     </View>
                 </Form>
             </PageLayout>

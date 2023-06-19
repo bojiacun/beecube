@@ -74,7 +74,7 @@ const AppMemberEdit = (props: any) => {
                                     <Modal.Body style={{maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
                                         <BootstrapInput label={'小程序OPENID'} readOnly={model?.id} name={'wxappOpenid'}/>
                                         <BootstrapInput label={'用户名'} readOnly={model?.id} name={'username'}/>
-                                        <FormGroup>
+                                        <FormGroup className={'mb-1'}>
                                             <FormLabel htmlFor={'avatar'}>头像</FormLabel>
                                             <FileBrowserInput name={'avatar'} type={1} multi={false} />
                                         </FormGroup>
@@ -82,12 +82,13 @@ const AppMemberEdit = (props: any) => {
                                         <BootstrapInput label={'真实姓名'}  name={'realname'}/>
                                         <BootstrapInput label={'手机号'}  name={'phone'}/>
                                         <BootstrapInput label={'身份证号'}  name={'idCard'}/>
-                                        <FormGroup>
-                                            <FormLabel htmlFor={'cardFace'}>身份证前照</FormLabel>
+                                        <BootstrapInput label={'证件类型'}  name={'cardType'}/>
+                                        <FormGroup className={'mb-1'}>
+                                            <FormLabel htmlFor={'cardFace'}>证件正面照</FormLabel>
                                             <FileBrowserInput name={'cardFace'} type={1} multi={false} />
                                         </FormGroup>
-                                        <FormGroup>
-                                            <FormLabel htmlFor={'cardBack'}>身份证背照</FormLabel>
+                                        <FormGroup className={'mb-1'}>
+                                            <FormLabel htmlFor={'cardBack'}>证件背面照</FormLabel>
                                             <FileBrowserInput name={'cardBack'} type={1} multi={false} />
                                         </FormGroup>
                                         <BootstrapRadioGroup  options={[{label: '是', value: '1'},{label: '否', value: '0'}]} name={'isAgent'} label={'分销商？'} />
