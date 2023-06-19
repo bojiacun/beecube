@@ -166,9 +166,14 @@ export default class Index extends Component<any, any> {
         const {preOffered} = this.state;
         if(!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
-            if (!checkResult.data.result) {
+            if (checkResult.data.result == 0) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
                     Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            else if(checkResult.data.result == -1) {
+                return utils.showMessage("请完成实名认证", function () {
+                    Taro.navigateTo({url: '/pages/my/realauth'}).then();
                 });
             }
             this.setState({preOffered: true});

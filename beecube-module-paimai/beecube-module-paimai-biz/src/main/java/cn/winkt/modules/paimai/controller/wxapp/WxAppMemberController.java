@@ -999,7 +999,7 @@ public class WxAppMemberController {
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
         if(StringUtils.isNotEmpty(goodsSettings.getRequireRealAuth()) && "1".equals(goodsSettings.getRequireRealAuth())) {
             //如果是需要实名认证
-            return Result.OK(memberVO.getAuthStatus() == 0 ? -1 : 1);
+            return Result.OK(memberVO.getAuthStatus() < 2 ? -1 : 1);
         }
         else {
             return Result.OK(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()) ? 0 : 1);
