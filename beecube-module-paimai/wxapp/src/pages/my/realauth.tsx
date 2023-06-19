@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Form, Input, Text, View} from "@tarojs/components";
+import {Button, Form, Image, Input, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -11,7 +11,8 @@ import {setUserInfo} from "../../store/actions";
 // @ts-ignore
 @connect((state: any) => (
     {
-        context: state.context
+        context: state.context,
+        settings: state.context.settings,
     }
 ), (dispatch) => {
     return {
@@ -120,10 +121,12 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
+        const {settings} = this.props;
         let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
 
         return (
             <PageLayout statusBarProps={{title: '实名认证'}}>
+                {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'} />}
                 <Form onSubmit={this.handleSubmit}>
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                         <View className={'p-4 flex items-center justify-between'}>
