@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Image, Text, View} from "@tarojs/components";
+import {Image, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -7,7 +7,7 @@ import request, {API_URL} from "../../lib/request";
 import PageLayout from "../../layouts/PageLayout";
 import FallbackImage from "../../components/FallbackImage";
 import {setUserInfo} from "../../store/actions";
-import {Field, Form, Input, Picker, Popup} from "@taroify/core";
+import {Field, Form, Input, Picker, Popup, Button} from "@taroify/core";
 import styles from "./index.module.scss";
 
 // @ts-ignore
@@ -145,6 +145,10 @@ export default class Index extends Component<any, any> {
                             <Form.Label>手机号</Form.Label>
                             <Field className={'!p-0'} name={'phone'}>
                                 <Input className={styles.bigInput} placeholder={'常用手机号'}/>
+                                <Button>发送验证码</Button>
+                            </Field>
+                            <Field className={'!p-0'} name={'code'}>
+                                <Input className={styles.bigInput} placeholder={'验证码'}/>
                             </Field>
                         </View>
                         <View>
