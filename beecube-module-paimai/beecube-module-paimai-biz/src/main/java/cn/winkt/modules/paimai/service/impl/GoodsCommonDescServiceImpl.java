@@ -5,12 +5,13 @@ import cn.winkt.modules.paimai.mapper.GoodsCommonDescMapper;
 import cn.winkt.modules.paimai.service.IGoodsCommonDescService;
 import cn.winkt.modules.paimai.vo.GoodsSettings;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,13 @@ public class GoodsCommonDescServiceImpl extends ServiceImpl<GoodsCommonDescMappe
         List<GoodsCommonDesc> descs = goodsCommonDescMapper.selectList(new QueryWrapper<>());
         Map<String, String> map = descs.stream().collect(Collectors.toMap(GoodsCommonDesc::getDescKey, GoodsCommonDesc::getDescValue));
         GoodsSettings goodsSettings = new GoodsSettings();
-        BeanUtils.copyProperties(map, goodsSettings);
+        try {
+            BeanUtils.populate(goodsSettings, map);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
         return goodsSettings;
     }
 }
