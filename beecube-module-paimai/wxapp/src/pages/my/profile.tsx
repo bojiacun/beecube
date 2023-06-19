@@ -11,7 +11,6 @@ import avatarImage from '../../assets/images/avatar.png';
 import {setUserInfo} from "../../store/actions";
 import {saveUserInfo} from "./profile/services";
 import request, {API_URL} from "../../lib/request";
-import PageLoading from "../../components/pageloading";
 
 // @ts-ignore
 @connect((state: any) => (

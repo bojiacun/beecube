@@ -10,6 +10,7 @@ import {setUserInfo} from "../../store/actions";
 import {Field, Form, Input, Picker, Popup, Button} from "@taroify/core";
 import styles from "./index.module.scss";
 import classNames from "classnames";
+import {saveUserInfo} from "./profile/services";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -157,12 +158,17 @@ export default class Index extends Component<any, any> {
                 return utils.showMessage('验证码不正确').then();
             }
         }
-
         this.setState({saving: true});
-        return;
-        utils.navigateBack();
+        saveUserInfo(values).then(res=>{
+            this.props.updateUserInfo(res.data.result);
+            this.setState({saving: false});
+            this.saveEditUser(res.data.result);
+            utils.showSuccess(true);
+        })
     }
-
+    saveEditUser(newUserInfo: any) {
+        Taro.setStorageSync("EDIT-USER", JSON.stringify(newUserInfo));
+    }
     render() {
         const {settings} = this.props;
         const {cardType, cardTypeOpen, cardTypes, userInfo} = this.state;
