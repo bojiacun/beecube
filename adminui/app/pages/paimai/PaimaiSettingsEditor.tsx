@@ -73,6 +73,10 @@ const PaimaiSettingsEditor = (props:any) => {
                             <FileBrowserInput type={1} name={'myIndexAdv'} multi={false} />
                         </FormGroup>
                         <BootstrapLinkSelector label={'个人中心广告链接地址'} links={links} name={'myIndexAdvLink'} initValue={settings.myIndexAdvLink}  />
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel>实名认证Banner</FormLabel>
+                            <FileBrowserInput type={1} name={'authPageBanner'} multi={false} />
+                        </FormGroup>
                         <BootstrapInput label={'积分兑换比例'} name={'integralRatio'} placeholder={'1元相当于多少积分'} />
                         <BootstrapInput label={'开始提醒模板ID'} name={'startTemplateId'} placeholder={'开始提醒模板ID，公共库模板编号为：5314'} />
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
