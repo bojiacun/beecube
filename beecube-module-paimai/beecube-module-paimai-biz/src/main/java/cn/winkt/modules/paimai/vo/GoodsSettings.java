@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class GoodsSettings {
     private String integralRatio;
+    private String requireRealAuth;
 }

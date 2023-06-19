@@ -992,11 +992,18 @@ public class WxAppMemberController {
     }
 
     @GetMapping("/check")
-    public Result<Boolean> checkUserInfo() {
+    public Result<Integer> checkUserInfo() {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
         //用户实名检测，必须绑定手机号才可出价
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
-        return Result.OK(!StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()));
+        if(StringUtils.isNotEmpty(goodsSettings.getRequireRealAuth()) && "1".equals(goodsSettings.getRequireRealAuth())) {
+            //如果是需要实名认证
+            return Result.OK(memberVO.getAuthStatus() == 0 ? -1 : 1);
+        }
+        else {
+            return Result.OK(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()) ? 0 : 1);
+        }
     }
 
     @GetMapping("/invites")
