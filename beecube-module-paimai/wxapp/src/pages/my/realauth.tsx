@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Form, Image, Input, Text, View} from "@tarojs/components";
+import {Button, Image, Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -7,6 +7,8 @@ import request, {API_URL} from "../../lib/request";
 import PageLayout from "../../layouts/PageLayout";
 import FallbackImage from "../../components/FallbackImage";
 import {setUserInfo} from "../../store/actions";
+import {Field, Form, Input, Picker, Popup} from "@taroify/core";
+import styles from "./index.module.scss";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -25,6 +27,9 @@ export default class Index extends Component<any, any> {
     state = {
         saving: false,
         cardImages: ['', ''],
+        cardType: '',
+        cardTypeOpen: false,
+        cardTypes: ['居民身份证','护照','港澳居民来往内地通行证（回乡证）','台胞证'],
     }
 
     realnameInputRef = React.createRef();
@@ -122,30 +127,55 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {settings} = this.props;
+        const {cardType,cardTypeOpen, cardTypes} = this.state;
         let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
 
         return (
-            <PageLayout statusBarProps={{title: '实名认证'}}>
+            <PageLayout statusBarProps={{title: '实名认证'}} style={{backgroundColor: 'white'}}>
                 {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'} />}
                 <Form onSubmit={this.handleSubmit}>
-                    <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
-                        <View className={'p-4 flex items-center justify-between'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>真实姓名</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <Input ref={this.realnameInputRef} name={'realname'} className={'text-right'} value={userInfo?.realname} />
-                            </View>
+                    <View className={'p-4 space-y-4'}>
+                        <View>
+                            <Form.Label>真实姓名</Form.Label>
+                            <Field className={'!p-0'} name={'realname'}>
+                                <Input className={styles.bigInput} placeholder={'请输入真实姓名'}/>
+                            </Field>
                         </View>
-                        <View className={'p-4 flex items-center justify-between'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>身份证号</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <Input ref={this.idCardInputRef} name={'idCard'} className={'text-right'} value={userInfo?.idCard} />
-                            </View>
+                        <View>
+                            <Form.Label>手机号</Form.Label>
+                            <Field className={'!p-0'} name={'phone'}>
+                                <Input className={styles.bigInput} placeholder={'常用手机号'}/>
+                            </Field>
+                        </View>
+                        <View>
+                            <Form.Label>证件类型</Form.Label>
+                            <Input value={cardType} onClick={()=>this.setState({cardTypeOpen:true})} readonly className={styles.bigInput} />
+                            <Popup mountOnEnter={false} open={cardTypeOpen} rounded placement="bottom" onClose={()=>this.setState({cardTypeOpen: false})}>
+                                <Picker
+                                    onCancel={() => this.setState({cardTypeOpen: false})}
+                                    onConfirm={(newValue) => {
+                                        if(newValue.length == 0) {
+                                            newValue = [cardTypes[0]];
+                                        }
+                                        this.setState({cardTypeOpen: false, cardType: newValue[0]});
+                                    }}
+                                >
+                                    <Picker.Toolbar>
+                                        <Picker.Button>取消</Picker.Button>
+                                        <Picker.Button>确认</Picker.Button>
+                                    </Picker.Toolbar>
+                                    <Picker.Column>
+                                        {cardTypes.map((item:any)=>{
+                                            return (
+                                                <Picker.Option value={item}>{item}</Picker.Option>
+                                            );
+                                        })};
+                                    </Picker.Column>
+                                </Picker>
+                            </Popup>
                         </View>
                     </View>
+
                     <View className={'grid grid-cols-2 gap-4 mt-4 px-4'}>
                         <View onClick={this.chooseCardFace}>
                             <View className={'flex relative flex-col items-center justify-center bg-gray-200 rounded-lg h-28'}>

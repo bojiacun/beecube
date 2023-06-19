@@ -16,7 +16,10 @@
     background: linear-gradient(180deg, #b02624 0%, #991b1b 100%);
   }
 }
-
+.bigInput {
+    @apply border border-solid border-stone-400 px-4 py-3 mt-2 h-auto text-lg bg-gray-100;
+    line-height: 2;
+}
 .profile {
   position: absolute;
   top: 0;
