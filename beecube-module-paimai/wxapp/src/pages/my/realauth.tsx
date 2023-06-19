@@ -9,6 +9,9 @@ import FallbackImage from "../../components/FallbackImage";
 import {setUserInfo} from "../../store/actions";
 import {Field, Form, Input, Picker, Popup, Button} from "@taroify/core";
 import styles from "./index.module.scss";
+import {syncEvent} from "@tarojs/components/lib/react/react-component-lib/utils";
+import classNames from "classnames";
+import {ArrowRight} from "@taroify/icons";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -29,7 +32,7 @@ export default class Index extends Component<any, any> {
         cardImages: ['', ''],
         cardType: '',
         cardTypeOpen: false,
-        cardTypes: ['居民身份证','护照','港澳居民来往内地通行证（回乡证）','台胞证'],
+        cardTypes: ['居民身份证', '护照', '港澳居民来往内地通行证（回乡证）', '台胞证'],
     }
 
     realnameInputRef = React.createRef();
@@ -43,10 +46,7 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidMount() {
-        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-        if(userInfo) {
-            this.setState({cardImages: [userInfo.cardFace, userInfo.cardBack]});
-        }
+
     }
 
     async chooseCardFace() {
@@ -121,44 +121,48 @@ export default class Index extends Component<any, any> {
         userInfo.idCard = values.idCard;
         userInfo.cardFace = this.state.cardImages[0];
         userInfo.cardBack = this.state.cardImages[1];
-        Taro.setStorageSync("EDIT-USER",JSON.stringify(userInfo));
+        Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
         Taro.navigateBack().then();
     }
 
     render() {
         const {settings} = this.props;
-        const {cardType,cardTypeOpen, cardTypes} = this.state;
+        const {cardType, cardTypeOpen, cardTypes} = this.state;
         let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
 
         return (
             <PageLayout statusBarProps={{title: '实名认证'}} style={{backgroundColor: 'white'}}>
-                {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'} />}
+                {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'}/>}
                 <Form onSubmit={this.handleSubmit}>
                     <View className={'p-4 space-y-4'}>
                         <View>
-                            <Form.Label>真实姓名</Form.Label>
+                            <Form.Label>真实姓名<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'realname'}>
                                 <Input className={styles.bigInput} placeholder={'请输入真实姓名'}/>
                             </Field>
                         </View>
                         <View>
-                            <Form.Label>手机号</Form.Label>
+                            <Form.Label>手机号<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'phone'}>
                                 <Input className={styles.bigInput} placeholder={'常用手机号'}/>
-                                <Button>发送验证码</Button>
                             </Field>
                             <Field className={'!p-0'} name={'code'}>
-                                <Input className={styles.bigInput} placeholder={'验证码'}/>
+                                <View className={'flex ittems-center justify-between w-full'}>
+                                    <Input className={classNames(styles.bigInput, 'flex-1 !mr-4')} placeholder={'验证码'}/>
+                                    <View style={{width: 120, lineHeight: 1}} className={classNames(styles.bigInput, 'flex-none flex items-center justify-center !bg-white')}>
+                                        发送验证码
+                                    </View>
+                                </View>
                             </Field>
                         </View>
                         <View>
-                            <Form.Label>证件类型</Form.Label>
-                            <Input value={cardType} onClick={()=>this.setState({cardTypeOpen:true})} readonly className={styles.bigInput} />
-                            <Popup mountOnEnter={false} open={cardTypeOpen} rounded placement="bottom" onClose={()=>this.setState({cardTypeOpen: false})}>
+                            <Form.Label>证件类型<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Input value={cardType} onClick={() => this.setState({cardTypeOpen: true})} readonly className={styles.bigInput}/>
+                            <Popup mountOnEnter={false} open={cardTypeOpen} rounded placement="bottom" onClose={() => this.setState({cardTypeOpen: false})}>
                                 <Picker
                                     onCancel={() => this.setState({cardTypeOpen: false})}
                                     onConfirm={(newValue) => {
-                                        if(newValue.length == 0) {
+                                        if (newValue.length == 0) {
                                             newValue = [cardTypes[0]];
                                         }
                                         this.setState({cardTypeOpen: false, cardType: newValue[0]});
@@ -169,7 +173,7 @@ export default class Index extends Component<any, any> {
                                         <Picker.Button>确认</Picker.Button>
                                     </Picker.Toolbar>
                                     <Picker.Column>
-                                        {cardTypes.map((item:any)=>{
+                                        {cardTypes.map((item: any) => {
                                             return (
                                                 <Picker.Option value={item}>{item}</Picker.Option>
                                             );
@@ -178,28 +182,36 @@ export default class Index extends Component<any, any> {
                                 </Picker>
                             </Popup>
                         </View>
+                        <View>
+                            <Form.Label>上传身份证<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <View className={'grid grid-cols-2 gap-4 mt-4'}>
+                                <View onClick={this.chooseCardFace}>
+                                    <View className={'flex relative flex-col items-center justify-center rounded-lg h-28'}>
+                                        {this.state.cardImages[0] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[0]} className={'block w-full h-full'}/>}
+                                        {!this.state.cardImages[0] && <FallbackImage src={'https://static.winkt.cn/card1.png'} className={'block w-full h-full'} />}
+                                    </View>
+                                    {!this.state.cardImages[0] && <View className={'text-center text-black-600 mt-2'}>上传正面人像照片</View>}
+                                </View>
+                                <View onClick={this.chooseCardBack}>
+                                    <View className={'flex relative flex-col items-center justify-center rounded-lg h-28'}>
+                                        {this.state.cardImages[1] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[1]} className={'block w-full h-full'}/>}
+                                        {!this.state.cardImages[1] && <FallbackImage src={'https://static.winkt.cn/card2.png'} className={'block w-full h-full'} />}
+                                    </View>
+                                    {!this.state.cardImages[1] && <View className={'text-center text-black-600 mt-2'}>上传背面国徽照片</View>}
+                                </View>
+                            </View>
+                            <View className={'text-sm text-stone-400 mt-4'}>
+                                <Text className={'text-red-600'}>提示:</Text>
+                                <Text>如因证件不清晰导致识别不准确，请重新上传，请上传真实有效证件，信息提交后不可更改</Text>
+                            </View>
+                        </View>
                     </View>
 
-                    <View className={'grid grid-cols-2 gap-4 mt-4 px-4'}>
-                        <View onClick={this.chooseCardFace}>
-                            <View className={'flex relative flex-col items-center justify-center bg-gray-200 rounded-lg h-28'}>
-                                {this.state.cardImages[0] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[0]} className={'block w-full h-full'}/>}
-                                {!this.state.cardImages[0] && <View>身份证正面照</View>}
-                                {!this.state.cardImages[0] && <View className={'text-lg text-red-600'}><Text className={'fa fa-plus'}/></View>}
-                            </View>
-                        </View>
-                        <View onClick={this.chooseCardBack}>
-                            <View className={'flex relative flex-col items-center justify-center bg-gray-200 rounded-lg h-28'}>
-                                {this.state.cardImages[1] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[1]} className={'block w-full h-full'}/>}
-                                {!this.state.cardImages[1] && <View>身份证反面照</View>}
-                                {!this.state.cardImages[1] && <View className={'text-lg text-red-600'}><Text className={'fa fa-plus'}/></View>}
-                            </View>
-                        </View>
-                    </View>
+
                     <View className={'container mx-auto mt-4 text-center'}>
                         {userInfo?.authStatus == 0 && <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
-                        {userInfo?.authStatus == 1 && <Button className={'btn btn-warning w-56'} onClick={()=>utils.navigateBack()}>审核中,点击返回</Button>}
-                        {userInfo?.authStatus == 2 && <Button className={'btn btn-success w-56'} onClick={()=>utils.navigateBack()}>已认证通过</Button>}
+                        {userInfo?.authStatus == 1 && <Button className={'btn btn-warning w-56'} onClick={() => utils.navigateBack()}>审核中,点击返回</Button>}
+                        {userInfo?.authStatus == 2 && <Button className={'btn btn-success w-56'} onClick={() => utils.navigateBack()}>已认证通过</Button>}
                     </View>
                 </Form>
             </PageLayout>
