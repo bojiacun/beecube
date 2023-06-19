@@ -9,9 +9,7 @@ import FallbackImage from "../../components/FallbackImage";
 import {setUserInfo} from "../../store/actions";
 import {Field, Form, Input, Picker, Popup, Button} from "@taroify/core";
 import styles from "./index.module.scss";
-import {syncEvent} from "@tarojs/components/lib/react/react-component-lib/utils";
 import classNames from "classnames";
-import {ArrowRight} from "@taroify/icons";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -27,7 +25,10 @@ import {ArrowRight} from "@taroify/icons";
     }
 })
 export default class Index extends Component<any, any> {
-    state = {
+    state: any = {
+        sending: false,
+        counter: 60,
+        userInfo: null,
         saving: false,
         cardImages: ['', ''],
         cardType: '',
@@ -35,18 +36,44 @@ export default class Index extends Component<any, any> {
         cardTypes: ['居民身份证', '护照', '港澳居民来往内地通行证（回乡证）', '台胞证'],
     }
 
-    realnameInputRef = React.createRef();
-    idCardInputRef = React.createRef();
+    timer: any;
+    formRef: any;
 
     constructor(props: any) {
         super(props);
         this.chooseCardFace = this.chooseCardFace.bind(this);
         this.chooseCardBack = this.chooseCardBack.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSendCode = this.handleSendCode.bind(this);
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
+        // request.get('/app/api/members/profile').then(res=>{
+        //     this.setState({userInfo: res.data.result});
+        // })
+    }
 
+    handleSendCode() {
+        if (this.state.sending) return false;
+        let phone = this.formRef.current.getValues('phone').phone;
+        if (!phone) {
+            return utils.showMessage('请输入手机号');
+        }
+        this.setState({sending: true});
+        request.post('/app/api/sms/send', {mobile: phone}).then(() => {
+            this.timer = setInterval(() => {
+                this.setState((v) => {
+                    v.counter--;
+                    if (v.counter <= 0) {
+                        clearInterval(this.timer);
+                        v.counter = 60;
+                        v.sending = false;
+                    }
+                    return v;
+                })
+            }, 1000);
+        });
     }
 
     async chooseCardFace() {
@@ -68,14 +95,6 @@ export default class Index extends Component<any, any> {
             }).then((res: any) => {
                 let result = JSON.parse(res.data);
                 this.state.cardImages[0] = result.result.url;
-
-                let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-                // @ts-ignore
-                userInfo.realname = this.realnameInputRef.current.value;
-                // @ts-ignore
-                userInfo.idCard = this.idCardInputRef.current.value;
-                Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
-
                 this.setState({cardImages: this.state.cardImages});
                 utils.showSuccess(false, '上传成功');
             });
@@ -101,39 +120,57 @@ export default class Index extends Component<any, any> {
             }).then((res: any) => {
                 let result = JSON.parse(res.data);
                 this.state.cardImages[1] = result.result.url;
-                let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-                // @ts-ignore
-                userInfo.realname = this.realnameInputRef.current.value;
-                // @ts-ignore
-                userInfo.idCard = this.idCardInputRef.current.value;
-                Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
                 this.setState({cardImages: this.state.cardImages});
                 utils.showSuccess(false, '上传成功');
             });
         });
     }
 
-    handleSubmit(e) {
-        this.setState({saving: true});
+    async handleSubmit(e) {
+        const {settings} = this.props;
         let values = e.detail.value;
-        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
-        userInfo.realname = values.realname;
-        userInfo.idCard = values.idCard;
-        userInfo.cardFace = this.state.cardImages[0];
-        userInfo.cardBack = this.state.cardImages[1];
-        Taro.setStorageSync("EDIT-USER", JSON.stringify(userInfo));
-        Taro.navigateBack().then();
+        values.cardType = this.state.cardType;
+        values.cardFace = this.state.cardImages[0];
+        values.cardBack = this.state.cardImages[1];
+        console.log(values);
+        if (!values.realname) {
+            return utils.showError('请输入真实姓名');
+        }
+        if (!values.phone) {
+            return utils.showError('请输入手机号');
+        }
+        if (!values.code) {
+            return utils.showError('请输入验证码');
+        }
+        if (!values.cardType) {
+            return utils.showError('请选择证件类型');
+        }
+        if (!values.cardFace) {
+            return utils.showError('请上传正面人像照');
+        }
+        if (!values.cardBack) {
+            return utils.showError('请上传背面国徽照');
+        }
+        if(settings.signName) {
+            const res = await request.put("/app/api/sms/check", values);
+            if (!res.data.result) {
+                return utils.showMessage('验证码不正确').then();
+            }
+        }
+
+        this.setState({saving: true});
+        return;
+        utils.navigateBack();
     }
 
     render() {
         const {settings} = this.props;
-        const {cardType, cardTypeOpen, cardTypes} = this.state;
-        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
+        const {cardType, cardTypeOpen, cardTypes, userInfo} = this.state;
 
         return (
             <PageLayout statusBarProps={{title: '实名认证'}} style={{backgroundColor: 'white'}}>
                 {settings.authPageBanner && <Image src={settings.authPageBanner} className={'w-full'} mode={'widthFix'}/>}
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} ref={this.formRef}>
                     <View className={'p-4 space-y-4'}>
                         <View>
                             <Form.Label>真实姓名<Text className={'text-red-600'}>*</Text></Form.Label>
@@ -146,14 +183,15 @@ export default class Index extends Component<any, any> {
                             <Field className={'!p-0'} name={'phone'}>
                                 <Input className={styles.bigInput} placeholder={'常用手机号'}/>
                             </Field>
-                            <Field className={'!p-0'} name={'code'}>
-                                <View className={'flex ittems-center justify-between w-full'}>
+                            <View className={'flex ittems-center justify-between w-full'}>
+                                <Field className={'!p-0'} name={'vcode'}>
                                     <Input className={classNames(styles.bigInput, 'flex-1 !mr-4')} placeholder={'验证码'}/>
-                                    <View style={{width: 120, lineHeight: 1}} className={classNames(styles.bigInput, 'flex-none flex items-center justify-center !bg-white')}>
-                                        发送验证码
-                                    </View>
+                                </Field>
+                                <View onClick={this.handleSendCode} style={{width: 120, lineHeight: 1}}
+                                      className={classNames(styles.bigInput, 'flex-none flex items-center justify-center !bg-white')}>
+                                    {this.state.sending ? this.state.counter + '' : '发送验证码'}
                                 </View>
-                            </Field>
+                            </View>
                         </View>
                         <View>
                             <Form.Label>证件类型<Text className={'text-red-600'}>*</Text></Form.Label>
@@ -188,14 +226,14 @@ export default class Index extends Component<any, any> {
                                 <View onClick={this.chooseCardFace}>
                                     <View className={'flex relative flex-col items-center justify-center rounded-lg h-28'}>
                                         {this.state.cardImages[0] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[0]} className={'block w-full h-full'}/>}
-                                        {!this.state.cardImages[0] && <FallbackImage src={'https://static.winkt.cn/card1.png'} className={'block w-full h-full'} />}
+                                        {!this.state.cardImages[0] && <FallbackImage src={'https://static.winkt.cn/card1.png'} className={'block w-full h-full'}/>}
                                     </View>
                                     {!this.state.cardImages[0] && <View className={'text-center text-black-600 mt-2'}>上传正面人像照片</View>}
                                 </View>
                                 <View onClick={this.chooseCardBack}>
                                     <View className={'flex relative flex-col items-center justify-center rounded-lg h-28'}>
                                         {this.state.cardImages[1] && <FallbackImage mode={'aspectFit'} src={this.state.cardImages[1]} className={'block w-full h-full'}/>}
-                                        {!this.state.cardImages[1] && <FallbackImage src={'https://static.winkt.cn/card2.png'} className={'block w-full h-full'} />}
+                                        {!this.state.cardImages[1] && <FallbackImage src={'https://static.winkt.cn/card2.png'} className={'block w-full h-full'}/>}
                                     </View>
                                     {!this.state.cardImages[1] && <View className={'text-center text-black-600 mt-2'}>上传背面国徽照片</View>}
                                 </View>
@@ -209,7 +247,7 @@ export default class Index extends Component<any, any> {
 
 
                     <View className={'container mx-auto mt-4 text-center'}>
-                        {userInfo?.authStatus == 0 && <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
+                        {!userInfo?.authStatus && <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存并返回</Button>}
                         {userInfo?.authStatus == 1 && <Button className={'btn btn-warning w-56'} onClick={() => utils.navigateBack()}>审核中,点击返回</Button>}
                         {userInfo?.authStatus == 2 && <Button className={'btn btn-success w-56'} onClick={() => utils.navigateBack()}>已认证通过</Button>}
                     </View>

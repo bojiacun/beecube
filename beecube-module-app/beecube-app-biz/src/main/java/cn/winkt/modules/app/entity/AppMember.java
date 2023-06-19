@@ -102,6 +102,10 @@ public class AppMember {
 	@ApiModelProperty(value = "用户身份证号")
 	private String idCard;
 
+	@Excel(name = "用户证件类型", width = 15)
+	@ApiModelProperty(value = "用户证件类型")
+	private String cardType;
+
 
 	@Excel(name = "用户身份证正面照", width = 15)
 	@ApiModelProperty(value = "用户身份证正面照")
