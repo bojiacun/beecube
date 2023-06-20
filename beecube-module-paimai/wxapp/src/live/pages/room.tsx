@@ -545,6 +545,7 @@ export default class Index extends Component<any, any> {
         this.setState({
             showOfferModal: true,
         });
+        this.nextPrice(this.state.goods);
         this.animationOffer = Taro.createAnimation({
             duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
             timingFunction: 'linear', //动画的效果 默认值是linear
@@ -552,6 +553,11 @@ export default class Index extends Component<any, any> {
         if (this.offerInputRef?.current) {
             this.offerInputRef.current.value = this.state.nextPrice;
         }
+        setTimeout(()=>{
+            if (this.offerInputRef?.current) {
+                this.offerInputRef.current.value = this.state.nextPrice;
+            }
+        }, 500);
         setTimeout(() => {
             this.fadeInOffer(); //调用显示动画
         }, 10);
@@ -598,6 +604,8 @@ export default class Index extends Component<any, any> {
         let rect = Taro.getMenuButtonBoundingClientRect();
         let gap = rect.top - systemInfo.statusBarHeight; //动态计算每台手机状态栏到胶囊按钮间距
         let navBarHeight = gap + rect.bottom;
+
+        settings.isCustomOffer = parseInt(settings.isCustomOffer);
 
         // @ts-ignore
         return (
