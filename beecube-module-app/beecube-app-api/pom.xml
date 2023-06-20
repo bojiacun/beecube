@@ -42,6 +42,47 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.6.0</version>
+                <executions>
+                    <execution>
+                        <!-- 插件运行时机，package为打包时,另有compile,process-classes,与injar配置需联动-->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 运行目标 -->
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>6.2.2</proguardVersion>
+                    <attach>true</attach> <!-- 是否另外产生构件，即产生未混淆 和 混淆 两个构件-->
+                    <attachArtifactClassifier>proguard</attachArtifactClassifier> <!-- 混淆构件的后缀名 -->
+                    <obfuscate>true</obfuscate> <!-- 是否混淆，否则只简化不混淆 -->
+                    <!--<proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>   引入配置文件，可以替代下面的<options> -->
+                    <maxMemory>768m</maxMemory> <!-- 混淆构建时使用的最大内存，不设置时容易内存溢出 -->
+                    <proguardInclude>${project.basedir}/proguard.pro</proguardInclude>
+                    <!-- 输入文件，可以是jar/war/zip/class/目录；值为class时，运行时机要为compile 或 process-classes -->
+                    <injar>${project.build.finalName}.jar</injar>
+                    <!--                    <injar>classes</injar> &lt;!&ndash; 输入为 classes 目录 &ndash;&gt;-->
+                    <!--                    <inFilter>com/qingzao/feiniao/**</inFilter>  &lt;!&ndash; 输入文件过滤 &ndash;&gt;-->
+                    <!--                    <outputDirectory>${project.build.directory}</outputDirectory> &lt;!&ndash; 输出目录&ndash;&gt;-->
+                    <!--                    <outjar>${project.build.finalName}-pg.jar</outjar> &lt;!&ndash; 输出文件名&ndash;&gt;-->
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>  <!-- Runtime包是必需的 -->
+                        <lib>${java.home}/lib/jce.jar</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.2.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${maven-source-plugin.version}</version>
