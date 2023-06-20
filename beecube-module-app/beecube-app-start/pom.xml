@@ -64,19 +64,17 @@
                         <!--保持源码名、内部类、行号、注解等-->
                         <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
                         <!--保持枚举中的名子，确保枚举 valueOf 可以使用-->
-                        <option>-keepclassmembers enum com.qingzao.feiniao.** { *;}</option>
                         <option>-keep class **.mysql.**</option> <!-- 保持部分内容不变 -->
-                        <option>-keep class com.qingzao.feiniao.pojo.** { *;}</option> <!--保持 Bean 类 -->
-                        <option>-keep class com.qingzao.feiniao.FeiniaoApplication { public void init(); }</option> <!-- 保持部分方法 -->
                     </options>
                     <!-- 输入文件，可以是jar/war/zip/class/目录；值为class时，运行时机要为compile 或 process-classes -->
                     <!--<injar>${project.build.finalName}.war</injar>-->
-                    <injar>classes</injar> <!-- 输入为 classes 目录 -->
-                    <inFilter>com/qingzao/feiniao/**</inFilter>  <!-- 输入文件过滤 -->
-                    <outputDirectory>${project.build.directory}</outputDirectory> <!-- 输出目录-->
-                    <outjar>${project.build.finalName}-pg.jar</outjar> <!-- 输出文件名-->
+<!--                    <injar>classes</injar> &lt;!&ndash; 输入为 classes 目录 &ndash;&gt;-->
+<!--                    <inFilter>com/qingzao/feiniao/**</inFilter>  &lt;!&ndash; 输入文件过滤 &ndash;&gt;-->
+<!--                    <outputDirectory>${project.build.directory}</outputDirectory> &lt;!&ndash; 输出目录&ndash;&gt;-->
+<!--                    <outjar>${project.build.finalName}-pg.jar</outjar> &lt;!&ndash; 输出文件名&ndash;&gt;-->
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>  <!-- Runtime包是必需的 -->
+                        <lib>${java.home}/lib/jce.jar</lib>
                     </libs>
                 </configuration>
                 <dependencies>
