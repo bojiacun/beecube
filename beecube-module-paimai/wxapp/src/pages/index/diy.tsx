@@ -40,7 +40,7 @@ export default class Index extends Component<any,any> {
     render() {
         if(!this.state.options) return <PageLoading />;
         return (
-            <DiyPage pageIdentifier={this.state.options.id} />
+            <DiyPage pageIdentifier={this.state.options.id} showTabBar={false} />
         )
     }
 }

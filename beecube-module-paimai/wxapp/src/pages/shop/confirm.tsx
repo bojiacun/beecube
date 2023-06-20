@@ -189,7 +189,7 @@ export default class Index extends Component<any, any> {
 
         request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
-            if(data) {
+            if(data?.id) {
                 //支付已经完成，提醒支付成功并返回上一页面
                 Taro.showToast({title: '下单成功', duration: 2000}).then(() => {
                     //清空购物车
@@ -205,7 +205,7 @@ export default class Index extends Component<any, any> {
                     Taro.setStorageSync("CART", JSON.stringify(newCart));
                     setTimeout(() => {
                         utils.hideLoading();
-                        Taro.navigateBack().then();
+                        Taro.redirectTo({url: '/order/pages/orders/detail?id='+data.id});
                     }, 2000);
                 });
                 this.setState({posting: false});
@@ -213,13 +213,12 @@ export default class Index extends Component<any, any> {
         });
     }
     handlePayTypeChanged(value) {
-        this.setState({payType: value});
+        this.setState({payType: value, openNetPay: true});
     }
 
     async pay() {
         const subs = await this.subscribeMessage();
         if(!subs) return;
-        this.setState({posting: true});
         let data = this.state.postOrderInfo;
         data.payType = parseInt(this.state.payType);
         data.address = this.state.address;
@@ -227,6 +226,7 @@ export default class Index extends Component<any, any> {
         data.note = this.state.note;
 
         if (data.payType == 1) {
+            this.setState({posting: true});
             utils.showLoading('发起支付中');
             //发起支付
             request.post('/paimai/api/members/goods/buy', data).then(res => {
@@ -497,7 +497,7 @@ export default class Index extends Component<any, any> {
                 <ConfigProvider theme={{
                     tabsNavBackgroundColor: 'transparent',
                 }}>
-                    <Popup style={{height: 330}} className={'!bg-gray-100'} open={openIntegral} rounded placement={'bottom'} onClose={() => this.setState({openIntegral: false})}>
+                    <Popup style={{height: 230}} className={'!bg-gray-100'} open={openIntegral} rounded placement={'bottom'} onClose={() => this.setState({openIntegral: false})}>
                         <View className={'text-2xl'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>积分抵扣</View>
                             <Popup.Close/>
@@ -511,6 +511,7 @@ export default class Index extends Component<any, any> {
                                 </Radio>
                                 <Radio className={'radio-red-color'} name={'0'}>不使用积分抵扣</Radio>
                             </Radio.Group>
+                            <View className={'mt-4'}><TaroifyButton color={'danger'} block onClick={()=>this.setState({openIntegral: false})}>确 定</TaroifyButton></View>
                         </View>
                     </Popup>
                 </ConfigProvider>

@@ -984,7 +984,7 @@ public class WxAppMemberController {
             }
             else {
                 redissonLockClient.unlock(lock);
-                return Result.OK("下单成功");
+                return Result.OK("下单成功", goodsOrder);
             }
         } else {
             return Result.error("下单失败");

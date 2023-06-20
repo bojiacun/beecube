@@ -8,6 +8,7 @@ import numeral from 'numeral';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import utils from "../../lib/utils";
+import styles from './index.module.scss';
 
 // @ts-ignore
 @connect((state: any) => (
@@ -116,15 +117,15 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: '发票中心'}} containerClassName={'p-4'}>
                 <Checkbox.Group onChange={this.handleSelect} value={this.state.selected}>
-                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
-                    <View className={'item-title text-lg mb-4'}>待开票记录</View>
+                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} size={'small'} onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
+                    <View className={'item-title text-lg mb-4'}>待开票订单</View>
                     <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                         <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
                             {
                                 list.map((item) => {
                                     return (
                                         <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
-                                            <View className={'flex-none'}><Checkbox name={item.id}/></View>
+                                            <View className={'flex-none'}><Checkbox className={styles.redCheckbox} name={item.id}/></View>
                                             <View className={'flex-1'}>
                                                 <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
                                                 <View className={'flex mt-2'}>
@@ -158,10 +159,10 @@ export default class Index extends Component<any, any> {
                     </PullRefresh>
                 </Checkbox.Group>
 
-                <View className={'bg-white flex items-center fixed py-2 px-4 w-full text-lg bottom-0 left-0'} style={{paddingBottom: safeBottom}}>
+                <View className={'bg-white flex items-center fixed py-2 px-4 w-full bottom-0 left-0'} style={{paddingBottom: safeBottom}}>
                     <View className={'flex-1 flex items-center space-x-4'}>
                         <View className={'flex flex-col items-center'}>
-                            <Checkbox id={'all'} checked={this.isCheckedAll} onClick={this.toggleCheckAll}/>
+                            <Checkbox id={'all'} className={styles.redCheckbox} checked={this.isCheckedAll} onClick={this.toggleCheckAll} />
                             <View>全选</View>
                         </View>
                         <View className={'flex-1'}>
@@ -170,7 +171,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View className={'flex-none'}>
-                        <Button disabled={this.calcCartPrice <= 0} className={'btn btn-danger'}
+                        <Button disabled={this.calcCartPrice <= 0} shape={'round'} className={'btn btn-danger'}
                                 onClick={this.handleToCreate}>去开票</Button>
                     </View>
                 </View>

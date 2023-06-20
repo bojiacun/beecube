@@ -245,6 +245,21 @@ export default class Index extends Component<any, any> {
 
         switch (detail.status) {
             case 0:
+                if(detail.payType == 2 && detail.payImage) {
+                    return (
+                        <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                              style={{paddingBottom: safeBottom}}>
+                            <View className={'flex items-center space-x-2'}>
+                                <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                    <View>取消订单</View>
+                                </Button>
+                                <Button disabled={true} className={'btn btn-primary'}>
+                                    <View>已上传，审核中</View>
+                                </Button>
+                            </View>
+                        </View>
+                    );
+                }
                 return (
                     <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>
@@ -425,10 +440,12 @@ export default class Index extends Component<any, any> {
                             <View className={'text-gray-400'}>支付时间</View>
                             <View>{detail.payTime}</View>
                         </View>
+                        {detail.status > 0 && detail.payType == 1 &&
                         <View className={'flex items-center justify-between'}>
                             <View className={'text-gray-400'}>交易单号</View>
                             <View>{detail.transactionId}</View>
                         </View>
+                        }
                         <View className={'flex items-center justify-between'}>
                             <View className={'text-gray-400'}>买家留言</View>
                             <View>{detail.note}</View>
@@ -437,7 +454,7 @@ export default class Index extends Component<any, any> {
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>支付方式</View>
                                 <View>
-                                    <Radio.Group defaultValue={detail.payType + ''} direction={'horizontal'} size={14} className={'radio-red-color'}
+                                    <Radio.Group defaultValue={detail.payType + ''} disabled={true} direction={'horizontal'} size={14} className={'radio-red-color'}
                                                  onChange={this.handlePayTypeChanged}>
                                         <Radio name={'1'}>微信支付</Radio>
                                         <Radio name={'2'}>网银转账</Radio>
@@ -451,10 +468,6 @@ export default class Index extends Component<any, any> {
                                 <View>{detail.payType == 1 ? '微信支付': '网银转账'}</View>
                             </View>
                         }
-                        {/*<View className={'flex items-center justify-between'}>*/}
-                        {/*    <View className={'text-gray-400'}>订单状态</View>*/}
-                        {/*    <View className={'font-bold'}>{ORDER_STATUS[detail.status]}</View>*/}
-                        {/*</View>*/}
                     </View>
                 </View>
                 {detail.status == 4 &&

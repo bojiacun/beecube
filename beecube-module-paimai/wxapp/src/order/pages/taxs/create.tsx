@@ -5,6 +5,8 @@ import {Button, ConfigProvider, Form, Input, Radio} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import request from "../../../lib/request";
 import utils from "../../../lib/utils";
+import styles from '../index.module.scss';
+import classNames from "classnames";
 
 
 export default class Index extends Component<any, any> {
@@ -55,8 +57,8 @@ export default class Index extends Component<any, any> {
                                 <Form.Label>抬头类型</Form.Label>
                                 <Form.Control>
                                     <Radio.Group direction="horizontal">
-                                        <Radio name="2">企业单位</Radio>
-                                        <Radio name="1">个人/非企业</Radio>
+                                        <Radio className={classNames(styles.redCheckbox, '!text-sm')} name="2">企业单位</Radio>
+                                        <Radio className={classNames(styles.redCheckbox, '!text-sm')} name="1">个人/非企业</Radio>
                                     </Radio.Group>
                                 </Form.Control>
                             </Form.Item>

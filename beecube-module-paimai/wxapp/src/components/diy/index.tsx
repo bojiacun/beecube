@@ -7,11 +7,13 @@ import request from "../../lib/request";
 
 export interface DiyPageProps extends Partial<any> {
   pageIdentifier: string;
+  showTabBar?: boolean;
+  showStatusBar?: boolean;
 }
 
 
 const DiyPage: FC<DiyPageProps> = (props) => {
-    const { pageIdentifier } = props;
+    const { pageIdentifier , showTabBar = true, showStatusBar = true} = props;
     const [loading, setLoading] = useState<boolean>(true);
     const [statusBarProps, setStatusBarProps] = useState<any>({});
     const [page, setPage] = useState<any>();
@@ -44,7 +46,7 @@ const DiyPage: FC<DiyPageProps> = (props) => {
     }, []);
 
     return (
-        <PageLayout style={page?.style} showTabBar={true} showStatusBar={true} statusBarProps={statusBarProps} pageLoading={loading}>
+        <PageLayout style={page?.style} showTabBar={showTabBar} showStatusBar={showStatusBar} statusBarProps={statusBarProps} pageLoading={loading}>
             {page?.modules.map((m: any) => {
                 const Module = modules[m.key];
                 if (Module) {
