@@ -62,65 +62,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.github.wvengen</groupId>
-                <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.6.0</version>
-                <executions>
-                    <execution>
-                        <!-- 插件运行时机，package为打包时,另有compile,process-classes,与injar配置需联动-->
-                        <phase>package</phase>
-                        <goals>
-                            <!-- 运行目标 -->
-                            <goal>proguard</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <proguardVersion>6.2.2</proguardVersion>
-                    <attach>true</attach> <!-- 是否另外产生构件，即产生未混淆 和 混淆 两个构件-->
-                    <attachArtifactClassifier>proguard</attachArtifactClassifier> <!-- 混淆构件的后缀名 -->
-                    <obfuscate>true</obfuscate> <!-- 是否混淆，否则只简化不混淆 -->
-                    <!--<proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>   引入配置文件，可以替代下面的<options> -->
-                    <maxMemory>768m</maxMemory> <!-- 混淆构建时使用的最大内存，不设置时容易内存溢出 -->
-                    <options>
-                        <option>-target 1.8</option>
-                        <option>-ignorewarnings</option> <!--忽略所有告警-->
-                        <option>-dontshrink</option>   <!--不做 shrink，即不删除没有使用的类/成员 -->
-                        <option>-dontoptimize</option> <!--不做 optimize，即不做字节码级别的优化 -->
-                        <option>-useuniqueclassmembernames</option> <!--对类成员名的混淆采取唯一策略 -->
-                        <!--<option>-adaptclassstrings</option> 混淆类名之后，对使用Class.forName('className')之类的地方进行相应替代-->
-                        <!--<option>-dontusemixedcaseclassnames</option> 混淆时不生成大小写混合的类名 -->
-                        <option>-dontskipnonpubliclibraryclasses</option> <!--不忽略非公共库的类-->
-                        <option>-dontskipnonpubliclibraryclassmembers</option> <!--不忽略非公共库的类成员-->
-                        <!-- <option>-repackageclasses com.qingzao.feiniao</option>  所有混淆的类放在 feiniao 包下-->
-                        <option>-keepattributes Signature</option>  <!--JAXB 必需 -->
-                        <!--保持源码名、内部类、行号、注解等-->
-                        <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
-                        <!--保持枚举中的名子，确保枚举 valueOf 可以使用-->
-                        <option>-keepclassmembers enum com.qingzao.feiniao.** { *;}</option>
-                        <option>-keep class **.mysql.**</option> <!-- 保持部分内容不变 -->
-                        <option>-keep class com.qingzao.feiniao.pojo.** { *;}</option> <!--保持 Bean 类 -->
-                        <option>-keep class com.qingzao.feiniao.FeiniaoApplication { public void init(); }</option> <!-- 保持部分方法 -->
-                    </options>
-                    <!-- 输入文件，可以是jar/war/zip/class/目录；值为class时，运行时机要为compile 或 process-classes -->
-                    <!--<injar>${project.build.finalName}.war</injar>-->
-                    <injar>classes</injar> <!-- 输入为 classes 目录 -->
-                    <inFilter>com/qingzao/feiniao/**</inFilter>  <!-- 输入文件过滤 -->
-                    <outputDirectory>${project.build.directory}</outputDirectory> <!-- 输出目录-->
-                    <outjar>${project.build.finalName}-pg.jar</outjar> <!-- 输出文件名-->
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>  <!-- Runtime包是必需的 -->
-                    </libs>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>6.2.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
