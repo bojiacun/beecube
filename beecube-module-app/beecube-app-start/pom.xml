@@ -28,7 +28,6 @@
         <!-- 打包名称 -->
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
