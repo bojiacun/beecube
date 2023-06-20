@@ -29,7 +29,8 @@ export default class Index extends Component<any, any> {
         liveRoom: null,
         isNative: false,
         userInfo: null,
-        hideModal: true,
+        showGoodsListModal: false,
+        showOfferModal: false,
         animationData: {},
         animationOfferData: {},
         merchandises: [],
@@ -208,7 +209,6 @@ export default class Index extends Component<any, any> {
         let {tag, content} = ev.detail;
         switch (tag) {
             case 'onMerchandise': {
-                console.log('onMerchandise', content);
                 this.showModal();
                 break;
             }
@@ -218,8 +218,7 @@ export default class Index extends Component<any, any> {
                 break;
             }
             case 'onModalClick': {
-                console.log('onModalClick', content);
-                if (!this.state.hideModal) {
+                if (this.state.showGoodsListModal) {
                     this.hideModal();
                     this.hideOffer();
                 }
@@ -296,7 +295,7 @@ export default class Index extends Component<any, any> {
                 } else {
                     utils.showError(res.data.message || '出价失败');
                 }
-                this.setState({hideModal: true});
+                this.setState({showOfferModal: false});
                 this.fadeDownOffer();
             }).catch(() => this.setState({posting: false}));
         }
@@ -375,7 +374,6 @@ export default class Index extends Component<any, any> {
             } else {
                 //计算是第几个人出价
                 let modIndex = (offerCount % priceConfigs.length);
-                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
                 price = parseFloat(priceConfigs[modIndex]);
             }
             if (currentPrice >= min) {
@@ -432,12 +430,12 @@ export default class Index extends Component<any, any> {
 
 
     hideModal() {
-        this.setState({hideModal: true});
+        this.setState({showGoodsListModal: false});
         this.fadeDown();
     }
 
     hideOffer() {
-        this.setState({hideModal: true});
+        this.setState({showOfferModal: false});
         this.fadeDownOffer();
     }
 
@@ -455,13 +453,11 @@ export default class Index extends Component<any, any> {
 
     pushMer(e) {
         const {currentTarget: {dataset: {indx}}} = e;
-        console.log(indx);
         this.liveRoom.pushMer(indx);
     }
 
     addShoppingCart(e) {
         const {currentTarget: {dataset: {indx}}} = e;
-        console.log('addShoppingCart ', indx);
     }
 
     fadeInOffer() {
@@ -529,7 +525,7 @@ export default class Index extends Component<any, any> {
 
     showModal() {
         this.setState({
-            hideModal: false
+            showGoodsListModal: true
         });
         this.animation = Taro.createAnimation({
             duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
@@ -547,7 +543,7 @@ export default class Index extends Component<any, any> {
         }
         // this.liveRoom?.showOffer(this.state.merchandises[this.state.pushIndex], this.state.deposited || this.state.liveRoom.deposit == 0);
         this.setState({
-            hideModal: false
+            showOfferModal: true,
         });
         this.animationOffer = Taro.createAnimation({
             duration: 150, //动画的持续时间 默认400ms 数值越大，动画越慢 数值越小，动画越快
@@ -589,9 +585,9 @@ export default class Index extends Component<any, any> {
     render() {
         const {
             liveRoom,
-            hideModal,
+            showOfferModal,
+            showGoodsListModal,
             animationData,
-            animationOfferData,
             merchandises,
             pushIndex,
             merBot,
@@ -645,7 +641,7 @@ export default class Index extends Component<any, any> {
                         <Button className={'btn btn-primary z-1'} onClick={() => utils.navigateBack()}>点击返回</Button>
                     </View>}
 
-                    <View className="modals modals-bottom-dialog" hidden={hideModal}>
+                    <View className="modals modals-bottom-dialog" hidden={!showGoodsListModal}>
                         <View className="bottom-dialog-body bottom-pos" animation={animationData}>
                             <View className="merchandise-container">
                                 <View className="merchandise-head">
@@ -724,7 +720,7 @@ export default class Index extends Component<any, any> {
                     }
 
 
-                    <Popup style={{height: 300}} placement={'bottom'} rounded open={!hideModal && pushIndex >= 0} onClose={() => this.setState({hideModal: true})}>
+                    <Popup style={{height: 300}} placement={'bottom'} rounded open={showOfferModal && pushIndex >= 0} onClose={() => this.setState({showOfferModal: false})}>
                         <View className={'text-2xl'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>出价拍品</View>
                             <Popup.Close/>
