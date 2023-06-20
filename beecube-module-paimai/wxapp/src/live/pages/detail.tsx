@@ -27,7 +27,7 @@ export default class Index extends Component<any, any> {
     state: any = {
         id: null,
         detail: null,
-        goodsList: [],
+        goodsList: null,
         loadingMore: false,
         noMore: false,
         page: 1,
@@ -51,7 +51,7 @@ export default class Index extends Component<any, any> {
             if (clear) {
                 let newGoodsList = res.data.result;
                 if (!newGoodsList || newGoodsList.length == 0) {
-                    this.setState({noMore: true, loadingMore: false});
+                    this.setState({noMore: true, loadingMore: false, goodsList: []});
                 } else {
                     if (parseInt(settings.isDealCommission) == 1) {
                         newGoodsList.forEach(item => {
@@ -65,10 +65,10 @@ export default class Index extends Component<any, any> {
                     this.setState({goodsList: newGoodsList, loadingMore: false, noMore: false});
                 }
             } else {
-                let goodsList = this.state.goodsList;
+                let goodsList = this.state.goodsList || [];
                 let newGoodsList = res.data.result;
                 if (!newGoodsList || newGoodsList.length == 0) {
-                    this.setState({noMore: true, loadingMore: false});
+                    this.setState({noMore: true, loadingMore: false, goodsList});
                 } else {
                     if (parseInt(settings.isDealCommission) == 1) {
                         newGoodsList.forEach(item => {
@@ -212,12 +212,11 @@ export default class Index extends Component<any, any> {
     render() {
         const {detail, goodsList} = this.state;
         const {systemInfo} = this.props;
-        if (!detail) return <PageLoading/>
 
+        if (!detail || goodsList === null) return <PageLoading />;
 
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
-
         return (
             <PageLayout statusBarProps={{title: '直播间详情'}} enableReachBottom={true}>
                 <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
