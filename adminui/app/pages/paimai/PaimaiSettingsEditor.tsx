@@ -82,6 +82,10 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapInput  label={'结束提醒模板ID'} name={'endTemplateId'}  placeholder={'结束提醒模板ID，公共库模板编号为：1578'} />
                         <BootstrapInput  label={'出价结果通知模板ID'} name={'offerResultTemplateId'}  placeholder={'出价结果通知模板ID，公共库模板编号为：1935'} />
                         <FormGroup className={'mb-1'}>
+                            <FormLabel htmlFor={'collectNotice'}>征集联系方式</FormLabel>
+                            <TinymceEditor name={'collectNotice'} />
+                        </FormGroup>
+                        <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                             <TinymceEditor name={'descFlow'} />
                         </FormGroup>

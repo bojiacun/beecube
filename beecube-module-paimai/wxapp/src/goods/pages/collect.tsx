@@ -1,7 +1,7 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast} from "@taroify/core";
-import {Textarea, View} from "@tarojs/components";
+import {Text, Textarea, View} from "@tarojs/components";
 import styles from './collect.module.scss';
 import classNames from "classnames";
 import Taro from "@tarojs/taro";
@@ -130,13 +130,13 @@ export default class Index extends Component<any, any> {
                     <View className={'p-4 space-y-4'}>
                         <View className={'font-bold text-xl mb-4'}>拍品信息</View>
                         <View>
-                            <Form.Label className={'text-lg'}>拍品名称</Form.Label>
+                            <Form.Label className={'text-stone-400'}>拍品名称<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'name'}>
                                 <Input className={styles.collectInput} placeholder={'请输入拍品名称'}/>
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-lg'}>拍品分类</Form.Label>
+                            <Form.Label className={'text-stone-400'}>拍品分类<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Input value={classId?.name} onClick={()=>this.setState({classOpen:true})} readonly className={styles.collectInput} placeholder={'请选择拍品分类'} />
                             <Popup mountOnEnter={false} open={classOpen} rounded placement="bottom" onClose={()=>this.setState({classOpen: false})}>
                                 <Picker
@@ -163,25 +163,25 @@ export default class Index extends Component<any, any> {
                             </Popup>
                         </View>
                         <View>
-                            <Form.Label className={'text-lg'}>联系人姓名</Form.Label>
+                            <Form.Label className={'text-stone-400'}>联系人姓名<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'contactor'}>
                                 <Input className={styles.collectInput} placeholder={'联系人姓名'} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-lg'}>联系人手机号</Form.Label>
+                            <Form.Label className={'text-stone-400'}>联系人手机号<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'phone'}>
                                 <Input className={styles.collectInput} placeholder={'联系人手机号'} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-lg'}>拍品详细信息</Form.Label>
+                            <Form.Label className={'text-stone-400'}>拍品详细信息<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'description'}>
                                 <Textarea name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-lg'}>拍品照片</Form.Label>
+                            <Form.Label className={'text-stone-400'}>拍品照片<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Uploader value={this.state.image} className={'mt-2'} onUpload={this.onUpload} onChange={file=>this.setState({image: file})} />
                         </View>
                         <Button color={'danger'} shape={'round'} loading={this.state.posting} block formType={'submit'} disabled={this.state.posting}>确定</Button>
