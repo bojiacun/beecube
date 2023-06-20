@@ -49,25 +49,9 @@
                     <obfuscate>true</obfuscate> <!-- 是否混淆，否则只简化不混淆 -->
                     <!--<proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>   引入配置文件，可以替代下面的<options> -->
                     <maxMemory>768m</maxMemory> <!-- 混淆构建时使用的最大内存，不设置时容易内存溢出 -->
-                    <options>
-                        <option>-target 1.8</option>
-                        <option>-ignorewarnings</option> <!--忽略所有告警-->
-                        <option>-dontshrink</option>   <!--不做 shrink，即不删除没有使用的类/成员 -->
-                        <option>-dontoptimize</option> <!--不做 optimize，即不做字节码级别的优化 -->
-                        <option>-useuniqueclassmembernames</option> <!--对类成员名的混淆采取唯一策略 -->
-                        <!--<option>-adaptclassstrings</option> 混淆类名之后，对使用Class.forName('className')之类的地方进行相应替代-->
-                        <!--<option>-dontusemixedcaseclassnames</option> 混淆时不生成大小写混合的类名 -->
-                        <option>-dontskipnonpubliclibraryclasses</option> <!--不忽略非公共库的类-->
-                        <option>-dontskipnonpubliclibraryclassmembers</option> <!--不忽略非公共库的类成员-->
-                        <!-- <option>-repackageclasses com.qingzao.feiniao</option>  所有混淆的类放在 feiniao 包下-->
-                        <option>-keepattributes Signature</option>  <!--JAXB 必需 -->
-                        <!--保持源码名、内部类、行号、注解等-->
-                        <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
-                        <!--保持枚举中的名子，确保枚举 valueOf 可以使用-->
-                        <option>-keep class **.mysql.**</option> <!-- 保持部分内容不变 -->
-                    </options>
+                    <proguardInclude>${project.basedir}/proguard.pro</proguardInclude>
                     <!-- 输入文件，可以是jar/war/zip/class/目录；值为class时，运行时机要为compile 或 process-classes -->
-                    <!--<injar>${project.build.finalName}.war</injar>-->
+                    <injar>${project.build.finalName}.jar</injar>
 <!--                    <injar>classes</injar> &lt;!&ndash; 输入为 classes 目录 &ndash;&gt;-->
 <!--                    <inFilter>com/qingzao/feiniao/**</inFilter>  &lt;!&ndash; 输入文件过滤 &ndash;&gt;-->
 <!--                    <outputDirectory>${project.build.directory}</outputDirectory> &lt;!&ndash; 输出目录&ndash;&gt;-->
@@ -93,6 +77,9 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                        <configuration>
+                            <mainClass>cn.winkt.BeecubeAppCloudApplication</mainClass>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
