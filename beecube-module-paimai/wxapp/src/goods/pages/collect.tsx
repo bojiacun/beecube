@@ -1,14 +1,20 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import {Button, Form, Input, Popup, Uploader, Picker, Field, Toast} from "@taroify/core";
-import {Text, Textarea, View} from "@tarojs/components";
+import {RichText, Text, Textarea, View} from "@tarojs/components";
 import styles from './collect.module.scss';
 import classNames from "classnames";
 import Taro from "@tarojs/taro";
 import request, {API_URL} from "../../lib/request";
 import utils from "../../lib/utils";
+import {connect} from "react-redux";
 
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        settings: state.context.settings,
+    }
+))
 export default class Index extends Component<any, any> {
     state:any = {
         image: null,
@@ -122,6 +128,7 @@ export default class Index extends Component<any, any> {
     }
     render() {
         const {classOpen, classes, classId} = this.state;
+        const {settings} = this.props;
 
         return (
             <PageLayout statusBarProps={{title: '拍品征集'}} style={{backgroundColor: 'white'}}>
@@ -185,6 +192,7 @@ export default class Index extends Component<any, any> {
                             <Uploader value={this.state.image} className={'mt-2'} onUpload={this.onUpload} onChange={file=>this.setState({image: file})} />
                         </View>
                         <Button color={'danger'} shape={'round'} loading={this.state.posting} block formType={'submit'} disabled={this.state.posting}>确定</Button>
+                        <View><RichText nodes={utils.resolveHtmlImageWidth(settings.collectNotice)} /></View>
                     </View>
                 </Form>
             </PageLayout>
