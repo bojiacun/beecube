@@ -628,7 +628,7 @@ export default class Index extends Component<any, any> {
                     {playError && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-center'}>
                         <Image src={'/assets/images/live-room-bg.png'} className={'w-full h-full block absolute top-0 left-0 z-0'}/>
                         <View className={'text-white text-lg z-1 mb-4'}>网络开小差了~~</View>
-                        <Button className={'btn btn-primary z-1'} onClick={this.handleReplay}>点击重试</Button>
+                        <Button className={'btn btn-primary z-1'} onClick={this.handleReplay}>点击刷新</Button>
                     </View>}
                     {/*直播结束*/}
                     {liveRoom?.state == 2 && <View className={'w-screen h-screen z-10 absolute top-0 left-0 flex flex-col items-center justify-around'}>
