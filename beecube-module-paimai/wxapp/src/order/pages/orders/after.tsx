@@ -1,11 +1,12 @@
 import {Component} from "react";
 import Taro from "@tarojs/taro";
-import {View, Picker, Form, Button, Textarea} from "@tarojs/components";
+import {View, Picker, Form, Textarea} from "@tarojs/components";
 import {connect} from "react-redux";
 import PageLayout from "../../../layouts/PageLayout";
 import utils from "../../../lib/utils";
 import FallbackImage from "../../../components/FallbackImage";
 import request from "../../../lib/request";
+import {Button} from "@taroify/core";
 const numeral = require('numeral');
 // @ts-ignore
 @connect((state: any) => (
@@ -113,7 +114,7 @@ export default class Index extends Component<any, any> {
 
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-primary w-56'} formType={'submit'} disabled={this.state.saving}>提交</Button>
+                        <Button className={'w-56'} color={'danger'} shape={'round'} formType={'submit'} disabled={this.state.saving}>提交</Button>
                     </View>
                 </Form>
             </PageLayout>

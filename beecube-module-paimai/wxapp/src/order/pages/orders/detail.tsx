@@ -60,6 +60,7 @@ export default class Index extends Component<any, any> {
         this.setUploadFile = this.setUploadFile.bind(this);
         this.confirmUpload = this.confirmUpload.bind(this);
         this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
+        this.openWxServiceChat = this.openWxServiceChat.bind(this);
     }
 
     handlePayTypeChanged(value) {
@@ -192,17 +193,18 @@ export default class Index extends Component<any, any> {
 
     async subscribeMessage() {
         const settings = this.props.settings;
-        if(settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
+        if (settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
             await Taro.requestSubscribeMessage({tmplIds: [settings.orderNotPayTemplateId, settings.orderDeliveryTemplateId]});
         }
         return true;
     }
+
     async pay() {
         if (!this.state.address) {
             return utils.showError("请选择收货地址");
         }
         const subs = await this.subscribeMessage();
-        if(!subs) return;
+        if (!subs) return;
 
         if (this.state.detail.payType == 1) {
             this.setState({posting: true});
@@ -235,27 +237,33 @@ export default class Index extends Component<any, any> {
     requestAfter() {
         Taro.navigateTo({url: 'after'}).then();
     }
-
+    openWxServiceChat() {
+        const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
+        Taro.openCustomerServiceChat({
+            extInfo: {url: wxServiceChatUrl},
+            corpId: wxServiceChatCorpId,
+        });
+    }
 
     renderButton() {
         const {detail} = this.state;
-        const {systemInfo} = this.props;
+        const {systemInfo, settings} = this.props;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
         switch (detail.status) {
             case 0:
-                if(detail.payType == 2 && detail.payImage) {
+                if (detail.payType == 2 && detail.payImage) {
                     return (
                         <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
                               style={{paddingBottom: safeBottom}}>
                             <View className={'flex items-center space-x-2'}>
-                                <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.cancel}>
                                     <View>取消订单</View>
-                                </Button>
-                                <Button disabled={true} className={'btn btn-primary'}>
+                                </TaroifyButton>
+                                <TaroifyButton disabled={true} shape={'round'} color={'danger'} className={'btn btn-primary'}>
                                     <View>已上传，审核中</View>
-                                </Button>
+                                </TaroifyButton>
                             </View>
                         </View>
                     );
@@ -264,12 +272,12 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>
                         <View className={'flex items-center space-x-2'}>
-                            <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                            <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.cancel}>
                                 <View>取消订单</View>
-                            </Button>
-                            <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.pay}>
+                            </TaroifyButton>
+                            <TaroifyButton disabled={this.state.posting} shape={'round'} color={'danger'} onClick={this.pay}>
                                 <View>{detail.payType == 1 ? '立即支付' : '上传转账凭证'}</View>
-                            </Button>
+                            </TaroifyButton>
                         </View>
                     </View>
                 );
@@ -280,14 +288,21 @@ export default class Index extends Component<any, any> {
                           style={{paddingBottom: safeBottom}}>
                         <View className={'flex space-x-2'}>
                             <View className={'flex items-center'}>
-                                <Button openType={'contact'} className={'btn btn-outline'}>
-                                    <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
-                                </Button>
+                                {!settings.wxServiceChatCorpId &&
+                                    <TaroifyButton openType={'contact'} shape={'round'} color={'danger'}>
+                                        <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
+                                    </TaroifyButton>
+                                }
+                                {settings.wxServiceChatCorpId &&
+                                    <TaroifyButton onClick={this.openWxServiceChat} shape={'round'} color={'danger'}>
+                                        <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
+                                    </TaroifyButton>
+                                }
                             </View>
                             <View className={'flex items-center space-x-2'}>
-                                <Button disabled={this.state.posting} className={'btn btn-outline'} onClick={this.cancel}>
+                                <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.cancel}>
                                     <View>取消订单</View>
-                                </Button>
+                                </TaroifyButton>
                             </View>
                         </View>
                     </View>
@@ -298,9 +313,9 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
                           style={{paddingBottom: safeBottom}}>
                         <View className={'flex items-center space-x-2'}>
-                            <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.confirmDelivery}>
+                            <TaroifyButton disabled={this.state.posting} color={'warning'} shape={'round'} onClick={this.confirmDelivery}>
                                 <View>确认收货</View>
-                            </Button>
+                            </TaroifyButton>
                         </View>
                     </View>
                 );
@@ -390,7 +405,7 @@ export default class Index extends Component<any, any> {
                                         <View>{item.goodsName}</View>
                                         <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
                                     </View>
-                                    <View className={'flex flex-col space-y-2 items-center'}>
+                                    <View className={'flex flex-col space-y-2'} style={{alignItems: 'flex-end'}}>
                                         <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
                                         {item.isAfter == 0 && detail.status > 1 && detail.type == 2 &&
                                             <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
@@ -441,10 +456,10 @@ export default class Index extends Component<any, any> {
                             <View>{detail.payTime}</View>
                         </View>
                         {detail.status > 0 && detail.payType == 1 &&
-                        <View className={'flex items-center justify-between'}>
-                            <View className={'text-gray-400'}>交易单号</View>
-                            <View>{detail.transactionId}</View>
-                        </View>
+                            <View className={'flex items-center justify-between'}>
+                                <View className={'text-gray-400'}>交易单号</View>
+                                <View>{detail.transactionId}</View>
+                            </View>
                         }
                         <View className={'flex items-center justify-between'}>
                             <View className={'text-gray-400'}>买家留言</View>
@@ -465,7 +480,7 @@ export default class Index extends Component<any, any> {
                         {detail.status > 0 &&
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>支付方式</View>
-                                <View>{detail.payType == 1 ? '微信支付': '网银转账'}</View>
+                                <View>{detail.payType == 1 ? '微信支付' : '网银转账'}</View>
                             </View>
                         }
                     </View>

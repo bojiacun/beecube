@@ -4,6 +4,7 @@ import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, RichText, Text, View} from "@tarojs/components";
+import {Button as TaroifyButton} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -159,14 +160,14 @@ export default class Index extends Component<any, any> {
         return (
             <>
                 <View className={'flex items-center space-x-2'}>
-                    <Button className={'btn btn-warning'} onClick={this.addInCart}>
+                    <TaroifyButton color={'warning'} block shape={'round'} onClick={this.addInCart}>
                         <View>加入购物车</View>
-                    </Button>
+                    </TaroifyButton>
                 </View>
                 <View className={'flex items-center space-x-2'}>
-                    <Button disabled={this.state.posting} className={'btn btn-primary'} onClick={this.buy}>
+                    <TaroifyButton block shape={'round'} color={'danger'} disabled={this.state.posting} onClick={this.buy}>
                         <View>立即购买</View>
-                    </Button>
+                    </TaroifyButton>
                 </View>
             </>
         );

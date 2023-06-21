@@ -396,15 +396,15 @@ export default class Index extends Component<any, any> {
                 </View>
 
                 <View style={{height: Taro.pxTransform(124)}}/>
-                <View className={'bg-white flex items-center fixed px-4 py-2 w-full bottom-0'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
+                <View className={'bg-white flex items-center fixed px-4 py-2 w-full bottom-0 z-10'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
                     <View className={'flex-1 flex items-center'}>
                         <Text className={'ml-4 font-bold'}>总计：</Text>
                         <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
-                        <Button disabled={this.calcCartPrice <= 0 || this.state.posting} className={'btn btn-danger'} onClick={this.pay}>
+                        <TaroifyButton color={'danger'} block shape={'round'} disabled={this.calcCartPrice <= 0 || this.state.posting} onClick={this.pay}>
                             {this.state.payType == 1 ? '立即支付' : '立即下单'}
-                        </Button>
+                        </TaroifyButton>
                     </View>
                 </View>
 
@@ -541,9 +541,6 @@ export default class Index extends Component<any, any> {
                         <View><TaroifyButton color={'danger'} block onClick={this.confirmNetPay}>确认下单</TaroifyButton></View>
                     </View>
                 </Popup>
-
-
-
             </PageLayout>
         );
     }

@@ -6,11 +6,13 @@ import {View, Navigator, Button, Text} from "@tarojs/components";
 import NoData from "../../components/nodata";
 import LoadMore from "../../components/loadmore";
 import {connect} from "react-redux";
+import Taro from "@tarojs/taro";
 
 //@ts-ignore
 @connect((state: any) => (
     {
         systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
     }
 ))
 export default class Index extends Component<any, any> {
@@ -21,9 +23,21 @@ export default class Index extends Component<any, any> {
         noMore: false,
     }
 
-    componentDidMount() {
+    constructor(props) {
+        super(props);
+        this.openWxServiceChat = this.openWxServiceChat.bind(this);
     }
 
+
+    componentDidMount() {
+    }
+    openWxServiceChat() {
+        const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
+        Taro.openCustomerServiceChat({
+            extInfo: {url: wxServiceChatUrl},
+            corpId: wxServiceChatCorpId,
+        });
+    }
     loadData(page, clear = false) {
         return request.get('/paimai/api/articles/list', {
             params: {
@@ -68,7 +82,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {list, noMore, loadingMore} = this.state;
-        const {systemInfo} = this.props;
+        const {systemInfo, settings} = this.props;
         const safeBottom = utils.calcSafeBottom(systemInfo) + 30;
         return (
             <PageLayout
@@ -90,7 +104,14 @@ export default class Index extends Component<any, any> {
                     })}
                 </View>
                 {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
-                <View className={'p-4 text-center absolute w-full'} style={{bottom:safeBottom}}><Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button></View>
+                <View className={'p-4 text-center absolute w-full'} style={{bottom:safeBottom}}>
+                    {!settings.wxServiceChatCorpId &&
+                        <Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button>
+                    }
+                    {settings.wxServiceChatCorpId &&
+                        <Button className={'btn btn-outline text-lg'} onClick={this.openWxServiceChat}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button>
+                    }
+                </View>
             </PageLayout>
         );
     }
