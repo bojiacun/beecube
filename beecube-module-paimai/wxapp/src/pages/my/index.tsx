@@ -49,6 +49,14 @@ export default class Index extends Component<PropsWithChildren<any>> {
         });
     }
 
+    openWxServiceChat() {
+        const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
+        Taro.openCustomerServiceChat({
+            extInfo: {url: wxServiceChatUrl},
+            corpId: wxServiceChatCorpId,
+        });
+    }
+
     componentDidHide() {
     }
 
@@ -77,15 +85,15 @@ export default class Index extends Component<PropsWithChildren<any>> {
                                            style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}/>
                             <View className={'space-y-1 flex flex-col'}>
                                 <View className={'text-lg'}>{userInfo?.realname || userInfo?.nickname || '微信用户'}</View>
-                                <View className={'text-yellow-400'}><Text className={'iconfont icon-wodejifen1'} />我的积分：{userInfo?.score}</View>
+                                <View className={'text-yellow-400'}><Text className={'iconfont icon-wodejifen1'}/>我的积分：{userInfo?.score}</View>
                             </View>
                         </View>
                         <Navigator url={'/integral/member/center'} openType={'navigate'}>
-                            <TaroifyButton size={'small'} shape={'round'} style={{ background: "linear-gradient(to right, #e2a786, #d0231c)", color: "#fff", border: 'none' }}>
+                            <TaroifyButton size={'small'} shape={'round'} style={{background: "linear-gradient(to right, #e2a786, #d0231c)", color: "#fff", border: 'none'}}>
                                 <Text>
                                     每日签到
                                 </Text>
-                                <Text className={'iconfont icon-youjiantou_huaban'} />
+                                <Text className={'iconfont icon-youjiantou_huaban'}/>
                             </TaroifyButton>
                         </Navigator>
                     </View>
@@ -171,9 +179,9 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     </View>
                 </View>
                 {settings.myIndexAdv &&
-                    <View className={'rounded-lg m-4 overflow-hidden'} style={{height: 140}}>
+                    <View className={'rounded-lg m-4 overflow-hidden'}>
                         <Navigator url={settings.myIndexAdvLink} className={'block w-full h-full'}>
-                            <Image src={settings.myIndexAdv} className={'w-full h-full'} mode={'aspectFill'} />
+                            <Image src={settings.myIndexAdv} className={'w-full h-full'} mode={'widthFix'}/>
                         </Navigator>
                     </View>
                 }
@@ -239,16 +247,31 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         </Navigator>
                     </View>
 
-                    <View>
-                        <Button plain={true} openType={'contact'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>联系客服</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Button>
-                    </View>
+
+                    {settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button plain={true} onClick={this.openWxServiceChat} className={'flex items-center justify-between p-4'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>联系客服</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Button>
+                        </View>
+                    }
+                    {!settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button plain={true} openType={'contact'} className={'flex items-center justify-between p-4'}>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View>联系客服</View>
+                                </View>
+                                <View className={'flex items-center space-x-2'}>
+                                    <View className={'iconfont icon-youjiantou_huaban'}/>
+                                </View>
+                            </Button>
+                        </View>
+                    }
 
                     {/*{this.state.liveRoom &&*/}
                     {/*    <View>*/}
