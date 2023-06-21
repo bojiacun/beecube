@@ -152,6 +152,19 @@ const OrderList = (props: any) => {
             dataField: 'deliveryInfo',
         },
         {
+            text: '发货信息',
+            dataField: '',
+            isDummyField: true,
+            formatter: (cell:any, row:any) => {
+                return (
+                    <div>
+                        <p>快递代码：{row.deliveryCode}</p>
+                        <p>快递单号：{row.deliveryNo}</p>
+                    </div>
+                );
+            }
+        },
+        {
             text: '订单备注',
             dataField: 'note',
         },

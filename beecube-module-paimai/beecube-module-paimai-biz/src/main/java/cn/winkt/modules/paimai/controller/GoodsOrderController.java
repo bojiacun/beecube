@@ -182,12 +182,14 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @AutoLog(value = "订单表-确认发货")
     @ApiOperation(value = "订单表-确认发货", notes = "订单表-确认发货")
     @RequestMapping(value = "/delivery", method = {RequestMethod.PUT, RequestMethod.POST})
-    public Result<?> delivery(@RequestBody GoodsOrder goodsOrder) {
-        goodsOrder = goodsOrderService.getById(goodsOrder.getId());
+    public Result<?> delivery(@RequestBody GoodsOrder postOrder) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(postOrder.getId());
         if(goodsOrder.getStatus() != 1) {
             throw new JeecgBootException("订单状态异常，请确认订单是否已经发货");
         }
         goodsOrder.setStatus(2);
+        goodsOrder.setDeliveryNo(postOrder.getDeliveryNo());
+        goodsOrder.setDeliveryCode(postOrder.getDeliveryCode());
         goodsOrderService.updateById(goodsOrder);
 
 
