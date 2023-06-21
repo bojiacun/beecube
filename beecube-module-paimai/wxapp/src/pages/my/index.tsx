@@ -187,7 +187,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                 {settings.myIndexAdv &&
                     <View className={'rounded-lg m-4 overflow-hidden'}>
                         <Navigator url={settings.myIndexAdvLink} className={'block w-full h-full'}>
-                            <Image src={settings.myIndexAdv} className={'w-full h-full'} mode={'widthFix'}/>
+                            <Image src={settings.myIndexAdv} className={'w-full h-full block'} mode={'widthFix'}/>
                         </Navigator>
                     </View>
                 }
