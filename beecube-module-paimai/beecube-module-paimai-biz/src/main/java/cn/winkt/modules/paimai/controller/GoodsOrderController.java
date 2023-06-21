@@ -2,6 +2,7 @@ package cn.winkt.modules.paimai.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.GoodsOrder;
 
@@ -105,6 +107,14 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
         QueryWrapper<GoodsOrder> queryWrapper = QueryGenerator.initQueryWrapper(goodsOrder, req.getParameterMap());
+        String startDate = req.getParameter("startDate");
+        String endDate = req.getParameter("endDate");
+        if(StringUtils.isNotEmpty(startDate)) {
+            queryWrapper.ge("create_time", DateUtils.str2Date(startDate, new SimpleDateFormat("yyyy-MM-dd")));
+        }
+        if(StringUtils.isNotEmpty(endDate)) {
+            queryWrapper.le("create_time", DateUtils.str2Date(endDate, new SimpleDateFormat("yyyy-MM-dd")));
+        }
         Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
         IPage<GoodsOrder> pageList = goodsOrderService.page(page, queryWrapper);
         pageList.getRecords().forEach(r -> {

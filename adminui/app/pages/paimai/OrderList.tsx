@@ -1,13 +1,15 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
-import {Badge, Button, Card, Col, FormControl, FormGroup, FormLabel, Image, InputGroup, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
 import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
 import {User} from "react-feather";
+import DatePicker from "react-datepicker";
+import BootstrapSelect from "~/components/form/BootstrapSelect";
 
 const PAY_TYPE_COLORS :any = {
     '1': 'primary',
@@ -27,6 +29,8 @@ const OrderList = (props: any) => {
     const [list, setList] = useState<any>(useLoaderData());
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams});
     const [editModal, setEditModal] = useState<any>();
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
@@ -226,19 +230,7 @@ const OrderList = (props: any) => {
             <Card>
                 <div className={'m-2'}>
                     <Row>
-                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
-                            <h4 className="mb-0">订单管理</h4>
-                            <ReactSelectThemed
-                                id={'role-page-size'}
-                                placeholder={'分页大小'}
-                                isSearchable={false}
-                                defaultValue={PageSizeOptions[0]}
-                                options={PageSizeOptions}
-                                className={'per-page-selector d-inline-block ml-50 me-1'}
-                                onChange={handlePageSizeChanged}
-                            />
-                        </Col>
-                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                        <Col md={12} className={'d-flex align-items-center'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
@@ -246,12 +238,53 @@ const OrderList = (props: any) => {
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
 
                                 <FormGroup as={Row} className={'mb-0'}>
-                                    <FormLabel column htmlFor={'name'}>关键字</FormLabel>
+                                    <FormLabel column md={'auto'}>下单时间：</FormLabel>
                                     <Col md={'auto'}>
-                                        <InputGroup>
-                                            <FormControl name={'searchKey'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                            <Button type={'submit'}>搜索</Button>
-                                        </InputGroup>
+                                        <DatePicker
+                                            selectsRange={true}
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            className={'form-control'}
+                                            dateFormat={'yyyy-MM-dd'}
+                                            onChange={(update: any) => {
+                                                setDateRange(update);
+                                            }}
+                                            isClearable={true}
+                                        />
+                                    </Col>
+                                    <FormLabel column md={'auto'}>支付方式：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Select name={'payType'}>
+                                            <option value={''}>不设置</option>
+                                            <option value={'1'}>微信支付</option>
+                                            <option value={'2'}>线下支付</option>
+                                        </Form.Select>
+                                    </Col>
+                                    <FormLabel column md={'auto'}>订单状态：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Select name={'status'}>
+                                            <option value={''}>不设置</option>
+                                            <option value={'0'}>待支付</option>
+                                            <option value={'1'}>待发货</option>
+                                            <option value={'2'}>待收货</option>
+                                            <option value={'3'}>已完成</option>
+                                            <option value={'4'}>申请售后</option>
+                                        </Form.Select>
+                                    </Col>
+                                    <FormLabel column md={'auto'}>订单类型：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Select name={'type'}>
+                                            <option value={''}>不设置</option>
+                                            <option value={'1'}>拍卖订单</option>
+                                            <option value={'2'}>一口价订单</option>
+                                        </Form.Select>
+                                    </Col>
+                                    <FormLabel column htmlFor={'id'} md={'auto'}>关键字：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <FormControl name={'id'} placeholder={'订单号'} style={{width: 120}} />
+                                    </Col>
+                                    <Col md={'auto'}>
+                                        <Button type={'submit'}>搜索</Button>
                                     </Col>
                                 </FormGroup>
                             </searchFetcher.Form>
@@ -267,6 +300,15 @@ const OrderList = (props: any) => {
                 <div className={'mx-2 mb-2 mt-1'}>
                     <Row>
                         <Col sm={6} className={'d-flex align-items-center justify-content-center justify-content-sm-start'}>
+                            <ReactSelectThemed
+                                id={'role-page-size'}
+                                placeholder={'分页大小'}
+                                isSearchable={false}
+                                defaultValue={PageSizeOptions[0]}
+                                options={PageSizeOptions}
+                                className={'per-page-selector d-inline-block ml-50 me-1'}
+                                onChange={handlePageSizeChanged}
+                            />
                         <span
                             className="text-muted">共 {list?.total} 条记录 显示 {(list?.current - 1) * list?.size + 1} 至 {list?.current * list?.size > list?.total ? list.total : list?.current * list?.size} 条</span>
                         </Col>
