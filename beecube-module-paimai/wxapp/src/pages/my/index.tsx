@@ -32,6 +32,12 @@ export default class Index extends Component<PropsWithChildren<any>> {
         badges: null
     }
 
+    constructor(props) {
+        super(props);
+        this.openWxServiceChat = this.openWxServiceChat.bind(this);
+    }
+
+
     componentDidMount() {
 
     }
