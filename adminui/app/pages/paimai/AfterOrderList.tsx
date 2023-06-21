@@ -76,7 +76,7 @@ const AfterOrderList = (props: any) => {
                     startPageLoading();
                     deleteFetcher.submit({id: row.id}, {
                         method: 'delete',
-                        action: `/paimai/orders/after_pass?id=${row.id}`,
+                        action: `/paimai/orders/after_deny?id=${row.id}`,
                         replace: true
                     });
                 }, '确认拒绝该用户的售后申请吗?', '确认拒绝');
@@ -159,11 +159,12 @@ const AfterOrderList = (props: any) => {
             dataField: 'operation',
             headerStyle: {width: 230},
             formatter: (cell: any, row: any) => {
+                if(row.status > 0) return <></>;
                 return (
                     <div className={'d-flex align-items-center'}>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'after_pass')}>申请通过</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'after_pass')} key={'after_pass'}>申请通过</a>
                         <span className={'divider'}/>
-                        <a href={'#'} onClick={() => handleOnAction(row, 'after_deny')}>拒绝申请</a>
+                        <a href={'#'} onClick={() => handleOnAction(row, 'after_deny')} key={'after_deny'}>拒绝申请</a>
                     </div>
                 );
             }
