@@ -472,30 +472,30 @@ export default class Index extends Component<any, any> {
         if ((goods.performanceType == 2 && goods.state == 1 && goods.performanceState == 1) || (goods.roomId && goods.state == 1) || (status == TimeCountDownerStatus.STARTED && goods.state < 2)) {
             //可以出价的情况
             return (
-                <View>
-                    <Button disabled={this.state.posting} className={'btn btn-danger w-56'} onClick={this.showModal}>
+                <View className={'w-56'}>
+                    <TaroifyButton block color={'danger'} disabled={this.state.posting} shape={'round'} onClick={this.showModal}>
                         <View>出价</View>
-                    </Button>
+                    </TaroifyButton>
                 </View>
             );
         }
         if ((goods.performanceType == 2 && (goods.state == 0 || goods.performanceState == 0)) || (goods.roomId && goods.state == 0) || status == TimeCountDownerStatus.NOT_START) {
             //未开始的情况
             return (
-                <View>
-                    <Button className={'btn w-56'} disabled={true}>
+                <View className={'w-56'}>
+                    <TaroifyButton block shape={'round'} color={'danger'} disabled={true}>
                         <View>未开始</View>
-                    </Button>
+                    </TaroifyButton>
                 </View>
             );
         }
         if ((goods.performanceType == 2 && (goods.state > 1 || goods.performanceState > 1)) || (goods.roomId && goods.state > 1) || status == TimeCountDownerStatus.ENDED || goods.state > 1) {
             //结束的情况
             return (
-                <View>
-                    <Button className={'btn w-56'} disabled={true}>
+                <View className={'w-56'}>
+                    <TaroifyButton block shape={'round'} color={'danger'} disabled={true}>
                         <View>已结束</View>
-                    </Button>
+                    </TaroifyButton>
                 </View>
             );
         }
