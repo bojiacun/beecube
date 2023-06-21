@@ -17,6 +17,7 @@ import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
 import {Popup} from "@taroify/core";
+
 const numeral = require('numeral');
 
 // @ts-ignore
@@ -70,6 +71,7 @@ export default class Index extends Component<any, any> {
         this.openShareGoods = this.openShareGoods.bind(this);
         this.handleSaveToPhotoAlbum = this.handleSaveToPhotoAlbum.bind(this);
         this.clickMask = this.clickMask.bind(this);
+        this.openWxServiceChat = this.openWxServiceChat.bind(this);
         this.offerInputRef = React.createRef();
     }
 
@@ -80,7 +82,7 @@ export default class Index extends Component<any, any> {
         if (this.offerInputRef?.current) {
             this.offerInputRef.current.value = this.state.nextPrice;
         }
-        setTimeout(()=>{
+        setTimeout(() => {
             if (this.offerInputRef?.current) {
                 this.offerInputRef.current.value = this.state.nextPrice;
             }
@@ -218,8 +220,7 @@ export default class Index extends Component<any, any> {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
                     Taro.navigateTo({url: '/pages/my/profile'}).then();
                 });
-            }
-            else if(checkResult.data.result == -1) {
+            } else if (checkResult.data.result == -1) {
                 return utils.showMessage("请完成实名认证", function () {
                     Taro.navigateTo({url: '/pages/my/realauth'}).then();
                 });
@@ -253,8 +254,7 @@ export default class Index extends Component<any, any> {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
                     Taro.navigateTo({url: '/pages/my/profile'}).then();
                 });
-            }
-            else if(checkResult.data.result == -1) {
+            } else if (checkResult.data.result == -1) {
                 return utils.showMessage("请完成实名认证", function () {
                     Taro.navigateTo({url: '/pages/my/realauth'}).then();
                 });
@@ -569,6 +569,14 @@ export default class Index extends Component<any, any> {
         }
     }
 
+    openWxServiceChat() {
+        const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
+        Taro.openCustomerServiceChat({
+            extInfo: {url: wxServiceChatUrl},
+            corpId: wxServiceChatCorpId,
+        });
+    }
+
     componentWillUnmount() {
         this.socket?.close();
         EventBus.unregister(EventType.onMessageData, this.onMessageReceive);
@@ -717,12 +725,22 @@ export default class Index extends Component<any, any> {
                             <View>分享</View>
                         </Button>
                     </View>
-                    <View>
-                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center p-0'}>
-                            <View className={'iconfont icon-lianxikefu text-xl'}/>
-                            <View>客服</View>
-                        </Button>
-                    </View>
+                    {!settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center p-0'}>
+                                <View className={'iconfont icon-lianxikefu text-xl'}/>
+                                <View>客服</View>
+                            </Button>
+                        </View>
+                    }
+                    {settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button onClick={this.openWxServiceChat} plain={true} className={'block flex flex-col items-center p-0'}>
+                                <View className={'iconfont icon-lianxikefu text-xl'}/>
+                                <View>客服</View>
+                            </Button>
+                        </View>
+                    }
                     <View onClick={this.toggleFollow}
                           className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
                         <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
@@ -732,7 +750,7 @@ export default class Index extends Component<any, any> {
                 </View>
                 <Uprange uprangeShow={this.state.uprangeShow} onClose={() => this.setState({uprangeShow: false})} goods={goods}/>
 
-                <Popup rounded placement={'bottom'} open={!hideModal} style={{height: 300}} onClose={()=>this.setState({hideModal: true})}>
+                <Popup rounded placement={'bottom'} open={!hideModal} style={{height: 300}} onClose={() => this.setState({hideModal: true})}>
                     <View className={'text-2xl'}>
                         <View className={'flex py-4 items-center justify-center text-xl font-bold'}>出价拍品</View>
                         <Popup.Close/>

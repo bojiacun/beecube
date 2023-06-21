@@ -4,13 +4,12 @@ import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, RichText, Text, View} from "@tarojs/components";
-import {Button as TaroifyButton} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
-import {Popup, Stepper, Tag} from "@taroify/core";
+import {Tag} from "@taroify/core";
 
 const numeral = require('numeral');
 
@@ -44,33 +43,38 @@ export default class Index extends Component<any, any> {
         this.addInCart = this.addInCart.bind(this);
         this.openShareGoods = this.openShareGoods.bind(this);
         this.handleSaveToPhotoAlbum = this.handleSaveToPhotoAlbum.bind(this);
+        this.openWxServiceChat = this.openWxServiceChat.bind(this);
     }
 
-    openShareGoods(){
-        this.setState({hideModal: false, loadingShareAdv:true});
-        request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res:any)=>{
+    openShareGoods() {
+        this.setState({hideModal: false, loadingShareAdv: true});
+        request.get('/paimai/api/members/share/goods', {params: {id: this.state.goods.id}, responseType: 'arraybuffer'}).then((res: any) => {
             let data = Taro.arrayBufferToBase64(res.data);
             this.setState({shareAdv: data});
         });
     }
+
     handleSaveToPhotoAlbum() {
         const token = Taro.getStorageSync("TOKEN");
         Taro.downloadFile({
-            url: API_URL+'/paimai/api/members/share/goods?id='+this.state.goods.id,
+            url: API_URL + '/paimai/api/members/share/goods?id=' + this.state.goods.id,
             header: {'X-Access-Token': token, 'Authorization': token, 'X-App-Id': APP_ID},
-        }).then(res=>{
-            Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(()=>{
-                utils.showSuccess(false,'保存成功');
+        }).then(res => {
+            Taro.saveImageToPhotosAlbum({filePath: res.tempFilePath}).then(() => {
+                utils.showSuccess(false, '保存成功');
                 this.clickMask();
             });
         })
     }
+
     componentDidMount() {
 
     }
-    clickMask(){
+
+    clickMask() {
         this.setState({hideModal: true, loadingShareAdv: false});
     }
+
     // @ts-ignore
     componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
         if (prevProps.context.userInfo == null || prevState.goods == null) {
@@ -112,7 +116,7 @@ export default class Index extends Component<any, any> {
         let mid = this.props.context?.userInfo?.id || '';
         return {
             title: this.state.goods?.title,
-            path: '/goods/pages/detail2?id=' + this.state.id +'&mid='+mid
+            path: '/goods/pages/detail2?id=' + this.state.id + '&mid=' + mid
         }
     }
 
@@ -171,16 +175,26 @@ export default class Index extends Component<any, any> {
     componentWillUnmount() {
 
     }
+
     changeSpec(item) {
         this.setState({goods: item});
     }
+
     getCurrentSpec() {
         return this.state.specs.filter((s: any) => s.id == this.state.goods.id)[0];
     }
 
+    openWxServiceChat() {
+        const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
+        Taro.openCustomerServiceChat({
+            extInfo: {url: wxServiceChatUrl},
+            corpId: wxServiceChatCorpId,
+        });
+    }
+
     render() {
-        const {goods, hideModal, openSpec, specs} = this.state;
-        const {systemInfo} = this.props;
+        const {goods, hideModal, specs} = this.state;
+        const {systemInfo, settings} = this.props;
         if (goods == null) return <PageLoading/>;
         let currentSpec = this.getCurrentSpec();
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
@@ -203,7 +217,8 @@ export default class Index extends Component<any, any> {
                         <View className={'space-x-2'}>
                             {specs.map((item: any) => {
                                 return (
-                                    <Tag size={'medium'} onClick={() => this.changeSpec(item)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant={currentSpec?.id == item.id ?'contained':'outlined'}
+                                    <Tag size={'medium'} onClick={() => this.changeSpec(item)} color={currentSpec?.id == item.id ? 'danger' : 'default'}
+                                         variant={currentSpec?.id == item.id ? 'contained' : 'outlined'}
                                          shape={'rounded'}>{item.spec}</Tag>
                                 );
                             })}
@@ -233,7 +248,7 @@ export default class Index extends Component<any, any> {
                 </View>
                 <View style={{height: Taro.pxTransform(124)}}/>
                 <View className={'absolute bg-white rounded-full overflow-hidden p-1 shadow-outer'} style={{bottom: 124, right: 16}}>
-                    <Button onClick={this.openShareGoods}  plain={true} className={'block flex flex-col items-center justify-center'} style={{width: 40, height: 40}}>
+                    <Button onClick={this.openShareGoods} plain={true} className={'block flex flex-col items-center justify-center'} style={{width: 40, height: 40}}>
                         <View className={'text-xl'}>
                             <View className={'iconfont icon-fenxiang text-xl'}/>
                         </View>
@@ -241,12 +256,22 @@ export default class Index extends Component<any, any> {
                 </View>
                 <View className={'bg-white px-4 pt-1 flex items-center justify-between fixed bottom-0 w-full'}
                       style={{paddingBottom: safeBottom}}>
-                    <View>
-                        <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
-                            <View className={'iconfont icon-lianxikefu text-xl'}/>
-                            <View>客服</View>
-                        </Button>
-                    </View>
+                    {!settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button openType={'contact'} plain={true} className={'block flex flex-col items-center'}>
+                                <View className={'iconfont icon-lianxikefu text-xl'}/>
+                                <View>客服</View>
+                            </Button>
+                        </View>
+                    }
+                    {settings.wxServiceChatCorpId &&
+                        <View>
+                            <Button onClick={this.openWxServiceChat} plain={true} className={'block flex flex-col items-center'}>
+                                <View className={'iconfont icon-lianxikefu text-xl'}/>
+                                <View>客服</View>
+                            </Button>
+                        </View>
+                    }
                     <View onClick={this.toggleFollow}
                           className={classNames('flex flex-col items-center space-y-1', goods.followed ? 'text-red-500' : '')}>
                         <View className={classNames('iconfont icon-31guanzhu1 text-xl')}/>
@@ -254,11 +279,11 @@ export default class Index extends Component<any, any> {
                     </View>
                     {this.renderButton()}
                 </View>
-                <View className={'modals-mask'} style={{display: hideModal ? 'none': 'block'}} onClick={this.clickMask} />
+                <View className={'modals-mask'} style={{display: hideModal ? 'none' : 'block'}} onClick={this.clickMask}/>
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
                     <View className={'flex flex-col items-center'} style={{height: '70%'}}>
-                        {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,'+this.state.shareAdv} mode={'aspectFit'} />}
-                        {!this.state.shareAdv && <PageLoading style={{height: 500}} />}
+                        {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,' + this.state.shareAdv} mode={'aspectFit'}/>}
+                        {!this.state.shareAdv && <PageLoading style={{height: 500}}/>}
                         <View className={'space-x-4 mt-4 flex-none'}>
                             <Button openType={'share'} className={'btn btn-info'}>发给好友</Button>
                             <Button onClick={this.handleSaveToPhotoAlbum} className={'btn btn-warning'}>保存到相册</Button>
