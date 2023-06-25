@@ -1005,7 +1005,13 @@ public class WxAppMemberController {
             return Result.OK(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()) ? 0 : 1);
         }
     }
-
+    @GetMapping("/invites/all")
+    public Result<List<PerformanceInvite>> queryMyInvites() {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<PerformanceInvite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PerformanceInvite::getMemberId, loginUser.getId());
+        return Result.OK(performanceInviteService.list(queryWrapper));
+    }
     @GetMapping("/invites")
     public Result<PerformanceInvite> queryMyInvite(@RequestParam String id) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
