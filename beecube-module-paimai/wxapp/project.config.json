@@ -18,6 +18,11 @@
                 {
                     "name": "实名认证",
                     "pathName": "/pages/my/realauth"
+                },
+                {
+                    "name": "预约记录",
+                    "pathName": "/performance/pages/invite",
+                    "query": "id=1669137797179842561"
                 }
             ]
         }

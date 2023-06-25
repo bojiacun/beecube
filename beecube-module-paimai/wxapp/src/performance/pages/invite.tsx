@@ -160,19 +160,19 @@ export default class Index extends Component<any, any> {
                                     <View className={'text-gray-400'}>请输入您的姓名 <Text
                                         className={'text-red-600'}>*</Text></View>
                                     <View>
-                                        <Input className={'p-4 bg-gray-200'} name={'userName'} adjustPosition={false} cursorSpacing={24} />
+                                        <Input className={'p-4 bg-gray-200'} name={'userName'} adjustPosition={true} alwaysEmbed={true} cursorSpacing={24} />
                                     </View>
                                 </View>
                                 <View className={'space-y-2'}>
                                     <View className={'text-gray-400'}>请输入您的手机号 <Text
                                         className={'text-red-600'}>*</Text></View>
                                     <View>
-                                        <Input className={'p-4 bg-gray-200'} name={'phone'} ref={this.mobileRef} adjustPosition={false} cursorSpacing={24} />
+                                        <Input className={'p-4 bg-gray-200'} name={'phone'} ref={this.mobileRef} adjustPosition={true} alwaysEmbed={true} cursorSpacing={24} />
                                     </View>
                                 </View>
                                 <View className={'space-y-2'}>
                                     <View className={'flex'}>
-                                        <Input className={'p-4 bg-gray-200 flex-1'} name={'code'}/>
+                                        <Input className={'p-4 bg-gray-200 flex-1'} name={'code'} adjustPosition={true} alwaysEmbed={true} cursorSpacing={24} />
                                         <Button className={classNames('flex items-center justify-center')} style={{color: 'black'}} onClick={this.handleSendCode}
                                                 disabled={this.state.sending}>{this.state.sending ? this.state.counter + '' : '获取验证码'}</Button>
                                     </View>
