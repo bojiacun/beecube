@@ -81,6 +81,7 @@ export default defineAppConfig({
                 'pages/public',
                 'pages/sync',
                 'pages/invite',
+                'pages/invites',
                 'pages/invited',
             ],
         },
