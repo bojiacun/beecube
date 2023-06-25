@@ -1015,7 +1015,11 @@ public class WxAppMemberController {
         queryWrapper.eq(PerformanceInvite::getMemberId, loginUser.getId());
         queryWrapper.orderByDesc(PerformanceInvite::getCreateTime);
         IPage<PerformanceInvite> page = new Page<>(pageNo, pageSize);
-        return Result.OK(performanceInviteService.page(page, queryWrapper));
+        IPage<PerformanceInvite> pageList = performanceInviteService.page(page, queryWrapper);
+        pageList.getRecords().forEach(item -> {
+            item.setPerformance(performanceService.getById(item.getPerformanceId()));
+        });
+        return Result.OK(pageList);
     }
     @GetMapping("/invites")
     public Result<PerformanceInvite> queryMyInvite(@RequestParam String id) {

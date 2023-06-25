@@ -65,4 +65,7 @@ public class PerformanceInvite {
 
 	private String performanceId;
 	private String memberId;
+
+	@TableField(exist = false)
+	private Performance performance;
 }

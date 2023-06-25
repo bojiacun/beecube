@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PageLoading from "../../components/pageloading";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
-import {View} from "@tarojs/components";
+import {Navigator, View} from "@tarojs/components";
 import {List, Loading} from "@taroify/core";
 import numeral from 'numeral';
 import {connect} from "react-redux";
@@ -79,26 +79,15 @@ export default class Index extends Component<any, any> {
                     {
                         list.map((item) => {
                             return (
-                                <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
+                                <Navigator url={`invited?id=${item.id}`} className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
                                     <View className={'flex-1'}>
-                                        <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
+                                        <View className={'text-sm text-stone-400'}></View>
                                         <View className={'flex mt-2'}>
-                                            {
-                                                item.orderGoods.map(item => {
-                                                    return (
-                                                        <View className={'space-y-1'}>
-                                                            <View>{item.goodsName}</View>
-                                                            <View>{item.goodsPrice} X {item.goodsCount}</View>
-                                                        </View>
-                                                    );
-                                                })
-                                            }
                                         </View>
                                     </View>
                                     <View className={'text-xl font-bold text-red-600 flex-none'}>
-                                        ￥{numeral(item.payedPrice).format('0,0.00')}
                                     </View>
-                                </View>
+                                </Navigator>
                             );
                         })
                     }
