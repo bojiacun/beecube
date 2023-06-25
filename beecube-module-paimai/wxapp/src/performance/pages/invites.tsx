@@ -6,6 +6,7 @@ import {Navigator, View} from "@tarojs/components";
 import {List, Loading} from "@taroify/core";
 import numeral from 'numeral';
 import {connect} from "react-redux";
+import {ArrowRight} from "@taroify/icons";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -79,13 +80,15 @@ export default class Index extends Component<any, any> {
                     {
                         list.map((item) => {
                             return (
-                                <Navigator url={`invited?id=${item.id}`} className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
+                                <Navigator url={`invited?id=${item.id}`} className={'flex items-center mb-2 space-x-4 bg-white p-4'} key={item.id}>
                                     <View className={'flex-1'}>
-                                        <View className={'text-sm text-stone-400'}></View>
-                                        <View className={'flex mt-2'}>
+                                        <View className={'text-lg'}>{item.performance.title}</View>
+                                        <View className={'flex mt-2 text-stone-400'}>
+                                            预计参展日期：{item.joinTime}
                                         </View>
                                     </View>
-                                    <View className={'text-xl font-bold text-red-600 flex-none'}>
+                                    <View className={'text-xl font-bold flex-none'}>
+                                        <ArrowRight />
                                     </View>
                                 </Navigator>
                             );
