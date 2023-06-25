@@ -1006,11 +1006,16 @@ public class WxAppMemberController {
         }
     }
     @GetMapping("/invites/all")
-    public Result<List<PerformanceInvite>> queryMyInvites() {
+    public Result<?> queryMyInvites(
+            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<PerformanceInvite> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PerformanceInvite::getMemberId, loginUser.getId());
-        return Result.OK(performanceInviteService.list(queryWrapper));
+        queryWrapper.orderByDesc(PerformanceInvite::getCreateTime);
+        IPage<PerformanceInvite> page = new Page<>(pageNo, pageSize);
+        return Result.OK(performanceInviteService.page(page, queryWrapper));
     }
     @GetMapping("/invites")
     public Result<PerformanceInvite> queryMyInvite(@RequestParam String id) {

@@ -3,10 +3,9 @@ import PageLoading from "../../components/pageloading";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import {View} from "@tarojs/components";
-import {List, Loading, Checkbox} from "@taroify/core";
+import {List, Loading} from "@taroify/core";
 import numeral from 'numeral';
 import {connect} from "react-redux";
-import styles from './index.module.scss';
 
 // @ts-ignore
 @connect((state: any) => (
@@ -47,7 +46,7 @@ export default class Index extends Component<any, any> {
     onLoad() {
         this.setState({loading: true});
         const newList = this.state.list || [];
-        request.get('/paimai/api/members/invites', {params: {pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/paimai/api/members/invites/all', {params: {pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));
             this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
@@ -57,7 +56,7 @@ export default class Index extends Component<any, any> {
     onRefresh(showLoading = true) {
         this.setState({loading: showLoading, page: 1});
         const newList = [];
-        request.get('/paimai/api/members/invites', {params: {pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/paimai/api/members/invites/all', {params: {pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
             let records = res.data.result.records;
             // @ts-ignore
             records.forEach(item => newList.push(item));
@@ -81,7 +80,6 @@ export default class Index extends Component<any, any> {
                         list.map((item) => {
                             return (
                                 <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
-                                    <View className={'flex-none'}><Checkbox className={styles.redCheckbox} name={item.id}/></View>
                                     <View className={'flex-1'}>
                                         <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
                                         <View className={'flex mt-2'}>
