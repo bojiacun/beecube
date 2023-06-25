@@ -139,12 +139,12 @@ export default class Index extends Component<any, any> {
                         <View>
                             <Form.Label className={'text-stone-400'}>拍品名称<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'name'}>
-                                <Input className={styles.collectInput} placeholder={'请输入拍品名称'}/>
+                                <Input className={styles.collectInput} placeholder={'请输入拍品名称'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400'}>拍品分类<Text className={'text-red-600'}>*</Text></Form.Label>
-                            <Input value={classId?.name} onClick={()=>this.setState({classOpen:true})} readonly className={styles.collectInput} placeholder={'请选择拍品分类'} />
+                            <Input value={classId?.name} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} onClick={()=>this.setState({classOpen:true})} readonly className={styles.collectInput} placeholder={'请选择拍品分类'} />
                             <Popup mountOnEnter={false} open={classOpen} rounded placement="bottom" onClose={()=>this.setState({classOpen: false})}>
                                 <Picker
                                     onCancel={() => this.setState({classOpen: false})}
@@ -172,19 +172,19 @@ export default class Index extends Component<any, any> {
                         <View>
                             <Form.Label className={'text-stone-400'}>联系人姓名<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'contactor'}>
-                                <Input className={styles.collectInput} placeholder={'联系人姓名'} />
+                                <Input adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} className={styles.collectInput} placeholder={'联系人姓名'} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400'}>联系人手机号<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'phone'}>
-                                <Input className={styles.collectInput} placeholder={'联系人手机号'} />
+                                <Input className={styles.collectInput} placeholder={'联系人手机号'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400'}>拍品详细信息<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'description'}>
-                                <Textarea name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
+                                <Textarea adjustPosition={true} cursorSpacing={24} name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
                             </Field>
                         </View>
                         <View>

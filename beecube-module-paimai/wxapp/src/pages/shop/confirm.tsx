@@ -353,7 +353,7 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center'}>
                         <View className={'font-bold'}>买家留言</View>
-                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} onInput={this.handleNoteChanged} /></View>
+                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} alwaysEmbed={true} adjustPosition={true} cursorSpacing={24} onInput={this.handleNoteChanged} /></View>
                     </View>
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>

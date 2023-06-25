@@ -69,7 +69,7 @@ export default class Index extends Component<any, any> {
         let res = await request.put("/app/api/sms/check", values);
         if(!res.data.result) {
             utils.showMessage('验证码不正确').then();
-            // return;
+            return;
         }
 
         let checkResult = await request.get('/paimai/api/members/check');
