@@ -52,10 +52,12 @@ public class WxAppFapiaoController {
                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                       @RequestParam Integer status
                                       ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
         goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getStatus, status);
         goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getFapiaoStatus, 0);
         goodsOrderLambdaQueryWrapper.gt(GoodsOrder::getPayedPrice, 0);
+        goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
         goodsOrderLambdaQueryWrapper.orderByDesc(GoodsOrder::getCreateTime);
 
         Page<GoodsOrder> page = new Page<>(pageNo, pageSize);
@@ -78,7 +80,9 @@ public class WxAppFapiaoController {
     public Result<?> kaipiaoHistoryList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         LambdaQueryWrapper<FapiaoOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FapiaoOrder::getMemberId, loginUser.getId());
         queryWrapper.orderByDesc(FapiaoOrder::getCreateTime);
 
         Page<FapiaoOrder> page = new Page<>(pageNo, pageSize);
