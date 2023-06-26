@@ -184,7 +184,7 @@ public class AuctionGoodsService {
         Date actualEndTime = goods.getActualEndTime() == null ? goods.getEndTime() : goods.getActualEndTime();
         String lockKey = "OFFER-LOCKER-" + goods.getId();
         if (redissonLockClient.tryLock(lockKey, -1, 300)) {
-            BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price"));
+            BigDecimal userOfferPrice = BigDecimal.valueOf(post.getFloatValue("price")).setScale(2, RoundingMode.CEILING);
             if (userOfferPrice.compareTo(goods.getStartPrice()) < 0) {
                 redissonLockClient.unlock(lockKey);
                 return Result.error("出价不得低于起拍价");
