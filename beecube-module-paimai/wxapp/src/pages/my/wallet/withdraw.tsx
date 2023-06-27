@@ -3,6 +3,7 @@ import PageLayout from "../../../layouts/PageLayout";
 import {Button, Input, View} from "@tarojs/components";
 import request from "../../../lib/request";
 import utils from "../../../lib/utils";
+import Taro from "@tarojs/taro";
 
 
 export default class Index extends Component<any, any> {
@@ -29,7 +30,18 @@ export default class Index extends Component<any, any> {
         this.setState({amount: parseFloat(e.detail.value).toFixed(2)})
     }
 
-    handleWithdraw() {
+    async handleWithdraw() {
+        let checkResult = await request.get('/paimai/api/members/check');
+        if (checkResult.data.result == 0) {
+            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                Taro.navigateTo({url: '/pages/my/profile'}).then();
+            });
+        } else if (checkResult.data.result == -1) {
+            return utils.showMessage("请完成实名认证", function () {
+                Taro.navigateTo({url: '/pages/my/realauth'}).then();
+            });
+        }
+
         this.setState({posting: true});
         request.post('/app/api/members/money/withdraw', {amount: this.state.amount}).then(res => {
             if(res.data.success) {
