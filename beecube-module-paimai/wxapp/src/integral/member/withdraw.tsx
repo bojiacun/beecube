@@ -58,7 +58,7 @@ export default class Index extends Component<any, any> {
         this.setState({posting: true});
         request.post('/app/api/members/scores/withdraw', {amount: this.state.amount}).then(()=>{
             utils.showSuccess(true, '申请成功，等待审核');
-        });
+        }).catch(()=>this.setState({posting: false}));
     }
 
     render() {
@@ -93,7 +93,9 @@ export default class Index extends Component<any, any> {
                             <View className={'font-bold text-lg'}>提现积分</View>
                         </View>
                         <View className={'flex justify-between items-center mb-4 space-x-4 text-lg'}>
-                            <View className={'font-bold flex-none text-3xl'}>￥</View>
+                            <View className={'font-bold flex-none text-3xl'}>
+                                <Text className={'fa fa-diamond'} />
+                            </View>
                             <Input value={this.state.amount} onInput={this.handleInput} className={'flex-1'} placeholder={`满${settings.minWithdrawIntegral}积分方可提现`} />
                             <View className={'font-bold flex-none text-red-600'} onClick={this.inputAll}>全部提现</View>
                         </View>
