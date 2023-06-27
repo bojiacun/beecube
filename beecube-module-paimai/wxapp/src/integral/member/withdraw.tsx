@@ -54,7 +54,17 @@ export default class Index extends Component<any, any> {
         this.setState({amount: e.detail.value});
     }
 
-    handleSubmit() {
+    async handleSubmit() {
+        let checkResult = await request.get('/paimai/api/members/check');
+        if (checkResult.data.result == 0) {
+            return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                Taro.navigateTo({url: '/pages/my/profile'}).then();
+            });
+        } else if (checkResult.data.result == -1) {
+            return utils.showMessage("请完成实名认证", function () {
+                Taro.navigateTo({url: '/pages/my/realauth'}).then();
+            });
+        }
         this.setState({posting: true});
         request.post('/app/api/members/scores/withdraw', {amount: this.state.amount}).then(()=>{
             utils.showSuccess(true, '申请成功，等待审核');
