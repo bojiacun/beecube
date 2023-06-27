@@ -126,6 +126,9 @@ public class WxAppMemberMoneyController {
         if(member.getMoney().compareTo(amount) < 0) {
             throw new JeecgBootException("您没有这么多的额度");
         }
+        if(StringUtils.isEmpty(member.getPhone())) {
+            throw new JeecgBootException("请绑定手机号之后再来提现");
+        }
         LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AppMemberWithdraw::getMemberId, loginUser.getId());
         queryWrapper.eq(AppMemberWithdraw::getStatus, 0);
