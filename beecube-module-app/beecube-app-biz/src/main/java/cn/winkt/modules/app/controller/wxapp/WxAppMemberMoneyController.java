@@ -126,6 +126,9 @@ public class WxAppMemberMoneyController {
         if(member.getMoney().compareTo(amount) < 0) {
             throw new JeecgBootException("您没有这么多的额度");
         }
+        if(member.getAuthStatus() == null || member.getAuthStatus() != 2) {
+            throw new JeecgBootException("尚未实名认证，请实名认证后再提现");
+        }
         if(StringUtils.isEmpty(member.getPhone())) {
             throw new JeecgBootException("请绑定手机号之后再来提现");
         }
