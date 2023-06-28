@@ -143,6 +143,7 @@ public class WxAppMemberController {
         if(tab == 0) {
             LambdaQueryWrapper<GoodsDeposit> depositLambdaQueryWrapper = new LambdaQueryWrapper<>();
             depositLambdaQueryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
+            depositLambdaQueryWrapper.gt(GoodsDeposit::getStatus, 0);
             List<GoodsDeposit> deposits = goodsDepositService.list(depositLambdaQueryWrapper);
             if(deposits.size() > 0) {
                 queryWrapper.and(qw -> {
@@ -150,12 +151,9 @@ public class WxAppMemberController {
                     List<String> performanceIds = deposits.stream().map(GoodsDeposit::getPerformanceId).filter(Objects::nonNull).collect(Collectors.toList());
                     if (goodsIds.size() > 0) {
                         qw.in("g.id", goodsIds);
-                        if (performanceIds.size() > 0) {
-                            qw.or();
-                        }
                     }
                     if (performanceIds.size() > 0) {
-                        qw.in("g.performance_id", performanceIds);
+                        qw.or().in("g.performance_id", performanceIds);
                     }
                 });
                 //未开始的拍品
