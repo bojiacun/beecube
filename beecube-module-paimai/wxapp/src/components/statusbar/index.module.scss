@@ -15,4 +15,17 @@
         background: rgba(255,255,255,0.6);
         box-sizing: content-box;
     }
+    .button {
+        position: absolute;
+        left: 40Px;
+        bottom: 5Px;
+        z-index: 99;
+        padding: 3Px;
+        width: 25Px;
+        height: 25Px;
+        display: flex;
+        align-items: center;
+        background: rgba(255,255,255,0.6);
+        box-sizing: content-box;
+    }
 }

@@ -77,12 +77,12 @@ const StatusBar = (props: StatusbarProps): any => {
             {barTop > 0 && <View style={{height: barTop, width: '100%'}}></View>}
             <View className={'flex items-center justify-center'} style={{height: barHeight}}>
                 {pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
-                {button !== null && button}
                 {pages?.length == 1 && pages[0].route != 'pages/index/index'
                     &&
                     <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
                         <Text className={'iconfont icon-shouye'} style={{fontSize: 24}}/>
                     </View>}
+                {button !== null && <View className={styles.button}>{button}</View>}
                 {!logo && renderTitle()}
                 {logo && <Image src={utils.resolveUrl(logo)} style={{height: '90%'}} mode={'heightFix'} className={'inline-block box-border'}/>}
             </View>

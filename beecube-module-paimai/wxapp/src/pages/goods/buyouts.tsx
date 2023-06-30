@@ -162,15 +162,8 @@ export default class Index extends Component<any, any> {
             currentSpec = this.getCurrentSpec();
         }
 
-        const title = (
-            <View onClick={()=>Taro.navigateTo({url: 'search'})}>
-                <Text className={'mr-1'}>{settings.buyoutListTitle || '一口价'}</Text>
-                <Text className={'fa fa-search'} />
-            </View>
-        );
-
         return (
-            <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
+            <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价', button: <Text className={'fa fa-search'} onClick={()=>Taro.navigateTo({url: '/pages/goods/search'})} />}} enableReachBottom={true} showTabBar={true}>
                 {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
                     <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />

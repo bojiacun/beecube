@@ -62,7 +62,7 @@ export default class Index extends Component<any, any> {
 
     render() {
         return (
-            <PageLayout statusBarProps={{title: '搜索一口价商品'}}>
+            <PageLayout statusBarProps={{title: '搜索商品'}}>
                 <View className={'px-4 bg-white pb-2'}>
                     <View className={'py-2 px-4 rounded-full border border-solid border-gray-400 flex items-center text-gray-400'}>
                         <View className={'mr-4'}><Text className={'fa fa-search'}/></View>
