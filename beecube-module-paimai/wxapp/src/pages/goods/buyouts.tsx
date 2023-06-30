@@ -134,7 +134,7 @@ export default class Index extends Component<any, any> {
                 return {label: cls.name, id: cls.id, template: this.renderTemplate}
             });
             tabs.unshift({label: '推荐', id: "-1", template: this.renderTemplate});
-            tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
+            // tabs.unshift({label: '全部', id: undefined, template: this.renderTemplate});
             this.setState({tabs: tabs});
         });
         request.get('/paimai/api/goods/swiper/list').then(res=>{

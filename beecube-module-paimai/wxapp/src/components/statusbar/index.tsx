@@ -76,8 +76,8 @@ const StatusBar = (props: StatusbarProps): any => {
         <View className={classNames(styles.status_bar, className)} style={{...navigatorBarStyle, ...style}}>
             {barTop > 0 && <View style={{height: barTop, width: '100%'}}></View>}
             <View className={'flex items-center justify-center'} style={{height: barHeight}}>
+                {pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
                 {button !== null && button}
-                {button === null && pages?.length > 1 && <Image className={classNames('ml-1', styles.backbtn)} src={backImage} onClick={goBack}/>}
                 {pages?.length == 1 && pages[0].route != 'pages/index/index'
                     &&
                     <View className={'absolute text-gray-400'} style={{left: 10}} onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
