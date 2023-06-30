@@ -148,6 +148,8 @@ export default defineAppConfig({
     usingComponents: {
         'modal': './components/custom-modal/index',
         'live': './components/live-room/index',
-        "zego-nav": "./components/zego-nav/zego-nav"
+        "zego-nav": "./components/zego-nav/zego-nav",
+        "me-waterfall": "./lib/me-waterfall/waterfall/index",
+        "me-waterfall-item": "./lib/me-waterfall/waterfall-item/index"
     }
 })
