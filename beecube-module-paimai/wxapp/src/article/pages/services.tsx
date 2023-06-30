@@ -89,7 +89,7 @@ export default class Index extends Component<any, any> {
                 statusBarProps={{title: '服务指南', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
                 enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
-                <View className={'grid grid-cols-1 px-4 divide-y divide-gray-100'}>
+                <View className={'grid grid-cols-1 divide-y divide-gray-100 px-4 bg-white'}>
                     {list.map((item) => {
                         return (
                             <View>
