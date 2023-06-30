@@ -103,7 +103,6 @@ const FlowListView: FC<ListViewProps> = (props) => {
             dataFetcher(1, defaultTab, initIndex).then(res => {
                 let records = res.data.result.records;
                 setData(records);
-                console.log('flow data is', records);
                 utils.hideLoading();
             }).catch(() => utils.hideLoading());
         }
@@ -129,7 +128,6 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 records.forEach(item => data.push(item));
                 setData(data);
             }
-            console.log('flow data is', data);
             setLoadingMore(false);
         })
         setPage(page + 1);
@@ -139,7 +137,6 @@ const FlowListView: FC<ListViewProps> = (props) => {
             //列表显示的时候主动刷新
             dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
                 let records= res.data.result.records;
-                console.log('flow data is', records);
                 setData(records);
             });
             setPage(1);
@@ -197,8 +194,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <ScrollView className={classNames('p-4', className)} type={'custom'}>
-                    <GridView type={'masonry'} crossAxisCount={2}>
+                <ScrollView className={classNames('p-4 box-border', className)} type={'custom'}>
+                    <GridView type={'masonry'} crossAxisCount={2} crossAxisGap={16} mainAxisGap={16}>
                         {selectedIndex > -1 && data.map((item) => {
                             let tab = tabs[selectedIndex];
                             return tab.template(item);

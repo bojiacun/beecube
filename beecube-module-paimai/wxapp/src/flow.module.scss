@@ -1,14 +1,8 @@
 .flow {
-    break-inside:avoid;
-    margin-bottom: 10px;
     overflow: hidden;
     line-height: 24px;
     display: inline-flex;
-    width: 100%;
     flex-direction: column;
-}
-.flow view {
-    line-height: 24px;
 }
 .flowWrapper {
     column-count:2;

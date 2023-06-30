@@ -104,13 +104,13 @@ export default class Index extends Component<any, any> {
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-lg', styles.flow)}>
                 <View onClick={event => this.gotoDetail(event, '/goods/pages/detail2?id=' + data.id)}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full'} src={imgUrl}/>
-                    {tags.length > 0 && <View className={'p-2 space-x-2'}>{tags.map((item: any) => {
+                    <FallbackImage mode={'widthFix'} className={'rounded block w-full mb-2'} src={imgUrl}/>
+                    {tags.length > 0 && <View className={'px-2 mb-2 space-x-2 flex'}>{tags.map((item: any) => {
                         return (
-                            <Tag shape={'rounded'} color={'danger'} variant={'outlined'}>{item}</Tag>
+                            <View className={'border rounded px-1 border-red-500 border-solid text-red-500'}>{item}</View>
                         );
                     })}</View>}
-                    <View className={'px-2 text-lg font-bold'}>{data.title}</View>
+                    <View className={'px-2 text-lg'}>{data.title}</View>
                     <View className={'px-2 text-stone-400'}>{utils.delHtml(data.subTitle)}</View>
                     <View className={'px-2 mb-2 flex justify-between items-center'}>
                         <View>
