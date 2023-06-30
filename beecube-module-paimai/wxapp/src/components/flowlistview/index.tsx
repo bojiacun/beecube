@@ -1,7 +1,7 @@
 import {FC, ReactElement, useEffect, useState} from "react";
 import styles from './index.module.scss';
 import 'react-tabs/style/react-tabs.css';
-import {Text, View, ScrollView} from "@tarojs/components";
+import {Text, View, ScrollView, GridView} from "@tarojs/components";
 import classNames from "classnames";
 import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
@@ -101,7 +101,9 @@ const FlowListView: FC<ListViewProps> = (props) => {
             }
             setSelectedIndex(initIndex);
             dataFetcher(1, defaultTab, initIndex).then(res => {
-                setData([...res.data.result.records]);
+                let records = res.data.result.records;
+                setData(records);
+                console.log('flow data is', records);
                 utils.hideLoading();
             }).catch(() => utils.hideLoading());
         }
@@ -124,8 +126,10 @@ const FlowListView: FC<ListViewProps> = (props) => {
                 setNoMore(true);
             }
             else {
-                setData([...data, ...records]);
+                records.forEach(item => data.push(item));
+                setData(data);
             }
+            console.log('flow data is', data);
             setLoadingMore(false);
         })
         setPage(page + 1);
@@ -134,7 +138,9 @@ const FlowListView: FC<ListViewProps> = (props) => {
         if(autoRefresh && selectedIndex > -1) {
             //列表显示的时候主动刷新
             dataFetcher(1, tabs[selectedIndex], selectedIndex).then(res => {
-                setData([...res.data.result.records]);
+                let records= res.data.result.records;
+                console.log('flow data is', records);
+                setData(records);
             });
             setPage(1);
         }
@@ -191,12 +197,14 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <View className={classNames('p-4', stylesFlow.flowWrapper, className)}>
-            {selectedIndex > -1 && data.map((item) => {
-                let tab = tabs[selectedIndex];
-                return tab.template(item);
-            })}
-            </View>}
+                <ScrollView className={classNames('p-4', className)} type={'custom'}>
+                    <GridView type={'masonry'} crossAxisCount={2}>
+                        {selectedIndex > -1 && data.map((item) => {
+                            let tab = tabs[selectedIndex];
+                            return tab.template(item);
+                        })}
+                    </GridView>
+            </ScrollView>}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
             <View style={{height: 100}} />
         </>

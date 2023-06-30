@@ -55,6 +55,7 @@
     "blueimp-md5": "^2.19.0",
     "classnames": "^2.3.2",
     "clocker-js": "^1.0.2",
+    "me-waterfall": "^1.1.2",
     "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "react": "^18.2.0",
