@@ -5,7 +5,6 @@ import {Text, View, ScrollView, GridView} from "@tarojs/components";
 import classNames from "classnames";
 import {useDidShow, usePullDownRefresh, useReachBottom} from "@tarojs/taro";
 import utils from "../../lib/utils";
-import stylesFlow from '../../flow.module.scss';
 import LoadMore from "../loadmore";
 import NoData from "../nodata";
 import {useSelector} from "react-redux";
@@ -194,14 +193,14 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <me-waterfall width={'100%'} className={classNames('p-4 box-border', className)} column={2}>
-                    <me-waterfall-item>
+                <ScrollView className={classNames('p-4 box-border', className)} type={'custom'}>
+                    <GridView type={'masonry'} crossAxisCount={2} crossAxisGap={16} mainAxisGap={16}>
                         {selectedIndex > -1 && data.map((item) => {
                             let tab = tabs[selectedIndex];
                             return tab.template(item);
                         })}
-                    </me-waterfall-item>
-            </me-waterfall>}
+                    </GridView>
+            </ScrollView>}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
             <View style={{height: 100}} />
         </>

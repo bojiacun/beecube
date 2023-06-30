@@ -15,6 +15,7 @@ Component({
   lifetimes: {
     attached() {
       const {width, gap, column} = this.data;
+      console.log(width);
       if (typeof column !== "number" || !Number.isInteger(column) || column <= 0) {
         throw new Error("column must be a integer greater than zero!")
       }
