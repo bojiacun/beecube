@@ -194,14 +194,14 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <ScrollView className={classNames('p-4 box-border', className)} type={'custom'}>
-                    <GridView type={'masonry'} crossAxisCount={2} crossAxisGap={16} mainAxisGap={16}>
+                <me-waterfall width={'100%'} className={classNames('p-4 box-border', className)} column={2}>
+                    <me-waterfall-item>
                         {selectedIndex > -1 && data.map((item) => {
                             let tab = tabs[selectedIndex];
                             return tab.template(item);
                         })}
-                    </GridView>
-            </ScrollView>}
+                    </me-waterfall-item>
+            </me-waterfall>}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
             <View style={{height: 100}} />
         </>
