@@ -5,14 +5,13 @@ import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
-import {Image, Text, View} from "@tarojs/components";
+import {Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
 import {Button, Popup, Stepper, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 import CustomSwiper from "../../components/swiper";
-import mallHead from '../../assets/images/mall-head.png';
 
 const numeral = require('numeral');
 
@@ -146,7 +145,7 @@ export default class Index extends Component<any, any> {
 
     }
     onPageScroll(e) {
-        if(e.scrollTop >= 180) {
+        if(e.scrollTop >= 230) {
             this.setState({tabClassName: 'bg-white'});
         }
         else {
@@ -164,7 +163,12 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价', button: <Text className={'fa fa-search'} onClick={()=>Taro.navigateTo({url: '/pages/goods/search'})} />}} enableReachBottom={true} showTabBar={true}>
-                {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
+                <View className={'flex items-center text-red-700 justify-center'} style={{height: 50}}>
+                    <View className={'flex-1 text-center'}>正品保证</View>
+                    <View className={'flex-1 text-center'}>全场包邮</View>
+                    <View className={'flex-1 text-center'}>售后无忧</View>
+                </View>
+                {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
                     <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
                     :
