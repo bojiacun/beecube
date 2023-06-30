@@ -5,13 +5,14 @@ import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
 import styles from "../../flow.module.scss";
-import {Navigator, Text, View} from "@tarojs/components";
+import {Image, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import {connect} from "react-redux";
 import {Button, Popup, Stepper, Tag} from "@taroify/core";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 import CustomSwiper from "../../components/swiper";
+import mallHead from '../../assets/images/mall-head.png';
 
 const numeral = require('numeral');
 
@@ -170,7 +171,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
-                {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} />}
+                {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
                     <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
                     :
