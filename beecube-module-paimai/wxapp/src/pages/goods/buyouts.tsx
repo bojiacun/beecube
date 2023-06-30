@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import {ListViewTabItem} from "../../components/listview";
+import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import FlowListView from "../../components/flowlistview";
 import classNames from "classnames";
@@ -114,7 +114,7 @@ export default class Index extends Component<any, any> {
                     <View className={'px-2 text-stone-400'}>{utils.delHtml(data.subTitle)}</View>
                     <View className={'px-2 mb-2 flex justify-between items-center'}>
                         <View>
-                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl font-bold'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl'}>{numeral(data.startPrice).format('0,0.00')}</Text>
                         </View>
                         <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'}
                               style={{width: 24, height: 24}}>
@@ -171,7 +171,11 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: title}} enableReachBottom={true} showTabBar={true}>
                 {swipers.length > 0 && <CustomSwiper className={'rounded-lg m-4 overflow-hidden'} list={swipers} height={160} />}
-                <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
+                {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
+                    <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
+                    :
+                    <ListView tabs={this.state.tabs} dataFetcher={this.loadData} className={'grid grid-cols-2 gap-4 p-4'} tabClassName={swipers.length > 0 ? tabClassName: 'bg-white'} />
+                }
                 <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>
                         <Popup.Close />

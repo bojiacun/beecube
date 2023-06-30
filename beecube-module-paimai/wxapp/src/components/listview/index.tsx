@@ -28,6 +28,7 @@ export interface ListViewProps extends Partial<any> {
     showSearch?: boolean,
     searchPlaceHolder?: string,
     searchUrl?: string|undefined,
+    tabClassName?: string;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -43,6 +44,7 @@ const ListView: FC<ListViewProps> = (props) => {
         fixed = true,
         appendBottom,
         showSearch = false,
+        tabClassName = 'bg-white',
         searchPlaceHolder = '更多您感兴趣的内容',
         searchUrl
     } = props;
@@ -127,7 +129,7 @@ const ListView: FC<ListViewProps> = (props) => {
                 <ScrollView
                     scrollX={true}
                     scrollY={false}
-                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 mb-2 text-gray-700', fixed ? 'sticky' : '')}
+                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 mb-2 text-gray-700', fixed ? 'sticky' : '', tabClassName)}
                     style={tabStyles} type={'list'}>
                     {tabs.map((tab, index) => {
                         return (
