@@ -322,7 +322,7 @@ export default class Index extends Component<any, any> {
                         <Text className={'fa fa-chevron-left absolute left-0'} onClick={() => utils.navigateBack()}/>
                     </View>
                     <View className={'bg-white p-4 rounded-lg mt-6'}>
-                        <View className={'font-bold text-lg item-title mb-2'}>收货地址</View>
+                        <View className={'item-title mb-2'}>收货地址</View>
                         <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
                             <View className={'flex-1 space-y-2'}>
                                 <View className={'font-bold space-x-2'}>
@@ -337,7 +337,7 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
-                    <View className={'font-bold text-lg item-title'}>商品信息</View>
+                    <View className={'item-title'}>商品信息</View>
                     {goodsList.map((item) => {
                         return (
                             <View className={'relative py-4 overflow-hidden flex items-center text-lg'}>
@@ -345,8 +345,8 @@ export default class Index extends Component<any, any> {
                                     <FallbackImage mode={'aspectFill'} src={utils.resolveUrl(item.images.split(',')[0])}
                                                    style={{width: Taro.pxTransform(60), height: Taro.pxTransform(60)}}/>
                                     <View className={'flex flex-col justify-between'}>
-                                        <View className={'font-bold'}>{item.title}</View>
-                                        <View className={'text-red-500 font-bold'}>￥{numeral(item.startPrice).format('0,0.00')}</View>
+                                        <View className={''}>{item.title}</View>
+                                        <View className={'text-red-500'}>￥{numeral(item.startPrice).format('0,0.00')}</View>
                                     </View>
                                 </View>
                                 <View className={'w-20 flex items-center justify-center'}> X {item.count} </View>
@@ -354,27 +354,26 @@ export default class Index extends Component<any, any> {
                         );
                     })}
                     <View className={'flex justify-between items-center'}>
-                        <View className={'font-bold'}>售后免邮</View>
+                        <View className={''}>售后免邮</View>
                         <View className={'text-stone-400'}>官方赠送</View>
                     </View>
                     <View className={'flex justify-between items-center'}>
-                        <View className={'font-bold'}>配送方式</View>
+                        <View className={''}>配送方式</View>
                         <View className={'text-stone-400'}>快递配送</View>
                     </View>
                     <View className={'flex items-center'}>
-                        <View className={'font-bold'}>买家留言</View>
+                        <View className={''}>买家留言</View>
                         <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} alwaysEmbed={true} adjustPosition={true} cursorSpacing={24}
                                                         onInput={this.handleNoteChanged}/></View>
                     </View>
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
-                    <View className={'font-bold text-lg item-title'}>结算信息</View>
                     <View className={'flex items-center justify-between'}>
-                        <View className={'font-bold'}>商品总价</View>
+                        <View className={''}>商品总价</View>
                         <View>￥{numeral(this.totalPrice).format('0,0.00')}</View>
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openCoupon}>
-                        <View className={'font-bold'}>优惠券</View>
+                        <View className={''}>优惠券</View>
                         <View className={'space-x-2'}>
                             {postOrderInfo.ticketAmount > 0 && <Text className={'text-red-600'}>-￥{numeral(postOrderInfo.ticketAmount).format('0,0.00')}</Text>}
                             {(postOrderInfo.ticketAmount == 0 && coupons?.available.length > 0) && <Text className={'text-red-600'}>{coupons.available.length}张</Text>}
@@ -383,7 +382,7 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View className={'flex items-center justify-between'} onClick={this.openIntegral}>
-                        <View className={'font-bold'}>积分</View>
+                        <View className={''}>积分</View>
                         <View className={'space-x-2'}>
                             {(userInfo.score > 0 && postOrderInfo.useIntegral > 0) && <Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text>}
                             {(userInfo.score > 0 && postOrderInfo.useIntegral <= 0 && this.calcAvailableIntegral > 0) && <Text className={'text-red-600'}>有可用积分</Text>}
@@ -392,11 +391,11 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                     <View className={'flex items-center justify-between'}>
-                        <View className={'font-bold'}>运费</View>
+                        <View className={''}>运费</View>
                         <View className={''}>+ ￥{numeral(postOrderInfo.deliveryPrice).format('0,0.00')}</View>
                     </View>
                     <View className={'flex items-center justify-between'}>
-                        <View className={'font-bold'}>支付方式</View>
+                        <View className={''}>支付方式</View>
                         <View className={'space-x-2 text-sm'}>
                             <Radio.Group defaultValue={'1'} direction={'horizontal'} size={14} className={'radio-red-color'} onChange={this.handlePayTypeChanged}>
                                 <Radio name={'1'}>微信支付</Radio>
