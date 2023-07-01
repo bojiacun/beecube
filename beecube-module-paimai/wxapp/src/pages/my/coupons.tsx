@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 import request from "../../lib/request";
-import {Text, View} from "@tarojs/components";
+import {Navigator, Text, View} from "@tarojs/components";
 import classNames from "classnames";
 
 
@@ -88,8 +88,14 @@ export default class Index extends Component<any, any> {
     render() {
         const {systemInfo} = this.props;
         const headerHeight = utils.calcPageHeaderHeight(systemInfo);
+        const titleComponent = (
+            <Navigator url={'/pages/settings?key=couponUseTip&title=优惠券说明'}>
+                <Text className={'mr-2'}>我的优惠券</Text>
+                <Text className={'fa fa-question-circle-o'} />
+            </Navigator>
+        );
         return (
-            <PageLayout statusBarProps={{title: '我的优惠券'}}>
+            <PageLayout statusBarProps={{title: titleComponent}}>
                 <Tabs defaultValue={'1'} sticky={{offsetTop: headerHeight}}>
                     <Tabs.TabPane value={'1'} title={'未使用'}>
                         <CouponList type={1} />

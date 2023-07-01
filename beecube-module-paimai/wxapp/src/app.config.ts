@@ -30,6 +30,7 @@ export default defineAppConfig({
         'pages/performance/list',
         'pages/goods/buyouts',
         'pages/goods/search',
+        'pages/settings',
     ],
     window: {
         backgroundTextStyle: 'light',
