@@ -20,12 +20,14 @@ export enum ArticleType {
     TEXT_IMAGE = 1,
     VIDEO = 2,
     SERVICES = 3,
+    HELP = 4,
 }
 
 const ArticleTypeNames:any = {
     '1': '图文类',
     '2': '视频类',
     '3': '服务指南',
+    '4': '帮助中心',
 }
 
 const ArticleList = (props: any) => {
