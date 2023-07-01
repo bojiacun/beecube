@@ -6,6 +6,7 @@ import utils from "../../lib/utils";
 import Taro from "@tarojs/taro";
 import request from "../../lib/request";
 import {Text, View} from "@tarojs/components";
+import classNames from "classnames";
 
 
 const CouponList:FC<any> = (props) => {
@@ -36,9 +37,9 @@ const CouponList:FC<any> = (props) => {
         >
             {
                 list.map((item) => (
-                    <View className={'m-4'} style={{filter: props.type != 1 ? 'grayscale(100%)':'none'}}>
-                        <View className={'text-white flex'}>
-                            <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
+                    <View className={'m-4'}>
+                        <View className={classNames('flex', props.type == 1 ? 'text-white':'text-stone-400')}>
+                            <View className={classNames('flex flex-col items-center justify-center rounded-t-lg flex-none', props.type == 1 ? 'bg-red-700': 'bg-stone-200')}
                                   style={{width: 100, height: 80}}>
                                 <View className={'font-bold'}>
                                     <Text>￥</Text>
@@ -46,17 +47,19 @@ const CouponList:FC<any> = (props) => {
                                         {item.coupon.amount}
                                     </Text>
                                 </View>
-                                <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
+                                <View className={classNames('text-sm', props.type == 1 ? 'text-stone-200':'text-stone-400')}>满{item.coupon.minPrice}可用</View>
                             </View>
-                            <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
+                            <View className={classNames('rounded-t-lg flex-1 flex items-center px-4', props.type == 1 ? 'bg-red-700': 'bg-stone-200')}>
                                 <View className={'flex-1'}>
-                                    <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
-                                    <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
+                                    <View className={'font-bold text-lg'}>{item.coupon.title}</View>
+                                    <View className={classNames('text-sm mt-2', props.type == 1 ? 'text-stone-200': 'text-stone-400')}>有效期至{item.endTime}</View>
                                 </View>
-                                {props.type == 1 && <View className={'flex-none'} onClick={()=>Taro.reLaunch({url: '/pages/index/index'})}><Button color={'warning'} size={'mini'} shape={'round'}>去使用</Button></View>}
+                                {props.type == 1 && <View className={'flex-none'} onClick={()=>Taro.reLaunch({url: '/pages/index/index'})}>
+                                    <Button color={'warning'} size={'mini'} shape={'round'} style={{color: '#991b1b', minWidth: 60}}>去使用</Button>
+                                </View>}
                             </View>
                         </View>
-                        <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
+                        <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400 text-sm'}>
                             {item.coupon.description}
                         </View>
                     </View>
