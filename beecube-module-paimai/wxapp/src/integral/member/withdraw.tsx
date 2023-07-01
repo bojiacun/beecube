@@ -7,7 +7,6 @@ import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import {setUserInfo} from "../../store/actions";
 import PageLoading from "../../components/pageloading";
-import numeral from 'numeral';
 import {Button} from "@taroify/core";
 import utils from "../../lib/utils";
 import request from "../../lib/request";
@@ -94,28 +93,28 @@ export default class Index extends Component<any, any> {
                         <View className={'mt-2'}>
                             <Text className={'fa fa-diamond'} />
                             <Text className={'text-4xl ml-4'}>
-                                {numeral(userInfo.score).format('0.00')}
+                                {userInfo.score}
                             </Text>
                         </View>
                     </View>
                     <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
                         <View className={'flex justify-between items-center mb-4'}>
-                            <View className={'font-bold text-lg'}>提现积分</View>
+                            <View className={'text-lg'}>提现积分</View>
                         </View>
                         <View className={'flex justify-between items-center mb-4 space-x-4 text-lg'}>
-                            <View className={'font-bold flex-none text-3xl'}>
+                            <View className={'mr-2 flex-none'}>
                                 <Text className={'fa fa-diamond'} />
                             </View>
                             <Input value={this.state.amount} onInput={this.handleInput} className={'flex-1'} placeholder={`满${settings.minWithdrawIntegral}积分方可提现`} />
-                            <View className={'font-bold flex-none text-red-600'} onClick={this.inputAll}>全部提现</View>
+                            <View className={'flex-none text-red-600'} onClick={this.inputAll}>全部提现</View>
                         </View>
                         <View className={'flex justify-between items-center mb-4'}>
-                            <View className={'font-bold'}>提现至</View>
-                            <View className={'font-bold'}>我的零钱</View>
+                            <View className={''}>提现至</View>
+                            <View className={''}>我的零钱</View>
                         </View>
                         <View className={'mt-4 flex flex-col justify-center space-y-4'}>
                             <Button onClick={this.handleSubmit} disabled={!this.state.amount} color={'danger'} shape={'round'} block loading={this.state.posting}>立即提现</Button>
-                            <View className={'text-stone-400'}>
+                            <View className={'text-stone-400 text-sm space-y-1'}>
                                 <View>提现规则：</View>
                                 <View>1、{settings.integralToMoney.split(':')[0]}积分={settings.integralToMoney.split(':')[1]}元（人民币）</View>
                                 <View>2、单次提现积分需大于等于{settings.minWithdrawIntegral}积分</View>

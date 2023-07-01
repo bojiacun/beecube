@@ -131,19 +131,19 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
 
         return (
-            <PageLayout statusBarProps={{title: '拍品征集'}} style={{backgroundColor: 'white'}}>
+            <PageLayout statusBarProps={{title: '拍品征集'}}>
                 <Form onSubmit={this.onSubmit} validateTrigger={'onSubmit'}>
                     <Toast id={'toast'} />
-                    <View className={'p-4 space-y-4'}>
-                        <View className={'font-bold text-xl mb-4'}>拍品信息</View>
+                    <View className={'p-4 space-y-4 bg-white'}>
+                        <View className={'text-xl mb-4'}>拍品信息</View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>拍品名称<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>拍品名称<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'name'}>
                                 <Input className={styles.collectInput} placeholder={'请输入拍品名称'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>拍品分类<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>拍品分类<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Input value={classId?.name} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} onClick={()=>this.setState({classOpen:true})} readonly className={styles.collectInput} placeholder={'请选择拍品分类'} />
                             <Popup mountOnEnter={false} open={classOpen} rounded placement="bottom" onClose={()=>this.setState({classOpen: false})}>
                                 <Picker
@@ -170,30 +170,33 @@ export default class Index extends Component<any, any> {
                             </Popup>
                         </View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>联系人姓名<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>联系人姓名<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'contactor'}>
                                 <Input adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} className={styles.collectInput} placeholder={'联系人姓名'} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>联系人手机号<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>联系人手机号<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'phone'}>
                                 <Input className={styles.collectInput} placeholder={'联系人手机号'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>拍品详细信息<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>拍品详细信息<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Field className={'!p-0'} name={'description'}>
                                 <Textarea adjustPosition={true} cursorSpacing={24} name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
                             </Field>
                         </View>
                         <View>
-                            <Form.Label className={'text-stone-400'}>拍品照片<Text className={'text-red-600'}>*</Text></Form.Label>
+                            <Form.Label className={'text-stone-400 text-sm'}>拍品照片<Text className={'text-red-600'}>*</Text></Form.Label>
                             <Uploader value={this.state.image} className={'mt-2'} onUpload={this.onUpload} onChange={file=>this.setState({image: file})} />
                         </View>
                         <Button color={'danger'} shape={'round'} loading={this.state.posting} block formType={'submit'} disabled={this.state.posting}>确定</Button>
-                        <View><RichText nodes={utils.resolveHtmlImageWidth(settings.collectNotice)} /></View>
+                        <View className={'text-stone-400 text-xs'}>
+                            注意：收到拍品信息后，我们会第一时间与您取得联系（如您提交的信息不符合本公司拍品征集预期，将不做回复）
+                        </View>
                     </View>
+                    <View className={'mt-4 p-4 bg-white'}><RichText nodes={utils.resolveHtmlImageWidth(settings.collectNotice)} /></View>
                 </Form>
             </PageLayout>
         );

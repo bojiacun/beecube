@@ -3,7 +3,6 @@ import PageLayout from "../../layouts/PageLayout";
 import {Cell, List, Loading, PullRefresh} from "@taroify/core";
 import request from "../../lib/request";
 import {View} from "@tarojs/components";
-import numeral from 'numeral';
 import utils from "../../lib/utils";
 import {connect} from "react-redux";
 
@@ -76,16 +75,16 @@ export default class Index extends Component<any, any> {
                                 <Cell key={item.id}>
                                     <View className={'flex items-center'}>
                                         <View className={'flex-1'}>
-                                            <View className={'font-bold text-lg'}>{item.description}</View>
-                                            <View className={'text-stone-400'}>{item.createTime}</View>
+                                            <View className={'text-lg'}>{item.description}</View>
+                                            <View className={'text-stone-400 text-xs'}>{item.createTime}</View>
                                         </View>
                                         {item.type == 1 ?
-                                            <View className={'flex-none font-bold text-xl text-red-600'}>
-                                                +{numeral(item.score).format('0,0.00')}
+                                            <View className={'flex-none text-xl text-red-600'}>
+                                                + {item.score}
                                             </View>
                                             :
-                                            <View className={'flex-none font-bold text-xl'}>
-                                                -{numeral(item.score).format('0,0.00')}
+                                            <View className={'flex-none font-bold text-xl text-green-400'}>
+                                                - {item.score}
                                             </View>
                                         }
                                     </View>
