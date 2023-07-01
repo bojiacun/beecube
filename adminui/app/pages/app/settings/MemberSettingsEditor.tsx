@@ -52,6 +52,11 @@ const MemberSettingsEditor = (props:any) => {
                             <FormLabel htmlFor={'integralRule'}>积分规则</FormLabel>
                             <TinymceEditor name={'integralRule'} />
                         </FormGroup>
+
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel htmlFor={'couponUseTip'}>优惠券适用说明</FormLabel>
+                            <TinymceEditor name={'couponUseTip'} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}>
