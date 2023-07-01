@@ -386,8 +386,8 @@ export default class Index extends Component<any, any> {
                         <View className={'font-bold'}>积分</View>
                         <View className={'space-x-2'}>
                             {(userInfo.score > 0 && postOrderInfo.useIntegral > 0) && <Text className={'text-red-600'}>-￥{postOrderInfo.useIntegral}</Text>}
-                            {(userInfo.score > 0 && postOrderInfo.useIntegral <= 0) && <Text className={'text-red-600'}>有可用积分</Text>}
-                            {userInfo.score <= 0 && <Text className={'text-stone-400'}>无可用积分</Text>}
+                            {(userInfo.score > 0 && postOrderInfo.useIntegral <= 0 && this.calcAvailableIntegral > 0) && <Text className={'text-red-600'}>有可用积分</Text>}
+                            {(userInfo.score <= 0 || this.calcAvailableIntegral <= 0) && <Text className={'text-stone-400'}>无可用积分</Text>}
                             <Text className={'fa fa-angle-right text-stone-400'}/>
                         </View>
                     </View>
