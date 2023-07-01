@@ -223,7 +223,7 @@ export default class Index extends Component<any, any> {
     }
 
     handlePayTypeChanged(value) {
-        this.setState({payType: value, openNetPay: true});
+        this.setState({payType: value, openNetPay: value === '2'});
     }
 
     async pay() {
@@ -519,6 +519,11 @@ export default class Index extends Component<any, any> {
                     <Popup style={{height: 230}} className={'!bg-gray-100'} open={openIntegral} rounded placement={'bottom'} onClose={() => this.setState({openIntegral: false})}>
                         <View className={'text-2xl'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>积分抵扣</View>
+                            <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
+                                       url={'/pages/settings?key=useScoreTip&title=积分使用说明'}>
+                                <Text className={'mr-2'}> 使用说明 </Text>
+                                <Text className={'fa fa-question-circle-o'}/>
+                            </Navigator>
                             <Popup.Close/>
                         </View>
                         <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
@@ -539,6 +544,11 @@ export default class Index extends Component<any, any> {
                 <Popup style={{height: 330}} className={'!bg-gray-100'} open={openNetPay} rounded placement={'bottom'} onClose={() => this.setState({openNetPay: false})}>
                     <View className={'text-2xl'}>
                         <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
+                                   url={'/pages/settings?key=netPayTip&title=网银转账使用说明'}>
+                            <Text className={'mr-2'}> 使用说明 </Text>
+                            <Text className={'fa fa-question-circle-o'}/>
+                        </Navigator>
                         <Popup.Close/>
                     </View>
                     <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
