@@ -419,7 +419,7 @@ export default class Index extends Component<any, any> {
                             <Popup.Close/>
                         </View>
                         <Tabs sticky defaultValue={'available'}>
-                            <Tabs.TabPane value={'available'} title={'可用优惠券'}>
+                            <Tabs.TabPane value={'available'} title={`可用优惠券(${coupons?.available.length})`}>
                                 <View className={'m-4'} style={{paddingBottom: 80}}>
                                     <Radio.Group className={'space-y-4'} onChange={this.handleSelectCoupon}>
                                         {coupons?.available.map((item: any) => {
