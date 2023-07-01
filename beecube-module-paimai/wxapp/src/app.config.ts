@@ -64,6 +64,7 @@ export default defineAppConfig({
                 'pages/detail',
                 'pages/detail2',
                 'pages/services',
+                'pages/helps',
                 'pages/normal',
                 'pages/video',
                 'pages/detail_h5',
