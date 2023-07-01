@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
-import {View, Button} from "@tarojs/components";
-import {Form, Radio, Input} from '@taroify/core';
+import {View, Button, Navigator} from "@tarojs/components";
+import {Form, Radio, Input, Cell} from '@taroify/core';
 import {ArrowRight} from '@taroify/icons';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
@@ -181,7 +181,7 @@ export default class Index extends Component<any, any> {
             return (
                 <>
                     <Form.Item className={'items-center'} rightIcon={<ArrowRight/>}>
-                        <Form.Label className={'font-bold'}>头像</Form.Label>
+                        <Form.Label>头像</Form.Label>
                         <Form.Control>
                             <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
                                     onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}>
@@ -190,7 +190,7 @@ export default class Index extends Component<any, any> {
                         </Form.Control>
                     </Form.Item>
                     <Form.Item name={'nickname'} className={'items-center'} rightIcon={<ArrowRight/>}>
-                        <Form.Label className={'font-bold'}>昵称</Form.Label>
+                        <Form.Label>昵称</Form.Label>
                         <Form.Control>
                             <Input type={'nickname'} className={'text-right'} onInput={this.handleNicknameChanged} />
                         </Form.Control>
@@ -207,7 +207,7 @@ export default class Index extends Component<any, any> {
                     </Form.Control>
                 </Form.Item>
                 <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/nickname'})} className={'items-center'} rightIcon={<ArrowRight/>}>
-                    <Form.Label className={'font-bold'}>昵称</Form.Label>
+                    <Form.Label>昵称</Form.Label>
                     <Form.Control>
                         <View>{userInfo?.nickname}</View>
                     </Form.Control>
@@ -221,10 +221,10 @@ export default class Index extends Component<any, any> {
             <PageLayout statusBarProps={{title: '个人资料'}}>
                 <Form onSubmit={this.handleSubmit} controlAlign={'right'} ref={this.formRef}>
                     <View className={'bg-white mt-4 text-gray-600'}>
-                        <View className={'font-bold text-lg p-4 pb-0'}>基本信息</View>
+                        <View className={'text-lg p-4 pb-0'}>基本信息</View>
                         {this.renderNicknameAvatar()}
                         <Form.Item name={'sex'} className={'items-center'}>
-                            <Form.Label className={'font-bold'}>性别</Form.Label>
+                            <Form.Label>性别</Form.Label>
                             <Form.Control>
                                 <Radio.Group direction="horizontal">
                                     <Radio name="1">男</Radio>
@@ -234,32 +234,27 @@ export default class Index extends Component<any, any> {
                         </Form.Item>
                     </View>
                     <View className={'bg-white mt-4 text-gray-600'}>
-                        <View className={'font-bold text-lg p-4 pb-0'}>实名资料</View>
+                        <View className={'text-lg p-4 pb-0'}>实名资料</View>
                         <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/phone'})} className={'items-center'} rightIcon={<ArrowRight/>}>
-                            <Form.Label className={'font-bold'}>手机号</Form.Label>
+                            <Form.Label>手机号</Form.Label>
                             <Form.Control>
                                 <View>{userInfo?.phone}</View>
                             </Form.Control>
                         </Form.Item>
-                        {/*<View className={''}>*/}
-                        {/*    <Navigator className={'flex items-center justify-between p-4'} url={'profile/email'}>*/}
-                        {/*        <View className={'flex items-center space-x-2'}>*/}
-                        {/*            <View>邮箱</View>*/}
-                        {/*        </View>*/}
-                        {/*        <View className={'flex items-center space-x-2'}>*/}
-                        {/*            <View>{userInfo?.email}</View>*/}
-                        {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                        {/*        </View>*/}
-                        {/*    </Navigator>*/}
-                        {/*</View>*/}
                         <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
-                            <Form.Label className={'font-bold'}>实名认证</Form.Label>
+                            <Form.Label>实名认证</Form.Label>
                             <Form.Control>
                                 {userInfo?.authStatus == 0 && <View>未认证</View>}
                                 {userInfo?.authStatus == 1 && <View>审核中</View>}
                                 {userInfo?.authStatus == 2 && <View>已认证</View>}
                             </Form.Control>
                         </Form.Item>
+                    </View>
+                    <View className={'bg-white mt-4 text-gray-600'}>
+                        <View className={'text-lg p-4 pb-0'}>文化推荐官</View>
+                        <Navigator url={'/pages/my/qrcode'}>
+                            <Cell rightIcon={<ArrowRight />} title={'我的二维码'} />
+                        </Navigator>
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
                         <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>

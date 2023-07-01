@@ -21,3 +21,7 @@
     position: absolute;
     top: 0;
 }
+.tip {
+    --tw-gradient-from: #e3af8a;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
