@@ -65,19 +65,19 @@ export default class Index extends Component<any, any> {
                             <Form.Item name="title" rules={[{required: true, message: "请填写发票抬头"}]}>
                                 <Form.Label>发票抬头</Form.Label>
                                 <Form.Control>
-                                    <Input placeholder="填写发票抬头" alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
+                                    <Input alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
                                 </Form.Control>
                             </Form.Item>
                             <Form.Item name="taxCode" rules={[{required: true, message: "请填写发票税号"}]}>
                                 <Form.Label>税号</Form.Label>
                                 <Form.Control>
-                                    <Input placeholder="填写发票税号" alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
+                                    <Input alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
                                 </Form.Control>
                             </Form.Item>
-                            <Form.Item name="email">
+                            <Form.Item name="email" rules={[{required: true, message: "请填写接受邮箱"}]}>
                                 <Form.Label>邮箱</Form.Label>
                                 <Form.Control>
-                                    <Input placeholder="填写邮箱" alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
+                                    <Input alwaysEmbed={true} cursorSpacing={24} adjustPosition={true} />
                                 </Form.Control>
                             </Form.Item>
                         </View>

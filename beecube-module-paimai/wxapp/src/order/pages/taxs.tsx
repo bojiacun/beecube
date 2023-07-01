@@ -128,13 +128,13 @@ export default class Index extends Component<any, any> {
                                             <View className={'flex-none'}><Checkbox className={styles.redCheckbox} name={item.id}/></View>
                                             <View className={'flex-1'}>
                                                 <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
-                                                <View className={'flex mt-2'}>
+                                                <View className={'flex flex-col mt-2'}>
                                                     {
                                                         item.orderGoods.map(item => {
                                                             return (
-                                                                <View className={'space-y-1'}>
+                                                                <View className={'space-y-1 mb-2'}>
                                                                     <View>{item.goodsName}</View>
-                                                                    <View>{item.goodsPrice} X {item.goodsCount}</View>
+                                                                    <View>￥{item.goodsPrice} X {item.goodsCount}</View>
                                                                 </View>
                                                             );
                                                         })
@@ -163,11 +163,11 @@ export default class Index extends Component<any, any> {
                     <View className={'flex-1 flex items-center space-x-4'}>
                         <View className={'flex flex-col items-center'}>
                             <Checkbox id={'all'} className={styles.redCheckbox} checked={this.isCheckedAll} onClick={this.toggleCheckAll} />
-                            <View>全选</View>
+                            <View className={'text-sm'}>全选</View>
                         </View>
                         <View className={'flex-1'}>
                             共<Text className={'font-bold text-red-600'}>{selected.length}</Text>个订单 <Text
-                            className={'text-red-600 font-bold'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>元
+                            className={'text-red-600 font-bold'}>{numeral(this.calcCartPrice).format('0,0.00')}</Text>元
                         </View>
                     </View>
                     <View className={'flex-none'}>
