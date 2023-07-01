@@ -105,19 +105,19 @@ export default class Index extends Component<any, any> {
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-lg', styles.flow)}>
                 <View onClick={event => this.gotoDetail(event, '/goods/pages/detail2?id=' + data.id)}>
                     <FallbackImage mode={'widthFix'} className={'rounded block w-full mb-2'} src={imgUrl}/>
-                    {tags.length > 0 && <View className={'px-2 mb-2 space-x-2 flex'}>{tags.map((item: any) => {
+                    {tags.length > 0 && <View className={'px-3 mb-2 space-x-2 flex'}>{tags.map((item: any) => {
                         return (
-                            <View className={'border rounded px-1 border-red-500 border-solid text-red-500'}>{item}</View>
+                            <View className={'border rounded px-1 border-red-500 border-solid text-red-500 text-sm'}>{item}</View>
                         );
                     })}</View>}
-                    <View className={'px-2 text-lg'}>{data.title}</View>
-                    <View className={'px-2 text-stone-400'}>{utils.delHtml(data.subTitle)}</View>
-                    <View className={'px-2 mb-2 flex justify-between items-center'}>
+                    <View className={'px-3 text-lg mb-1'}>{data.title}</View>
+                    <View className={'px-3 mb-1 text-stone-400 text-sm'}>{utils.delHtml(data.subTitle)}</View>
+                    <View className={'px-3 mb-2 flex justify-between items-center'}>
                         <View>
-                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500 text-xl'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500'}>{numeral(data.startPrice).format('0,0.00')}</Text>
                         </View>
-                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-500 flex items-center text-lg justify-center text-white'}
-                              style={{width: 24, height: 24}}>
+                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-700 flex items-center justify-center text-white'}
+                              style={{width: 20, height: 20}}>
                             <Text className={'iconfont icon-gouwuche'}/>
                         </View>
                     </View>
