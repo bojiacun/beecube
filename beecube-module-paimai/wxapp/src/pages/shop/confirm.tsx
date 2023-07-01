@@ -62,9 +62,9 @@ export default class Index extends Component<any, any> {
 
     copyBank(bank) {
         let data = `${bank.bankName} ${bank.bankAddress} ${bank.bankCode}`;
-        Taro.setClipboardData({data: data}).then(()=>{
+        Taro.setClipboardData({data: data}).then(() => {
             utils.showSuccess(false, '复制成功');
-        }).catch(()=>{
+        }).catch(() => {
             utils.showError('复制失败');
         });
     }
@@ -110,12 +110,18 @@ export default class Index extends Component<any, any> {
     }
 
     handleSelectCoupon(value: string) {
-        this.setState({selectedTicketId: value});
+        if(value == 'nouse') {
+            this.setState({selectedTicketId: null});
+        }
+        else {
+            this.setState({selectedTicketId: value});
+        }
     }
 
     handleNoteChanged(e) {
         this.setState({note: e.detail.value});
     }
+
     handleIntegralChange(value) {
         const postOrderInfo = this.state.postOrderInfo;
         if (value == '1') {
@@ -131,6 +137,9 @@ export default class Index extends Component<any, any> {
     useCoupon() {
         const postOrderInfo = this.state.postOrderInfo;
         postOrderInfo.ticketId = this.state.selectedTicketId;
+        if(!postOrderInfo.ticketId) {
+            postOrderInfo.ticketAmount = 0;
+        }
         this.setState({postOrderInfo: postOrderInfo, openCoupon: false});
         this.fetchPrice(postOrderInfo);
     }
@@ -168,7 +177,7 @@ export default class Index extends Component<any, any> {
 
     async subscribeMessage() {
         const settings = this.props.settings;
-        if(settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
+        if (settings.orderNotPayTemplateId || settings.orderDeliveryTemplateId) {
             await Taro.requestSubscribeMessage({tmplIds: [settings.orderNotPayTemplateId, settings.orderDeliveryTemplateId]});
         }
         return true;
@@ -176,7 +185,7 @@ export default class Index extends Component<any, any> {
 
     async confirmNetPay() {
         const subs = await this.subscribeMessage();
-        if(!subs) return;
+        if (!subs) return;
 
         this.setState({posting: true});
         utils.showLoading('订单提交中');
@@ -189,7 +198,7 @@ export default class Index extends Component<any, any> {
 
         request.post('/paimai/api/members/goods/buy', data).then(res => {
             let data = res.data.result;
-            if(data?.id) {
+            if (data?.id) {
                 //支付已经完成，提醒支付成功并返回上一页面
                 Taro.showToast({title: '下单成功', duration: 2000}).then(() => {
                     //清空购物车
@@ -205,20 +214,21 @@ export default class Index extends Component<any, any> {
                     Taro.setStorageSync("CART", JSON.stringify(newCart));
                     setTimeout(() => {
                         utils.hideLoading();
-                        Taro.redirectTo({url: '/order/pages/orders/detail?id='+data.id});
+                        Taro.redirectTo({url: '/order/pages/orders/detail?id=' + data.id});
                     }, 2000);
                 });
                 this.setState({posting: false});
             }
         });
     }
+
     handlePayTypeChanged(value) {
         this.setState({payType: value, openNetPay: true});
     }
 
     async pay() {
         const subs = await this.subscribeMessage();
-        if(!subs) return;
+        if (!subs) return;
         let data = this.state.postOrderInfo;
         data.payType = parseInt(this.state.payType);
         data.address = this.state.address;
@@ -353,7 +363,8 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'flex items-center'}>
                         <View className={'font-bold'}>买家留言</View>
-                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} alwaysEmbed={true} adjustPosition={true} cursorSpacing={24} onInput={this.handleNoteChanged} /></View>
+                        <View className={'ml-4'}><Input placeholder={'请填写内容与平台确认，限制50字以内'} alwaysEmbed={true} adjustPosition={true} cursorSpacing={24}
+                                                        onInput={this.handleNoteChanged}/></View>
                     </View>
                 </View>
                 <View className={'p-4 m-4 rounded-lg bg-white space-y-4'}>
@@ -416,12 +427,20 @@ export default class Index extends Component<any, any> {
                     <Popup style={{height: 530}} className={'!bg-gray-100'} open={openCoupon} rounded placement={'bottom'} onClose={() => this.setState({openCoupon: false})}>
                         <View className={'text-2xl sticky top-0 !bg-gray-100 z-100'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>优惠券</View>
+                            <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
+                                       url={'/pages/settings?key=useCouponTip&title=优惠券使用说明'}>
+                                <Text className={'mr-2'}> 使用说明 </Text>
+                                <Text className={'fa fa-question-circle-o'}/>
+                            </Navigator>
                             <Popup.Close/>
                         </View>
-                        <Tabs sticky defaultValue={'available'}>
-                            <Tabs.TabPane value={'available'} title={`可用优惠券(${coupons?.available.length})`}>
-                                <View className={'m-4'} style={{paddingBottom: 80}}>
-                                    <Radio.Group className={'space-y-4'} onChange={this.handleSelectCoupon}>
+                        <Radio.Group onChange={this.handleSelectCoupon}>
+                            <View className={'px-4'}>
+                                <Radio className={'radio-red-color !mb-0 mr-1'} name={'nouse'}>不使用优惠券</Radio>
+                            </View>
+                            <Tabs sticky defaultValue={'available'}>
+                                <Tabs.TabPane value={'available'} title={`可用优惠券(${coupons?.available.length})`}>
+                                    <View className={'m-4'} style={{paddingBottom: 80}}>
                                         {coupons?.available.map((item: any) => {
                                             return (
                                                 <View>
@@ -434,61 +453,61 @@ export default class Index extends Component<any, any> {
                                                                     {item.coupon.amount}
                                                                 </Text>
                                                             </View>
-                                                            <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
+                                                            <View className={'text-sm text-stone-200'}>满{item.coupon.minPrice}可用</View>
                                                         </View>
                                                         <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
                                                             <View className={'flex-1'}>
                                                                 <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
-                                                                <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
+                                                                <View className={'text-sm text-stone-200 mt-2'}>有效期至{item.endTime}</View>
                                                             </View>
-                                                            <View className={'w-10'}><Radio className={'radio-red-color'} name={item.id}/></View>
+                                                            <View className={'w-10'}><Radio className={'radio-red-color'} size={18} name={item.id} /></View>
                                                         </View>
                                                     </View>
-                                                    <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
+                                                    <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400 text-sm'}>
                                                         {item.coupon.description}
                                                     </View>
                                                 </View>
                                             );
                                         })}
-                                    </Radio.Group>
-                                    <View className={'my-4'}><TaroifyButton color={'danger'} onClick={this.useCoupon} block>确定</TaroifyButton></View>
-                                </View>
-                            </Tabs.TabPane>
-                            <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
-                                <View className={'m-4'} style={{paddingBottom: 80}}>
-                                    <Radio.Group className={'space-y-4'}>
-                                        {coupons?.unAvailable.map((item: any) => {
-                                            return (
-                                                <View style={{filter: 'grayscale(100%)'}}>
-                                                    <View className={'text-white flex'}>
-                                                        <View className={'flex flex-col items-center justify-center rounded-t-lg bg-red-700 flex-none'}
-                                                              style={{width: 100, height: 80}}>
-                                                            <View className={'font-bold'}>
-                                                                <Text>￥</Text>
-                                                                <Text className={'text-4xl'}>
-                                                                    {item.coupon.amount}
-                                                                </Text>
+                                        <View className={'my-4'}><TaroifyButton color={'danger'} onClick={this.useCoupon} block>确定</TaroifyButton></View>
+                                    </View>
+                                </Tabs.TabPane>
+                                <Tabs.TabPane value={'unAvailable'} title={`不可用优惠券(${coupons?.unAvailable.length})`}>
+                                    <View className={'m-4'} style={{paddingBottom: 80}}>
+                                        <Radio.Group className={'space-y-4'}>
+                                            {coupons?.unAvailable.map((item: any) => {
+                                                return (
+                                                    <View>
+                                                        <View className={'text-white flex'}>
+                                                            <View className={'flex flex-col items-center justify-center rounded-t-lg bg-stone-200 flex-none'}
+                                                                  style={{width: 100, height: 80}}>
+                                                                <View className={'font-bold'}>
+                                                                    <Text>￥</Text>
+                                                                    <Text className={'text-4xl'}>
+                                                                        {item.coupon.amount}
+                                                                    </Text>
+                                                                </View>
+                                                                <View className={'text-sm text-stone-400'}>满{item.coupon.minPrice}可用</View>
                                                             </View>
-                                                            <View className={'text-sm text-gray-400'}>满{item.coupon.minPrice}可用</View>
+                                                            <View className={'rounded-t-lg bg-stone-200 flex-1 flex items-center px-4'}>
+                                                                <View className={'flex-1'}>
+                                                                    <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
+                                                                    <View className={'text-sm text-stone-400 mt-2'}>有效期至{item.endTime}</View>
+                                                                </View>
+                                                                <View className={'w-10'}><Radio disabled name={item.id}/></View>
+                                                            </View>
                                                         </View>
-                                                        <View className={'rounded-t-lg bg-red-700 flex-1 flex items-center px-4'}>
-                                                            <View className={'flex-1'}>
-                                                                <View className={'text-white font-bold text-lg'}>{item.coupon.title}</View>
-                                                                <View className={'text-sm text-gray-400 mt-2'}>有效期至{item.endTime}</View>
-                                                            </View>
-                                                            <View className={'w-10'}><Radio disabled name={item.id}/></View>
+                                                        <View className={'bg-white text-cut rounded-b-lg p-4 text-sm text-stone-400'}>
+                                                            {item.coupon.description}
                                                         </View>
                                                     </View>
-                                                    <View className={'bg-white text-cut rounded-b-lg p-4 text-stone-400'}>
-                                                        {item.coupon.description}
-                                                    </View>
-                                                </View>
-                                            );
-                                        })}
-                                    </Radio.Group>
-                                </View>
-                            </Tabs.TabPane>
-                        </Tabs>
+                                                );
+                                            })}
+                                        </Radio.Group>
+                                    </View>
+                                </Tabs.TabPane>
+                            </Tabs>
+                        </Radio.Group>
                     </Popup>
                 </ConfigProvider>
 
@@ -511,7 +530,7 @@ export default class Index extends Component<any, any> {
                                 </Radio>
                                 <Radio className={'radio-red-color'} name={'0'}>不使用积分抵扣</Radio>
                             </Radio.Group>
-                            <View className={'mt-4'}><TaroifyButton color={'danger'} block onClick={()=>this.setState({openIntegral: false})}>确 定</TaroifyButton></View>
+                            <View className={'mt-4'}><TaroifyButton color={'danger'} block onClick={() => this.setState({openIntegral: false})}>确 定</TaroifyButton></View>
                         </View>
                     </Popup>
                 </ConfigProvider>
@@ -533,7 +552,7 @@ export default class Index extends Component<any, any> {
                                             <View>{item.bankAddress}</View>
                                             <View>{item.bankCode}</View>
                                         </View>
-                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={()=>this.copyBank(item)}>复制</Button></View>
+                                        <View className={'flex-none'}><Button className={'btn btn-sm btn-outline'} onClick={() => this.copyBank(item)}>复制</Button></View>
                                     </View>
                                 );
                             })}
