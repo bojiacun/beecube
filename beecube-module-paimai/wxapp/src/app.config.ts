@@ -15,6 +15,7 @@ export default defineAppConfig({
         'pages/my/wallet',
         'pages/my/wallet/charge',
         'pages/my/wallet/withdraw',
+        'pages/my/wallet/withdraws',
         'pages/my/addresses',
         'pages/my/newaddress',
         'pages/my/deposits',
