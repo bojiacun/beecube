@@ -31,6 +31,7 @@ export default class Index extends Component<any, any> {
 
     componentDidMount() {
     }
+
     openWxServiceChat() {
         const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
         Taro.openCustomerServiceChat({
@@ -38,6 +39,7 @@ export default class Index extends Component<any, any> {
             corpId: wxServiceChatCorpId,
         });
     }
+
     loadData(page, clear = false) {
         return request.get('/paimai/api/articles/list', {
             params: {
@@ -69,35 +71,65 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {list, noMore, loadingMore} = this.state;
+        const {list} = this.state;
         const {systemInfo, settings} = this.props;
-        const safeBottom = utils.calcSafeBottom(systemInfo) + 30;
+        const safeBottom = utils.calcSafeBottom(systemInfo);
         return (
-            <PageLayout
-                statusBarProps={{title: '帮助中心', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
-                enableReachBottom={true}>
+            <PageLayout statusBarProps={{title: '帮助中心', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}>
                 {list.length == 0 && <NoData/>}
-                <View className={'grid grid-cols-1 divide-y divide-gray-100 px-4 bg-white'}>
-                    {list.map((item) => {
-                        return (
-                            <View>
-                                <Navigator url={`/article/pages/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
-                                    <View className={'flex-1 font-bold'}>
-                                        {item.title}
-                                    </View>
-                                    <View className={'iconfont icon-youjiantou_huaban w-20 text-right'}/>
-                                </Navigator>
-                            </View>
-                        );
-                    })}
+                <View className={'bg-white p-4 mt-4'}>
+                    <View className={'flex items-center justify-between'}>
+                        <View className={'item-title'}>常见问题</View>
+                        <View className={'text-stone-400'}><Text className={'fa fa-circle-o mr-2'}/>换一换</View>
+                    </View>
+                    <View className={''}>
+                        {list.map((item) => {
+                            return (
+                                <View>
+                                    <Navigator url={`/article/pages/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
+                                        <View className={'flex-1'}>
+                                            {item.title}
+                                        </View>
+                                        <View className={'iconfont icon-youjiantou_huaban w-20 text-right'}/>
+                                    </Navigator>
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
-                <View className={'p-4 text-center absolute w-full'} style={{bottom:safeBottom}}>
-                    {!settings.wxServiceChatCorpId &&
-                        <Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button>
-                    }
-                    {settings.wxServiceChatCorpId &&
-                        <Button className={'btn btn-outline text-lg'} onClick={this.openWxServiceChat}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button>
-                    }
+                <View className={'p-4 text-center absolute w-full'} style={{bottom: safeBottom}}>
+                    <View className={'rounded-lg bg-orange-100 p-4'}>咨询时间：09:00 - 18:30 （工作日、节假日除外）</View>
+                    <View className={'flex items-center mt-4'}>
+                        <View className={'flex-1'}>
+                            {!settings.wxServiceChatCorpId &&
+                                <View className={'flex flex-col items-center justify-center'}>
+                                    <Text className={'iconfont text-4xl icon-kefu011'} />
+                                    <Button plain={true} openType={'contact'}>
+                                        在线咨询
+                                    </Button>
+                                </View>
+                            }
+                            {settings.wxServiceChatCorpId &&
+                                <View className={'flex flex-col items-center justify-center'}>
+                                    <Text className={'iconfont text-4xl icon-kefu011'} />
+                                    <Button plain={true} onClick={this.openWxServiceChat}>
+                                        在线咨询
+                                    </Button>
+                                </View>
+                            }
+                        </View>
+                        <View className={'flex-1'}>
+                            <View className={'flex flex-col items-center justify-center'}>
+                                <View className={'text-4xl'}>
+                                    <Text className={'fa fa-phone'} />
+                                </View>
+                                <Button plain={true}>
+                                    电话咨询
+                                </Button>
+                            </View>
+                        </View>
+                    </View>
+
                 </View>
             </PageLayout>
         );
