@@ -409,7 +409,7 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white flex items-center fixed px-4 py-2 w-full bottom-0 z-10'} style={{paddingBottom: Taro.pxTransform(safeBottom)}}>
                     <View className={'flex-1 flex items-center'}>
                         <Text className={'ml-4 font-bold'}>总计：</Text>
-                        <Text className={'text-red-500 font-bold text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
+                        <Text className={'text-red-500 text-xl'}>￥{numeral(this.calcCartPrice).format('0,0.00')}</Text>
                     </View>
                     <View>
                         <TaroifyButton color={'danger'} block shape={'round'} disabled={this.calcCartPrice <= 0 || this.state.posting} onClick={this.pay}>

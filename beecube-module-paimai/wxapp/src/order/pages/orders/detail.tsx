@@ -56,6 +56,7 @@ export default class Index extends Component<any, any> {
         this.refreshData = this.refreshData.bind(this);
         this.showUploadNetPay = this.showUploadNetPay.bind(this);
         this.copyBank = this.copyBank.bind(this);
+        this.copyOrdersn = this.copyOrdersn.bind(this);
         this.onUpload = this.onUpload.bind(this);
         this.setUploadFile = this.setUploadFile.bind(this);
         this.confirmUpload = this.confirmUpload.bind(this);
@@ -100,7 +101,14 @@ export default class Index extends Component<any, any> {
             utils.showError('复制失败');
         });
     }
-
+    copyOrdersn() {
+        let data = `${this.state.detail.ordersn}`;
+        Taro.setClipboardData({data: data}).then(() => {
+            utils.showSuccess(false, '复制成功');
+        }).catch(() => {
+            utils.showError('复制失败');
+        });
+    }
     showUploadNetPay() {
         this.setState({openNetPay: false, openUploadPay: true});
     }
@@ -110,6 +118,7 @@ export default class Index extends Component<any, any> {
         request.get('/paimai/api/banks').then(res => {
             this.setState({banks: res.data.result});
         });
+        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'});
     }
 
     onLoad(options) {
@@ -237,6 +246,7 @@ export default class Index extends Component<any, any> {
     requestAfter() {
         Taro.navigateTo({url: 'after'}).then();
     }
+
     openWxServiceChat() {
         const {wxServiceChatCorpId, wxServiceChatUrl} = this.props.settings;
         Taro.openCustomerServiceChat({
@@ -244,7 +254,43 @@ export default class Index extends Component<any, any> {
             corpId: wxServiceChatCorpId,
         });
     }
-
+    renderStatusText() {
+        const {detail} = this.state;
+        switch (detail.status) {
+            case 0:
+                if (detail.payType == 2 && detail.payImage) {
+                    return '核对中';
+                }
+        }
+        return ORDER_STATUS[detail.status];
+    }
+    renderTopButton() {
+        const {detail} = this.state;
+        switch (detail.status) {
+            case 0:
+                if (detail.payType == 2 && detail.payImage) {
+                    return (
+                        <TaroifyButton shape={'round'} size={'small'}>
+                            <View className={'text-red-700'}>查看凭据</View>
+                        </TaroifyButton>
+                    );
+                }
+                return (
+                    <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.pay} size={'small'}>
+                        <View className={'text-red-700'}>{detail.payType == 1 ? '立即支付' : '上传转账凭证'}</View>
+                    </TaroifyButton>
+                );
+                break;
+            case 2:
+                return (
+                    <TaroifyButton disabled={this.state.posting} color={'warning'} shape={'round'} onClick={this.confirmDelivery}>
+                        <View>确认收货</View>
+                    </TaroifyButton>
+                );
+                break;
+        }
+        return <></>
+    }
     renderButton() {
         const {detail} = this.state;
         const {systemInfo, settings} = this.props;
@@ -261,8 +307,8 @@ export default class Index extends Component<any, any> {
                                 <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.cancel}>
                                     <View>取消订单</View>
                                 </TaroifyButton>
-                                <TaroifyButton disabled={true} shape={'round'} color={'danger'} className={'btn btn-primary'}>
-                                    <View>已上传，审核中</View>
+                                <TaroifyButton shape={'round'} color={'danger'}>
+                                    <View>查看凭据</View>
                                 </TaroifyButton>
                             </View>
                         </View>
@@ -290,7 +336,7 @@ export default class Index extends Component<any, any> {
                             <View className={'flex items-center'}>
                                 {!settings.wxServiceChatCorpId &&
                                     <TaroifyButton openType={'contact'} shape={'round'} color={'danger'}>
-                                        <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
+                                        <View className={'space-x-2'}>联系客服</View>
                                     </TaroifyButton>
                                 }
                                 {settings.wxServiceChatCorpId &&
@@ -350,18 +396,26 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {detail, address, afters, openUploadPay, openNetPay, banks} = this.state;
+        const {systemInfo} = this.props;
         if (detail == null) return <PageLoading/>;
-
+        const barTop = systemInfo.statusBarHeight;
+        const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+        // 获取导航栏高度
+        const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2;
 
         return (
-            <PageLayout statusBarProps={{title: '订单详情'}}>
-                <View className={'space-y-4 p-4 head-bg'}>
-                    <View className={'text-white mt-4'}>
-                        <View className={'text-3xl'}> {ORDER_STATUS[detail.status]} </View>
-                        <View></View>
+            <PageLayout showStatusBar={false}>
+                <View className={'space-y-4 head-bg'}>
+                    <View className={'flex items-center justify-center text-lg relative text-white'} style={{height: barHeight + barTop, paddingTop: barTop}}>
+                        订单详情
+                        <Text className={'fa fa-chevron-left absolute left-5'} onClick={() => utils.navigateBack()}/>
                     </View>
-                    <View className={'bg-white p-4 rounded-lg space-y-4'}>
-                        <View className={'font-bold item-title text-lg'}>收货地址</View>
+                    <View className={'text-white mt-4 p-4 flex justify-between items-center'}>
+                        <View className={'text-3xl'}>{this.renderStatusText()}</View>
+                        <View>{this.renderTopButton()}</View>
+                    </View>
+                    <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                        <View className={'item-title text-lg'}>收货地址</View>
                         <View className={'space-y-4'}>
                             {detail.status == 0 && !detail.deliveryId &&
                                 <Navigator url={'/pages/my/addresses'} className={'flex items-center justify-between'}>
@@ -391,8 +445,8 @@ export default class Index extends Component<any, any> {
                         </View>
                     </View>
                 </View>
-                <View className={'bg-white p-4 rounded-lg mx-4 space-y-4'}>
-                    <View className={'font-bold text-lg item-title'}>商品信息</View>
+                <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
+                    <View className={'text-lg item-title'}>商品信息</View>
                     <View className={'space-y-4'}>
                         {detail.orderGoods.map((item: any) => {
                             return (
@@ -403,10 +457,10 @@ export default class Index extends Component<any, any> {
                                     </View>
                                     <View className={'flex-1'}>
                                         <View>{item.goodsName}</View>
-                                        <View>{numeral(item.goodsPrice).format('0,0.00')} X {item.goodsCount}</View>
+                                        <View className={'text-red-600 mt-1'}>￥{numeral(item.goodsPrice).format('0,0.00')}</View>
                                     </View>
                                     <View className={'flex flex-col space-y-2'} style={{alignItems: 'flex-end'}}>
-                                        <View className={'font-bold'}>￥{numeral(item.goodsPrice * item.goodsCount).format('0,0.00')}</View>
+                                        <View className={''}>X {item.goodsCount}</View>
                                         {item.isAfter == 0 && detail.status > 1 && detail.type == 2 &&
                                             <Navigator style={{padding: 5, fontSize: 12}} className={'btn btn-outline'}
                                                        url={`after?ogid=${item.id}&oid=${item.orderId}`}>
@@ -418,12 +472,12 @@ export default class Index extends Component<any, any> {
                             );
                         })}
                     </View>
-                    <View className={'text-right font-bold text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
+                    <View className={'text-right text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
                 </View>
 
                 {detail?.status == 2 &&
                     <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                        <View className={'font-bold text-lg item-title'}>快递信息</View>
+                        <View className={'text-lg item-title'}>快递信息</View>
                         <View className={'space-y-4'}>
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>快递类型</View>
@@ -437,39 +491,44 @@ export default class Index extends Component<any, any> {
                     </View>
                 }
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                    <View className={'font-bold text-lg item-title'}>订单信息</View>
+                    <View className={'text-lg item-title'}>订单信息</View>
                     <View className={'space-y-4'}>
-                        <View className={'flex items-center justify-between'}>
+                        <View className={'flex items-center'}>
+                            <View className={'flex items-center flex-1 space-x-4'}>
+                                <View className={'text-gray-400'}>订单编号</View>
+                                <View>{detail.id}</View>
+                            </View>
+                            <View className={'flex-none'}><TaroifyButton className={'w-10'} shape={'round'} size={'mini'} onClick={this.copyOrdersn}>复制</TaroifyButton></View>
+                        </View>
+                        <View className={'flex items-center space-x-4'}>
                             <View className={'text-gray-400'}>订单类型</View>
                             <View>{ORDER_TYPES[detail.type]}</View>
                         </View>
-                        <View className={'flex items-center justify-between'}>
-                            <View className={'text-gray-400'}>订单号</View>
-                            <View>{detail.id}</View>
-                        </View>
-                        <View className={'flex items-center justify-between'}>
+                        <View className={'flex items-center space-x-4'}>
                             <View className={'text-gray-400'}>下单时间</View>
                             <View>{detail.createTime}</View>
                         </View>
-                        <View className={'flex items-center justify-between'}>
-                            <View className={'text-gray-400'}>支付时间</View>
-                            <View>{detail.payTime}</View>
-                        </View>
+                        {detail.status > 0 &&
+                            <View className={'flex items-center space-x-4'}>
+                                <View className={'text-gray-400'}>支付时间</View>
+                                <View>{detail.payTime}</View>
+                            </View>
+                        }
                         {detail.status > 0 && detail.payType == 1 &&
-                            <View className={'flex items-center justify-between'}>
+                            <View className={'flex items-center space-x-4'}>
                                 <View className={'text-gray-400'}>交易单号</View>
                                 <View>{detail.transactionId}</View>
                             </View>
                         }
-                        <View className={'flex items-center justify-between'}>
+                        <View className={'flex items-center space-x-4'}>
                             <View className={'text-gray-400'}>买家留言</View>
                             <View>{detail.note}</View>
                         </View>
                         {detail.status == 0 &&
-                            <View className={'flex items-center justify-between'}>
+                            <View className={'flex items-center space-x-4'}>
                                 <View className={'text-gray-400'}>支付方式</View>
                                 <View>
-                                    <Radio.Group defaultValue={detail.payType + ''} disabled={true} direction={'horizontal'} size={14} className={'radio-red-color'}
+                                    <Radio.Group defaultValue={detail.payType + ''} disabled={true} direction={'horizontal'} size={14} className={'radio-red-color !text-sm'}
                                                  onChange={this.handlePayTypeChanged}>
                                         <Radio name={'1'}>微信支付</Radio>
                                         <Radio name={'2'}>网银转账</Radio>
@@ -478,7 +537,7 @@ export default class Index extends Component<any, any> {
                             </View>
                         }
                         {detail.status > 0 &&
-                            <View className={'flex items-center justify-between'}>
+                            <View className={'flex items-center space-x-4'}>
                                 <View className={'text-gray-400'}>支付方式</View>
                                 <View>{detail.payType == 1 ? '微信支付' : '网银转账'}</View>
                             </View>
@@ -487,7 +546,7 @@ export default class Index extends Component<any, any> {
                 </View>
                 {detail.status == 4 &&
                     <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                        <View className={'font-bold text-lg item-title'}>售后信息</View>
+                        <View className={'text-lg item-title'}>售后信息</View>
                         <View className={'space-y-4'}>
                             {afters?.map((item: any) => {
                                 return (
@@ -512,19 +571,19 @@ export default class Index extends Component<any, any> {
                 }
 
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                    <View className={'font-bold text-lg item-title'}>结算信息</View>
+                    <View className={'text-lg item-title'}>结算信息</View>
                     <View className={'space-y-4'}>
                         {detail.settlements.map((item: any) => {
                             return (
                                 <View className={'flex items-center justify-between'}>
                                     <View className={'text-gray-400'}>{item.description}</View>
-                                    <View className={'font-bold'}>{item.amount}</View>
+                                    <View className={''}>{item.amount}</View>
                                 </View>
                             );
                         })}
                         <View className={'flex items-center justify-between'}>
                             <View className={'text-gray-400'}>实际支付</View>
-                            <View className={'font-bold text-lg text-red-600'}>￥{numeral(detail.payedPrice).format('0,0.00')}</View>
+                            <View className={'text-lg text-red-600'}>￥{numeral(detail.payedPrice).format('0,0.00')}</View>
                         </View>
                     </View>
                 </View>
@@ -553,7 +612,7 @@ export default class Index extends Component<any, any> {
                                 );
                             })}
                         </View>
-                        <View><TaroifyButton color={'primary'} block onClick={this.showUploadNetPay}>上传转账凭证</TaroifyButton></View>
+                        <View><TaroifyButton color={'danger'} block onClick={this.showUploadNetPay}>上传转账凭证</TaroifyButton></View>
                     </View>
                 </Popup>
                 <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
