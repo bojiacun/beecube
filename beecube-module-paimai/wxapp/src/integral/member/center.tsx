@@ -37,11 +37,7 @@ export default class Index extends Component<any, any> {
         this.handleSignin = this.handleSignin.bind(this);
     }
 
-    componentDidUpdate() {
-    }
-
-    componentDidMount() {
-        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
+    loadData() {
         request.get('/app/api/signin/info').then(res => {
             const {settings} = this.props;
             let cycles = settings.signinCycle.split(',').map(integral => ({integral: integral, active: false}));
@@ -51,6 +47,16 @@ export default class Index extends Component<any, any> {
             });
             this.setState({signins: cycles});
         });
+    }
+    refreshUserInfo() {
+        request.get('/app/api/members/profile').then(res => {
+            this.props.updateUserInfo(res.data.result);
+        });
+    }
+
+    componentDidMount() {
+        Taro.setNavigationBarColor({frontColor: '#ffffff', backgroundColor: 'transparent'}).then();
+        this.loadData();
     }
 
     handleSignin() {
@@ -62,6 +68,7 @@ export default class Index extends Component<any, any> {
                 cycles[msignin.dayIndex - 1].active = true;
             });
             this.setState({signins: cycles, posting: false});
+            this.refreshUserInfo();
         }).catch(() => this.setState({posting: false}));
     }
 
