@@ -58,6 +58,7 @@ export default class Index extends Component<any, any> {
         this.showUploadNetPay = this.showUploadNetPay.bind(this);
         this.copyBank = this.copyBank.bind(this);
         this.copyOrdersn = this.copyOrdersn.bind(this);
+        this.copyDeliveryNo = this.copyDeliveryNo.bind(this);
         this.onUpload = this.onUpload.bind(this);
         this.setUploadFile = this.setUploadFile.bind(this);
         this.confirmUpload = this.confirmUpload.bind(this);
@@ -104,6 +105,14 @@ export default class Index extends Component<any, any> {
     }
     copyOrdersn() {
         let data = `${this.state.detail.ordersn}`;
+        Taro.setClipboardData({data: data}).then(() => {
+            utils.showSuccess(false, '复制成功');
+        }).catch(() => {
+            utils.showError('复制失败');
+        });
+    }
+    copyDeliveryNo() {
+        let data = `${this.state.detail.deliveryNo}`;
         Taro.setClipboardData({data: data}).then(() => {
             utils.showSuccess(false, '复制成功');
         }).catch(() => {
@@ -469,6 +478,18 @@ export default class Index extends Component<any, any> {
                                 </View>
                             }
                         </View>
+                        {detail?.status == 2 &&
+                            <View style={{borderTop: '1px dashed #ccc'}}>
+                                <View className={'py-4 text-stone-400'}>物流信息</View>
+                                <View className={'flex items-center'}>
+                                    <View className={'flex-1 flex items-center space-x-4'}>
+                                        <View>{detail.deliveryCode}</View>
+                                        <View>{detail.deliveryNo}</View>
+                                    </View>
+                                    <View className={'flex-none'}><TaroifyButton className={'w-10'} shape={'round'} size={'mini'} onClick={this.copyDeliveryNo}>复制</TaroifyButton></View>
+                                </View>
+                            </View>
+                        }
                     </View>
                 </View>
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
@@ -501,20 +522,6 @@ export default class Index extends Component<any, any> {
                     <View className={'text-right text-lg'}>总计：￥{numeral(detail.totalPrice).format('0,0.00')}</View>
                 </View>
 
-                {detail?.status == 2 &&
-                    <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                        <View className={'space-y-4'}>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>快递类型</View>
-                                <View>{detail.deliveryCode}</View>
-                            </View>
-                            <View className={'flex items-center justify-between'}>
-                                <View className={'text-gray-400'}>快递单号</View>
-                                <View>{detail.deliveryNo}</View>
-                            </View>
-                        </View>
-                    </View>
-                }
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
                     <View className={'space-y-4'}>
                         <View className={'flex items-center'}>
