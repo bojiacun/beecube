@@ -7,6 +7,12 @@ import PageLoading from "../../../components/pageloading";
 import request from "../../../lib/request";
 import numeral from 'numeral';
 
+const WITHDRAW_STATUS = {
+    '0': '审核中',
+    '1': '已通过',
+    '2': '未通过',
+}
+
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -86,6 +92,7 @@ export default class Index extends Component<any, any> {
                                             申请时间：{item.createTime}
                                         </View>
                                     </View>
+                                    <View>{WITHDRAW_STATUS[item.status]}</View>
                                 </View>
                             );
                         })

@@ -67,18 +67,6 @@ export default class Index extends Component<any, any> {
         this.loadData(1, true).then(() => utils.hideLoading());
     }
 
-    onReachBottom() {
-        this.setState({loadingMore: true, noMore: false});
-        this.loadData(this.state.page + 1, false).then(() => {
-        });
-        this.setState({page: this.state.page + 1});
-    }
-
-    onPullDownRefresh() {
-        utils.showLoading();
-        this.loadData(1, true).then(() => utils.hideLoading());
-        this.setState({page: 1});
-    }
 
     render() {
         const {list, noMore, loadingMore} = this.state;
@@ -86,7 +74,7 @@ export default class Index extends Component<any, any> {
         const safeBottom = utils.calcSafeBottom(systemInfo) + 30;
         return (
             <PageLayout
-                statusBarProps={{title: '服务指南', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
+                statusBarProps={{title: '帮助中心', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}
                 enableReachBottom={true}>
                 {list.length == 0 && <NoData/>}
                 <View className={'grid grid-cols-1 divide-y divide-gray-100 px-4 bg-white'}>
@@ -103,7 +91,6 @@ export default class Index extends Component<any, any> {
                         );
                     })}
                 </View>
-                {list.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
                 <View className={'p-4 text-center absolute w-full'} style={{bottom:safeBottom}}>
                     {!settings.wxServiceChatCorpId &&
                         <Button className={'btn btn-outline text-lg'} openType={'contact'}><Text className={'fa fa-commenting-o mr-2'} />联系客服</Button>
