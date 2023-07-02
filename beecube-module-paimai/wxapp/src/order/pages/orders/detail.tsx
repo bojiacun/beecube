@@ -593,7 +593,12 @@ export default class Index extends Component<any, any> {
 
                 <Popup style={{height: 330}} className={'!bg-gray-100'} open={openNetPay} rounded placement={'bottom'} onClose={() => this.setState({openNetPay: false})}>
                     <View className={'text-2xl'}>
-                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>上传转账凭证</View>
+                        <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
+                                   url={'/pages/settings?key=netPayTip&title=网银转账使用说明'}>
+                            <Text className={'mr-2'}> 使用说明 </Text>
+                            <Text className={'fa fa-question-circle-o'}/>
+                        </Navigator>
                         <Popup.Close/>
                     </View>
                     <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
@@ -617,8 +622,13 @@ export default class Index extends Component<any, any> {
                 </Popup>
                 <Popup style={{height: 330}} className={'!bg-gray-100'} open={openUploadPay} rounded placement={'bottom'} onClose={() => this.setState({openUploadPay: false})}>
                     <View className={'text-2xl'}>
-                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>网银转账</View>
+                        <View className={'flex py-4 items-center justify-center text-xl font-bold'}>上传转账凭证</View>
                         <Popup.Close/>
+                        <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
+                                   url={'/pages/settings?key=netPayTip&title=网银转账使用说明'}>
+                            <Text className={'mr-2'}> 使用说明 </Text>
+                            <Text className={'fa fa-question-circle-o'}/>
+                        </Navigator>
                     </View>
                     <View className={'px-4 space-y-4 flex flex-col justify-between'} style={{paddingBottom: 84}}>
                         <View className={''}><Text className={'font-bold text-lg'}>转账截图:</Text><Text className={'text-stone-400'}>图片大小不能超过5M</Text>:</View>
