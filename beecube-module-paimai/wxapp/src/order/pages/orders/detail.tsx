@@ -16,6 +16,7 @@ const ORDER_TYPES = {
     '2': '一口价订单'
 }
 const ORDER_STATUS = {
+    '-1': '已取消',
     '0': '待支付',
     '1': '待发货',
     '2': '待收货',
@@ -267,6 +268,13 @@ export default class Index extends Component<any, any> {
     renderTopButton() {
         const {detail} = this.state;
         switch (detail.status) {
+            case -1:
+                return (
+                    <TaroifyButton disabled={this.state.posting} size={'small'} shape={'round'} onClick={()=>Taro.navigateTo({url: `/goods/pages/detail2?id=${detail.orderGoods[0].goodsId}`})}>
+                        <View className={'text-red-700'}>再次购买</View>
+                    </TaroifyButton>
+                );
+                break;
             case 0:
                 if (detail.payType == 2 && detail.payImage) {
                     return (
@@ -283,8 +291,8 @@ export default class Index extends Component<any, any> {
                 break;
             case 2:
                 return (
-                    <TaroifyButton disabled={this.state.posting} color={'warning'} shape={'round'} onClick={this.confirmDelivery}>
-                        <View>确认收货</View>
+                    <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.confirmDelivery}>
+                        <View className={'text-red-700'}>确认收货</View>
                     </TaroifyButton>
                 );
                 break;
@@ -335,13 +343,13 @@ export default class Index extends Component<any, any> {
                         <View className={'flex space-x-2'}>
                             <View className={'flex items-center'}>
                                 {!settings.wxServiceChatCorpId &&
-                                    <TaroifyButton openType={'contact'} shape={'round'} color={'danger'}>
+                                    <TaroifyButton openType={'contact'} shape={'round'}>
                                         <View className={'space-x-2'}>联系客服</View>
                                     </TaroifyButton>
                                 }
                                 {settings.wxServiceChatCorpId &&
-                                    <TaroifyButton onClick={this.openWxServiceChat} shape={'round'} color={'danger'}>
-                                        <View className={'space-x-2'}><Text className={'iconfont icon-lianxikefu '}/>联系客服</View>
+                                    <TaroifyButton onClick={this.openWxServiceChat} shape={'round'}>
+                                        <View className={'space-x-2'}>联系客服</View>
                                     </TaroifyButton>
                                 }
                             </View>
@@ -367,7 +375,25 @@ export default class Index extends Component<any, any> {
                 );
                 break;
         }
-        return <></>
+        return (
+            <View className={'bg-white px-4 pt-1 flex items-center justify-end fixed bottom-0 w-full'}
+                  style={{paddingBottom: safeBottom}}>
+                <View className={'flex space-x-2'}>
+                    <View className={'flex items-center'}>
+                        {!settings.wxServiceChatCorpId &&
+                            <TaroifyButton openType={'contact'} shape={'round'}>
+                                <View className={'space-x-2'}>联系客服</View>
+                            </TaroifyButton>
+                        }
+                        {settings.wxServiceChatCorpId &&
+                            <TaroifyButton onClick={this.openWxServiceChat} shape={'round'}>
+                                <View className={'space-x-2'}>联系客服</View>
+                            </TaroifyButton>
+                        }
+                    </View>
+                </View>
+            </View>
+        );
     }
 
     setUploadFile(file) {
