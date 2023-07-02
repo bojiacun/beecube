@@ -47,6 +47,7 @@ const MemberSettingsEditor = (props:any) => {
                         <BootstrapSwitch label={'消费送积分'} name={'consumeIntegral'} />
                         <BootstrapInput label={'提现金额'} name={'minWithdrawIntegral'} placeholder={'最小提现金额'} />
                         <BootstrapInput label={'提现比例'} name={'integralToMoney'} placeholder={'提现比例，例如100积分兑换1元设置为100:1'} />
+                        <BootstrapInput label={'客服电话'} name={'servicePhone'} placeholder={'客服电话'} />
 
                         <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'integralRule'}>积分规则</FormLabel>
@@ -54,9 +55,15 @@ const MemberSettingsEditor = (props:any) => {
                         </FormGroup>
 
                         <FormGroup className={'mb-1'}>
-                            <FormLabel htmlFor={'couponUseTip'}>优惠券适用说明</FormLabel>
+                            <FormLabel htmlFor={'couponUseTip'}>优惠券使用说明</FormLabel>
                             <TinymceEditor name={'couponUseTip'} />
                         </FormGroup>
+
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel htmlFor={'netPayTip'}>网银转账使用说明</FormLabel>
+                            <TinymceEditor name={'netPayTip'} />
+                        </FormGroup>
+
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}>

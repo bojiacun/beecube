@@ -519,7 +519,7 @@ export default class Index extends Component<any, any> {
                         <View className={'text-2xl'}>
                             <View className={'flex py-4 items-center justify-center text-xl font-bold'}>积分抵扣</View>
                             <Navigator style={{left: 16, top: 16}} className={'absolute block text-lg text-stone-400'}
-                                       url={'/pages/settings?key=useScoreTip&title=积分使用说明'}>
+                                       url={'/pages/settings?key=integralRule&title=积分使用说明'}>
                                 <Text className={'mr-2'}> 使用说明 </Text>
                                 <Text className={'fa fa-question-circle-o'}/>
                             </Navigator>
