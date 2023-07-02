@@ -18,7 +18,7 @@ export default class Index extends Component<any, any> {
     state: any = {
         page: 1,
         list: [],
-        pageSize: 1,
+        pageSize: 10,
         pages: 1,
     }
 
@@ -67,6 +67,7 @@ export default class Index extends Component<any, any> {
         if(newPage > this.state.pages) {
             newPage = 1;
         }
+        utils.showLoading();
         this.setState({page: newPage});
         this.loadData(newPage).then(()=>utils.hideLoading());
     }
