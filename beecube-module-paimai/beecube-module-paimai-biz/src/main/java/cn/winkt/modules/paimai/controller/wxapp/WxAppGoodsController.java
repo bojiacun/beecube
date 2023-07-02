@@ -83,6 +83,8 @@ public class WxAppGoodsController {
         }
         queryWrapper.eq("type", 2);
         queryWrapper.eq("status", 1);
+        queryWrapper.orderByAsc("sort_num");
+        queryWrapper.orderByDesc("create_time");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
         return Result.OK(pageList);
