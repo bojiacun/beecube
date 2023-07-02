@@ -95,6 +95,9 @@ export default class Index extends Component<any, any> {
                             return (
                                 <View>
                                     <Navigator url={`/article/pages/detail?id=${item.id}`} className={'flex py-4 items-center'}>
+                                        <View className={'text-red-700 mr-2'} style={{fontSize: 4}}>
+                                            <Text className={'fa fa-circle'} />
+                                        </View>
                                         <View className={'flex-1'}>
                                             {item.title}
                                         </View>
