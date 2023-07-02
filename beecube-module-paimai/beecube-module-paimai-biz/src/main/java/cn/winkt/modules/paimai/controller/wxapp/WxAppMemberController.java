@@ -1003,6 +1003,7 @@ public class WxAppMemberController {
             return Result.OK(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar()) ? 0 : 1);
         }
     }
+
     @GetMapping("/invites/all")
     public Result<?> queryMyInvites(
             @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,

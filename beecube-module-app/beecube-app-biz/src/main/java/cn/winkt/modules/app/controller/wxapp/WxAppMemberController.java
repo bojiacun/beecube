@@ -6,12 +6,16 @@ import cn.winkt.modules.app.config.WxMiniappServices;
 import cn.winkt.modules.app.constant.AppModuleConstants;
 import cn.winkt.modules.app.entity.AppMember;
 import cn.winkt.modules.app.entity.AppMemberAddress;
+import cn.winkt.modules.app.entity.AppMemberWithdraw;
 import cn.winkt.modules.app.service.IAppMemberAddressService;
 import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.service.IAppMemberWithdrawService;
 import cn.winkt.modules.app.service.IAppSettingService;
 import cn.winkt.modules.app.vo.MemberSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -56,7 +60,9 @@ public class WxAppMemberController {
     WxMiniappServices wxMiniappServices;
 
     @Resource
-    IAppSettingService appSettingService;
+    IAppMemberWithdrawService appMemberWithdrawService;
+
+
 
     //    获取当前用户信息
     @GetMapping("/profile")
@@ -189,6 +195,19 @@ public class WxAppMemberController {
         appMemberAddress.setMemberId(loginUser.getId());
         appMemberAddressService.updateById(appMemberAddress);
         return Result.OK("编辑成功!");
+    }
+    @GetMapping("/withdraws")
+    public Result<?> queryMyWithdraws(
+            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AppMemberWithdraw::getMemberId, loginUser.getId());
+        queryWrapper.orderByDesc(AppMemberWithdraw::getCreateTime);
+        IPage<AppMemberWithdraw> page = new Page<>(pageNo, pageSize);
+        IPage<AppMemberWithdraw> pageList = appMemberWithdrawService.page(page, queryWrapper);
+        return Result.OK(pageList);
     }
     /**
      * 添加
