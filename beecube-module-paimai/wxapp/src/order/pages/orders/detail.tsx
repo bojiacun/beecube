@@ -446,7 +446,7 @@ export default class Index extends Component<any, any> {
                     </View>
                 </View>
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                    <View className={'text-lg item-title'}>商品信息</View>
+                    <View className={'item-title'}>商品信息</View>
                     <View className={'space-y-4'}>
                         {detail.orderGoods.map((item: any) => {
                             return (
@@ -477,7 +477,6 @@ export default class Index extends Component<any, any> {
 
                 {detail?.status == 2 &&
                     <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                        <View className={'text-lg item-title'}>快递信息</View>
                         <View className={'space-y-4'}>
                             <View className={'flex items-center justify-between'}>
                                 <View className={'text-gray-400'}>快递类型</View>
@@ -491,7 +490,6 @@ export default class Index extends Component<any, any> {
                     </View>
                 }
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                    <View className={'text-lg item-title'}>订单信息</View>
                     <View className={'space-y-4'}>
                         <View className={'flex items-center'}>
                             <View className={'flex items-center flex-1 space-x-4'}>
@@ -546,7 +544,6 @@ export default class Index extends Component<any, any> {
                 </View>
                 {detail.status == 4 &&
                     <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                        <View className={'text-lg item-title'}>售后信息</View>
                         <View className={'space-y-4'}>
                             {afters?.map((item: any) => {
                                 return (
@@ -571,7 +568,6 @@ export default class Index extends Component<any, any> {
                 }
 
                 <View className={'bg-white p-4 rounded-lg m-4 space-y-4'}>
-                    <View className={'text-lg item-title'}>结算信息</View>
                     <View className={'space-y-4'}>
                         {detail.settlements.map((item: any) => {
                             return (
