@@ -4,7 +4,6 @@ import request from "../../lib/request";
 import utils from "../../lib/utils";
 import {View, Navigator, Button, Text} from "@tarojs/components";
 import NoData from "../../components/nodata";
-import LoadMore from "../../components/loadmore";
 import {connect} from "react-redux";
 import Taro from "@tarojs/taro";
 
@@ -19,15 +18,21 @@ export default class Index extends Component<any, any> {
     state: any = {
         page: 1,
         list: [],
-        loadingMore: false,
-        noMore: false,
+        pageSize: 1,
+        pages: 1,
     }
 
     constructor(props) {
         super(props);
         this.openWxServiceChat = this.openWxServiceChat.bind(this);
+        this.makePhoneCall = this.makePhoneCall.bind(this);
+        this.refreshLoad = this.refreshLoad.bind(this);
     }
 
+    makePhoneCall() {
+        const {settings} = this.props;
+        Taro.makePhoneCall({phoneNumber: settings.servicePhone});
+    }
 
     componentDidMount() {
     }
@@ -40,33 +45,36 @@ export default class Index extends Component<any, any> {
         });
     }
 
-    loadData(page, clear = false) {
+    loadData(page) {
+        const pageSize = this.state.pageSize;
         return request.get('/paimai/api/articles/list', {
             params: {
                 pageNo: page,
+                pageSize: pageSize,
                 column: 'createTime',
                 order: 'desc',
                 type: 4,
             }
         }).then(res => {
-            if (clear) {
-                this.setState({list: res.data.result.records, loadingMore: false, noMore: false});
-            } else {
-                let list = this.state.list;
-                let newList = res.data.result.records;
-                if (!newList || newList.length == 0) {
-                    this.setState({noMore: true, loadingMore: false});
-                } else {
-                    this.setState({noMore: false, loadingMore: false, list: [...list, ...newList]});
-                }
-            }
+            let records = res.data.result.records;
+            if(records.length == 0) return;
+            this.setState({list: records, pages: res.data.result.pages});
         });
+    }
+
+    refreshLoad() {
+        let newPage = this.state.page + 1;
+        if(newPage > this.state.pages) {
+            newPage = 1;
+        }
+        this.setState({page: newPage});
+        this.loadData(newPage).then(()=>utils.hideLoading());
     }
 
     onLoad(options: any) {
         this.setState({options: options})
         utils.showLoading();
-        this.loadData(1, true).then(() => utils.hideLoading());
+        this.loadData(1).then(() => utils.hideLoading());
     }
 
 
@@ -76,17 +84,17 @@ export default class Index extends Component<any, any> {
         const safeBottom = utils.calcSafeBottom(systemInfo);
         return (
             <PageLayout statusBarProps={{title: '帮助中心', className: 'border-0 border-b-1 border-gray-200 bg-white border-solid'}}>
-                {list.length == 0 && <NoData/>}
                 <View className={'bg-white p-4 mt-4'}>
                     <View className={'flex items-center justify-between'}>
                         <View className={'item-title'}>常见问题</View>
-                        <View className={'text-stone-400'}><Text className={'fa fa-circle-o mr-2'}/>换一换</View>
+                        <View className={'text-stone-400 cursor-pointer'} onClick={this.refreshLoad}><Text className={'fa fa-circle-o mr-2'}/>换一换</View>
                     </View>
-                    <View className={''}>
+                    {list.length == 0 && <NoData/>}
+                    <View className={'grid grid-cols-1 mt-4 px-4'}>
                         {list.map((item) => {
                             return (
                                 <View>
-                                    <Navigator url={`/article/pages/detail?id=${item.id}`} className={'bg-white py-4 flex items-center'}>
+                                    <Navigator url={`/article/pages/detail?id=${item.id}`} className={'flex py-4 items-center'}>
                                         <View className={'flex-1'}>
                                             {item.title}
                                         </View>
@@ -102,23 +110,23 @@ export default class Index extends Component<any, any> {
                     <View className={'flex items-center mt-4'}>
                         <View className={'flex-1'}>
                             {!settings.wxServiceChatCorpId &&
-                                <View className={'flex flex-col items-center justify-center'}>
-                                    <Text className={'iconfont text-4xl icon-kefu011'} />
-                                    <Button plain={true} openType={'contact'}>
+                                <View className={''}>
+                                    <Button className={'flex flex-col items-center justify-center'} plain={true} openType={'contact'}>
+                                        <Text className={'iconfont text-4xl icon-kefu011'} />
                                         在线咨询
                                     </Button>
                                 </View>
                             }
                             {settings.wxServiceChatCorpId &&
-                                <View className={'flex flex-col items-center justify-center'}>
-                                    <Text className={'iconfont text-4xl icon-kefu011'} />
-                                    <Button plain={true} onClick={this.openWxServiceChat}>
+                                <View className={''}>
+                                    <Button className={'flex flex-col items-center justify-center'} plain={true} onClick={this.openWxServiceChat}>
+                                        <Text className={'iconfont text-4xl icon-kefu011'} />
                                         在线咨询
                                     </Button>
                                 </View>
                             }
                         </View>
-                        <View className={'flex-1'}>
+                        <View className={'flex-1'} onClick={this.makePhoneCall}>
                             <View className={'flex flex-col items-center justify-center'}>
                                 <View className={'text-4xl'}>
                                     <Text className={'fa fa-phone'} />
