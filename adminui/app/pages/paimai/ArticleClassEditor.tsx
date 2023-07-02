@@ -64,7 +64,7 @@ const ArticleClassEditor = (props: any) => {
                                         <BootstrapRadioGroup options={[{label: '图文类', value: '1'}, {
                                             label: '视频类',
                                             value: '2'
-                                        }, {label: '服务指南', value: '3'}]} name={'type'} label={'文章模块'}/>
+                                        }, {label: '服务指南', value: '3'}, {label: '帮助中心', value: '4'}]} name={'type'} label={'文章模块'}/>
                                         <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}}
                                                         type={'number'}/>
                                         <BootstrapRadioGroup

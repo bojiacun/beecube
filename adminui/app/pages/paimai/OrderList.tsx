@@ -227,9 +227,9 @@ const OrderList = (props: any) => {
             }
         },
     ]
-    const handleOnSearchSubmit = () => {
+    const handleOnSearchSubmit = (e:any) => {
         //设置分页为1
-        setSearchState({...searchState, pageNo: 1});
+        setSearchState({...searchState, ...e.detail.value, pageNo: 1});
     }
     const handleOnNameChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
