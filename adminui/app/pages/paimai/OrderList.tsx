@@ -10,6 +10,7 @@ import DeliveryConfirmEditor from "~/pages/paimai/DeliveryConfirmEditor";
 import {User} from "react-feather";
 import DatePicker from "react-datepicker";
 import BootstrapSelect from "~/components/form/BootstrapSelect";
+import moment from "moment/moment";
 
 const PAY_TYPE_COLORS: any = {
     '1': 'primary',
@@ -227,17 +228,31 @@ const OrderList = (props: any) => {
             }
         },
     ]
-    const handleOnSearchSubmit = (e:any) => {
+    const handleOnSearchSubmit = () => {
         //设置分页为1
-        setSearchState({...searchState, ...e.detail.value, pageNo: 1});
+        setSearchState({...searchState, pageNo: 1});
     }
-    const handleOnNameChanged = (e: any) => {
+    const handleIdChanged = (e: any) => {
         setSearchState({...searchState, roleName: e.target.value});
+    }
+    const handlePayTypeChanged = (e: any) => {
+        setSearchState({...searchState, payType: e.target.value});
+    }
+    const handleStatusChanged = (e: any) => {
+        setSearchState({...searchState, status: e.target.value});
+    }
+    const handleFapiaoStatusChange = (e: any) => {
+        setSearchState({...searchState, fapiaoStatus: e.target.value});
+    }
+    const handleTypeChanged = (e: any) => {
+        setSearchState({...searchState, type: e.target.value});
     }
 
     const handleOnAdd = () => {
         setEditModal({});
     }
+
+
     return (
         <>
             <Card>
@@ -247,6 +262,8 @@ const OrderList = (props: any) => {
                         <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                         <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                         <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
+                        <FormControl name={'startDate'} value={moment(startDate).isValid() ? moment(startDate).format('YYYY-MM-DD') : ''} type={'hidden'}/>
+                        <FormControl name={'endDate'} value={moment(endDate).isValid() ? moment(endDate).format('YYYY-MM-DD') : ''} type={'hidden'}/>
 
                         <FormGroup as={Row} className={'mb-0'} gutter={16}>
                             <FormLabel column md={'auto'}>下单时间：</FormLabel>
@@ -265,7 +282,7 @@ const OrderList = (props: any) => {
                             </Col>
                             <FormLabel column md={'auto'}>支付方式：</FormLabel>
                             <Col md={'auto'} className={'mb-1'}>
-                                <Form.Select name={'payType'}>
+                                <Form.Select name={'payType'} onChange={handlePayTypeChanged}>
                                     <option value={''}>不设置</option>
                                     <option value={'1'}>微信支付</option>
                                     <option value={'2'}>线下支付</option>
@@ -273,7 +290,7 @@ const OrderList = (props: any) => {
                             </Col>
                             <FormLabel column md={'auto'}>订单状态：</FormLabel>
                             <Col md={'auto'} className={'mb-1'}>
-                                <Form.Select name={'status'}>
+                                <Form.Select name={'status'} onChange={handleStatusChanged}>
                                     <option value={''}>不设置</option>
                                     <option value={'0'}>待支付</option>
                                     <option value={'1'}>待发货</option>
@@ -283,7 +300,7 @@ const OrderList = (props: any) => {
                                 </Form.Select>
                             </Col>
                             <FormLabel column md={'auto'}>订单类型：</FormLabel>
-                            <Col md={'auto'} className={'mb-1'}>
+                            <Col md={'auto'} className={'mb-1'} onChange={handleTypeChanged}>
                                 <Form.Select name={'type'}>
                                     <option value={''}>不设置</option>
                                     <option value={'1'}>拍卖订单</option>
@@ -292,16 +309,16 @@ const OrderList = (props: any) => {
                             </Col>
                             <FormLabel column md={'auto'}>发票状态：</FormLabel>
                             <Col md={'auto'} className={'mb-1'}>
-                                <Form.Select name={'fapiaoStatus'}>
+                                <Form.Select name={'fapiaoStatus'} onChange={handleFapiaoStatusChange}>
                                     <option value={''}>不设置</option>
                                     <option value={'0'}>未申请</option>
                                     <option value={'1'}>申请中</option>
                                     <option value={'2'}>已开票</option>
                                 </Form.Select>
                             </Col>
-                            <FormLabel column htmlFor={'id'} md={'auto'}>关键字：</FormLabel>
+                            <FormLabel column htmlFor={'id'} md={'auto'}>订单号：</FormLabel>
                             <Col md={'auto'} className={'mb-1'}>
-                                <FormControl name={'id'} placeholder={'订单号'} style={{width: 120}}/>
+                                <FormControl name={'id'} placeholder={'订单号'} style={{width: 120}} onChange={handleIdChanged} />
                             </Col>
                             <Col md={'auto'}>
                                 <Button type={'submit'}>搜索</Button>
