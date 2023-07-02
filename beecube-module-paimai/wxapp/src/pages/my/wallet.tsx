@@ -6,6 +6,7 @@ import ListView, {ListViewTabItem} from "../../components/listview";
 import request from "../../lib/request";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
+import classNames from "classnames";
 
 const numeral = require('numeral');
 
@@ -33,8 +34,9 @@ export default class Index extends Component<any, any> {
                 <View className={'bg-white px-4 py-2'}>
                     <View className={'flex justify-between'}>
                         <Text>{data.description}</Text>
-                        <View className={'text-gray-800 font-bold'}>
-                            <Text className={'text-lg'}>{money.split('.')[0]}</Text>
+                        <View className={classNames('font-bold', (data.type == 1 || data.type ==4) ? 'text-gray-800':'text-red-600')}>
+                            <Text>{(data.type == 1 || data.type ==4) ? '-' : '+'}</Text>
+                            <Text className={'text-xl'}>{money.split('.')[0]}</Text>
                             <Text className={'text-sm'}>.{money.split('.')[1]}</Text>
                         </View>
                     </View>
