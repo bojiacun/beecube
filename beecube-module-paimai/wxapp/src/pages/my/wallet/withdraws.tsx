@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import PageLayout from "../../../layouts/PageLayout";
 import PageLoading from "../../../components/pageloading";
 import request from "../../../lib/request";
+import numeral from 'numeral';
 
 // @ts-ignore
 @connect((state: any) => (
@@ -45,7 +46,7 @@ export default class Index extends Component<any, any> {
     onLoad() {
         this.setState({loading: true});
         const newList = this.state.list || [];
-        request.get('/paimai/api/members/withdraws', {params: {pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/app/api/members/withdraws', {params: {pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));
             this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
@@ -55,7 +56,7 @@ export default class Index extends Component<any, any> {
     onRefresh(showLoading = true) {
         this.setState({loading: showLoading, page: 1});
         const newList = [];
-        request.get('/paimai/api/members/withdraws', {params: {pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/app/api/members/withdraws', {params: {pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
             let records = res.data.result.records;
             // @ts-ignore
             records.forEach(item => newList.push(item));
@@ -80,9 +81,9 @@ export default class Index extends Component<any, any> {
                             return (
                                 <View className={'flex items-center mb-2 space-x-4 bg-white p-4'} key={item.id}>
                                     <View className={'flex-1'}>
-                                        <View className={'text-lg'}>{item.performance.title}</View>
+                                        <View className={'text-lg'}>￥{numeral(item.amount).format('0,0.00')}</View>
                                         <View className={'flex mt-2 text-stone-400'}>
-                                            预计参展日期：{item.joinTime}
+                                            申请时间：{item.createTime}
                                         </View>
                                     </View>
                                 </View>
