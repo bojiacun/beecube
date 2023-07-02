@@ -86,6 +86,7 @@ public class WxAppGoodsController {
         queryWrapper.orderByDesc("recommend");
         queryWrapper.orderByAsc("sort_num");
         queryWrapper.orderByDesc("create_time");
+        queryWrapper.groupBy("title");
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         IPage<Goods> pageList = goodsService.selectPagedMallGoods(page, queryWrapper);
         return Result.OK(pageList);
