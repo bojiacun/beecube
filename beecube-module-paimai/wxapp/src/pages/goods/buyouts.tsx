@@ -179,9 +179,9 @@ export default class Index extends Component<any, any> {
                 </View>
                 {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
-                    <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={swipers.length > 0 ? tabClassName: 'bg-none'} />
+                    <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={tabClassName} />
                     :
-                    <ListView tabs={this.state.tabs} dataFetcher={this.loadData} className={'grid grid-cols-2 gap-4 p-4'} tabClassName={swipers.length > 0 ? tabClassName: 'bg-none'} />
+                    <ListView tabs={this.state.tabs} dataFetcher={this.loadData} className={'grid grid-cols-2 gap-4 p-4'} tabClassName={tabClassName} />
                 }
                 <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
                     <View className={'text-2xl'}>
