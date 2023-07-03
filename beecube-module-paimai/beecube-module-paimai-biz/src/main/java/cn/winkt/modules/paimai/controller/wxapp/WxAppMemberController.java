@@ -1291,7 +1291,7 @@ public class WxAppMemberController {
         String productImageUrl = goods.getImages().split(",")[0];
         String title = goods.getTitle();
         String content = goods.getSubTitle();
-        int canvasHeight = 680;
+        int canvasHeight = 700;
         int canvasWidth = 390;
 
 //        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 375, 812, ZoomMode.Height,  OutputFormat.JPEG);
@@ -1388,6 +1388,7 @@ public class WxAppMemberController {
         baseY += 36;
         combiner.addTextElement(notice2,  18, baseX, baseY)
                 .setSpace(.1f)
+                .setColor(Color.gray)
                 .setAutoFitWidth(205);
         //执行图片合并
         combiner.combine();
