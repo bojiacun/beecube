@@ -1311,8 +1311,8 @@ public class WxAppMemberController {
 //        combiner.setCanvasRoundCorner(0); //设置整图圆角（输出格式必须为PNG）
         combiner.setQuality(1f);           //设置图片保存质量（0.0~1.0，Java9以下仅jpg格式有效）
         //标题（默认字体为阿里普惠、黑色，也可以自己指定Font对象）
-        TextElement titleElement = combiner.addTextElement(title, Font.BOLD, 24, baseX, baseY)
-                .setSpace(.1f)
+        TextElement titleElement = combiner.addTextElement(title, 24, baseX, baseY)
+                .setSpace(0f)
                 .setAutoBreakLine(335, 2, 30);
 //                .setCenter(true)        //居中绘制（会忽略x坐标，改为自动计算）
 //                .setAlpha(.8f)          //透明度（0.0~1.0）
@@ -1324,11 +1324,10 @@ public class WxAppMemberController {
         baseY += titleElement.getBreakLineElements().size() * 30;
 
         if(content != null) {
-            baseY+=16;
+            baseY+=10;
             //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
             combiner.addTextElement(content, 16, baseX, baseY)
-                    .setSpace(.1f)
-                    .setColor(Color.gray)
+                    .setSpace(0f)
                     .setAutoFitWidth(335);
             baseY+=16;
         }
@@ -1384,10 +1383,11 @@ public class WxAppMemberController {
         String notice = "长按识别小程序 立即购买";
         String notice2 = "分享自"+wxAppName;
         combiner.addTextElement(notice,  18, baseX, baseY)
-                .setSpace(.1f);
+                .setColor(new Color(102,102,102))
+                .setSpace(0f);
         baseY += 36;
         combiner.addTextElement(notice2,  18, baseX, baseY)
-                .setSpace(.1f)
+                .setSpace(0f)
                 .setColor(Color.gray)
                 .setAutoFitWidth(205);
         //执行图片合并

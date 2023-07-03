@@ -773,7 +773,12 @@ export default class Index extends Component<any, any> {
                 </Popup>
 
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
-                    <View className={'flex flex-col items-center'} style={{height: '70%'}}>
+                    <View className={'flex flex-col items-center relative'} style={{height: '70%'}}>
+                        {this.state.shareAdv &&
+                            <View className={'absolute z-10 text-white text-4xl'} style={{right: 5, top: -20}} onClick={() => this.setState({hideModal: true, loadingShareAdv: false, shareAdv: false})}>
+                                <Text className={'fa fa-close'}/>
+                            </View>
+                        }
                         {this.state.shareAdv && <FallbackImage className={'flex-1 block'} src={'data:image/png;base64,' + this.state.shareAdv} mode={'aspectFit'}/>}
                         {!this.state.shareAdv && <PageLoading style={{height: 500}}/>}
                         <View className={'space-x-4 mt-4 flex-none'}>
