@@ -1297,12 +1297,14 @@ public class WxAppMemberController {
 //        ImageCombiner combiner = new ImageCombiner(bgImageUrl, 375, 812, ZoomMode.Height,  OutputFormat.JPEG);
         ImageCombiner combiner = new ImageCombiner( canvasWidth, canvasHeight, Color.WHITE,  OutputFormat.JPEG);
         int baseX = 20;
-        int baseY;
+        int baseY = 391;
+
         //商品图（设置坐标、宽高和缩放模式，若按宽度缩放，则高度按比例自动计算）
         ImageElement goodsImage = combiner.addImageElement(productImageUrl, 0, 0, canvasWidth, 0, ZoomMode.Width)
                 .setCenter(true);       //居中绘制（会忽略x坐标，改为自动计算
 //                .setRoundCorner(46);    //设置圆角
-        baseY = goodsImage.getHeight() + 10;
+
+//        baseY = goodsImage.getHeight() + 10;
 
         //针对背景和整图的设置
 //        combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
