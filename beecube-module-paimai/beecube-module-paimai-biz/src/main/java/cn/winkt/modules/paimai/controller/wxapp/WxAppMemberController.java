@@ -1304,7 +1304,7 @@ public class WxAppMemberController {
                 .setCenter(true);       //居中绘制（会忽略x坐标，改为自动计算
 //                .setRoundCorner(46);    //设置圆角
 
-//        baseY = goodsImage.getHeight() + 10;
+        baseY = Math.round(((float) canvasWidth / goodsImage.getImage().getWidth()) * goodsImage.getImage().getHeight()) + 16;
 
         //针对背景和整图的设置
 //        combiner.setBackgroundBlur(30);     //设置背景高斯模糊（毛玻璃效果）
