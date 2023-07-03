@@ -164,9 +164,18 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价', button: <Text className={'fa fa-search'} onClick={()=>Taro.navigateTo({url: '/pages/goods/search'})} />}} enableReachBottom={true} showTabBar={true}>
                 <View className={'flex items-center text-red-700 justify-center'} style={{height: 50}}>
-                    <View className={'flex-1 text-center'}>正品保证</View>
-                    <View className={'flex-1 text-center'}>全场包邮</View>
-                    <View className={'flex-1 text-center'}>售后无忧</View>
+                    <View className={'flex-1 justify-center flex items-center'}>
+                        <Text className={'iconfont icon-zhengpinbaozhang mr-1'} />
+                        正品保证
+                    </View>
+                    <View className={'flex-1 justify-center flex items-center'}>
+                        <Text className={'iconfont icon-baoyou mr-1'} />
+                        全场包邮
+                    </View>
+                    <View className={'flex-1 justify-center flex items-center'}>
+                        <Text className={'iconfont icon-shouhouwuyou mr-1'} />
+                        售后无忧
+                    </View>
                 </View>
                 {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
