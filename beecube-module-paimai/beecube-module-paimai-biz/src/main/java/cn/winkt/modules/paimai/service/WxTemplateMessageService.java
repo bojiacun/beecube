@@ -42,7 +42,7 @@ public class WxTemplateMessageService {
         m.setPage(page);
         m.setToUser(appMemberVO.getWxappOpenid());
         List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
-        List<String> kvs = Arrays.asList(params.split(";"));
+        List<String> kvs = Arrays.asList(params.split(","));
         kvs.forEach(kv -> {
             String[] _params = kv.split(":");
             WxMaSubscribeMessage.MsgData msgData = new WxMaSubscribeMessage.MsgData();

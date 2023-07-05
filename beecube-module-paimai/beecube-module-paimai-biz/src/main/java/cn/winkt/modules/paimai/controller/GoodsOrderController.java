@@ -209,7 +209,9 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
             if (StringUtils.isNotEmpty(templateId) && StringUtils.isNotEmpty(templateParams)) {
                 templateParams = templateParams.replace("{orderId}", goodsOrder.getId());
                 templateParams = templateParams.replace("{createTime}", DateFormatUtils.format(goodsOrder.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+                templateParams = templateParams.replace("{deliveryTime}", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 templateParams = templateParams.replace("{goodsNames}", goodsOrder.getOrderGoods().stream().map(OrderGoods::getGoodsName).collect(Collectors.joining()));
+                templateParams = templateParams.replace("{deliveryCode}", goodsOrder.getDeliveryCode());
                 templateParams = templateParams.replace("{deliveryCode}", goodsOrder.getDeliveryNo());
                 wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
             }
