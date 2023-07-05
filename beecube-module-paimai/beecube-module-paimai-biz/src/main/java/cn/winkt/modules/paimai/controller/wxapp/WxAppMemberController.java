@@ -1328,6 +1328,7 @@ public class WxAppMemberController {
             //副标题（v2.6.3版本开始支持加载项目内字体文件，可以不用在服务器安装，性能略低）
             combiner.addTextElement(content, 16, baseX, baseY)
                     .setSpace(0f)
+                    .setColor(new Color(102,102,102))
                     .setAutoFitWidth(335);
             baseY+=16;
         }
@@ -1340,7 +1341,7 @@ public class WxAppMemberController {
 //                .setAutoBreakLine(837, 2, 60);      //自动换行（还有一个LineAlign参数可以指定对齐方式）
 
         //价格（元素对象也可以直接new，然后手动加入待绘制列表）
-        TextElement textPrice = new TextElement("￥ "+goods.getStartPrice(), 32, baseX, baseY);
+        TextElement textPrice = new TextElement("￥ "+goods.getStartPrice().setScale(2, RoundingMode.CEILING), 32, baseX, baseY);
         textPrice.setLineHeight(36);
         textPrice.setColor(Color.red);          //红色
         combiner.addElement(textPrice);         //加入待绘制集合
