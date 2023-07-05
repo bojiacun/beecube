@@ -6,4 +6,6 @@ import lombok.Data;
 public class GoodsSettings {
     private String integralRatio;
     private String requireRealAuth;
+    private String orderNotPayTemplateId;
+    private String orderNotPayTemplateArgs;
 }
