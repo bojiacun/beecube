@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/members/scores")
@@ -50,6 +51,9 @@ public class WxAppMemberScoreController {
     @Resource
     IAppMemberWithdrawService appMemberWithdrawService;
 
+    @Resource
+    IAppMemberShareRecordService appMemberShareRecordService;
+
     @GetMapping(value = "/records")
     public Result<?> queryPageList(@RequestParam(name = "type", defaultValue = "0") Integer type,
                                    @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -65,6 +69,40 @@ public class WxAppMemberScoreController {
         return Result.OK(pageList);
     }
 
+
+    /**
+     * 转发朋友圈获或者微信好友立即增加积分，不管有么有成功
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    @PostMapping("/share")
+    public Result<?> newShareScore() throws InvocationTargetException, IllegalAccessException {
+        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        if(StringUtils.isNumeric(memberSetting.getShareTimelineIntegral())) {
+            BigDecimal shareTimelineIntegral = new BigDecimal(memberSetting.getShareTimelineIntegral()).setScale(2, RoundingMode.CEILING);
+            if(shareTimelineIntegral.compareTo(BigDecimal.ZERO) > 0) {
+                LambdaQueryWrapper<AppMemberShareRecord> queryWrapper = new LambdaQueryWrapper<>();
+                List<AppMemberShareRecord> shareRecords = appMemberShareRecordService.list(queryWrapper);
+                BigDecimal maxDayShare = BigDecimal.ZERO;
+                BigDecimal todaySharedScore = BigDecimal.ZERO;
+                if(StringUtils.isNumeric(memberSetting.getMaxDayShareTimelineIntegral())) {
+                    maxDayShare = maxDayShare.add(new BigDecimal(memberSetting.getMaxDayShareTimelineIntegral()).setScale(2, RoundingMode.CEILING));
+                }
+                for (AppMemberShareRecord record : shareRecords) {
+                    todaySharedScore = todaySharedScore.add(record.getScore());
+                }
+                if(maxDayShare.compareTo(BigDecimal.ZERO) == 0 || todaySharedScore.compareTo(maxDayShare) < 0) {
+                    AppMemberShareRecord record = new AppMemberShareRecord();
+                    record.setScore(shareTimelineIntegral);
+                    LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+                    record.setMemberId(loginUser.getId());
+                    appMemberShareRecordService.save(record);
+                }
+            }
+        }
+        return Result.OK("调用成功");
+    }
 
     @PostMapping("/withdraw")
     public Result<?> withdraw(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException {
