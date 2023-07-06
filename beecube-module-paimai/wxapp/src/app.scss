@@ -22,7 +22,7 @@ page {
     'Apple Color Emoji',
     'Segoe UI Emoji';
     --warning-color: #e6cca7;
-    --danger-color: #991b1b;
+    --danger-color: #d80c18;
 }
 view {
     box-sizing: border-box;
@@ -225,7 +225,7 @@ button, button[plain] {
         top: 0;
         content: '';
         border-radius: 0 0 50% 50%;
-        background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
+        background: linear-gradient(180deg, #d80c18 0%, #7f1d1d 100%);
     }
 }
 .item-title {
@@ -238,7 +238,7 @@ button, button[plain] {
         top: 12%;
         height: 70%;
         width: 5px;
-        background-color: #b91c1c;
+        background-color: #d80c18;
     }
 }
 .radio-red-color {
