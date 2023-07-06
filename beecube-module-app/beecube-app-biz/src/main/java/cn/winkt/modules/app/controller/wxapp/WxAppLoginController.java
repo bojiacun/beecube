@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/wxapp/login")
@@ -41,6 +43,7 @@ public class WxAppLoginController {
 
     @Resource
     RedisUtil redisUtil;
+
 
     @GetMapping
     public Result<String> code2Session(@RequestParam String code, @RequestParam(defaultValue = "") String mid) throws WxErrorException {

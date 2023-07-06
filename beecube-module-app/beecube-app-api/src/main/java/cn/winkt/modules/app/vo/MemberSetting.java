@@ -4,8 +4,16 @@ import lombok.Data;
 
 @Data
 public class MemberSetting {
+    //新用户获得积分
     private String newMemberIntegral;
+    //分享一个新用户老用户得积分
     private String shareIntegral;
+    //转发朋友圈获得积分
+    private String shareTimelineIntegral;
+    //每日转发朋友圈最多获得积分
+    private String maxDayShareTimelineIntegral;
+
+
     private String authRealIntegral;
     private String rechargeIntegral;
     private String shareMaxIntegral;
