@@ -67,8 +67,8 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
     @Transactional(rollbackFor = Exception.class)
     public void send(String id, String appId) {
         AppContext.setApp(appId);
+        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
         if(credential == null) {
-            GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
             credential = new Credential(goodsSettings.getLianluCorpId(), goodsSettings.getLianluAppId(), goodsSettings.getLianluAppKey());
         }
         SmTemplate smTemplate = smTemplateMapper.selectById(id);
@@ -110,6 +110,7 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
         smsSend.setPhoneNumberSet(sendPhoneNumbers);
         smsSend.setTemplateId(smTemplate.getTemplateId());
         smsSend.setTemplateParamSet(templateStr.split(","));
+        smsSend.setSignName(goodsSettings.getLianluSignName());
 
         try {
             smsSend.TemplateSend(credential, smsSend);
