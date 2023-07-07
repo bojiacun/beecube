@@ -135,6 +135,23 @@ const BuyoutList = (props: any) => {
             }
         },
         {
+            text: '排序',
+            dataField: 'sortNum',
+        },
+        {
+            text: '推荐',
+            dataField: 'status_dictText',
+            formatter(cell:number, row: any) {
+                if(row.recommend == 0) {
+                    return <Badge bg={'light'}>否</Badge>
+                }
+                else if(row.recommend == 1) {
+                    return <Badge bg={'success'}>是</Badge>
+                }
+                return <Badge bg={'dark'}>未知</Badge>
+            }
+        },
+        {
             text: '显示状态',
             dataField: 'status_dictText',
             formatter(cell:number, row: any) {
@@ -146,10 +163,6 @@ const BuyoutList = (props: any) => {
                 }
                 return <Badge bg={'dark'}>未知</Badge>
             }
-        },
-        {
-            text: '排序',
-            dataField: 'sortNum',
         },
         {
             text: '操作',

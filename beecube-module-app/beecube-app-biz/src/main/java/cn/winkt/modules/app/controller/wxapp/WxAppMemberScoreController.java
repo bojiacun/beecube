@@ -77,6 +77,7 @@ public class WxAppMemberScoreController {
      * @throws IllegalAccessException
      */
     @PostMapping("/share")
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> newShareScore() throws InvocationTargetException, IllegalAccessException {
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
         if(StringUtils.isNumeric(memberSetting.getShareTimelineIntegral())) {
@@ -98,6 +99,7 @@ public class WxAppMemberScoreController {
                     LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
                     record.setMemberId(loginUser.getId());
                     appMemberShareRecordService.save(record);
+                    appMemberService.inScore(loginUser.getId(), shareTimelineIntegral, "转发朋友圈获得积分");
                 }
             }
         }
