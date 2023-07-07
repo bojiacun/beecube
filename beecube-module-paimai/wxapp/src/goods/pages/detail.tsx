@@ -423,7 +423,7 @@ export default class Index extends Component<any, any> {
         });
     }
     postIntegral() {
-        request.post('/paimai/api/members/score/share').then(()=>{});
+        request.post('/app/api/members/scores/share').then(()=>{});
     }
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
