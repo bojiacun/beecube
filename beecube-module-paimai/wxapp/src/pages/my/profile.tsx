@@ -183,9 +183,9 @@ export default class Index extends Component<any, any> {
                     <Form.Item className={'items-center'} rightIcon={<ArrowRight/>}>
                         <Form.Label>头像</Form.Label>
                         <Form.Control>
-                            <Button className={'overflow-hidden rounded-full'} style={{border: 'none', margin: 0, padding: 0, width: 30, height: 30}}
+                            <Button className={'overflow-hidden rounded-full text-right'} style={{border: 'none', margin: 0, padding: 0, width: '100%', height: 30, display: 'inline-block'}}
                                     onChooseAvatar={this.handleChooseAvatarNative} openType={'chooseAvatar'} plain={true}>
-                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} className={'w-full h-full'}/>
+                                <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} className={'h-full rounded-full overflow-hidden'} style={{width: 30, height: 30}} />
                             </Button>
                         </Form.Control>
                     </Form.Item>
