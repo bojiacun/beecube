@@ -112,7 +112,14 @@ button, button[plain] {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
-
+.wx-checkbox-input.wx-checkbox-input-checked, .wx-radio-input.wx-radio-input-checked{
+    background: #d80c18;
+    border:1px solid #d80c18;
+    color:#ffffff;
+}
+.wx-checkbox-input.wx-checkbox-input-checked::before, .wx-radio-input.wx-radio-input-checked::before{
+    color:#ffffff;
+}
 .m-t {
     display: flex;
 }

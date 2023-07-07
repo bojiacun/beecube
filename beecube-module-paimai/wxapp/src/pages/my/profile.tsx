@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import Taro from "@tarojs/taro";
 import utils from "../../lib/utils";
 import {View, Button, Navigator} from "@tarojs/components";
-import {Form, Radio, Input, Cell} from '@taroify/core';
+import {Form, Radio, Input, Cell, Button as TaroifyButton} from '@taroify/core';
 import {ArrowRight} from '@taroify/icons';
 import {connect} from "react-redux";
 import FallbackImage from "../../components/FallbackImage";
@@ -227,8 +227,8 @@ export default class Index extends Component<any, any> {
                             <Form.Label>性别</Form.Label>
                             <Form.Control>
                                 <Radio.Group direction="horizontal">
-                                    <Radio name="1">男</Radio>
-                                    <Radio name="2">女</Radio>
+                                    <Radio name="1" className={'radio-red-color'}>男</Radio>
+                                    <Radio name="2" className={'radio-red-color'}>女</Radio>
                                 </Radio.Group>
                             </Form.Control>
                         </Form.Item>
@@ -257,7 +257,7 @@ export default class Index extends Component<any, any> {
                         </Navigator>
                     </View>
                     <View className={'container mx-auto mt-4 text-center'}>
-                        <Button className={'btn btn-danger w-56'} formType={'submit'} disabled={this.state.saving}>保存</Button>
+                        <TaroifyButton className={'w-56'} formType={'submit'} color={'danger'} shape={'round'} disabled={this.state.saving}>保存</TaroifyButton>
                     </View>
                 </Form>
             </PageLayout>
