@@ -116,6 +116,7 @@ class App extends Component<PropsWithChildren> {
     }
 
     initApp(options) {
+        console.log('开始初始化程序');
         store.dispatch(setPageLoading(true));
         store.dispatch(setSiteInfo(siteInfo));
         store.dispatch(setSystemInfo(Taro.getSystemInfoSync()));
