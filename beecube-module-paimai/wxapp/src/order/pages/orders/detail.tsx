@@ -64,6 +64,7 @@ export default class Index extends Component<any, any> {
         this.confirmUpload = this.confirmUpload.bind(this);
         this.handlePayTypeChanged = this.handlePayTypeChanged.bind(this);
         this.openWxServiceChat = this.openWxServiceChat.bind(this);
+        this.viewUploadedNetPay = this.viewUploadedNetPay.bind(this);
     }
 
     handlePayTypeChanged(value) {
@@ -121,6 +122,9 @@ export default class Index extends Component<any, any> {
     }
     showUploadNetPay() {
         this.setState({openNetPay: false, openUploadPay: true});
+    }
+    viewUploadedNetPay() {
+        Taro.previewImage({urls: [this.state.detail.payImage]});
     }
 
     componentDidMount() {
@@ -287,7 +291,7 @@ export default class Index extends Component<any, any> {
             case 0:
                 if (detail.payType == 2 && detail.payImage) {
                     return (
-                        <TaroifyButton shape={'round'} size={'small'}>
+                        <TaroifyButton shape={'round'} size={'small'} onClick={this.viewUploadedNetPay}>
                             <View className={'text-red-700'}>查看凭据</View>
                         </TaroifyButton>
                     );
@@ -324,7 +328,7 @@ export default class Index extends Component<any, any> {
                                 <TaroifyButton disabled={this.state.posting} shape={'round'} onClick={this.cancel}>
                                     <View>取消订单</View>
                                 </TaroifyButton>
-                                <TaroifyButton shape={'round'} color={'danger'}>
+                                <TaroifyButton shape={'round'} color={'danger'} onClick={this.viewUploadedNetPay}>
                                     <View>查看凭据</View>
                                 </TaroifyButton>
                             </View>
