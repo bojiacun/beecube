@@ -177,7 +177,7 @@ export default class Index extends Component<any, any> {
                         售后无忧
                     </View>
                 </View>
-                {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#b91c1c'} dotStyle={0} />}
+                {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#d80c18'} dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
                     <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={tabClassName} />
                     :

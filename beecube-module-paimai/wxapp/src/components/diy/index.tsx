@@ -24,6 +24,9 @@ const DiyPage: FC<DiyPageProps> = (props) => {
             page.modules = JSON.parse(page.modules);
             page.controls = JSON.parse(page.controls);
             page.style = JSON.parse(page.styles);
+            if(showTabBar) {
+                page.style.paddingBottom = parseInt(page.style.paddingBottom) + 80;
+            }
             //设置状态栏
             let statusBarDiyData = page.controls[0].data;
             statusBarProps.hide = statusBarDiyData.basic.hide;

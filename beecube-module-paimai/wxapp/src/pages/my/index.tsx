@@ -252,26 +252,26 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </Navigator>
                     </View>
-                    <View>
-                        <Navigator url={'/article/pages/services'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>服务指南</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-                    </View>
-                    <View>
-                        <Navigator url={'/article/pages/helps'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>帮助中心</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-                    </View>
+                    {/*<View>*/}
+                    {/*    <Navigator url={'/article/pages/services'} className={'flex items-center justify-between p-4'}>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View>服务指南</View>*/}
+                    {/*        </View>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                    {/*        </View>*/}
+                    {/*    </Navigator>*/}
+                    {/*</View>*/}
+                    {/*<View>*/}
+                    {/*    <Navigator url={'/article/pages/helps'} className={'flex items-center justify-between p-4'}>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View>帮助中心</View>*/}
+                    {/*        </View>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                    {/*        </View>*/}
+                    {/*    </Navigator>*/}
+                    {/*</View>*/}
 
                     {settings.wxServiceChatCorpId &&
                         <View>

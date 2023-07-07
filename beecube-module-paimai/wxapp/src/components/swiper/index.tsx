@@ -41,7 +41,7 @@ const CustomSwiper = (props: CustomSwiperProps) => {
         circular = true,
         imageMode = 'aspectFill',
         indicatorColor = 'white',
-        indicatorActiveColor = 'white',
+        indicatorActiveColor = '#d80c18',
         height = 320,
         className = '',
         radius = '12rpx',
