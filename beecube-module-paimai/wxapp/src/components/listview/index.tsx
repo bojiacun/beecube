@@ -29,6 +29,7 @@ export interface ListViewProps extends Partial<any> {
     searchPlaceHolder?: string,
     searchUrl?: string|undefined,
     tabClassName?: string;
+    showBottomSpace?: boolean;
 }
 
 const ListView: FC<ListViewProps> = (props) => {
@@ -46,7 +47,8 @@ const ListView: FC<ListViewProps> = (props) => {
         showSearch = false,
         tabClassName = 'bg-white',
         searchPlaceHolder = '更多您感兴趣的内容',
-        searchUrl
+        searchUrl,
+        showBottomSpace = true,
     } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [data, setData] = useState<any[]>([]);
@@ -176,7 +178,7 @@ const ListView: FC<ListViewProps> = (props) => {
                     })}
                 </View>
             }
-            {data.length === 0 && <NoData style={{marginTop: 200}}/>}
+            {data.length === 0 && <NoData style={{marginTop: 200, marginBottom: 200}}/>}
             <View className={classNames('', className ? className : 'p-4 space-y-4')}>
                 {selectedIndex > - 1 && data.map((item) => {
                     let tab = tabs[selectedIndex];
@@ -185,7 +187,7 @@ const ListView: FC<ListViewProps> = (props) => {
             </View>
             {appendBottom}
             {data.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
-            <View style={{height: 100}} />
+            {showBottomSpace && <View style={{height: 100}} />}
         </>
     );
 }

@@ -103,6 +103,15 @@ const BuyoutEditor = (props: any) => {
                                     <BootstrapInput label={'标题'} name={'title'}/>
                                     <BootstrapInput label={'型号'} name={'spec'}/>
                                     <BootstrapInput label={'副标题'} name={'subTitle'}/>
+                                    <FormGroup className={'mb-1'}>
+                                        <FormLabel htmlFor={'fields'}>其他字段</FormLabel>
+                                        <Row>
+                                            <Col sm={12}>
+                                                <DescListConfiger label={'点击配置'} name={'fields'} />
+                                            </Col>
+                                        </Row>
+                                    </FormGroup>
+
                                     <BootstrapInput label={'分销佣金'} name={'commission'} placeholder={'分销佣金百分比'}/>
                                     <BootstrapInput label={'积分抵扣比例'} name={'maxIntegralPercent'} placeholder={'积分抵扣比例，50%填50，1%填1'}/>
                                     <BootstrapInput label={'库存'} name={'stock'} placeholder={'库存数量，为0时无法下单'}/>

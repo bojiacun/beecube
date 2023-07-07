@@ -1,9 +1,10 @@
 import {Component} from "react";
 import PageLayout from "../../../layouts/PageLayout";
-import {Button, Input, View} from "@tarojs/components";
+import {Input, View} from "@tarojs/components";
 import request from "../../../lib/request";
 import Taro from "@tarojs/taro";
 import utils from "../../../lib/utils";
+import {Button} from "@taroify/core";
 
 
 export default class Index extends Component<any, any> {
@@ -57,7 +58,7 @@ export default class Index extends Component<any, any> {
                         <View className={'text-sm'}>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
                     </View>
                     <View className={'mt-4 text-center'}>
-                        <Button onClick={this.handleCharge} className={'btn btn-primary w-56'} disabled={amount <= 0||posting}>微信支付</Button>
+                        <Button className={'w-50'} onClick={this.handleCharge} color={'danger'} shape={"round"} disabled={amount <= 0||posting}>微信支付</Button>
                     </View>
                 </View>
             </PageLayout>

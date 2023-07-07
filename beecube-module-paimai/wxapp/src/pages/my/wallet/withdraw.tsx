@@ -10,6 +10,7 @@ import {Button} from "@taroify/core";
 export default class Index extends Component<any, any> {
     state: any = {
         amount: 0.00,
+        alipayAccount: null,
         posting: false,
         userInfo: null,
     }
@@ -17,6 +18,7 @@ export default class Index extends Component<any, any> {
     constructor(props) {
         super(props);
         this.handleInput = this.handleInput.bind(this);
+        this.handleAccountInput = this.handleAccountInput.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
     }
 
@@ -30,6 +32,9 @@ export default class Index extends Component<any, any> {
     handleInput(e) {
         this.setState({amount: parseFloat(e.detail.value).toFixed(2)})
     }
+    handleAccountInput(e) {
+        this.setState({alipayAccount: e.detail.value})
+    }
 
     async handleWithdraw() {
         let checkResult = await request.get('/paimai/api/members/check');
@@ -42,9 +47,15 @@ export default class Index extends Component<any, any> {
                 Taro.navigateTo({url: '/pages/my/realauth'}).then();
             });
         }
+        if(!this.state.amount) {
+            return utils.showError('请填写提现金额');
+        }
+        if(!this.state.alipayAccount) {
+            return utils.showError('请填写支付宝收款账户');
+        }
 
         this.setState({posting: true});
-        request.post('/app/api/members/money/withdraw', {amount: this.state.amount}).then(res => {
+        request.post('/app/api/members/money/withdraw', {amount: this.state.amount, alipayAccount: this.state.alipayAccount}).then(res => {
             if(res.data.success) {
                 utils.showSuccess(true, '申请成功,等待审核');
             }
@@ -52,7 +63,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {userInfo, posting, amount} = this.state;
+        const {userInfo, posting, amount, alipayAccount} = this.state;
 
         return (
             <PageLayout statusBarProps={{title: '提现'}}>
@@ -67,11 +78,18 @@ export default class Index extends Component<any, any> {
                                 placeholder={'请输入要提现金额'}
                             />
                         </View>
+                        <View>
+                            <Input
+                                className={'text-lg font-bold border-b border-gray-400'}
+                                onInput={this.handleAccountInput}
+                                placeholder={'填写收款的支付宝账户'}
+                            />
+                        </View>
                         <View className={'text-sm'}>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
                     </View>
                     <View className={'mt-4 text-center'}>
-                        <Button onClick={this.handleWithdraw} color={'danger'} shape={'round'} disabled={posting||amount<=0||amount>userInfo?.money||amount == 'NaN'}>确认提现</Button>
-                        <Navigator className={'text-stone-400 p-4'} url={'withdraws'}>提现记录</Navigator>
+                        <Button onClick={this.handleWithdraw} color={'danger'} shape={'round'} disabled={posting||amount<=0||amount>userInfo?.money||amount == 'NaN'||!alipayAccount}>确认提现</Button>
+                        <Navigator className={'text-stone-400 p-4 mt-6'} url={'withdraws'}>提现记录</Navigator>
                     </View>
                 </View>
             </PageLayout>

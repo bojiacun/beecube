@@ -422,9 +422,12 @@ export default class Index extends Component<any, any> {
             this.setState({offers: res.data.result.records});
         });
     }
-
+    postIntegral() {
+        request.post('/paimai/api/members/score/share').then(()=>{});
+    }
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
+        this.postIntegral();
         return {
             title: this.state.goods?.title,
             query: {mid: mid},
@@ -433,6 +436,7 @@ export default class Index extends Component<any, any> {
 
     onShareAppMessage() {
         let mid = this.props.context?.userInfo?.id || '';
+        this.postIntegral();
         return {
             title: this.state.goods?.title,
             path: '/goods/pages/detail?id=' + this.state.id + '&mid=' + mid

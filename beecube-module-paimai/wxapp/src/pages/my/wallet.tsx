@@ -87,7 +87,7 @@ export default class Index extends Component<any, any> {
         const barHeight = menuButtonInfo.height + (menuButtonInfo.top - barTop) * 2;
         return (
             <PageLayout showStatusBar={false} style={{background: 'url(https://static.winkt.cn/wallet-bg.png) no-repeat top', backgroundSize: 'contain'}}>
-                <View className={'flex items-center justify-center text-lg relative text-white'} style={{height: barHeight + barTop, paddingTop: barTop}}>
+                <View className={'flex items-center justify-center text-lg relative'} style={{height: barHeight + barTop, paddingTop: barTop}}>
                     我的钱包
                     <Text className={'fa fa-chevron-left absolute left-5'} onClick={() => utils.navigateBack()}/>
                 </View>
@@ -111,6 +111,7 @@ export default class Index extends Component<any, any> {
                         tabStyle={2}
                         fixed={false}
                         autoRefresh={true}
+                        showBottomSpace={false}
                     />
                 </View>
             </PageLayout>

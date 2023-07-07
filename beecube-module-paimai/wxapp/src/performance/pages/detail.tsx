@@ -151,8 +151,12 @@ export default class Index extends Component<any, any> {
         this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
+    postIntegral() {
+        request.post('/paimai/api/members/score/share').then(()=>{});
+    }
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
+        this.postIntegral();
         return {
             title: this.state.detail?.title,
             query: {mid: mid},
@@ -161,6 +165,7 @@ export default class Index extends Component<any, any> {
 
     onShareAppMessage() {
         let mid = this.props.context?.userInfo?.id || '';
+        this.postIntegral();
         return {
             title: this.state.detail?.title,
             path: '/performance/pages/detail?id=' + this.state.id +'&mid='+mid

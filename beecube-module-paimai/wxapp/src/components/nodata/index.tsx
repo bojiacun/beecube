@@ -8,8 +8,8 @@ export interface NoDataProps extends Partial<any> {
 const NoData: FC<NoDataProps> = (props:any) => {
     const {text = '暂无数据', ...rest} = props;
     return (
-        <View className={'text-center mt-20 text-gray-300'} {...rest}>
-            <View className={'iconfont icon-zanwushuju text-9xl'} />
+        <View className={'text-center mt-20 mb-20 text-gray-300'} {...rest}>
+            <View className={'iconfont icon-zanwushuju !text-9xl'} />
             <View>{text}</View>
         </View>
     );

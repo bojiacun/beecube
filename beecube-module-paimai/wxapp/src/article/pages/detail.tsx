@@ -2,7 +2,7 @@ import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
 import PageLoading from "../../components/pageloading";
 import request from "../../lib/request";
-import {RichText, View, Text} from "@tarojs/components";
+import {RichText, View} from "@tarojs/components";
 import utils from "../../lib/utils";
 import {connect} from "react-redux";
 
@@ -52,17 +52,17 @@ export default class Index extends Component<any, any> {
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.type == 3 ? detail.title: '文章详情'}} style={{backgroundColor: 'white'}}>
+            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.type > 2 ? detail.title: '文章详情'}} style={{backgroundColor: 'white'}}>
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>
-                {detail.type != 3 &&
-                    <View className={'text-gray-400 mt-2 flex justify-between'}>
-                        <View>{detail.createTime}</View>
-                        <View><Text className={'fa fa-eye mr-1'} />{detail.views}</View>
-                    </View>
-                }
-                <View className={'mt-4 relative w-full'}>
+                {/*{detail.type != 3 &&*/}
+                {/*    <View className={'text-gray-400 mt-2 flex justify-between'}>*/}
+                {/*        <View>{detail.createTime}</View>*/}
+                {/*        <View><Text className={'fa fa-eye mr-1'} />{detail.views}</View>*/}
+                {/*    </View>*/}
+                {/*}*/}
+                <View className={'mt-2 relative w-full'}>
                     <RichText className={'w-full'} nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'} />
                 </View>
             </PageLayout>

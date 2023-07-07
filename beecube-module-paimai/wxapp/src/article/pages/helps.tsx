@@ -116,7 +116,7 @@ export default class Index extends Component<any, any> {
                             {!settings.wxServiceChatCorpId &&
                                 <View className={''}>
                                     <Button className={'flex flex-col items-center justify-center'} plain={true} openType={'contact'}>
-                                        <Text className={'iconfont text-4xl icon-kefu011'} />
+                                        <Text className={'iconfont !text-4xl icon-kefu011'} />
                                         在线咨询
                                     </Button>
                                 </View>
@@ -124,7 +124,7 @@ export default class Index extends Component<any, any> {
                             {settings.wxServiceChatCorpId &&
                                 <View className={''}>
                                     <Button className={'flex flex-col items-center justify-center'} plain={true} onClick={this.openWxServiceChat}>
-                                        <Text className={'iconfont text-4xl icon-kefu011'} />
+                                        <Text className={'iconfont !text-4xl icon-kefu011'} />
                                         在线咨询
                                     </Button>
                                 </View>

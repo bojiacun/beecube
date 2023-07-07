@@ -125,7 +125,7 @@ const GoodsEditor = (props: any) => {
                                     <BootstrapInput label={'延时周期'} name={'delayTime'} placeholder={'延时周期（分钟）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
-                                    <FormGroup>
+                                    <FormGroup  className={'mb-1'}>
                                         <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                         <Row>
                                             <Col sm={12}>
@@ -133,7 +133,7 @@ const GoodsEditor = (props: any) => {
                                             </Col>
                                         </Row>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'fields'}>其他字段</FormLabel>
                                         <Row>
                                             <Col sm={12}>
@@ -141,27 +141,27 @@ const GoodsEditor = (props: any) => {
                                             </Col>
                                         </Row>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'description'}>拍品描述</FormLabel>
                                         <TinymceEditor name={'description'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'descFlow'}>拍品流程</FormLabel>
                                         <TinymceEditor name={'descFlow'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'descDelivery'}>物流运输</FormLabel>
                                         <TinymceEditor name={'descDelivery'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'descNotice'}>注意事项</FormLabel>
                                         <TinymceEditor name={'descNotice'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'descRead'}>拍卖须知</FormLabel>
                                         <TinymceEditor name={'descRead'}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'descDeposit'}>保证金说明</FormLabel>
                                         <TinymceEditor name={'descDeposit'}/>
                                     </FormGroup>

@@ -11,6 +11,7 @@ import {FormGroup, FormLabel} from "react-bootstrap";
 import FileBrowserInput from "~/components/filebrowser/form";
 import BootstrapLinkSelector from "~/components/form/BootstrapLinkSelector";
 import BootstrapSwitch from "~/components/form/BootstrapSwitch";
+import BootstrapRadioGroup from "~/components/form/BootstrapRadioGroup";
 
 
 export const SINGLE_IMAGE_MODULE = "SINGLE_IMAGE_MODULE";
@@ -18,6 +19,7 @@ export const defaultData = {
     basic: {
         image: '',
         url: '',
+        mode: 'aspectFit',
     },
     style: {
         ...DEFAULT_BOX_STYLES,
@@ -45,10 +47,17 @@ const SingleImageModuleAttribute = (props: any) => {
                         (formik) => {
                             return (
                                 <Form method={'post'} onChange={(e)=>formik.submitForm()}>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'image'}>广告图</FormLabel>
                                         <FileBrowserInput name={'image'} type={1} multi={false} onChange={()=>formik.submitForm()} />
                                     </FormGroup>
+                                    <BootstrapRadioGroup options={[
+                                        {label: 'aspectFit', value: 'aspectFit'},
+                                        {label: 'aspectFill', value: 'aspectFill'},
+                                        {label: 'scaleToFill', value: 'scaleToFill'},
+                                        {label: 'widthFix', value: 'widthFix'},
+                                        {label: 'heightFix', value: 'heightFix'},
+                                    ]} name={'mode'} label={'布局方式'} />
                                     <FormGroup>
                                         <FormLabel htmlFor={'url'}>链接地址</FormLabel>
                                         <BootstrapLinkSelector name={'url'} links={links} onChange={()=>formik.submitForm()} />

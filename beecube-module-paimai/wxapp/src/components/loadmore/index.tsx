@@ -24,7 +24,7 @@ const LoadMore: FC<LoadMoreProps> = (props) => {
     }, [loading]);
 
     if(!show) {
-        return <View className={'py-8'}> </View>;
+        return <></>;
     }
 
 
