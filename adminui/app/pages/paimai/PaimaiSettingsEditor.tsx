@@ -56,10 +56,10 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapSwitch label={'实名认证'} name={'requireRealAuth'} placeholder={'拍卖流程中是否需要实名认证'} />
                         <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
 
-                        <BootstrapSwitch label={'联麓企业ID'} name={'lianluCorpId'} />
-                        <BootstrapSwitch label={'联麓AppId'} name={'lianluAppId'} />
-                        <BootstrapSwitch label={'联麓AppKey'} name={'lianluAppKey'} />
-                        <BootstrapSwitch label={'联麓签名'} name={'lianluSignName'} />
+                        <BootstrapInput label={'联麓企业ID'} name={'lianluCorpId'} placeholder={'联麓企业ID'} />
+                        <BootstrapInput label={'联麓AppId'} name={'lianluAppId'} placeholder={'联麓AppId'} />
+                        <BootstrapInput label={'联麓AppKey'} name={'lianluAppKey'} placeholder={'联麓AppKey'} />
+                        <BootstrapInput label={'联麓签名'} name={'lianluSignName'} placeholder={'联麓签名'} />
 
                         <BootstrapInput label={'微信客服企业ID'} name={'wxServiceChatCorpId'} placeholder={'微信客服企业ID'} />
                         <BootstrapInput label={'微信客服客服链接'} name={'wxServiceChatUrl'} placeholder={'微信客服客服链接'} />
