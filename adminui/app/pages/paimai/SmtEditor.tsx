@@ -125,7 +125,7 @@ const SmtEditor = (props: any) => {
                                     <BootstrapInput label={'模板标题'} name={'title'} />
                                     <BootstrapInput label={'短信模板ID'} name={'templateId'} />
                                     <BootstrapInput label={'变量替换'} name={'vars'} placeholder={'变量参数，英文逗号相隔，系统中短链变量为{url}'} />
-                                    <BootstrapLinkSelector links={links} label={'链接地址'} name={'url'} />
+                                    <BootstrapInput label={'链接地址'} name={'url'} />
                                     <BootstrapRadioGroup options={ruleMemberOptions} name={'ruleMember'} label={'适用人群'}/>
                                     {formik.values.ruleMember == 1 &&
                                         <FormGroup className={'mb-1'}>

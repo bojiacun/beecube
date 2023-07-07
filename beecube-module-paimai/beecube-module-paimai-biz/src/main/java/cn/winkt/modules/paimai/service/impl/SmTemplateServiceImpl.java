@@ -80,12 +80,12 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
             members = appApi.getAllMembers();
         }
         String url = smTemplate.getUrl();
-        try {
-            WxMaLinkService wxMaLinkService = miniappServices.getWxMaLinkService(AppContext.getApp());
-            url = wxMaLinkService.generateShortLink(GenerateShortLinkRequest.builder().isPermanent(false).pageTitle(smTemplate.getTitle()).pageUrl(url).build());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+//        try {
+//            WxMaLinkService wxMaLinkService = miniappServices.getWxMaLinkService(AppContext.getApp());
+//            url = wxMaLinkService.generateShortLink(GenerateShortLinkRequest.builder().isPermanent(false).pageTitle(smTemplate.getTitle()).pageUrl(url).build());
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
         String templateStr = smTemplate.getVars().replaceAll("\\{url\\}", url);
         LambdaQueryWrapper<SmTemplateRecord> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SmTemplateRecord::getTemplateId, smTemplate.getTemplateId());
