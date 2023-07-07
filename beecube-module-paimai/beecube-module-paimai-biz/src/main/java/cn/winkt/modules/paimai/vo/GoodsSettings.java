@@ -8,4 +8,8 @@ public class GoodsSettings {
     private String requireRealAuth;
     private String orderNotPayTemplateId;
     private String orderNotPayTemplateArgs;
+
+    private String lianluCorpId;
+    private String lianluAppId;
+    private String lianluAppKey;
 }

@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -59,6 +60,8 @@ public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplat
 
 	@Resource
 	private AppApi appApi;
+
+
 	
 	/**
 	 * 分页列表查询
@@ -135,7 +138,7 @@ public class SmTemplateController extends JeecgController<SmTemplate, ISmTemplat
 	 @ApiOperation(value="营销短信模板表-通过id删除", notes="营销短信模板表-通过id删除")
 	 @PutMapping(value = "/send")
 	 public Result<?> send(@RequestParam(name="id",required=true) String id) {
-
+		 smTemplateService.send(id, AppContext.getApp());
 		 return Result.OK("发送成功!");
 	 }
 
