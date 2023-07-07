@@ -1,7 +1,9 @@
 package cn.winkt.modules.paimai.config;
 
 
+import cn.binarywang.wx.miniapp.api.WxMaLinkService;
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaLinkServiceImpl;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.winkt.modules.app.api.AppApi;
@@ -31,7 +33,17 @@ public class MiniappServices {
 
     private final static ConcurrentHashMap<String, WxPayService> wxPayServices = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, WxMaService> wxMaServiceMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, WxMaLinkService> wxMaLinkServiceMap = new ConcurrentHashMap<>();
 
+
+    public WxMaLinkService getWxMaLinkService(String appId) throws InvocationTargetException, IllegalAccessException {
+        if(wxMaLinkServiceMap.containsKey(appId)) {
+            return wxMaLinkServiceMap.get(appId);
+        }
+        WxMaLinkService wxMaLinkService = new WxMaLinkServiceImpl(getWxMaService(appId));
+        wxMaLinkServiceMap.put(appId, wxMaLinkService);
+        return wxMaLinkService;
+    }
 
 
     public WxMaService getWxMaService(String appId) throws InvocationTargetException, IllegalAccessException {

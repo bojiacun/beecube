@@ -12,4 +12,5 @@ public class GoodsSettings {
     private String lianluCorpId;
     private String lianluAppId;
     private String lianluAppKey;
+    private String lianluSignName;
 }
