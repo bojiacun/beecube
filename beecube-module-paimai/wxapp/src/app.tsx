@@ -20,7 +20,7 @@ const IM_SERVER_URL = "wss://im.winkt.cn/websocket";
 let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
-
+    options: {}
     constructor(props) {
         super(props);
         this.initUser = this.initUser.bind(this);
@@ -112,12 +112,13 @@ class App extends Component<PropsWithChildren> {
     }
 
     componentDidMount() {
+        console.log('component did mount');
+    }
+
+    initApp(options) {
         store.dispatch(setPageLoading(true));
         store.dispatch(setSiteInfo(siteInfo));
         store.dispatch(setSystemInfo(Taro.getSystemInfoSync()));
-    }
-
-    onLaunch(options) {
         let {context} = store.getState();
         context.referer = options;
         context.copyright = siteInfo.copyright;
@@ -177,11 +178,21 @@ class App extends Component<PropsWithChildren> {
                 }
             });
         });
+    }
 
+    onLaunch(options) {
+        console.log('on load executed', options);
+        store.dispatch(setPageLoading(true));
+        this.options = options;
     }
 
     componentDidShow() {
-
+        console.log('on show executed', this.options);
+        //确保初始化会执行
+        let {context} = store.getState();
+        if(!context.userInfo) {
+            this.initApp(this.options);
+        }
     }
 
     componentDidHide() {
