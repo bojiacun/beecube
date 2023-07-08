@@ -83,6 +83,10 @@ const WithdrawList = (props: any) => {
             dataField: 'memberPhone',
         },
         {
+            text: '支付宝账户',
+            dataField: 'alipayAccount',
+        },
+        {
             text: '提现金额',
             dataField: 'amount',
         },
