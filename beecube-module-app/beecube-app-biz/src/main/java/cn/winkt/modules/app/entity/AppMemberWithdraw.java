@@ -73,4 +73,5 @@ public class AppMemberWithdraw {
 	private java.lang.String transactionId;
 	private BigDecimal amount;
 	private Integer type;
+	private String alipayAccount;
 }
