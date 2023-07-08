@@ -79,7 +79,7 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
             members = appApi.getAllMembers();
         }
         LambdaQueryWrapper<SmTemplateRecord> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SmTemplateRecord::getTemplateId, smTemplate.getTemplateId());
+        queryWrapper.eq(SmTemplateRecord::getTemplateId, smTemplate.getId());
         List<SmTemplateRecord> sendedRecords = smTemplateRecordMapper.selectList(queryWrapper);
         members = members.stream().filter(appMemberVO -> {
             if (StringUtils.isEmpty(appMemberVO.getPhone())) {
