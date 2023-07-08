@@ -20,7 +20,7 @@ const IM_SERVER_URL = "wss://im.winkt.cn/websocket";
 let qqmapSdk;
 
 class App extends Component<PropsWithChildren> {
-    options: {}
+    options: any;
     constructor(props) {
         super(props);
         this.initUser = this.initUser.bind(this);
