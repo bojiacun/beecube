@@ -132,6 +132,10 @@ public class WxAppMemberMoneyController {
         if(StringUtils.isEmpty(member.getPhone())) {
             throw new JeecgBootException("请绑定手机号之后再来提现");
         }
+        String alipayAccount = data.getString("alipayAccount");
+        if(StringUtils.isEmpty(alipayAccount)) {
+            throw new JeecgBootException("请填写收款支付宝账户");
+        }
         LambdaQueryWrapper<AppMemberWithdraw> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AppMemberWithdraw::getMemberId, loginUser.getId());
         queryWrapper.eq(AppMemberWithdraw::getStatus, 0);
@@ -143,6 +147,7 @@ public class WxAppMemberMoneyController {
         AppMemberWithdraw appMemberWithdraw = new AppMemberWithdraw();
         appMemberWithdraw.setMemberId(loginUser.getId());
         appMemberWithdraw.setAmount(amount);
+        appMemberWithdraw.setAlipayAccount(alipayAccount);
         appMemberWithdraw.setMemberId(member.getId());
         appMemberWithdraw.setMemberPhone(member.getPhone());
         appMemberWithdraw.setMemberName(StringUtils.getIfEmpty(member.getRealname(), member::getNickname));
