@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 /**
  * @Description: 营销短信模板表
  * @Author: jeecg-boot
- * @Date:   2023-06-06
+ * @Date: 2023-06-06
  * @Version: V1.0
  */
 @Service
@@ -68,30 +68,21 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
     public void send(String id, String appId) {
         AppContext.setApp(appId);
         GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
-        if(credential == null) {
+        if (credential == null) {
             credential = new Credential(goodsSettings.getLianluCorpId(), goodsSettings.getLianluAppId(), goodsSettings.getLianluAppKey());
         }
         SmTemplate smTemplate = smTemplateMapper.selectById(id);
         List<AppMemberVO> members;
-        if(smTemplate.getRuleMember() == 1) {
+        if (smTemplate.getRuleMember() == 1) {
             members = appApi.getMembersByIds(Arrays.asList(smTemplate.getRuleMemberIds().split(",")));
-        }
-        else {
+        } else {
             members = appApi.getAllMembers();
         }
-        String url = smTemplate.getUrl();
-//        try {
-//            WxMaLinkService wxMaLinkService = miniappServices.getWxMaLinkService(AppContext.getApp());
-//            url = wxMaLinkService.generateShortLink(GenerateShortLinkRequest.builder().isPermanent(false).pageTitle(smTemplate.getTitle()).pageUrl(url).build());
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//        }
-        String templateStr = smTemplate.getVars().replaceAll("\\{url\\}", url);
         LambdaQueryWrapper<SmTemplateRecord> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SmTemplateRecord::getTemplateId, smTemplate.getTemplateId());
         List<SmTemplateRecord> sendedRecords = smTemplateRecordMapper.selectList(queryWrapper);
         members = members.stream().filter(appMemberVO -> {
-            if(StringUtils.isEmpty(appMemberVO.getPhone())) {
+            if (StringUtils.isEmpty(appMemberVO.getPhone())) {
                 return false;
             }
             boolean sended = false;
@@ -103,29 +94,39 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
             }
             return !sended;
         }).collect(Collectors.toList());
+
+        String url = smTemplate.getUrl();
+//        try {
+//            WxMaLinkService wxMaLinkService = miniappServices.getWxMaLinkService(AppContext.getApp());
+//            url = wxMaLinkService.generateShortLink(GenerateShortLinkRequest.builder().isPermanent(false).pageTitle(smTemplate.getTitle()).pageUrl(url).build());
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
+        String templateStr = smTemplate.getVars().replaceAll("\\{url\\}", url);
         String[] sendPhoneNumbers = members.stream().map(AppMemberVO::getPhone).collect(Collectors.joining(",")).split(",");
+        if (sendPhoneNumbers.length > 0) {
+            SmsSend smsSend = new SmsSend();
+            smsSend.setTemplateType("3");
+            smsSend.setPhoneNumberSet(sendPhoneNumbers);
+            smsSend.setTemplateId(smTemplate.getTemplateId());
+            smsSend.setTemplateParamSet(templateStr.split(","));
+            smsSend.setSignName(goodsSettings.getLianluSignName());
 
-        SmsSend smsSend = new SmsSend();
-        smsSend.setTemplateType("3");
-        smsSend.setPhoneNumberSet(sendPhoneNumbers);
-        smsSend.setTemplateId(smTemplate.getTemplateId());
-        smsSend.setTemplateParamSet(templateStr.split(","));
-        smsSend.setSignName(goodsSettings.getLianluSignName());
-
-        try {
-            smsSend.TemplateSend(credential, smsSend);
-            for (AppMemberVO appMemberVO : members) {
-                SmTemplateRecord smTemplateRecord = new SmTemplateRecord();
-                smTemplateRecord.setTemplateId(id);
-                smTemplateRecord.setMemberId(appMemberVO.getId());
-                smTemplateRecord.setMemberName(StringUtils.getIfEmpty(appMemberVO.getRealname(), appMemberVO::getNickname));
-                smTemplateRecord.setMemberAvatar(appMemberVO.getAvatar());
-                smTemplateRecord.setMemberPhone(appMemberVO.getPhone());
-                smTemplateRecordMapper.insert(smTemplateRecord);
+            try {
+                smsSend.TemplateSend(credential, smsSend);
+                for (AppMemberVO appMemberVO : members) {
+                    SmTemplateRecord smTemplateRecord = new SmTemplateRecord();
+                    smTemplateRecord.setTemplateId(id);
+                    smTemplateRecord.setMemberId(appMemberVO.getId());
+                    smTemplateRecord.setMemberName(StringUtils.getIfEmpty(appMemberVO.getRealname(), appMemberVO::getNickname));
+                    smTemplateRecord.setMemberAvatar(appMemberVO.getAvatar());
+                    smTemplateRecord.setMemberPhone(appMemberVO.getPhone());
+                    smTemplateRecordMapper.insert(smTemplateRecord);
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
 
+        }
     }
 }
