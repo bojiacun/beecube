@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
 import {
     DefaultListSearchParams,
@@ -234,12 +234,16 @@ const BuyoutList = (props: any) => {
     const operateBatch = () => {
         deleteFetcher.submit({status: operateValue, rows: selectedRows.join(',')}, {method: 'delete', action: `/paimai/goods/toggle-show`, replace: true});
     }
+    const handleOnRecommendChange = (e: any) => {
+        setSearchState({...searchState, recommend: e.target.checked ? 'on' : null});
+    }
+
     return (
         <>
             <Card>
                 <div className={'m-2'}>
                     <Row>
-                        <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
+                        <Col md={2} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                             <ReactSelectThemed
                                 id={'role-page-size'}
                                 placeholder={'分页大小'}
@@ -251,14 +255,18 @@ const BuyoutList = (props: any) => {
                             />
                             <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建一口价拍品</Button>
                         </Col>
-                        <Col md={6} className={'d-flex align-items-center justify-content-end'}>
+                        <Col md={10} className={'d-flex align-items-center justify-content-end'}>
                             <searchFetcher.Form className={'form-inline justify-content-end'} onSubmit={handleOnSearchSubmit}>
                                 <FormControl name={'pageNo'} value={1} type={'hidden'}/>
                                 <FormControl name={'column'} value={searchState.column} type={'hidden'}/>
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
+                                <FormGroup as={Row} className={'mb-0 align-items-center justify-content-end'}>
+                                    <FormLabel column md={'auto'}>是否推荐：</FormLabel>
+                                    <Col md={'auto'}>
+                                        <Form.Switch name={'recommend'} id={'recommend'} onChange={handleOnRecommendChange}/>
+                                    </Col>
 
-                                <FormGroup as={Row} className={'mb-0'}>
                                     <FormLabel column htmlFor={'name'}>拍品名称</FormLabel>
                                     <Col md={'auto'}>
                                         <InputGroup>

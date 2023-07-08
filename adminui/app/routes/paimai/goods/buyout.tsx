@@ -23,6 +23,12 @@ export const loader: LoaderFunction = async ({request}) => {
     if(!url.searchParams.has('order')) {
         url.searchParams.set('order', 'desc');
     }
+    if(url.searchParams.get('recommend') == 'on') {
+        url.searchParams.set('recommend', '1');
+    }
+    else {
+        url.searchParams.delete('recommend');
+    }
     let queryString = '';
     if (_.isEmpty(url.search)) {
         queryString = '?' + querystring.stringify(DefaultListSearchParams);
