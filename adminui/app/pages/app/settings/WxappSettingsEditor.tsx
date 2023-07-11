@@ -5,7 +5,7 @@ import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import BootstrapInput from "~/components/form/BootstrapInput";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import FileBrowserInput from "~/components/filebrowser/form";
 
 
@@ -37,19 +37,23 @@ const WxappSettingsEditor = (props:any) => {
                         <BootstrapInput  label={'APPSECRET'} name={'appsecret'}  placeholder={'微信小程序secret'} />
                         <BootstrapInput  label={'商户号'} name={'merchId'}  placeholder={'微信支付商户号'} />
                         <BootstrapInput  label={'商户号秘钥'} name={'merchSecret'}  placeholder={'微信支付商户号秘钥'} />
-                        <FormGroup>
+                        <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'apiclientCert'}>apiclientCert</FormLabel>
                             <FileBrowserInput name={'apiclientCert'} type={4} multi={false} />
                         </FormGroup>
-                        <FormGroup>
+                        <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'apiclientP12'}>apiclientP12</FormLabel>
                             <FileBrowserInput name={'apiclientP12'} type={4} multi={false} />
                         </FormGroup>
-                        <FormGroup>
+                        <FormGroup className={'mb-1'}>
                             <FormLabel htmlFor={'apiclientKey'}>apiclientKey</FormLabel>
                             <FileBrowserInput name={'apiclientKey'} type={4} multi={false} />
                         </FormGroup>
                         <BootstrapInput  label={'腾讯地图秘钥'} name={'tencentMapKey'}  placeholder={'腾讯地图秘钥'} />
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel>个人中心版权图片</FormLabel>
+                            <FileBrowserInput type={1} name={'userCenterCopyRight'} multi={false} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>

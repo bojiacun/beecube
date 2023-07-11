@@ -1,18 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useFetcher, useLoaderData} from "@remix-run/react";
-import {
-    DefaultListSearchParams,
-    PageSizeOptions,
-    showDeleteAlert,
-    showToastError,
-    showToastSuccess
-} from "~/utils/utils";
-import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, Row} from "react-bootstrap";
+import {DefaultListSearchParams, FetcherState, getFetcherState, PageSizeOptions, showDeleteAlert, showToastError, showToastSuccess} from "~/utils/utils";
+import {Badge, Button, Card, Col, Dropdown, Form, FormControl, FormGroup, FormLabel, InputGroup, Row} from "react-bootstrap";
 import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import FigureImage from "react-bootstrap/FigureImage";
-import {Delete, Edit, Eye, MoreVertical} from "react-feather";
+import {Delete, Edit, MoreVertical} from "react-feather";
 import ViewList from "~/pages/paimai/ViewList";
 import FollowList from "~/pages/paimai/FollowList";
 import BuyoutEditor from "~/pages/paimai/BuyoutEditor";
@@ -25,16 +19,29 @@ const BuyoutList = (props: any) => {
     const [editModal, setEditModal] = useState<any>();
     const [selectedRow, setSelectedRow] = useState<any>();
     const [selectedRows, setSelectedRows] = useState<any>([]);
+    const [classOptions, setClassOptions] = useState<any>([{label: '不选择', value: ''}]);
     const [operateValue, setOperateValue] = useState<any>();
     const [viewsShow, setViewsShow] = useState<boolean>(false);
     const [followsShow, setFollowsShow] = useState<boolean>(false);
     const searchFetcher = useFetcher();
+    const classFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
     }
+
+    useEffect(() => {
+        classFetcher.load('/paimai/buyout/classes/all');
+    }, []);
+
+
+    useEffect(()=>{
+        if(getFetcherState(classFetcher) === FetcherState.DONE) {
+            classFetcher.data.forEach((item:any)=>classOptions.push({label: item.name, value: item.id}));
+        }
+    }, [classFetcher.state]);
 
     useEffect(() => {
         if (searchFetcher.data) {
@@ -53,6 +60,7 @@ const BuyoutList = (props: any) => {
             }
         }
     }, [editFetcher.state]);
+
     useEffect(() => {
         if (deleteFetcher.data && deleteFetcher.type === 'done') {
             if (deleteFetcher.data.success) {
@@ -198,9 +206,11 @@ const BuyoutList = (props: any) => {
         setSearchState({...searchState, pageNo: 1});
     }
     const handleOnNameChanged = (e: any) => {
-        setSearchState({...searchState, roleName: e.target.value});
+        setSearchState({...searchState, title: e.target.value});
     }
-
+    const handleOnSpecChanged = (e: any) => {
+        setSearchState({...searchState, spec: e.target.value});
+    }
     const handleOnAdd = () => {
         setEditModal({});
     }
@@ -237,7 +247,9 @@ const BuyoutList = (props: any) => {
     const handleOnRecommendChange = (e: any) => {
         setSearchState({...searchState, recommend: e.target.checked ? 'on' : null});
     }
-
+    const handleClassIdChanged = (e: any) => {
+        setSearchState({...searchState, classId: e.target.value});
+    }
     return (
         <>
             <Card>
@@ -262,16 +274,30 @@ const BuyoutList = (props: any) => {
                                 <FormControl name={'order'} value={searchState.order} type={'hidden'}/>
                                 <FormControl name={'pageSize'} value={searchState.pageSize} type={'hidden'}/>
                                 <FormGroup as={Row} className={'mb-0 align-items-center justify-content-end'}>
+
+                                    <FormLabel column md={'auto'}>分类：</FormLabel>
+                                    <Col md={'auto'} className={'mb-1'}>
+                                        <Form.Select name={'classId'} onChange={handleClassIdChanged}>
+                                            <option value={''}>不设置</option>
+                                        </Form.Select>
+                                    </Col>
+
+                                    <FormLabel column htmlFor={'name'}>拍品名称</FormLabel>
+                                    <Col md={'auto'}>
+                                        <FormControl name={'spec'} onChange={handleOnSpecChanged} placeholder={'商品规格'}/>
+                                    </Col>
+
                                     <FormLabel column md={'auto'}>是否推荐：</FormLabel>
                                     <Col md={'auto'}>
                                         <Form.Switch name={'recommend'} id={'recommend'} onChange={handleOnRecommendChange}/>
                                     </Col>
 
-                                    <FormLabel column htmlFor={'name'}>拍品名称</FormLabel>
+
+                                    <FormLabel column htmlFor={'title'}>商品名称</FormLabel>
                                     <Col md={'auto'}>
                                         <InputGroup>
-                                            <FormControl name={'name'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
-                                                <Button type={'submit'}>搜索</Button>
+                                            <FormControl name={'title'} onChange={handleOnNameChanged} placeholder={'请输入要搜索的内容'}/>
+                                            <Button type={'submit'}>搜索</Button>
                                         </InputGroup>
                                     </Col>
                                 </FormGroup>
