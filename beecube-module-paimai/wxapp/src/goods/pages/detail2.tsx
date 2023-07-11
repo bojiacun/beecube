@@ -98,15 +98,19 @@ export default class Index extends Component<any, any> {
         request.get("/paimai/api/goods/detail", {params: {id: options.id}}).then(res => {
             let data = res.data.result;
             utils.hideLoading();
+            data.fields && (data.fields = JSON.parse(data.fields));
             this.setState({goods: data});
             request.get('/paimai/api/goods/specs', {params: {id: options.id}}).then(res => {
                 this.setState({specs: res.data.result})
             });
         });
     }
+
     postIntegral() {
-        request.post('/app/api/members/scores/share').then(()=>{});
+        request.post('/app/api/members/scores/share').then(() => {
+        });
     }
+
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
         this.postIntegral();
@@ -247,6 +251,19 @@ export default class Index extends Component<any, any> {
 
                 <View className={'bg-white p-4 mt-4'}>
                     <View className={'font-bold text-center text-lg'}>商品详情</View>
+                    {goods.fields && <View>
+                        <View className={'item-title-black'}>基本信息</View>
+                        <View className="table w-full text-stone-400 text-lg mt-4">
+                            {goods.fields.map((item: any) => {
+                                return (
+                                    <View className="tr">
+                                        <view className="td w-20">{item.key}</view>
+                                        <view className="td">{item.value}</view>
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </View>}
                     <View>
                         <RichText nodes={utils.resolveHtmlImageWidth(goods.description)} space={'nbsp'}/>
                     </View>
@@ -284,11 +301,12 @@ export default class Index extends Component<any, any> {
                     </View>
                     {this.renderButton()}
                 </View>
-                <View className={'modals-mask'} style={{display: hideModal ? 'none' : 'block'}} onClick={this.clickMask} />
+                <View className={'modals-mask'} style={{display: hideModal ? 'none' : 'block'}} onClick={this.clickMask}/>
                 {this.state.loadingShareAdv && <View className={'w-full h-full flex flex-col z-100 items-center justify-center absolute top-0 right-0'}>
                     <View className={'flex flex-col items-center relative'} style={{height: '70%'}}>
                         {this.state.shareAdv &&
-                            <View className={'absolute z-10 text-white text-4xl'} style={{right: 5, top: -20}} onClick={() => this.setState({hideModal: true, loadingShareAdv: false, shareAdv: false})}>
+                            <View className={'absolute z-10 text-white text-4xl'} style={{right: 5, top: -20}}
+                                  onClick={() => this.setState({hideModal: true, loadingShareAdv: false, shareAdv: false})}>
                                 <Text className={'fa fa-close'}/>
                             </View>
                         }
