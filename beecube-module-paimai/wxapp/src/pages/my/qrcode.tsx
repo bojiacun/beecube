@@ -63,7 +63,9 @@ export default class Index extends Component<any, any> {
                     <View className={'p-4'}>
                         <View className={'font-bold text-3xl mb-4'}>Hi,我是{userInfo?.nickname || userInfo?.realname}</View>
                         <View className={'text-lg mb-4'}>{settings.shareQrcodeTitle || '我发现了一个非常值得信赖的拍卖品平台，特邀请您注册，一起发现东方美器'}</View>
-                        {this.state.qrcode && <FallbackImage src={'data:image/png;base64,' + this.state.qrcode} className={'w-full block'} mode={'widthFix'}/>}
+                        <View className={'px-6'}>
+                            {this.state.qrcode && <FallbackImage src={'data:image/png;base64,' + this.state.qrcode} className={'w-full block'} mode={'widthFix'}/>}
+                        </View>
                         <View className={'text-lg mb-4 text-center mt-4'}>{'长按识别二维码'}</View>
                     </View>
                     <View className={'flex items-center justify-center mt-4 p-4 bg-gray-200 h-40'}>
