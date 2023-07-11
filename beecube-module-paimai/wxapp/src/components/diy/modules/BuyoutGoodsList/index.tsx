@@ -27,7 +27,7 @@ const BuyoutGoodsListModule = (props: any) => {
     useEffect(() => {
         if (basic.showClass) {
             request.get('/paimai/api/goods/buyout/classes', {params: {}}).then(res => {
-                setClassList(res.data.result);
+                setClassList([{id: '0', name: '推荐'},...res.data.result]);
             })
         }
     }, [basic.showClass]);
@@ -37,7 +37,7 @@ const BuyoutGoodsListModule = (props: any) => {
             <View className={'py-4 -mx-4 flex items-center  flex-nowrap overflow-auto divide-x'}>
                 {classList.map((item, index) => {
                     return (
-                        <Text onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4 whitespace-nowrap')} >
+                        <Text key={item.id} onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4 whitespace-nowrap')} >
                             {item.name}
                         </Text>
                     );
