@@ -40,6 +40,8 @@ const BuyoutList = (props: any) => {
     useEffect(()=>{
         if(getFetcherState(classFetcher) === FetcherState.DONE) {
             classFetcher.data.forEach((item:any)=>classOptions.push({label: item.name, value: item.id}));
+            console.log(classOptions);
+            setClassOptions([...classOptions]);
         }
     }, [classFetcher.state]);
 
@@ -276,13 +278,15 @@ const BuyoutList = (props: any) => {
                                 <FormGroup as={Row} className={'mb-0 align-items-center justify-content-end'}>
 
                                     <FormLabel column md={'auto'}>分类：</FormLabel>
-                                    <Col md={'auto'} className={'mb-1'}>
+                                    <Col md={'auto'}>
                                         <Form.Select name={'classId'} onChange={handleClassIdChanged}>
-                                            <option value={''}>不设置</option>
+                                            {classOptions.map((item:any)=>{
+                                                return (<option value={item.value} key={item.value}>{item.label}</option>);
+                                            })}
                                         </Form.Select>
                                     </Col>
 
-                                    <FormLabel column htmlFor={'name'}>拍品名称</FormLabel>
+                                    <FormLabel column htmlFor={'name'}>商品规格</FormLabel>
                                     <Col md={'auto'}>
                                         <FormControl name={'spec'} onChange={handleOnSpecChanged} placeholder={'商品规格'}/>
                                     </Col>
