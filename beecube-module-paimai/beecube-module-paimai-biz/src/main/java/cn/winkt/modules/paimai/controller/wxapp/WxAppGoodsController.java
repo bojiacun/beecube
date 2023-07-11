@@ -110,7 +110,12 @@ public class WxAppGoodsController {
             queryWrapper.eq("g.performance_id", goods.getPerformanceId());
         }
         if(StringUtils.isNotEmpty(goods.getClassId())) {
-            queryWrapper.eq("g.class_id", goods.getClassId());
+            if("0".equals(goods.getClassId())) {
+                queryWrapper.eq("g.recommend", 1);
+            }
+            else {
+                queryWrapper.eq("g.class_id", goods.getClassId());
+            }
         }
         if(goods.getType() != null) {
             queryWrapper.eq("g.type", goods.getType());
