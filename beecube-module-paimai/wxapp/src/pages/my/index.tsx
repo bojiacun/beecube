@@ -242,16 +242,16 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             </View>
                         </Navigator>
                     </View>
-                    <View>
-                        <Navigator url={'qrcode'} className={'flex items-center justify-between p-4'}>
-                            <View className={'flex items-center space-x-2'}>
-                                <View>我的二维码</View>
-                            </View>
-                            <View className={'flex items-center space-x-2'}>
-                                <View className={'iconfont icon-youjiantou_huaban'}/>
-                            </View>
-                        </Navigator>
-                    </View>
+                    {/*<View>*/}
+                    {/*    <Navigator url={'qrcode'} className={'flex items-center justify-between p-4'}>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View>我的二维码</View>*/}
+                    {/*        </View>*/}
+                    {/*        <View className={'flex items-center space-x-2'}>*/}
+                    {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
+                    {/*        </View>*/}
+                    {/*    </Navigator>*/}
+                    {/*</View>*/}
                     {/*<View>*/}
                     {/*    <Navigator url={'/article/pages/services'} className={'flex items-center justify-between p-4'}>*/}
                     {/*        <View className={'flex items-center space-x-2'}>*/}
@@ -262,16 +262,16 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     {/*        </View>*/}
                     {/*    </Navigator>*/}
                     {/*</View>*/}
-                    {/*<View>*/}
-                    {/*    <Navigator url={'/article/pages/helps'} className={'flex items-center justify-between p-4'}>*/}
-                    {/*        <View className={'flex items-center space-x-2'}>*/}
-                    {/*            <View>帮助中心</View>*/}
-                    {/*        </View>*/}
-                    {/*        <View className={'flex items-center space-x-2'}>*/}
-                    {/*            <View className={'iconfont icon-youjiantou_huaban'}/>*/}
-                    {/*        </View>*/}
-                    {/*    </Navigator>*/}
-                    {/*</View>*/}
+                    <View>
+                        <Navigator url={'/article/pages/helps'} className={'flex items-center justify-between p-4'}>
+                            <View className={'flex items-center space-x-2'}>
+                                <View>帮助中心</View>
+                            </View>
+                            <View className={'flex items-center space-x-2'}>
+                                <View className={'iconfont icon-youjiantou_huaban'}/>
+                            </View>
+                        </Navigator>
+                    </View>
 
                     {settings.wxServiceChatCorpId &&
                         <View>
