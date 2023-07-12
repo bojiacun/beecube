@@ -257,7 +257,7 @@ export default class Index extends Component<any, any> {
                             {goods.fields.map((item: any) => {
                                 return (
                                     <View className="tr">
-                                        <view className="td w-20">{item.key}</view>
+                                        <view className="td w-30">{item.key}</view>
                                         <view className="td">{item.value}</view>
                                     </View>
                                 );
