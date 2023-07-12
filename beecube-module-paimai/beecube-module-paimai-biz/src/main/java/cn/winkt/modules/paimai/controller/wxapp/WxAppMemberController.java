@@ -980,7 +980,10 @@ public class WxAppMemberController {
                 WxPayService wxPayService = miniappServices.getService(AppContext.getApp());
                 Object payResult = wxPayService.createOrder(request);
                 redissonLockClient.unlock(lock);
-                return Result.OK("", payResult);
+                JSONObject result = new JSONObject();
+                result.put("pay", payResult);
+                result.put("order", goodsOrder);
+                return Result.OK("", result);
             }
             else {
                 redissonLockClient.unlock(lock);

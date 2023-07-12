@@ -214,6 +214,7 @@ export default class Index extends Component<any, any> {
                     Taro.setStorageSync("CART", JSON.stringify(newCart));
                     setTimeout(() => {
                         utils.hideLoading();
+                        //跳转到订单详情页
                         Taro.redirectTo({url: '/order/pages/orders/detail?id=' + data.id});
                     }, 2000);
                 });
@@ -258,7 +259,8 @@ export default class Index extends Component<any, any> {
                         Taro.setStorageSync("CART", JSON.stringify(newCart));
                         setTimeout(() => {
                             utils.hideLoading();
-                            Taro.navigateBack().then();
+                            Taro.redirectTo({url: '/order/pages/orders/detail?id=' + data.id});
+                            // Taro.navigateBack().then();
                         }, 2000);
                     });
                     this.setState({posting: false});
