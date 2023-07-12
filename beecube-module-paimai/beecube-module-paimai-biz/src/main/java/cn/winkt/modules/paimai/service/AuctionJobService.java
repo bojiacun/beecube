@@ -315,6 +315,7 @@ public class AuctionJobService {
             //获取超过5分钟未支付的订单，自动处理并取消订单
             QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("status", 0);
+            queryWrapper.eq("type", 2);
             queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -5));
             List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
             goodsOrders.forEach(goodsOrder -> {
