@@ -247,16 +247,19 @@ export default class Index extends Component<any, any> {
                     //支付已经完成，提醒支付成功并返回上一页面
                     Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
                         //清空购物车
-                        let cart = JSON.parse(Taro.getStorageSync("CART"));
-                        let newCart: any[] = [];
-                        cart.forEach((item: any) => {
-                            this.state.goodsList.forEach(g => {
-                                if (item.id != g.id) {
-                                    newCart.push(item);
-                                }
+                        let cartValue = Taro.getStorageSync("CART");
+                        if(cartValue) {
+                            let cart = JSON.parse(cartValue);
+                            let newCart: any[] = [];
+                            cart.forEach((item: any) => {
+                                this.state.goodsList.forEach(g => {
+                                    if (item.id != g.id) {
+                                        newCart.push(item);
+                                    }
+                                });
                             });
-                        });
-                        Taro.setStorageSync("CART", JSON.stringify(newCart));
+                            Taro.setStorageSync("CART", JSON.stringify(newCart));
+                        }
                         setTimeout(async () => {
                             utils.hideLoading();
                             let latestOrder = await request.get('/paimai/api/members/orders/latest', {params: {type: 2}});
