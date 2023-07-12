@@ -216,7 +216,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
                 templateParams = templateParams.replace("{goodsNames}", orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining()));
                 templateParams = templateParams.replace("{deliveryCode}", goodsOrder.getDeliveryCode());
                 templateParams = templateParams.replace("{deliveryNo}", goodsOrder.getDeliveryNo());
-                wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
+                wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/orders/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
             }
         }
         catch (Exception exception) {
