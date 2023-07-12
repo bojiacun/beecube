@@ -17,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.DateUtils;
 import org.jeecg.config.AppContext;
 import org.jeecg.config.JeecgBaseConfig;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,7 @@ public class WxAppMemberScoreController {
             BigDecimal shareTimelineIntegral = new BigDecimal(memberSetting.getShareTimelineIntegral()).setScale(2, RoundingMode.CEILING);
             if(shareTimelineIntegral.compareTo(BigDecimal.ZERO) > 0) {
                 LambdaQueryWrapper<AppMemberShareRecord> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.gt(AppMemberShareRecord::getCreateTime, DateUtils.todayZeroTime());
                 List<AppMemberShareRecord> shareRecords = appMemberShareRecordService.list(queryWrapper);
                 BigDecimal maxDayShare = BigDecimal.ZERO;
                 BigDecimal todaySharedScore = BigDecimal.ZERO;
