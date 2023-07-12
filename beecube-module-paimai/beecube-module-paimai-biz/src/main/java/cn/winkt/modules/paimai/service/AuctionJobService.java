@@ -346,7 +346,7 @@ public class AuctionJobService {
                     templateParams = templateParams.replace("{goodsNames}", orderGoods.stream().map(OrderGoods::getGoodsName).collect(Collectors.joining()));
                     templateParams = templateParams.replace("{totalPay}", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING).toString());
                     try {
-                        wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
+                        wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/orders/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
