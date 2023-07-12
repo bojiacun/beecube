@@ -130,6 +130,12 @@ public class WxAppMemberController {
     IPerformanceInviteService performanceInviteService;
 
 
+    @GetMapping(value = "/orders/latest")
+    public Result<GoodsOrder> latestGoodsOrder(@RequestParam Integer type) {
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        return Result.OK(goodsOrderService.getLatestOrder(loginUser.getId(), type));
+    }
+
     @AutoLog(value = "拍品表-我的参拍拍品")
     @ApiOperation(value = "拍品表-我的参拍拍品", notes = "拍品表-我的参拍拍品")
     @GetMapping(value = "/goods/my")

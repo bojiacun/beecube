@@ -5,4 +5,8 @@
         select o.*, g.title as goods_name,g.id as goods_id,g.images as goods_images,g.type as goods_type
         from paimai_orders o left join paimai_goods g on g.id = o.goods_id
     </select>
+
+    <select id="getLatestOrder" resultType="cn.winkt.modules.paimai.entity.GoodsOrder">
+        select * from paimai_orders where member_id = #{memberId} and type = #{type} order by create_time desc limit 1;
+    </select>
 </mapper>

@@ -22,4 +22,6 @@ public interface IGoodsOrderService extends IService<GoodsOrder> {
      * @param goodsOrder
      */
     void cancel(GoodsOrder goodsOrder) throws InvocationTargetException, IllegalAccessException, WxPayException;
+
+    GoodsOrder getLatestOrder(String memberId, Integer type);
 }

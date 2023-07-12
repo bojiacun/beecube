@@ -17,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface GoodsOrderMapper extends BaseMapper<GoodsOrder> {
+    GoodsOrder getLatestOrder(@Param("memberId") String memberId, @Param("type") Integer type);
 }

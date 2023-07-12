@@ -107,4 +107,9 @@ public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderMapper, GoodsOr
         goodsOrder.setStatus(-1);
         goodsOrderMapper.updateById(goodsOrder);
     }
+
+    @Override
+    public GoodsOrder getLatestOrder(String memberId, Integer type) {
+        return goodsOrderMapper.getLatestOrder(memberId, type);
+    }
 }
