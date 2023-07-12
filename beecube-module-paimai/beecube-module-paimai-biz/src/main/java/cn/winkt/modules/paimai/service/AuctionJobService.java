@@ -333,13 +333,13 @@ public class AuctionJobService {
             if (!StringUtils.isAnyEmpty(templateParams, templateId)) {
                 LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
                 goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getStatus, 0);
+                goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getType, 2);
                 goodsOrderLambdaQueryWrapper.lt(GoodsOrder::getCreateTime, DateUtils.addMinutes(new Date(), -2));
                 List<GoodsOrder> notPayOrders = goodsOrderService.list(goodsOrderLambdaQueryWrapper);
                 for (GoodsOrder goodsOrder : notPayOrders) {
                     LambdaQueryWrapper<OrderGoods> orderGoodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
                     orderGoodsLambdaQueryWrapper.eq(OrderGoods::getOrderId, goodsOrder.getId());
                     List<OrderGoods> orderGoods = orderGoodsService.list(orderGoodsLambdaQueryWrapper);
-
                     templateParams = templateParams.replace("{orderId}", goodsOrder.getId());
                     templateParams = templateParams.replace("{createTime}", DateFormatUtils.format(goodsOrder.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
                     templateParams = templateParams.replace("{endPayTime}", DateFormatUtils.format(DateUtils.addMinutes(goodsOrder.getCreateTime(), 5), "yyyy-MM-dd HH:mm:ss"));
