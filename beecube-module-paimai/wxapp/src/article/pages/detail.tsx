@@ -70,7 +70,7 @@ export default class Index extends Component<any, any> {
                 {/*        <View><Text className={'fa fa-eye mr-1'} />{detail.views}</View>*/}
                 {/*    </View>*/}
                 {/*}*/}
-                <View className={'relative w-full'}>
+                <View className={'mt-2 relative w-full'}>
                     <RichText className={'w-full'} nodes={utils.resolveHtmlImageWidth(detail.content)} space={'nbsp'} />
                 </View>
             </PageLayout>
