@@ -34,6 +34,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.jeecg.boot.starter.lock.client.RedissonLockClient;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
@@ -902,7 +903,7 @@ public class WxAppMemberController {
             //settle
             GoodsOrderSettlement settlement = new GoodsOrderSettlement();
             settlement.setSortNum(0);
-            settlement.setAmount("+ "+totalPrice);
+            settlement.setAmount("+ "+totalPrice.setScale(2, RoundingMode.CEILING));
             settlement.setDescription("商品总价");
             settlement.setOrderId(goodsOrder.getId());
             goodsOrderSettlementService.save(settlement);
@@ -910,7 +911,7 @@ public class WxAppMemberController {
             if(postOrderVO.getUseIntegral().compareTo(BigDecimal.ZERO) > 0) {
                 settlement = new GoodsOrderSettlement();
                 settlement.setSortNum(1);
-                settlement.setAmount("- " + postOrderVO.getUseIntegral());
+                settlement.setAmount("- " + postOrderVO.getUseIntegral().setScale(2, RoundingMode.CEILING));
                 settlement.setDescription("积分抵扣");
                 settlement.setOrderId(goodsOrder.getId());
                 goodsOrderSettlementService.save(settlement);
@@ -923,7 +924,7 @@ public class WxAppMemberController {
                 couponTicketService.updateById(ticket);
                 settlement = new GoodsOrderSettlement();
                 settlement.setSortNum(2);
-                settlement.setAmount("- " + coupon.getAmount());
+                settlement.setAmount("- " + coupon.getAmount().setScale(2, RoundingMode.CEILING));
                 settlement.setDescription("优惠券抵扣");
                 settlement.setOrderId(goodsOrder.getId());
                 goodsOrderSettlementService.save(settlement);
@@ -931,7 +932,7 @@ public class WxAppMemberController {
 
             settlement = new GoodsOrderSettlement();
             settlement.setSortNum(3);
-            settlement.setAmount("+ " + postOrderVO.getDeliveryPrice());
+            settlement.setAmount("+ " + postOrderVO.getDeliveryPrice().setScale(2, RoundingMode.CEILING));
             settlement.setDescription("运费");
             settlement.setOrderId(goodsOrder.getId());
             goodsOrderSettlementService.save(settlement);
