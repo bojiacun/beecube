@@ -6,6 +6,14 @@ import {RichText, View} from "@tarojs/components";
 import utils from "../../lib/utils";
 import {connect} from "react-redux";
 
+
+const TITLES = {
+    '1': '大家之谈',
+    '2': '公开课',
+    '3': '服务指南',
+    '4': '帮助中心',
+}
+
 // @ts-ignore
 @connect((state: any) => (
     {
@@ -52,7 +60,7 @@ export default class Index extends Component<any, any> {
         if(detail == null) return <PageLoading />;
 
         return (
-            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.type > 2 ? detail.title: '文章详情'}} style={{backgroundColor: 'white'}}>
+            <PageLayout containerClassName={'p-4'} statusBarProps={{title: detail.type <= 2 ? detail.title: TITLES[detail.type]}} style={{backgroundColor: 'white'}}>
                 <View className={'text-xl font-bold'}>
                     {detail.title}
                 </View>
