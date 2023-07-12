@@ -251,7 +251,7 @@ export default class Index extends Component<any, any> {
 
                 <View className={'bg-white p-4 mt-4'}>
                     <View className={'font-bold text-center text-lg'}>商品详情</View>
-                    {goods.fields && <View>
+                    {goods.fields && <View className={'mb-4'}>
                         <View className={'item-title-black'}>基本信息</View>
                         <View className="table w-full text-stone-400 text-lg mt-4">
                             {goods.fields.map((item: any) => {
