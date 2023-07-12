@@ -81,11 +81,13 @@ public class WxAppMemberScoreController {
     @Transactional(rollbackFor = Exception.class)
     public Result<?> newShareScore() throws InvocationTargetException, IllegalAccessException {
         MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(StringUtils.isNumeric(memberSetting.getShareTimelineIntegral())) {
             BigDecimal shareTimelineIntegral = new BigDecimal(memberSetting.getShareTimelineIntegral()).setScale(2, RoundingMode.CEILING);
             if(shareTimelineIntegral.compareTo(BigDecimal.ZERO) > 0) {
                 LambdaQueryWrapper<AppMemberShareRecord> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.gt(AppMemberShareRecord::getCreateTime, DateUtils.todayZeroTime());
+                queryWrapper.eq(AppMemberShareRecord::getMemberId, loginUser.getId());
                 List<AppMemberShareRecord> shareRecords = appMemberShareRecordService.list(queryWrapper);
                 BigDecimal maxDayShare = BigDecimal.ZERO;
                 BigDecimal todaySharedScore = BigDecimal.ZERO;
@@ -98,7 +100,6 @@ public class WxAppMemberScoreController {
                 if(maxDayShare.compareTo(BigDecimal.ZERO) == 0 || todaySharedScore.compareTo(maxDayShare) < 0) {
                     AppMemberShareRecord record = new AppMemberShareRecord();
                     record.setScore(shareTimelineIntegral);
-                    LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
                     record.setMemberId(loginUser.getId());
                     appMemberShareRecordService.save(record);
                     appMemberService.inScore(loginUser.getId(), shareTimelineIntegral, "转发朋友圈获得积分");
