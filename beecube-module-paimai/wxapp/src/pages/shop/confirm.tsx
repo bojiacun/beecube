@@ -257,10 +257,15 @@ export default class Index extends Component<any, any> {
                             });
                         });
                         Taro.setStorageSync("CART", JSON.stringify(newCart));
-                        setTimeout(() => {
+                        setTimeout(async () => {
                             utils.hideLoading();
-                            Taro.redirectTo({url: '/order/pages/orders/detail?id=' + data.id});
-                            // Taro.navigateBack().then();
+                            let latestOrder = await request.get('/paimai/api/members/orders/latest', {params: {type: 2}});
+                            if(latestOrder) {
+                                Taro.redirectTo({url: '/order/pages/orders/detail?id=' + latestOrder.data.result.id});
+                            }
+                            else {
+                                Taro.navigateBack().then();
+                            }
                         }, 2000);
                     });
                     this.setState({posting: false});
