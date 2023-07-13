@@ -36,7 +36,7 @@ export default class Index extends Component<any, any> {
 
 
     onPageScroll({scrollTop}) {
-        this.setState({scrollTop});
+        this.setState({scrollTop, reachTop: scrollTop === 0});
     }
 
     onLoad() {
@@ -58,7 +58,7 @@ export default class Index extends Component<any, any> {
         this.refreshingRef.current = true;
         this.setState({loading: showLoading, page: 1});
         const newList = [];
-        request.get('/app/api/members/scores/records', {params: {status: 3, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+        request.get('/app/api/members/scores/records', {params: {pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
             this.refreshingRef.current = false;
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));
@@ -80,7 +80,7 @@ export default class Index extends Component<any, any> {
 
 
         return (
-            <PageLayout statusBarProps={{title: '积分明细'}}>
+            <PageLayout statusBarProps={{title: '积分明细'}} enableReachBottom={true}>
                 <PullRefresh className={'min-h-full'} loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                     <List loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
                         {list.map((item: any) => {

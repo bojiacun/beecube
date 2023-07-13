@@ -115,8 +115,8 @@ export default class Index extends Component<any, any> {
         if (safeBottom > 10) safeBottom -= 10;
 
         return (
-            <PageLayout statusBarProps={{title: '发票中心'}} containerClassName={'p-4'}>
-                <Checkbox.Group onChange={this.handleSelect} value={this.state.selected}>
+            <PageLayout statusBarProps={{title: '发票中心'}} enableReachBottom>
+                <Checkbox.Group className={'p-4'} onChange={this.handleSelect} value={this.state.selected}>
                     <View className={'flex justify-end'}><Button className={'btn btn-outline'} size={'small'} onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
                     <View className={'item-title text-lg mb-4'}>待开票订单</View>
                     <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
