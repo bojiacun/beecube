@@ -27,7 +27,7 @@ const MemberSettingsEditor = (props:any) => {
     const handleOnSubmit = (values: any) => {
         postFetcher.submit(values, {method: 'post', action:'/app/settings/update?group=member'});
     }
-
+    settings.consumeIntegral = parseInt(settings.consumeIntegral);
 
     return (
         <Formik initialValues={settings} onSubmit={handleOnSubmit} validationSchema={SettingsSchema}>
