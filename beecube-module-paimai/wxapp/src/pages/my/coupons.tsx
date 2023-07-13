@@ -34,6 +34,7 @@ const CouponList:FC<any> = (props) => {
                     setPage(page+1);
                 });
             }}
+            offset={0}
         >
             {
                 list.map((item) => (
@@ -68,6 +69,7 @@ const CouponList:FC<any> = (props) => {
             <List.Placeholder>
                 {loading && <Loading>加载中...</Loading>}
                 {!hasMore && "没有更多了"}
+                <View style={{height: props.safeBottom + 56}}/>
             </List.Placeholder>
         </List>
     )
@@ -94,17 +96,20 @@ export default class Index extends Component<any, any> {
                 <Text className={'fa fa-question-circle-o'} />
             </Navigator>
         );
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
+
         return (
             <PageLayout statusBarProps={{title: titleComponent}}>
                 <Tabs defaultValue={'1'} sticky={{offsetTop: headerHeight}}>
                     <Tabs.TabPane value={'1'} title={'未使用'}>
-                        <CouponList type={1} />
+                        <CouponList type={1} safeBottom={safeBottom} />
                     </Tabs.TabPane>
                     <Tabs.TabPane value={'2'} title={'已使用'}>
-                        <CouponList type={2} />
+                        <CouponList type={2} safeBottom={safeBottom} />
                     </Tabs.TabPane>
                     <Tabs.TabPane value={'3'} title={'已过期'}>
-                        <CouponList type={3} />
+                        <CouponList type={3} safeBottom={safeBottom} />
                     </Tabs.TabPane>
                 </Tabs>
             </PageLayout>

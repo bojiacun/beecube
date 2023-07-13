@@ -1,10 +1,9 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import PageLoading from "../../components/pageloading";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import {Navigator, View} from "@tarojs/components";
 import {List, Loading} from "@taroify/core";
-import numeral from 'numeral';
 import {connect} from "react-redux";
 import {ArrowRight} from "@taroify/icons";
 
@@ -27,7 +26,6 @@ export default class Index extends Component<any, any> {
         pageSize: 20,
         selected: [],
     }
-    refreshingRef = React.createRef<boolean>();
 
     constructor(props) {
         super(props);
@@ -70,13 +68,12 @@ export default class Index extends Component<any, any> {
         const {systemInfo} = this.props;
         if (!list) return <PageLoading/>;
 
-        const refreshingRef = this.refreshingRef;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
         return (
             <PageLayout statusBarProps={{title: '我的参展'}} containerClassName={'p-4'}>
-                <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
+                <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad} offset={0}>
                     {
                         list.map((item) => {
                             return (
@@ -88,19 +85,17 @@ export default class Index extends Component<any, any> {
                                         </View>
                                     </View>
                                     <View className={'text-xl font-bold flex-none'}>
-                                        <ArrowRight />
+                                        <ArrowRight/>
                                     </View>
                                 </Navigator>
                             );
                         })
                     }
-                    {!refreshingRef.current && (
-                        <List.Placeholder>
-                            {loading && <Loading>加载中...</Loading>}
-                            {!hasMore && "没有更多了"}
-                        </List.Placeholder>
-                    )}
-                    <View style={{height: safeBottom + 56}}/>
+                    <List.Placeholder>
+                        {loading && <Loading>加载中...</Loading>}
+                        {!hasMore && "没有更多了"}
+                        <View style={{height: safeBottom + 56}}/>
+                    </List.Placeholder>
                 </List>
             </PageLayout>
         );
