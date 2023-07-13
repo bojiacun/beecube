@@ -312,7 +312,7 @@ export default class Index extends Component<any, any> {
                         </Button>
                     }
                     {detail.state == 2 &&
-                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?roomId=${detail.id}`})} className={'btn btn-primary w-56'}>
+                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?id=${detail.id}`})} className={'btn btn-primary w-56'}>
                             <View>直播已结束，观看回放</View>
                         </Button>
                     }
