@@ -80,7 +80,7 @@ export default class Index extends Component<any, any> {
 
 
         return (
-            <PageLayout statusBarProps={{title: '积分明细'}} containerClassName={'pb-4'}>
+            <PageLayout statusBarProps={{title: '积分明细'}}>
                 <PullRefresh className={'min-h-full'} loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                     <List loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
                         {list.map((item: any) => {
@@ -110,7 +110,7 @@ export default class Index extends Component<any, any> {
                                 {!hasMore && "没有更多了"}
                             </List.Placeholder>
                         )}
-                        <View style={{height: safeBottom + 56}} />
+                        <View style={{height: safeBottom}} />
                     </List>
                 </PullRefresh>
             </PageLayout>
