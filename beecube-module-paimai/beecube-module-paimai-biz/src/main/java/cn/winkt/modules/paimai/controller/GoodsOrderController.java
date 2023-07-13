@@ -3,9 +3,7 @@ package cn.winkt.modules.paimai.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -34,7 +32,6 @@ import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.oConvertUtils;
 import cn.winkt.modules.paimai.entity.GoodsOrder;
 
-import java.util.Date;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -173,7 +170,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
         long todayOrders = goodsOrderService.count(queryWrapper);
 
         //每日首次下单送积分
-        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getMemberId());
+        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getAppId());
         if(todayOrders == 1 && memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral())) {
             ChangeMemberScore changeMemberScore = new ChangeMemberScore();
             changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
@@ -181,7 +178,19 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
             changeMemberScore.setDescription("每日首单送积分");
             appApi.reduceMemberScore(changeMemberScore);
         }
-        return Result.OK("编辑成功!");
+        //设置下单赠送积分
+        if(memberSetting != null && Objects.equals(memberSetting.getConsumeIntegral(), "1")) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setDescription(String.format("消费送积分, 金额%s", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING)));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setAmount(BigDecimal.valueOf(goodsOrder.getPayedPrice()));
+            try {
+                appApi.reduceMemberScore(changeMemberScore);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+        return Result.OK("确认支付成功!");
     }
     @AutoLog(value = "订单表-确认收货")
     @ApiOperation(value = "订单表-确认收货", notes = "订单表-确认收货")

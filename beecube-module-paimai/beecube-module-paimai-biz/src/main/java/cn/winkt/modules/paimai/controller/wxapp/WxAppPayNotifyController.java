@@ -182,7 +182,7 @@ public class WxAppPayNotifyController {
         long todayOrders = goodsOrderService.count(queryWrapper);
 
         //每日首次下单送积分
-        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getMemberId());
+        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getAppId());
         if(todayOrders == 1 && memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral())) {
             ChangeMemberScore changeMemberScore = new ChangeMemberScore();
             changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
