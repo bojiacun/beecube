@@ -3,8 +3,8 @@ import PageLayout from "../../layouts/PageLayout";
 import {Cell, List, Loading, PullRefresh} from "@taroify/core";
 import request from "../../lib/request";
 import {View} from "@tarojs/components";
-import utils from "../../lib/utils";
 import {connect} from "react-redux";
+import PageLoading from "../../components/pageloading";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -17,10 +17,11 @@ import {connect} from "react-redux";
 export default class Index extends Component<any, any> {
     state: any = {
         list: [],
-        hasMore: false,
+        hasMore: true,
         loading: false,
         scrollTop: 0,
         page: 1,
+        pageSize: 10,
         reachTop: true,
     }
 
@@ -39,24 +40,29 @@ export default class Index extends Component<any, any> {
 
     onLoad() {
         this.setState({loading: true});
-        const newList = this.refreshingRef.current ? [] : this.state.list;
-        request.get('/app/api/members/scores/records', {params: {pageNo: this.state.page, pageSize: 20}}).then(res => {
+        const newList = this.state.list || [];
+        request.get('/app/api/members/scores/records', {params: {pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
             // @ts-ignore
             this.refreshingRef.current = false;
             let list = res.data.result.records;
             list.forEach((item: any) => {
                 newList.push(item);
             });
-            this.setState({list: newList, loading: false, hasMore: list.length == 20});
+            this.setState({list: newList, loading: false, hasMore: list.length >= this.state.pageSize, page: this.state.page + 1});
         });
     }
 
-    onRefresh() {
+    onRefresh(showLoading = true) {
         // @ts-ignore
-        this.setState({page: 1});
         this.refreshingRef.current = true;
-        this.setState({loading: false});
-        this.onLoad();
+        this.setState({loading: showLoading, page: 1});
+        const newList = [];
+        request.get('/app/api/members/scores/records', {params: {status: 3, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
+            this.refreshingRef.current = false;
+            let records = res.data.result.records;
+            records.forEach(item => newList.push(item));
+            this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
+        });
     }
 
     componentDidMount() {
@@ -64,10 +70,16 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {loading, hasMore, scrollTop, reachTop, list} = this.state;
-        const top = utils.calcPageHeaderHeight(this.props.systemInfo);
+        const {systemInfo} = this.props;
+        if (!list) return <PageLoading/>;
+
+        const refreshingRef = this.refreshingRef;
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
+
 
         return (
-            <PageLayout statusBarProps={{title: '积分明细'}} containerStyle={{height: `calc(100vh - ${top}px)`}}>
+            <PageLayout statusBarProps={{title: '积分明细'}} containerClassName={'pb-4'}>
                 <PullRefresh className={'min-h-full'} loading={this.refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                     <List loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
                         {list.map((item: any) => {
@@ -91,13 +103,14 @@ export default class Index extends Component<any, any> {
                                 </Cell>
                             );
                         })}
+                        {!refreshingRef.current && (
+                            <List.Placeholder>
+                                {loading && <Loading>加载中...</Loading>}
+                                {!hasMore && "没有更多了"}
+                            </List.Placeholder>
+                        )}
+                        <View style={{height: safeBottom + 56}} />
                     </List>
-                    {!this.refreshingRef.current && (
-                        <List.Placeholder>
-                            {loading && <Loading>加载中...</Loading>}
-                            {!hasMore && "没有更多了"}
-                        </List.Placeholder>
-                    )}
                 </PullRefresh>
             </PageLayout>
         );
