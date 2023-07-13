@@ -1,9 +1,9 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import PageLoading from "../../components/pageloading";
 import PageLayout from "../../layouts/PageLayout";
 import request from "../../lib/request";
 import {Text, View} from "@tarojs/components";
-import {Button, List, Loading, PullRefresh, Checkbox} from "@taroify/core";
+import {Button, List, Loading, Checkbox} from "@taroify/core";
 import numeral from 'numeral';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
@@ -29,12 +29,10 @@ export default class Index extends Component<any, any> {
         pageSize: 20,
         selected: [],
     }
-    refreshingRef = React.createRef();
 
     constructor(props) {
         super(props);
         this.onLoad = this.onLoad.bind(this);
-        this.onRefresh = this.onRefresh.bind(this);
         this.onPageScroll = this.onPageScroll.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.toggleCheckAll = this.toggleCheckAll.bind(this);
@@ -42,35 +40,20 @@ export default class Index extends Component<any, any> {
     }
 
     onPageScroll({scrollTop}) {
-        this.setState({scrollTop});
+        this.setState({scrollTop, reachTop: scrollTop === 0});
     }
 
-    componentDidShow() {
-        this.onRefresh(false);
-    }
 
     onLoad() {
         this.setState({loading: true});
         const newList = this.state.list || [];
         request.get('/paimai/api/members/fapiao/orders', {params: {status: 3, pageNo: this.state.page, pageSize: this.state.pageSize}}).then(res => {
-            this.refreshingRef.current = false;
             let records = res.data.result.records;
             records.forEach(item => newList.push(item));
             this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
         });
     }
 
-    onRefresh(showLoading = true) {
-        this.refreshingRef.current = true;
-        this.setState({loading: showLoading, page: 1});
-        const newList = [];
-        request.get('/paimai/api/members/fapiao/orders', {params: {status: 3, pageNo: 1, pageSize: this.state.pageSize}}).then(res => {
-            this.refreshingRef.current = false;
-            let records = res.data.result.records;
-            records.forEach(item => newList.push(item));
-            this.setState({list: newList, loading: false, hasMore: records.length >= this.state.pageSize, page: this.state.page + 1});
-        });
-    }
 
     toggleCheckAll() {
         if (this.isCheckedAll) {
@@ -106,63 +89,59 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {list, reachTop, scrollTop, hasMore, loading, selected} = this.state;
+        const {list, scrollTop, hasMore, loading, selected} = this.state;
         const {systemInfo} = this.props;
         if (!list) return <PageLoading/>;
 
-        const refreshingRef = this.refreshingRef;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
         return (
             <PageLayout statusBarProps={{title: '发票中心'}} enableReachBottom>
                 <Checkbox.Group className={'p-4'} onChange={this.handleSelect} value={this.state.selected}>
-                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} size={'small'} onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
+                    <View className={'flex justify-end'}><Button className={'btn btn-outline'} size={'small'}
+                                                                 onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
                     <View className={'item-title text-lg mb-4'}>待开票订单</View>
-                    <PullRefresh loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
-                        <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
-                            {
-                                list.map((item) => {
-                                    return (
-                                        <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
-                                            <View className={'flex-none'}><Checkbox className={styles.redCheckbox} name={item.id}/></View>
-                                            <View className={'flex-1'}>
-                                                <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
-                                                <View className={'flex flex-col mt-2'}>
-                                                    {
-                                                        item.orderGoods.map(item => {
-                                                            return (
-                                                                <View className={'space-y-1 mb-2'}>
-                                                                    <View>{item.goodsName}</View>
-                                                                    <View>￥{item.goodsPrice} X {item.goodsCount}</View>
-                                                                </View>
-                                                            );
-                                                        })
-                                                    }
-                                                </View>
-                                            </View>
-                                            <View className={'text-xl font-bold text-red-600 flex-none'}>
-                                                ￥{numeral(item.payedPrice).format('0,0.00')}
+                    <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
+                        {
+                            list.map((item) => {
+                                return (
+                                    <View className={'flex items-center space-x-4 bg-none pb-2 mb-2 border-b border-gray-300'} key={item.id}>
+                                        <View className={'flex-none'}><Checkbox className={styles.redCheckbox} name={item.id}/></View>
+                                        <View className={'flex-1'}>
+                                            <View className={'text-sm text-stone-400'}>订单编号 | {item.id}</View>
+                                            <View className={'flex flex-col mt-2'}>
+                                                {
+                                                    item.orderGoods.map(item => {
+                                                        return (
+                                                            <View className={'space-y-1 mb-2'}>
+                                                                <View>{item.goodsName}</View>
+                                                                <View>￥{item.goodsPrice} X {item.goodsCount}</View>
+                                                            </View>
+                                                        );
+                                                    })
+                                                }
                                             </View>
                                         </View>
-                                    );
-                                })
-                            }
-                            {!refreshingRef.current && (
-                                <List.Placeholder>
-                                    {loading && <Loading>加载中...</Loading>}
-                                    {!hasMore && "没有更多了"}
-                                </List.Placeholder>
-                            )}
-                            <View style={{height: safeBottom + 56}} />
-                        </List>
-                    </PullRefresh>
+                                        <View className={'text-xl font-bold text-red-600 flex-none'}>
+                                            ￥{numeral(item.payedPrice).format('0,0.00')}
+                                        </View>
+                                    </View>
+                                );
+                            })
+                        }
+                        <List.Placeholder>
+                            {loading && <Loading>加载中...</Loading>}
+                            {!hasMore && "没有更多了"}
+                            <View style={{height: safeBottom + 56}}/>
+                        </List.Placeholder>
+                    </List>
                 </Checkbox.Group>
 
                 <View className={'bg-white flex items-center fixed py-2 px-4 w-full bottom-0 left-0'} style={{paddingBottom: safeBottom}}>
                     <View className={'flex-1 flex items-center space-x-4'}>
                         <View className={'flex flex-col items-center'}>
-                            <Checkbox id={'all'} className={styles.redCheckbox} checked={this.isCheckedAll} onClick={this.toggleCheckAll} />
+                            <Checkbox id={'all'} className={styles.redCheckbox} checked={this.isCheckedAll} onClick={this.toggleCheckAll}/>
                             <View className={'text-sm'}>全选</View>
                         </View>
                         <View className={'flex-1'}>
