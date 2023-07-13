@@ -325,7 +325,6 @@ public class AuctionJobService {
             queryWrapper.eq("status", 0);
             queryWrapper.eq("type", 2);
             queryWrapper.eq("pay_type", 1);
-            queryWrapper.eq("pay_notified", 0);
             queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -cancelTimeout));
             List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
             goodsOrders.forEach(goodsOrder -> {
@@ -343,7 +342,7 @@ public class AuctionJobService {
             if (!StringUtils.isAnyEmpty(templateParams, templateId)) {
                 LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
                 goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getStatus, 0);
-                goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getType, 2);
+                goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getPayNotified, 0);
                 goodsOrderLambdaQueryWrapper.lt(GoodsOrder::getCreateTime, DateUtils.addMinutes(new Date(), -noticeTimeout));
                 List<GoodsOrder> notPayOrders = goodsOrderService.list(goodsOrderLambdaQueryWrapper);
                 for (GoodsOrder goodsOrder : notPayOrders) {
@@ -357,6 +356,8 @@ public class AuctionJobService {
                     templateParams = templateParams.replace("{totalPay}", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING).toString());
                     try {
                         wxTemplateMessageService.sendTemplateMessage(templateId, templateParams, "/order/pages/orders/detail?id=" + goodsOrder.getId(), goodsOrder.getMemberId(), AppContext.getApp());
+                        goodsOrder.setPayNotified(1);
+                        goodsOrderService.updateById(goodsOrder);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
