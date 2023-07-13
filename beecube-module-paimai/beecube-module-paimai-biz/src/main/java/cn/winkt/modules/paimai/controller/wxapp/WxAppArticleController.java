@@ -28,6 +28,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.CommonUtils;
 import org.jeecg.common.util.DateUtils;
+import org.jeecg.config.AppContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -118,7 +119,7 @@ public class WxAppArticleController extends JeecgController<Article, IArticleSer
 
        //每日阅读送积分
        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-       MemberSetting memberSetting = appApi.queryMemberSettings();
+       MemberSetting memberSetting = appApi.queryMemberSettings(AppContext.getApp());
        if(loginUser != null && StringUtils.isNotEmpty(memberSetting.getReadIntegral())) {
            if(!dayTaskService.todayTasked(1)) {
                ChangeMemberScore changeMemberScore = new ChangeMemberScore();

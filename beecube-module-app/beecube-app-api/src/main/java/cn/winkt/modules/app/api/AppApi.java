@@ -32,7 +32,7 @@ public interface AppApi {
     @GetMapping("/app/admin/settings")
     List<AppSettingVO> queryAppSettings(@RequestParam("app_id") String appId, @RequestParam("group") String groupKey);
     @GetMapping("/app/admin/settings/member")
-    MemberSetting queryMemberSettings(@RequestParam("member_id") String memberId);
+    MemberSetting queryMemberSettings(@RequestParam("app_id") String appId);
     @GetMapping("/app/admin/tencent/configs")
     List<AppTencentConfigItemVO> tencentConfigs();
 
