@@ -174,6 +174,36 @@ public class WxAppPayNotifyController {
         goodsOrder.setPayTime(new Date());
         goodsOrder.setTransactionId(notifyResult.getTransactionId());
         goodsOrderService.updateById(goodsOrder);
+
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.gt(GoodsOrder::getStatus, 0);
+        queryWrapper.eq(GoodsOrder::getMemberId, goodsOrder.getMemberId());
+        queryWrapper.gt(GoodsOrder::getCreateTime, DateUtils.todayZeroTime());
+        long todayOrders = goodsOrderService.count(queryWrapper);
+
+        //每日首次下单送积分
+        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getMemberId());
+        if(todayOrders == 1 && memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral())) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setDescription("每日首单送积分");
+            appApi.reduceMemberScore(changeMemberScore);
+        }
+
+        //设置下单赠送积分
+        if(memberSetting != null && Objects.equals(memberSetting.getConsumeIntegral(), "1")) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setDescription(String.format("消费送积分, 金额%s", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING)));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setAmount(BigDecimal.valueOf(goodsOrder.getPayedPrice()));
+            try {
+                appApi.reduceMemberScore(changeMemberScore);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+
         return WxPayNotifyResponse.success("成功");
     }
 }
