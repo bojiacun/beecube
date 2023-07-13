@@ -21,21 +21,22 @@ export default class Index extends Component<any, any> {
         loading: false,
         scrollTop: 0,
         page: 1,
-        pageSize: 10,
+        pageSize: 20,
         reachTop: true,
     }
 
-    refreshingRef = React.createRef<any>();
+    refreshingRef = React.createRef<boolean>();
 
     constructor(props) {
         super(props);
         this.onLoad = this.onLoad.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.onPageScroll = this.onPageScroll.bind(this);
     }
 
 
-    onPageScroll(res) {
-        this.setState({scrollTop: res.scrollTop, reachTop: res.scrollTop == 0});
+    onPageScroll({scrollTop}) {
+        this.setState({scrollTop});
     }
 
     onLoad() {
@@ -80,7 +81,7 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '积分明细'}} containerClassName={'pb-4'}>
-                <PullRefresh className={'min-h-full'} loading={this.refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
+                <PullRefresh className={'min-h-full'} loading={refreshingRef.current} reachTop={reachTop} onRefresh={this.onRefresh}>
                     <List loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
                         {list.map((item: any) => {
                             return (

@@ -29,7 +29,7 @@ export default class Index extends Component<any, any> {
         pageSize: 20,
         selected: [],
     }
-    refreshingRef = React.createRef<boolean>();
+    refreshingRef = React.createRef();
 
     constructor(props) {
         super(props);
