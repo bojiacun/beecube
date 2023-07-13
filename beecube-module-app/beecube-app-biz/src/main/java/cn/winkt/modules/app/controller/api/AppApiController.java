@@ -159,8 +159,8 @@ public class AppApiController {
     }
 
     @GetMapping("/settings/member")
-    public MemberSetting queryMemberSettings() throws InvocationTargetException, IllegalAccessException {
-        return appSettingService.queryMemberSettings();
+    public MemberSetting queryMemberSettings(@RequestParam("app_id") String appId) throws InvocationTargetException, IllegalAccessException {
+        return appSettingService.queryMemberSettings(appId);
     }
 
     @PutMapping("/score/change")

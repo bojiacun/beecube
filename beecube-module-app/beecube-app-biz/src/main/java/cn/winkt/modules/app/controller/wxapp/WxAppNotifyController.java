@@ -72,7 +72,7 @@ public class WxAppNotifyController {
 
         log.debug("用户充值回调，充值记录ID是 {}", payLog.getOrdersn());
         AppMemberMoneyRecord record = appMemberMoneyRecordService.getById(payLog.getOrdersn());
-        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
         if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getRechargeIntegral())) {
             //查看今天是否已经充值
             LambdaQueryWrapper<AppMemberMoneyRecord> recordLambdaQueryWrapper = new LambdaQueryWrapper<>();

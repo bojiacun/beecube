@@ -32,10 +32,10 @@ public class AppSettingServiceImpl extends ServiceImpl<AppSettingMapper, AppSett
     AppSettingMapper appSettingMapper;
 
     @Override
-    public MemberSetting queryMemberSettings() throws InvocationTargetException, IllegalAccessException {
+    public MemberSetting queryMemberSettings(String appId) throws InvocationTargetException, IllegalAccessException {
         QueryWrapper<AppSetting> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("group_key", "member");
-        queryWrapper.eq("app_id", AppContext.getApp());
+        queryWrapper.eq("app_id", appId);
         List<AppSetting> settings = appSettingMapper.selectList(queryWrapper);
         Map<String, String> configs = settings.stream()
                 .filter(setting -> setting != null && setting.getSettingValue() != null)

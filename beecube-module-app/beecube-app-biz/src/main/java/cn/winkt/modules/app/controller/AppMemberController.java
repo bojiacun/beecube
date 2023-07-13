@@ -32,6 +32,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -140,7 +141,7 @@ public class AppMemberController extends JeecgController<AppMember, IAppMemberSe
 		//判断是不是通过实名认证
 		if(old.getAuthStatus() != 2 && appMember.getAuthStatus() == 2) {
 			//实名认证赠送积分
-			MemberSetting memberSetting = appSettingService.queryMemberSettings();
+			MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
 			if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getAuthRealIntegral())) {
 				appMemberService.inScore(appMember.getId(), new BigDecimal(memberSetting.getAuthRealIntegral()), "实名认证送积分");
 			}

@@ -308,15 +308,25 @@ public class AuctionJobService {
     @XxlJob(value = "GOODS_ORDER_CANCEL")
     public ReturnT<String> autoCancelGoodsOrders(String params) {
         log.debug("开始处理过期未支付的订单");
+        int cancelTimeout = 15;
+        int noticeTimeout = 5;
+
+        if(StringUtils.isNotEmpty(params)) {
+            String[] paramsArr = params.split(",");
+            cancelTimeout = Integer.parseInt(paramsArr[0]);
+            noticeTimeout = Integer.parseInt(paramsArr[1]);
+        }
         List<AppVO> apps = appApi.allApps();
-        apps.forEach(appVO -> {
+        for (AppVO appVO : apps) {
             log.debug("处理应用{}未处理订单", appVO.getId());
             AppContext.setApp(appVO.getId());
-            //获取超过5分钟未支付的订单，自动处理并取消订单
+            //获取超过5分钟未支付的微信支付订单，自动处理并取消订单
             QueryWrapper<GoodsOrder> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("status", 0);
             queryWrapper.eq("type", 2);
-            queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -5));
+            queryWrapper.eq("pay_type", 1);
+            queryWrapper.eq("pay_notified", 0);
+            queryWrapper.lt("create_time", DateUtils.addMinutes(new Date(), -cancelTimeout));
             List<GoodsOrder> goodsOrders = goodsOrderService.list(queryWrapper);
             goodsOrders.forEach(goodsOrder -> {
                 try {
@@ -334,7 +344,7 @@ public class AuctionJobService {
                 LambdaQueryWrapper<GoodsOrder> goodsOrderLambdaQueryWrapper = new LambdaQueryWrapper<>();
                 goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getStatus, 0);
                 goodsOrderLambdaQueryWrapper.eq(GoodsOrder::getType, 2);
-                goodsOrderLambdaQueryWrapper.lt(GoodsOrder::getCreateTime, DateUtils.addMinutes(new Date(), -2));
+                goodsOrderLambdaQueryWrapper.lt(GoodsOrder::getCreateTime, DateUtils.addMinutes(new Date(), -noticeTimeout));
                 List<GoodsOrder> notPayOrders = goodsOrderService.list(goodsOrderLambdaQueryWrapper);
                 for (GoodsOrder goodsOrder : notPayOrders) {
                     LambdaQueryWrapper<OrderGoods> orderGoodsLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -352,7 +362,7 @@ public class AuctionJobService {
                     }
                 }
             }
-        });
+        }
         return ReturnT.SUCCESS;
     }
 

@@ -69,7 +69,7 @@ public class WxAppLoginController {
             log.debug("新用户刚建立ID：{}，分享人ID：{}", appMember.getId(), mid);
             try {
                 //新用户赠送积分
-                MemberSetting memberSetting = appSettingService.queryMemberSettings();
+                MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
                 BigDecimal newMemberIntegral = new BigDecimal(memberSetting.getNewMemberIntegral());
                 if(newMemberIntegral.compareTo(BigDecimal.ZERO) > 0) {
                     appMemberService.inScore(appMember.getId(), newMemberIntegral, "新用户赠送积分");

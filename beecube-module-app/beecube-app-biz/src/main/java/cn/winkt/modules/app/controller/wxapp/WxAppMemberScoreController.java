@@ -80,7 +80,7 @@ public class WxAppMemberScoreController {
     @PostMapping("/share")
     @Transactional(rollbackFor = Exception.class)
     public Result<?> newShareScore() throws InvocationTargetException, IllegalAccessException {
-        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         if(StringUtils.isNumeric(memberSetting.getShareTimelineIntegral())) {
             BigDecimal shareTimelineIntegral = new BigDecimal(memberSetting.getShareTimelineIntegral()).setScale(2, RoundingMode.CEILING);
@@ -111,7 +111,7 @@ public class WxAppMemberScoreController {
 
     @PostMapping("/withdraw")
     public Result<?> withdraw(@RequestBody JSONObject data) throws InvocationTargetException, IllegalAccessException {
-        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
         BigDecimal amount = BigDecimal.valueOf(data.getFloatValue("amount"));
         if(amount.compareTo(new BigDecimal(memberSetting.getMinWithdrawIntegral())) < 0) {
             throw new JeecgBootException(String.format("最低%s起步，才可提现", memberSetting.getMinWithdrawIntegral()));

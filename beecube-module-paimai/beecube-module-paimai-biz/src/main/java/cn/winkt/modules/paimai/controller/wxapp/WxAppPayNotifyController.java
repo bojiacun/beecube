@@ -14,6 +14,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.common.util.DateUtils;
 import org.jeecg.config.AppContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -111,8 +112,24 @@ public class WxAppPayNotifyController {
         goodsOrder.setTransactionId(notifyResult.getTransactionId());
         goodsOrderService.updateById(goodsOrder);
 
-        //设置赠送积分
-        MemberSetting memberSetting = appApi.queryMemberSettings();
+
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.gt(GoodsOrder::getStatus, 0);
+        queryWrapper.eq(GoodsOrder::getMemberId, goodsOrder.getMemberId());
+        queryWrapper.gt(GoodsOrder::getCreateTime, DateUtils.todayZeroTime());
+        long todayOrders = goodsOrderService.count(queryWrapper);
+
+        //每日首次下单送积分
+        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getMemberId());
+        if(todayOrders == 1 && memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral())) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setDescription("每日首单送积分");
+            appApi.reduceMemberScore(changeMemberScore);
+        }
+
+        //设置下单赠送积分
         if(memberSetting != null && Objects.equals(memberSetting.getConsumeIntegral(), "1")) {
             ChangeMemberScore changeMemberScore = new ChangeMemberScore();
             changeMemberScore.setDescription(String.format("消费送积分, 金额%s", BigDecimal.valueOf(goodsOrder.getPayedPrice()).setScale(2, RoundingMode.CEILING)));

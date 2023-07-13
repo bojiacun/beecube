@@ -33,6 +33,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -126,7 +127,7 @@ public class AppMemberWithdrawController extends JeecgController<AppMemberWithdr
 
 		if(appMemberWithdraw.getStatus() == 1) {
 			AppMember member = appMemberService.getById(appMemberWithdraw.getMemberId());
-			MemberSetting memberSetting = appSettingService.queryMemberSettings();
+			MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
 
 			//处理了
 			appMemberWithdraw.setResolver(loginUser.getUsername());

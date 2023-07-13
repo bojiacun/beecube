@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
+import cn.winkt.modules.app.vo.ChangeMemberScore;
+import cn.winkt.modules.app.vo.MemberSetting;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsCommonDesc;
 import cn.winkt.modules.paimai.entity.OrderGoods;
@@ -156,6 +158,7 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
     @AutoLog(value = "订单表-确认支付")
     @ApiOperation(value = "订单表-确认支付", notes = "订单表-确认支付")
     @RequestMapping(value = "/pay/confirm", method = {RequestMethod.PUT, RequestMethod.POST})
+    @Transactional(rollbackFor = Exception.class)
     public Result<?> payConfirm(@RequestParam String id) {
         GoodsOrder goodsOrder = goodsOrderService.getById(id);
         if(goodsOrder.getStatus() != 0) {
@@ -163,6 +166,21 @@ public class GoodsOrderController extends JeecgController<GoodsOrder, IGoodsOrde
         }
         goodsOrder.setStatus(1);
         goodsOrderService.updateById(goodsOrder);
+        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.gt(GoodsOrder::getStatus, 0);
+        queryWrapper.eq(GoodsOrder::getMemberId, goodsOrder.getMemberId());
+        queryWrapper.gt(GoodsOrder::getCreateTime, DateUtils.todayZeroTime());
+        long todayOrders = goodsOrderService.count(queryWrapper);
+
+        //每日首次下单送积分
+        MemberSetting memberSetting = appApi.queryMemberSettings(goodsOrder.getMemberId());
+        if(todayOrders == 1 && memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral())) {
+            ChangeMemberScore changeMemberScore = new ChangeMemberScore();
+            changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
+            changeMemberScore.setMemberId(goodsOrder.getMemberId());
+            changeMemberScore.setDescription("每日首单送积分");
+            appApi.reduceMemberScore(changeMemberScore);
+        }
         return Result.OK("编辑成功!");
     }
     @AutoLog(value = "订单表-确认收货")

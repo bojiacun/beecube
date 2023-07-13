@@ -13,6 +13,7 @@ import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.config.AppContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +70,7 @@ public class WxAppSignInController {
                 memberSignIns = new ArrayList<>();
             }
         }
-        MemberSetting memberSetting = appSettingService.queryMemberSettings();
+        MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
         int cycle = memberSetting.getSigninCycle().split(",").length;
         MemberSignIn memberSignIn = new MemberSignIn();
         memberSignIn.setMemberId(loginUser.getId());

@@ -83,10 +83,6 @@ public class WxAppMemberController {
     ILiveRoomService liveRoomService;
     @Resource
     AppApi appApi;
-
-    @Resource
-    private IDayTaskService dayTaskService;
-
     @Resource
     IPayLogService payLogService;
     @Resource
@@ -965,19 +961,6 @@ public class WxAppMemberController {
                 orderGoods.setGoodsImage(goodsVO.getImages().split(",")[0]);
                 orderGoodsService.save(orderGoods);
             });
-
-
-            //每日首次下单送积分
-            MemberSetting memberSetting = appApi.queryMemberSettings();
-            if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getBuyIntegral()) && !dayTaskService.todayTasked(2)) {
-                ChangeMemberScore changeMemberScore = new ChangeMemberScore();
-                changeMemberScore.setAmount(new BigDecimal(memberSetting.getBuyIntegral()));
-                changeMemberScore.setMemberId(loginUser.getId());
-                changeMemberScore.setDescription("每日下单送积分");
-                appApi.reduceMemberScore(changeMemberScore);
-                dayTaskService.saveTask(2);
-            }
-
 
             PayLog payLog = getPayLog(goodsOrder.getId());
             AppMemberVO appMemberVO = appApi.getMemberById(loginUser.getId());

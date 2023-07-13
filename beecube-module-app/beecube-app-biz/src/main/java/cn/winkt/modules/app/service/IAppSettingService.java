@@ -14,5 +14,5 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface IAppSettingService extends IService<AppSetting> {
 
-    MemberSetting queryMemberSettings() throws InvocationTargetException, IllegalAccessException;
+    MemberSetting queryMemberSettings(String appId) throws InvocationTargetException, IllegalAccessException;
 }

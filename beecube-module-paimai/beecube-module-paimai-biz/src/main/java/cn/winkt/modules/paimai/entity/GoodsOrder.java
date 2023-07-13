@@ -124,6 +124,8 @@ public class GoodsOrder {
 	@ApiModelProperty(value = "应用ID")
 	private java.lang.String appId;
 
+	private Integer payNotified;
+
 	@Excel(name = "发票状态（0未申请、1申请中、2已开票）", width = 15)
 	@ApiModelProperty(value = "发票状态（0未申请、1申请中、2已开票")
 	@Dict(dicCode = "paimai_order_fapiao_status")
