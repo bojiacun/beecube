@@ -109,7 +109,7 @@ export default class Index extends Component<any, any> {
         if (status === null) return <PageLoading/>;
         return (
             <PageLayout statusBarProps={{title: '我的订单'}} enableReachBottom={true}>
-                <ListView autoRefresh={true} tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} />
+                <ListView autoRefresh={true} showBottomSpace={false} tabs={this.state.tabs} dataFetcher={this.loadData} defaultActiveKey={this.state.status} />
             </PageLayout>
         );
     }

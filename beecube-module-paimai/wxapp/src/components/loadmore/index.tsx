@@ -29,7 +29,7 @@ const LoadMore: FC<LoadMoreProps> = (props) => {
 
 
     return (
-        <View className={'text-center text-gray-400 py-8 w-full'}>{text}</View>
+        <View className={'text-center text-gray-400 pt-2 pb-12 w-full'}>{text}</View>
     );
 }
 

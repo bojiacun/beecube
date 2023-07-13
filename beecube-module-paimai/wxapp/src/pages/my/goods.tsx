@@ -6,6 +6,7 @@ import {Navigator, Text, View} from "@tarojs/components";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
 import numeral from 'numeral';
+import {connect} from "react-redux";
 
 const TABS = {
     "0": "未开始",
@@ -13,7 +14,14 @@ const TABS = {
     '2': '已获拍',
     '3': '未获拍',
 }
-
+// @ts-ignore
+@connect((state: any) => (
+    {
+        systemInfo: state.context.systemInfo,
+        settings: state.context.settings,
+        context: state.context
+    }
+))
 export default class Index extends Component<any, any> {
     state: any = {
         list: [],
@@ -36,6 +44,10 @@ export default class Index extends Component<any, any> {
 
     render() {
         const {list, loading, hasMore, scrollTop, page, options} = this.state;
+        const {systemInfo} = this.props;
+        let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
+        if (safeBottom > 10) safeBottom -= 10;
+
 
         return (
             <PageLayout statusBarProps={{title: `我的参拍 - ${TABS[options.tab]}`}}>
@@ -43,6 +55,7 @@ export default class Index extends Component<any, any> {
                     loading={loading}
                     hasMore={hasMore}
                     scrollTop={scrollTop}
+                    offset={0}
                     onLoad={() => {
                         this.setState({loading: true});
                         request.get('/paimai/api/members/goods/my', {params: {tab: options.tab, pageSize: 20, pageNo: page}}).then(res => {
@@ -92,6 +105,7 @@ export default class Index extends Component<any, any> {
                     <List.Placeholder>
                         {loading && <Loading>加载中...</Loading>}
                         {!hasMore && "没有更多了"}
+                        <View style={{height: safeBottom + 56}}/>
                     </List.Placeholder>
                 </List>
             </PageLayout>

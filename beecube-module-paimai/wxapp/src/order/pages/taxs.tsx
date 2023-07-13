@@ -102,7 +102,7 @@ export default class Index extends Component<any, any> {
                     <View className={'flex justify-end'}><Button className={'btn btn-outline'} size={'small'}
                                                                  onClick={() => Taro.navigateTo({url: 'taxs/history'})}>开票记录</Button></View>
                     <View className={'item-title text-lg mb-4'}>待开票订单</View>
-                    <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad}>
+                    <List className={''} loading={loading} hasMore={hasMore} scrollTop={scrollTop} onLoad={this.onLoad} offset={0}>
                         {
                             list.map((item) => {
                                 return (
