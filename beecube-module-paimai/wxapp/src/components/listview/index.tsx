@@ -122,22 +122,24 @@ const ListView: FC<ListViewProps> = (props) => {
     return (
         <>
             {showSearch && searchUrl &&
-                <Navigator url={searchUrl} className={'rounded-full bg-gray-100 px-4 mx-4 mb-1 py-2 flex space-x-4 block text-lg'}>
-                    <View className={'text-gray-400'}><Text className={'fa fa-search'} /></View>
+                <Navigator url={searchUrl} className='rounded-full bg-gray-100 px-4 mx-4 mb-1 py-2 flex space-x-4 block text-lg'>
+                    <View className='text-gray-400'><Text className='fa fa-search' /></View>
                     <Text className='text-gray-400'>{searchPlaceHolder}</Text>
                 </Navigator>
             }
             {tabStyle == 1 &&
                 <ScrollView
-                    scrollX={true}
-                    scrollY={false}
-                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 mb-2 text-gray-700', fixed ? 'sticky' : '', tabClassName)}
-                    style={tabStyles} type={'list'}>
+                  scrollX
+                  showScrollbar={false}
+                  scrollY={false}
+                  className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 mb-2 text-gray-700', fixed ? 'sticky' : '', tabClassName)}
+                  style={tabStyles} type='list'
+                >
                     {tabs.map((tab, index) => {
                         return (
                             <Text
-                                className={classNames('text-center mr-4', index === selectedIndex ? styles.active : '')}
-                                onClick={() => {
+                              className={classNames('text-center mr-4', index === selectedIndex ? styles.active : '')}
+                              onClick={() => {
                                     setSelectedIndex(index);
                                     onTabChanged(tab, index);
                                     setPage(1);
@@ -146,7 +148,8 @@ const ListView: FC<ListViewProps> = (props) => {
                                         setNoMore(false);
                                         setLoadingMore(false);
                                     });
-                                }}>
+                                }}
+                            >
                                 {tab.label}
                             </Text>
                         );
@@ -155,14 +158,14 @@ const ListView: FC<ListViewProps> = (props) => {
             }
             {tabStyle == 2 &&
                 <View
-                    className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700 w-full', fixed ? 'sticky' : '')}
-                    style={tabStyles}
+                  className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700 w-full', fixed ? 'sticky' : '')}
+                  style={tabStyles}
                 >
                     {tabs.map((tab, index) => {
                         return (
                             <Text
-                                className={classNames('text-center flex-1', index === selectedIndex ? styles.active : '')}
-                                onClick={() => {
+                              className={classNames('text-center flex-1', index === selectedIndex ? styles.active : '')}
+                              onClick={() => {
                                     setSelectedIndex(index);
                                     onTabChanged(tab, index);
                                     setPage(1);
@@ -171,14 +174,15 @@ const ListView: FC<ListViewProps> = (props) => {
                                         setNoMore(false);
                                         setLoadingMore(false);
                                     });
-                                }}>
+                                }}
+                            >
                                 {tab.label}
                             </Text>
                         );
                     })}
                 </View>
             }
-            {data.length === 0 && <NoData style={{marginTop: 200, marginBottom: 200}}/>}
+            {data.length === 0 && <NoData style={{marginTop: 200, marginBottom: 200}} />}
             <View className={classNames('', className ? className : 'p-4 space-y-4')}>
                 {selectedIndex > - 1 && data.map((item) => {
                     let tab = tabs[selectedIndex];

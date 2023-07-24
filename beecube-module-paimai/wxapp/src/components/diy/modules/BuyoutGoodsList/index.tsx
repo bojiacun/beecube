@@ -34,7 +34,7 @@ const BuyoutGoodsListModule = (props: any) => {
 
     return (
         <View style={style}>
-            <View className={'py-4 -mx-4 flex items-center  flex-nowrap overflow-auto divide-x'}>
+            <View className='py-4 -mx-4 flex items-center  flex-nowrap overflow-auto divide-x'>
                 {classList.map((item, index) => {
                     return (
                         <Text key={item.id} onClick={() => { setActiveIndex(index); loadData(index); }} className={classNames(index === activeIndex ? 'text-red-500 text-lg' : '', 'px-4 whitespace-nowrap')} >
@@ -43,10 +43,10 @@ const BuyoutGoodsListModule = (props: any) => {
                     );
                 })}
             </View>
-            <View className={'grid grid-cols-2 gap-4'} {...rest}>
+            <View className='grid grid-cols-2 gap-4' {...rest}>
                 {goodsList.map((item: any) => {
                     return (
-                        <GoodsItemView item={item} radius={basic.itemBorderRadius}/>
+                        <GoodsItemView item={item} radius={basic.itemBorderRadius} />
                     );
                 })}
             </View>

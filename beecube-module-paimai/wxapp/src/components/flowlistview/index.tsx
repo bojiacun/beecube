@@ -149,8 +149,9 @@ const FlowListView: FC<ListViewProps> = (props) => {
     }
     return (
         <>
-            {tabStyle == 1 && tabs.length > 0 && <ScrollView scrollY={false} scrollX={true} type={'list'} className={classNames('box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'', tabClassName)}
-                  style={tabStyles}>
+            {tabStyle == 1 && tabs.length > 0 && <ScrollView showScrollbar={false} scrollY={false} scrollX type='list' className={classNames('box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'', tabClassName)}
+              style={tabStyles}
+            >
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames(tabStyle == 1 ? '':'flex-1','text-center mr-4',index === selectedIndex ? styles.active : '')} onClick={() => {
@@ -164,14 +165,16 @@ const FlowListView: FC<ListViewProps> = (props) => {
                                 setLoadingMore(false);
                                 utils.hideLoading();
                             });
-                        }}>
+                        }}
+                        >
                             {tab.label}
                         </Text>
                     );
                 })}
             </ScrollView>}
             {tabStyle == 2 && tabs.length > 0 && <View className={classNames('bg-white box-border whitespace-nowrap flex items-center px-4 py-2 text-gray-700',fixed?'sticky':'')}
-                                                             style={tabStyles}>
+              style={tabStyles}
+            >
                 {tabs.map((tab, index) => {
                     return (
                         <Text className={classNames('text-center flex-1',index === selectedIndex ? styles.active : '')} onClick={() => {
@@ -185,7 +188,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
                                 setLoadingMore(false);
                                 utils.hideLoading();
                             });
-                        }}>
+                        }}
+                        >
                             {tab.label}
                         </Text>
                     );
@@ -193,8 +197,8 @@ const FlowListView: FC<ListViewProps> = (props) => {
             </View>}
             {data.length === 0 && <NoData style={{marginTop: 200}} />}
             {data.length > 0 &&
-                <ScrollView className={classNames('p-4 box-border', className)} type={'custom'}>
-                    <GridView type={'masonry'} crossAxisCount={2} crossAxisGap={16} mainAxisGap={16}>
+                <ScrollView showScrollbar={false} className={classNames('p-4 box-border', className)} type='custom'>
+                    <GridView type='masonry' crossAxisCount={2} crossAxisGap={16} mainAxisGap={16}>
                         {selectedIndex > -1 && data.map((item) => {
                             let tab = tabs[selectedIndex];
                             return tab.template(item);

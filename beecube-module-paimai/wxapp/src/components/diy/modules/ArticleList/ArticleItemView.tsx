@@ -26,11 +26,11 @@ const ArticleItemView: FC<AuctionItemViewProps> = (props) => {
     }
 
     return (
-        <View onClick={jump2Detail} className={'bg-white relative flex flex-col flex-none overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius), width: width, height: height}}>
-            <View className={'relative flex-1'}>
-                <FallbackImage mode={'aspectFill'} className={'block w-full h-full'} src={utils.resolveUrl(item.preview2)}/>
+        <View onClick={jump2Detail} className='bg-white relative flex flex-col flex-none overflow-hidden' style={{borderRadius: Taro.pxTransform(radius), width: width, height: height}}>
+            <View className='relative flex-1'>
+                <FallbackImage mode='aspectFill' className='block w-full h-full' src={utils.resolveUrl(item.preview2)} />
             </View>
-            <View className={'p-4 text-xl font-bold'}>{item.title}</View>
+            <View className='p-4 text-xl font-bold'>{item.title}</View>
         </View>
     );
 }

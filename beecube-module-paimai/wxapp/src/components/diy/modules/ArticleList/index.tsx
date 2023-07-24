@@ -24,7 +24,7 @@ const ArticleListModule = (props: any) => {
     if (basic.direction === 'horizontal') {
         //横向滚动
         return (
-            <ScrollView scrollY={false} scrollX style={style} className='box-border' {...rest}>
+            <ScrollView showScrollbar={false} scrollY={false} scrollX style={style} className='box-border' {...rest}>
                 <View className='flex flex-nowrap space-x-4'>
                     {articleList.map((item: any) => {
                         return (

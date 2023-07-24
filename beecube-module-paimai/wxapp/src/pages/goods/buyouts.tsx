@@ -104,21 +104,22 @@ export default class Index extends Component<any, any> {
         return (
             <View className={classNames('bg-white rounded-lg overflow-hidden shadow-lg', styles.flow)}>
                 <View onClick={event => this.gotoDetail(event, '/goods/pages/detail2?id=' + data.id)}>
-                    <FallbackImage mode={'widthFix'} className={'rounded block w-full mb-2'} src={imgUrl}/>
-                    {tags.length > 0 && <View className={'px-3 mb-2 space-x-2 flex'}>{tags.map((item: any) => {
+                    <FallbackImage mode='widthFix' className='rounded block w-full mb-2' src={imgUrl} />
+                    {tags.length > 0 && <View className='px-3 mb-2 space-x-2 flex'>{tags.map((item: any) => {
                         return (
-                            <View className={'border rounded px-1 border-red-500 border-solid text-red-500 text-sm'}>{item}</View>
+                            <View className='border rounded px-1 border-red-500 border-solid text-red-500 text-sm'>{item}</View>
                         );
                     })}</View>}
-                    <View className={'px-3 text-lg mb-1'}>{data.title}</View>
-                    <View className={'px-3 mb-1 text-stone-400 text-sm'}>{utils.delHtml(data.subTitle)}</View>
-                    <View className={'px-3 mb-2 flex justify-between items-center'}>
+                    <View className='px-3 text-lg mb-1'>{data.title}</View>
+                    <View className='px-3 mb-1 text-stone-400 text-sm'>{utils.delHtml(data.subTitle)}</View>
+                    <View className='px-3 mb-2 flex justify-between items-center'>
                         <View>
-                            <Text className={'text-red-500'}>￥</Text> <Text className={'text-red-500'}>{numeral(data.startPrice).format('0,0.00')}</Text>
+                            <Text className='text-red-500'>￥</Text> <Text className='text-red-500'>{numeral(data.startPrice).format('0,0.00')}</Text>
                         </View>
-                        <View onClick={event => this.joinCart(event, data.id)} className={'rounded-full bg-red-700 flex items-center justify-center text-white'}
-                              style={{width: 20, height: 20}}>
-                            <Text className={'iconfont icon-gouwuche'}/>
+                        <View onClick={event => this.joinCart(event, data.id)} className='rounded-full bg-red-700 flex items-center justify-center text-white'
+                          style={{width: 20, height: 20}}
+                        >
+                            <Text className='iconfont icon-gouwuche' />
                         </View>
                     </View>
                 </View>
@@ -162,58 +163,59 @@ export default class Index extends Component<any, any> {
         }
 
         return (
-            <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价', button: <Text className={'fa fa-search'} onClick={()=>Taro.navigateTo({url: '/pages/goods/search'})} />}} enableReachBottom={true} showTabBar={true}>
-                <View className={'flex items-center text-red-700 justify-center'} style={{height: 50}}>
-                    <View className={'flex-1 justify-center flex items-center'}>
-                        <Text className={'iconfont icon-zhengpinbaozhang mr-1'} />
+            <PageLayout statusBarProps={{title: settings.buyoutListTitle || '一口价', button: <Text className='fa fa-search' onClick={()=>Taro.navigateTo({url: '/pages/goods/search'})} />}} enableReachBottom showTabBar>
+                <View className='flex items-center text-red-700 justify-center' style={{height: 50}}>
+                    <View className='flex-1 justify-center flex items-center'>
+                        <Text className='iconfont icon-zhengpinbaozhang mr-1' />
                         正品保证
                     </View>
-                    <View className={'flex-1 justify-center flex items-center'}>
-                        <Text className={'iconfont icon-baoyou mr-1'} />
+                    <View className='flex-1 justify-center flex items-center'>
+                        <Text className='iconfont icon-baoyou mr-1' />
                         全场包邮
                     </View>
-                    <View className={'flex-1 justify-center flex items-center'}>
-                        <Text className={'iconfont icon-shouhouwuyou mr-1'} />
+                    <View className='flex-1 justify-center flex items-center'>
+                        <Text className='iconfont icon-shouhouwuyou mr-1' />
                         售后无忧
                     </View>
                 </View>
-                {swipers.length > 0 && <CustomSwiper className={'rounded-lg mx-4 mb-4 overflow-hidden'} list={swipers} height={160} indicatorActiveColor={'#d80c18'} dotStyle={0} />}
+                {swipers.length > 0 && <CustomSwiper className='rounded-lg mx-4 mb-4 overflow-hidden' list={swipers} height={160} indicatorActiveColor='#d80c18' dotStyle={0} />}
                 {utils.compareVersion(Taro.getAppBaseInfo().SDKVersion, '2.29.1') > 0 ?
                     <FlowListView tabs={this.state.tabs} dataFetcher={this.loadData} tabClassName={tabClassName} />
                     :
-                    <ListView tabs={this.state.tabs} dataFetcher={this.loadData} className={'grid grid-cols-2 gap-4 p-4'} tabClassName={tabClassName} />
+                    <ListView tabs={this.state.tabs} dataFetcher={this.loadData} className='grid grid-cols-2 gap-4 p-4' tabClassName={tabClassName} />
                 }
-                <Popup style={{height: 330}} open={openSpec} rounded placement={'bottom'} onClose={() => this.setState({openSpec: false})}>
-                    <View className={'text-2xl'}>
+                <Popup style={{height: 330}} open={openSpec} rounded placement='bottom' onClose={() => this.setState({openSpec: false})}>
+                    <View className='text-2xl'>
                         <Popup.Close />
                     </View>
-                    <View className={'p-4 space-y-4 mt-6 flex flex-col justify-between'} style={{paddingBottom: 84}}>
-                        <View className={'space-y-4'}>
-                            {currentSpec && <View className={'flex items-center'}>
-                                <View className={'flex-none'}>
-                                    <FallbackImage style={{width: 60, height: 60}} src={currentSpec.listCover ? currentSpec.listCover : currentSpec.images.split(',')[0]}/>
+                    <View className='p-4 space-y-4 mt-6 flex flex-col justify-between' style={{paddingBottom: 84}}>
+                        <View className='space-y-4'>
+                            {currentSpec && <View className='flex items-center'>
+                                <View className='flex-none'>
+                                    <FallbackImage style={{width: 60, height: 60}} src={currentSpec.listCover ? currentSpec.listCover : currentSpec.images.split(',')[0]} />
                                 </View>
-                                <View className={'flex-1 ml-2'}>
-                                    <View className={'text-lg font-bold'}>{currentSpec.title}</View>
-                                    <View className={'text-red-600 font-bold text-xl'}>￥{currentSpec.startPrice}</View>
+                                <View className='flex-1 ml-2'>
+                                    <View className='text-lg font-bold'>{currentSpec.title}</View>
+                                    <View className='text-red-600 font-bold text-xl'>￥{currentSpec.startPrice}</View>
                                 </View>
                             </View>}
-                            <View className={'space-x-2'}>
+                            <View className='space-x-2'>
                                 {specs.map((item: any) => {
                                     return (
-                                        <Tag size={'large'} onClick={() => this.changeSpec(item.id)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant={'outlined'}
-                                             shape={'rounded'}>{item.spec}</Tag>
+                                        <Tag size='large' onClick={() => this.changeSpec(item.id)} color={currentSpec?.id == item.id ? 'danger' : 'default'} variant='outlined'
+                                          shape='rounded'
+                                        >{item.spec}</Tag>
                                     );
                                 })}
                             </View>
                         </View>
-                        <View className={'flex items-center justify-between'}>
+                        <View className='flex items-center justify-between'>
                             <View>数量</View>
                             <View>
-                                <Stepper shape={'circular'} value={currentSpec?.count??1} size={22} onChange={this.handleChangeCount} />
+                                <Stepper shape='circular' value={currentSpec?.count??1} size={22} onChange={this.handleChangeCount} />
                             </View>
                         </View>
-                        <View><Button color={'danger'} block onClick={()=>this.doJoinCart()}>加入购物车</Button></View>
+                        <View><Button color='danger' block onClick={()=>this.doJoinCart()}>加入购物车</Button></View>
                     </View>
                 </Popup>
             </PageLayout>
