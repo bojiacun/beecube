@@ -2,8 +2,8 @@
     font-family: "iconfont2"; /* Project id 4154243 */
     /* Color fonts */
     src:
-        url('//at.alicdn.com/t/c/font_4154243_z4byj2e0nwg.woff2?t=1690164926309') format('woff2'),
-        url('//at.alicdn.com/t/c/font_4154243_z4byj2e0nwg.ttf?t=1690164926309') format('truetype');
+        url('//at.alicdn.com/t/c/font_4154243_77w322tny2.woff2?t=1690166476240') format('woff2'),
+        url('//at.alicdn.com/t/c/font_4154243_77w322tny2.ttf?t=1690166476240') format('truetype');
 }
 
 .iconfont2 {
@@ -12,6 +12,10 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.icon2-daishouhuo:before {
+    content: "\e627";
 }
 
 .icon2-jinhangzhong:before {

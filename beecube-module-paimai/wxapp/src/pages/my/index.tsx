@@ -171,7 +171,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             {badges?.deliveryCount ? <Text className='badge'>{badges.deliveryCount}</Text> : <></>}
                         </Navigator>
                         <Navigator url='/order/pages/orders?status=2' className='relative'>
-                            <View className='iconfont icon-daishouhuo2' style={{fontSize: 24}} />
+                            <View className='iconfont2 icon2-daishouhuo' style={{fontSize: 24}} />
                             <View className='mt-2'>待收货</View>
                             {badges?.confirmDeliveryCount ? <Text className='badge'>{badges.confirmDeliveryCount}</Text> : <></>}
                         </Navigator>
