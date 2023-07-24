@@ -187,7 +187,7 @@ export default class Index extends Component<any, any> {
 
                 if (parseInt(settings.isDealCommission) == 1) {
                     if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
-                        //落槌价显示佣金
+                        //成交价显示佣金
                         const commission = goods.commission / 100;
                         goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
                     }
@@ -326,7 +326,7 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
-                //落槌价显示佣金
+                //成交价显示佣金
                 const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
@@ -369,7 +369,7 @@ export default class Index extends Component<any, any> {
         const {settings} = this.props;
         if (parseInt(settings.isDealCommission) == 1) {
             if (parseFloat(goods.commission) > 0.00 && goods.state == 3) {
-                //落槌价显示佣金
+                //成交价显示佣金
                 const commission = goods.commission / 100;
                 goods.dealPrice = (goods.dealPrice + (goods.dealPrice * commission));
             }
@@ -629,7 +629,7 @@ export default class Index extends Component<any, any> {
                                 }
                                 {goods.state == 3 &&
                                     <View className={'text-gray-600 mt-2'}>
-                                        落槌价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
+                                        成交价 <Text className={'text-sm text-red-500 font-bold'}>RMB</Text> <Text
                                         className={'text-lg text-red-500 font-bold'}>{numeral(goods.dealPrice).format('0,0.00')}</Text>
                                     </View>
                                 }

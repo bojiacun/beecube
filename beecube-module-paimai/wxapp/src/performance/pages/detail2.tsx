@@ -58,7 +58,7 @@ export default class Index extends Component<any, any> {
                     if(parseInt(settings.isDealCommission) == 1) {
                         newGoodsList.forEach(item=>{
                             if(parseFloat(item.commission) > 0.00 && item.state == 3) {
-                                //落槌价显示佣金
+                                //成交价显示佣金
                                 const commission = item.commission/100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
@@ -75,7 +75,7 @@ export default class Index extends Component<any, any> {
                     if(parseInt(settings.isDealCommission) == 1) {
                         newGoodsList.forEach(item=>{
                             if(parseFloat(item.commission) > 0.00 && item.state == 3) {
-                                //落槌价显示佣金
+                                //成交价显示佣金
                                 const commission = item.commission/100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
@@ -284,7 +284,7 @@ export default class Index extends Component<any, any> {
                                     }
                                     {item.state == 3 &&
                                         <View className={'text-sm'}>
-                                            落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                            成交价 <Text className={'text-red-500'}>RMB</Text> <Text
                                             className={'text-base font-bold'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
