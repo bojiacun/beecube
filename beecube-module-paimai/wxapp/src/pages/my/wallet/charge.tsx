@@ -1,11 +1,10 @@
 import {Component} from "react";
-import PageLayout from "../../../layouts/PageLayout";
-import {Input, View} from "@tarojs/components";
-import request from "../../../lib/request";
+import {Input, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
-import utils from "../../../lib/utils";
 import {Button} from "@taroify/core";
-
+import utils from "../../../lib/utils";
+import request from "../../../lib/request";
+import PageLayout from "../../../layouts/PageLayout";
 
 export default class Index extends Component<any, any> {
     state:any = {
@@ -49,16 +48,17 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '充值'}}>
-                <View className={'p-4'}>
-                    <View className={'p-4 space-y-4 bg-white rounded-lg'}>
-                        <View className={'text-sm'}>充值金额RMB</View>
-                        <View>
-                            <Input className={'text-3xl font-bold border-b border-gray-400'} style={{height: 64}} onInput={this.handleInput} placeholder={'请输入充值金额'} />
+                <View className='p-4'>
+                    <View className='p-4 space-y-4 bg-white rounded-lg'>
+                        <View className=''>充值金额RMB</View>
+                        <View className='bg-gray-100 rounded-lg px-2 flex spce-x-4 items-center'>
+                            <Text className='font-bold text-2xl'>￥</Text>
+                            <Input className='text-lg flex-1' style={{height: 48}} onInput={this.handleInput} placeholder='手动输入充值金额' />
                         </View>
-                        <View className={'text-sm'}>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
-                    </View>
-                    <View className={'mt-4 text-center'}>
-                        <Button className={'w-50'} onClick={this.handleCharge} color={'danger'} shape={"round"} disabled={amount <= 0||posting}>微信支付</Button>
+                        <View className='text-sm text-red-600'>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
+                        <View className='mt-6 text-center'>
+                            <Button block onClick={this.handleCharge} color='danger' shape='round' disabled={amount <= 0||posting}>微信支付</Button>
+                        </View>
                     </View>
                 </View>
             </PageLayout>

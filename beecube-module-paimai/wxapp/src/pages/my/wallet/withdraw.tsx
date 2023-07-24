@@ -1,10 +1,10 @@
 import {Component} from "react";
-import PageLayout from "../../../layouts/PageLayout";
-import {Input, Navigator, View} from "@tarojs/components";
-import request from "../../../lib/request";
-import utils from "../../../lib/utils";
+import {Input, Navigator, Text, View} from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import {Button} from "@taroify/core";
+import request from "../../../lib/request";
+import PageLayout from "../../../layouts/PageLayout";
+import utils from "../../../lib/utils";
 
 
 export default class Index extends Component<any, any> {
@@ -67,29 +67,34 @@ export default class Index extends Component<any, any> {
 
         return (
             <PageLayout statusBarProps={{title: '提现'}}>
-                <View className={'p-4'}>
-                    <View className={'p-4 space-y-4 bg-white rounded-lg'}>
-                        <View className={'text-sm'}>提现金额RMB</View>
-                        <View>
+                <View className='p-4'>
+                    <View className='p-4 space-y-4 bg-white rounded-lg'>
+                        <View className=''>提现金额RMB</View>
+                        <View className='bg-gray-100 rounded-lg px-2 flex spce-x-4 items-center'>
+                            <Text className='font-bold text-2xl'>￥</Text>
                             <Input
-                                className={'text-3xl font-bold border-b border-gray-400'}
-                                style={{height: 64}}
-                                onInput={this.handleInput}
-                                placeholder={'请输入要提现金额'}
+                              className='text-lg flex-1'
+                              style={{height: 48}}
+                              onInput={this.handleInput}
+                              placeholder='手动输入提现金额'
                             />
                         </View>
-                        <View>
+                        <View className='bg-gray-100 rounded-lg px-4 flex spce-x-4 items-center'>
                             <Input
-                                className={'text-lg font-bold border-b border-gray-400'}
-                                onInput={this.handleAccountInput}
-                                placeholder={'填写收款的支付宝账户'}
+                              className='text-lg flex-1'
+                              style={{height: 48}}
+                              onInput={this.handleAccountInput}
+                              placeholder='填写收款的支付宝账户'
                             />
                         </View>
-                        <View className={'text-sm'}>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
+                        <View className='text-sm text-red-600'>当前余额{parseFloat(userInfo?.money).toFixed(2)}</View>
+
+                        <View className='mt-4 text-center'>
+                            <Button block onClick={this.handleWithdraw} color='danger' shape='round' disabled={posting||amount<=0||amount>userInfo?.money||amount == 'NaN'||!alipayAccount}>确认提现</Button>
+                        </View>
                     </View>
-                    <View className={'mt-4 text-center'}>
-                        <Button onClick={this.handleWithdraw} color={'danger'} shape={'round'} disabled={posting||amount<=0||amount>userInfo?.money||amount == 'NaN'||!alipayAccount}>确认提现</Button>
-                        <Navigator className={'text-stone-400 p-4 mt-6'} url={'withdraws'}>提现记录</Navigator>
+                    <View className='mt-4 text-center'>
+                        <Navigator className='text-stone-400 p-4 mt-6' url='withdraws'>提现记录</Navigator>
                     </View>
                 </View>
             </PageLayout>
