@@ -141,6 +141,10 @@
     content: "\e609";
 }
 
+.icon-daifukuan:before {
+    content: "\e60a";
+}
+
 .icon-daikaishi:before {
     content: "\e60b";
 }

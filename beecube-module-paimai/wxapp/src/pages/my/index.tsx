@@ -134,23 +134,23 @@ export default class Index extends Component<PropsWithChildren<any>> {
                         <View className='item-title font-bold text-lg ml-4 mb-4'>我的参拍</View>
                         <View className='grid grid-cols-5 gap-1 text-center'>
                             <Navigator url='goods?tab=0' className='relative'>
-                                <View className='iconfont icon-daikaishi' style={{fontSize: 24}} />
+                                <View className='iconfont2 icon2-jinhangzhong' style={{fontSize: 24}} />
                                 <View className='mt-2'>待开始</View>
                             </Navigator>
                             <Navigator url='goods?tab=1' className='relative'>
-                                <View className='iconfont icon-canpaizhong1' style={{fontSize: 24}} />
+                                <View className='iconfont2 icon2-canpaizhong' style={{fontSize: 24}} />
                                 <View className='mt-2'>参拍中</View>
                             </Navigator>
                             <Navigator url='goods?tab=2' className='relative'>
-                                <View className='iconfont icon-yihuopai1' style={{fontSize: 24}} />
+                                <View className='iconfont2 icon2-yihuopai' style={{fontSize: 24}} />
                                 <View className='mt-2'>已获拍</View>
                             </Navigator>
                             <Navigator url='goods?tab=3'>
-                                <View className='iconfont icon-weihuopai1' style={{fontSize: 24}} />
+                                <View className='iconfont2 icon2-weihuopai' style={{fontSize: 24}} />
                                 <View className='mt-2'>未获拍</View>
                             </Navigator>
                             <Navigator url='deposits' className='border-l-1 border-gray-100'>
-                                <View className='iconfont icon-baozhengjin2' style={{fontSize: 24}} />
+                                <View className='iconfont2 icon2-baozhengjin' style={{fontSize: 24}} />
                                 <View className='mt-2'>保证金</View>
                             </Navigator>
                         </View>
@@ -161,12 +161,12 @@ export default class Index extends Component<PropsWithChildren<any>> {
                     <View className='item-title font-bold text-lg ml-4 text-black mb-4'>我的订单</View>
                     <View className='grid grid-cols-5 gap-1 text-center'>
                         <Navigator url='/order/pages/orders?status=0' className='relative'>
-                            <View className='iconfont2 icon-daifukuan' style={{fontSize: 24}} />
+                            <View className='iconfont2 icon2-daifukuan' style={{fontSize: 24}} />
                             <View className='mt-2'>待结算</View>
                             {badges?.payCount ? <Text className='badge'>{badges.payCount}</Text> : <></>}
                         </Navigator>
                         <Navigator url='/order/pages/orders?status=1' className='relative'>
-                            <View className='iconfont icon-daifahuo2' style={{fontSize: 24}} />
+                            <View className='iconfont2 icon2-daifahuo' style={{fontSize: 24}} />
                             <View className='mt-2'>待发货</View>
                             {badges?.deliveryCount ? <Text className='badge'>{badges.deliveryCount}</Text> : <></>}
                         </Navigator>
@@ -176,11 +176,11 @@ export default class Index extends Component<PropsWithChildren<any>> {
                             {badges?.confirmDeliveryCount ? <Text className='badge'>{badges.confirmDeliveryCount}</Text> : <></>}
                         </Navigator>
                         <Navigator url='/order/pages/orders?status=3'>
-                            <View className='iconfont icon-yiwancheng2' style={{fontSize: 24}} />
+                            <View className='iconfont2 icon2-yiwancheng' style={{fontSize: 24}} />
                             <View className='mt-2'>已完成</View>
                         </Navigator>
                         <Navigator url='/order/pages/orders?status=' className='border-l-1 border-gray-100'>
-                            <View className='iconfont icon-quanbudingdan1' style={{fontSize: 24}} />
+                            <View className='iconfont2 icon2-quanbudingdan' style={{fontSize: 24}} />
                             <View className='mt-2'>全部</View>
                         </Navigator>
                     </View>
