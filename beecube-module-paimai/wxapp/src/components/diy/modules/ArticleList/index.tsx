@@ -24,8 +24,8 @@ const ArticleListModule = (props: any) => {
     if (basic.direction === 'horizontal') {
         //横向滚动
         return (
-            <ScrollView scrollY={false} scrollX={true} style={style} className={'box-border'} {...rest}>
-                <View className={'flex flex-nowrap space-x-4'}>
+            <ScrollView scrollY={false} scrollX style={style} className='box-border' {...rest}>
+                <View className='flex flex-nowrap space-x-4'>
                     {articleList.map((item: any) => {
                         return (
                             <ArticleItemView item={item} radius={basic.itemBorderRadius} width={basic.itemWidth||'90%'} height={basic.itemHeight||200} />
@@ -37,10 +37,10 @@ const ArticleListModule = (props: any) => {
     }
 
     return (
-        <View style={style} className={'grid grid-cols-1 gap-4'} {...rest}>
+        <View style={style} className='grid grid-cols-1 gap-4' {...rest}>
             {articleList.map((item: any) => {
                 return (
-                    <ArticleItemView item={item} radius={basic.itemBorderRadius}/>
+                    <ArticleItemView item={item} radius={basic.itemBorderRadius} />
                 );
             })}
         </View>
