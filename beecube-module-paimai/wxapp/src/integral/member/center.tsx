@@ -84,7 +84,7 @@ export default class Index extends Component<any, any> {
     render() {
         const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
-        if (userInfo == null || !this.state.signins) return <PageLoading/>;
+        if (userInfo == null || !this.state.signins) return <PageLoading />;
 
 
         const barTop = systemInfo.statusBarHeight;
@@ -96,137 +96,139 @@ export default class Index extends Component<any, any> {
         return (
             <PageLayout showStatusBar={false}>
                 <View className={classNames('text-white flex flex-col px-4 relative', styles.userProfile)} style={{paddingTop: barTop}}>
-                    <View className={'flex items-center justify-center text-lg relative'} style={{height: barHeight}}>
+                    <View className='flex items-center justify-center text-lg relative' style={{height: barHeight}}>
                         积分中心
-                        <Text className={'fa fa-chevron-left absolute left-0'} onClick={() => utils.navigateBack()}/>
+                        <Text className='fa fa-chevron-left absolute left-0' onClick={() => utils.navigateBack()} />
                     </View>
                     <View className={classNames('mt-6 relative flex flex-col items-center justify-center space-x-2')}>
-                        <View className={'text-6xl text-center'}>{numeral(userInfo.score).format('0')}</View>
-                        <Navigator url={'records'}>积分明细</Navigator>
+                        <View className='text-6xl text-center'>{numeral(userInfo.score).format('0')}</View>
+                        <Navigator url='records'>积分明细</Navigator>
                     </View>
-                    <View className={'absolute text-sm'} style={{right: 0, top: 100}}>
-                        <Navigator className={classNames('bg-gradient-to-r p-2 rounded-l-full', styles.tip)} url={'rules'}>规则说明</Navigator>
-                        <Navigator className={classNames('bg-gradient-to-r p-2 rounded-l-full mt-2', styles.tip)} url={'withdraw'}>积分提现</Navigator>
+                    <View className='absolute text-sm' style={{right: 0, top: 100}}>
+                        <Navigator className={classNames('bg-gradient-to-r p-2 rounded-l-full', styles.tip)} url='rules'>规则说明</Navigator>
+                        <Navigator className={classNames('bg-gradient-to-r p-2 rounded-l-full mt-2', styles.tip)} url='withdraw'>积分提现</Navigator>
                     </View>
-                    <View className={'rounded-md bg-white text-gray-800 mt-8 p-4'}>
-                        <View className={'flex justify-between items-center mb-4'}>
-                            <View className={'text-lg'}>签到赚积分</View>
-                            <View className={''}>已签 <Text className={'text-red-600'}>{signins.length}</Text>/{this.state.signins.length}</View>
+                    <View className='rounded-md bg-white text-gray-800 mt-8 p-4'>
+                        <View className='flex justify-between items-center mb-4'>
+                            <View className='text-lg'>签到赚积分</View>
+                            <View className=''>已签 <Text className='text-red-600'>{signins.length}</Text>/{this.state.signins.length}</View>
                         </View>
-                        <ScrollView scrollX={true} type={'custom'}>
-                            <View className={'grid grid-cols-7 gap-2'}>
+                        <ScrollView scrollX type='custom'>
+                            <View className='grid grid-cols-7 gap-2'>
                                 {this.state.signins.map((signin: any, index) => {
                                     if (signin.active) {
                                         return (
-                                            <View className={'flex flex-col items-center justify-center'}>
+                                            <View className='flex flex-col items-center justify-center'>
                                                 <View style={{width: 40, height: 50}}
-                                                      className={'bg-orange-100 flex flex-col items-center justify-center relative rounded text-red-600'}>
-                                                    <Text className={'font-bold'}>{signin.integral}</Text>
-                                                    <Text className={'text-xs'}>积分</Text>
-                                                    <Text className={'fa fa-check-circle absolute'} style={{right: 3, top: 3}}/>
+                                                  className='bg-orange-100 flex flex-col items-center justify-center relative rounded text-red-600'
+                                                >
+                                                    <Text className='font-bold'>{signin.integral}</Text>
+                                                    <Text className='text-xs'>积分</Text>
+                                                    <Text className='fa fa-check-circle absolute' style={{right: 3, top: 3}} />
                                                 </View>
-                                                <View className={'mt-2'}>第{index + 1}天</View>
+                                                <View className='mt-2'>第{index + 1}天</View>
                                             </View>
                                         );
                                     }
                                     return (
-                                        <View className={'flex flex-col items-center justify-center'}>
+                                        <View className='flex flex-col items-center justify-center'>
                                             <View style={{width: 40, height: 50}}
-                                                  className={'bg-stone-200 flex flex-col items-center justify-center relative rounded text-stone-600'}>
-                                                <Text className={'font-bold text-lg'}>{signin.integral}</Text>
-                                                <Text className={'text-xs'}>积分</Text>
+                                              className='bg-stone-200 flex flex-col items-center justify-center relative rounded text-stone-600'
+                                            >
+                                                <Text className='font-bold text-lg'>{signin.integral}</Text>
+                                                <Text className='text-xs'>积分</Text>
                                             </View>
-                                            <View className={'mt-2'}>第{index + 1}天</View>
+                                            <View className='mt-2'>第{index + 1}天</View>
                                         </View>
                                     );
                                 })}
                             </View>
                         </ScrollView>
-                        <View className={'mt-4 flex flex-col justify-center items-center space-y-4'}>
+                        <View className='mt-4 flex flex-col justify-center items-center space-y-4'>
                             {signInToday ?
-                                <Button color={'danger'} shape={'round'} disabled>今日已签到</Button>
+                                <Button color='danger' shape='round' disabled>今日已签到</Button>
                                 :
-                                <Button color={'danger'} shape={'round'} onClick={this.handleSignin} block loading={this.state.posting}>签到获得积分</Button>
+                                <Button color='danger' shape='round' onClick={this.handleSignin} block loading={this.state.posting}>签到获得积分</Button>
                             }
-                            <View className={'text-stone-400 text-sm'}>签到7天为一个周期，断签重新开始</View>
+                            <View className='text-stone-400 text-sm'>签到7天为一个周期，断签重新开始</View>
                         </View>
                     </View>
 
                 </View>
-                <View className={'rounded-md bg-white text-gray-800 p-4 m-4 space-y-4'}>
-                    <View className={'flex justify-between items-center'}>
-                        <View className={'text-lg'}>做任务赚积分</View>
+                <View className='rounded-md bg-white text-gray-800 p-4 m-4 space-y-4'>
+                    <View className='flex justify-between items-center'>
+                        <View className='text-lg'>做任务赚积分</View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-user-plus'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-user-plus' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>邀请新用户</View>
-                            <View className={'text-stone-400 text-xs'}>成功邀请1位新用户，积分<Text className={'text-red-600 font-bold'}>+{settings.shareIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>邀请新用户</View>
+                            <View className='text-stone-400 text-xs'>成功邀请1位新用户，积分<Text className='text-red-600 font-bold'>+{settings.shareIntegral}</Text></View>
                         </View>
                         <View>
-                            <Button color={'danger'} size={'small'} shape={'round'} openType={'share'}>邀请好友</Button>
+                            <Button color='danger' size='small' shape='round' openType='share'>邀请好友</Button>
                         </View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-share-alt'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-share-alt' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>分享页面到朋友圈</View>
-                            <View className={'text-stone-400 text-xs'}>单次分享积分<Text className={'text-red-600 font-bold'}>+{settings.shareTimelineIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>分享页面到朋友圈</View>
+                            <View className='text-stone-400 text-xs'>单次分享积分<Text className='text-red-600 font-bold'>+{settings.shareTimelineIntegral}</Text></View>
                         </View>
                         <View onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
-                            <Button color={'danger'} size={'small'} shape={'round'}>去分享</Button>
+                            <Button color='danger' size='small' shape='round'>去分享</Button>
                         </View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-shopping-cart'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-shopping-cart' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>商城下单购物</View>
-                            <View className={'text-stone-400 text-xs'}>下单即可获得积分<Text className={'text-red-600 font-bold'}>+{settings.buyIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>商城下单购物</View>
+                            <View className='text-stone-400 text-xs'>下单即可获得积分<Text className='text-red-600 font-bold'>+{settings.buyIntegral}</Text></View>
                         </View>
                         <View onClick={() => Taro.reLaunch({url: '/pages/index/index'})}>
-                            <Button color={'danger'} size={'small'} shape={'round'}>去下单</Button>
+                            <Button color='danger' size='small' shape='round'>去下单</Button>
                         </View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-video-camera'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-video-camera' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>学习公开课</View>
-                            <View className={'text-stone-400 text-xs'}>每日首次观看公开课，积分<Text className={'text-red-600 font-bold'}>+{settings.readIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>学习公开课</View>
+                            <View className='text-stone-400 text-xs'>每日首次观看公开课，积分<Text className='text-red-600 font-bold'>+{settings.readIntegral}</Text></View>
                         </View>
-                        <View onClick={() => Taro.navigateTo({url: '/pages/index/index'})}>
-                            <Button color={'danger'} size={'small'} shape={'round'}>去观看</Button>
+                        <View onClick={() => Taro.switchTab({url: '/pages/index/index'})}>
+                            <Button color='danger' size='small' shape='round'>去观看</Button>
                         </View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-id-card-o'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-id-card-o' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>实名认证</View>
-                            <View className={'text-stone-400 text-xs'}>完成实名认证，积分<Text className={'text-red-600 font-bold'}>+{settings.authRealIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>实名认证</View>
+                            <View className='text-stone-400 text-xs'>完成实名认证，积分<Text className='text-red-600 font-bold'>+{settings.authRealIntegral}</Text></View>
                         </View>
                         <View onClick={() => Taro.navigateTo({url: '/pages/my/profile'})}>
-                            <Button color={'danger'} size={'small'} shape={'round'}>去认证</Button>
+                            <Button color='danger' size='small' shape='round'>去认证</Button>
                         </View>
                     </View>
-                    <View className={'flex items-center space-x-2'}>
-                        <View style={{width: 45, height: 45}} className={'flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'}>
-                            <Text className={'fa fa-money'}/>
+                    <View className='flex items-center space-x-2'>
+                        <View style={{width: 45, height: 45}} className='flex items-center justify-center bg-orange-100 text-red-600 rounded-full text-2xl'>
+                            <Text className='fa fa-money' />
                         </View>
-                        <View className={'space-y-2 flex-1'}>
-                            <View className={''}>余额充值</View>
-                            <View className={'text-stone-400 text-xs'}>每日首次充值，积分<Text className={'text-red-600 font-bold'}>+{settings.rechargeIntegral}</Text></View>
+                        <View className='space-y-2 flex-1'>
+                            <View className=''>余额充值</View>
+                            <View className='text-stone-400 text-xs'>每日首次充值，积分<Text className='text-red-600 font-bold'>+{settings.rechargeIntegral}</Text></View>
                         </View>
                         <View onClick={() => Taro.navigateTo({url: '/pages/my/wallet'})}>
-                            <Button color={'danger'} size={'small'} shape={'round'}>去充值</Button>
+                            <Button color='danger' size='small' shape='round'>去充值</Button>
                         </View>
                     </View>
                 </View>
