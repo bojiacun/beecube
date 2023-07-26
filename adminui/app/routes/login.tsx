@@ -18,7 +18,6 @@ import {useContext, useEffect, useState} from "react";
 import ThemeContext from 'themeConfig';
 import lightSideImageUrl from 'assets/images/pages/login-v2.svg';
 import darkSideImageUrl from 'assets/images/pages/login-v2-dark.svg';
-import {Eye, HelpCircle} from "react-feather";
 
 import {useLoaderData, useTransition, Form as RemixForm, useNavigation} from "@remix-run/react";
 import {auth, sessionStorage} from '~/utils/auth.server';
