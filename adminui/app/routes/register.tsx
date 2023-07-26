@@ -44,39 +44,36 @@ const RegisterPage = () => {
                 <Col md={12} className="d-flex align-items-center px-2 p-lg-5">
                     <Card className="p-xl-2 mx-auto" style={{width: 500}}>
                         <Card.Title className="mb-1 font-weight-bold" style={{fontSize: '1.714rem'}}>
-                            登录蜜蜂魔方
+                            注册蜜蜂魔方
                         </Card.Title>
                         <Card.Text>
-                            请登录您的帐户开始体验
+                            请如实填写您的个人信息，以便我们联系您发送体验账号
                         </Card.Text>
                         <RemixForm noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated' : '')} method='post' onSubmit={handleOnSubmit}>
                             <Form.Group className={'mb-1'}>
-                                <Form.Label htmlFor={'username'}>用户名</Form.Label>
-                                <Form.Control name='username' placeholder={'邮箱或者手机号'} required/>
+                                <Form.Label htmlFor={'realname'}>姓名</Form.Label>
+                                <Form.Control name='realname' placeholder={'联系人姓名'} required/>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
-                                <Form.Label htmlFor="password">密码</Form.Label>
+                                <Form.Label htmlFor="password">手机号码</Form.Label>
                                 <InputGroup className="input-group-merge">
                                     <Form.Control name='password' type='password' className='form-control-merge'
                                                   placeholder={'abc123'} required/>
                                 </InputGroup>
                             </Form.Group>
-                            <Row>
-                                <Form.Group as={Col}>
-                                    <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
-                                    <Form.Control name='captcha' placeholder={'验证码'} required/>
-                                </Form.Group>
-                                <Form.Group as={Col}>
-                                    <Form.Label>&nbsp;</Form.Label>
-                                    {captchaKey && <Image onClick={handleCaptchaClick} src={`/captcha.png?_t=${captchaKey}`} className='cursor-pointer' alt='验证码'
-                                                          style={{display: 'block'}}/>}
-                                </Form.Group>
-                            </Row>
+                            <Form.Group className={'mb-1'}>
+                                <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
+                                <Form.Control name='captcha' placeholder={'短信验证码'} required/>
+                            </Form.Group>
+                            <Form.Group className={'mb-1'}>
+                                <Form.Label htmlFor={'cropName'}>公司名称</Form.Label>
+                                <Form.Control name='cropName' placeholder={'公司名称'} required/>
+                            </Form.Group>
                             {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey}/>}
                             <Row>
                                 <Col className={'d-grid'}>
                                     <Button className='mt-1' variant={'primary'} type={'submit'}
-                                            disabled={transition.state === 'submitting'}>{transition.state === 'submitting' ? '登录中...' : '登 录'}</Button>
+                                            disabled={transition.state === 'submitting'}>{transition.state === 'submitting' ? '注册中...' : '注 册'}</Button>
                                 </Col>
                             </Row>
                         </RemixForm>
