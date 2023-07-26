@@ -14,7 +14,7 @@ export const links: LinksFunction = () => {
 }
 
 export const action: ActionFunction = async ({request}) => {
-    await auth.authenticate("form", request, {successRedirect: LOGIN_SUCCESS_URL, failureRedirect: LOGIN_URL});
+    await auth.authenticate("form", request, {successRedirect: '/register/done', failureRedirect: '/register'});
 }
 const RegisterPage = () => {
     const [captchaKey, setCaptchaKey] = useState<string>();
@@ -28,10 +28,7 @@ const RegisterPage = () => {
         }
         setValidated(true);
     }
-    const handleCaptchaClick = () => {
-        let randomStr = randomstring.generate(18);
-        setCaptchaKey(randomStr);
-    }
+
     return (
         <div className={'auth-wrapper auth-v2'}>
             <Row className={'auth-inner m-0'}>
@@ -55,19 +52,22 @@ const RegisterPage = () => {
                                 <Form.Control name='realname' placeholder={'联系人姓名'} required/>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
-                                <Form.Label htmlFor="password">手机号码</Form.Label>
+                                <Form.Label htmlFor="mobile">手机号码</Form.Label>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='password' type='password' className='form-control-merge'
-                                                  placeholder={'abc123'} required/>
+                                    <Form.Control name='mobile' className='form-control-merge'
+                                                  placeholder={'联系人11位手机号码'} required/>
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
-                                <Form.Control name='captcha' placeholder={'短信验证码'} required/>
+                                <InputGroup>
+                                    <Form.Control name='captcha' placeholder={'短信验证码'} required/>
+                                    <Button>验证码</Button>
+                                </InputGroup>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'cropName'}>公司名称</Form.Label>
-                                <Form.Control name='cropName' placeholder={'公司名称'} required/>
+                                <Form.Control name='cropName' placeholder={'公司名称'} />
                             </Form.Group>
                             {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey}/>}
                             <Row>
