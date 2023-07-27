@@ -39,7 +39,7 @@ public class AppMemberRegister {
 
 	@Excel(name = "用户真实姓名", width = 15)
 	@ApiModelProperty(value = "用户真实姓名")
-	private String realname;
+	private String realName;
 
 	@Excel(name = "用户身份证号", width = 15)
 	@ApiModelProperty(value = "用户身份证号")
