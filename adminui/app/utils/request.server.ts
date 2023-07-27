@@ -333,7 +333,8 @@ export const API_PAIMAI_BUYOUT_CLASS_DELETE = `${BASE_URL}/paimai/buyout/classes
 
 export const API_APP_USER_QUERY = `${BASE_URL}/beecube-app/app/users/admin`;
 
-export const API_APP_REGISTER = `${BASE_URL}/beecube-app/app/users/register`;
+export const API_APP_REGISTER = `${BASE_URL}/beecube-app/app/register`;
+export const API_APP_SEND_SMS= `${BASE_URL}/beecube-app/app/register/send`;
 
 
 export const API_DEMO_TEST_JEECG_LIST = `${BASE_URL}/jeecg-demo/test/jeecgDemo/list`;

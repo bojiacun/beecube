@@ -21,6 +21,10 @@ const RegisterPage = () => {
     const [captchaKey, setCaptchaKey] = useState<string>();
     const transition = useNavigation();
     const [validated, setValidated] = useState<boolean>(false);
+    const [timeout, setTimeout] = useState<number>(60);
+    const [mobile, setMobile] = useState<string>();
+    const [timer, setTimer] = useState<any>();
+
     const handleOnSubmit = async (e: any) => {
         let form = e.currentTarget;
         if (form.checkValidity() === false) {
@@ -28,6 +32,27 @@ const RegisterPage = () => {
             e.stopPropagation();
         }
         setValidated(true);
+    }
+
+    const handleSendSms = async () => {
+        if(!mobile || mobile.length != 11) {
+            alert('请输入有效的手机号码');
+            return;
+        }
+        clearInterval(timer);
+        setTimeout(59);
+        setTimer(setInterval(()=>{
+            setTimeout(v=>{
+                if(v <= 0) {
+                    clearInterval(timer);
+                    return 0;
+                }
+                return v-1;
+            });
+        }, 1000));
+    }
+    const handleMobileChange = (e:any) => {
+        setMobile(e.target.value);
     }
 
     return (
@@ -55,7 +80,7 @@ const RegisterPage = () => {
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor="mobile">手机号码</Form.Label>
                                 <InputGroup className="input-group-merge">
-                                    <Form.Control name='mobile' className='form-control-merge'
+                                    <Form.Control name='mobile' className='form-control-merge' onChange={handleMobileChange}
                                                   placeholder={'联系人11位手机号码'} required/>
                                 </InputGroup>
                             </Form.Group>
@@ -63,7 +88,11 @@ const RegisterPage = () => {
                                 <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
                                 <InputGroup>
                                     <Form.Control name='captcha' placeholder={'短信验证码'} required/>
-                                    <Button>验证码</Button>
+                                    <Button onClick={handleSendSms} disabled={timeout < 60 && timeout > 0}>
+                                        {timeout == 60 && '验证码'}
+                                        {(timeout < 60 && timeout > 0) && timeout}
+                                        {timeout == 0 && '重新发送'}
+                                    </Button>
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
