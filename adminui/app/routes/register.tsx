@@ -5,17 +5,16 @@ import SystemLogo from "~/components/logo";
 import {Form as RemixForm, useFetcher, useNavigation} from "@remix-run/react";
 import classNames from "classnames";
 import {useEffect, useRef, useState} from "react";
-import {API_APP_SEND_SMS, API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithoutToken, requestWithToken} from "~/utils/request.server";
+import {API_APP_REGISTER, postFormInit, requestWithoutToken} from "~/utils/request.server";
 import {formData2Json} from "~/utils/utils";
 
-const randomstring = require('randomstring');
 export const links: LinksFunction = () => {
     return [{rel: 'stylesheet', href: loginPageStyleUrl}];
 }
 
 export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
-    return await requestWithoutToken(request)(API_PAIMAI_ARTICLE_EDIT, postFormInit(formData2Json(formData)))
+    return await requestWithoutToken(request)(API_APP_REGISTER, postFormInit(formData2Json(formData)))
 }
 
 
@@ -37,6 +36,7 @@ const RegisterPage = () => {
                 alert('验证码错误');
                 return;
             }
+            formRef.current.submit();
         }
     }, [checkSmsFetcher.state]);
 
@@ -48,6 +48,7 @@ const RegisterPage = () => {
         if (form.checkValidity()) {
             //验证验证码是否正确
             let data = {mobile: mobile, code: code};
+            //@ts-ignore
             checkSmsFetcher.submit(data, {action: '/check', method: 'post'});
         }
         setValidated(true);
