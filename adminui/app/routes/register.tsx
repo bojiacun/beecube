@@ -5,7 +5,7 @@ import SystemLogo from "~/components/logo";
 import {Form as RemixForm, useFetcher, useNavigation} from "@remix-run/react";
 import classNames from "classnames";
 import {useState} from "react";
-import {API_APP_SEND_SMS, API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithToken} from "~/utils/request.server";
+import {API_APP_SEND_SMS, API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithoutToken, requestWithToken} from "~/utils/request.server";
 import {formData2Json} from "~/utils/utils";
 
 const randomstring = require('randomstring');
@@ -15,8 +15,10 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
-    return await requestWithToken(request)(API_PAIMAI_ARTICLE_EDIT, postFormInit(formData2Json(formData)))
+    return await requestWithoutToken(request)(API_PAIMAI_ARTICLE_EDIT, postFormInit(formData2Json(formData)))
 }
+
+
 const RegisterPage = () => {
     const [captchaKey, setCaptchaKey] = useState<string>();
     const transition = useNavigation();
