@@ -36,6 +36,7 @@ const RegisterPage = () => {
                 alert('验证码错误');
                 return;
             }
+            //@ts-ignore
             formRef.current.submit();
         }
     }, [checkSmsFetcher.state]);
