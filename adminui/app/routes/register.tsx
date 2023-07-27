@@ -1,4 +1,4 @@
-import {ActionFunction, LinksFunction} from "@remix-run/node";
+import {ActionFunction, LinksFunction, redirect} from "@remix-run/node";
 import loginPageStyleUrl from "~/styles/page-auth.css";
 import {Button, Card, Col, Form, InputGroup, NavLink, Row} from "react-bootstrap";
 import SystemLogo from "~/components/logo";
@@ -14,7 +14,9 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
-    return await requestWithoutToken(request)(API_APP_REGISTER, postFormInit(formData2Json(formData)))
+    let res = await requestWithoutToken(request)(API_APP_REGISTER, postFormInit(formData2Json(formData)))
+    console.log('注册结果为', res);
+    return redirect("/reg_success");
 }
 
 
@@ -27,7 +29,7 @@ const RegisterPage = () => {
     const [posting, setPosting] = useState<boolean>(false);
     const sendSmsFetcher = useFetcher();
     const checkSmsFetcher = useFetcher();
-    const formRef = useRef();
+    const formRef = useRef<any>();
 
 
     useEffect(() => {
