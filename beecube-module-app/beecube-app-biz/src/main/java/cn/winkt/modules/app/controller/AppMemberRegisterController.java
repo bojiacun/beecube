@@ -69,6 +69,17 @@ public class AppMemberRegisterController extends JeecgController<AppMemberRegist
         return Result.OK(true);
     }
 
+    @PutMapping("/check")
+    public Result<Boolean> checkCode(@RequestBody Map<String, String> postData) {
+        String mobile = postData.get("mobile");
+        String code = postData.get("code");
+        String vcode = (String)redisUtil.get("MOBILE_CODE:"+mobile);
+        if(StringUtils.isNotEmpty(vcode) && vcode.equals(code)) {
+            redisUtil.del("MOBILE_CODE:"+mobile);
+            return Result.OK(true);
+        }
+        return Result.OK(false);
+    }
    /**
     * 分页列表查询
     *
@@ -95,21 +106,30 @@ public class AppMemberRegisterController extends JeecgController<AppMemberRegist
    /**
     * 添加
     *
+    * @param AppMemberRegister
     * @return
     */
    @AutoLog(value = "应用会员表-添加")
    @ApiOperation(value="应用会员表-添加", notes="应用会员表-添加")
    @PostMapping(value = "/add")
-   public Result<?> add(@RequestBody AppMemberRegister model) {
-       String mobile = model.getMobile();
-       String code = model.getCode();
-       String vcode = (String)redisUtil.get("MOBILE_CODE:"+mobile);
-       if(StringUtils.isNotEmpty(vcode) && vcode.equals(code)) {
-           redisUtil.del("MOBILE_CODE:"+mobile);
-           appMemberRegisterService.save(model);
-           return Result.OK(true);
-       }
-       return Result.error("验证码错误");
+   public Result<?> add(@RequestBody AppMemberRegister AppMemberRegister) {
+       appMemberRegisterService.save(AppMemberRegister);
+       return Result.OK("添加成功！");
+   }
+
+   /**
+    * 编辑
+    *
+    * @param AppMemberRegister
+    * @return
+    */
+   @AutoLog(value = "应用会员表-编辑")
+   @ApiOperation(value="应用会员表-编辑", notes="应用会员表-编辑")
+   @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
+   public Result<?> edit(@RequestBody AppMemberRegister AppMemberRegister) throws InvocationTargetException, IllegalAccessException {
+       AppMemberRegister old = appMemberRegisterService.getById(AppMemberRegister.getId());
+       appMemberRegisterService.updateById(AppMemberRegister);
+       return Result.OK("编辑成功!");
    }
 
    /**
