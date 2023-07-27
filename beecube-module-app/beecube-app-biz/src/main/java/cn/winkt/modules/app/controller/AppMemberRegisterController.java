@@ -1,7 +1,7 @@
 package cn.winkt.modules.app.controller;
 
-import cn.winkt.modules.app.entity.AppMember;
-import cn.winkt.modules.app.service.IAppMemberService;
+import cn.winkt.modules.app.entity.AppMemberRegister;
+import cn.winkt.modules.app.service.IAppMemberRegisterService;
 import cn.winkt.modules.app.service.IAppSettingService;
 import cn.winkt.modules.app.vo.MemberSetting;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,9 +40,9 @@ import java.util.Arrays;
 @Api(tags="体验注册")
 @RestController
 @RequestMapping("/member/register")
-public class AppMemberRegisterController extends JeecgController<AppMember, IAppMemberService> {
+public class AppMemberRegisterController extends JeecgController<AppMemberRegister, IAppMemberRegisterService> {
    @Autowired
-   private IAppMemberService appMemberService;
+   private IAppMemberRegisterService appMemberRegisterService;
 
    @Resource
    private IAppSettingService appSettingService;
@@ -50,7 +50,7 @@ public class AppMemberRegisterController extends JeecgController<AppMember, IApp
    /**
     * 分页列表查询
     *
-    * @param appMember
+    * @param AppMemberRegister
     * @param pageNo
     * @param pageSize
     * @param req
@@ -60,75 +60,42 @@ public class AppMemberRegisterController extends JeecgController<AppMember, IApp
    @ApiOperation(value="应用会员表-分页列表查询", notes="应用会员表-分页列表查询")
    @GetMapping(value = "/list")
    @AutoDict
-   public Result<?> queryPageList(AppMember appMember,
+   public Result<?> queryPageList(AppMemberRegister AppMemberRegister,
                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                                   HttpServletRequest req) {
-       QueryWrapper<AppMember> queryWrapper = QueryGenerator.initQueryWrapper(appMember, req.getParameterMap());
-       String keywords = req.getParameter("keywords");
-       String isAgent = req.getParameter("isAgent");
-       if(StringUtils.isNotEmpty(isAgent)) {
-           queryWrapper.eq("is_agent", 1);
-       }
-       String authStatus = req.getParameter("authStatus");
-       if(StringUtils.isNotEmpty(authStatus)) {
-           queryWrapper.eq("auth_status", 1);
-       }
-       String startDate = req.getParameter("startDate");
-       String endDate = req.getParameter("endDate");
-       if(StringUtils.isNotEmpty(startDate)) {
-           queryWrapper.ge("create_time", DateUtils.str2Date(startDate, new SimpleDateFormat("yyyy-MM-dd")));
-       }
-       if(StringUtils.isNotEmpty(endDate)) {
-           queryWrapper.le("create_time", DateUtils.str2Date(endDate, new SimpleDateFormat("yyyy-MM-dd")));
-       }
-       if(StringUtils.isNotEmpty(keywords)) {
-           queryWrapper.and(qw -> {
-               qw.eq("id", keywords).or()
-                       .like("nickname", keywords).or()
-                       .like("realname", keywords).or()
-                       .like("phone", keywords);
-           });
-       }
-       Page<AppMember> page = new Page<AppMember>(pageNo, pageSize);
-       IPage<AppMember> pageList = appMemberService.page(page, queryWrapper);
+       QueryWrapper<AppMemberRegister> queryWrapper = QueryGenerator.initQueryWrapper(AppMemberRegister, req.getParameterMap());
+       Page<AppMemberRegister> page = new Page<AppMemberRegister>(pageNo, pageSize);
+       IPage<AppMemberRegister> pageList = appMemberRegisterService.page(page, queryWrapper);
        return Result.OK(pageList);
    }
 
    /**
     * 添加
     *
-    * @param appMember
+    * @param AppMemberRegister
     * @return
     */
    @AutoLog(value = "应用会员表-添加")
    @ApiOperation(value="应用会员表-添加", notes="应用会员表-添加")
    @PostMapping(value = "/add")
-   public Result<?> add(@RequestBody AppMember appMember) {
-       appMemberService.save(appMember);
+   public Result<?> add(@RequestBody AppMemberRegister AppMemberRegister) {
+       appMemberRegisterService.save(AppMemberRegister);
        return Result.OK("添加成功！");
    }
 
    /**
     * 编辑
     *
-    * @param appMember
+    * @param AppMemberRegister
     * @return
     */
    @AutoLog(value = "应用会员表-编辑")
    @ApiOperation(value="应用会员表-编辑", notes="应用会员表-编辑")
    @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-   public Result<?> edit(@RequestBody AppMember appMember) throws InvocationTargetException, IllegalAccessException {
-       AppMember old = appMemberService.getById(appMember.getId());
-       //判断是不是通过实名认证
-       if(old.getAuthStatus() != 2 && appMember.getAuthStatus() == 2) {
-           //实名认证赠送积分
-           MemberSetting memberSetting = appSettingService.queryMemberSettings(AppContext.getApp());
-           if(memberSetting != null && StringUtils.isNotEmpty(memberSetting.getAuthRealIntegral())) {
-               appMemberService.inScore(appMember.getId(), new BigDecimal(memberSetting.getAuthRealIntegral()), "实名认证送积分");
-           }
-       }
-       appMemberService.updateById(appMember);
+   public Result<?> edit(@RequestBody AppMemberRegister AppMemberRegister) throws InvocationTargetException, IllegalAccessException {
+       AppMemberRegister old = appMemberRegisterService.getById(AppMemberRegister.getId());
+       appMemberRegisterService.updateById(AppMemberRegister);
        return Result.OK("编辑成功!");
    }
 
@@ -142,7 +109,7 @@ public class AppMemberRegisterController extends JeecgController<AppMember, IApp
    @ApiOperation(value="应用会员表-通过id删除", notes="应用会员表-通过id删除")
    @DeleteMapping(value = "/delete")
    public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-       appMemberService.removeById(id);
+       appMemberRegisterService.removeById(id);
        return Result.OK("删除成功!");
    }
 
@@ -156,7 +123,7 @@ public class AppMemberRegisterController extends JeecgController<AppMember, IApp
    @ApiOperation(value="应用会员表-批量删除", notes="应用会员表-批量删除")
    @DeleteMapping(value = "/deleteBatch")
    public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-       this.appMemberService.removeByIds(Arrays.asList(ids.split(",")));
+       this.appMemberRegisterService.removeByIds(Arrays.asList(ids.split(",")));
        return Result.OK("批量删除成功！");
    }
 
@@ -170,7 +137,7 @@ public class AppMemberRegisterController extends JeecgController<AppMember, IApp
    @ApiOperation(value="应用会员表-通过id查询", notes="应用会员表-通过id查询")
    @GetMapping(value = "/queryById")
    public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-       AppMember appMember = appMemberService.getById(id);
-       return Result.OK(appMember);
+       AppMemberRegister AppMemberRegister = appMemberRegisterService.getById(id);
+       return Result.OK(AppMemberRegister);
    }
 }
