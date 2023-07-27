@@ -102,8 +102,8 @@ const RegisterPage = () => {
                         </Card.Text>
                         <RemixForm ref={formRef} noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated' : '')} method='post' onSubmit={handleOnSubmit}>
                             <Form.Group className={'mb-1'}>
-                                <Form.Label htmlFor={'realname'}>姓名</Form.Label>
-                                <Form.Control name='realname' placeholder={'联系人姓名'} required/>
+                                <Form.Label htmlFor={'realName'}>姓名</Form.Label>
+                                <Form.Control name='realName' placeholder={'联系人姓名'} required/>
                             </Form.Group>
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor="mobile">手机号码</Form.Label>
