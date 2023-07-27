@@ -23,11 +23,11 @@ public class TencentSmsServices {
     public TencentSmsService getDefaultService() {
         if(defaultService == null) {
             defaultService = new TencentSmsService();
-            defaultService.setAppId("1400466351");
-            defaultService.setSecretKey("QaVCdoupUv62jA5mEQM3VhdP0NWTHrET");
-            defaultService.setSecretId("AKIDqZ7SZUChyRileLo34rPjphMn0zkHajcG");
-            defaultService.setTemplateId("823401");
-            defaultService.setSignName("享铛铛");
+            defaultService.setAppId("1400465538");
+            defaultService.setSecretKey("JPCoBamhNp32jA1dQxErHRKwKRJwOcdV");
+            defaultService.setSecretId("AKIDjEWaPhQcBUZPzIp8WgbhcHgqnVw6mCtJ");
+            defaultService.setTemplateId("1877851");
+            defaultService.setSignName("蜜蜂魔方");
         }
         return defaultService;
     }
