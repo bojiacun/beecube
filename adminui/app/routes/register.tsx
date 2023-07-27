@@ -2,10 +2,10 @@ import {ActionFunction, LinksFunction} from "@remix-run/node";
 import loginPageStyleUrl from "~/styles/page-auth.css";
 import {Button, Card, Col, Form, InputGroup, NavLink, Row} from "react-bootstrap";
 import SystemLogo from "~/components/logo";
-import {Form as RemixForm, useNavigation} from "@remix-run/react";
+import {Form as RemixForm, useFetcher, useNavigation} from "@remix-run/react";
 import classNames from "classnames";
 import {useState} from "react";
-import {API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithToken} from "~/utils/request.server";
+import {API_APP_SEND_SMS, API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithToken} from "~/utils/request.server";
 import {formData2Json} from "~/utils/utils";
 
 const randomstring = require('randomstring');
@@ -24,6 +24,7 @@ const RegisterPage = () => {
     const [timeout, setTimeout] = useState<number>(60);
     const [mobile, setMobile] = useState<string>();
     const [timer, setTimer] = useState<any>();
+    const sendSmsFetcher = useFetcher();
 
     const handleOnSubmit = async (e: any) => {
         let form = e.currentTarget;
@@ -39,6 +40,7 @@ const RegisterPage = () => {
             alert('请输入有效的手机号码');
             return;
         }
+        sendSmsFetcher.submit({mobile: mobile}, {action: '/sms', method: 'post'});
         clearInterval(timer);
         setTimeout(59);
         setTimer(setInterval(()=>{
@@ -87,7 +89,7 @@ const RegisterPage = () => {
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
                                 <InputGroup>
-                                    <Form.Control name='captcha' placeholder={'短信验证码'} required/>
+                                    <Form.Control name='vcode' placeholder={'短信验证码'} required/>
                                     <Button onClick={handleSendSms} disabled={timeout < 60 && timeout > 0}>
                                         {timeout == 60 && '验证码'}
                                         {(timeout < 60 && timeout > 0) && timeout}
@@ -99,7 +101,6 @@ const RegisterPage = () => {
                                 <Form.Label htmlFor={'cropName'}>公司名称</Form.Label>
                                 <Form.Control name='cropName' placeholder={'公司名称'} />
                             </Form.Group>
-                            {captchaKey && <Form.Control type={'hidden'} name={'checkKey'} value={captchaKey}/>}
                             <Row>
                                 <Col className={'d-grid'}>
                                     <Button className='mt-1' variant={'primary'} type={'submit'}
