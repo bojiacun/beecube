@@ -4,7 +4,7 @@ import {Button, Card, Col, Form, InputGroup, NavLink, Row} from "react-bootstrap
 import SystemLogo from "~/components/logo";
 import {Form as RemixForm, useFetcher, useNavigation} from "@remix-run/react";
 import classNames from "classnames";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {API_APP_SEND_SMS, API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithoutToken, requestWithToken} from "~/utils/request.server";
 import {formData2Json} from "~/utils/utils";
 
@@ -20,23 +20,37 @@ export const action: ActionFunction = async ({request}) => {
 
 
 const RegisterPage = () => {
-    const [captchaKey, setCaptchaKey] = useState<string>();
     const transition = useNavigation();
     const [validated, setValidated] = useState<boolean>(false);
     const [timeout, setTimeout] = useState<number>(60);
     const [mobile, setMobile] = useState<string>();
+    const [code, setCode] = useState<string>();
     const [timer, setTimer] = useState<any>();
     const sendSmsFetcher = useFetcher();
+    const checkSmsFetcher = useFetcher();
+    const formRef = useRef();
+
+
+    useEffect(() => {
+        if (checkSmsFetcher.type === 'done' && checkSmsFetcher.data) {
+            if(!checkSmsFetcher.data.result) {
+                alert('验证码错误');
+                return;
+            }
+        }
+    }, [checkSmsFetcher.state]);
+
 
     const handleOnSubmit = async (e: any) => {
         let form = e.currentTarget;
-        if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
+        if (form.checkValidity()) {
+            //验证验证码是否正确
+            let data = {mobile: mobile, code: code};
+            checkSmsFetcher.submit(data, {action: '/check', method: 'post'});
         }
         setValidated(true);
-        //验证验证码是否正确
-
     }
 
     const handleSendSms = async () => {
@@ -60,7 +74,9 @@ const RegisterPage = () => {
     const handleMobileChange = (e:any) => {
         setMobile(e.target.value);
     }
-
+    const handleCodeChange = (e:any) => {
+        setCode(e.target.value);
+    }
     return (
         <div className={'auth-wrapper auth-v2'}>
             <Row className={'auth-inner m-0'}>
@@ -78,7 +94,7 @@ const RegisterPage = () => {
                         <Card.Text>
                             请如实填写您的个人信息，以便我们联系您发送体验账号
                         </Card.Text>
-                        <RemixForm noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated' : '')} method='post' onSubmit={handleOnSubmit}>
+                        <RemixForm ref={formRef} noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated' : '')} method='post' onSubmit={handleOnSubmit}>
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'realname'}>姓名</Form.Label>
                                 <Form.Control name='realname' placeholder={'联系人姓名'} required/>
@@ -93,7 +109,7 @@ const RegisterPage = () => {
                             <Form.Group className={'mb-1'}>
                                 <Form.Label htmlFor={'captcha'}>验证码</Form.Label>
                                 <InputGroup>
-                                    <Form.Control name='vcode' placeholder={'短信验证码'} required/>
+                                    <Form.Control name='code' placeholder={'短信验证码'} required onChange={handleCodeChange} />
                                     <Button onClick={handleSendSms} disabled={timeout < 60 && timeout > 0}>
                                         {timeout == 60 && '验证码'}
                                         {(timeout < 60 && timeout > 0) && timeout}
