@@ -98,7 +98,7 @@ const RegisterPage = () => {
                             注册蜜蜂魔方
                         </Card.Title>
                         <Card.Text>
-                            请如实填写您的个人信息，以便我们联系您发送体验账号
+                            注册免费账号体验
                         </Card.Text>
                         <RemixForm ref={formRef} noValidate className={classNames("auth-login-form mt-2", validated ? 'was-validated' : '')} method='post' onSubmit={handleOnSubmit}>
                             <Form.Group className={'mb-1'}>
