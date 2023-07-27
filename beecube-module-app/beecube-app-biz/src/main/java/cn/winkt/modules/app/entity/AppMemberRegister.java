@@ -23,10 +23,10 @@ import java.util.Date;
  * @Version: V1.0
  */
 @Data
-@TableName("app_registers")
+@TableName("beecube_registers")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="app_registers对象", description="体验注册")
+@ApiModel(value="beecube_registers对象", description="体验注册")
 public class AppMemberRegister {
     
 	/**id*/
