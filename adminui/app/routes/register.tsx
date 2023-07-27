@@ -1,12 +1,12 @@
 import {ActionFunction, LinksFunction} from "@remix-run/node";
 import loginPageStyleUrl from "~/styles/page-auth.css";
-import {auth} from "~/utils/auth.server";
-import {LOGIN_SUCCESS_URL, LOGIN_URL} from "~/utils/request.server";
-import {Alert, Button, Card, Col, Form, Image, InputGroup, NavLink, Row} from "react-bootstrap";
+import {Button, Card, Col, Form, InputGroup, NavLink, Row} from "react-bootstrap";
 import SystemLogo from "~/components/logo";
 import {Form as RemixForm, useNavigation} from "@remix-run/react";
 import classNames from "classnames";
 import {useState} from "react";
+import {API_PAIMAI_ARTICLE_EDIT, postFormInit, requestWithToken} from "~/utils/request.server";
+import {formData2Json} from "~/utils/utils";
 
 const randomstring = require('randomstring');
 export const links: LinksFunction = () => {
@@ -14,7 +14,8 @@ export const links: LinksFunction = () => {
 }
 
 export const action: ActionFunction = async ({request}) => {
-    await auth.authenticate("form", request, {successRedirect: '/register/done', failureRedirect: '/register'});
+    const formData = await request.formData();
+    return await requestWithToken(request)(API_PAIMAI_ARTICLE_EDIT, postFormInit(formData2Json(formData)))
 }
 const RegisterPage = () => {
     const [captchaKey, setCaptchaKey] = useState<string>();
