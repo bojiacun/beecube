@@ -24,6 +24,7 @@ const RegisterPage = () => {
                         <i className="feather icon-check-circle"></i>
                     </span>
                     <h1>注册成功，稍后售前会联系您，请保持手机畅通</h1>
+                    <h5><a href={'/login'}>返回登录页</a></h5>
                 </Col>
             </Row>
         </div>
