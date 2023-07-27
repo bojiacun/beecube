@@ -19,12 +19,12 @@ export const action: ActionFunction = async ({request}) => {
 
 
 const RegisterPage = () => {
-    const transition = useNavigation();
     const [validated, setValidated] = useState<boolean>(false);
     const [timeout, setTimeout] = useState<number>(60);
     const [mobile, setMobile] = useState<string>();
     const [code, setCode] = useState<string>();
     const [timer, setTimer] = useState<any>();
+    const [posting, setPosting] = useState<boolean>(false);
     const sendSmsFetcher = useFetcher();
     const checkSmsFetcher = useFetcher();
     const formRef = useRef();
@@ -32,6 +32,7 @@ const RegisterPage = () => {
 
     useEffect(() => {
         if (checkSmsFetcher.type === 'done' && checkSmsFetcher.data) {
+            setPosting(false);
             if(!checkSmsFetcher.data.result) {
                 alert('验证码错误');
                 return;
@@ -47,6 +48,7 @@ const RegisterPage = () => {
         e.preventDefault();
         e.stopPropagation();
         if (form.checkValidity()) {
+            setPosting(true);
             //验证验证码是否正确
             let data = {mobile: mobile, code: code};
             //@ts-ignore
@@ -126,7 +128,7 @@ const RegisterPage = () => {
                             <Row>
                                 <Col className={'d-grid'}>
                                     <Button className='mt-1' variant={'primary'} type={'submit'}
-                                            disabled={transition.state === 'submitting'}>{transition.state === 'submitting' ? '注册中...' : '注 册'}</Button>
+                                            disabled={posting}>{posting ? '注册中...' : '注 册'}</Button>
                                 </Col>
                             </Row>
                         </RemixForm>
