@@ -35,6 +35,8 @@ const RegisterPage = () => {
             e.stopPropagation();
         }
         setValidated(true);
+        //验证验证码是否正确
+
     }
 
     const handleSendSms = async () => {

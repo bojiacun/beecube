@@ -1,6 +1,7 @@
 package cn.winkt.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,5 +49,8 @@ public class AppMemberRegister {
 	/**创建时间*/
     @ApiModelProperty(value = "创建时间")
 	private Date createTime;
+
+	@TableField(exist = false)
+	private String code;
 
 }
