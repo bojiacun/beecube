@@ -45,7 +45,7 @@ import java.util.Map;
 @Slf4j
 @Api(tags="体验注册")
 @RestController
-@RequestMapping("/member/register")
+@RequestMapping("/register")
 public class AppMemberRegisterController extends JeecgController<AppMemberRegister, IAppMemberRegisterService> {
    @Autowired
    private IAppMemberRegisterService appMemberRegisterService;
@@ -56,7 +56,7 @@ public class AppMemberRegisterController extends JeecgController<AppMemberRegist
     RedisUtil redisUtil;
     @PostMapping("/send")
     public Result<Boolean> sendCode(@RequestBody Map<String, String> postData) {
-        TencentSmsService service = tencentSmsServices.getService(AppContext.getApp());
+        TencentSmsService service = tencentSmsServices.getDefaultService();
         if(service == null) {
             throw new JeecgBootException("获取短信服务失败");
         }
@@ -115,21 +115,6 @@ public class AppMemberRegisterController extends JeecgController<AppMemberRegist
    public Result<?> add(@RequestBody AppMemberRegister AppMemberRegister) {
        appMemberRegisterService.save(AppMemberRegister);
        return Result.OK("添加成功！");
-   }
-
-   /**
-    * 编辑
-    *
-    * @param AppMemberRegister
-    * @return
-    */
-   @AutoLog(value = "应用会员表-编辑")
-   @ApiOperation(value="应用会员表-编辑", notes="应用会员表-编辑")
-   @RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
-   public Result<?> edit(@RequestBody AppMemberRegister AppMemberRegister) throws InvocationTargetException, IllegalAccessException {
-       AppMemberRegister old = appMemberRegisterService.getById(AppMemberRegister.getId());
-       appMemberRegisterService.updateById(AppMemberRegister);
-       return Result.OK("编辑成功!");
    }
 
    /**

@@ -18,6 +18,19 @@ public class TencentSmsServices {
 
     private static final Map<String, TencentSmsService> tencentSmsServiceMap = new HashMap<>();
 
+    private static TencentSmsService defaultService = null;
+
+    public TencentSmsService getDefaultService() {
+        if(defaultService == null) {
+            defaultService = new TencentSmsService();
+            defaultService.setAppId("appid");
+            defaultService.setSecretKey("key");
+            defaultService.setSecretId("id");
+            defaultService.setTemplateId("templateid");
+            defaultService.setSignName("signname");
+        }
+        return defaultService;
+    }
 
     public TencentSmsService getService(String appId) {
         if(tencentSmsServiceMap.containsKey(appId)) {
