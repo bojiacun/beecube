@@ -25,7 +25,7 @@ import java.util.Date;
 @TableName("beecube_app_members")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="beecube_app_member_registers对象", description="体验注册")
+@ApiModel(value="app_registers对象", description="体验注册")
 public class AppMemberRegister {
     
 	/**id*/
