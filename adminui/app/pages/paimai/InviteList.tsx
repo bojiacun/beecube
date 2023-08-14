@@ -60,6 +60,10 @@ const InviteList = (props: any) => {
 
     const columns: any[] = [
         {
+            text: '会员ID',
+            dataField: 'memberId',
+        },
+        {
             text: '预约码',
             dataField: 'inviteCode',
         },
