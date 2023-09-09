@@ -160,8 +160,11 @@ public class AuctionGoodsService {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //用户实名检测，必须绑定手机号才可出价
         AppMemberVO memberVO = appApi.getMemberById(loginUser.getId());
-        if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
-            throw new JeecgBootException("请完善您的用户信息后再出价");
+//        if(StringUtils.isAnyEmpty(memberVO.getNickname(), memberVO.getPhone(), memberVO.getAvatar())) {
+//            throw new JeecgBootException("请完善您的用户信息后再出价");
+//        }
+        if(memberVO.getAuthStatus() == null || memberVO.getAuthStatus() == 0) {
+            throw new JeecgBootException("请实名认证后再出价");
         }
         Goods goods = goodsService.getById(post.getString("id"));
         if (goods == null) {
