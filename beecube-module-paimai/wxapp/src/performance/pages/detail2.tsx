@@ -285,7 +285,8 @@ export default class Index extends Component<any, any> {
                                     {item.state == 3 &&
                                         <View className={'text-sm'}>
                                             成交价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base font-bold'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                              className='text-base font-bold'
+                                            >{numeral(item.dealPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 4 &&
@@ -305,12 +306,13 @@ export default class Index extends Component<any, any> {
                         );
                     })}
                 </View>
-                {goodsList.length == 0 && <NoData/>}
-                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
-                <View style={{height: Taro.pxTransform(124)}}/>
+                {goodsList.length == 0 && <NoData />}
+                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
+                <View style={{height: Taro.pxTransform(124)}} />
                 {!deposited && detail.state < 2 &&
                     <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
+                          style={{paddingBottom: safeBottom}}
+                    >
                         <View>
                             <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
                                 <View>交保证金</View>

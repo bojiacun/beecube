@@ -215,7 +215,7 @@ export default class Index extends Component<any, any> {
                             <View className=''>实名认证</View>
                             <View className='text-stone-400 text-xs'>完成实名认证，积分<Text className='text-red-600 font-bold'>+{settings.authRealIntegral}</Text></View>
                         </View>
-                        <View onClick={() => Taro.navigateTo({url: '/pages/my/profile'})}>
+                        <View onClick={() => Taro.navigateTo({url: '/pages/my/realauth'})}>
                             <Button color='danger' size='small' shape='round'>去认证</Button>
                         </View>
                     </View>
