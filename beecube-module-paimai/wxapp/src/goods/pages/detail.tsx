@@ -17,6 +17,8 @@ import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
 import {Popup} from "@taroify/core";
+import moment from "moment";
+import _ from "lodash";
 
 const numeral = require('numeral');
 
@@ -384,25 +386,38 @@ export default class Index extends Component<any, any> {
         //这里计算要加价多少，并且符合后台的258逻辑
 
         let rangePrice = 0;
-        let offerCount = goods.offerCount - 1;
-        for (let i = 0; i < upgradeConfig.length; i++) {
+        //取得当前价格所在区间
+        let rangeIndex = 0;
+        for(let i = upgradeConfig.length - 1; i >=0; i--) {
             let config = upgradeConfig[i];
             let min = parseFloat(config.min);
-            let priceConfigs = config.price.split(',');
-            let price = 0;
-            if (priceConfigs.length == 1) {
-                price = parseFloat(priceConfigs[0]);
-            } else {
-                //计算是第几个人出价
-                let modIndex = (offerCount % priceConfigs.length);
-                price = parseFloat(priceConfigs[modIndex]);
-            }
-            if (currentPrice >= min) {
-                rangePrice = price;
+            if(currentPrice >= min) {
+                rangeIndex = i;
+                break;
             }
         }
-        update && this.setState({nextPrice: currentPrice + rangePrice, goods: goods});
-        return currentPrice + rangePrice;
+        let currentConfig = upgradeConfig[rangeIndex];
+        let priceConfigs = currentConfig.price.split(',');
+        let nextPrice = 0;
+        if(priceConfigs.length == 1) {
+            nextPrice = currentPrice + parseFloat(priceConfigs[0]);
+        }
+        else {
+            let startPrice = parseFloat(currentConfig.min);
+            let priceMap = [startPrice];
+            let recycleIndex = 0;
+            while (startPrice < parseFloat(currentConfig.max)) {
+                let offset = parseFloat(priceConfigs[recycleIndex % priceConfigs.length]);
+                startPrice += offset;
+                priceMap.push(startPrice);
+                recycleIndex++;
+            }
+            let currentPriceMapIndex = _.indexOf(priceMap, currentPrice);
+            nextPrice = priceMap[currentPriceMapIndex+1];
+            console.log(currentPriceMapIndex, nextPrice, priceMap, currentPrice);
+        }
+        update && this.setState({nextPrice: nextPrice, goods: goods});
+        return nextPrice;
     }
 
     onLoad(options) {
@@ -709,7 +724,7 @@ export default class Index extends Component<any, any> {
                                         <View className={'text-right pr-4'}>
                                             {index == 0 && <View className={'text-indigo-600 font-bold'}>领先</View>}
                                             {index != 0 && <View className={'font-bold text-gray-400'}>出局</View>}
-                                            <View className={'text-sm text-gray-400'}>{o.offerTime}</View>
+                                            <View className={'text-sm text-gray-400'}>{moment(o.offerTime).format('YYYY-MM-DD HH:mm:ss')}</View>
                                         </View>
                                     </View>
                                 );
