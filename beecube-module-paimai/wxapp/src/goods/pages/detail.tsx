@@ -342,27 +342,36 @@ export default class Index extends Component<any, any> {
 
         //这里计算要加价多少，并且符合后台的258逻辑
 
-        let rangePrice = 0;
-        let offerCount = goods.offerCount;
-        for (let i = 0; i < upgradeConfig.length; i++) {
+        let rangeIndex = 0;
+        for(let i = 0; i < upgradeConfig.length; i++) {
             let config = upgradeConfig[i];
-            let min = parseFloat(config.min);
-            let priceConfigs = config.price.split(',');
-            let price = 0;
-            if (priceConfigs.length == 1) {
-                price = parseFloat(priceConfigs[0]);
-            } else {
-                //计算是第几个人出价
-                let modIndex = (offerCount % priceConfigs.length);
-                console.log('mod index is', modIndex, offerCount, priceConfigs.length);
-                price = parseFloat(priceConfigs[modIndex]);
-            }
-            if (currentPrice >= min) {
-                rangePrice = price;
+            let max = parseFloat(config.max);
+            if(max >= currentPrice) {
+                rangeIndex = i;
+                break;
             }
         }
-        update && this.setState({nextPrice: currentPrice - rangePrice, goods: goods});
-        return currentPrice - rangePrice;
+        let currentConfig = upgradeConfig[rangeIndex];
+        let priceConfigs = currentConfig.price.split(',');
+        let prevPrice = 0;
+        if(priceConfigs.length == 1) {
+            prevPrice = currentPrice - parseFloat(priceConfigs[0]);
+        }
+        else {
+            let startPrice = parseFloat(currentConfig.min);
+            let priceMap = [startPrice];
+            let recycleIndex = 0;
+            while (startPrice < parseFloat(currentConfig.max)) {
+                let offset = parseFloat(priceConfigs[recycleIndex % priceConfigs.length]);
+                startPrice += offset;
+                priceMap.push(startPrice);
+                recycleIndex++;
+            }
+            let currentPriceMapIndex = _.indexOf(priceMap, currentPrice);
+            prevPrice = priceMap[currentPriceMapIndex-1];
+        }
+        update && this.setState({nextPrice: prevPrice, goods: goods});
+        return prevPrice;
     }
 
     nextPrice(newGoods, update = true) {
@@ -385,7 +394,6 @@ export default class Index extends Component<any, any> {
 
         //这里计算要加价多少，并且符合后台的258逻辑
 
-        let rangePrice = 0;
         //取得当前价格所在区间
         let rangeIndex = 0;
         for(let i = upgradeConfig.length - 1; i >=0; i--) {
@@ -414,7 +422,6 @@ export default class Index extends Component<any, any> {
             }
             let currentPriceMapIndex = _.indexOf(priceMap, currentPrice);
             nextPrice = priceMap[currentPriceMapIndex+1];
-            console.log(currentPriceMapIndex, nextPrice, priceMap, currentPrice);
         }
         update && this.setState({nextPrice: nextPrice, goods: goods});
         return nextPrice;
