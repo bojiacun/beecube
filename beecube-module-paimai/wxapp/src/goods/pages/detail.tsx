@@ -590,7 +590,7 @@ export default class Index extends Component<any, any> {
         const {goods, message, hideModal} = this.state;
         const {systemInfo, settings} = this.props;
         settings.isCustomOffer = parseInt(settings.isCustomOffer);
-        if (goods == null) return <PageLoading/>;
+        if (goods == null) return <PageLoading />;
 
         const images: CustomSwiperItem[] = goods.images.split(',').map((item, index) => {
             return {id: index, url: '#', image: item};
