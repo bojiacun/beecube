@@ -275,6 +275,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 	@ApiOperation(value="直播间表-编辑", notes="直播间表-编辑")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<?> edit(@RequestBody LiveRoom liveRoom) {
+		LiveRoom old = liveRoomService.getById(liveRoom.getId());
 		if(StringUtils.isNotEmpty(liveRoom.getMainAnchor())) {
 			AppMemberVO appMemberVO = appApi.getMemberById(liveRoom.getMainAnchor());
 			if(appMemberVO == null) {
@@ -295,7 +296,7 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 			throw new JeecgBootException("开始时间不得在结束时间之后");
 		}
 		//专场修改出价配置则更新专场下所有拍品
-		if(StringUtils.isNotEmpty(liveRoom.getUprange())) {
+		if(StringUtils.isNotEmpty(liveRoom.getUprange()) && !StringUtils.equals(liveRoom.getUprange(), old.getUprange())) {
 			LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
 			updateWrapper.set(Goods::getUprange, liveRoom.getUprange());
 			updateWrapper.eq(Goods::getRoomId, liveRoom.getId());

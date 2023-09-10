@@ -314,7 +314,7 @@ public class PerformanceController extends JeecgController<Performance, IPerform
             }
         }
         //专场修改出价配置则更新专场下所有拍品
-        if(StringUtils.isNotEmpty(performance.getUprange())) {
+        if(StringUtils.isNotEmpty(performance.getUprange()) && !StringUtils.equals(performance.getUprange(), old.getUprange())) {
             LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.set(Goods::getUprange, performance.getUprange());
             updateWrapper.eq(Goods::getPerformanceId, performance.getId());
