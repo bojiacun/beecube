@@ -1,4 +1,4 @@
-import {Modal, FormGroup, FormLabel, Button, Col, Row} from "react-bootstrap";
+import {Modal, FormGroup, FormLabel, Button, Col, Row, FormText} from "react-bootstrap";
 import {Form, Formik} from "formik";
 import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showToastError} from "~/utils/utils";
 import {useFetcher} from "@remix-run/react";
@@ -80,6 +80,15 @@ const LiveRoomEditor = (props: any) => {
                                     <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
+                                        <Row>
+                                            <Col sm={12}>
+                                                <UprangConfiger  label={'点击配置'} name={'uprange'} />
+                                            </Col>
+                                        </Row>
+                                        <FormText>直播间统一加价配置，每次编辑的时候都会覆盖直播间下所有拍品</FormText>
                                     </FormGroup>
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
