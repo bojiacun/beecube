@@ -5,6 +5,7 @@ import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.mapper.LiveRoomMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
+import cn.winkt.modules.paimai.vo.LiveRoomVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,10 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
     @Override
     public boolean isEnded(LiveRoom liveRoom) {
         return liveRoom.getEndTime().before(new Date()) || liveRoom.getState() == 2;
+    }
+
+    @Override
+    public LiveRoomVo getDetail(String id) {
+        return liveRoomMapper.getDetail(id);
     }
 }

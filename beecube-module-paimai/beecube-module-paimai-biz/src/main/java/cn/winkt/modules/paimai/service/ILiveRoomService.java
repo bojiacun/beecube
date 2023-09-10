@@ -2,6 +2,7 @@ package cn.winkt.modules.paimai.service;
 
 import cn.winkt.modules.paimai.entity.LiveRoom;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.vo.LiveRoomVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.system.vo.LoginUser;
@@ -23,4 +24,6 @@ public interface ILiveRoomService extends IService<LiveRoom> {
     boolean isStarted(String roomId);
     boolean isEnded(String roomId);
     boolean isEnded(LiveRoom liveRoom);
+
+    LiveRoomVo getDetail(String id);
 }

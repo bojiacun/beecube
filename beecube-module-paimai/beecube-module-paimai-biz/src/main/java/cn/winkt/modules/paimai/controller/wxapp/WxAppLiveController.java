@@ -4,6 +4,7 @@ import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.service.im.ImClientService;
 import cn.winkt.modules.paimai.vo.GoodsVO;
+import cn.winkt.modules.paimai.vo.LiveRoomVo;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
 import cn.winkt.modules.paimai.vo.ZegoSetting;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -44,8 +45,8 @@ public class WxAppLiveController {
     ImClientService imClientService;
 
     @GetMapping("/rooms/{id}")
-    public Result<LiveRoom> liveRoom(@PathVariable String id) {
-        LiveRoom room = liveRoomService.getById(id);
+    public Result<LiveRoomVo> liveRoom(@PathVariable String id) {
+        LiveRoomVo room = liveRoomService.getDetail(id);
         liveRoomService.updateRoomViews(id);
         LambdaQueryWrapper<LiveRoomStream> streamLambdaQueryWrapper = new LambdaQueryWrapper<>();
         streamLambdaQueryWrapper.eq(LiveRoomStream::getLiveId, room.getId());
