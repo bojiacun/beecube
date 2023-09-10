@@ -11,11 +11,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +56,7 @@ public class WxAppLiveController {
         room.setStreams(liveRoomStreamService.list(streamLambdaQueryWrapper));
         return Result.OK("获取成功", room);
     }
+
     @GetMapping("/room/goods")
     public Result<List<GoodsVO>> roomGoodsList(@RequestParam String roomId) {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
@@ -62,6 +65,22 @@ public class WxAppLiveController {
         queryWrapper.orderByAsc("g.sort_num");
         return Result.OK(goodsService.selectListVO(queryWrapper));
     }
+
+    @GetMapping("/room/goods/list")
+    public Result<?> roomGoodsPageList(
+            Goods goods,
+            @RequestParam(defaultValue = "1") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            HttpServletRequest req
+    ) {
+        QueryWrapper<Goods> queryWrapper = QueryGenerator.initQueryWrapper(goods, req.getParameterMap());
+        queryWrapper.orderByAsc("sort_num");
+        Page<Goods> page = new Page<>(pageNo, pageSize);
+        IPage<GoodsVO> pageList = goodsService.selectPageVO(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+
+
     @PutMapping("/room/logout")
     public Result<Boolean> logoutRoom(@RequestBody LiveRoom liveRoom) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -71,9 +90,9 @@ public class WxAppLiveController {
 
     @GetMapping("/rooms")
     public Result<?> roomList(LiveRoom liveRoom,
-                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                    HttpServletRequest req) {
+                              @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                              @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                              HttpServletRequest req) {
         LambdaQueryWrapper<LiveRoom> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(LiveRoom::getStatus, 1);
         String source = req.getParameter("source");
@@ -88,7 +107,7 @@ public class WxAppLiveController {
             });
         }
         String key = req.getParameter("key");
-        if(StringUtils.isNotEmpty(key)) {
+        if (StringUtils.isNotEmpty(key)) {
             queryWrapper.like(LiveRoom::getTitle, key);
         }
 

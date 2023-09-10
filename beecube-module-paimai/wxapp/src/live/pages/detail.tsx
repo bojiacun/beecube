@@ -12,6 +12,8 @@ import NoData from "../../components/nodata";
 import MessageType from "../../utils/message-type";
 import EventBus from '../../utils/event-bus';
 import EventType from '../../utils/event-type';
+import LoadMore from "../../components/loadmore";
+import {TimeCountDownerStatus} from "../../components/TimeCountDowner";
 
 const numeral = require('numeral');
 // @ts-ignore
@@ -36,6 +38,7 @@ export default class Index extends Component<any, any> {
         message: false,
         deposited: true,
         preOffered: false,
+        pageSize: 10,
     }
 
     constructor(props) {
@@ -47,9 +50,9 @@ export default class Index extends Component<any, any> {
 
     loadData(id, page: number, clear = false) {
         const {settings} = this.props;
-        return request.get('/paimai/api/live/room/goods', {params: {roomId: id, pageNo: page}}).then(res => {
+        return request.get('/paimai/api/live/room/goods/list', {params: {roomId: id, pageNo: page, pageSize: this.state.pageSize}}).then(res => {
             if (clear) {
-                let newGoodsList = res.data.result;
+                let newGoodsList = res.data.result.records;
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false, goodsList: []});
                 } else {
@@ -66,7 +69,7 @@ export default class Index extends Component<any, any> {
                 }
             } else {
                 let goodsList = this.state.goodsList || [];
-                let newGoodsList = res.data.result;
+                let newGoodsList = res.data.result.records;
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false, goodsList});
                 } else {
@@ -79,7 +82,7 @@ export default class Index extends Component<any, any> {
                             }
                         })
                     }
-                    this.setState({noMore: false, loadingMore: false, goodsList: [...goodsList, ...newGoodsList]});
+                    this.setState({noMore: newGoodsList.length < this.state.pageSize, loadingMore: false, goodsList: [...goodsList, ...newGoodsList]});
                 }
             }
         });
@@ -114,12 +117,12 @@ export default class Index extends Component<any, any> {
     }
 
     componentDidShow() {
-        // if(this.state.id) {
-        //     //查询是否需要缴纳保证金
-        //     return request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.id}}).then(res => {
-        //         this.setState({deposited: res.data.result});
-        //     });
-        // }
+        if(this.state.id) {
+            //查询是否需要缴纳保证金
+            return request.get('/paimai/api/members/deposited/liveroom', {params: {id: this.state.id}}).then(res => {
+                this.setState({deposited: res.data.result});
+            });
+        }
     }
 
     onLoad(options) {
@@ -150,45 +153,18 @@ export default class Index extends Component<any, any> {
     }
 
     onReachBottom() {
-        // this.setState({loadingMore: true, noMore: false});
-        // this.loadData(this.state.id, this.state.page + 1, false).then(() => {
-        // });
-        // this.setState({page: this.state.page + 1});
+        this.setState({loadingMore: true, noMore: false});
+        this.loadData(this.state.id, this.state.page + 1, false).then(() => {
+        });
+        this.setState({page: this.state.page + 1});
     }
 
     onPullDownRefresh() {
-        // utils.showLoading();
-        // this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
-        // this.setState({page: 1});
+        utils.showLoading();
+        this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
+        this.setState({page: 1});
     }
 
-    // async payDeposit() {
-    //     const {preOffered} = this.state;
-    //     if(!preOffered) {
-    //         let checkResult = await request.get('/paimai/api/members/check');
-    //         if (!checkResult.data.result) {
-    //             return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
-    //                 Taro.navigateTo({url: '/pages/my/profile'}).then();
-    //             });
-    //         }
-    //         this.setState({preOffered: true});
-    //     }
-    //     this.setState({posting: true});
-    //     //支付宝保证金
-    //     request.post('/paimai/api/members/deposits/performance', null, {params: {id: this.state.id}}).then(res => {
-    //         let data = res.data.result;
-    //         data.package = data.packageValue;
-    //         Taro.requestPayment(data).then(() => {
-    //             //支付已经完成，提醒支付成功并返回上一页面
-    //             Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
-    //                 let detail = this.state.detail;
-    //                 detail.deposited = true;
-    //                 this.setState({detail: detail});
-    //             });
-    //             this.setState({posting: false});
-    //         }).catch(() => this.setState({posting: false}));
-    //     })
-    // }
 
     noticeMe() {
         let type = 0;
@@ -210,7 +186,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList} = this.state;
+        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
         const {systemInfo} = this.props;
 
         if (!detail || goodsList === null) return <PageLoading />;
@@ -242,6 +218,8 @@ export default class Index extends Component<any, any> {
                     <View className='flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'>
                         <Text>拍品{goodsList.length}件</Text>
                         <Text>围观{detail.views}人</Text>
+                        <Text>报名{detail.depositCount}人</Text>
+                        <Text>出价{detail.offerCount}次</Text>
                     </View>
                 </View>
                 <View className='p-4 mt-4 grid grid-cols-1 gap-4'>
@@ -297,8 +275,9 @@ export default class Index extends Component<any, any> {
                     })}
                 </View>
                 {goodsList.length == 0 && <NoData />}
-                {/*{goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}*/}
+                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
                 <View style={{height: Taro.pxTransform(124)}} />
+
                 <View className='bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'
                   style={{paddingBottom: safeBottom}}
                 >
