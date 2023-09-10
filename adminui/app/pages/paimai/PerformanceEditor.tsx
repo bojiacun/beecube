@@ -103,7 +103,7 @@ const PerformanceEditor = (props: any) => {
                                     <BootstrapDateTime label={'起拍时间'} name={'startTime'} showTime={true} />
                                     {type != 2 && <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true}/>}
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                         <Row>
                                             <Col sm={12}>

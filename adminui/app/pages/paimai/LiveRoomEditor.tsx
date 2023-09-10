@@ -81,7 +81,7 @@ const LiveRoomEditor = (props: any) => {
                                         <FormLabel htmlFor={'preview'}>预览图片</FormLabel>
                                         <FileBrowserInput name={'preview'} type={1} multi={false}/>
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup className={'mb-1'}>
                                         <FormLabel htmlFor={'uprange'}>加价配置</FormLabel>
                                         <Row>
                                             <Col sm={12}>
