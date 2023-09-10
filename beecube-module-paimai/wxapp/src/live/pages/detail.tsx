@@ -218,101 +218,102 @@ export default class Index extends Component<any, any> {
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
         return (
-            <PageLayout statusBarProps={{title: '直播间详情'}} enableReachBottom={true}>
-                <View className={'p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'}>
-                    <View><FallbackImage src={utils.resolveUrl(detail.preview)} mode={'widthFix'} className={'block w-full box-border'}/></View>
-                    <View className={'flex items-center justify-between'}>
-                        <View className={'text-sm text-red-600 space-x-1'}>{detail.tags && detail.tags.split(',').map(item => <Text
-                            className={'py-1 px-2 border border-1 border-solid border-red-500 rounded'}>{item}</Text>)}</View>
-                        {detail.state == 0 && <View className={'text-gray-400 font-bold'}>未开始</View>}
-                        {detail.state == 1 && <View className={'text-red-600 font-bold'}>直播中</View>}
-                        {detail.state == 2 && <View className={'text-gray-400 font-bold'}>已结束</View>}
+            <PageLayout statusBarProps={{title: '直播间详情'}} enableReachBottom>
+                <View className='p-4 m-4 bg-white rounded-lg shadow-outer space-y-4'>
+                    <View><FallbackImage src={utils.resolveUrl(detail.preview)} mode='widthFix' className='block w-full box-border' /></View>
+                    <View className='flex items-center justify-between'>
+                        <View className='text-sm text-red-600 space-x-1'>{detail.tags && detail.tags.split(',').map(item => <Text
+                          className='py-1 px-2 border border-1 border-solid border-red-500 rounded'
+                        >{item}</Text>)}</View>
+                        {detail.state == 0 && <View className='text-gray-400 font-bold'>未开始</View>}
+                        {detail.state == 1 && <View className='text-red-600 font-bold'>直播中</View>}
+                        {detail.state == 2 && <View className='text-gray-400 font-bold'>已结束</View>}
                     </View>
-                    <View className={'font-bold text-lg'}>{detail.title}</View>
-                    <View className={'space-x-4'}>
-                        <Text className={'font-bold'}>开始时间</Text>
+                    <View className='font-bold text-lg'>{detail.title}</View>
+                    <View className='space-x-4'>
+                        <Text className='font-bold'>所在地址</Text>
+                        <Text>{detail.address}</Text>
+                    </View>
+                    <View className='space-x-4'>
+                        <Text className='font-bold'>开始时间</Text>
                         <Text>{detail.startTime}</Text>
                     </View>
-                    <View className={'space-x-4'}>
-                        <Text className={'font-bold'}>结束时间</Text>
-                        <Text>{detail.endTime}</Text>
-                    </View>
-                    <View className={'space-x-4'}>
-                        <Text className={'font-bold'}>主播</Text>
-                        <Text>{detail.mainAnchorName}</Text>
-                    </View>
 
-                    <View className={'flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'}>
+                    <View className='flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'>
                         <Text>拍品{goodsList.length}件</Text>
                         <Text>围观{detail.views}人</Text>
                     </View>
                 </View>
-                <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
+                <View className='p-4 mt-4 grid grid-cols-1 gap-4'>
                     {goodsList.map((item: any) => {
                         return (
                             <Navigator url={'/goods/pages/detail?id=' + item.id}
-                                       className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
-                                <View className={'relative w-28 h-28'}>
+                              className='bg-white flex items-center shadow-outer rounded-lg overflow-hidden'
+                            >
+                                <View className='relative w-28 h-28'>
                                     <FallbackImage
-                                        mode={'aspectFill'}
-                                        className={'block w-full h-full'}
-                                        src={utils.resolveUrl(item.images.split(',')[0])}
+                                      mode='aspectFill'
+                                      className='block w-full h-full'
+                                      src={utils.resolveUrl(item.images.split(',')[0])}
                                     />
                                 </View>
-                                <View className={'p-2 space-y-4 flex-1'}>
-                                    <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
+                                <View className='p-2 space-y-4 flex-1'>
+                                    <View className='text-gray-600 text-lg'>LOT{item.sortNum} {item.title}</View>
                                     {item.state < 3 &&
-                                        <View className={'text-sm'}>
-                                            <View className={'space-x-1'}>
-                                                估价 <Text className={'text-red-500'}>RMB</Text>
-                                                <Text className={'text-base font-bold'}>{item.evaluatePrice}</Text>
+                                        <View className='text-sm'>
+                                            <View className='space-x-1'>
+                                                估价 <Text className='text-red-500'>RMB</Text>
+                                                <Text className='text-base font-bold'>{item.evaluatePrice}</Text>
                                             </View>
                                             <View>
-                                                当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                                className={'text-base font-bold'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                                当前价 <Text className='text-red-500'>RMB</Text> <Text
+                                                  className='text-base font-bold'
+                                                >{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                             </View>
                                         </View>
                                     }
                                     {item.state == 3 &&
-                                        <View className={'text-sm'}>
-                                            落槌价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base font-bold'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                        <View className='text-sm'>
+                                            落槌价 <Text className='text-red-500'>RMB</Text> <Text
+                                              className='text-base font-bold'
+                                            >{numeral(item.dealPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 4 &&
-                                        <View className={'text-sm'}>
+                                        <View className='text-sm'>
                                             流拍
                                         </View>
                                     }
                                 </View>
-                                <View className={'flex items-center justify-center pr-4'}>
-                                    {item.state == 1 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
-                                    {item.state == 0 && <Text className={'text-gray-600'}>未开始</Text>}
-                                    {item.state == 2 && <Text className={'text-gray-600'}>已结束</Text>}
-                                    {item.state == 3 && <Text className={'text-green-600 font-bold'}>成交</Text>}
-                                    {item.state == 4 && <Text className={'text-gray-600'}>流拍</Text>}
+                                <View className='flex items-center justify-center pr-4'>
+                                    {item.state == 1 && <Text className='text-indigo-600 font-bold'>进行中</Text>}
+                                    {item.state == 0 && <Text className='text-gray-600'>未开始</Text>}
+                                    {item.state == 2 && <Text className='text-gray-600'>已结束</Text>}
+                                    {item.state == 3 && <Text className='text-green-600 font-bold'>成交</Text>}
+                                    {item.state == 4 && <Text className='text-gray-600'>流拍</Text>}
                                 </View>
                             </Navigator>
                         );
                     })}
                 </View>
-                {goodsList.length == 0 && <NoData/>}
+                {goodsList.length == 0 && <NoData />}
                 {/*{goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}*/}
-                <View style={{height: Taro.pxTransform(124)}}/>
-                <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                      style={{paddingBottom: safeBottom}}>
+                <View style={{height: Taro.pxTransform(124)}} />
+                <View className='bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'
+                  style={{paddingBottom: safeBottom}}
+                >
                     {detail.state == 0 &&
-                        <Button disabled={true} className={'btn btn-info w-56'}>
+                        <Button disabled className='btn btn-info w-56'>
                             <View>直播尚未开始</View>
                         </Button>
                     }
                     {detail.state == 1 &&
-                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className={'btn btn-success w-56'}>
+                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className='btn btn-success w-56'>
                             <View>直播中，点击观看</View>
                         </Button>
                     }
                     {detail.state == 2 &&
-                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?id=${detail.id}`})} className={'btn btn-primary w-56'}>
+                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?id=${detail.id}`})} className='btn btn-primary w-56'>
                             <View>直播已结束，观看回放</View>
                         </Button>
                     }

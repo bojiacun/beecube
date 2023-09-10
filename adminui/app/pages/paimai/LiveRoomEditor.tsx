@@ -23,6 +23,7 @@ import DescListConfiger from "~/pages/paimai/DescListConfiger";
 
 const FormSchema = Yup.object().shape({
     title: Yup.string().required('必填字段'),
+    address: Yup.string().required('必填字段'),
     startTime: Yup.string().required('必填字段'),
     streamLayout: Yup.number().required('必填字段'),
     endTime: Yup.string().required('必填字段'),
@@ -82,6 +83,7 @@ const LiveRoomEditor = (props: any) => {
                                     </FormGroup>
                                     <BootstrapInput label={'保证金'} name={'deposit'} placeholder={'保证金（元）'}/>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
+                                    <BootstrapInput label={'地址'} name={'address'}/>
                                     <BootstrapDateTime label={'开始时间'} name={'startTime'} showTime={true}/>
                                     <BootstrapDateTime label={'结束时间'} name={'endTime'} showTime={true} disabled={model?.id} isClearable={!model?.id} />
                                     <BootstrapInput label={'主播ID'} name={'mainAnchor'} placeholder={'主播的用户ID'}/>
