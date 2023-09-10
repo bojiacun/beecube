@@ -90,7 +90,9 @@ public class LiveRoom {
 	private String subAnchorAvatar;
 	private String subAnchorName;
 
-
+	@Excel(name = "加价幅度配置", width = 15)
+	@ApiModelProperty(value = "加价幅度配置")
+	private java.lang.String uprange;
 	@TableField(exist = false)
 	private List<LiveRoomStream> streams;
 }

@@ -122,6 +122,11 @@ public class AppApiController {
         return appService.list(queryWrapper);
     }
 
+    @GetMapping("/members")
+    public List<AppMember> allMemberList() {
+        return appMemberService.list();
+    }
+
     @GetMapping("/getMemberById")
     public AppMember queryAppMember(@RequestParam("id") String id) {
         return appMemberService.getById(id);
