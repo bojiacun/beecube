@@ -27,6 +27,7 @@ import cn.winkt.modules.paimai.vo.AppConfigItemVO;
 import cn.winkt.modules.paimai.vo.AppTencentConfigVO;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.map.CompositeMap;
 import org.apache.commons.lang3.StringUtils;
@@ -292,6 +293,13 @@ public class LiveRoomController extends JeecgController<LiveRoom, ILiveRoomServi
 		}
 		if(liveRoom.getEndTime().before(liveRoom.getStartTime())) {
 			throw new JeecgBootException("开始时间不得在结束时间之后");
+		}
+		//专场修改出价配置则更新专场下所有拍品
+		if(StringUtils.isNotEmpty(liveRoom.getUprange())) {
+			LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
+			updateWrapper.set(Goods::getUprange, liveRoom.getUprange());
+			updateWrapper.eq(Goods::getRoomId, liveRoom.getId());
+			goodsService.update(updateWrapper);
 		}
 		liveRoomService.updateById(liveRoom);
 		return Result.OK("编辑成功!");

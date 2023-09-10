@@ -235,6 +235,9 @@ public class GoodsController extends JeecgController<Goods, IGoodsService> {
             goods.setEndTime(liveRoom.getEndTime());
             goods.setActualEndTime(liveRoom.getEndTime());
             goods.setDeposit(liveRoom.getDeposit());
+            if(StringUtils.isNotEmpty(liveRoom.getUprange()) && StringUtils.isEmpty(goods.getUprange())) {
+                goods.setUprange(liveRoom.getUprange());
+            }
         }
         //查询商品名称是否重复
         LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
