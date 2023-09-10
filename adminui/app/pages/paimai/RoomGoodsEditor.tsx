@@ -32,7 +32,6 @@ const RoomGoodsEditor = (props: any) => {
     const GoodsSchema = Yup.object().shape({
         title: Yup.string().required('必填字段'),
         startPrice: Yup.number().required('必填字段'),
-        uprange: Yup.string().required('必填字段'),
         images: Yup.string().required('必填字段'),
         classId: Yup.number().required('必填字段'),
         commission: Yup.number().nullable().integer().default(0),
