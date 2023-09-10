@@ -44,6 +44,7 @@ export default class Index extends Component<any, any> {
     constructor(props) {
         super(props);
         this.noticeMe = this.noticeMe.bind(this);
+        this.payDeposit = this.payDeposit.bind(this);
         this.onMessageReceived = this.onMessageReceived.bind(this);
     }
 
@@ -184,9 +185,78 @@ export default class Index extends Component<any, any> {
         EventBus.unregister(EventType.onMessageData, this.onMessageReceived);
     }
 
+    async payDeposit() {
+        const {preOffered} = this.state;
+        if(!preOffered) {
+            let checkResult = await request.get('/paimai/api/members/check');
+            if (checkResult.data.result == 0) {
+                return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
+                    Taro.navigateTo({url: '/pages/my/profile'}).then();
+                });
+            }
+            else if(checkResult.data.result == -1) {
+                return utils.showMessage("请完成实名认证", function () {
+                    Taro.navigateTo({url: '/pages/my/realauth'}).then();
+                });
+            }
+            this.setState({preOffered: true});
+        }
+        this.setState({posting: true});
+        //支付宝保证金
+        request.post('/paimai/api/members/deposits/liveroom', null, {params: {id: this.state.id}}).then(res => {
+            let data = res.data.result;
+            data.package = data.packageValue;
+            Taro.requestPayment(data).then(() => {
+                //支付已经完成，提醒支付成功并返回上一页面
+                Taro.showToast({title: '支付成功', duration: 2000}).then(() => {
+                    let detail = this.state.detail;
+                    detail.deposited = true;
+                    this.setState({detail: detail});
+                });
+                this.setState({posting: false});
+            }).catch(() => this.setState({posting: false}));
+        })
+    }
+    renderButton(safeBottom: number) {
+        const {deposited, detail} = this.state;
 
+        if(!deposited && detail.state < 2) {
+            return (
+                <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
+                      style={{paddingBottom: safeBottom}}>
+                    <View>
+                        <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                            <View>交保证金</View>
+                            <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
+                        </Button>
+                    </View>
+                </View>
+            );
+        }
+        return (
+            <View className='bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'
+                  style={{paddingBottom: safeBottom}}
+            >
+                {detail.state == 0 &&
+                    <Button disabled className='btn btn-info w-56'>
+                        <View>直播尚未开始</View>
+                    </Button>
+                }
+                {detail.state == 1 &&
+                    <Button onClick={() => Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className='btn btn-success w-56'>
+                        <View>直播中，点击观看</View>
+                    </Button>
+                }
+                {detail.state == 2 &&
+                    <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?id=${detail.id}`})} className='btn btn-primary w-56'>
+                        <View>直播已结束，观看回放</View>
+                    </Button>
+                }
+            </View>
+        );
+    }
     render() {
-        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
+        const {detail, goodsList, noMore, loadingMore} = this.state;
         const {systemInfo} = this.props;
 
         if (!detail || goodsList === null) return <PageLoading />;
@@ -277,26 +347,7 @@ export default class Index extends Component<any, any> {
                 {goodsList.length == 0 && <NoData />}
                 {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
                 <View style={{height: Taro.pxTransform(124)}} />
-
-                <View className='bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'
-                  style={{paddingBottom: safeBottom}}
-                >
-                    {detail.state == 0 &&
-                        <Button disabled className='btn btn-info w-56'>
-                            <View>直播尚未开始</View>
-                        </Button>
-                    }
-                    {detail.state == 1 &&
-                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/room?roomId=${detail.id}`})} className='btn btn-success w-56'>
-                            <View>直播中，点击观看</View>
-                        </Button>
-                    }
-                    {detail.state == 2 &&
-                        <Button onClick={() => Taro.navigateTo({url: `/live/pages/history?id=${detail.id}`})} className='btn btn-primary w-56'>
-                            <View>直播已结束，观看回放</View>
-                        </Button>
-                    }
-                </View>
+                {this.renderButton(safeBottom)}
             </PageLayout>
         );
     }
