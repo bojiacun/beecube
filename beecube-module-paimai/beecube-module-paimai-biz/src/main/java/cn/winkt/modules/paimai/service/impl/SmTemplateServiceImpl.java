@@ -17,9 +17,11 @@ import cn.winkt.modules.paimai.service.IGoodsCommonDescService;
 import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.ISmTemplateService;
 import cn.winkt.modules.paimai.vo.GoodsSettings;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jodd.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.config.AppContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -103,17 +105,20 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
 //            log.error(e.getMessage(), e);
 //        }
         String templateStr = smTemplate.getVars().replaceAll("\\{url\\}", url);
-        String[] sendPhoneNumbers = members.stream().map(AppMemberVO::getPhone).collect(Collectors.joining(",")).split(",");
-        if (sendPhoneNumbers.length > 0) {
+        List<String> sendPhoneNumbers = members.stream().map(AppMemberVO::getPhone).collect(Collectors.toList());
+        if (!sendPhoneNumbers.isEmpty()) {
             SmsSend smsSend = new SmsSend();
             smsSend.setTemplateType("3");
-            smsSend.setPhoneNumberSet(sendPhoneNumbers);
+            smsSend.setPhoneNumberSet(sendPhoneNumbers.toArray(new String[0]));
             smsSend.setTemplateId(smTemplate.getTemplateId());
             smsSend.setTemplateParamSet(templateStr.split(","));
             smsSend.setSignName(goodsSettings.getLianluSignName());
 
             try {
-                smsSend.TemplateSend(credential, smsSend);
+                JSONObject res = smsSend.TemplateSend(credential, smsSend);
+                if(res.getInteger("status") > 0) {
+                    throw new JeecgBootException(res.getString("message"));
+                }
                 for (AppMemberVO appMemberVO : members) {
                     SmTemplateRecord smTemplateRecord = new SmTemplateRecord();
                     smTemplateRecord.setTemplateId(id);

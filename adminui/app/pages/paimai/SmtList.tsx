@@ -20,6 +20,7 @@ const SmtList = (props: any) => {
     const searchFetcher = useFetcher();
     const editFetcher = useFetcher();
     const deleteFetcher = useFetcher();
+    const sendFetcher= useFetcher();
 
     const loadData = () => {
         searchFetcher.submit(searchState, {method: 'get'});
@@ -54,7 +55,17 @@ const SmtList = (props: any) => {
             }
         }
     }, [deleteFetcher.state]);
-
+    useEffect(() => {
+        if (getFetcherState(sendFetcher) === FetcherState.DONE) {
+            if (sendFetcher.data.success) {
+                stopPageLoading();
+                showToastSuccess('发送成功');
+                searchFetcher.submit(searchState, {method: 'get'});
+            } else {
+                showToastError(sendFetcher.data.message);
+            }
+        }
+    }, [sendFetcher.state]);
     const handleOnAction = (row: any, e: any) => {
         switch (e) {
             case 'records':
@@ -75,7 +86,7 @@ const SmtList = (props: any) => {
                 //发送按钮
                 showDeleteAlert(function () {
                     startPageLoading();
-                    deleteFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/smts/send?id=${row.id}`, replace: true});
+                    sendFetcher.submit({id: row.id}, {method: 'put', action: `/paimai/smts/send?id=${row.id}`, replace: true});
                 }, '确定要群发短信吗？','群发短信');
                 break;
         }
