@@ -112,7 +112,9 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
             smsSend.setPhoneNumberSet(sendPhoneNumbers.toArray(new String[0]));
             smsSend.setTemplateId(smTemplate.getTemplateId());
             smsSend.setTemplateParamSet(templateStr.split(","));
-            smsSend.setSignName(goodsSettings.getLianluSignName());
+            if(StringUtils.isNotEmpty(goodsSettings.getLianluSignName())) {
+                smsSend.setSignName(goodsSettings.getLianluSignName());
+            }
 
             try {
                 JSONObject res = smsSend.TemplateSend(credential, smsSend);
