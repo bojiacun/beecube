@@ -119,6 +119,7 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
                 if(res.getInteger("status") > 0) {
                     throw new JeecgBootException(res.getString("message"));
                 }
+                smTemplate.setLastErrorMessage("");
                 for (AppMemberVO appMemberVO : members) {
                     SmTemplateRecord smTemplateRecord = new SmTemplateRecord();
                     smTemplateRecord.setTemplateId(id);
