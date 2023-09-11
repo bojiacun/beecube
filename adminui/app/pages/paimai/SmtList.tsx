@@ -128,6 +128,11 @@ const SmtList = (props: any) => {
             dataField: 'ruleMember_dictText',
         },
         {
+            text: '最后一次错误信息',
+            dataField: 'lastErrorMessage',
+            headerStyle: {width: 300},
+        },
+        {
             text: '操作',
             dataField: 'operation',
             headerStyle: {width: 200},

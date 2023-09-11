@@ -69,4 +69,6 @@ public class SmTemplate {
 	private java.lang.String appId;
 
 	private String url;
+
+	private String lastErrorMessage;
 }

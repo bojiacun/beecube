@@ -129,9 +129,12 @@ public class SmTemplateServiceImpl extends ServiceImpl<SmTemplateMapper, SmTempl
                     smTemplateRecordMapper.insert(smTemplateRecord);
                 }
             } catch (Exception e) {
+                smTemplate.setLastErrorMessage(e.getMessage());
                 log.error(e.getMessage(), e);
             }
-
+            finally {
+                smTemplateMapper.updateById(smTemplate);
+            }
         }
     }
 }
