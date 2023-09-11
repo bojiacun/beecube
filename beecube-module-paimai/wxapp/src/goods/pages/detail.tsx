@@ -367,7 +367,20 @@ export default class Index extends Component<any, any> {
                 priceMap.push(startPrice);
                 recycleIndex++;
             }
-            let currentPriceMapIndex = _.indexOf(priceMap, currentPrice);
+            let currentPriceMapIndex = 0;
+            for(let i = 0; i < priceMap.length; i++) {
+                if(priceMap[i] == currentPrice) {
+                    currentPriceMapIndex = i;
+                    break;
+                }
+                else if(priceMap[i] > currentPrice) {
+                    currentPriceMapIndex = i-1;
+                    break;
+                }
+            }
+            if(currentPriceMapIndex < 1) {
+                currentPriceMapIndex = 1;
+            }
             prevPrice = priceMap[currentPriceMapIndex-1];
         }
         update && this.setState({nextPrice: prevPrice, goods: goods});
@@ -420,7 +433,17 @@ export default class Index extends Component<any, any> {
                 priceMap.push(startPrice);
                 recycleIndex++;
             }
-            let currentPriceMapIndex = _.indexOf(priceMap, currentPrice);
+            let currentPriceMapIndex = 0;
+            for(let i = 0; i < priceMap.length; i++) {
+                if(priceMap[i] == currentPrice) {
+                    currentPriceMapIndex = i;
+                    break;
+                }
+                else if(priceMap[i] > currentPrice) {
+                    currentPriceMapIndex = i-1;
+                    break;
+                }
+            }
             nextPrice = priceMap[currentPriceMapIndex+1];
         }
         update && this.setState({nextPrice: nextPrice, goods: goods});
