@@ -250,6 +250,10 @@ public class AppWxOpenController {
         message.setItemList(itemList);
         WxOpenMaSubmitAuditResult result = wxOpenMaService.submitAudit(message);
 
+        log.info(String.format("发布审核的返回信息为 %s,%s", result.getErrcode(), result.getErrmsg()));
+        if(!result.isSuccess()) {
+            throw new JeecgBootException(result.getErrcode()+":"+result.getErrmsg());
+        }
         //更新本地发布记录
         publish.setAuditId(result.getAuditId());
         publish.setStatus(1);
