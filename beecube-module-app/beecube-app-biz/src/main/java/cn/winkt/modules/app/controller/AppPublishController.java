@@ -197,7 +197,7 @@ public class AppPublishController extends JeecgController<AppPublish, IAppPublis
             } else if (result.getStatus() == 0) {
                 publish.setStatus(2);
             }
-            log.debug("微信返回的审核状态为 {}", JSONObject.toJSONString(result));
+            log.info("微信返回的审核状态为 {}", JSONObject.toJSONString(result));
             appPublishService.updateById(publish);
         }
 
