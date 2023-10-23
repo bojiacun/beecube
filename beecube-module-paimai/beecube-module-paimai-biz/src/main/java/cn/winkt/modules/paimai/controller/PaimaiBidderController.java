@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="竞买人")
 @RestController
-@RequestMapping("/bidder")
+@RequestMapping("/bidders")
 public class PaimaiBidderController extends JeecgController<PaimaiBidder, IPaimaiBidderService> {
 	@Autowired
 	private IPaimaiBidderService paimaiBidderService;
