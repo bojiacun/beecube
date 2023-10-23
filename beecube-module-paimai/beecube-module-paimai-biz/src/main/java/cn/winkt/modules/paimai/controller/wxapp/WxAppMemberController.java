@@ -600,7 +600,7 @@ public class WxAppMemberController {
         AppMemberVO member = appApi.getMemberById(loginUser.getId());
         LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
         bidderLambdaQueryWrapper.eq(PaimaiBidder::getRoomId, id);
-        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
         if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
             return Result.OK(true);
         }
@@ -635,7 +635,7 @@ public class WxAppMemberController {
         AppMemberVO member = appApi.getMemberById(loginUser.getId());
         LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
         bidderLambdaQueryWrapper.eq(PaimaiBidder::getPerformanceId, id);
-        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
         if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
             return Result.OK(true);
         }
@@ -665,7 +665,7 @@ public class WxAppMemberController {
         AppMemberVO member = appApi.getMemberById(loginUser.getId());
         LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
         bidderLambdaQueryWrapper.eq(PaimaiBidder::getGoodsId, id);
-        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
         if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
             return Result.OK(true);
         }

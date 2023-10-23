@@ -6,6 +6,7 @@ import ReactSelectThemed from "~/components/react-select-themed/ReactSelectTheme
 import BootstrapTable, {ColumnDescription} from "react-bootstrap-table-next";
 import SinglePagination from "~/components/pagination/SinglePagination";
 import BankEditor from "~/pages/paimai/BankEditor";
+import BidderEditor from "~/pages/paimai/BidderEditor";
 
 
 const BidderList = (props: any) => {
@@ -167,7 +168,7 @@ const BidderList = (props: any) => {
                     </Row>
                 </div>
             </Card>
-            {editModal && <BankEditor model={editModal} onHide={()=>{
+            {editModal && <BidderEditor model={editModal} onHide={()=>{
                 setEditModal(null);
                 loadData();
             }} />}
