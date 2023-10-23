@@ -125,6 +125,9 @@ public class WxAppMemberController {
     @Resource
     IPerformanceInviteService performanceInviteService;
 
+    @Resource
+    private IPaimaiBidderService paimaiBidderService;
+
 
     @GetMapping(value = "/orders/latest")
     public Result<GoodsOrder> latestGoodsOrder(@RequestParam Integer type) {
@@ -594,6 +597,15 @@ public class WxAppMemberController {
         if (loginUser == null) {
             return Result.OK(false);
         }
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getRoomId, id);
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+            return Result.OK(true);
+        }
+
+
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsDeposit::getRoomId, id);
@@ -620,6 +632,14 @@ public class WxAppMemberController {
         if (loginUser == null) {
             return Result.OK(false);
         }
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPerformanceId, id);
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+            return Result.OK(true);
+        }
+
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
         queryWrapper.eq(GoodsDeposit::getPerformanceId, id);
@@ -642,6 +662,14 @@ public class WxAppMemberController {
         if (loginUser == null) {
             return Result.OK(false);
         }
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getGoodsId, id);
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getCardCode, member.getIdCard());
+        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+            return Result.OK(true);
+        }
+
         Goods goods = goodsService.getById(id);
         return Result.OK(goodsService.checkDeposite(loginUser, goods));
     }

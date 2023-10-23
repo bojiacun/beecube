@@ -60,6 +60,7 @@ public class PaimaiBidder {
 	@Excel(name = "performanceId", width = 15)
     @ApiModelProperty(value = "performanceId")
 	private java.lang.String performanceId;
+	private java.lang.String roomId;
 	/**goodsId*/
 	@Excel(name = "goodsId", width = 15)
     @ApiModelProperty(value = "goodsId")
