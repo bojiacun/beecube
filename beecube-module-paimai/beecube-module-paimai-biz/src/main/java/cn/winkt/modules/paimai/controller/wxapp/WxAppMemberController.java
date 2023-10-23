@@ -673,14 +673,14 @@ public class WxAppMemberController {
         Goods goods = goodsService.getById(id);
         //如果拍品在专场或者直播间下面，则判断专场和直播间是否存在竞买人
         bidderLambdaQueryWrapper.clear();
-        if(!StringUtils.isNotEmpty(goods.getRoomId())) {
+        if(StringUtils.isNotEmpty(goods.getRoomId())) {
             bidderLambdaQueryWrapper.eq(PaimaiBidder::getRoomId, goods.getRoomId());
             bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
             if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
                 return Result.OK(true);
             }
         }
-        else if(!StringUtils.isNotEmpty(goods.getPerformanceId())) {
+        else if(StringUtils.isNotEmpty(goods.getPerformanceId())) {
             bidderLambdaQueryWrapper.eq(PaimaiBidder::getPerformanceId, goods.getPerformanceId());
             bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
             if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
