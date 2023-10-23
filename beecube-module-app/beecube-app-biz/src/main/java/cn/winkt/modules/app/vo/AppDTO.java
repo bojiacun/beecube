@@ -21,6 +21,7 @@ public class AppDTO {
 
     private String moduleName;
     private Integer maxRoomUserCount;
+    private Integer userCenterLayout;
 
     private java.lang.String logo;
 

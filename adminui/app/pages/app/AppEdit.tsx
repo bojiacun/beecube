@@ -4,8 +4,6 @@ import {emptyDropdownIndicator, emptyIndicatorSeparator, handleSaveResult, showT
 import {useFetcher} from "@remix-run/react";
 import * as Yup from "yup";
 import {useEffect, useRef, useState} from "react";
-import ReactSelectThemed from "~/components/react-select-themed/ReactSelectThemed";
-import PositionListSelector from "~/pages/system/roles/PositionListSelector";
 //@ts-ignore
 import _ from 'lodash';
 import DepartmentTreeSelector from "~/pages/system/roles/DepartmentTreeSelector";
