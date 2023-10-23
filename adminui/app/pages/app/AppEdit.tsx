@@ -104,6 +104,7 @@ const AppEdit = (props: any) => {
                                             <DateTimePicker inputName={'endTime'} />
                                         </FormGroup>
                                         <BootstrapInput label={'最大直播用户'}  name={'maxRoomUserCount'} />
+                                        <BootstrapInput label={'个人中心样式'}  name={'userCenterLayout'} />
                                         <BootstrapInput label={'备注'} name={'description'} rows={3} as={'textarea'} />
                                         <BootstrapRadioGroup  options={[{label: '正常', value: '1'},{label: '禁用', value: '0'}]} name={'status'} label={'状态'} />
                                     </Modal.Body>

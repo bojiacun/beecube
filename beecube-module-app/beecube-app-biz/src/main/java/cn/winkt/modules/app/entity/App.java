@@ -56,6 +56,8 @@ public class App {
 
 	private Integer maxRoomUserCount;
 
+	private Integer userCenterLayout;
+
 	@TableField(updateStrategy = FieldStrategy.IGNORED)
 	private String authorizerAppid;
 
