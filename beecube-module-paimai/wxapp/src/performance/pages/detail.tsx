@@ -137,7 +137,7 @@ export default class Index extends Component<any, any> {
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
-        request.get('/api/app/'+APP_ID).then(res=>{
+        request.get('/app/api/app/'+APP_ID).then(res=>{
             let app = res.data.result;
             if(app.userCenterLayout == 1) {
                 Taro.redirectTo({url: 'detail2?id='+options.id}).then();
