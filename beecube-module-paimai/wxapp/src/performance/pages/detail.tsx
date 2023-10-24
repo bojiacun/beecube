@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request from "../../lib/request";
+import request, {APP_ID} from "../../lib/request";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
@@ -137,6 +137,13 @@ export default class Index extends Component<any, any> {
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
+        request.get('/api/app/'+APP_ID).then(res=>{
+            let app = res.data.result;
+            if(app.userCenterLayout == 1) {
+                Taro.redirectTo({url: 'detail2?id='+options.id}).then();
+            }
+            this.setState({app});
+        })
     }
 
     onReachBottom() {
@@ -270,12 +277,13 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, message, deposited} = this.state;
+        const {detail, goodsList, noMore, loadingMore, message, deposited, app} = this.state;
         const {systemInfo} = this.props;
 
-        if (!detail || goodsList === null) return <PageLoading />;
+        if (!detail || goodsList === null || !app) return <PageLoading />;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
+
         return (
             <PageLayout statusBarProps={{title: '限时拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
                 <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>

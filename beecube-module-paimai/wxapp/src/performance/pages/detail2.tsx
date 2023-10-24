@@ -1,6 +1,6 @@
 import {Component} from "react";
 import PageLayout from "../../layouts/PageLayout";
-import request from "../../lib/request";
+import request, {APP_ID} from "../../lib/request";
 import PageLoading from "../../components/pageloading";
 import FallbackImage from "../../components/FallbackImage";
 import utils from "../../lib/utils";
