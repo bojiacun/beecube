@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 import PageLayout from "../../layouts/PageLayout";
 import avatar from '../../assets/images/avatar.png';
 import FallbackImage from "../../components/FallbackImage";
-import request from "../../lib/request";
+import request, {APP_ID} from "../../lib/request";
 import {setUserInfo} from "../../store/actions";
 import PageLoading from "../../components/pageloading";
 
@@ -250,7 +250,8 @@ const UserCenterLayoutDefault = (props:any) => {
 })
 export default class Index extends Component<PropsWithChildren<any>> {
     state: any = {
-        badges: null
+        badges: null,
+        app: null,
     }
 
     constructor(props) {
@@ -260,7 +261,9 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
 
     componentDidMount() {
-
+        request.get('/app/api/app/'+APP_ID).then(res=>{
+            this.setState({app: res.data.result});
+        })
     }
 
     componentWillUnmount() {
@@ -288,11 +291,11 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     render() {
-        const {systemInfo, context, settings} = this.props;
+        const {systemInfo, context, settings, app} = this.props;
         const {userInfo} = context;
         const {badges} = this.state;
 
-        if (userInfo == null || !settings) return <PageLoading />;
+        if (userInfo == null || !settings || !app) return <PageLoading />;
         // 获取距上
         const barTop = systemInfo.statusBarHeight;
         const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
@@ -302,7 +305,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
         // @ts-ignore
         return (
             <PageLayout showTabBar showStatusBar={false} copyright={context.copyright}>
-                {settings.userCenterLayout == 1 ?
+                {app.userCenterLayout == 1 ?
                     <UserCenterLayout1 barHeight={barHeight} barTop={barTop} settings={settings} userInfo={userInfo} badges={badges} openWxServiceChat={this.openWxServiceChat} /> :
                     <UserCenterLayoutDefault barHeight={barHeight} barTop={barTop} settings={settings} userInfo={userInfo} badges={badges} openWxServiceChat={this.openWxServiceChat} />
                 }
