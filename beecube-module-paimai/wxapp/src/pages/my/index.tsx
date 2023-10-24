@@ -19,7 +19,7 @@ const UserCenterLayout1 = (props:any) => {
     return (
         <>
             <View
-              className={classNames('text-white flex flex-col p-4', styles.userProfile)}
+              className={classNames('text-white flex flex-col p-4', styles.userProfile2)}
               style={{paddingTop: barTop + barHeight}}
             >
                 <View className={classNames('flex items-center justify-between space-x-2 mt-4')}>
@@ -36,34 +36,34 @@ const UserCenterLayout1 = (props:any) => {
                         <Text className='iconfont icon-31shezhi' style={{fontSize: 24}} />
                     </Navigator>
                 </View>
-                <View className='grid grid-cols-4 my-4 divide-x divide-red-900'>
-                    <View className='text-center'>
-                        <Navigator className='w-full' url='coupons'>
-                            <View className='text-xl'>{badges?.ticketCount}</View>
-                            <View>优惠券</View>
-                        </Navigator>
-                    </View>
-                    <View className='text-center'>
-                        <Navigator url='wallet'>
-                            <View className='text-xl'>{numeral(userInfo?.money).format('0,0.00')}</View>
-                            <View>我的钱包</View>
-                        </Navigator>
-                    </View>
-                    <View className='text-center'>
-                        <Navigator url='follows'>
-                            <View className='text-xl'>{badges?.goodsFollowCount}</View>
-                            <View>收藏</View>
-                        </Navigator>
-                    </View>
-                    <View className='text-center'>
-                        <Navigator url='views'>
-                            <View className='text-xl'>{badges?.goodsViewCount}</View>
-                            <View>浏览足迹</View>
-                        </Navigator>
-                    </View>
-                </View>
-                <View className='rounded-lg bg-white mt-2 py-4 text-black'>
-                    {/*<View className='item-title font-bold text-lg ml-4 mb-4'>我的参拍</View>*/}
+                {/*<View className='grid grid-cols-4 my-4 divide-x divide-red-900'>*/}
+                {/*    <View className='text-center'>*/}
+                {/*        <Navigator className='w-full' url='coupons'>*/}
+                {/*            <View className='text-xl'>{badges?.ticketCount}</View>*/}
+                {/*            <View>优惠券</View>*/}
+                {/*        </Navigator>*/}
+                {/*    </View>*/}
+                {/*    <View className='text-center'>*/}
+                {/*        <Navigator url='wallet'>*/}
+                {/*            <View className='text-xl'>{numeral(userInfo?.money).format('0,0.00')}</View>*/}
+                {/*            <View>我的钱包</View>*/}
+                {/*        </Navigator>*/}
+                {/*    </View>*/}
+                {/*    <View className='text-center'>*/}
+                {/*        <Navigator url='follows'>*/}
+                {/*            <View className='text-xl'>{badges?.goodsFollowCount}</View>*/}
+                {/*            <View>收藏</View>*/}
+                {/*        </Navigator>*/}
+                {/*    </View>*/}
+                {/*    <View className='text-center'>*/}
+                {/*        <Navigator url='views'>*/}
+                {/*            <View className='text-xl'>{badges?.goodsViewCount}</View>*/}
+                {/*            <View>浏览足迹</View>*/}
+                {/*        </Navigator>*/}
+                {/*    </View>*/}
+                {/*</View>*/}
+                <View className='rounded-lg bg-white mt-4 py-4 text-black'>
+                    <View className='font-bold text-lg ml-4 mb-4'>我的参拍</View>
                     <View className='grid grid-cols-5 gap-1 text-center'>
                         <Navigator url='goods?tab=0' className='relative'>
                             <View className='iconfont2 icon2-jinhangzhong' style={{fontSize: 24}} />
