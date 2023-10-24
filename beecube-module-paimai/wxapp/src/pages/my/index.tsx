@@ -19,21 +19,21 @@ const UserCenterLayout1 = (props: any) => {
     return (
         <>
             <View
-                className={classNames('text-white flex flex-col p-4', styles.userProfile2)}
-                style={{paddingTop: barTop + barHeight}}
+              className={classNames('text-white flex flex-col p-4', styles.userProfile2)}
+              style={{paddingTop: barTop + barHeight}}
             >
                 <View className={classNames('flex items-center justify-between space-x-2 mt-4')}>
                     <View className='flex items-center space-x-2'>
                         <FallbackImage className='rounded-full' src={userInfo?.avatar} errorImage={avatar}
-                                       style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}
+                          style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}
                         />
                         <View className='space-y-1 flex flex-col'>
                             <View className='text-lg'>{userInfo?.realname || userInfo?.nickname || '微信用户'}</View>
-                            <View className='text-yellow-400'><Text className='iconfont icon-wodejifen1'/>我的积分：{userInfo?.score}</View>
+                            <View className='text-yellow-400'><Text className='iconfont icon-wodejifen1' />我的积分：{userInfo?.score}</View>
                         </View>
                     </View>
                     <Navigator url='profile' openType='navigate'>
-                        <Text className='iconfont icon-31shezhi' style={{fontSize: 24}}/>
+                        <Text className='iconfont icon-31shezhi' style={{fontSize: 24}} />
                     </Navigator>
                 </View>
 
@@ -41,23 +41,23 @@ const UserCenterLayout1 = (props: any) => {
                     <View className='font-bold text-lg ml-4 mb-4'>我的参拍</View>
                     <View className='grid grid-cols-5 gap-1 text-center'>
                         <Navigator url='goods?tab=0' className='relative'>
-                            <View className='iconpm iconpm-weikaishi' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-weikaishi' style={{fontSize: 24}} />
                             <View className='mt-2'>待开始</View>
                         </Navigator>
                         <Navigator url='goods?tab=1' className='relative'>
-                            <View className='iconpm iconpm-jinhangzhong' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-jinhangzhong' style={{fontSize: 24}} />
                             <View className='mt-2'>参拍中</View>
                         </Navigator>
                         <Navigator url='goods?tab=2' className='relative'>
-                            <View className='iconpm iconpm-daichuli' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-daichuli' style={{fontSize: 24}} />
                             <View className='mt-2'>已获拍</View>
                         </Navigator>
                         <Navigator url='goods?tab=3'>
-                            <View className='iconpm iconpm-yiquxiao' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-yiquxiao' style={{fontSize: 24}} />
                             <View className='mt-2'>未获拍</View>
                         </Navigator>
                         <Navigator url='deposits' className='border-l-1 border-gray-100'>
-                            <View className='iconpm iconpm-chengxinbaozhengjin' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-chengxinbaozhengjin' style={{fontSize: 24}} />
                             <View className='mt-2'>保证金</View>
                         </Navigator>
                     </View>
@@ -68,26 +68,26 @@ const UserCenterLayout1 = (props: any) => {
                 <View className='font-bold text-lg ml-4 text-black mb-4'>我的订单</View>
                 <View className='grid grid-cols-5 gap-1 text-center'>
                     <Navigator url='/order/pages/orders?status=0' className='relative'>
-                        <View className='iconpm iconpm-daijiesuan' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-daijiesuan' style={{fontSize: 24}} />
                         <View className='mt-2'>待结算</View>
                         {badges?.payCount ? <Text className='badge'>{badges.payCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=1' className='relative'>
-                        <View className='iconpm iconpm-31daifahuo' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-31daifahuo' style={{fontSize: 24}} />
                         <View className='mt-2'>待发货</View>
                         {badges?.deliveryCount ? <Text className='badge'>{badges.deliveryCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=2' className='relative'>
-                        <View className='iconpm iconpm-daishouhuo1' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-daishouhuo1' style={{fontSize: 24}} />
                         <View className='mt-2'>待收货</View>
                         {badges?.confirmDeliveryCount ? <Text className='badge'>{badges.confirmDeliveryCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=3'>
-                        <View className='iconpm iconpm-yiwancheng' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-yiwancheng' style={{fontSize: 24}} />
                         <View className='mt-2'>已完成</View>
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=4' className='border-l-1 border-gray-100'>
-                        <View className='iconpm iconpm-shouhou' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-shouhou' style={{fontSize: 24}} />
                         <View className='mt-2'>售后</View>
                     </Navigator>
                 </View>
@@ -121,7 +121,7 @@ const UserCenterLayout1 = (props: any) => {
                 {settings.myIndexAdv &&
                     <View className='overflow-hidden'>
                         <Navigator url={settings.myIndexAdvLink} className='block w-full h-full'>
-                            <Image src={settings.myIndexAdv} className='w-full h-full block' mode='widthFix'/>
+                            <Image src={settings.myIndexAdv} className='w-full h-full block' mode='widthFix' />
                         </Navigator>
                     </View>
                 }
@@ -130,15 +130,15 @@ const UserCenterLayout1 = (props: any) => {
             <View className='rounded-lg bg-white m-4 py-4 text-black'>
                 <View className='grid grid-cols-3 gap-1 text-center'>
                     <Navigator url='follows' className='relative'>
-                        <View className='iconpm iconpm-shoucang' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-shoucang' style={{fontSize: 24}} />
                         <View className='mt-2'>我的收藏</View>
                     </Navigator>
                     <Navigator url='/integral/member/center' className='relative'>
-                        <View className='iconpm iconpm-qiandao' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-qiandao' style={{fontSize: 24}} />
                         <View className='mt-2'>每日签到</View>
                     </Navigator>
                     <Navigator url='views' className='relative'>
-                        <View className='iconpm iconpm-lishijilu' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-lishijilu' style={{fontSize: 24}} />
                         <View className='mt-2'>浏览记录</View>
                     </Navigator>
                 </View>
@@ -147,15 +147,15 @@ const UserCenterLayout1 = (props: any) => {
             <View className='rounded-lg bg-white m-4 py-4 text-black'>
                 <View className='grid grid-cols-3 gap-1 text-center'>
                     <Navigator url='profile' className='relative'>
-                        <View className='iconpm iconpm-gerenziliao' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-gerenziliao' style={{fontSize: 24}} />
                         <View className='mt-2'>个人资料</View>
                     </Navigator>
                     <Navigator url='addresses' className='relative'>
-                        <View className='iconpm iconpm-dizhiguanli' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-dizhiguanli' style={{fontSize: 24}} />
                         <View className='mt-2'>地址管理</View>
                     </Navigator>
                     <Navigator url='/order/pages/taxs' className='relative'>
-                        <View className='iconpm iconpm-fapiaoguanli' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-fapiaoguanli' style={{fontSize: 24}} />
                         <View className='mt-2'>发票管理</View>
                     </Navigator>
                 </View>
@@ -164,22 +164,22 @@ const UserCenterLayout1 = (props: any) => {
             <View className='rounded-lg bg-white m-4 py-4 text-black'>
                 <View className='grid grid-cols-3 gap-1 text-center'>
                     <Navigator url='/performance/pages/invites' className='relative'>
-                        <View className='iconpm iconpm-yuyue' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-yuyue' style={{fontSize: 24}} />
                         <View className='mt-2'>预约参展</View>
                     </Navigator>
                     <Navigator url='/article/pages/helps' className='relative'>
-                        <View className='iconpm iconpm-bangzhuzhongxin' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-bangzhuzhongxin' style={{fontSize: 24}} />
                         <View className='mt-2'>帮助中心</View>
                     </Navigator>
                     {settings.wxServiceChatCorpId &&
                         <Button plain onClick={openWxServiceChat} className='flex flex-col items-center justify-between'>
-                            <View className='iconpm iconpm-lianxikefu' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-lianxikefu' style={{fontSize: 24}} />
                             <View>联系客服</View>
                         </Button>
                     }
                     {!settings.wxServiceChatCorpId &&
                         <Button plain openType='contact' className='flex flex-col items-center justify-between'>
-                            <View className='iconpm iconpm-lianxikefu' style={{fontSize: 24}}/>
+                            <View className='iconpm iconpm-lianxikefu' style={{fontSize: 24}} />
                             <View>联系客服</View>
                         </Button>
                     }
@@ -187,7 +187,7 @@ const UserCenterLayout1 = (props: any) => {
             </View>
             {settings.userCenterCopyRight &&
                 <View className='m-4 overflow-hidden'>
-                    <Image src={settings.userCenterCopyRight} className='w-full h-full block' mode='widthFix'/>
+                    <Image src={settings.userCenterCopyRight} className='w-full h-full block' mode='widthFix' />
                 </View>
             }
         </>
@@ -199,17 +199,17 @@ const UserCenterLayoutDefault = (props: any) => {
     return (
         <>
             <View
-                className={classNames('text-white flex flex-col p-4', styles.userProfile)}
-                style={{paddingTop: barTop + barHeight}}
+              className={classNames('text-white flex flex-col p-4', styles.userProfile)}
+              style={{paddingTop: barTop + barHeight}}
             >
                 <View className={classNames('flex items-center justify-between space-x-2 mt-4')}>
                     <View className='flex items-center space-x-2'>
                         <FallbackImage className='rounded-full' src={userInfo?.avatar} errorImage={avatar}
-                                       style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}
+                          style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}
                         />
                         <View className='space-y-1 flex flex-col'>
                             <View className='text-lg'>{userInfo?.realname || userInfo?.nickname || '微信用户'}</View>
-                            <View className='text-yellow-400'><Text className='iconfont icon-wodejifen1'/>我的积分：{userInfo?.score}</View>
+                            <View className='text-yellow-400'><Text className='iconfont icon-wodejifen1' />我的积分：{userInfo?.score}</View>
                         </View>
                     </View>
                     <Navigator url='/integral/member/center' openType='navigate'>
@@ -217,7 +217,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <Text>
                                 每日签到
                             </Text>
-                            <Text className='iconfont icon-youjiantou_huaban'/>
+                            <Text className='iconfont icon-youjiantou_huaban' />
                         </TaroifyButton>
                     </Navigator>
                 </View>
@@ -251,23 +251,23 @@ const UserCenterLayoutDefault = (props: any) => {
                     <View className='item-title font-bold text-lg ml-4 mb-4'>我的参拍</View>
                     <View className='grid grid-cols-5 gap-1 text-center'>
                         <Navigator url='goods?tab=0' className='relative'>
-                            <View className='iconfont2 icon2-jinhangzhong' style={{fontSize: 24}}/>
+                            <View className='iconfont2 icon2-jinhangzhong' style={{fontSize: 24}} />
                             <View className='mt-2'>待开始</View>
                         </Navigator>
                         <Navigator url='goods?tab=1' className='relative'>
-                            <View className='iconfont2 icon2-canpaizhong' style={{fontSize: 24}}/>
+                            <View className='iconfont2 icon2-canpaizhong' style={{fontSize: 24}} />
                             <View className='mt-2'>参拍中</View>
                         </Navigator>
                         <Navigator url='goods?tab=2' className='relative'>
-                            <View className='iconfont2 icon2-yihuopai' style={{fontSize: 24}}/>
+                            <View className='iconfont2 icon2-yihuopai' style={{fontSize: 24}} />
                             <View className='mt-2'>已获拍</View>
                         </Navigator>
                         <Navigator url='goods?tab=3'>
-                            <View className='iconfont2 icon2-weihuopai' style={{fontSize: 24}}/>
+                            <View className='iconfont2 icon2-weihuopai' style={{fontSize: 24}} />
                             <View className='mt-2'>未获拍</View>
                         </Navigator>
                         <Navigator url='deposits' className='border-l-1 border-gray-100'>
-                            <View className='iconfont2 icon2-baozhengjin' style={{fontSize: 24}}/>
+                            <View className='iconfont2 icon2-baozhengjin' style={{fontSize: 24}} />
                             <View className='mt-2'>保证金</View>
                         </Navigator>
                     </View>
@@ -278,26 +278,26 @@ const UserCenterLayoutDefault = (props: any) => {
                 <View className='item-title font-bold text-lg ml-4 text-black mb-4'>我的订单</View>
                 <View className='grid grid-cols-5 gap-1 text-center'>
                     <Navigator url='/order/pages/orders?status=0' className='relative'>
-                        <View className='iconfont2 icon2-daifukuan' style={{fontSize: 24}}/>
+                        <View className='iconfont2 icon2-daifukuan' style={{fontSize: 24}} />
                         <View className='mt-2'>待结算</View>
                         {badges?.payCount ? <Text className='badge'>{badges.payCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=1' className='relative'>
-                        <View className='iconfont2 icon2-daifahuo' style={{fontSize: 24}}/>
+                        <View className='iconfont2 icon2-daifahuo' style={{fontSize: 24}} />
                         <View className='mt-2'>待发货</View>
                         {badges?.deliveryCount ? <Text className='badge'>{badges.deliveryCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=2' className='relative'>
-                        <View className='iconfont2 icon2-daishouhuo' style={{fontSize: 24}}/>
+                        <View className='iconfont2 icon2-daishouhuo' style={{fontSize: 24}} />
                         <View className='mt-2'>待收货</View>
                         {badges?.confirmDeliveryCount ? <Text className='badge'>{badges.confirmDeliveryCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=3'>
-                        <View className='iconfont2 icon2-yiwancheng' style={{fontSize: 24}}/>
+                        <View className='iconfont2 icon2-yiwancheng' style={{fontSize: 24}} />
                         <View className='mt-2'>已完成</View>
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=' className='border-l-1 border-gray-100'>
-                        <View className='iconfont2 icon2-quanbudingdan' style={{fontSize: 24}}/>
+                        <View className='iconfont2 icon2-quanbudingdan' style={{fontSize: 24}} />
                         <View className='mt-2'>全部</View>
                     </Navigator>
                 </View>
@@ -305,7 +305,7 @@ const UserCenterLayoutDefault = (props: any) => {
             {settings.myIndexAdv &&
                 <View className='rounded-lg m-4 overflow-hidden'>
                     <Navigator url={settings.myIndexAdvLink} className='block w-full h-full'>
-                        <Image src={settings.myIndexAdv} className='w-full h-full block' mode='widthFix'/>
+                        <Image src={settings.myIndexAdv} className='w-full h-full block' mode='widthFix' />
                     </Navigator>
                 </View>
             }
@@ -316,7 +316,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>个人资料</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -326,7 +326,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>地址管理</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -336,7 +336,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>发票管理</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -346,7 +346,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>积分中心</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -356,7 +356,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>预约参展</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -366,7 +366,7 @@ const UserCenterLayoutDefault = (props: any) => {
                             <View>帮助中心</View>
                         </View>
                         <View className='flex items-center space-x-2'>
-                            <View className='iconfont icon-youjiantou_huaban'/>
+                            <View className='iconfont icon-youjiantou_huaban' />
                         </View>
                     </Navigator>
                 </View>
@@ -378,7 +378,7 @@ const UserCenterLayoutDefault = (props: any) => {
                                 <View>联系客服</View>
                             </View>
                             <View className='flex items-center space-x-2'>
-                                <View className='iconfont icon-youjiantou_huaban'/>
+                                <View className='iconfont icon-youjiantou_huaban' />
                             </View>
                         </Button>
                     </View>
@@ -390,7 +390,7 @@ const UserCenterLayoutDefault = (props: any) => {
                                 <View>联系客服</View>
                             </View>
                             <View className='flex items-center space-x-2'>
-                                <View className='iconfont icon-youjiantou_huaban'/>
+                                <View className='iconfont icon-youjiantou_huaban' />
                             </View>
                         </Button>
                     </View>
@@ -398,7 +398,7 @@ const UserCenterLayoutDefault = (props: any) => {
             </View>
             {settings.userCenterCopyRight &&
                 <View className='m-4 overflow-hidden'>
-                    <Image src={settings.userCenterCopyRight} className='w-full h-full block' mode='widthFix'/>
+                    <Image src={settings.userCenterCopyRight} className='w-full h-full block' mode='widthFix' />
                 </View>
             }
         </>
@@ -466,7 +466,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
         const {userInfo} = context;
         const {badges, app} = this.state;
 
-        if (userInfo == null || !settings || !app) return <PageLoading/>;
+        if (userInfo == null || !settings || !app) return <PageLoading />;
         // 获取距上
         const barTop = systemInfo.statusBarHeight;
         const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
@@ -477,9 +477,10 @@ export default class Index extends Component<PropsWithChildren<any>> {
         return (
             <PageLayout showTabBar showStatusBar={false} copyright={context.copyright}>
                 {app.userCenterLayout == 1 ?
-                    <UserCenterLayout1 barHeight={barHeight} barTop={barTop} settings={settings} userInfo={userInfo} badges={badges} openWxServiceChat={this.openWxServiceChat}/> :
+                    <UserCenterLayout1 barHeight={barHeight} barTop={barTop} settings={settings} userInfo={userInfo} badges={badges} openWxServiceChat={this.openWxServiceChat} /> :
                     <UserCenterLayoutDefault barHeight={barHeight} barTop={barTop} settings={settings} userInfo={userInfo} badges={badges}
-                                             openWxServiceChat={this.openWxServiceChat}/>
+                      openWxServiceChat={this.openWxServiceChat}
+                    />
                 }
             </PageLayout>
         )
