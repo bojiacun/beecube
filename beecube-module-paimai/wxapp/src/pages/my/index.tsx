@@ -18,7 +18,168 @@ const UserCenterLayout1 = (props:any) => {
     const {barTop, barHeight, userInfo, badges, settings, openWxServiceChat} = props;
     return (
         <>
+            <View
+              className={classNames('text-white flex flex-col p-4', styles.userProfile)}
+              style={{paddingTop: barTop + barHeight}}
+            >
+                <View className={classNames('flex items-center justify-between space-x-2 mt-4')}>
+                    <View className='flex items-center space-x-2'>
+                        <FallbackImage className='rounded-full' src={userInfo?.avatar} errorImage={avatar}
+                          style={{width: Taro.pxTransform(52), height: Taro.pxTransform(52)}}
+                        />
+                        <View className='space-y-1 flex flex-col'>
+                            <View className='text-lg'>{userInfo?.realname || userInfo?.nickname || '微信用户'}</View>
+                            <View className='text-yellow-400'><Text className='iconfont icon-wodejifen1' />我的积分：{userInfo?.score}</View>
+                        </View>
+                    </View>
+                    <Navigator url='profile' openType='navigate'>
+                        <Text className='iconfont icon-31shezhi' style={{fontSize: 24}} />
+                    </Navigator>
+                </View>
+                <View className='grid grid-cols-4 my-4 divide-x divide-red-900'>
+                    <View className='text-center'>
+                        <Navigator className='w-full' url='coupons'>
+                            <View className='text-xl'>{badges?.ticketCount}</View>
+                            <View>优惠券</View>
+                        </Navigator>
+                    </View>
+                    <View className='text-center'>
+                        <Navigator url='wallet'>
+                            <View className='text-xl'>{numeral(userInfo?.money).format('0,0.00')}</View>
+                            <View>我的钱包</View>
+                        </Navigator>
+                    </View>
+                    <View className='text-center'>
+                        <Navigator url='follows'>
+                            <View className='text-xl'>{badges?.goodsFollowCount}</View>
+                            <View>收藏</View>
+                        </Navigator>
+                    </View>
+                    <View className='text-center'>
+                        <Navigator url='views'>
+                            <View className='text-xl'>{badges?.goodsViewCount}</View>
+                            <View>浏览足迹</View>
+                        </Navigator>
+                    </View>
+                </View>
+                <View className='rounded-lg bg-white mt-2 py-4 text-black'>
+                    {/*<View className='item-title font-bold text-lg ml-4 mb-4'>我的参拍</View>*/}
+                    <View className='grid grid-cols-5 gap-1 text-center'>
+                        <Navigator url='goods?tab=0' className='relative'>
+                            <View className='iconfont2 icon2-jinhangzhong' style={{fontSize: 24}} />
+                            <View className='mt-2'>待开始</View>
+                        </Navigator>
+                        <Navigator url='goods?tab=1' className='relative'>
+                            <View className='iconfont2 icon2-canpaizhong' style={{fontSize: 24}} />
+                            <View className='mt-2'>参拍中</View>
+                        </Navigator>
+                        <Navigator url='goods?tab=2' className='relative'>
+                            <View className='iconfont2 icon2-yihuopai' style={{fontSize: 24}} />
+                            <View className='mt-2'>已获拍</View>
+                        </Navigator>
+                        <Navigator url='goods?tab=3'>
+                            <View className='iconfont2 icon2-weihuopai' style={{fontSize: 24}} />
+                            <View className='mt-2'>未获拍</View>
+                        </Navigator>
+                        <Navigator url='deposits' className='border-l-1 border-gray-100'>
+                            <View className='iconfont2 icon2-baozhengjin' style={{fontSize: 24}} />
+                            <View className='mt-2'>保证金</View>
+                        </Navigator>
+                    </View>
+                </View>
+            </View>
+            <View className='m-4 bg-white divide-y rounded-lg divide-gray-100 text-black'>
+                <View>
+                    <Navigator url='/order/pages/orders?status=' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>我的订单</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
+                <View>
+                    <Navigator url='addresses' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>地址管理</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
+                <View>
+                    <Navigator url='/order/pages/taxs' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>发票管理</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
+                <View>
+                    <Navigator url='/integral/member/center' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>积分中心</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
+                <View>
+                    <Navigator url='/performance/pages/invites' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>预约参展</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
+                <View>
+                    <Navigator url='/article/pages/helps' className='flex items-center justify-between p-4'>
+                        <View className='flex items-center space-x-2'>
+                            <View>帮助中心</View>
+                        </View>
+                        <View className='flex items-center space-x-2'>
+                            <View className='iconfont icon-youjiantou_huaban' />
+                        </View>
+                    </Navigator>
+                </View>
 
+                {settings.wxServiceChatCorpId &&
+                    <View>
+                        <Button plain onClick={openWxServiceChat} className='flex items-center justify-between p-4'>
+                            <View className='flex items-center space-x-2'>
+                                <View>联系客服</View>
+                            </View>
+                            <View className='flex items-center space-x-2'>
+                                <View className='iconfont icon-youjiantou_huaban' />
+                            </View>
+                        </Button>
+                    </View>
+                }
+                {!settings.wxServiceChatCorpId &&
+                    <View>
+                        <Button plain openType='contact' className='flex items-center justify-between p-4'>
+                            <View className='flex items-center space-x-2'>
+                                <View>联系客服</View>
+                            </View>
+                            <View className='flex items-center space-x-2'>
+                                <View className='iconfont icon-youjiantou_huaban' />
+                            </View>
+                        </Button>
+                    </View>
+                }
+            </View>
+            {settings.userCenterCopyRight &&
+                <View className='m-4 overflow-hidden'>
+                    <Image src={settings.userCenterCopyRight} className='w-full h-full block' mode='widthFix' />
+                </View>
+            }
         </>
     );
 }
@@ -291,9 +452,9 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     render() {
-        const {systemInfo, context, settings, app} = this.props;
+        const {systemInfo, context, settings} = this.props;
         const {userInfo} = context;
-        const {badges} = this.state;
+        const {badges, app} = this.state;
 
         if (userInfo == null || !settings || !app) return <PageLoading />;
         // 获取距上
