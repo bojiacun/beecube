@@ -279,53 +279,45 @@ export default class Index extends Component<any, any> {
         const {detail, app, goodsList} = this.state;
         if(app.userCenterLayout == 1) {
             return (
-                <View className={'p-4 mt-4 grid grid-cols-1 gap-4'}>
+                <View className={'p-4 mt-4 grid grid-cols-1 gap-4 bg-white'}>
                     {goodsList.map((item: any) => {
+                        let radius = 0;
                         return (
-                            <Navigator url={'/goods/pages/detail?id=' + item.id}
-                                       className={'bg-white flex items-center shadow-outer rounded-lg overflow-hidden'}>
-                                <View className={'relative w-28 h-28'}>
-                                    <FallbackImage
-                                        mode={'aspectFill'}
-                                        className={'block w-full h-full'}
-                                        src={utils.resolveUrl(item.images.split(',')[0])}
-                                    />
-                                </View>
-                                <View className={'p-2 space-y-4 flex-1'}>
-                                    <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
-                                    {item.state < 3 &&
-                                        <View className={'text-sm'}>
-                                            <View className={'space-x-1'}>
-                                                估价 <Text className={'text-red-500'}>RMB</Text>
-                                                <Text className={'text-base font-bold'}>{item.evaluatePrice}</Text>
-                                            </View>
-                                            <View>
+                            <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <Navigator url={'/goods/pages/detail?id=' + item.id}>
+                                    <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
+                                        <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
+                                                       className={'absolute z-0 inset-0 block w-full h-full'}
+                                                       src={utils.resolveUrl(item.images.split(',')[0])}/>
+                                    </View>
+                                    <View className={'p-2 space-y-0.5'}>
+                                        <View className={'text-gray-600'}>{item.title}</View>
+                                        {item.state < 3 &&
+                                            <View className={'text-sm'}>
                                                 当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                                className={'text-base font-bold'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                                className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                             </View>
-                                        </View>
-                                    }
-                                    {item.state == 3 &&
-                                        <View className={'text-sm'}>
-                                            成交价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className='text-base font-bold'
-                                        >{numeral(item.dealPrice).format('0,0.00')}</Text>
-                                        </View>
-                                    }
-                                    {item.state == 4 &&
-                                        <View className={'text-sm'}>
-                                            流拍
-                                        </View>
-                                    }
-                                </View>
-                                <View className={'flex items-center justify-center pr-4'}>
-                                    {item.state == 1 && <Text className={'text-indigo-600 font-bold'}>进行中</Text>}
-                                    {item.state == 0 && <Text className={'text-gray-600'}>未开始</Text>}
-                                    {item.state == 2 && <Text className={'text-gray-600'}>已结束</Text>}
-                                    {item.state == 3 && <Text className={'text-green-600 font-bold'}>成交</Text>}
-                                    {item.state == 4 && <Text className={'text-gray-600'}>流拍</Text>}
-                                </View>
-                            </Navigator>
+                                        }
+                                        {item.state == 3 &&
+                                            <View className={'text-sm'}>
+                                                <Text className={'text-green-600 font-bold'}>成交</Text> 成交价 <Text
+                                                className={'text-red-500'}>RMB</Text> <Text
+                                                className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                            </View>
+                                        }
+                                        {item.state == 4 &&
+                                            <View className={'text-gray-400'}>流拍</View>
+                                        }
+                                        {item.state < 3 &&
+                                            <TimeCountDowner
+                                                className={'text-gray-400 text-xs flex'}
+                                                startTime={item.startTime}
+                                                endTime={item.endTime}
+                                            />
+                                        }
+                                    </View>
+                                </Navigator>
+                            </View>
                         );
                     })}
                 </View>
