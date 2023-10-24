@@ -78,7 +78,7 @@ const UserCenterLayout1 = (props: any) => {
                         {badges?.deliveryCount ? <Text className='badge'>{badges.deliveryCount}</Text> : <></>}
                     </Navigator>
                     <Navigator url='/order/pages/orders?status=2' className='relative'>
-                        <View className='iconpm iconpm-daishouhuo' style={{fontSize: 24}}/>
+                        <View className='iconpm iconpm-daishouhuo1' style={{fontSize: 24}}/>
                         <View className='mt-2'>待收货</View>
                         {badges?.confirmDeliveryCount ? <Text className='badge'>{badges.confirmDeliveryCount}</Text> : <></>}
                     </Navigator>

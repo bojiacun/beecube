@@ -1,8 +1,8 @@
 @font-face {
     font-family: "iconpm"; /* Project id 4299736 */
-    src: url('//at.alicdn.com/t/c/font_4299736_f1rra3ksmb.woff2?t=1698121669504') format('woff2'),
-    url('//at.alicdn.com/t/c/font_4299736_f1rra3ksmb.woff?t=1698121669504') format('woff'),
-    url('//at.alicdn.com/t/c/font_4299736_f1rra3ksmb.ttf?t=1698121669504') format('truetype');
+    src: url('//at.alicdn.com/t/c/font_4299736_3ceddak1p7d.woff2?t=1698123764721') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4299736_3ceddak1p7d.woff?t=1698123764721') format('woff'),
+    url('//at.alicdn.com/t/c/font_4299736_3ceddak1p7d.ttf?t=1698123764721') format('truetype');
 }
 
 .iconpm {
@@ -10,6 +10,10 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.iconpm-daishouhuo1:before {
+    content: "\e62f";
 }
 
 .iconpm-31daifahuo:before {
