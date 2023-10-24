@@ -41,6 +41,7 @@ const PaimaiSettingsEditor = (props:any) => {
     }
     settings.isCustomOffer = parseInt(settings.isCustomOffer);
     settings.isDealCommission = parseInt(settings.isDealCommission);
+    settings.requireRealAuth = parseInt(settings.requireRealAuth);
 
 
     return (
