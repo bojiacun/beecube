@@ -268,7 +268,7 @@ export default class Index extends Component<any, any> {
                                         src={utils.resolveUrl(item.images.split(',')[0])}
                                     />
                                 </View>
-                                <View className={'p-2 space-y-4 flex-1'}>
+                                <View className={'p-2 space-y-4 flex-1 ml-2'}>
                                     <View className={'text-gray-600 text-lg'}>LOT{item.sortNum} {item.title}</View>
                                     {item.state < 3 &&
                                         <View className={'text-sm'}>

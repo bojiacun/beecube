@@ -57,11 +57,11 @@ export default class Index extends Component<any, any> {
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false, goodsList: []});
                 } else {
-                    if(parseInt(settings.isDealCommission) == 1) {
-                        newGoodsList.forEach(item=>{
-                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                    if (parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item => {
+                            if (parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //成交价显示佣金
-                                const commission = item.commission/100;
+                                const commission = item.commission / 100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
@@ -74,11 +74,11 @@ export default class Index extends Component<any, any> {
                 if (!newGoodsList || newGoodsList.length == 0) {
                     this.setState({noMore: true, loadingMore: false, goodsList});
                 } else {
-                    if(parseInt(settings.isDealCommission) == 1) {
-                        newGoodsList.forEach(item=>{
-                            if(parseFloat(item.commission) > 0.00 && item.state == 3) {
+                    if (parseInt(settings.isDealCommission) == 1) {
+                        newGoodsList.forEach(item => {
+                            if (parseFloat(item.commission) > 0.00 && item.state == 3) {
                                 //成交价显示佣金
-                                const commission = item.commission/100;
+                                const commission = item.commission / 100;
                                 item.dealPrice = (item.dealPrice + (item.dealPrice * commission));
                             }
                         })
@@ -137,7 +137,7 @@ export default class Index extends Component<any, any> {
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
-        request.get('/app/api/app/'+APP_ID).then(res=>{
+        request.get('/app/api/app/' + APP_ID).then(res => {
             let app = res.data.result;
             // if(app.userCenterLayout == 1) {
             //     Taro.redirectTo({url: 'detail2?id='+options.id}).then();
@@ -158,9 +158,12 @@ export default class Index extends Component<any, any> {
         this.loadData(this.state.id, 1, true).then(() => utils.hideLoading());
         this.setState({page: 1});
     }
+
     postIntegral() {
-        request.post('/app/api/members/scores/share').then(()=>{});
+        request.post('/app/api/members/scores/share').then(() => {
+        });
     }
+
     onShareTimeline() {
         let mid = this.props.context?.userInfo?.id || '';
         this.postIntegral();
@@ -175,19 +178,19 @@ export default class Index extends Component<any, any> {
         this.postIntegral();
         return {
             title: this.state.detail?.title,
-            path: '/performance/pages/detail?id=' + this.state.id +'&mid='+mid
+            path: '/performance/pages/detail?id=' + this.state.id + '&mid=' + mid
         }
     }
+
     async payDeposit() {
         const {preOffered} = this.state;
-        if(!preOffered) {
+        if (!preOffered) {
             let checkResult = await request.get('/paimai/api/members/check');
             if (checkResult.data.result == 0) {
                 return utils.showMessage("请完善您的个人信息(手机号、昵称、头像)", function () {
                     Taro.navigateTo({url: '/pages/my/profile'}).then();
                 });
-            }
-            else if(checkResult.data.result == -1) {
+            } else if (checkResult.data.result == -1) {
                 return utils.showMessage("请完成实名认证", function () {
                     Taro.navigateTo({url: '/pages/my/realauth'}).then();
                 });
@@ -230,22 +233,21 @@ export default class Index extends Component<any, any> {
         const {message, status} = this.state;
         const {settings} = this.props;
 
-        let templateId,type;
+        let templateId, type;
 
-        if(status == TimeCountDownerStatus.NOT_START) {
+        if (status == TimeCountDownerStatus.NOT_START) {
             //开始提醒
             type = 1;
             templateId = settings.startTemplateId;
-        }
-        else if(status == TimeCountDownerStatus.STARTED) {
+        } else if (status == TimeCountDownerStatus.STARTED) {
             type = 2;
             templateId = settings.endTemplateId;
         }
 
-        if(!message && templateId) {
+        if (!message && templateId) {
             const res = await Taro.requestSubscribeMessage({tmplIds: [templateId]});
-            if(res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
-                if(type) {
+            if (res[templateId] == 'accept' || res[templateId] == 'acceptWithAudio') {
+                if (type) {
                     request.put('/paimai/api/members/messages/toggle', {
                         type: type,
                         performanceId: this.state.detail.id,
@@ -255,9 +257,8 @@ export default class Index extends Component<any, any> {
                     });
                 }
             }
-        }
-        else {
-            if(type) {
+        } else {
+            if (type) {
                 request.put('/paimai/api/members/messages/toggle', {
                     type: type,
                     performanceId: this.state.detail.id,
@@ -270,54 +271,52 @@ export default class Index extends Component<any, any> {
     }
 
 
-
     componentWillUnmount() {
         EventBus.unregister(EventType.onMessageData, this.onMessageReceived);
     }
 
     renderItem() {
         const {detail, app, goodsList} = this.state;
-        if(app.userCenterLayout == 1) {
+        if (app.userCenterLayout == 1) {
             return (
                 <View className={'p-4 mt-4 grid grid-cols-1 gap-4 bg-white'}>
                     {goodsList.map((item: any) => {
                         let radius = 0;
                         return (
-                            <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <Navigator url={'/goods/pages/detail?id=' + item.id}>
-                                    <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
-                                        <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                                       className={'absolute z-0 inset-0 block w-full h-full'}
-                                                       src={utils.resolveUrl(item.images.split(',')[0])}/>
-                                    </View>
-                                    <View className={'p-2 space-y-0.5'}>
-                                        <View className={'text-gray-600'}>{item.title}</View>
-                                        {item.state < 3 &&
-                                            <View className={'text-sm'}>
-                                                当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                                className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
-                                            </View>
-                                        }
-                                        {item.state == 3 &&
-                                            <View className={'text-sm'}>
-                                                <Text className={'text-green-600 font-bold'}>成交</Text> 成交价 <Text
-                                                className={'text-red-500'}>RMB</Text> <Text
-                                                className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
-                                            </View>
-                                        }
-                                        {item.state == 4 &&
-                                            <View className={'text-gray-400'}>流拍</View>
-                                        }
-                                        {item.state < 3 &&
-                                            <TimeCountDowner
-                                                className={'text-gray-400 text-xs flex'}
-                                                startTime={item.startTime}
-                                                endTime={item.endTime}
-                                            />
-                                        }
-                                    </View>
-                                </Navigator>
-                            </View>
+                            <Navigator url={'/goods/pages/detail?id=' + item.id} className={'w-full rounded-lg bg-white shadow-outer overflow-hidden flex items-center'}
+                                       style={{borderRadius: Taro.pxTransform(radius)}}>
+                                <View className={'relative w-28 h-28'}>
+                                    <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
+                                                   className={'absolute z-0 inset-0 block w-full h-full'}
+                                                   src={utils.resolveUrl(item.images.split(',')[0])}/>
+                                </View>
+                                <View className={'p-2 flex-1'}>
+                                    <View className={'text-gray-600 text-lg mb-4'}>{item.title}</View>
+                                    {item.state < 3 &&
+                                        <View className={'text-sm'}>
+                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
+                                            className={'text-base font-bold'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                        </View>
+                                    }
+                                    {item.state == 3 &&
+                                        <View className={'text-sm'}>
+                                            <Text className={'text-green-600 font-bold'}>成交</Text> 成交价 <Text
+                                            className={'text-red-500'}>RMB</Text> <Text
+                                            className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                        </View>
+                                    }
+                                    {item.state == 4 &&
+                                        <View className={'text-gray-400'}>流拍</View>
+                                    }
+                                    {item.state < 3 &&
+                                        <TimeCountDowner
+                                            className={'text-gray-400 text-sm flex'}
+                                            startTime={item.startTime}
+                                            endTime={item.endTime}
+                                        />
+                                    }
+                                </View>
+                            </Navigator>
                         );
                     })}
                 </View>
@@ -374,7 +373,7 @@ export default class Index extends Component<any, any> {
         const {detail, goodsList, noMore, loadingMore, message, deposited, app} = this.state;
         const {systemInfo} = this.props;
 
-        if (!detail || goodsList === null || !app) return <PageLoading />;
+        if (!detail || goodsList === null || !app) return <PageLoading/>;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
