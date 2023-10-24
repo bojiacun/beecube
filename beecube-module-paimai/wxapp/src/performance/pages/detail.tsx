@@ -279,40 +279,39 @@ export default class Index extends Component<any, any> {
         const {detail, app, goodsList} = this.state;
         if (app.userCenterLayout == 1) {
             return (
-                <View className={'p-4 mt-4 grid grid-cols-1 gap-4 bg-white'}>
+                <View className='p-4 mt-4 grid grid-cols-1 gap-4 bg-white'>
                     {goodsList.map((item: any) => {
-                        let radius = 0;
                         return (
-                            <Navigator url={'/goods/pages/detail?id=' + item.id} className={'w-full rounded-lg bg-white shadow-outer overflow-hidden flex items-center'}
-                                       style={{borderRadius: Taro.pxTransform(radius)}}>
-                                <View className={'relative w-28 h-28'}>
-                                    <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                                   className={'absolute z-0 inset-0 block w-full h-full'}
-                                                   src={utils.resolveUrl(item.images.split(',')[0])}/>
+                            <Navigator url={'/goods/pages/detail?id=' + item.id} className='w-full rounded-lg bg-white shadow-outer overflow-hidden flex items-center'>
+                                <View className='relative w-28 h-28'>
+                                    <FallbackImage mode='aspectFill' className='absolute z-0 inset-0 block w-full h-full' src={utils.resolveUrl(item.images.split(',')[0])} />
                                 </View>
-                                <View className={'p-2 flex-1'}>
-                                    <View className={'text-gray-600 text-lg mb-4'}>{item.title}</View>
+                                <View className='p-2 flex-1'>
+                                    <View className='text-gray-600 text-lg mb-4'>{item.title}</View>
                                     {item.state < 3 &&
-                                        <View className={'text-sm'}>
-                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base font-bold'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                        <View className='text-sm'>
+                                            当前价 <Text className='text-red-500'>RMB</Text> <Text
+                                              className='text-base font-bold'
+                                            >{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 3 &&
-                                        <View className={'text-sm'}>
-                                            <Text className={'text-green-600 font-bold'}>成交</Text> 成交价 <Text
-                                            className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                        <View className='text-sm'>
+                                            <Text className='text-green-600 font-bold'>成交</Text> 成交价 <Text
+                                              className='text-red-500'
+                                            >RMB</Text> <Text
+                                              className='text-base'
+                                            >{numeral(item.dealPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 4 &&
-                                        <View className={'text-gray-400'}>流拍</View>
+                                        <View className='text-gray-400'>流拍</View>
                                     }
                                     {item.state < 3 &&
                                         <TimeCountDowner
-                                            className={'text-gray-400 text-sm flex'}
-                                            startTime={item.startTime}
-                                            endTime={item.endTime}
+                                          className='text-gray-400 text-sm flex'
+                                          startTime={item.startTime}
+                                          endTime={item.endTime}
                                         />
                                     }
                                 </View>
@@ -323,40 +322,44 @@ export default class Index extends Component<any, any> {
             );
         }
         return (
-            <View className={'p-4 mt-4 grid grid-cols-2 gap-4 bg-white'}>
+            <View className='p-4 mt-4 grid grid-cols-2 gap-4 bg-white'>
                 {goodsList.map((item: any) => {
                     let radius = 0;
                     return (
-                        <View className={'bg-white shadow-outer overflow-hidden'} style={{borderRadius: Taro.pxTransform(radius)}}>
+                        <View className='bg-white shadow-outer overflow-hidden' style={{borderRadius: Taro.pxTransform(radius)}}>
                             <Navigator url={'/goods/pages/detail?id=' + item.id}>
-                                <View className={'relative'} style={{width: '100%', paddingTop: '100%'}}>
-                                    <FallbackImage mode={'aspectFill'} style={{borderRadius: Taro.pxTransform(radius)}}
-                                                   className={'absolute z-0 inset-0 block w-full h-full'}
-                                                   src={utils.resolveUrl(item.images.split(',')[0])}/>
+                                <View className='relative' style={{width: '100%', paddingTop: '100%'}}>
+                                    <FallbackImage mode='aspectFill' style={{borderRadius: Taro.pxTransform(radius)}}
+                                      className='absolute z-0 inset-0 block w-full h-full'
+                                      src={utils.resolveUrl(item.images.split(',')[0])}
+                                    />
                                 </View>
-                                <View className={'p-2 space-y-0.5'}>
-                                    <View className={'text-gray-600'}>{item.title}</View>
+                                <View className='p-2 space-y-0.5'>
+                                    <View className='text-gray-600'>{item.title}</View>
                                     {item.state < 3 &&
-                                        <View className={'text-sm'}>
-                                            当前价 <Text className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
+                                        <View className='text-sm'>
+                                            当前价 <Text className='text-red-500'>RMB</Text> <Text
+                                              className='text-base'
+                                            >{numeral(item.currentPrice || item.startPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 3 &&
-                                        <View className={'text-sm'}>
-                                            <Text className={'text-green-600 font-bold'}>成交</Text> 成交价 <Text
-                                            className={'text-red-500'}>RMB</Text> <Text
-                                            className={'text-base'}>{numeral(item.dealPrice).format('0,0.00')}</Text>
+                                        <View className='text-sm'>
+                                            <Text className='text-green-600 font-bold'>成交</Text> 成交价 <Text
+                                              className='text-red-500'
+                                            >RMB</Text> <Text
+                                              className='text-base'
+                                            >{numeral(item.dealPrice).format('0,0.00')}</Text>
                                         </View>
                                     }
                                     {item.state == 4 &&
-                                        <View className={'text-gray-400'}>流拍</View>
+                                        <View className='text-gray-400'>流拍</View>
                                     }
                                     {item.state < 3 &&
                                         <TimeCountDowner
-                                            className={'text-gray-400 text-xs flex'}
-                                            startTime={item.startTime}
-                                            endTime={item.endTime}
+                                          className='text-gray-400 text-xs flex'
+                                          startTime={item.startTime}
+                                          endTime={item.endTime}
                                         />
                                     }
                                 </View>
@@ -373,51 +376,52 @@ export default class Index extends Component<any, any> {
         const {detail, goodsList, noMore, loadingMore, message, deposited, app} = this.state;
         const {systemInfo} = this.props;
 
-        if (!detail || goodsList === null || !app) return <PageLoading/>;
+        if (!detail || goodsList === null || !app) return <PageLoading />;
         let safeBottom = systemInfo.screenHeight - systemInfo.safeArea.bottom;
         if (safeBottom > 10) safeBottom -= 10;
 
         return (
-            <PageLayout statusBarProps={{title: '限时拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom={true}>
-                <FallbackImage mode={'widthFix'} src={utils.resolveUrl(detail.preview)} className={'block w-full'}/>
-                <View className={'px-4 py-2'} style={{backgroundColor: '#f8f8f8'}}>
+            <PageLayout statusBarProps={{title: '限时拍专场详情'}} style={{backgroundColor: 'white', minHeight: '100vh'}} enableReachBottom>
+                <FallbackImage mode='widthFix' src={utils.resolveUrl(detail.preview)} className='block w-full' />
+                <View className='px-4 py-2' style={{backgroundColor: '#f8f8f8'}}>
                     <TimeCountDowner
-                        onStatusChanged={(status) => {
+                      onStatusChanged={(status) => {
                             this.setState({status: status});
                         }}
-                        className={'flex'}
-                        startTime={detail.startTime}
-                        endTime={detail.endTime}
+                      className='flex'
+                      startTime={detail.startTime}
+                      endTime={detail.endTime}
                     />
                 </View>
-                <View className={'divide-y divide-gray-100 bg-white'}>
-                    <View className={'p-4 flex items-center justify-between'}>
-                        <View className={'flex-1 space-y-1'}>
-                            <View className={'text-xl font-bold'}>{detail.title}</View>
-                            <View className={'text-gray-600'}>{detail.subTitle}</View>
-                            <View className={'text-gray-600'}>开拍时间: {detail.startTime}</View>
-                            <View className={'text-gray-600'}>结束时间: {detail.endTime}</View>
-                            <View className={'text-gray-600'}>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
+                <View className='divide-y divide-gray-100 bg-white'>
+                    <View className='p-4 flex items-center justify-between'>
+                        <View className='flex-1 space-y-1'>
+                            <View className='text-xl font-bold'>{detail.title}</View>
+                            <View className='text-gray-600'>{detail.subTitle}</View>
+                            <View className='text-gray-600'>开拍时间: {detail.startTime}</View>
+                            <View className='text-gray-600'>结束时间: {detail.endTime}</View>
+                            <View className='text-gray-600'>固定保证金: {numeral(detail.deposit).format('0,0.00')}</View>
                         </View>
                         {(this.state.status == TimeCountDownerStatus.NOT_START || this.state.status == TimeCountDownerStatus.STARTED) &&
-                            <View className={'w-20'}>
+                            <View className='w-20'>
                                 {!message &&
-                                    <View className={'flex flex-col items-center text-gray-600'} onClick={this.noticeMe}>
-                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
+                                    <View className='flex flex-col items-center text-gray-600' onClick={this.noticeMe}>
+                                        <View><Text className='iconfont icon-daojishi text-3xl' /></View>
                                         <View
-                                            className={'text-sm'}>{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
+                                          className='text-sm'
+                                        >{this.state.status == TimeCountDownerStatus.NOT_START ? '开始' : '结束'}提醒</View>
                                     </View>
                                 }
                                 {message &&
-                                    <View className={'flex flex-col items-center text-red-600'} onClick={this.noticeMe}>
-                                        <View><Text className={'iconfont icon-daojishi text-3xl'}/></View>
-                                        <View className={'text-sm'}>取消提醒</View>
+                                    <View className='flex flex-col items-center text-red-600' onClick={this.noticeMe}>
+                                        <View><Text className='iconfont icon-daojishi text-3xl' /></View>
+                                        <View className='text-sm'>取消提醒</View>
                                     </View>
                                 }
                             </View>
                         }
                     </View>
-                    <View className={'space-x-4 px-4 py-2 text-gray-400'}>
+                    <View className='space-x-4 px-4 py-2 text-gray-400'>
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
                         <Text>报名{detail.depositCount}人</Text>
@@ -426,14 +430,15 @@ export default class Index extends Component<any, any> {
                     <View></View>
                 </View>
                 {this.renderItem()}
-                {goodsList.length == 0 && <NoData/>}
-                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore}/>}
-                <View style={{height: Taro.pxTransform(124)}}/>
+                {goodsList.length == 0 && <NoData />}
+                {goodsList.length > 0 && <LoadMore noMore={noMore} loading={loadingMore} />}
+                <View style={{height: Taro.pxTransform(124)}} />
                 {!deposited && detail.state < 2 && this.state.status != TimeCountDownerStatus.ENDED &&
-                    <View className={'bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'}
-                          style={{paddingBottom: safeBottom}}>
+                    <View className='bg-white px-4 pt-1 flex items-center justify-center fixed bottom-0 w-full'
+                      style={{paddingBottom: safeBottom}}
+                    >
                         <View>
-                            <Button disabled={this.state.posting} className={'btn btn-primary w-56'} onClick={this.payDeposit}>
+                            <Button disabled={this.state.posting} className='btn btn-primary w-56' onClick={this.payDeposit}>
                                 <View>交保证金</View>
                                 <View>RMB {numeral(detail.deposit).format('0,0.00')}</View>
                             </Button>
