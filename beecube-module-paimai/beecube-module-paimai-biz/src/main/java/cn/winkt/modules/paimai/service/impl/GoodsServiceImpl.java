@@ -1,15 +1,11 @@
 package cn.winkt.modules.paimai.service.impl;
 
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
-import cn.winkt.modules.paimai.entity.Goods;
-import cn.winkt.modules.paimai.entity.GoodsDeposit;
-import cn.winkt.modules.paimai.entity.LiveRoom;
-import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.entity.*;
 import cn.winkt.modules.paimai.mapper.GoodsMapper;
-import cn.winkt.modules.paimai.service.IGoodsDepositService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.ILiveRoomService;
-import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.service.*;
 import cn.winkt.modules.paimai.vo.GoodsVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -46,6 +42,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Resource
     ILiveRoomService liveRoomService;
+
+    @Resource
+    private IPaimaiBidderService paimaiBidderService;
+
+    @Resource
+    private AppApi appApi;
 
     @Override
     public GoodsVO getDetail(String id) {
@@ -147,6 +149,14 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
         else {
             if(goods.getDeposit() == null || goods.getDeposit() <= 0){
+                return true;
+            }
+            AppMemberVO member = appApi.getMemberById(loginUser.getId());
+            //检查是否已经设置竞买人
+            LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            bidderLambdaQueryWrapper.eq(PaimaiBidder::getGoodsId, goods.getId());
+            bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
+            if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
                 return true;
             }
             LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();

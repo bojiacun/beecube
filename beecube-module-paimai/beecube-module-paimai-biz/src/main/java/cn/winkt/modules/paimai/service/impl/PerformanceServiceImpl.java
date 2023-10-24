@@ -1,10 +1,14 @@
 package cn.winkt.modules.paimai.service.impl;
 
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
+import cn.winkt.modules.paimai.entity.PaimaiBidder;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.mapper.PerformanceMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
+import cn.winkt.modules.paimai.service.IPaimaiBidderService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -35,6 +39,12 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Resource
     IGoodsDepositService goodsDepositService;
+
+    @Resource
+    private IPaimaiBidderService paimaiBidderService;
+
+    @Resource
+    private AppApi appApi;
 
     @Override
     public PerformanceVO getDetail(String id) {
@@ -86,6 +96,15 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         if(performance == null || performance.getDeposit() == null || performance.getDeposit() <= 0) {
             return true;
         }
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        //检查是否已经设置竞买人
+        LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPerformanceId, performance.getId());
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
+        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+            return true;
+        }
+
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getPerformanceId, performance.getId());
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());

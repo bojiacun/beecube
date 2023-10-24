@@ -1,10 +1,14 @@
 package cn.winkt.modules.paimai.service.impl;
 
+import cn.winkt.modules.app.api.AppApi;
+import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
 import cn.winkt.modules.paimai.entity.LiveRoom;
+import cn.winkt.modules.paimai.entity.PaimaiBidder;
 import cn.winkt.modules.paimai.mapper.LiveRoomMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
 import cn.winkt.modules.paimai.service.ILiveRoomService;
+import cn.winkt.modules.paimai.service.IPaimaiBidderService;
 import cn.winkt.modules.paimai.vo.LiveRoomVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jeecg.common.system.vo.LoginUser;
@@ -30,6 +34,12 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
     @Resource
     IGoodsDepositService goodsDepositService;
 
+    @Resource
+    private IPaimaiBidderService paimaiBidderService;
+
+    @Resource
+    private AppApi appApi;
+
     @Override
     public void updateRoomViews(String id) {
         liveRoomMapper.updateRoomViews(id);
@@ -40,6 +50,16 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
         if(liveRoom == null || liveRoom.getDeposit() == null || liveRoom.getDeposit() <= 0) {
             return true;
         }
+        AppMemberVO member = appApi.getMemberById(loginUser.getId());
+        //检查是否已经设置竞买人
+        LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getRoomId, liveRoom.getId());
+        bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
+        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+            return true;
+        }
+
+
         LambdaQueryWrapper<GoodsDeposit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(GoodsDeposit::getRoomId, liveRoom.getId());
         queryWrapper.eq(GoodsDeposit::getMemberId, loginUser.getId());
