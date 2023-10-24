@@ -57,7 +57,7 @@ const UserCenterLayout1 = (props: any) => {
                             <View className='mt-2'>未获拍</View>
                         </Navigator>
                         <Navigator url='deposits' className='border-l-1 border-gray-100'>
-                            <View className='iconpm iconpm-chengxinbaozhengjin' style={{fontSize: 24}} />
+                            <View className='iconpm iconpm-chengxinbaozhengjin text-red-600' style={{fontSize: 24}} />
                             <View className='mt-2'>保证金</View>
                         </Navigator>
                     </View>
@@ -102,13 +102,13 @@ const UserCenterLayout1 = (props: any) => {
                     </View>
                     <View className='text-center'>
                         <Navigator url='wallet'>
-                            <View className='text-xl'>{numeral(userInfo?.money).format('0,0.00')}</View>
+                            <View className='text-xl text-red-600 font-bold'>{numeral(userInfo?.money).format('0,0.00')}</View>
                             <View>我的钱包</View>
                         </Navigator>
                     </View>
                     <View className='text-center'>
                         <Navigator url='/integral/member/center'>
-                            <View className='text-xl'>{userInfo?.score}</View>
+                            <View className='text-xl text-yellow-600 font-bold'>{userInfo?.score}</View>
                             <View>积分</View>
                         </Navigator>
                     </View>
