@@ -162,33 +162,30 @@ class App extends Component<PropsWithChildren> {
 
             const mapKey = context.settings.tencentMapKey;
             qqmapSdk = new QQMapWX({key: mapKey});
-            Taro.onLocationChange(res => {
-                console.log('location changed', res);
-                Taro.stopLocationUpdate();
-                Taro.setStorageSync("POSITION", {lat: res.latitude, lng: res.longitude});
-                qqmapSdk.reverseGeocoder({
-                    location: res,
-                    success(res) {
-                        Taro.setStorageSync("GEO", res.result);
-                    }
-                });
-            });
-            Taro.startLocationUpdate({
-                success(res) {
-                    console.log('start location change listening', res);
-                }
-            });
+            // Taro.onLocationChange(res => {
+            //     Taro.stopLocationUpdate();
+            //     Taro.setStorageSync("POSITION", {lat: res.latitude, lng: res.longitude});
+            //     qqmapSdk.reverseGeocoder({
+            //         location: res,
+            //         success(res) {
+            //             Taro.setStorageSync("GEO", res.result);
+            //         }
+            //     });
+            // });
+            // Taro.startLocationUpdate({
+            //     success(res) {
+            //         console.log('start location change listening', res);
+            //     }
+            // });
         });
     }
 
     onLaunch(options) {
-        console.log('on load executed', options);
         store.dispatch(setPageLoading(true));
         this.options = options;
     }
 
     componentDidShow() {
-        console.log('on show executed', this.options);
         //确保初始化会执行
         let {context} = store.getState();
         if(!context.userInfo) {
