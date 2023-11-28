@@ -39,6 +39,7 @@ export default class Index extends Component<any, any> {
         message: false,
         deposited: true,
         preOffered: false,
+        bidderCount: 0,
     }
 
     constructor(props) {
@@ -137,13 +138,16 @@ export default class Index extends Component<any, any> {
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
+        request.get('/paimai/api/bidder/count/performance', {params: {id: options.id}}).then(res=>{
+            this.setState({bidderCount: res.data.result});
+        });
         request.get('/app/api/app/' + APP_ID).then(res => {
             let app = res.data.result;
             // if(app.userCenterLayout == 1) {
             //     Taro.redirectTo({url: 'detail2?id='+options.id}).then();
             // }
             this.setState({app});
-        })
+        });
     }
 
     onReachBottom() {
@@ -276,7 +280,7 @@ export default class Index extends Component<any, any> {
     }
 
     renderItem() {
-        const {detail, app, goodsList} = this.state;
+        const {app, goodsList} = this.state;
         if (app.userCenterLayout == 1) {
             return (
                 <View className='p-4 mt-4 grid grid-cols-1 gap-4 bg-white'>
@@ -373,7 +377,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, message, deposited, app} = this.state;
+        const {detail, goodsList, noMore, loadingMore, message, deposited, app, bidderCount} = this.state;
         const {systemInfo} = this.props;
 
         if (!detail || goodsList === null || !app) return <PageLoading />;
@@ -424,7 +428,7 @@ export default class Index extends Component<any, any> {
                     <View className='space-x-4 px-4 py-2 text-gray-400'>
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
-                        <Text>报名{detail.depositCount}人</Text>
+                        <Text>报名{detail.depositCount + bidderCount}人</Text>
                         <Text>出价{detail.offerCount}次</Text>
                     </View>
                     <View></View>

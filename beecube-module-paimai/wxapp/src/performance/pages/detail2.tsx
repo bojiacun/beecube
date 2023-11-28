@@ -35,6 +35,7 @@ export default class Index extends Component<any, any> {
         posting: false,
         status: undefined,
         message: false,
+        bidderCount: 0,
         deposited: true,
         preOffered: false,
     }
@@ -133,6 +134,9 @@ export default class Index extends Component<any, any> {
             //注册全局事件
             EventBus.register(EventType.onMessageData, this.onMessageReceived);
         });
+        request.get('/paimai/api/bidder/count/performance', {params: {id: options.id}}).then(res=>{
+            this.setState({bidderCount: res.data.result});
+        });
     }
     postIntegral() {
         request.post('/app/api/members/scores/share').then(()=>{});
@@ -220,7 +224,7 @@ export default class Index extends Component<any, any> {
 
 
     render() {
-        const {detail, goodsList, noMore, loadingMore, deposited} = this.state;
+        const {detail, goodsList, noMore, loadingMore, deposited, bidderCount} = this.state;
         const {systemInfo} = this.props;
 
 
@@ -253,7 +257,7 @@ export default class Index extends Component<any, any> {
                     <View className='flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'>
                         <Text>拍品{detail.goodsCount}件</Text>
                         <Text>围观{detail.viewCount}人</Text>
-                        <Text>报名{detail.depositCount}人</Text>
+                        <Text>报名{detail.depositCount + bidderCount}人</Text>
                         <Text>出价{detail.offerCount}次</Text>
                     </View>
                 </View>
