@@ -38,7 +38,7 @@ const tabs: ListViewTabItem[] = [
                                 }
                             </View>
                             <View className={'flex pt-2 space-x-4'}>
-                                <Text>报名{data.depositCount}人</Text>
+                                <Text>报名{data.depositCount+data.bidderCount}人</Text>
                                 <Text>围观{data.viewCount}人</Text>
                                 <Text>出价{data.offerCount}次</Text>
                             </View>
@@ -76,7 +76,7 @@ const tabs: ListViewTabItem[] = [
                                 }
                             </View>
                             <View className={'flex pt-2 space-x-4'}>
-                                <Text>报名{data.depositCount}人</Text>
+                                <Text>报名{data.depositCount + data.bidderCount}人</Text>
                                 <Text>围观{data.viewCount}人</Text>
                                 <Text>出价{data.offerCount}次</Text>
                             </View>

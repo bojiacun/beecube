@@ -288,7 +288,7 @@ export default class Index extends Component<any, any> {
                     <View className='flex items-center pt-4 justify-around text-gray-400 border-t-1 border-gray-200'>
                         <Text>拍品{goodsList.length}件</Text>
                         <Text>围观{detail.views}人</Text>
-                        <Text>报名{detail.depositCount}人</Text>
+                        <Text>报名{detail.depositCount+detail.bidderCount}人</Text>
                         <Text>出价{detail.offerCount}次</Text>
                     </View>
                 </View>
