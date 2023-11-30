@@ -43,6 +43,7 @@ public class PerformanceVO {
     private Integer offerCount;
     private Integer followCount;
     private Integer depositCount;
+    private Integer bidderCount;
     @Dict(dicCode = "paimai_performance_state")
     private Integer state;
 
