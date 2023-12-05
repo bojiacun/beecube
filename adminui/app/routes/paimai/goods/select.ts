@@ -8,7 +8,9 @@ import {API_PAIMAI_GOODS_SELECT_LIST, requestWithToken} from "~/utils/request.se
 export const loader: LoaderFunction = async ({request}) => {
     await requireAuthenticated(request);
     const url = new URL(request.url);
-    url.searchParams.set('type', '1');
+    if(!url.searchParams.has('type')) {
+        url.searchParams.set('type', '1');
+    }
     url.searchParams.set('status', '1');
     let queryString = '';
     if (_.isEmpty(url.search)) {
