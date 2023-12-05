@@ -186,6 +186,7 @@ export default class Index extends Component<any, any> {
     }
 
     changeSpec(item) {
+        typeof item.fields === 'string' && (item.fields = JSON.parse(item.fields));
         this.setState({goods: item});
     }
 
@@ -254,7 +255,7 @@ export default class Index extends Component<any, any> {
                     {goods.fields && <View className={'mb-4'}>
                         <View className={'item-title-black'}>基本信息</View>
                         <View className="table w-full text-stone-400 text-lg mt-4">
-                            {goods.fields.map((item: any) => {
+                            {goods.fields?.map((item: any) => {
                                 return (
                                     <View className="tr">
                                         <view className="td w-30">{item.key}</view>
