@@ -451,7 +451,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
             request.get('/paimai/api/members/quotas').then(res1=> {
                 this.setState({badges: res1.data.result});
                 let bindflag = Taro.getStorageSync("BINDMOBILE") || 0;
-                if(!userInfo.phone && !bindflag) {
+                if(requireMemberMobile == '1' && !userInfo.phone && !bindflag) {
                     Taro.setStorageSync("BINDMOBILE", 1);
                     Taro.navigateTo({url: '/pages/my/bind-mobile'}).then();
                 }

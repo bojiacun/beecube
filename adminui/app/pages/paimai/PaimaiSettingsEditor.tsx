@@ -56,6 +56,7 @@ const PaimaiSettingsEditor = (props:any) => {
                         <BootstrapSwitch label={'落槌价包含佣金'} name={'isDealCommission'} />
                         <BootstrapSwitch label={'实名认证'} name={'requireRealAuth'} placeholder={'拍卖流程中是否需要实名认证'} />
                         <BootstrapSwitch label={'自定义出价'} name={'isCustomOffer'} />
+                        <BootstrapSwitch label={'强制绑定手机号'} name={'requireMemberMobile'} />
 
                         <BootstrapInput label={'联麓企业ID'} name={'lianluCorpId'} placeholder={'联麓企业ID'} />
                         <BootstrapInput label={'联麓AppId'} name={'lianluAppId'} placeholder={'联麓AppId'} />
