@@ -72,7 +72,7 @@ export default class Index extends Component<PropsWithChildren<any>, any> {
         const data:any = {phoneCode, code: null};
         Taro.login().then(res => {
             data.code = res.code;
-            request.post('/app/api/login/mobile', data).then(res => {
+            request.post('/app/api/wxapp/login/mobile', data).then(res => {
                 let loginInfo = res.data.result;
                 Toast.open({
                     message: '授权成功!', onClose(opened: boolean) {
