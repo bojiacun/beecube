@@ -438,14 +438,23 @@ export default class Index extends Component<PropsWithChildren<any>> {
     }
 
     componentWillUnmount() {
+        Taro.removeStorageSync("BINDMOBILE");
     }
 
     componentDidShow() {
+        const {requireMemberMobile} = this.props.settings;
         request.get('/app/api/members/profile').then(res => {
-            this.props.updateUserInfo(res.data.result);
+            //加入手机号检测逻辑，如果没有手机号，则跳转到手机号授权页面，进行手机号授权绑定
+            const userInfo = res.data.result;
+            this.props.updateUserInfo(userInfo);
             //刷新订单角标提醒
-            request.get('/paimai/api/members/quotas').then(res => {
-                this.setState({badges: res.data.result})
+            request.get('/paimai/api/members/quotas').then(res1=> {
+                this.setState({badges: res1.data.result});
+                let bindflag = Taro.getStorageSync("BINDMOBILE") || 0;
+                if(!userInfo.phone && !bindflag) {
+                    Taro.setStorageSync("BINDMOBILE", 1);
+                    Taro.navigateTo({url: '/pages/my/bind-mobile'}).then();
+                }
             });
         });
     }

@@ -138,7 +138,7 @@ export default class Index extends Component<any, any> {
                         <View className={'text-xl mb-4'}>拍品信息</View>
                         <View>
                             <Form.Label className={'text-stone-400 text-sm'}>拍品名称<Text className={'text-red-600'}>*</Text></Form.Label>
-                            <Field className={'!p-0'} name={'name'}>
+                            <Field style={{padding:0}} name={'name'}>
                                 <Input className={styles.collectInput} placeholder={'请输入拍品名称'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
@@ -171,19 +171,19 @@ export default class Index extends Component<any, any> {
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400 text-sm'}>联系人姓名<Text className={'text-red-600'}>*</Text></Form.Label>
-                            <Field className={'!p-0'} name={'contactor'}>
+                            <Field style={{padding:0}} name={'contactor'}>
                                 <Input adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} className={styles.collectInput} placeholder={'联系人姓名'} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400 text-sm'}>联系人手机号<Text className={'text-red-600'}>*</Text></Form.Label>
-                            <Field className={'!p-0'} name={'phone'}>
+                            <Field style={{padding:0}} name={'phone'}>
                                 <Input className={styles.collectInput} placeholder={'联系人手机号'} adjustPosition={true} cursorSpacing={24} alwaysEmbed={true} />
                             </Field>
                         </View>
                         <View>
                             <Form.Label className={'text-stone-400 text-sm'}>拍品详细信息<Text className={'text-red-600'}>*</Text></Form.Label>
-                            <Field className={'!p-0'} name={'description'}>
+                            <Field style={{padding:0}} name={'description'}>
                                 <Textarea adjustPosition={true} cursorSpacing={24} name={'description'} style={{height: 100, boxSizing: 'border-box'}} className={classNames(styles.collectInput, 'block w-full')} placeholder={'拍品详情'} />
                             </Field>
                         </View>

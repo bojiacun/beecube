@@ -21,6 +21,7 @@ export default defineAppConfig({
         'pages/my/deposits',
         'pages/my/coupons',
         'pages/my/offers',
+        'pages/my/bind-mobile',
         'pages/my/views',
         'pages/my/follows',
         'pages/my/profile',
