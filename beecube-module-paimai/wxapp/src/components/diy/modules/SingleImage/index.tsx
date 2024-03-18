@@ -7,7 +7,7 @@ const SingleImageModule = (props: any) => {
 
     return (
         <View {...rest} style={style} onClick={()=>utils.gotoLink(basic.url)}>
-            <FallbackImage mode={basic.mode || 'aspectFill'} src={utils.resolveUrl(basic.image)} style={{ width: '100%' }} width={'100%'}  />
+            <FallbackImage mode={basic.mode || 'aspectFill'} src={utils.resolveUrl(basic.image)} style={{ width: '100%', display: 'block' }} width={'100%'}  />
         </View>
     );
 }

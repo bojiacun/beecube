@@ -9,7 +9,7 @@ const ImageText = (props: any) => {
 
     return (
         <View {...rest} style={style} onClick={()=>utils.gotoLink(basic.url)}>
-            <FallbackImage src={utils.resolveUrl(basic.image)} style={{width: '100%'}} />
+            <FallbackImage src={utils.resolveUrl(basic.image)} style={{width: '100%', display: "block"}} />
             <View style={{ marginTop: '16rpx', lineHeight: 1.5 }}>{basic.description}</View>
         </View>
     );

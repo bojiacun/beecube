@@ -224,11 +224,12 @@ export default class Index extends Component<any, any> {
                         <View className={'text-gray-400'}>
                             {goods.subTitle}
                         </View>
-                        <View className={'space-x-2'}>
+                        <View className={''}>
                             {specs.map((item: any) => {
                                 return (
                                     <Tag size={'medium'} onClick={() => this.changeSpec(item)} color={currentSpec?.id == item.id ? 'danger' : 'default'}
                                          variant={currentSpec?.id == item.id ? 'contained' : 'outlined'}
+                                         style={{marginRight: 8, marginBottom: 8}}
                                          shape={'rounded'}>{item.spec}</Tag>
                                 );
                             })}
