@@ -42,6 +42,9 @@ const DiyPage: FC<DiyPageProps> = (props) => {
             page.style.paddingTop = Taro.pxTransform(page.style.paddingTop);
             page.style.paddingRight = Taro.pxTransform(page.style.paddingRight);
             page.style.paddingBottom = Taro.pxTransform(page.style.paddingBottom);
+            if(page.style.backgroundImage) {
+                page.style.backgroundImage = `url(${page.style.backgroundImage})`;
+            }
             setPage(page);
             setStatusBarProps(statusBarProps);
             setLoading(false);
