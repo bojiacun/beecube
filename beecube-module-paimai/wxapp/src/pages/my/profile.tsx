@@ -206,7 +206,7 @@ export default class Index extends Component<any, any> {
                         <FallbackImage src={userInfo?.avatar} errorImage={avatarImage} style={{width: 30, height: 30}}/>
                     </Form.Control>
                 </Form.Item>
-                <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/nickname'})} className={'items-center'} rightIcon={<ArrowRight/>}>
+                <Form.Item onClick={()=>Taro.navigateTo({url: '/pages/my/realauth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                     <Form.Label>昵称</Form.Label>
                     <Form.Control>
                         <View>{userInfo?.nickname}</View>

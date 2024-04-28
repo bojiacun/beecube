@@ -37,7 +37,6 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        let userInfo = JSON.parse(Taro.getStorageSync("EDIT-USER"));
 
         return (
             <PageLayout statusBarProps={{title: '修改昵称'}}>
@@ -45,7 +44,7 @@ export default class Index extends Component<any, any> {
                     <View className={'bg-white divide-y divide-gray-100 text-gray-600 mt-4'}>
                         <View className={'p-4'}>
                             <View className={'flex items-center space-x-2'}>
-                                <Input name={'nickname'} className={'block w-full'} placeholder={'修改昵称'} value={userInfo?.nickname} />
+                                <Input name={'nickname'} className={'block w-full'} placeholder={'修改昵称'}  />
                             </View>
                         </View>
                     </View>
