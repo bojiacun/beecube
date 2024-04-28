@@ -235,13 +235,13 @@ export default class Index extends Component<any, any> {
                     </View>
                     <View className={'bg-white mt-4 text-gray-600'}>
                         <View className={'text-lg p-4 pb-0'}>实名资料</View>
-                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/phone'})} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Item onClick={()=>Taro.navigateTo({url: '/pages/my/realauth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                             <Form.Label>手机号</Form.Label>
                             <Form.Control>
                                 <View>{userInfo?.phone}</View>
                             </Form.Control>
                         </Form.Item>
-                        <Form.Item onClick={()=>Taro.navigateTo({url: 'profile/auth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
+                        <Form.Item onClick={()=>Taro.navigateTo({url: '/pages/my/realauth'})} className={'items-center'} rightIcon={<ArrowRight/>}>
                             <Form.Label>实名认证</Form.Label>
                             <Form.Control>
                                 {userInfo?.authStatus == 0 && <View>未认证</View>}

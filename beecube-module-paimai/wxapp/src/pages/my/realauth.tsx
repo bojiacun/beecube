@@ -93,10 +93,13 @@ export default class Index extends Component<any, any> {
                 header: {
                     "X-Access-Token": token,
                     "Authorization": token,
-                    "Content-Type": 'application/json'
+                    "Content-Type": 'application/json;charset=utf-8'
                 }
             }).then((res: any) => {
                 let result = JSON.parse(res.data);
+                if(result.code == 500) {
+                    return utils.showError(result.message);
+                }
                 this.state.cardImages[0] = result.result.url;
                 this.setState({cardImages: this.state.cardImages});
                 utils.showSuccess(false, '上传成功');
@@ -118,10 +121,13 @@ export default class Index extends Component<any, any> {
                 header: {
                     "X-Access-Token": token,
                     "Authorization": token,
-                    "Content-Type": 'application/json'
+                    "Content-Type": 'application/json;charset=utf-8'
                 }
             }).then((res: any) => {
                 let result = JSON.parse(res.data);
+                if(result.code == 500) {
+                    return utils.showError(result.message);
+                }
                 this.state.cardImages[1] = result.result.url;
                 this.setState({cardImages: this.state.cardImages});
                 utils.showSuccess(false, '上传成功');
