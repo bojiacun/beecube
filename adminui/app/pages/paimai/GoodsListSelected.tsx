@@ -11,6 +11,7 @@ import OfferList from "~/pages/paimai/OfferList";
 import DepositList from "~/pages/paimai/DepositList";
 import ViewList from "~/pages/paimai/ViewList";
 import FollowList from "~/pages/paimai/FollowList";
+import Upload from "rc-upload";
 
 
 const GoodsListSelected = (props: any) => {
@@ -19,6 +20,7 @@ const GoodsListSelected = (props: any) => {
     const [searchState, setSearchState] = useState<any>({...DefaultListSearchParams, perf_id: selectedPerformance?.id, column: 'sortNum', order: 'asc'});
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [editModal, setEditModal] = useState<any>();
+    const [importing, setImporting] = useState<boolean>(false);
     const [selectedRow, setSelectedRow] = useState<any>();
     const [viewsShow, setViewsShow] = useState<boolean>(false);
     const [followsShow, setFollowsShow] = useState<boolean>(false);
@@ -318,6 +320,16 @@ const GoodsListSelected = (props: any) => {
         setEditModal({});
     }
 
+    const handleOnImportError = () => {
+        setImporting(false);
+    }
+    const handleOnImporting = () => {
+        setImporting(true);
+    }
+    const handleOnImportSuccess = () => {
+        setImporting(false);
+    }
+
     return (
         <>
             <Modal
@@ -336,6 +348,9 @@ const GoodsListSelected = (props: any) => {
                         <Row>
                             <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                                 <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建拍品</Button>
+                                <Upload action={'/system/oss/file/upload'} disabled={importing} multiple={false} data={{type: 4}} onError={handleOnImportError} onSuccess={handleOnImportSuccess} onProgress={handleOnImporting}>
+                                    <Button style={{marginLeft: 10}} disabled={importing}><i className={'feather icon-plus'}/>{importing?'导入中':'导入ZIP'}</Button>
+                                </Upload>
                             </Col>
                             <Col md={6} className={'d-flex align-items-center justify-content-end'}>
                                 <searchFetcher.Form action={'/paimai/goods/selected'} className={'form-inline justify-content-end'}
