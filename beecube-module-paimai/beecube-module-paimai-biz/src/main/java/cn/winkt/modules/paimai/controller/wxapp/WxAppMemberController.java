@@ -1320,7 +1320,7 @@ public class WxAppMemberController {
             throw new JeecgBootException("找不到商品");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        ByteArrayInputStream qrCodeStream = new ByteArrayInputStream(appApi.getMemberQrcode("/pages/goods/detail"+(goods.getType()==1?"":"2")+"?id=" + id + "&mid=" + loginUser.getId()));
+        ByteArrayInputStream qrCodeStream = new ByteArrayInputStream(appApi.getMemberQrcode("/goods/pages/detail"+(goods.getType()==1?"":"2")+"?id=" + id + "&mid=" + loginUser.getId()));
         BufferedImage qrCode = ImageIO.read(qrCodeStream);
         String productImageUrl = goods.getImages().split(",")[0];
         String title = goods.getTitle();
