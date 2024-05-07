@@ -32,5 +32,5 @@ public interface IPerformanceService extends IService<Performance> {
     boolean checkDeposite(LoginUser loginUser, Performance performance);
     boolean checkDeposite(LoginUser loginUser, String performanceId);
 
-    void importZip(File zipDirFile, LoginUser loginUser);
+    void importZip(String performanceId, File zipDirFile, LoginUser loginUser);
 }

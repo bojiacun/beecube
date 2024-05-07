@@ -122,7 +122,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     }
 
     @Override
-    public void importZip(File zipDirFile, LoginUser loginUser) {
+    public void importZip(String performanceId,File zipDirFile, LoginUser loginUser) {
 
     }
 

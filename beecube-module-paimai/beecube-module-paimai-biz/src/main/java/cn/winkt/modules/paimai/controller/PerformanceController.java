@@ -416,14 +416,14 @@ public class PerformanceController extends JeecgController<Performance, IPerform
     }
 
     @PostMapping("/importZip")
-    public Result<?> importZip(@RequestParam("file") MultipartFile file) throws IOException {
+    public Result<?> importZip(@RequestParam("file") MultipartFile file, @RequestParam String performanceId) throws IOException {
         if(file.isEmpty()) {
             return Result.error("文件为空");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         File dirFile = FileUtil.file("/www/wwwroot/zips/"+loginUser.getId()+"/"+ DateUtil.format(new Date(), "yyyyMMddHHmmss"));
         File zipDir = ZipUtil.unzip(file.getInputStream(), dirFile, CharsetUtil.CHARSET_GBK);
-        performanceService.importZip(zipDir, loginUser);
+        performanceService.importZip(performanceId, zipDir, loginUser);
         return Result.OK();
     }
 }

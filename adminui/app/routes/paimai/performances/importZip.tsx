@@ -9,6 +9,8 @@ export const action: ActionFunction = async ({request}) => {
     //@ts-ignore
     data.append("type", formData.get("type"));
     //@ts-ignore
+    data.append("performanceId", formData.get("performanceId"));
+    //@ts-ignore
     data.append('file', formData.get('file'));
     let result = await requestWithToken(request)(
         API_PAIMAI_PERFORMANCE_IMPORTZIP, {method: 'post', body: data}
