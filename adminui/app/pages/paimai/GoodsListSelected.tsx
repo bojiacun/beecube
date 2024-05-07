@@ -349,7 +349,7 @@ const GoodsListSelected = (props: any) => {
                             <Col md={6} className={'d-flex align-items-center justify-content-start mb-1 mb-md-0'}>
                                 <Button onClick={handleOnAdd}><i className={'feather icon-plus'}/>新建拍品</Button>
                                 <Upload action={'/paimai/performance/import'} disabled={importing} multiple={false} data={{type: 4}} onError={handleOnImportError} onSuccess={handleOnImportSuccess} onProgress={handleOnImporting}>
-                                    <Button style={{marginLeft: 10}} disabled={importing}><i className={'feather icon-plus'}/>{importing?'导入中':'导入ZIP'}</Button>
+                                    <Button style={{marginLeft: 10}} disabled={importing}><i className={'feather icon-plus'}/>{importing?'导入中...':'导入ZIP'}</Button>
                                 </Upload>
                             </Col>
                             <Col md={6} className={'d-flex align-items-center justify-content-end'}>

@@ -1,11 +1,16 @@
 package cn.winkt.modules.paimai.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
 import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.service.im.ImClientService;
@@ -18,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoDict;
 import org.jeecg.common.exception.JeecgBootException;
@@ -32,9 +38,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
 
+import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -406,4 +414,14 @@ public class PerformanceController extends JeecgController<Performance, IPerform
         return super.importExcel(request, response, Performance.class);
     }
 
+    @PostMapping("/importZip")
+    public Result<?> importZip(@RequestParam("file") MultipartFile file) throws IOException {
+        if(file.isEmpty()) {
+            return Result.error("文件为空");
+        }
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        File dirFile = FileUtil.file("./zips/"+loginUser.getId());
+        File zipFile = ZipUtil.unzip(file.getInputStream(), dirFile, CharsetUtil.CHARSET_GBK);
+        return Result.OK();
+    }
 }
