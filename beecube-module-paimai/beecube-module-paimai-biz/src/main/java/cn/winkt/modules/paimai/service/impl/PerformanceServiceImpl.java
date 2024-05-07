@@ -2,6 +2,8 @@ package cn.winkt.modules.paimai.service.impl;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
@@ -17,13 +19,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.util.ExcelUtil;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,6 +45,7 @@ import java.util.Map;
  * @Version: V1.0
  */
 @Service
+@Slf4j
 public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Performance> implements IPerformanceService {
 
     @Resource
@@ -146,10 +149,11 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         File excelFile = excelFiles[0];
         //添加标的
         try {
-            Workbook workbook = WorkbookFactory.create(excelFile);
-            List<Map<String, String>> data = ExcelUtil.readExcel(workbook, 0, 0, 0);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            ExcelReader reader = ExcelUtil.getReader(excelFile);
+            List<Map<String, Object>> data = reader.readAll();
+            log.info("data length:{}", data.size());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 
