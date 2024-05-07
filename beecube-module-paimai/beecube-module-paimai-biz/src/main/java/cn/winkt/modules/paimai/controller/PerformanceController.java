@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ZipUtil;
@@ -420,8 +421,9 @@ public class PerformanceController extends JeecgController<Performance, IPerform
             return Result.error("文件为空");
         }
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        File dirFile = FileUtil.file("./zips/"+loginUser.getId());
-        File zipFile = ZipUtil.unzip(file.getInputStream(), dirFile, CharsetUtil.CHARSET_GBK);
+        File dirFile = FileUtil.file("/www/wwwroot/zips/"+loginUser.getId()+"/"+ DateUtil.format(new Date(), "yyyyMMddHHmmss"));
+        File zipDir = ZipUtil.unzip(file.getInputStream(), dirFile, CharsetUtil.CHARSET_GBK);
+        performanceService.importZip(zipDir, loginUser);
         return Result.OK();
     }
 }

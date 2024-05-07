@@ -215,6 +215,7 @@ export const API_PAIMAI_PERFORMANCE_ADD = `${BASE_URL}/paimai/performances/add`;
 export const API_PAIMAI_PERFORMANCE_ADDGOODS = `${BASE_URL}/paimai/performances/goods/add`;
 export const API_PAIMAI_PERFORMANCE_EDIT = `${BASE_URL}/paimai/performances/edit`;
 export const API_PAIMAI_PERFORMANCE_DELETE = `${BASE_URL}/paimai/performances/delete`;
+export const API_PAIMAI_PERFORMANCE_IMPORTZIP= `${BASE_URL}/paimai/performances/importZip`;
 
 export const API_PAIMAI_PERFORMANCE_GOODS_START = `${BASE_URL}/paimai/performances/goods/start`;
 export const API_PAIMAI_LIVE_GOODS_START = `${BASE_URL}/paimai/rooms/goods/up`;

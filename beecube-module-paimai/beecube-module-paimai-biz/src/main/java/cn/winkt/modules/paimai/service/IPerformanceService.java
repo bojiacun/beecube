@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.system.vo.LoginUser;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -30,4 +31,6 @@ public interface IPerformanceService extends IService<Performance> {
 
     boolean checkDeposite(LoginUser loginUser, Performance performance);
     boolean checkDeposite(LoginUser loginUser, String performanceId);
+
+    void importZip(File zipDirFile, LoginUser loginUser);
 }

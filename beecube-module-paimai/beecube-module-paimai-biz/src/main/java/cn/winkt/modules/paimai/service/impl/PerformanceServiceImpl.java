@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -118,6 +119,11 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     @Override
     public boolean checkDeposite(LoginUser loginUser, String performanceId) {
         return checkDeposite(loginUser, getById(performanceId));
+    }
+
+    @Override
+    public void importZip(File zipDirFile, LoginUser loginUser) {
+
     }
 
     public boolean isEnded(String performanceId) {
