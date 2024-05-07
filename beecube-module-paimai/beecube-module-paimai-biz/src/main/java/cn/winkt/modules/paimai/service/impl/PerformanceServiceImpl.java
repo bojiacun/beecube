@@ -154,6 +154,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
             throw new JeecgBootException("找到多个EXCEL文件，请确保只有一个标的EXCEL文件");
         }
         File excelFile = excelFiles[0];
+        Performance performance = performanceMapper.selectById(performanceId);
+        //找到专场图片
+
         //添加标的
         try {
             ExcelReader reader = ExcelUtil.getReader(excelFile);
