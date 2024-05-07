@@ -1,5 +1,6 @@
 package cn.winkt.modules.paimai.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
@@ -16,6 +17,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
 import org.springframework.stereotype.Service;
 
@@ -123,7 +125,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Override
     public void importZip(String performanceId,File zipDirFile, LoginUser loginUser) {
-
+        if(!zipDirFile.isDirectory()) {
+            throw new JeecgBootException("导入的Zip文件解压出错");
+        }
     }
 
     public boolean isEnded(String performanceId) {
