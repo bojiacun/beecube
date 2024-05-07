@@ -7,11 +7,13 @@ import cn.hutool.poi.excel.ExcelUtil;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
 import cn.winkt.modules.paimai.common.PaimaiConstant;
+import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
 import cn.winkt.modules.paimai.entity.PaimaiBidder;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.mapper.PerformanceMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
+import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IPaimaiBidderService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
@@ -25,6 +27,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +60,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Resource
     private IPaimaiBidderService paimaiBidderService;
+
+    @Resource
+    private IGoodsService goodsService;
 
     @Resource
     private AppApi appApi;
@@ -151,6 +158,23 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         try {
             ExcelReader reader = ExcelUtil.getReader(excelFile);
             List<Map<String, Object>> data = reader.readAll();
+            data.forEach(map -> {
+                Goods goods = new Goods();
+                goods.setType(1);
+                goods.setSortNum(Integer.valueOf(map.get("拍品编号").toString()));
+                goods.setPerformanceId(performanceId);
+                goods.setAppId(AppContext.getApp());
+                goods.setStartPrice(new BigDecimal(map.get("起拍价").toString()));
+                goods.setDescription(map.get("拍品简介").toString());
+                goods.setMinPrice(Float.valueOf(map.get("保留低价").toString()));
+                goods.setBaseSales(0);
+                goods.setState(1);
+                goods.setClassId("");
+                goods.setTitle(map.get("作品名称").toString());
+                goods.setEvaluatePrice(map.get("估价").toString());
+                //找到图片,并上传图片
+                goodsService.save(goods);
+            });
             log.info("data length:{}", data.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
