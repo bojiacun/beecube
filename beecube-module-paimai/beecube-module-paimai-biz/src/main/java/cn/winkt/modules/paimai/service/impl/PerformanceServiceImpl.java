@@ -1,5 +1,6 @@
 package cn.winkt.modules.paimai.service.impl;
 
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.winkt.modules.app.api.AppApi;
 import cn.winkt.modules.app.vo.AppMemberVO;
@@ -16,17 +17,24 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecgframework.poi.excel.ExcelImportUtil;
+import org.jeecgframework.poi.util.ExcelUtil;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 订单售后表
@@ -127,6 +135,21 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     public void importZip(String performanceId,File zipDirFile, LoginUser loginUser) {
         if(!zipDirFile.isDirectory()) {
             throw new JeecgBootException("导入的Zip文件解压出错");
+        }
+        File[] excelFiles = zipDirFile.listFiles(pathname -> FileTypeUtil.getType(pathname).equals("xlsx"));
+        if(excelFiles == null || excelFiles.length == 0) {
+            throw new JeecgBootException("没有找到EXCEL文件!请确保压缩包中有标的的EXCEL文件");
+        }
+        if(excelFiles.length > 1) {
+            throw new JeecgBootException("找到多个EXCEL文件，请确保只有一个标的EXCEL文件");
+        }
+        File excelFile = excelFiles[0];
+        //添加标的
+        try {
+            Workbook workbook = WorkbookFactory.create(excelFile);
+            List<Map<String, String>> data = ExcelUtil.readExcel(workbook, 0, 0, 0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
