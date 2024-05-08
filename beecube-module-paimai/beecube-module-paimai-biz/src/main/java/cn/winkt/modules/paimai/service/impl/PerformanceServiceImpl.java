@@ -14,10 +14,8 @@ import cn.winkt.modules.paimai.entity.PaimaiBidder;
 import cn.winkt.modules.paimai.entity.Performance;
 import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.mapper.PerformanceMapper;
-import cn.winkt.modules.paimai.service.IGoodsDepositService;
-import cn.winkt.modules.paimai.service.IGoodsService;
-import cn.winkt.modules.paimai.service.IPaimaiBidderService;
-import cn.winkt.modules.paimai.service.IPerformanceService;
+import cn.winkt.modules.paimai.service.*;
+import cn.winkt.modules.paimai.vo.GoodsSettings;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -74,6 +72,8 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     @Resource
     private AppApi appApi;
 
+    @Resource
+    private IGoodsCommonDescService goodsCommonDescService;
 
     @Override
     public PerformanceVO getDetail(String id) {
@@ -170,6 +170,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
             performance.setPreview(url);
             updateById(performance);
         }
+        GoodsSettings goodsSettings = goodsCommonDescService.queryGoodsSettings();
 
         //添加标的
         try {
@@ -189,6 +190,12 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setClassId("");
                 goods.setTitle(map.get("作品名称").toString());
                 goods.setEvaluatePrice(map.get("估价").toString());
+                goods.setDescDelivery(goodsSettings.getDescDelivery());
+                goods.setDescDeposit(goodsSettings.getDescDeposit());
+                goods.setDescRead(goodsSettings.getDescRead());
+                goods.setDescFlow(goodsSettings.getDescFlow());
+                goods.setDescNotice(goodsSettings.getDescNotice());
+
                 //设置加价幅度
                 JSONArray uprange = new JSONArray();
                 JSONObject first = new JSONObject();

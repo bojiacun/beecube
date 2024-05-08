@@ -13,4 +13,9 @@ public class GoodsSettings {
     private String lianluAppId;
     private String lianluAppKey;
     private String lianluSignName;
+    private String descFlow;
+    private String descDelivery;
+    private String descNotice;
+    private String descRead;
+    private String descDeposit;
 }
