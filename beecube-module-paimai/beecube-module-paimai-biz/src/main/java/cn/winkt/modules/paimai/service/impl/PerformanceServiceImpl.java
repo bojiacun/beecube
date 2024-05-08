@@ -27,8 +27,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.oss.OssBootUtil;
 import org.jeecg.config.AppContext;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,6 +38,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -66,6 +69,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Resource
     private AppApi appApi;
+
 
     @Override
     public PerformanceVO getDetail(String id) {
@@ -156,6 +160,12 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         File excelFile = excelFiles[0];
         Performance performance = performanceMapper.selectById(performanceId);
         //找到专场图片
+        File[] performanceImages = zipDirFile.listFiles((dir, name) -> name.equals(performance.getTitle()));
+        if(performanceImages != null && performanceImages.length > 0) {
+            String url = OssBootUtil.upload(FileUtil.getInputStream(performanceImages[0]), AppContext.getApp());
+            performance.setPreview(url);
+            updateById(performance);
+        }
 
         //添加标的
         try {
@@ -175,6 +185,10 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setClassId("");
                 goods.setTitle(map.get("作品名称").toString());
                 goods.setEvaluatePrice(map.get("估价").toString());
+                File[] previewImageFile = zipDirFile.listFiles((dir, name) -> name.equals(goods.getSortNum().toString()));
+                if(previewImageFile != null && previewImageFile.length > 0) {
+                    setGoodsImage(goods, previewImageFile[0]);
+                }
                 //找到图片,并上传图片
                 goodsService.save(goods);
             });
@@ -186,5 +200,12 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     public boolean isEnded(String performanceId) {
         return isEnded(getById(performanceId));
+    }
+
+    @Async
+    public void setGoodsImage(Goods goods, File imageFile) {
+        String url = OssBootUtil.upload(FileUtil.getInputStream(imageFile), AppContext.getApp());
+        goods.setImages(url);
+        goodsService.updateById(goods);
     }
 }
