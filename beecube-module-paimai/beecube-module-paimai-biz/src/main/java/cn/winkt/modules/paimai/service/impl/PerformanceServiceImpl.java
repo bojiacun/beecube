@@ -194,6 +194,15 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 first.put("max", Integer.valueOf(map.get("竞价阶梯").toString()));
                 uprange.add(first);
                 goods.setUprange(uprange.toJSONString());
+
+                JSONArray fields = new JSONArray();
+                importOtherFields(map, "作者", fields);
+                importOtherFields(map, "质地形式", fields);
+                importOtherFields(map, "拍品规格", fields);
+                importOtherFields(map, "题识款识", fields);
+                importOtherFields(map, "重量", fields);
+                importOtherFields(map, "备注", fields);
+                goods.setFields(fields.toJSONString());
                 goodsService.save(goods);
 
                 //找到图片,并上传图片
@@ -217,5 +226,10 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         String url = OssBootUtil.upload(FileUtil.getInputStream(imageFile), AppContext.getApp());
         goods.setImages(url);
         goodsService.updateById(goods);
+    }
+    private void importOtherFields(Map<String, Object> map, String key, JSONArray jsonArray) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(key, map.get(key).toString());
+        jsonArray.add(jsonObject);
     }
 }
