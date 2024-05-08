@@ -204,6 +204,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 importOtherFields(map, "重量", fields);
                 importOtherFields(map, "备注", fields);
                 goods.setFields(fields.toJSONString());
+                goods.setImages("");
                 goodsMapper.insert(goods);
 
                 //找到图片,并上传图片
