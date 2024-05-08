@@ -17,6 +17,8 @@ import cn.winkt.modules.paimai.service.IGoodsService;
 import cn.winkt.modules.paimai.service.IPaimaiBidderService;
 import cn.winkt.modules.paimai.service.IPerformanceService;
 import cn.winkt.modules.paimai.vo.PerformanceVO;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -185,12 +187,20 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setClassId("");
                 goods.setTitle(map.get("作品名称").toString());
                 goods.setEvaluatePrice(map.get("估价").toString());
+                //设置加价幅度
+                JSONArray uprange = new JSONArray();
+                JSONObject first = new JSONObject();
+                first.put("min", 0);
+                first.put("max", Integer.valueOf(map.get("竞价阶梯").toString()));
+                uprange.add(first);
+                goods.setUprange(uprange.toJSONString());
+                goodsService.save(goods);
+
+                //找到图片,并上传图片
                 File[] previewImageFile = zipDirFile.listFiles((dir, name) -> name.equals(goods.getSortNum().toString()));
                 if(previewImageFile != null && previewImageFile.length > 0) {
                     setGoodsImage(goods, previewImageFile[0]);
                 }
-                //找到图片,并上传图片
-                goodsService.save(goods);
             });
             log.info("data length:{}", data.size());
         } catch (Exception e) {
