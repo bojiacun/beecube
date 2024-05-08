@@ -328,6 +328,7 @@ const GoodsListSelected = (props: any) => {
     }
     const handleOnImportSuccess = () => {
         setImporting(false);
+        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
     }
 
     return (

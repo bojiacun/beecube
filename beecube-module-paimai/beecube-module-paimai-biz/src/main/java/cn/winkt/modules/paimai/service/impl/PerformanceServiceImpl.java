@@ -2,6 +2,7 @@ package cn.winkt.modules.paimai.service.impl;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.winkt.modules.app.api.AppApi;
@@ -205,10 +206,14 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 importOtherFields(map, "备注", fields);
                 goods.setFields(fields.toJSONString());
                 goods.setImages("");
+                goods.setState(0);
+                goods.setStatus(1);
                 goodsMapper.insert(goods);
 
                 //找到图片,并上传图片
-                File[] previewImageFile = zipDirFile.listFiles((dir, name) -> name.equals(goods.getSortNum().toString()));
+                File[] previewImageFile = zipDirFile.listFiles((dir, name) -> {
+                    return FileNameUtil.mainName(name).equals(map.get("拍品编号").toString());
+                });
                 if(previewImageFile != null && previewImageFile.length > 0) {
                     setGoodsImage(goods, previewImageFile[0]);
                 }
@@ -231,7 +236,8 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     }
     private void importOtherFields(Map<String, Object> map, String key, JSONArray jsonArray) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(key, map.get(key).toString());
+        jsonObject.put("key", key);
+        jsonObject.put("value", map.get(key).toString());
         jsonArray.add(jsonObject);
     }
 }
