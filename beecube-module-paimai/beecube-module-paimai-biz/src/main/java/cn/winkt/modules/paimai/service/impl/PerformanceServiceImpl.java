@@ -11,6 +11,7 @@ import cn.winkt.modules.paimai.entity.Goods;
 import cn.winkt.modules.paimai.entity.GoodsDeposit;
 import cn.winkt.modules.paimai.entity.PaimaiBidder;
 import cn.winkt.modules.paimai.entity.Performance;
+import cn.winkt.modules.paimai.mapper.GoodsMapper;
 import cn.winkt.modules.paimai.mapper.PerformanceMapper;
 import cn.winkt.modules.paimai.service.IGoodsDepositService;
 import cn.winkt.modules.paimai.service.IGoodsService;
@@ -67,7 +68,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     private IPaimaiBidderService paimaiBidderService;
 
     @Resource
-    private IGoodsService goodsService;
+    private GoodsMapper goodsMapper;
 
     @Resource
     private AppApi appApi;
@@ -203,7 +204,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 importOtherFields(map, "重量", fields);
                 importOtherFields(map, "备注", fields);
                 goods.setFields(fields.toJSONString());
-                goodsService.save(goods);
+                goodsMapper.insert(goods);
 
                 //找到图片,并上传图片
                 File[] previewImageFile = zipDirFile.listFiles((dir, name) -> name.equals(goods.getSortNum().toString()));
@@ -225,7 +226,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     public void setGoodsImage(Goods goods, File imageFile) {
         String url = OssBootUtil.upload(FileUtil.getInputStream(imageFile), AppContext.getApp());
         goods.setImages(url);
-        goodsService.updateById(goods);
+        goodsMapper.updateById(goods);
     }
     private void importOtherFields(Map<String, Object> map, String key, JSONArray jsonArray) {
         JSONObject jsonObject = new JSONObject();
