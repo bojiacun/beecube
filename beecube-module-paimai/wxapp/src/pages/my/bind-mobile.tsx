@@ -1,12 +1,15 @@
 import React, {Component, PropsWithChildren} from "react";
 import Taro from "@tarojs/taro";
-import {Avatar, Button, ConfigProvider, Radio, Toast} from "@taroify/core";
+import {Avatar, Button, ConfigProvider, Field, Form, Input, Radio, Toast} from "@taroify/core";
 import PageLayout from "../../layouts/PageLayout";
-import {View} from "@tarojs/components";
+import {Text, View} from "@tarojs/components";
 import {connect} from "react-redux";
 import utils from "../../lib/utils";
 import request, {APP_ID} from "../../lib/request";
 import {setUserInfo} from "../../store/actions";
+import styles from "./index.module.scss";
+import classNames from "classnames";
+import {saveUserInfo} from "./profile/services";
 
 // @ts-ignore
 @connect((state: any) => (
@@ -33,8 +36,8 @@ export default class Index extends Component<PropsWithChildren<any>, any> {
 
     constructor(props) {
         super(props);
-        this.getPhoneNumber = this.getPhoneNumber.bind(this);
         this.handleSendCode = this.handleSendCode.bind(this);
+        this.handleOnSubmit = this.handleOnSubmit.bind(this);
         this.formRef = React.createRef();
     }
 
@@ -51,7 +54,7 @@ export default class Index extends Component<PropsWithChildren<any>, any> {
             return utils.showMessage('请输入手机号');
         }
         this.setState({sending: true});
-        request.post('/api/member/sms', {mobile: phone, smsmode: 2}).then(() => {
+        request.post('/app/api/sms/send', {mobile: phone}).then(() => {
             this.timer = setInterval(() => {
                 this.setState((v) => {
                     v.counter--;
@@ -66,24 +69,29 @@ export default class Index extends Component<PropsWithChildren<any>, any> {
         });
     }
 
-    getPhoneNumber(res:any) {
+    async handleOnSubmit(e: any) {
+        let values = e.detail.value;
+        if (!values.phone) {
+            return utils.showError('请输入手机号');
+        }
+        const {settings, context} = this.props;
+        const {userInfo} = context;
+        if(settings.signName) {
+            const res = await request.put("/app/api/sms/check", {mobile: values.phone, ...values});
+            if (!res.data.result) {
+                return utils.showMessage('验证码不正确').then();
+            }
+        }
         this.setState({saving: true});
-        const phoneCode = res.detail.code;
-        const data:any = {phoneCode, code: null};
-        Taro.login().then(res => {
-            data.code = res.code;
-            request.post('/app/api/wxapp/login/mobile', data).then(res => {
-                let loginInfo = res.data.result;
-                Toast.open({
-                    message: '授权成功!', onClose(opened: boolean) {
-                        if (!opened) {
-                            utils.navigateBack();
-                        }
-                    },
-                    duration: 1000,
-                });
-            }).finally(() => this.setState({saving: false}));
-        })
+        saveUserInfo({...userInfo, ...values}).then(res=>{
+            this.props.updateUserInfo(res.data.result);
+            this.setState({saving: false});
+            this.saveEditUser(res.data.result);
+            utils.showSuccess(true);
+        }).catch(()=>this.setState({saving: false}));
+    }
+    saveEditUser(newUserInfo: any) {
+        Taro.setStorageSync("EDIT-USER", JSON.stringify(newUserInfo));
     }
 
     render() {
@@ -91,16 +99,29 @@ export default class Index extends Component<PropsWithChildren<any>, any> {
         const {app} = this.state;
         return (
             <PageLayout statusBarProps={{title: '绑定手机号'}} containerClassName='flex flex-col items-center'>
-                <Toast id='toast' />
-                <View className='py-4 flex flex-col items-center' style={{marginTop: 100}}>
-                    <Avatar size='large' src={utils.resolveUrl(app?.logo)} />
-                    <View className='font-bold text-xl my-2'>{settings.wxAppName}</View>
-                </View>
-                <View className='w-full text-center' style={{margin: "16px"}}>
-                    <Button style={{width: '70%'}} shape='round' color='danger' onGetPhoneNumber={this.getPhoneNumber} openType='getPhoneNumber' disabled={this.state.saving} loading={this.state.saving}>
-                        手机号快捷授权
-                    </Button>
-                </View>
+                <Form onSubmit={this.handleOnSubmit} ref={this.formRef}>
+                    <Toast id='toast' />
+                    <View className='py-4 flex flex-col items-center' style={{marginTop: 100}}>
+                        <Avatar size='large' src={utils.resolveUrl(app?.logo)} />
+                        <View className='font-bold text-xl my-2'>{settings.wxAppName}</View>
+                    </View>
+                    <View className='mb-4'>
+                        <Field className='!p-0' name='phone'>
+                            <Input className={styles.bigInput} placeholder='常用手机号' />
+                        </Field>
+                        <View className='flex ittems-center justify-between w-full'>
+                            <Field className='!p-0' name='code'>
+                                <Input className={classNames(styles.bigInput, 'flex-1 !mr-4')} placeholder='验证码' />
+                            </Field>
+                            <View onClick={this.handleSendCode} style={{width: 120, lineHeight: 1}}
+                              className={classNames('flex-none flex items-center justify-center !bg-white')}
+                            >
+                                {this.state.sending ? this.state.counter + '' : '发送验证码'}
+                            </View>
+                        </View>
+                    </View>
+                    <Button color='danger' block formType='submit' disabled={this.state.saving}>确认绑定</Button>
+                </Form>
             </PageLayout>
         );
     }

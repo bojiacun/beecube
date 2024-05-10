@@ -108,7 +108,8 @@ export default class Index extends Component<any, any> {
         let data = `${this.state.detail.ordersn}`;
         Taro.setClipboardData({data: data}).then(() => {
             utils.showSuccess(false, '复制成功');
-        }).catch(() => {
+        }).catch((e) => {
+            console.log(e);
             utils.showError('复制失败');
         });
     }
