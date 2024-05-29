@@ -321,14 +321,20 @@ const GoodsListSelected = (props: any) => {
     }
 
     const handleOnImportError = () => {
+        showToastError('上传失败');
         setImporting(false);
     }
     const handleOnImporting = () => {
         setImporting(true);
     }
-    const handleOnImportSuccess = () => {
+    const handleOnImportSuccess = (res:any) => {
+        if(res.success == false) {
+            showToastError(res.message);
+        }
+        else {
+            searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
+        }
         setImporting(false);
-        searchFetcher.submit(searchState, {method: 'get', action: '/paimai/goods/selected'});
     }
 
     return (
