@@ -50,7 +50,7 @@ import java.util.Map;
 /**
  * @Description: 订单售后表
  * @Author: jeecg-boot
- * @Date:   2023-02-08
+ * @Date: 2023-02-08
  * @Version: V1.0
  */
 @Service
@@ -92,15 +92,15 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     /**
      * 检查专场是否已经开始
+     *
      * @param performance
      * @return
      */
     public boolean isStarted(Performance performance) {
         Date now = new Date();
-        if(performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
+        if (performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
             return now.after(performance.getStartTime());
-        }
-        else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
+        } else if (performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
             return performance.getState() > 0;
         }
         return false;
@@ -111,10 +111,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     }
 
     public boolean isEnded(Performance performance) {
-        if(performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
+        if (performance.getType() == PaimaiConstant.PEFORMANCE_TYPE_TIMED) {
             return new Date().after(performance.getEndTime());
-        }
-        else if(performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
+        } else if (performance.getType() == PaimaiConstant.PERFORMANCE_TYPE_SYNC) {
             return performance.getState() >= 2;
         }
         return false;
@@ -122,7 +121,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Override
     public boolean checkDeposite(LoginUser loginUser, Performance performance) {
-        if(performance == null || performance.getDeposit() == null || performance.getDeposit() <= 0) {
+        if (performance == null || performance.getDeposit() == null || performance.getDeposit() <= 0) {
             return true;
         }
         AppMemberVO member = appApi.getMemberById(loginUser.getId());
@@ -130,7 +129,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         LambdaQueryWrapper<PaimaiBidder> bidderLambdaQueryWrapper = new LambdaQueryWrapper<>();
         bidderLambdaQueryWrapper.eq(PaimaiBidder::getPerformanceId, performance.getId());
         bidderLambdaQueryWrapper.eq(PaimaiBidder::getPhone, member.getPhone());
-        if(paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
+        if (paimaiBidderService.count(bidderLambdaQueryWrapper) > 0) {
             return true;
         }
 
@@ -150,22 +149,22 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     }
 
     @Override
-    public void importZip(String performanceId,File zipDirFile, LoginUser loginUser) {
-        if(!zipDirFile.isDirectory()) {
+    public void importZip(String performanceId, File zipDirFile, LoginUser loginUser) {
+        if (!zipDirFile.isDirectory()) {
             throw new JeecgBootException("导入的Zip文件解压出错");
         }
         File[] excelFiles = zipDirFile.listFiles(pathname -> FileTypeUtil.getType(pathname).equals("xlsx"));
-        if(excelFiles == null || excelFiles.length == 0) {
+        if (excelFiles == null || excelFiles.length == 0) {
             throw new JeecgBootException("没有找到EXCEL文件!请确保压缩包中有标的的EXCEL文件");
         }
-        if(excelFiles.length > 1) {
+        if (excelFiles.length > 1) {
             throw new JeecgBootException("找到多个EXCEL文件，请确保只有一个标的EXCEL文件");
         }
         File excelFile = excelFiles[0];
         Performance performance = performanceMapper.selectById(performanceId);
         //找到专场图片
         File[] performanceImages = zipDirFile.listFiles((dir, name) -> name.equals(performance.getTitle()));
-        if(performanceImages != null && performanceImages.length > 0) {
+        if (performanceImages != null && performanceImages.length > 0) {
             String url = OssBootUtil.upload(FileUtil.getInputStream(performanceImages[0]), AppContext.getApp());
             performance.setPreview(url);
             updateById(performance);
@@ -188,10 +187,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setBaseSales(0);
                 goods.setState(1);
                 goods.setClassId("");
-                if(map.get("佣金") != null) {
+                if (map.get("佣金") != null) {
                     goods.setCommission(Float.valueOf(map.get("佣金").toString()));
-                }
-                else {
+                } else {
                     goods.setCommission(0.00F);
                 }
                 goods.setTitle(map.get("作品名称").toString());
@@ -217,7 +215,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 importOtherFields(map, "质地形式", fields);
                 importOtherFields(map, "拍品规格", fields);
                 importOtherFields(map, "题识款识", fields);
-                importOtherFields(map, "铃印", fields);
+                importOtherFields(map, "钤印", fields);
                 importOtherFields(map, "重量", fields);
                 importOtherFields(map, "备注", fields);
                 goods.setFields(fields.toJSONString());
@@ -230,13 +228,14 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 File[] previewImageFile = zipDirFile.listFiles((dir, name) -> {
                     return FileNameUtil.mainName(name).equals(map.get("拍品编号").toString());
                 });
-                if(previewImageFile != null && previewImageFile.length > 0) {
+                if (previewImageFile != null && previewImageFile.length > 0) {
                     setGoodsImage(goods, previewImageFile[0]);
                 }
             });
             log.info("data length:{}", data.size());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw new JeecgBootException(e.getMessage());
         }
     }
 
@@ -250,10 +249,13 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
         goods.setImages(url);
         goodsMapper.updateById(goods);
     }
+
     private void importOtherFields(Map<String, Object> map, String key, JSONArray jsonArray) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("key", key);
-        jsonObject.put("value", map.get(key).toString());
-        jsonArray.add(jsonObject);
+        if (map.containsKey(key)) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("key", key);
+            jsonObject.put("value", map.get(key).toString());
+            jsonArray.add(jsonObject);
+        }
     }
 }
