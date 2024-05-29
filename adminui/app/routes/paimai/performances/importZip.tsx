@@ -12,13 +12,7 @@ export const action: ActionFunction = async ({request}) => {
     data.append("performanceId", formData.get("performanceId"));
     //@ts-ignore
     data.append('file', formData.get('file'));
-    let result = await requestWithToken(request)(
+    return await requestWithToken(request)(
         API_PAIMAI_PERFORMANCE_IMPORTZIP, {method: 'post', body: data}
     );
-    return json({
-        code: result.code,
-        message: result.message,
-        success: result.success,
-        data: result.result?.url
-    });
 }
