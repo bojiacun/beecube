@@ -188,6 +188,12 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setBaseSales(0);
                 goods.setState(1);
                 goods.setClassId("");
+                if(map.get("佣金") != null) {
+                    goods.setCommission(Float.valueOf(map.get("佣金").toString()));
+                }
+                else {
+                    goods.setCommission(0.00F);
+                }
                 goods.setTitle(map.get("作品名称").toString());
                 goods.setEvaluatePrice(map.get("估价").toString());
                 goods.setDescDelivery(goodsSettings.getDescDelivery());
