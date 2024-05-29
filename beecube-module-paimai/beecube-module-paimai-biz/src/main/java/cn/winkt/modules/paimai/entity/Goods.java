@@ -27,7 +27,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="paimai_goods对象", description="拍品表")
 public class Goods {
-    
+
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
@@ -148,6 +148,8 @@ public class Goods {
     @ApiModelProperty(value = "状态（0下架1上架）")
 	@Dict(dicCode = "paimai_goods_status")
 	private java.lang.Integer status;
+
+	private String contractNo;
 
 	private String roomId;
 

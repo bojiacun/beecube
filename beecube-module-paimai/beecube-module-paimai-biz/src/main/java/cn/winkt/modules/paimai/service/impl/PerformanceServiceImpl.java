@@ -195,6 +195,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 goods.setDescRead(goodsSettings.getDescRead());
                 goods.setDescFlow(goodsSettings.getDescFlow());
                 goods.setDescNotice(goodsSettings.getDescNotice());
+                goods.setContractNo(map.get("合同编号").toString());
 
                 //设置加价幅度
                 JSONArray uprange = new JSONArray();
@@ -209,6 +210,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 importOtherFields(map, "质地形式", fields);
                 importOtherFields(map, "拍品规格", fields);
                 importOtherFields(map, "题识款识", fields);
+                importOtherFields(map, "铃印", fields);
                 importOtherFields(map, "重量", fields);
                 importOtherFields(map, "备注", fields);
                 goods.setFields(fields.toJSONString());
