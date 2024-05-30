@@ -208,7 +208,7 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
                 JSONObject first = new JSONObject();
                 first.put("min", 0);
                 first.put("max", Integer.MAX_VALUE);
-                first.put("price", Integer.valueOf(map.get("竞价阶梯").toString()));
+                first.put("price", map.get("竞价阶梯").toString());
                 uprange.add(first);
                 goods.setUprange(uprange.toJSONString());
 
