@@ -3,6 +3,8 @@ package cn.winkt.modules.paimai.service.impl;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.winkt.modules.app.api.AppApi;
@@ -226,7 +228,8 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
                 //找到图片,并上传图片
                 File[] previewImageFile = zipDirFile.listFiles((dir, name) -> {
-                    return FileNameUtil.mainName(name).equals(map.get("拍品编号").toString());
+                    String fileName = FileNameUtil.mainName(name);
+                    return NumberUtil.isNumber(fileName) && goods.getSortNum().equals(Integer.valueOf(fileName));
                 });
                 if (previewImageFile != null && previewImageFile.length > 0) {
                     setGoodsImage(goods, previewImageFile[0]);
