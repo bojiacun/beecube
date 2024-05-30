@@ -421,13 +421,14 @@ public class WxAppMemberController {
     @ApiOperation(value = "订单表-取消订单", notes = "订单表-取消订单")
     @PostMapping(value = "/orders/cancel")
     public Result<?> cancelOrder(@RequestParam(name = "id", defaultValue = "") String id) throws InvocationTargetException, IllegalAccessException, WxPayException {
-        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
-        queryWrapper.eq(GoodsOrder::getId, id);
-        GoodsOrder order = goodsOrderService.getOne(queryWrapper);
-        goodsOrderService.cancel(order);
-        return Result.OK("取消成功", order);
+        throw new JeecgBootException("无法取消拍品订单!");
+//        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+//        LambdaQueryWrapper<GoodsOrder> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(GoodsOrder::getMemberId, loginUser.getId());
+//        queryWrapper.eq(GoodsOrder::getId, id);
+//        GoodsOrder order = goodsOrderService.getOne(queryWrapper);
+//        goodsOrderService.cancel(order);
+//        return Result.OK("取消成功", order);
     }
 
 
