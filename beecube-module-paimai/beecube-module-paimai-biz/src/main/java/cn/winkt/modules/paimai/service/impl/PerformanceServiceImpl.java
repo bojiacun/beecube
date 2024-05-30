@@ -3,6 +3,7 @@ package cn.winkt.modules.paimai.service.impl;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
@@ -248,7 +249,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Async
     public void setGoodsImage(Goods goods, File imageFile) {
-        String url = OssBootUtil.upload(FileUtil.getInputStream(imageFile), AppContext.getApp());
+        String fileType = FileTypeUtil.getType(imageFile);
+        String fileName = "images/"+IdUtil.fastSimpleUUID()+"."+fileType;
+        String url = OssBootUtil.upload(FileUtil.getInputStream(imageFile), AppContext.getApp()+"/"+fileName);
         goods.setImages(url);
         goodsMapper.updateById(goods);
     }
