@@ -11,8 +11,8 @@ let ServerEnv = {
 };
 
 if (process.env.NODE_ENV === 'development') {
-    ServerEnv.BASE_URL = 'http://localhost:9999';
-    ServerEnv.API_BASE_URL = 'http://localhost:9999';
+    // ServerEnv.BASE_URL = 'http://localhost:9999';
+    // ServerEnv.API_BASE_URL = 'http://localhost:9999';
 } else {
     ServerEnv.AXIOS_BASE_URL = 'https://beecube.winkt.cn';
 }
