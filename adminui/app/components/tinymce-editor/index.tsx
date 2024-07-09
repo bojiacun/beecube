@@ -21,7 +21,7 @@ const TinymceEditor: React.FC<TinymceEditorProps> = (props) => {
     }
     return (
         <Editor
-            apiKey={"zly5n25yopvw9c92zi0ngu8to4j6jffsulwb8newm80l9qsa"}
+            apiKey={"prl21nffzhk03ervc04sm5u81oqb0ej1ciubjsqo6j8k82t9"}
             initialValue={formik.values[name]}
             onBlur={handleEditorChange}
             textareaName={name}
