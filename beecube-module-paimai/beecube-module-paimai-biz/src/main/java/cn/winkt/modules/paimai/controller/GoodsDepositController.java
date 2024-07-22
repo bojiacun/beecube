@@ -141,7 +141,7 @@ public class GoodsDepositController extends JeecgController<GoodsDeposit, IGoods
 		deposit.setStatus(2);
         goodsDepositService.updateById(deposit);
         log.debug("退款金额为 {}", deposit.getPrice());
-        Integer refundAmount = BigDecimal.valueOf(deposit.getPrice()).setScale(2, RoundingMode.CEILING).multiply(BigDecimal.valueOf(100)).intValue();
+        Integer refundAmount = BigDecimal.valueOf(deposit.getPrice()).setScale(2, RoundingMode.HALF_DOWN).multiply(BigDecimal.valueOf(100)).intValue();
         log.debug("实际退款金额为 {}", refundAmount);
         WxPayRefundRequest refundRequest = WxPayRefundRequest.newBuilder()
                 .transactionId(deposit.getTransactionId())
