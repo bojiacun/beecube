@@ -48,7 +48,6 @@ const TimeCountDowner: FC<TimeCountDownerProps> = (props) => {
     const nowDate = moment();
     const clocker = useMemo(() => new Clocker(), []);
     clocker.countDown = true;
-
     if (mode == TimeCountDownerMode.TimeBase) {
         if (startTime == null) {
             started = false;

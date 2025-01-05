@@ -150,7 +150,7 @@ var Clocker = function () {
         get: function get() {
             var interval = Math.abs(this._interval);
             // return (this.dateObj.getUTCDate() - 1) * this._countFactor;
-            return interval / 3600000 / 24 * this._countFactor;
+            return Math.floor(interval / 3600000 / 24 * this._countFactor);
         }
 
         /**
