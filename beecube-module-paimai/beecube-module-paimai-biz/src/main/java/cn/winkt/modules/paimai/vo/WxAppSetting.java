@@ -13,4 +13,5 @@ public class WxAppSetting {
     private String apiclientKey;
     private String detailServiceAvatar;
     private String detailServiceQrcode;
+    private String detailServiceName;
 }
