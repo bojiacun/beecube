@@ -54,6 +54,14 @@ const WxappSettingsEditor = (props:any) => {
                             <FormLabel>个人中心版权图片</FormLabel>
                             <FileBrowserInput type={1} name={'userCenterCopyRight'} multi={false} />
                         </FormGroup>
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel>拍卖详情页客服头像</FormLabel>
+                            <FileBrowserInput type={1} name={'detailServiceAvatar'} multi={false} />
+                        </FormGroup>
+                        <FormGroup className={'mb-1'}>
+                            <FormLabel>拍卖详情页客服企业微信二维码</FormLabel>
+                            <FileBrowserInput type={1} name={'detailServiceQrcode'} multi={false} />
+                        </FormGroup>
                     </Card.Body>
                     <Card.Footer className={'text-right'}>
                         <Button disabled={postFetcher.state === 'submitting'} type={'submit'}><FontAwesomeIcon  icon={'save'} style={{marginRight: 5}} />保存</Button>
