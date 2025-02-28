@@ -248,6 +248,7 @@ public class AppWxOpenController {
         });
 
         message.setItemList(itemList);
+        message.setOrderPath("/orders/pages/orders");
         WxOpenMaSubmitAuditResult result = wxOpenMaService.submitAudit(message);
 
         log.info(String.format("发布审核的返回信息为 %s,%s", result.getErrcode(), result.getErrmsg()));
