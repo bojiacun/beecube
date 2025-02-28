@@ -3,7 +3,7 @@ import PageLayout from "../../layouts/PageLayout";
 import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
-import {Button, Input, Navigator, Text, View} from "@tarojs/components";
+import {Button, Input, Navigator, Text, View, Image} from "@tarojs/components";
 import {Avatar, Button as TaroifyButton} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
@@ -47,6 +47,7 @@ export default class Index extends Component<any, any> {
         customGoods: null,
         shareAdv: null,
         loadingShareAdv: false,
+        showService: false,
     }
     socket: any;
     randomStr: string;
@@ -69,12 +70,23 @@ export default class Index extends Component<any, any> {
         this.showModal = this.showModal.bind(this);
         this.addPrice = this.addPrice.bind(this);
         this.subPrice = this.subPrice.bind(this);
+        this.showServiceModal = this.showServiceModal.bind(this);
+        this.hideServiceModal = this.hideServiceModal.bind(this);
         this.onInputPriceChange = this.onInputPriceChange.bind(this);
         this.openShareGoods = this.openShareGoods.bind(this);
         this.handleSaveToPhotoAlbum = this.handleSaveToPhotoAlbum.bind(this);
         this.clickMask = this.clickMask.bind(this);
         this.openWxServiceChat = this.openWxServiceChat.bind(this);
         this.offerInputRef = React.createRef();
+    }
+
+    showServiceModal() {
+        // eslint-disable-next-line react/no-unused-state
+        this.setState({showService: true});
+    }
+    hideServiceModal() {
+        // eslint-disable-next-line react/no-unused-state
+        this.setState({showService: false});
     }
 
     showModal() {
@@ -632,7 +644,7 @@ export default class Index extends Component<any, any> {
     }
 
     render() {
-        const {goods, message, hideModal} = this.state;
+        const {goods, message, hideModal, showService} = this.state;
         const {systemInfo, settings} = this.props;
         settings.isCustomOffer = parseInt(settings.isCustomOffer);
         if (goods == null) return <PageLoading />;
@@ -744,7 +756,7 @@ export default class Index extends Component<any, any> {
                                 <View className={'text-stone-400'}>提供免费收藏咨询及一对一藏品答疑</View>
                             </View>
                             <View>
-                                <TaroifyButton style={{backgroundColor: 'transparent'}} variant={'outlined'} color={'danger'} size={'small'}>添加顾问</TaroifyButton>
+                                <TaroifyButton onClick={this.showServiceModal} style={{backgroundColor: 'transparent'}} variant={'outlined'} color={'danger'} size={'small'}>添加顾问</TaroifyButton>
                             </View>
                         </View>
                     }
@@ -832,6 +844,20 @@ export default class Index extends Component<any, any> {
                         <View className={'text-center'}>
                             <TaroifyButton color={'danger'} onClick={this.offer}>确认出价</TaroifyButton>
                         </View>
+                    </View>
+                </Popup>
+                <Popup rounded placement="bottom" style={{ height: 400, overflow: 'visible' }} open={showService} onClose={() => this.hideServiceModal()}>
+                    <Popup.Close />
+                    <View className={'p-4 text-center text-lg relative'} style={{marginTop: 36}}>
+                        <View className={'bg-white overflow-hidden'} style={{border: '3px solid white', borderRadius: '100%', position: "absolute", top: -66, margin: '0 auto', left: 'calc(50% - 32px)', width: 64, height: 64}}>
+                            <Image src={settings.detailServiceAvatar} className={'w-full h-full'} />
+                        </View>
+                        <View className={'text-lg'}>{settings.detailServiceName}</View>
+                        <View>提供免费收藏咨询及一对一藏品答疑</View>
+                        <View className={'p-4'}>
+                            <Image src={settings.detailServiceQrcode} style={{width: 200, height: 200}} showMenuByLongpress={true} />
+                        </View>
+                        <View>长按二维码识别添加</View>
                     </View>
                 </Popup>
 
