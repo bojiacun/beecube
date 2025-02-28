@@ -4,7 +4,7 @@ import request, {API_URL, APP_ID} from "../../lib/request";
 import utils from "../../lib/utils";
 import CustomSwiper, {CustomSwiperItem} from "../../components/swiper";
 import {Button, Input, Navigator, Text, View} from "@tarojs/components";
-import {Button as TaroifyButton} from '@taroify/core';
+import {Avatar, Button as TaroifyButton} from '@taroify/core';
 import Taro from "@tarojs/taro";
 import {connect} from "react-redux";
 import classNames from "classnames";
@@ -734,6 +734,20 @@ export default class Index extends Component<any, any> {
                             {/*<View className={'flex-1'}>延时周期：<Text>{goods.delayTime}分钟</Text></View>*/}
                         </View>
                     </View>
+                    {settings.detailServiceName && settings.detailServiceAvatar && settings.detailServiceQrcode &&
+                        <View className={'flex py-4 space-x-2 items-center'}>
+                            <View>
+                                <Avatar src={settings.detailServiceAvatar} />
+                            </View>
+                            <View className={'flex-1'}>
+                                <View>收藏高级顾问 | {settings.detailServiceName}</View>
+                                <View className={'text-stone-400'}>提供免费收藏咨询及一对一藏品答疑</View>
+                            </View>
+                            <View>
+                                <TaroifyButton style={{backgroundColor: 'transparent'}} variant={'outlined'} color={'danger'} size={'small'}>添加顾问</TaroifyButton>
+                            </View>
+                        </View>
+                    }
                     <View className={'py-4'}>
                         <View className={'flex justify-between'}>
                             <View className={'font-bold'}>出价记录({goods.offerCount})</View>
