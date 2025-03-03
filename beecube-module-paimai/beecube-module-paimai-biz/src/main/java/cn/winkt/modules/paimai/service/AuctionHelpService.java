@@ -166,7 +166,6 @@ public class AuctionHelpService {
         List<Goods> goodsList = goodsService.list(queryWrapper);
 
         log.debug("有 {} 个拍品待处理", goodsList.size());
-        String token = getTempToken();
         //处理流拍及成交逻辑
         goodsList.forEach(goods -> {
             BigDecimal minPrice = BigDecimal.valueOf(goods.getMinPrice());
