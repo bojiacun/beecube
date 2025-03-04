@@ -749,10 +749,10 @@ export default class Index extends Component<any, any> {
                     {settings.detailServiceName && settings.detailServiceAvatar && settings.detailServiceQrcode &&
                         <View className={'flex py-4 space-x-2 items-center'}>
                             <View>
-                                <Avatar src={settings.detailServiceAvatar} />
+                                <Avatar src={settings.detailServiceAvatar} size={'large'} style={{width: 64, height: 64}} />
                             </View>
                             <View className={'flex-1'}>
-                                <View>收藏高级顾问 | {settings.detailServiceName}</View>
+                                <View className={'text-lg'}>收藏高级顾问 | {settings.detailServiceName}</View>
                                 <View className={'text-stone-400'}>提供免费收藏咨询及一对一藏品答疑</View>
                             </View>
                             <View>
@@ -849,7 +849,7 @@ export default class Index extends Component<any, any> {
                 <Popup rounded placement="bottom" style={{ height: 400, overflow: 'visible' }} open={showService} onClose={() => this.hideServiceModal()}>
                     <Popup.Close />
                     <View className={'p-4 text-center text-lg relative'} style={{marginTop: 36}}>
-                        <View className={'bg-white overflow-hidden'} style={{border: '3px solid white', borderRadius: '100%', position: "absolute", top: -66, margin: '0 auto', left: 'calc(50% - 32px)', width: 64, height: 64}}>
+                        <View className={'bg-white overflow-hidden'} style={{border: '3px solid white', borderRadius: '100%', position: "absolute", top: -86, margin: '0 auto', left: 'calc(50% - 48px)', width: 96, height: 96}}>
                             <Image src={settings.detailServiceAvatar} className={'w-full h-full'} />
                         </View>
                         <View className={'text-lg'}>{settings.detailServiceName}</View>
