@@ -80,7 +80,9 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
 
     @Override
     public PerformanceVO getDetail(String id) {
-        return performanceMapper.getDetail(id);
+        PerformanceVO result = performanceMapper.getDetail(id);
+        result.setFollowCount(result.getFollowCount() + result.getBaseCount());
+        return result;
     }
 
     @Override

@@ -38,6 +38,7 @@ public class PerformanceVO {
     /**状态（0下架、1上架）*/
     private java.lang.Integer status;
     private java.lang.String appId;
+    private Integer baseCount;
     private Integer goodsCount;
     private Integer viewCount;
     private Integer offerCount;

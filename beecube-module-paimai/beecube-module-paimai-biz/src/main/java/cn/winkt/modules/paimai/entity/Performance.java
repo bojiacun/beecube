@@ -28,7 +28,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="paimai_performances对象", description="拍卖专场表")
 public class Performance {
-    
+
 	/**id*/
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "id")
@@ -81,6 +81,8 @@ public class Performance {
     @ApiModelProperty(value = "状态（0下架、1上架）")
 	@Dict(dicCode = "paimai_performance_status")
 	private java.lang.Integer status;
+
+	private Integer baseCount;
 
 	@Excel(name = "应用ID", width = 15)
 	@ApiModelProperty(value = "应用ID")
