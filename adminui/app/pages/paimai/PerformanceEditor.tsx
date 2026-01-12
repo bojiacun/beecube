@@ -29,6 +29,7 @@ const PerformanceEditor = (props: any) => {
             preview: Yup.string().required('必填字段'),
             startTime: Yup.string().required('必填字段'),
             sortNum: Yup.number().integer().default(0),
+            baseCount: Yup.number().integer().default(0),
         });
     }
     else {
@@ -39,6 +40,7 @@ const PerformanceEditor = (props: any) => {
             endTime: Yup.string().required('必填字段'),
             preview: Yup.string().required('必填字段'),
             sortNum: Yup.number().integer().default(0),
+            baseCount: Yup.number().integer().default(0),
         });
     }
 
@@ -114,6 +116,7 @@ const PerformanceEditor = (props: any) => {
                                     </FormGroup>
                                     <BootstrapInput label={'标签'} name={'tags'} placeholder={'自定义标签，用户搜索，用英文逗号分割每个标签，例如公益拍,保证金1:5'}/>
                                     <BootstrapInput label={'排序'} name={'sortNum'} style={{maxWidth: 200}} type={'number'} />
+                                    <BootstrapInput label={'围观基数'} name={'baseCount'} style={{maxWidth: 200}} type={'number'} />
                                     <BootstrapRadioGroup options={[{label: '下架', value: '0'}, {label: '上架', value: '1'}]} name={'status'} label={'状态'}/>
                                 </Modal.Body>
                                 <Modal.Footer>
