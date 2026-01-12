@@ -13,8 +13,8 @@ import 'weapp-cookie';
 import utils from "./lib/utils";
 
 const QQMapWX = require('./lib/qqmap-wx-jssdk.min');
-// const siteInfo = Taro.getExtConfigSync();
-const siteInfo = {siteroot: 'https://api.beecube.winkt.cn', appId:  'wx56c56e3b1952fb28'};
+const siteInfo = Taro.getExtConfigSync();
+// const siteInfo = {siteroot: 'https://api.beecube.winkt.cn', appId:  'wx489f537367e5bd02'};
 const store = configStore();
 const IM_SERVER_URL = "wss://im.winkt.cn/websocket";
 // const IM_SERVER_URL = "ws://localhost:3000/websocket";
