@@ -1,9 +1,9 @@
 {
-    "extEnable": true,
-    "extAppid": "wx27e82c4052bf749c",
+    "extEnable": false,
+    "extAppid": "wx56c56e3b1952fb28",
     "directCommit": false,
     "ext": {
-        "appId": "1635823084673253377",
+        "appId": "wx56c56e3b1952fb28",
         "siteroot": "https://api.beecube.winkt.cn",
         "copyright": true
     }
