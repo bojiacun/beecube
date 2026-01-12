@@ -51,7 +51,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Override
     public GoodsVO getDetail(String id) {
-        return goodsMapper.getDetail(id);
+        GoodsVO result = goodsMapper.getDetail(id);
+        Performance performance = performanceService.getById(result.getPerformanceId());
+        result.setViewCount(result.getViewCount() + performance.getBaseCount());
+        return result;
     }
 
     @Override
