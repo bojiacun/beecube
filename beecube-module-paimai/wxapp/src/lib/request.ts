@@ -3,8 +3,8 @@ import axios, {AxiosResponse} from "taro-axios";
 import Taro from "@tarojs/taro";
 import utils from "./utils";
 
-const siteinfo = Taro.getExtConfigSync();
-// const siteinfo = {siteroot: 'https://api.beecube.winkt.cn', appId:  'wx489f537367e5bd02'};
+// const siteinfo = Taro.getExtConfigSync();
+const siteinfo = {siteroot: 'https://api.beecube.winkt.cn', appId:  '2008781211667861505'};
 
 console.log('siteinfo is',siteinfo);
 export const API_URL = siteinfo.siteroot;
