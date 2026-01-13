@@ -62,8 +62,8 @@ public class ImService extends ServerLauncher implements ApplicationRunner {
         ServerLauncher.supportedGateways = Gateway.SOCKET_TYPE_UDP | Gateway.SOCKET_TYPE_TCP | Gateway.SOCKET_TYPE_WEBSOCKET;
 
         // 开/关Demog日志的输出
-        QoS4SendDaemonS2C.getInstance().setDebugable(imConfig.getDebug());
-        QoS4ReciveDaemonC2S.getInstance().setDebugable(imConfig.getDebug());
+        QoS4SendDaemonS2C.getInstance().setDebugable(false);
+        QoS4ReciveDaemonC2S.getInstance().setDebugable(false);
 
         // 与客户端协商一致的心跳频率模式设置
 //		ServerToolKits.setSenseModeUDP(SenseModeUDP.MODE_15S);
